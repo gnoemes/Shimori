@@ -10,14 +10,10 @@ android {
 
 dependencies {
     implementation Libs.Kotlin.stdlib
-    implementation Libs.Coroutines.core
-    implementation Libs.Coroutines.android
 
     implementation Libs.AndroidX.appcompat
     implementation Libs.AndroidX.browser
-    implementation Libs.AndroidX.palette
     implementation Libs.AndroidX.recyclerview
-    implementation Libs.AndroidX.emoji
     implementation Libs.AndroidX.preference
     implementation Libs.AndroidX.constraintlayout
     implementation Libs.AndroidX.coreKtx
