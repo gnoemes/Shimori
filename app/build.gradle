@@ -1,20 +1,62 @@
+import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Application
+import org.moallemi.gradle.internal.VersionCodeType
+
 apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
+apply from: '../android_commons.gradle'
+apply from: '../android_core_dependencies.gradle'
+apply plugin: 'org.moallemi.advanced-build-version'
 
 android {
-    compileSdkVersion 29
+    def version = readVersion(new File("${project.projectDir}/version.properties"))
+
+    advancedVersioning {
+        nameOptions {
+            versionMajor version["major"] as int
+            versionMinor version["minor"] as int
+            versionPatch version["patch"] as int
+            versionBuild version["build"] as int
+        }
+        codeOptions {
+            versionCodeType VersionCodeType.AUTO_INCREMENT_ONE_STEP
+            dependsOnTasks 'release'
+        }
+
+        outputOptions {
+            renameOutput true
+            nameFormat 'Shimori-v' + versionName + '-${buildType}'
+        }
+    }
+
+
+    def appVersionName = advancedVersioning.versionName
+    def appVersionCode = advancedVersioning.versionCode
+
+    println "config code: ${appVersionCode}, name: ${appVersionName}"
+
     defaultConfig {
-        applicationId "com.gnoemes.shimori"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        applicationId Application.id
+        versionCode appVersionCode
+        versionName appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    packagingOptions {
+        // Exclude AndroidX version files
+        exclude 'META-INF/*.version'
+        // Exclude consumer proguard files
+        exclude 'META-INF/proguard/*'
+        // Exclude the Firebase/Fabric/other random properties files
+        exclude '/*.properties'
+        exclude 'fabric/*.properties'
+        exclude 'META-INF/*.properties'
+    }
+
     buildTypes {
+        debug {
+            versionNameSuffix "-dev"
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -23,12 +65,17 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation Libs.Kotlin.stdlib
+
+    implementation Libs.Dagger.androidSupport
+    kapt Libs.Dagger.compiler
+    kapt Libs.Dagger.androidProcessor
+
+    compileOnly Libs.AssistedInject.annotationDagger2
+    kapt Libs.AssistedInject.processorDagger2
+
+    implementation Libs.mvRx
+
+    testImplementation Libs.junit
+    testImplementation Libs.robolectric
 }

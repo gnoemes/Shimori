@@ -1,0 +1,34 @@
+import com.gnoemes.shimori.Libs
+
+apply plugin: 'com.android.library'
+apply from: '../../android_core_dependencies.gradle'
+apply from: '../../android_commons.gradle'
+
+dependencies {
+    //TODO modules
+
+    implementation Libs.Dagger.androidSupport
+    kapt Libs.Dagger.compiler
+    kapt Libs.Dagger.androidProcessor
+
+    compileOnly Libs.AssistedInject.annotationDagger2
+    kapt Libs.AssistedInject.processorDagger2
+
+    implementation Libs.mvRx
+
+    implementation Libs.Epoxy.epoxy
+    implementation Libs.Epoxy.paging
+    implementation Libs.Epoxy.dataBinding
+    kapt Libs.Epoxy.processor
+
+    implementation Libs.gravitySnapHelper
+
+    testImplementation Libs.junit
+    testImplementation Libs.mockK
+    testImplementation Libs.robolectric
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
+    androidTestImplementation Libs.AndroidX.Test.junit
+}
