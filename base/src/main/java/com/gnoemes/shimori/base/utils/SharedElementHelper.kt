@@ -5,13 +5,14 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.collection.ArrayMap
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
 class SharedElementHelper {
     private val _sharedElements = ArrayMap<View, String?>()
 
     val sharedElements: Map<View, String?>
         get() = _sharedElements
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun addSharedElement(view: View, transitionName: String? = view.transitionName) {
         _sharedElements[view] = transitionName ?: view.transitionName
     }

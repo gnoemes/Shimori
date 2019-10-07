@@ -6,6 +6,9 @@ object Application {
 
 object Modules {
     const val app = ":app"
+    const val base = ":base"
+    const val common = ":common"
+    const val navigation = ":navigation"
 }
 
 object Releases {
@@ -143,6 +146,13 @@ object Libs {
         private const val version = "4.2.0"
         const val okhttp = "com.squareup.okhttp3:okhttp:$version"
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$version"
+    }
+
+    object Glide {
+        private const val version = "4.10.0"
+        const val glide = "com.github.bumptech.glide:glide:$version"
+        const val okHttpIntergation = "com.github.bumptech.glide:okhttp3-integration:$version"
+        const val compiler = "com.github.bumptech.glide:compiler:$version"
     }
 
     object Epoxy {
