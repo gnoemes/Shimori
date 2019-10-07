@@ -1,2 +1,4 @@
 include ':app'
+include ':base'
+
 rootProject.name='Shimori'
