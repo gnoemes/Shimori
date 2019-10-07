@@ -31,6 +31,20 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+
+            allWarningsAsErrors = true
+
+            freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+
+            jvmTarget = "1.8"
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
