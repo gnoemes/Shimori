@@ -6,9 +6,10 @@ import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.*
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -57,14 +58,3 @@ fun Context.drawable(@DrawableRes drawableResId: Int): Drawable? {
 fun Context.colorStateList(@ColorRes colorRes: Int): ColorStateList {
     return AppCompatResources.getColorStateList(this, colorRes)
 }
-
-@ColorInt
-fun Context.colorAttr(@AttrRes attribute: Int): Int = theme.color(attribute)
-
-fun Context.drawableAttr(@AttrRes attribute: Int): Drawable? = drawable(theme.drawable(attribute))
-
-fun Context.attr(@AttrRes attribute: Int): TypedValue = theme.attr(attribute)
-
-@Dimension(unit = Dimension.PX)
-fun Context.dimenAttr(@AttrRes attribute: Int): Int =
-    TypedValue.complexToDimensionPixelSize(attr(attribute).data, resources.displayMetrics)

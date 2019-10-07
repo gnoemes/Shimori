@@ -1,5 +1,6 @@
 include ':app'
 include ':base'
+include ':common'
 include ':navigation'
 
 rootProject.name='Shimori'
