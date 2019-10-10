@@ -1,0 +1,38 @@
+import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Modules
+
+apply plugin: 'com.android.library'
+apply from: '../android_commons.gradle'
+
+dependencies {
+    implementation project(Modules.base)
+    implementation project(Modules.model)
+
+    implementation Libs.AndroidX.Room.runtime
+    kapt Libs.AndroidX.Room.compiler
+
+    implementation Libs.AndroidX.Paging.runtime
+    implementation Libs.Coroutines.core
+
+    implementation Libs.Dagger.dagger
+    kapt Libs.Dagger.compiler
+
+    implementation Libs.jodaTime
+
+    api Libs.OkHttp.okhttp
+    api Libs.OkHttp.loggingInterceptor
+    api Libs.Retrofit.retrofit
+    api Libs.gson
+    implementation Libs.Retrofit.gsonConverter
+
+    testImplementation Libs.junit
+    testImplementation Libs.robolectric
+    testImplementation Libs.mockK
+
+    testImplementation Libs.AndroidX.Test.archCoreTesting
+    testImplementation Libs.AndroidX.Test.core
+    testImplementation Libs.AndroidX.Room.testing
+    testImplementation Libs.Coroutines.test
+    kaptTest Libs.AndroidX.Room.compiler
+    kaptTest Libs.Dagger.compiler
+}

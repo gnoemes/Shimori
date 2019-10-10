@@ -75,6 +75,9 @@ dependencies {
     implementation project(Modules.base)
     implementation project(Modules.common)
     implementation project(Modules.navigation)
+    //TODO remove (domain will provide it)
+    implementation project(Modules.data)
+    implementation project(Modules.model)
 
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler

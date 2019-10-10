@@ -8,8 +8,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
 import androidx.annotation.DrawableRes
-import com.gnoemes.shimori.base.extensions.drawable
-
 
 fun Resources.Theme.attr(@AttrRes attribute: Int): TypedValue {
     val typedValue = TypedValue()

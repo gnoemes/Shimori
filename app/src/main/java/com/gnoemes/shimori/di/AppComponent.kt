@@ -2,6 +2,7 @@ package com.gnoemes.shimori.di
 
 import com.gnoemes.common.epoxy.EpoxyModule
 import com.gnoemes.shimori.ShimoriApplication
+import com.gnoemes.shimori.data.network.NetworkModule
 import com.gnoemes.shimori.main.MainBuilder
 import dagger.BindsInstance
 import dagger.Component
@@ -16,6 +17,7 @@ import javax.inject.Singleton
             AppModule::class,
             AppAssistedModule::class,
             EpoxyModule::class,
+            NetworkModule::class,
             MainBuilder::class
         ])
 interface AppComponent : AndroidInjector<ShimoriApplication> {

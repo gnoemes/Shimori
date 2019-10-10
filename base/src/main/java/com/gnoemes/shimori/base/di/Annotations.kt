@@ -10,4 +10,4 @@ annotation class PerActivity
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 @MustBeDocumented
-annotation class AuthCommonApi
+annotation class Auth
