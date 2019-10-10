@@ -2,7 +2,7 @@ package com.gnoemes.shimori.di
 
 import com.gnoemes.common.epoxy.EpoxyModule
 import com.gnoemes.shimori.ShimoriApplication
-import com.gnoemes.shimori.data.network.NetworkModule
+import com.gnoemes.shimori.data.remote.NetworkModule
 import com.gnoemes.shimori.main.MainBuilder
 import dagger.BindsInstance
 import dagger.Component

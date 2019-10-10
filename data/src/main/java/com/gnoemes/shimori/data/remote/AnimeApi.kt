@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.data.network
+package com.gnoemes.shimori.data.remote
 
 import com.gnoemes.shimori.data.entities.network.AnimeResponse
 import kotlinx.coroutines.Deferred
