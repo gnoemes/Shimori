@@ -1,5 +1,5 @@
 
-package com.gnoemes.common.inject
+package com.gnoemes.common.di
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

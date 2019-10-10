@@ -35,8 +35,6 @@ subprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
 
-            allWarningsAsErrors = true
-
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
 
@@ -52,6 +50,13 @@ task clean(type: Delete) {
 
 Object propOrDef(String propertyName, Object defaultValue) {
     def propertyValue = project.properties[propertyName]
+
+    if (propertyValue == null) {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        propertyValue = properties.getProperty(propertyName)
+    }
+
     return propertyValue != null ? propertyValue : defaultValue
 }
 

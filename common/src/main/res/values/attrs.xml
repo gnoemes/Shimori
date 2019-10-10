@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorSecondaryTransparent" format="color" />
+    <attr name="colorOnPrimarySecondary" format="color" />
+    <attr name="colorDivider" format="color" />
+    <attr name="colorTransparentBackground" format="color" />
+    <attr name="colorOnTransparentBackground" format="color" />
+    <attr name="colorDialogSurface" format="color" />
+    <attr name="colorRateMenuBackground" format="reference" />
+    <attr name="colorRateDialog" format="color" />
+    <attr name="colorStatusBar" format="color" />
+    <attr name="colorNavigationBar" format="color" />
+
+    <attr name="dialogCustomBackground" format="reference" />
+    <attr name="bottomSheetBackground" format="reference" />
+    <attr name="editRateBackground" format="reference" />
+    <attr name="colorSnackbarSurface" format="reference" />
+
+    <attr name="themeStrokeWidth" format="dimension" />
+    <attr name="lightStatusBar" format="boolean" />
+
+    <attr name="colorRateDefault" format="color" />
+    <attr name="colorRateWatched" format="color" />
+    <attr name="colorRateOnHold" format="color" />
+    <attr name="colorRateDropped" format="color" />
+</resources>

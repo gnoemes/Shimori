@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@id/navigation_rates"
+        android:icon="@drawable/selector_bottom_nav_rate"
+        android:title="@string/common_rates" />
+
+    <item
+        android:id="@id/navigation_calendar"
+        android:icon="@drawable/selector_bottom_nav_calendar"
+        android:title="@string/common_calendar" />
+
+    <item
+        android:id="@id/navigation_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/common_search" />
+
+    <item
+        android:id="@id/navigation_news"
+        android:icon="@drawable/selector_bottom_nav_news"
+        android:title="@string/common_main" />
+
+    <item
+        android:id="@id/navigation_profile"
+        android:icon="@drawable/selector_bottom_nav_profile"
+        android:title="@string/common_profile" />
+
+</menu>

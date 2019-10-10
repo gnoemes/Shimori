@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_colorPrimary">#ffffff</color>
+    <color name="default_colorPrimaryVariant">#c7c7c7</color>
+    <color name="default_colorSecondary">#ff7043</color>
+    <color name="default_colorSurface">#ffffff</color>
+    <color name="default_colorOnSecondary">#FFFFFF</color>
+    <color name="default_colorBackground">#f5f5f5</color>
+    <color name="default_colorOnSurface">#DE000000</color>
+    <color name="default_colorOnPrimary">#000000</color>
+    <color name="default_colorOnPrimarySecondary">#99000000</color>
+    <color name="default_colorOnPrimaryDisabled">#61000000</color>
+    <color name="default_colorOnBackground">#7b8084</color>
+    <color name="default_colorSecondaryTransparent">#1ffe5722</color>
+    <color name="default_colorDivider">#0F000000</color>
+    <color name="default_colorRipple">#0f000000</color>
+    <color name="default_colorTransparentBackground">#80ffffff</color>
+    <color name="default_colorOnTransparentBackground">#99000000</color>
+    <color name="default_colorDialogSurface">#FFFFFF</color>
+    <color name="default_colorRateMenuBackground">#FFFFFF</color>
+    <color name="default_colorRateDialog">#FFFFFF</color>
+    <color name="default_colorSnackBar">#0d0d0d</color>
+    <color name="default_colorStatusBar">#80FFFFFF</color>
+
+    <color name="dark_colorPrimary">#2a2a2a</color>
+    <color name="dark_colorPrimaryVariant">#99ffffff</color>
+    <color name="dark_colorSecondary">#ff7043</color>
+    <color name="dark_colorSurface">#212121</color>
+    <color name="dark_colorOnSecondary">#212121</color>
+    <color name="dark_colorBackground">#1d1d1d</color>
+    <color name="dark_colorOnSurface">#deffffff</color>
+    <color name="dark_colorOnPrimary">#ffffff</color>
+    <color name="dark_colorOnPrimarySecondary">#99ffffff</color>
+    <color name="dark_colorOnPrimaryDisabled">#1FFFFFFF</color>
+    <color name="dark_colorOnBackground">#61ffffff</color>
+    <color name="dark_colorSecondaryTransparent">#1ffe5722</color>
+    <color name="dark_colorDivider">#0FFFFFFF</color>
+    <color name="dark_colorRipple">#0FFFFFFF</color>
+    <color name="dark_colorTransparentBackground">#80000000</color>
+    <color name="dark_colorOnTransparentBackground">#99ffffff</color>
+    <color name="dark_colorDialogSurface">#212121</color>
+    <color name="dark_colorRateMenuBackground">#1d1d1d</color>
+    <color name="dark_colorRateDialog">#212121</color>
+    <color name="dark_colorSnackBar">#424242</color>
+    <color name="dark_colorStatusBar">#de2a2a2a</color>
+
+    <color name="amoled_colorPrimary">#000000</color>
+    <color name="amoled_colorPrimaryVariant">#99FFFFFF</color>
+    <color name="amoled_colorSecondary">#ff7043</color>
+    <color name="amoled_colorSurface">#000000</color>
+    <color name="amoled_colorOnSecondary">#000000</color>
+    <color name="amoled_colorBackground">#000000</color>
+    <color name="amoled_colorOnSurface">#deffffff</color>
+    <color name="amoled_colorOnPrimary">#ffffff</color>
+    <color name="amoled_colorOnPrimarySecondary">#99ffffff</color>
+    <color name="amoled_colorOnPrimaryDisabled">#0FFFFFFF</color>
+    <color name="amoled_colorOnBackground">#61ffffff</color>
+    <color name="amoled_colorSecondaryTransparent">#1ffe5722</color>
+    <color name="amoled_colorDivider">#1fffffff</color>
+    <color name="amoled_colorRipple">#0FFFFFFF</color>
+    <color name="amoled_colorTransparentBackground">#99000000</color>
+    <color name="amoled_colorOnTransparentBackground">#99ffffff</color>
+    <color name="amoled_colorDialogSurface">#212121</color>
+    <color name="amoled_colorRateMenuBackground">#0d0d0d</color>
+    <color name="amoled_colorRateDialog">#212121</color>
+    <color name="amoled_colorSnackBar">#212121</color>
+    <color name="amoled_colorStatusBar">#de000000</color>
+
+    <color name="colorTextProtector">#96000000</color>
+    <color name="colorTextProtectorVariant">#de000000</color>
+    <color name="colorOnProtector">#DEffffff</color>
+    <color name="colorOnProtectorVariant">#ffffff</color>
+    <color name="colorShimmer">#8b8a8a</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="rate_default">#daf1ff</color>
+    <color name="rate_default_transparent">#1f3d5afe</color>
+    <color name="rate_default_dark">#3d5afe</color>
+    <color name="rate_watched">#eef6dc</color>
+    <color name="rate_watched_transparent">#1f00a700</color>
+    <color name="rate_watched_dark">#00a700</color>
+    <color name="rate_on_hold">#ebeef1</color>
+    <color name="rate_on_hold_transparent">#1fa26450</color>
+    <color name="rate_on_hold_dark">#b86c55</color>
+    <color name="rate_dropped">#fedddf</color>
+    <color name="rate_dropped_transparent">#1fd11414</color>
+    <color name="rate_dropped_dark">#d11414</color>
+
+    <color name="topic_news">#ff8a3c</color>
+    <color name="topic_cosplay">#f7b42c</color>
+    <color name="topic_review">#f477ad</color>
+    <color name="topic_collection">#1fd52f</color>
+    <color name="topic_new_episode">#428686</color>
+    <color name="topic_release">#42865e</color>
+
+    <color name="comment_review">#1fd52f</color>
+    <color name="comment_offtopic">#f477ad</color>
+
+    <color name="ic_launcher_background">#FFFFFF</color>
+
+    <color name="player_controls">#deffffff</color>
+    <color name="player_surface">#80000000</color>
+    <color name="player_levels_background">#91000000</color>
+    <color name="player_unlock_background">#99ffffff</color>
+
+    <color name="anime_rate_progress_watched">#00a700</color>
+    <color name="anime_rate_progress_watching">#3d5afe</color>
+    <color name="manga_rate_progress_readed">#00a700</color>
+    <color name="manga_rate_progress_reading">#3d5afe</color>
+    <color name="rate_progress_dropped">#d11414</color>
+
+    <color name="colorSecondary_red">#ef5350</color>
+    <color name="colorSecondary_red_transparent">#1fef5350</color>
+    <color name="colorSecondary_orange">#ff7043</color>
+    <color name="colorSecondary_orange_transparent">#1fff7043</color>
+    <color name="colorSecondary_yellow">#f9a825</color>
+    <color name="colorSecondary_yellow_transparent">#1ff9a825</color>
+    <color name="colorSecondary_green">#43a047</color>
+    <color name="colorSecondary_green_transparent">#1f43a047</color>
+    <color name="colorSecondary_cyan">#00bcd4</color>
+    <color name="colorSecondary_cyan_transparent">#1f00bcd4</color>
+    <color name="colorSecondary_blue">#2196f3</color>
+    <color name="colorSecondary_blue_transparent">#1f2196f3</color>
+    <color name="colorSecondary_purple">#e358fb</color>
+    <color name="colorSecondary_purple_transparent">#1fe358fb</color>
+
+    <color name="status_anons">#ff2d58</color>
+    <color name="status_ongoing">#0088ff</color>
+
+</resources>

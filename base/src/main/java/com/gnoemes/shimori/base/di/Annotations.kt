@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.base.inject
+package com.gnoemes.shimori.base.di
 
 import javax.inject.Qualifier
 

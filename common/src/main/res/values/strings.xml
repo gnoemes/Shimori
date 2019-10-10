@@ -1,2 +1,7 @@
 <resources>
+    <string name="common_rates">Списки</string>
+    <string name="common_calendar">Календарь</string>
+    <string name="common_search">Поиск</string>
+    <string name="common_main">Главная</string>
+    <string name="common_profile">Профиль</string>
 </resources>

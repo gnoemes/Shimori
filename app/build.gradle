@@ -1,5 +1,6 @@
 import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Application
+import com.gnoemes.shimori.Modules
 import org.moallemi.gradle.internal.VersionCodeType
 
 apply plugin: 'com.android.application'
@@ -41,6 +42,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+
+        buildConfigField 'String', 'ShimoriClientId', "\"" + propOrDef("ShimoriClientId", "") + "\""
+        buildConfigField 'String', 'ShimoriClientSecret', "\"" + propOrDef("ShimoriClientSecret", "") + "\""
+        buildConfigField 'String', 'ShikimoriBaseUrl', ShikimoriBaseUrl
     }
 
     packagingOptions {
@@ -67,7 +72,9 @@ android {
 }
 
 dependencies {
-    implementation Libs.Kotlin.stdlib
+    implementation project(Modules.base)
+    implementation project(Modules.common)
+    implementation project(Modules.navigation)
 
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler
@@ -80,6 +87,11 @@ dependencies {
     implementation Libs.Coroutines.android
 
     implementation Libs.mvRx
+
+    implementation Libs.jodaTime
+
+    implementation Libs.Glide.glide
+    kapt Libs.Glide.compiler
 
     testImplementation Libs.junit
     testImplementation Libs.robolectric
