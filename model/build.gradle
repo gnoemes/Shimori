@@ -1,0 +1,9 @@
+import com.gnoemes.shimori.Libs
+
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.gson
+    implementation Libs.jodaTime
+}
