@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.data.network
+package com.gnoemes.shimori.data.remote
 
 import com.gnoemes.shimori.base.di.Auth
 import com.gnoemes.shimori.data.util.DateTimeResponseConverter
