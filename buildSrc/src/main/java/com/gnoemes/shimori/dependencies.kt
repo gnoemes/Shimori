@@ -9,6 +9,8 @@ object Modules {
     const val base = ":base"
     const val common = ":common"
     const val navigation = ":navigation"
+    const val model = ":model"
+    const val data = ":data"
 }
 
 object Releases {
@@ -31,6 +33,7 @@ object Libs {
 
     const val gravitySnapHelper = "com.github.rubensousa:gravitysnaphelper:2.2.0"
     const val jodaTime = "net.danlew:android.joda:2.9.9.3"
+    const val gson = "com.google.code.gson:gson:2.8.5"
 
     const val junit = "junit:junit:4.12"
     const val robolectric = "org.robolectric:robolectric:4.3"
@@ -172,7 +175,9 @@ object Libs {
 
     object AssistedInject {
         private const val version = "0.5.0"
-        const val annotationDagger2 = "com.squareup.inject:assisted-inject-annotations-dagger2:$version"
-        const val processorDagger2 = "com.squareup.inject:assisted-inject-processor-dagger2:$version"
+        const val annotationDagger2 =
+            "com.squareup.inject:assisted-inject-annotations-dagger2:$version"
+        const val processorDagger2 =
+            "com.squareup.inject:assisted-inject-processor-dagger2:$version"
     }
 }
