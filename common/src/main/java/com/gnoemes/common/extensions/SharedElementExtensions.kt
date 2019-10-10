@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.ActivityNavigatorExtras
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
-import com.gnoemes.shimori.base.utils.SharedElementHelper
+import com.gnoemes.common.utils.SharedElementHelper
 
 fun SharedElementHelper.toBundle(activity: Activity): Bundle? {
     return toActivityOptions(activity)?.toBundle()

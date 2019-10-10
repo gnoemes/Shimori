@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.base.utils
+package com.gnoemes.common.utils
 
 import android.os.Build
 import android.view.View

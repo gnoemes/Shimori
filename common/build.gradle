@@ -15,6 +15,7 @@ dependencies {
     implementation project(Modules.navigation)
 
     implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Navigation.ui
     implementation Libs.AndroidX.Navigation.fragment
     implementation Libs.AndroidX.swiperefresh

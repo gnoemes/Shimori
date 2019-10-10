@@ -1,9 +1,14 @@
 package com.gnoemes.common.extensions
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -14,6 +19,21 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.gnoemes.common.utils.Event
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.roundToInt
+
+fun Activity.hideSoftInput() {
+    val imm: InputMethodManager? = getSystemService()
+    val currentFocus = currentFocus
+    if (currentFocus != null && imm != null) {
+        imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+    }
+}
+
+fun Fragment.hideSoftInput() = requireActivity().hideSoftInput()
+fun Fragment.dp(px: Int) = resources.dp(px)
+fun Activity.dp(px: Int) = resources.dp(px)
+fun Context.dp(px: Int) = resources.dp(px)
+fun Resources.dp(px: Int) = (displayMetrics.density * px).roundToInt()
 
 fun Fragment.showSnackbar(snackbarText: String, timeLength: Int) {
     activity?.let {
@@ -112,20 +132,20 @@ inline fun View.doOnLayouts(crossinline action: (view: View) -> Boolean) {
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 private fun createStateForViewPadding(view: View) =
     ViewDimensions(
-        view.paddingLeft,
-        view.paddingTop,
-        view.paddingRight,
-        view.paddingBottom,
-        view.paddingStart,
-        view.paddingEnd
+            view.paddingLeft,
+            view.paddingTop,
+            view.paddingRight,
+            view.paddingBottom,
+            view.paddingStart,
+            view.paddingEnd
     )
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 private fun createStateForViewMargin(view: View): ViewDimensions {
     return (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
         ViewDimensions(
-            it.leftMargin, it.topMargin, it.rightMargin, it.bottomMargin,
-            it.marginStart, it.marginEnd
+                it.leftMargin, it.topMargin, it.rightMargin, it.bottomMargin,
+                it.marginStart, it.marginEnd
         )
     } ?: ViewDimensions()
 }
