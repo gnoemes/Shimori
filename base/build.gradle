@@ -10,5 +10,5 @@ dependencies {
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Fragment.fragment
 
-    implementation Libs.Dagger.compiler
+    implementation Libs.Dagger.dagger
 }

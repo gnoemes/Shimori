@@ -3,7 +3,6 @@ package com.gnoemes.common
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.doOnPreDraw
-import androidx.lifecycle.ViewModelProvider
 import com.airbnb.mvrx.BaseMvRxActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -12,9 +11,6 @@ import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
 abstract class BaseActivity : BaseMvRxActivity(), HasAndroidInjector {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Any>
