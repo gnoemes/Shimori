@@ -1,0 +1,16 @@
+import com.gnoemes.shimori.Modules
+import com.gnoemes.shimori.Libs
+
+apply plugin: 'com.android.library'
+apply from: '../android_commons.gradle'
+
+dependencies {
+    implementation project(Modules.base)
+    implementation project(Modules.model)
+    api project(Modules.data)
+
+    kapt Libs.Dagger.compiler
+
+    implementation Libs.AndroidX.Paging.common
+    implementation Libs.AndroidX.Paging.runtime
+}

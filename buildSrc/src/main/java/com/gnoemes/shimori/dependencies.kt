@@ -11,6 +11,7 @@ object Modules {
     const val navigation = ":navigation"
     const val model = ":model"
     const val data = ":data"
+    const val domain = ":domain"
 }
 
 object Releases {

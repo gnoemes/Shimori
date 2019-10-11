@@ -1,11 +1,14 @@
 import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
 apply from: '../../android_core_dependencies.gradle'
 apply from: '../../android_commons.gradle'
 
 dependencies {
-    //TODO modules
+    implementation project(Modules.domain)
+    implementation project(Modules.model)
+    implementation project(Modules.navigation)
 
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler

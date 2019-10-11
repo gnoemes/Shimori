@@ -4,5 +4,6 @@ include ':common'
 include ':navigation'
 include ':model'
 include ':data'
+include ':domain'
 
 rootProject.name='Shimori'
