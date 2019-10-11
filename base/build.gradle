@@ -6,5 +6,5 @@ apply from: '../android_commons.gradle'
 dependencies {
     api Libs.Coroutines.core
 
-    implementation Libs.Dagger.dagger
+    api Libs.Dagger.dagger
 }
