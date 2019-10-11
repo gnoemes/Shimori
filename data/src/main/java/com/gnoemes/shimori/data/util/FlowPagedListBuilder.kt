@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gnoemes.shimori.data
+package com.gnoemes.shimori.data.util
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.paging.DataSource
