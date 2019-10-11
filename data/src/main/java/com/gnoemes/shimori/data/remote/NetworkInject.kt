@@ -29,7 +29,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun bindAnimesApi(@Auth retrofit: Retrofit): AnimeApi {
+    fun bindAnimesApi(retrofit: Retrofit): AnimeApi {
         return retrofit.create(AnimeApi::class.java)
     }
 }
@@ -87,7 +87,8 @@ class CommonNetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(builder: OkHttpClient.Builder) = builder.build()
+    fun provideOkHttpClient(@Named("okhttp-default") builder: OkHttpClient.Builder) =
+        builder.build()
 
     @Provides
     @Singleton
@@ -102,6 +103,12 @@ class CommonNetworkModule {
     fun provideRetrofit(builder: Retrofit.Builder): Retrofit {
         return builder.baseUrl(ShimoriConstants.ShikimoriBaseUrl).build()
     }
+
+    @Provides
+    @Singleton
+    fun provideFactory(gson: Gson): Converter.Factory {
+        return GsonConverterFactory.create(gson)
+    }
 }
 
 @Module
@@ -111,8 +118,9 @@ class AuthNetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthOkHttpClient(builder: OkHttpClient.Builder) = builder.apply {
-        //TODO auth
-    }.build()
+    fun provideAuthOkHttpClient(@Named("okhttp-default") builder: OkHttpClient.Builder) =
+        builder.apply {
+            //TODO auth
+        }.build()
 }
 
