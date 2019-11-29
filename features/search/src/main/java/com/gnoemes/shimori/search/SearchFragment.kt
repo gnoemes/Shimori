@@ -40,9 +40,12 @@ class SearchFragment : BaseFragment() {
 
         binding.recyclerView.run {
             setController(controller)
+
+            //4:3
+            val posterWidthWithPadding = context.dimen(R.dimen.search_image_grid_poster_height) / 1.331 + dp(16)
             val rawColumns = context.resources.displayMetrics
                 .widthPixels
-                .div(context.dimen(R.dimen.image_grid_poster_width) + dp(16))
+                .div(posterWidthWithPadding)
                 .toInt()
 
             layoutManager = GridLayoutManager(context, rawColumns)
