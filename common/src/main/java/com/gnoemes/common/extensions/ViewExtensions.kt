@@ -7,10 +7,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -52,28 +49,6 @@ fun Fragment.setupSnackbar(lifecycleOwner: LifecycleOwner, snackbarEvent: LiveDa
 fun ViewGroup.beginDelayedTransition(duration: Long = 200) {
     TransitionManager.beginDelayedTransition(this, AutoTransition().apply { setDuration(duration) })
 }
-
-
-fun View.doOnApplyWindowInsets(
-    f: (
-        View,
-        insets: WindowInsetsCompat,
-        initialPadding: ViewDimensions,
-        initialMargin: ViewDimensions
-    ) -> Unit
-) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) return
-
-    // Create a snapshot of the view's padding state
-    val initialPadding = createStateForViewPadding(this)
-    val initialMargin = createStateForViewMargin(this)
-    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
-        f(v, insets, initialPadding, initialMargin)
-        insets
-    }
-    requestApplyInsetsWhenAttached()
-}
-
 
 /**
  * Call [View.requestApplyInsets] in a safe away. If we're attached it calls it straight-away.
@@ -128,33 +103,3 @@ inline fun View.doOnLayouts(crossinline action: (view: View) -> Boolean) {
         }
     })
 }
-
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-private fun createStateForViewPadding(view: View) =
-    ViewDimensions(
-            view.paddingLeft,
-            view.paddingTop,
-            view.paddingRight,
-            view.paddingBottom,
-            view.paddingStart,
-            view.paddingEnd
-    )
-
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-private fun createStateForViewMargin(view: View): ViewDimensions {
-    return (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
-        ViewDimensions(
-                it.leftMargin, it.topMargin, it.rightMargin, it.bottomMargin,
-                it.marginStart, it.marginEnd
-        )
-    } ?: ViewDimensions()
-}
-
-data class ViewDimensions(
-    val left: Int = 0,
-    val top: Int = 0,
-    val right: Int = 0,
-    val bottom: Int = 0,
-    val start: Int = 0,
-    val end: Int = 0
-)

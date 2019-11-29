@@ -66,6 +66,12 @@ object Libs {
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
+    object Insetter {
+        private const val version = "0.2.0"
+        const val dbx = "dev.chrisbanes:insetter-dbx:$version"
+        const val ktx = "dev.chrisbanes:insetter-ktx:$version"
+    }
+
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val browser = "androidx.browser:browser:1.0.0"

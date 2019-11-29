@@ -10,6 +10,7 @@
         android:orientation="vertical"
         app:paddingRightSystemWindowInsets="@{true}"
         app:paddingLeftSystemWindowInsets="@{true}"
+        app:layout_edgeToEdge="@{true}"
         tools:context=".main.MainActivity">
 
         <FrameLayout
