@@ -25,18 +25,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/image_grid_poster_width"
         android:onClick="@{clickListener}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/posterContainer"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/search_image_grid_poster_height"
             app:cardCornerRadius="@dimen/image_round_corners"
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="false"
-            app:layout_constraintDimensionRatio="w, 4:3"
+            app:layout_constraintDimensionRatio="h, 4:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
