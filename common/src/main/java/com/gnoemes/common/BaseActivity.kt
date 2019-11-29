@@ -2,15 +2,15 @@ package com.gnoemes.common
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
-import com.airbnb.mvrx.BaseMvRxActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-abstract class BaseActivity : BaseMvRxActivity(), HasAndroidInjector {
+abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Any>
