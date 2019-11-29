@@ -42,6 +42,8 @@ object Libs {
     const val robolectric = "org.robolectric:robolectric:4.3"
     const val mockK = "io.mockk:mockk:1.9.3"
 
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
+
     object Google {
         const val material = "com.google.android.material:material:${Versions.material}"
         const val firebaseCore = "com.google.firebase:firebase-core:17.2.0"
