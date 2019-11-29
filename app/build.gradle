@@ -78,6 +78,8 @@ dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.model)
 
+    implementation project(Modules.featureSearch)
+
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler
     kapt Libs.Dagger.androidProcessor
@@ -87,6 +89,11 @@ dependencies {
 
     implementation Libs.Coroutines.core
     implementation Libs.Coroutines.android
+
+    implementation Libs.Epoxy.epoxy
+    implementation Libs.Epoxy.paging
+    implementation Libs.Epoxy.dataBinding
+    kapt Libs.Epoxy.processor
 
     implementation Libs.mvRx
 

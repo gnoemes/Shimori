@@ -15,7 +15,11 @@ class SearchRepository @Inject constructor(
 
     //TODO error processing or Result
     suspend fun search(): List<Anime> {
-        val result = api.search(emptyMap())
+        val filter = mapOf(
+                "page" to "1",
+                "limit" to "50"
+        )
+        val result = api.search(filter)
             .toResult(animeMapper.toListMapper())
 
         if (result is Success) {

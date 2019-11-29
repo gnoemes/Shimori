@@ -4,4 +4,24 @@
     <string name="common_search">Поиск</string>
     <string name="common_main">Главная</string>
     <string name="common_profile">Профиль</string>
+
+    <string name="status_anons">Анонс</string>
+    <string name="status_ongoing">Онгоинг</string>
+    <string name="status_released">Завершен</string>
+
+    <string name="type_tv_translatable">TV сериал</string>
+    <string name="type_tv_long_translatable">Сериал</string>
+    <string name="type_tv_short_translatable">TV</string>
+    <string name="type_movie_translatable">Фильм</string>
+    <string name="type_special_translatable">Спешл</string>
+    <string name="type_music_translatable">Клип</string>
+    <string name="type_tv_13" translatable="false">TV 13</string>
+    <string name="type_tv_24" translatable="false">TV 24</string>
+    <string name="type_tv_48" translatable="false">TV 48</string>
+    <string name="type_ova" translatable="false">OVA</string>
+    <string name="type_ona" translatable="false">ONA</string>
+
+    <string name="episode_short">эп.</string>
+    <string name="episode_short_format">%d эп.</string>
+
 </resources>

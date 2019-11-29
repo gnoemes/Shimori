@@ -3,5 +3,7 @@
     <style name="Platform.Theme.Shimori" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:navigationBarColor">?attr/colorNavigationBar</item>
         <item name="android:statusBarColor">?attr/colorStatusBar</item>
+        <item name="android:windowLightStatusBar">?attr/lightStatusBar</item>
+        <item name="android:windowLightNavigationBar">?attr/lightStatusBar</item>
     </style>
 </resources>

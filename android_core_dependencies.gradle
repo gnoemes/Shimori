@@ -1,7 +1,5 @@
 import com.gnoemes.shimori.Libs
 
-apply plugin: "androidx.navigation.safeargs.kotlin"
-
 android {
     dataBinding {
         enabled = true

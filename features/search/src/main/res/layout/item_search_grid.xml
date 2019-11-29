@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="textCreator"
+            type="com.gnoemes.common.textcreators.AnimeTextCreator" />
+
+        <variable
+            name="item"
+            type="com.gnoemes.shimori.model.anime.Anime" />
+
+        <variable
+            name="image"
+            type="com.gnoemes.shimori.model.ShimoriImage" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/image_grid_poster_width"
+        android:onClick="@{clickListener}">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/posterContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="@dimen/image_round_corners"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:layout_constraintDimensionRatio="w, 4:3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorDivider"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/posterView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:image="@{image}"
+                app:roundedCornerOutlineProvider="@{@dimen/image_round_corners}"
+                tools:src="@drawable/poster_debug" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{textCreator.showTitle(item)}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
+            app:layout_constraintStart_toStartOf="@+id/posterContainer"
+            app:layout_constraintTop_toBottomOf="@+id/posterContainer"
+            tools:text="Вторжение гигантов 3. Часть 2" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{textCreator.showDescription(item)}"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="?attr/colorOnPrimarySecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
+            app:layout_constraintStart_toStartOf="@+id/posterContainer"
+            app:layout_constraintTop_toBottomOf="@+id/titleView"
+            app:layout_constraintVertical_bias="0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
