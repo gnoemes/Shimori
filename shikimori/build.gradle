@@ -1,0 +1,27 @@
+import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Modules
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    correctErrorTypes = true
+}
+
+dependencies {
+    implementation project(Modules.dataBase)
+    implementation project(Modules.base)
+    implementation project(Modules.model)
+
+    implementation Libs.OkHttp.okhttp
+    implementation Libs.OkHttp.loggingInterceptor
+    implementation Libs.Retrofit.retrofit
+    implementation Libs.gson
+    implementation Libs.Retrofit.gsonConverter
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.gson
+    implementation Libs.jodaTime
+
+    kapt Libs.Dagger.compiler
+}

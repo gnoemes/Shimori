@@ -1,0 +1,9 @@
+import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Modules
+
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(Modules.model)
+    implementation Libs.Kotlin.stdlib
+}

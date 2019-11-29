@@ -5,14 +5,23 @@ object Application {
 }
 
 object Modules {
+    //base
     const val app = ":app"
     const val base = ":base"
+    const val baseAndroid = ":base-android"
     const val common = ":common"
     const val navigation = ":navigation"
-    const val model = ":model"
-    const val data = ":data"
-    const val domain = ":domain"
 
+    //data
+    const val dataBase = ":data-base"
+    const val data = ":data"
+    const val shikimori = ":shikimori"
+
+    //domain
+    const val domain = ":domain"
+    const val model = ":model"
+
+    //features
     const val featureSearch = ":features:search"
 }
 

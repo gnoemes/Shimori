@@ -1,10 +1,16 @@
 include ':app'
 include ':base'
+include ':base-android'
 include ':common'
 include ':navigation'
-include ':model'
+
+include ':data-base'
 include ':data'
+include ':shikimori'
+
 include ':domain'
+include ':model'
+
 include ':features:search'
 
 rootProject.name='Shimori'
