@@ -42,7 +42,7 @@ class SearchFragment : BaseFragment() {
             setController(controller)
 
             //4:3
-            val posterWidthWithPadding = context.dimen(R.dimen.search_image_grid_poster_height) / 1.331 + dp(16)
+            val posterWidthWithPadding = context.dimen(R.dimen.search_image_grid_poster_height) * 0.75 + dp(16)
             val rawColumns = context.resources.displayMetrics
                 .widthPixels
                 .div(posterWidthWithPadding)
