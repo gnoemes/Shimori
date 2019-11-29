@@ -12,14 +12,14 @@ class SearchEpoxyController @Inject constructor(
     private val textCreator: AnimeTextCreator
 ) : EpoxyController() {
     var callbacks: Callbacks? by observable(null, ::requestModelBuild)
-    var viewState by observable(SearchViewState(), ::requestModelBuild)
+    var state by observable(SearchViewState(), ::requestModelBuild)
 
     interface Callbacks {
         fun onItemClicked(id: Long, type: ContentType)
     }
 
     override fun buildModels() {
-        val items = viewState.resuls
+        val items = state.resuls
 
         items?.forEach { item ->
             searchGrid {
