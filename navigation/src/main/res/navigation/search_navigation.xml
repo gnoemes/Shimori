@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/navigation_search"
-    app:startDestination="@id/test">
+    app:startDestination="@id/navigation_search">
 
     <fragment
-        android:id="@+id/test"
-        android:name="com.gnoemes.shimori.presentation.test.TestFragment" />
+        android:id="@id/navigation_search"
+        android:name="com.gnoemes.shimori.search.SearchFragment" />
 
 </navigation>

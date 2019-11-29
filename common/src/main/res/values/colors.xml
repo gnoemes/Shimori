@@ -20,7 +20,7 @@
     <color name="default_colorRateMenuBackground">#FFFFFF</color>
     <color name="default_colorRateDialog">#FFFFFF</color>
     <color name="default_colorSnackBar">#0d0d0d</color>
-    <color name="default_colorStatusBar">#80FFFFFF</color>
+    <color name="default_colorStatusBar">#DEFFFFFF</color>
 
     <color name="dark_colorPrimary">#2a2a2a</color>
     <color name="dark_colorPrimaryVariant">#99ffffff</color>

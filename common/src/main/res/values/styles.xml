@@ -10,7 +10,7 @@
     <style name="Widget.Shimori.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
-        <item name="itemRippleColor">?attr/colorDivider</item>
+        <item name="itemBackground">?attr/selectableItemBackground</item>
     </style>
 
     <style name="Widget.Shimori.DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">

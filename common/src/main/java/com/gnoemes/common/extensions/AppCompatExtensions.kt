@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -21,3 +22,5 @@ fun Context.drawable(@DrawableRes drawableResId: Int): Drawable? {
 fun Context.colorStateList(@ColorRes colorRes: Int): ColorStateList {
     return AppCompatResources.getColorStateList(this, colorRes)
 }
+
+fun Context.dimen(@DimenRes dimen: Int) = this.resources.getDimension(dimen)

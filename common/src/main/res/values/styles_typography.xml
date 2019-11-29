@@ -57,16 +57,16 @@
     </style>
 
     <style name="TextAppearance.Shimori.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">sans-serif</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0.0015</item>
     </style>
 
     <style name="TextAppearance.Shimori.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">sans-serif</item>
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0.001</item>
     </style>
 

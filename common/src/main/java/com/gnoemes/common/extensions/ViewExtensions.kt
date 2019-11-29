@@ -30,10 +30,10 @@ fun Activity.hideSoftInput() {
 }
 
 fun Fragment.hideSoftInput() = requireActivity().hideSoftInput()
-fun Fragment.dp(px: Int) = resources.dp(px)
-fun Activity.dp(px: Int) = resources.dp(px)
-fun Context.dp(px: Int) = resources.dp(px)
-fun Resources.dp(px: Int) = (displayMetrics.density * px).roundToInt()
+fun Fragment.dp(dp: Int) = resources.dp(dp)
+fun Activity.dp(dp: Int) = resources.dp(dp)
+fun Context.dp(dp: Int) = resources.dp(dp)
+fun Resources.dp(dp: Int) = (displayMetrics.density * dp).roundToInt()
 
 fun Fragment.showSnackbar(snackbarText: String, timeLength: Int) {
     activity?.let {
@@ -87,7 +87,7 @@ fun View.requestApplyInsetsWhenAttached() = doOnAttach {
 }
 
 fun View.doOnAttach(f: (View) -> Unit) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return
 
     if (isAttachedToWindow) {
         f(this)

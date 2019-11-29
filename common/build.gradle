@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation project(Modules.base)
     implementation project(Modules.navigation)
+    implementation project(Modules.model)
 
     implementation Libs.AndroidX.appcompat
     implementation Libs.AndroidX.coreKtx

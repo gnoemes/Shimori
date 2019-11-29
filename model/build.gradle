@@ -5,5 +5,5 @@ apply plugin: 'kotlin'
 dependencies {
     implementation Libs.Kotlin.stdlib
     implementation Libs.gson
-    implementation Libs.jodaTime
+    api Libs.jodaTime
 }

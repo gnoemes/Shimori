@@ -12,6 +12,8 @@ object Modules {
     const val model = ":model"
     const val data = ":data"
     const val domain = ":domain"
+
+    const val featureSearch = ":features:search"
 }
 
 object Releases {

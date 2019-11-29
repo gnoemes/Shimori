@@ -12,8 +12,10 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.gnoemes.common.extensions.doOnApplyWindowInsets
 import com.gnoemes.common.ui.widgets.MaxLinesToggleClickListener
+import com.gnoemes.shimori.model.ShimoriImage
 
 @BindingAdapter("visible")
 fun visible(view: View, value: Boolean) {
@@ -42,9 +44,9 @@ fun maxLinesClickListener(view: TextView, oldCollapsedMaxLines: Int, newCollapse
     if (oldCollapsedMaxLines != newCollapsedMaxLines) {
         view.maxLines = newCollapsedMaxLines
         view.setOnClickListener(
-            MaxLinesToggleClickListener(
-                newCollapsedMaxLines
-            )
+                MaxLinesToggleClickListener(
+                        newCollapsedMaxLines
+                )
         )
     }
 }
@@ -63,23 +65,23 @@ fun roundedCornerOutlineProvider(view: View, oldRadius: Float, radius: Float) {
 }
 
 @BindingAdapter(
-    "paddingLeftSystemWindowInsets",
-    "paddingTopSystemWindowInsets",
-    "paddingRightSystemWindowInsets",
-    "paddingBottomSystemWindowInsets",
-    "paddingLeftGestureInsets",
-    "paddingTopGestureInsets",
-    "paddingRightGestureInsets",
-    "paddingBottomGestureInsets",
-    "marginLeftSystemWindowInsets",
-    "marginTopSystemWindowInsets",
-    "marginRightSystemWindowInsets",
-    "marginBottomSystemWindowInsets",
-    "marginLeftGestureInsets",
-    "marginTopGestureInsets",
-    "marginRightGestureInsets",
-    "marginBottomGestureInsets",
-    requireAll = false
+        "paddingLeftSystemWindowInsets",
+        "paddingTopSystemWindowInsets",
+        "paddingRightSystemWindowInsets",
+        "paddingBottomSystemWindowInsets",
+        "paddingLeftGestureInsets",
+        "paddingTopGestureInsets",
+        "paddingRightGestureInsets",
+        "paddingBottomGestureInsets",
+        "marginLeftSystemWindowInsets",
+        "marginTopSystemWindowInsets",
+        "marginRightSystemWindowInsets",
+        "marginBottomSystemWindowInsets",
+        "marginLeftGestureInsets",
+        "marginTopGestureInsets",
+        "marginRightGestureInsets",
+        "marginBottomGestureInsets",
+        requireAll = false
 )
 fun applySystemWindows(
     view: View,
@@ -135,10 +137,10 @@ fun applySystemWindows(
             else -> 0
         }
         v.setPadding(
-            initialPadding.left + paddingLeft,
-            initialPadding.top + paddingTop,
-            initialPadding.right + paddingRight,
-            initialPadding.bottom + paddingBottom
+                initialPadding.left + paddingLeft,
+                initialPadding.top + paddingTop,
+                initialPadding.right + paddingRight,
+                initialPadding.bottom + paddingBottom
         )
 
         // Margin handling
@@ -178,5 +180,18 @@ fun applySystemWindows(
                 bottomMargin = initialMargin.bottom + marginBottom
             }
         }
+    }
+}
+
+@BindingAdapter("image")
+fun loadImage(view: ImageView, oldImage: ShimoriImage?, image: ShimoriImage?) {
+    if (oldImage == image) return
+
+    if (image != null) {
+        Glide.with(view)
+            .load(image.original)
+            .into(view)
+    } else {
+        view.setImageDrawable(null)
     }
 }
