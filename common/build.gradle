@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation project(Modules.base)
+    implementation project(Modules.baseAndroid)
     implementation project(Modules.navigation)
     implementation project(Modules.model)
 

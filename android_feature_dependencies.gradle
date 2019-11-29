@@ -7,7 +7,7 @@ apply from: '../../android_commons.gradle'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
-    implementation project(Modules.base)
+    implementation project(Modules.baseAndroid)
     implementation project(Modules.common)
     implementation project(Modules.domain)
     implementation project(Modules.model)

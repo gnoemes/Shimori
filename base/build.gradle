@@ -1,10 +1,11 @@
 import com.gnoemes.shimori.Libs
 
-apply plugin: 'com.android.library'
-apply from: '../android_commons.gradle'
+apply plugin: 'kotlin'
 
 dependencies {
+    implementation Libs.Kotlin.stdlib
     api Libs.Coroutines.core
-
     api Libs.Dagger.dagger
+    api Libs.Retrofit.retrofit
+    api Libs.OkHttp.loggingInterceptor
 }

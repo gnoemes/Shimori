@@ -5,7 +5,9 @@ apply plugin: 'com.android.library'
 apply from: '../android_commons.gradle'
 
 dependencies {
-    implementation project(Modules.base)
+    api project(Modules.dataBase)
+    implementation project(Modules.baseAndroid)
+    implementation project(Modules.shikimori)
     implementation project(Modules.model)
 
     implementation Libs.AndroidX.Room.runtime
@@ -17,12 +19,6 @@ dependencies {
     kapt Libs.Dagger.compiler
 
     implementation Libs.jodaTime
-
-    api Libs.OkHttp.okhttp
-    api Libs.OkHttp.loggingInterceptor
-    api Libs.Retrofit.retrofit
-    api Libs.gson
-    implementation Libs.Retrofit.gsonConverter
 
     testImplementation Libs.junit
     testImplementation Libs.robolectric

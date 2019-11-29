@@ -72,11 +72,12 @@ android {
 }
 
 dependencies {
-    implementation project(Modules.base)
+    implementation project(Modules.baseAndroid)
     implementation project(Modules.common)
     implementation project(Modules.navigation)
     implementation project(Modules.domain)
     implementation project(Modules.model)
+    implementation project(Modules.shikimori)
 
     implementation project(Modules.featureSearch)
 
@@ -94,6 +95,9 @@ dependencies {
     implementation Libs.Epoxy.paging
     implementation Libs.Epoxy.dataBinding
     kapt Libs.Epoxy.processor
+
+    implementation Libs.gson
+    implementation Libs.Retrofit.gsonConverter
 
     implementation Libs.mvRx
 

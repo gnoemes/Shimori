@@ -5,7 +5,7 @@ apply plugin: 'com.android.library'
 apply from: '../android_commons.gradle'
 
 dependencies {
-    implementation project(Modules.base)
+    implementation project(Modules.baseAndroid)
     implementation project(Modules.model)
     api project(Modules.data)
 

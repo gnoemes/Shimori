@@ -11,3 +11,8 @@ annotation class PerActivity
 @Qualifier
 @MustBeDocumented
 annotation class Auth
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+@MustBeDocumented
+annotation class Shikimori
