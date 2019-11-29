@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.main
 
 import android.os.Bundle
-import android.view.View
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
@@ -10,6 +10,7 @@ import com.gnoemes.common.BaseActivity
 import com.gnoemes.common.extensions.setupWithNavController
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.databinding.ActivityMainBinding
+import dev.chrisbanes.insetter.doOnApplyWindowInsets
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -27,9 +28,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        binding.mainRoot.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        binding.mainRoot.doOnApplyWindowInsets { view, insets, initialState ->
+            view.updatePadding(left = insets.systemWindowInsetLeft + initialState.paddings.left,
+                    right = insets.systemWindowInsetRight + initialState.paddings.left)
+        }
 
         if (savedInstanceState == null) {
             setupBottomNavigation()
