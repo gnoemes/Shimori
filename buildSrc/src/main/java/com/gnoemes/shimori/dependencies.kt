@@ -32,7 +32,7 @@ object Versions {
 object Libs {
     const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.1"
     const val advancedVersioning = "org.moallemi.gradle.advanced-build-version:gradle-plugin:1.6.0"
-    const val mvRx = "com.airbnb.android:mvrx:1.1.0"
+    const val mvRx = "com.airbnb.android:mvrx:1.3.0"
 
     const val gravitySnapHelper = "com.github.rubensousa:gravitysnaphelper:2.2.0"
     const val jodaTime = "net.danlew:android.joda:2.9.9.3"
