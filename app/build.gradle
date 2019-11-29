@@ -102,6 +102,8 @@ dependencies {
     implementation Libs.Glide.glide
     kapt Libs.Glide.compiler
 
+    debugImplementation Libs.leakCanary
+
     testImplementation Libs.junit
     testImplementation Libs.robolectric
 }
