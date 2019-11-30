@@ -1,9 +1,8 @@
 package com.gnoemes.shikimori.entities.anime
 
-import com.gnoemes.shikimori.entities.GenreResponse
-import com.gnoemes.shikimori.entities.ImageResponse
-import com.gnoemes.shikimori.entities.ShikimoriAnimeType
-import com.gnoemes.shikimori.entities.StatisticResponse
+import com.gnoemes.shikimori.entities.common.GenreResponse
+import com.gnoemes.shikimori.entities.common.ImageResponse
+import com.gnoemes.shikimori.entities.common.StatisticResponse
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
 import com.gnoemes.shimori.model.AgeRating
 import com.gnoemes.shimori.model.ContentStatus

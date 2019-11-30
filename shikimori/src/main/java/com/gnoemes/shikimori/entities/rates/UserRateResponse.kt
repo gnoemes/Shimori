@@ -1,6 +1,6 @@
 package com.gnoemes.shikimori.entities.rates
 
-import com.gnoemes.shikimori.entities.ShikimoriContentType
+import com.gnoemes.shikimori.entities.common.ShikimoriContentType
 import com.google.gson.annotations.SerializedName
 import org.joda.time.DateTime
 
