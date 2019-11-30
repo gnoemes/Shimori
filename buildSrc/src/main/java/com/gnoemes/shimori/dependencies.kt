@@ -34,7 +34,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.2"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-beta04"
     const val advancedVersioning = "org.moallemi.gradle.advanced-build-version:gradle-plugin:1.6.0"
     const val mvRx = "com.airbnb.android:mvrx:1.3.0"
 
@@ -87,7 +87,7 @@ object Libs {
         const val emoji = "androidx.emoji:emoji:1.0.0"
         const val swiperefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02"
         const val preference = "androidx.preference:preference:1.1.0"
-        const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta2"
+        const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
         const val coreKtx = "androidx.core:core-ktx:1.2.0-rc01"
 
         object Navigation {
@@ -194,5 +194,11 @@ object Libs {
             "com.squareup.inject:assisted-inject-annotations-dagger2:$version"
         const val processorDagger2 =
             "com.squareup.inject:assisted-inject-processor-dagger2:$version"
+    }
+
+    object Roomigrant {
+        private const val version = "0.1.7"
+        const val library = "com.github.MatrixDev.Roomigrant:RoomigrantLib:$version"
+        const val compiler = "com.github.MatrixDev.Roomigrant:RoomigrantCompiler:$version"
     }
 }

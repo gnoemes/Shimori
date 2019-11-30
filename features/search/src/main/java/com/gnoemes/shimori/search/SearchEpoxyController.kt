@@ -4,7 +4,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.gnoemes.common.textcreators.AnimeTextCreator
 import com.gnoemes.shimori.base.extensions.observable
-import com.gnoemes.shimori.model.ContentType
+import com.gnoemes.shimori.model.common.ContentType
 import javax.inject.Inject
 
 class SearchEpoxyController @Inject constructor(

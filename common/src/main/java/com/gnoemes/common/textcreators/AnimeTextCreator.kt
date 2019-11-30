@@ -8,9 +8,9 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import com.gnoemes.common.R
 import com.gnoemes.common.extensions.color
-import com.gnoemes.shimori.model.ContentStatus
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
+import com.gnoemes.shimori.model.common.ContentStatus
 import javax.inject.Inject
 
 class AnimeTextCreator @Inject constructor(
@@ -75,7 +75,7 @@ class AnimeTextCreator @Inject constructor(
         }
     }
 
-    private fun getLocalizedType(type: AnimeType): String? {
+    private fun getLocalizedType(type: AnimeType?): String? {
         return when (type) {
             AnimeType.TV -> context.getString(R.string.type_tv_short_translatable)
             AnimeType.OVA -> context.getString(R.string.type_ova)

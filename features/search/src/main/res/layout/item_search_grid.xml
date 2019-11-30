@@ -15,7 +15,7 @@
 
         <variable
             name="image"
-            type="com.gnoemes.shimori.model.ShimoriImage" />
+            type="com.gnoemes.shimori.model.common.ShimoriImage" />
 
         <variable
             name="clickListener"

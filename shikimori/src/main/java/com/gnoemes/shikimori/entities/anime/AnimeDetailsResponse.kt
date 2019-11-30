@@ -4,8 +4,8 @@ import com.gnoemes.shikimori.entities.common.GenreResponse
 import com.gnoemes.shikimori.entities.common.ImageResponse
 import com.gnoemes.shikimori.entities.common.StatisticResponse
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.model.AgeRating
-import com.gnoemes.shimori.model.ContentStatus
+import com.gnoemes.shimori.model.common.AgeRating
+import com.gnoemes.shimori.model.common.ContentStatus
 import com.google.gson.annotations.SerializedName
 import org.joda.time.DateTime
 
@@ -16,7 +16,7 @@ internal data class AnimeDetailsResponse(
     @field:SerializedName("image") val image: ImageResponse,
     @field:SerializedName("url") val url: String,
     @field:SerializedName("kind") val type: ShikimoriAnimeType?,
-    @field:SerializedName("status") private val _status: ContentStatus?,
+    @field:SerializedName("status") val status: ContentStatus?,
     @field:SerializedName("episodes") val episodes: Int,
     @field:SerializedName("episodes_aired") val episodesAired: Int,
     @field:SerializedName("aired_on") val dateAired: DateTime?,
@@ -38,7 +38,4 @@ internal data class AnimeDetailsResponse(
     @field:SerializedName("studios") val studioResponses: List<StudioResponse>?,
     @field:SerializedName("rates_scores_stats") val rateScoresStats: List<StatisticResponse>,
     @field:SerializedName("rates_statuses_stats") val rateStatusesStats: List<StatisticResponse>
-) {
-    val status: ContentStatus
-        get() = _status ?: ContentStatus.NONE
-}
+) 

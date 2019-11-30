@@ -7,9 +7,9 @@ internal data class AnimeVideoResponse(
     @field:SerializedName("name") val name: String?,
     @field:SerializedName("url") val url: String,
     @field:SerializedName("image_url") val imageUrl: String?,
-    @field:SerializedName("kind") private val _type: AnimeVideoType?,
+    @field:SerializedName("kind") private val _type: ShikimoriAnimeVideoType?,
     @field:SerializedName("hosting") val hosting: String?
 ) {
-    val type: AnimeVideoType
-        get() = _type ?: AnimeVideoType.OTHER
+    val type: ShikimoriAnimeVideoType
+        get() = _type ?: ShikimoriAnimeVideoType.OTHER
 }

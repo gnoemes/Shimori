@@ -2,7 +2,7 @@ package com.gnoemes.shikimori.entities.anime
 
 import com.google.gson.annotations.SerializedName
 
-internal enum class AnimeVideoType {
+internal enum class ShikimoriAnimeVideoType {
     @SerializedName("op")
     OPENING,
     @SerializedName("ed")

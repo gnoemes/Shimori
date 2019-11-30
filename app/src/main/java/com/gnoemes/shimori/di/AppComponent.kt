@@ -3,6 +3,7 @@ package com.gnoemes.shimori.di
 import com.gnoemes.common.epoxy.EpoxyModule
 import com.gnoemes.shikimori.ShikimoriModule
 import com.gnoemes.shimori.ShimoriApplication
+import com.gnoemes.shimori.data.database.DatabaseModule
 import com.gnoemes.shimori.main.MainBuilder
 import dagger.BindsInstance
 import dagger.Component
@@ -15,6 +16,7 @@ import javax.inject.Singleton
         modules = [
             AndroidSupportInjectionModule::class,
             AppModule::class,
+            DatabaseModule::class,
             AppAssistedModule::class,
             EpoxyModule::class,
             NetworkModule::class,
