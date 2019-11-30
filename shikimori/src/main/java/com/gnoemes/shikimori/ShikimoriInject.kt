@@ -1,6 +1,8 @@
 package com.gnoemes.shikimori
 
 import com.gnoemes.shikimori.services.AnimeService
+import com.gnoemes.shikimori.services.RateService
+import com.gnoemes.shikimori.services.UserService
 import com.gnoemes.shikimori.util.DateTimeResponseConverter
 import com.gnoemes.shikimori.util.DateTimeResponseConverterImpl
 import com.gnoemes.shikimori.util.UserAgentInterceptor
@@ -52,6 +54,18 @@ internal class ApiServices {
     fun animeService(retrofit: Retrofit): AnimeService {
         return retrofit.create(AnimeService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun userService(@Auth retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun rateService(@Auth retrofit: Retrofit): RateService {
+        return retrofit.create(RateService::class.java)
+    }
 }
 
 @Module
@@ -80,7 +94,7 @@ internal class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideFactory(gson: Gson) = GsonConverterFactory.create(gson)
+    fun provideFactory(gson: Gson): Converter.Factory = GsonConverterFactory.create(gson)
 
     @Provides
     @Singleton
@@ -114,12 +128,6 @@ internal class CommonNetworkModule {
     fun provideRetrofit(builder: Retrofit.Builder): Retrofit {
         return builder.baseUrl(ShimoriConstants.ShikimoriBaseUrl).build()
     }
-
-    @Provides
-    @Singleton
-    fun provideFactory(gson: Gson): Converter.Factory {
-        return GsonConverterFactory.create(gson)
-    }
 }
 
 @Module
@@ -133,4 +141,20 @@ internal class AuthNetworkModule {
         builder.apply {
             //TODO auth
         }.build()
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideRetrofitBuilder(@Auth factory: Converter.Factory, @Auth client: OkHttpClient): Retrofit.Builder {
+        return Retrofit.Builder()
+            .client(client)
+            .addConverterFactory(factory)
+    }
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideRetrofit(@Auth builder: Retrofit.Builder): Retrofit {
+        return builder.baseUrl(ShimoriConstants.ShikimoriBaseUrl).build()
+    }
 }
