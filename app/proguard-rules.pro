@@ -5,7 +5,6 @@
 -verbose
 -dontpreverify
 -allowaccessmodification
--repackageclasses ''
 
 # Note that you cannot just include these flags in your own
 # configuration file; if you are including this file, optimization
@@ -24,6 +23,8 @@
 -keep public class * extends androidx.fragment.app.Fragment
 -keep public class * extends android.app.Fragment
 -keep public class com.android.vending.licensing.ILicensingService
+
+-keep class com.gnoemes.shimori.model.**
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {

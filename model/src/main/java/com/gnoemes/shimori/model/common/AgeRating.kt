@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.model
+package com.gnoemes.shimori.model.common
 
 import com.google.gson.annotations.SerializedName
 

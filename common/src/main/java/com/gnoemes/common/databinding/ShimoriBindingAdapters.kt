@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.gnoemes.common.ui.widgets.MaxLinesToggleClickListener
-import com.gnoemes.shimori.model.ShimoriImage
+import com.gnoemes.shimori.model.common.ShimoriImage
 
 @BindingAdapter("visible")
 fun visible(view: View, value: Boolean) {

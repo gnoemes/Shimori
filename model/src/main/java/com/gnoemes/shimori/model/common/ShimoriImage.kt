@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.model
+package com.gnoemes.shimori.model.common
 
 data class ShimoriImage(
     val original: String?,

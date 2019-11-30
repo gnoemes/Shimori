@@ -1,26 +1,59 @@
 package com.gnoemes.shimori.model.anime
 
-import com.gnoemes.shimori.model.ContentStatus
-import com.gnoemes.shimori.model.ContentType
+import androidx.room.*
+import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
-import com.gnoemes.shimori.model.ShimoriImage
+import com.gnoemes.shimori.model.common.*
+import com.gnoemes.shimori.model.rate.Rate
 import org.joda.time.DateTime
 
+@Entity(tableName = "animes",
+        indices = [
+            Index(value = ["shikimori_id"], unique = true),
+            Index(value = ["rate_id"])
+        ],
+        foreignKeys = [
+            ForeignKey(entity = Rate::class,
+                    parentColumns = ["shikimori_id"],
+                    childColumns = ["rate_id"])
+        ]
+)
 data class Anime(
-    override val id: Long,
-    override val name: String,
-    override val nameRu: String?,
-    override val image: ShimoriImage,
-    val url: String,
-    val type: AnimeType,
-    val score: Double?,
-    val status: ContentStatus,
-    val episodes: Int,
-    val episodesAired: Int,
-    val dateAired: DateTime?,
-    val dateReleased: DateTime?
-) : ShimoriEntity {
+    @PrimaryKey(autoGenerate = true) override val id: Long = 0,
+    @ColumnInfo(name = "shikimori_id") override val shikimoriId: Long? = null,
+    override val name: String = "",
+    @ColumnInfo(name = "name_ru") override val nameRu: String? = null,
+    @Embedded(prefix = "image_") override val image: ShimoriImage? = null,
+    val url: String? = null,
+    val type: AnimeType? = null,
+    val score: Double? = null,
+    val status: ContentStatus? = null,
+    val episodes: Int = 0,
+    val episodesAired: Int = 0,
+    @ColumnInfo(name = "date_aired") val dateAired: DateTime? = null,
+    @ColumnInfo(name = "date_released") val dateReleased: DateTime? = null,
+    @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: DateTime? = null,
+    @ColumnInfo(name = "age_rating") val ageRating: AgeRating? = null,
+    val duration: Int = 0,
+    val description: String? = null,
+    @ColumnInfo(name = "description_html") val descriptionHtml: String? = null,
+    val franchise: String? = null,
+    val favorite: Boolean = false,
+    @ColumnInfo(name = "topic_id") val topicId: Long? = null,
+    val genres: List<Genre>? = null,
+    @ColumnInfo(name = "rate_id") val rateId: Long? = null
+) : ShimoriEntity, ShikimoriContentEntity {
 
+    @Ignore
+    var videos: List<AnimeVideo>? = null
+    @Ignore
+    var studio: String? = null
+    @Ignore
+    var rateScoresStats: List<Statistic>? = null
+    @Ignore
+    var rateStatusesStats: List<Statistic>? = null
+
+    @get:Ignore
     override val contentType: ContentType
         get() = ContentType.ANIME
 }

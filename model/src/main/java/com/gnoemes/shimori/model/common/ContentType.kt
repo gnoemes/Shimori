@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.model
+package com.gnoemes.shimori.model.common
 
 //Todo remove?
 enum class ContentType {

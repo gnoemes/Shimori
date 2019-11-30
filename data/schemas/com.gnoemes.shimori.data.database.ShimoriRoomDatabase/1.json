@@ -1,0 +1,337 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "30b4d1757e701459a588e5a7d65d0b87",
+    "entities": [
+      {
+        "tableName": "animes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` INTEGER, `date_released` INTEGER, `next_episode_date` INTEGER, `age_rating` TEXT, `duration` INTEGER NOT NULL, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shikimoriId",
+            "columnName": "shikimori_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameRu",
+            "columnName": "name_ru",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "episodes",
+            "columnName": "episodes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "episodesAired",
+            "columnName": "episodesAired",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateAired",
+            "columnName": "date_aired",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateReleased",
+            "columnName": "date_released",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextEpisodeDate",
+            "columnName": "next_episode_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ageRating",
+            "columnName": "age_rating",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "descriptionHtml",
+            "columnName": "description_html",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "franchise",
+            "columnName": "franchise",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "favorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topicId",
+            "columnName": "topic_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "genres",
+            "columnName": "genres",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rateId",
+            "columnName": "rate_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.original",
+            "columnName": "image_original",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.preview",
+            "columnName": "image_preview",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.x96",
+            "columnName": "image_x96",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.x48",
+            "columnName": "image_x48",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_animes_shikimori_id",
+            "unique": true,
+            "columnNames": [
+              "shikimori_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_animes_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
+          },
+          {
+            "name": "index_animes_rate_id",
+            "unique": false,
+            "columnNames": [
+              "rate_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_animes_rate_id` ON `${TABLE_NAME}` (`rate_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "rates",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rate_id"
+            ],
+            "referencedColumns": [
+              "shikimori_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "rates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `target_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` INTEGER, `date_updated` INTEGER, FOREIGN KEY(`target_id`) REFERENCES `animes`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shikimoriId",
+            "columnName": "shikimori_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "targetId",
+            "columnName": "target_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "targetType",
+            "columnName": "target_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "episodes",
+            "columnName": "episodes",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "chapters",
+            "columnName": "chapters",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "volumes",
+            "columnName": "volumes",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reCounter",
+            "columnName": "re_counter",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateCreated",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateUpdated",
+            "columnName": "date_updated",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_rates_target_id_target_type",
+            "unique": true,
+            "columnNames": [
+              "target_id",
+              "target_type"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_target_id_target_type` ON `${TABLE_NAME}` (`target_id`, `target_type`)"
+          },
+          {
+            "name": "index_rates_shikimori_id",
+            "unique": true,
+            "columnNames": [
+              "shikimori_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
+          },
+          {
+            "name": "index_rates_date_created",
+            "unique": false,
+            "columnNames": [
+              "date_created"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_rates_date_created` ON `${TABLE_NAME}` (`date_created`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "animes",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "target_id"
+            ],
+            "referencedColumns": [
+              "shikimori_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '30b4d1757e701459a588e5a7d65d0b87')"
+    ]
+  }
+}
