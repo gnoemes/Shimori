@@ -1,6 +1,6 @@
 package com.gnoemes.shikimori.mappers
 
-import com.gnoemes.shikimori.entities.ImageResponse
+import com.gnoemes.shikimori.entities.common.ImageResponse
 import com.gnoemes.shimori.data_base.mappers.Mapper
 import com.gnoemes.shimori.model.ShimoriConstants
 import com.gnoemes.shimori.model.ShimoriImage
