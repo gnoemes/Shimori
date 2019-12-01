@@ -43,7 +43,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
-        buildConfigField 'String', 'ShikimoriiClientId', "\"" + propOrDef("ShikimoriClientId", "") + "\""
+        buildConfigField 'String', 'ShikimoriClientId', "\"" + propOrDef("ShikimoriClientId", "") + "\""
         buildConfigField 'String', 'ShikimoriClientSecret', "\"" + propOrDef("ShikimoriClientSecret", "") + "\""
         buildConfigField 'String', 'ShikimoriBaseUrl', ShikimoriBaseUrl
     }
