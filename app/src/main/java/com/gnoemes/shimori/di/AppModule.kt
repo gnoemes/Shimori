@@ -52,7 +52,7 @@ class AppModule {
 
     @Provides
     @Named("shikimori-client-id")
-    fun provideShimoriClientId(): String = BuildConfig.ShikimoriiClientId
+    fun provideShimoriClientId(): String = BuildConfig.ShikimoriClientId
 
     @Provides
     @Named("shikimori-secret-key")
