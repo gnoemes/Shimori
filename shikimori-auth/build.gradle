@@ -1,0 +1,19 @@
+import com.gnoemes.shimori.Modules
+import com.gnoemes.shimori.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply from: '../android_commons.gradle'
+
+dependencies {
+    implementation project(Modules.baseAndroid)
+    api project(Modules.shikimori)
+
+    kapt Libs.Dagger.compiler
+
+    implementation Libs.AndroidX.browser
+    implementation Libs.AndroidX.coreKtx
+
+    api Libs.appauth
+}

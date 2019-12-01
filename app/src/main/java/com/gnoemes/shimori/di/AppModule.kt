@@ -2,11 +2,15 @@ package com.gnoemes.shimori.di
 
 import android.content.Context
 import android.os.Build
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.coroutineScope
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.ShimoriApplication
+import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.util.concurrent.Executor
@@ -23,9 +27,9 @@ class AppModule {
     @Singleton
     @Provides
     fun provideCoroutineDispatchers() = AppCoroutineDispatchers(
-        io = Dispatchers.IO,
-        computation = Dispatchers.Default,
-        main = Dispatchers.Main
+            io = Dispatchers.IO,
+            computation = Dispatchers.Default,
+            main = Dispatchers.Main
     )
 
     @Singleton
@@ -47,11 +51,17 @@ class AppModule {
     fun provideCacheDir(app: ShimoriApplication): File = app.cacheDir
 
     @Provides
-    @Named("shimori-client-id")
-    fun provideShimoriClientId(): String = BuildConfig.ShimoriClientId
+    @Named("shikimori-client-id")
+    fun provideShimoriClientId(): String = BuildConfig.ShikimoriiClientId
 
     @Provides
-    @Named("shimori-secret-key")
-    fun provideShimoriSecretKey() : String = BuildConfig.ShimoriClientSecret
+    @Named("shikimori-secret-key")
+    fun provideShimoriSecretKey(): String = BuildConfig.ShikimoriClientSecret
+
+    @Provides
+    @ProcessLifetime
+    fun provideLifetimeScope(): CoroutineScope {
+        return ProcessLifecycleOwner.get().lifecycle.coroutineScope
+    }
 
 }

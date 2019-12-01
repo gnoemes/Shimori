@@ -1,20 +1,23 @@
 package com.gnoemes.shikimori
 
+import com.gnoemes.shikimori.repositories.ShikimoriAnimeDataSource
+import com.gnoemes.shikimori.repositories.ShikimoriUserDataSource
 import com.gnoemes.shikimori.services.AnimeService
+import com.gnoemes.shikimori.services.AuthService
 import com.gnoemes.shikimori.services.RateService
 import com.gnoemes.shikimori.services.UserService
-import com.gnoemes.shikimori.util.DateTimeResponseConverter
-import com.gnoemes.shikimori.util.DateTimeResponseConverterImpl
-import com.gnoemes.shikimori.util.UserAgentInterceptor
+import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
+import com.gnoemes.shimori.data_base.sources.UserDataSource
 import com.gnoemes.shimori.model.ShimoriConstants
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,6 +46,11 @@ internal abstract class RepositoryModule {
     @Singleton
     @Shikimori
     abstract fun bindAnimeSource(source: ShikimoriAnimeDataSource): AnimeDataSource
+
+    @Binds
+    @Singleton
+    @Shikimori
+    abstract fun bindUserSource(source: ShikimoriUserDataSource): UserDataSource
 }
 
 
@@ -65,6 +73,12 @@ internal class ApiServices {
     @Singleton
     fun rateService(@Auth retrofit: Retrofit): RateService {
         return retrofit.create(RateService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 }
 
@@ -137,15 +151,20 @@ internal class AuthNetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthOkHttpClient(@Named("okhttp-default") builder: OkHttpClient.Builder) =
+    fun provideAuthOkHttpClient(
+        @Named("okhttp-default") builder: OkHttpClient.Builder,
+        @Auth tokenInterceptor: ShikimoriTokenInterceptor,
+        @Auth authenticator: Authenticator
+    ) =
         builder.apply {
-            //TODO auth
+            addInterceptor(tokenInterceptor)
+            authenticator(authenticator)
         }.build()
 
     @Provides
     @Singleton
     @Auth
-    fun provideRetrofitBuilder(@Auth factory: Converter.Factory, @Auth client: OkHttpClient): Retrofit.Builder {
+    fun provideRetrofitBuilder(factory: Converter.Factory, @Auth client: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder()
             .client(client)
             .addConverterFactory(factory)
@@ -157,4 +176,16 @@ internal class AuthNetworkModule {
     fun provideRetrofit(@Auth builder: Retrofit.Builder): Retrofit {
         return builder.baseUrl(ShimoriConstants.ShikimoriBaseUrl).build()
     }
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideTokenInterceptor(source: com.gnoemes.shikimori.Shikimori) =
+        ShikimoriTokenInterceptor(source)
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideAuth(shikimori: com.gnoemes.shikimori.Shikimori): Authenticator =
+        ShikimoriAuthenticator(shikimori)
 }

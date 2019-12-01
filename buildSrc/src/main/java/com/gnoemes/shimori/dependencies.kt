@@ -16,6 +16,7 @@ object Modules {
     const val dataBase = ":data-base"
     const val data = ":data"
     const val shikimori = ":shikimori"
+    const val shikimoriAuth = ":shikimori-auth"
 
     //domain
     const val domain = ":domain"
@@ -47,6 +48,8 @@ object Libs {
     const val mockK = "io.mockk:mockk:1.9.3"
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
+
+    const val appauth = "net.openid:appauth:0.7.1"
 
     object Google {
         const val material = "com.google.android.material:material:${Versions.material}"

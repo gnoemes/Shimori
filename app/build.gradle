@@ -43,8 +43,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
-        buildConfigField 'String', 'ShimoriClientId', "\"" + propOrDef("ShimoriClientId", "") + "\""
-        buildConfigField 'String', 'ShimoriClientSecret', "\"" + propOrDef("ShimoriClientSecret", "") + "\""
+        buildConfigField 'String', 'ShikimoriiClientId', "\"" + propOrDef("ShikimoriClientId", "") + "\""
+        buildConfigField 'String', 'ShikimoriClientSecret', "\"" + propOrDef("ShikimoriClientSecret", "") + "\""
         buildConfigField 'String', 'ShikimoriBaseUrl', ShikimoriBaseUrl
     }
 
@@ -77,7 +77,7 @@ dependencies {
     implementation project(Modules.navigation)
     implementation project(Modules.domain)
     implementation project(Modules.model)
-    implementation project(Modules.shikimori)
+    implementation project(Modules.shikimoriAuth)
 
     implementation project(Modules.featureSearch)
 

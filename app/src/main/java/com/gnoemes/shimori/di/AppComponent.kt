@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.di
 
+import com.example.shikimori.ShikimoriAuthModule
 import com.gnoemes.common.epoxy.EpoxyModule
 import com.gnoemes.shikimori.ShikimoriModule
 import com.gnoemes.shimori.ShimoriApplication
@@ -21,7 +22,8 @@ import javax.inject.Singleton
             EpoxyModule::class,
             NetworkModule::class,
             MainBuilder::class,
-            ShikimoriModule::class
+            ShikimoriModule::class,
+            ShikimoriAuthModule::class
         ])
 interface AppComponent : AndroidInjector<ShimoriApplication> {
 

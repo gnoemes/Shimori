@@ -1,4 +1,4 @@
-package com.gnoemes.shikimori
+package com.gnoemes.shikimori.repositories
 
 import com.gnoemes.shikimori.mappers.AnimeResponseMapper
 import com.gnoemes.shikimori.services.AnimeService
