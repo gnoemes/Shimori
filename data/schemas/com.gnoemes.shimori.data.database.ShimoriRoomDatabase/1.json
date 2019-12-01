@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "30b4d1757e701459a588e5a7d65d0b87",
+    "identityHash": "c6bcdaf63acc11a478c310252d3755c3",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` INTEGER, `date_released` INTEGER, `next_episode_date` INTEGER, `age_rating` TEXT, `duration` INTEGER NOT NULL, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` INTEGER, `date_released` INTEGER, `next_episode` INTEGER, `next_episode_date` INTEGER, `next_episode_end_date` INTEGER, `age_rating` TEXT, `duration` INTEGER NOT NULL, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -81,8 +81,20 @@
             "notNull": false
           },
           {
+            "fieldPath": "nextEpisode",
+            "columnName": "next_episode",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "nextEpisodeDate",
             "columnName": "next_episode_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextEpisodeEndDate",
+            "columnName": "next_episode_end_date",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -181,12 +193,13 @@
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_animes_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
           },
           {
-            "name": "index_animes_rate_id",
+            "name": "index_animes_rate_id_next_episode_date",
             "unique": false,
             "columnNames": [
-              "rate_id"
+              "rate_id",
+              "next_episode_date"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_animes_rate_id` ON `${TABLE_NAME}` (`rate_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_animes_rate_id_next_episode_date` ON `${TABLE_NAME}` (`rate_id`, `next_episode_date`)"
           }
         ],
         "foreignKeys": [
@@ -331,7 +344,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '30b4d1757e701459a588e5a7d65d0b87')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6bcdaf63acc11a478c310252d3755c3')"
     ]
   }
 }

@@ -10,7 +10,7 @@ import org.joda.time.DateTime
 @Entity(tableName = "animes",
         indices = [
             Index(value = ["shikimori_id"], unique = true),
-            Index(value = ["rate_id"])
+            Index(value = ["rate_id", "next_episode_date"])
         ],
         foreignKeys = [
             ForeignKey(entity = Rate::class,
@@ -32,7 +32,9 @@ data class Anime(
     val episodesAired: Int = 0,
     @ColumnInfo(name = "date_aired") val dateAired: DateTime? = null,
     @ColumnInfo(name = "date_released") val dateReleased: DateTime? = null,
+    @ColumnInfo(name = "next_episode") val nextEpisode: Int? = null,
     @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: DateTime? = null,
+    @ColumnInfo(name = "next_episode_end_date") val nextEpisodeEndDate: DateTime? = null,
     @ColumnInfo(name = "age_rating") val ageRating: AgeRating? = null,
     val duration: Int = 0,
     val description: String? = null,
