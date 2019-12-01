@@ -1,5 +1,6 @@
 package com.gnoemes.shikimori.util
 
+import com.gnoemes.shikimori.Shikimori
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -11,12 +12,13 @@ internal class UserAgentInterceptor : Interceptor {
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val original = chain.request()
+        val request = chain.request()
+        if (Shikimori.BASE_URL != request.url.host) {
+            return chain.proceed(request)
+        }
 
-        val requestBuilder = original.newBuilder()
-        requestBuilder.addHeader(USER_AGENT_HEADER, USER_AGENT_CLIENT)
-
-        val request = requestBuilder.build()
-        return chain.proceed(request)
+        val builder = request.newBuilder()
+        builder.addHeader(USER_AGENT_HEADER, USER_AGENT_CLIENT)
+        return chain.proceed(builder.build())
     }
 }

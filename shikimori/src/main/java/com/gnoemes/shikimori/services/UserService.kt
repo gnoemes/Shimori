@@ -6,7 +6,7 @@ import com.gnoemes.shikimori.entities.user.UserBriefResponse
 import com.gnoemes.shikimori.entities.user.UserDetailsResponse
 import com.gnoemes.shikimori.entities.user.UserHistoryResponse
 import retrofit2.http.*
-import javax.xml.ws.Response
+import retrofit2.Response
 
 internal interface UserService {
 

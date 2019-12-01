@@ -4,7 +4,7 @@ import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
 import retrofit2.http.*
-import javax.xml.ws.Response
+import retrofit2.Response
 
 internal interface RateService {
 

@@ -20,7 +20,7 @@ android {
 dependencies {
     api project(Modules.dataBase)
     implementation project(Modules.baseAndroid)
-    implementation project(Modules.shikimori)
+    implementation project(Modules.shikimoriAuth)
     implementation project(Modules.model)
 
     implementation Libs.AndroidX.Room.common

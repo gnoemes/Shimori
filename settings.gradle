@@ -7,6 +7,7 @@ include ':navigation'
 include ':data-base'
 include ':data'
 include ':shikimori'
+include ':shikimori-auth'
 
 include ':domain'
 include ':model'

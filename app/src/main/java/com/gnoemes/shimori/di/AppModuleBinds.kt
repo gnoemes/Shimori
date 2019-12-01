@@ -1,17 +1,20 @@
 package com.gnoemes.shimori.di
 
 import android.app.Application
+import com.gnoemes.shimori.ShimoriAppNavigator
 import com.gnoemes.shimori.ShimoriApplication
 import com.gnoemes.shimori.appinitializers.AppCompatInitializer
 import com.gnoemes.shimori.appinitializers.ArchInitializer
 import com.gnoemes.shimori.appinitializers.JodaTimeInitializer
 import com.gnoemes.shimori.appinitializers.PreferencesInitializer
+import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.base.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.settings.ShimoriPreferencesImpl
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -39,4 +42,9 @@ abstract class AppModuleBinds {
     @Binds
     @IntoSet
     abstract fun bindAppCompatInitializer(appCompat: AppCompatInitializer): AppInitializer
+
+    @Singleton
+    @Named("app")
+    @Binds
+    abstract fun provideAppNavigator(bind: ShimoriAppNavigator): AppNavigator
 }

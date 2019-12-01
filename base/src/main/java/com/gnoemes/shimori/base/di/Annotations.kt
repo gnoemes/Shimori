@@ -16,3 +16,8 @@ annotation class Auth
 @Qualifier
 @MustBeDocumented
 annotation class Shikimori
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+@MustBeDocumented
+annotation class ProcessLifetime

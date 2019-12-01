@@ -1,19 +1,25 @@
 package com.gnoemes.shimori.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import com.airbnb.mvrx.viewModel
+import com.example.shikimori.ShikimoriConstants
 import com.gnoemes.common.BaseActivity
 import com.gnoemes.common.extensions.setupWithNavController
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.databinding.ActivityMainBinding
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationResponse
+import net.openid.appauth.AuthorizationService
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
+    private val authService by lazy { AuthorizationService(this) }
 
     private val viewModel: MainViewModel by viewModel()
 
@@ -44,6 +50,29 @@ class MainActivity : BaseActivity() {
         setupBottomNavigation()
     }
 
+    internal fun startAuth() {
+        viewModel.onAuth(authService)
+    }
+
+    override fun handleIntent(intent: Intent) {
+        when (intent.action) {
+            ShikimoriConstants.AUTH_HANDLE_ACTION -> {
+
+                //TODO remove
+                val code = intent.data?.toString()?.let {
+                    it.substring(it.lastIndexOf("/"))
+                        .replaceFirst("/", "")
+                }
+                val response = AuthorizationResponse.Builder(viewModel.shikimoriManager.request)
+                    .setAuthorizationCode(code)
+                    .build()
+
+//                val response = AuthorizationResponse.fromIntent(intent)
+                val error = AuthorizationException.fromIntent(intent)
+                viewModel.onAuthResult(authService, response, error)
+            }
+        }
+    }
 
     private fun setupBottomNavigation() {
         binding.bottomNav.setupWithNavController(
@@ -60,6 +89,10 @@ class MainActivity : BaseActivity() {
         ).observe(this) { navController ->
             currentNavController = navController
 
+        }
+
+        binding.bottomNav.setOnNavigationItemReselectedListener {
+            startAuth()
         }
     }
 }
