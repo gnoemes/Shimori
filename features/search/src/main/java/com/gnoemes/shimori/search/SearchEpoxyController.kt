@@ -22,7 +22,7 @@ class SearchEpoxyController @Inject constructor(
 
         items?.forEach { item ->
             searchGrid {
-                id(item.id)
+                id(item.shikimoriId)
                 item(item)
                 image(item.image)
                 textCreator(textCreator)
