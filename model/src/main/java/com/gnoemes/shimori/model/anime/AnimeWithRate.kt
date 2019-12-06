@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.gnoemes.shimori.model.rate.Rate
 
-class CalendarItem {
+class AnimeWithRate {
     @Embedded
     var anime: Anime? = null
 
@@ -13,7 +13,7 @@ class CalendarItem {
 
     override fun equals(other: Any?): Boolean = when {
         other === this -> true
-        other is CalendarItem -> anime == other.anime && rate == other.rate
+        other is AnimeWithRate -> anime == other.anime && rate == other.rate
         else -> false
     }
 

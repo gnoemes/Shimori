@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.gnoemes.shimori.model.anime.Anime
-import com.gnoemes.shimori.model.anime.CalendarItem
+import com.gnoemes.shimori.model.anime.AnimeWithRate
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,11 +12,11 @@ abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
     @Query(QUERY_CALENDAR)
-    abstract fun observeCalendar(): Flow<List<CalendarItem>>
+    abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
 
     @Transaction
     @Query(QUERY_CALENDAR_FILTER)
-    abstract fun observeCalendarFilter(filter: String): Flow<List<CalendarItem>>
+    abstract fun observeCalendarFilter(filter: String): Flow<List<AnimeWithRate>>
 
     companion object {
         private const val QUERY_CALENDAR = """
