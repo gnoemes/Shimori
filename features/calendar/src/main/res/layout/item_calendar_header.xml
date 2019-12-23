@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="textCreator"
+            type="com.gnoemes.shimori.calendar.CalendarTextCreator" />
+
+        <variable
+            name="item"
+            type="com.gnoemes.shimori.calendar.CalendarItem" />
+
+    </data>
+
+    <TextView
+        android:id="@+id/dateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginLeft="@dimen/spacing_normal"
+        android:text="@{textCreator.showDate(item.date)}"
+        android:textAppearance="@style/TextAppearance.Shimori.Body1" />
+
+</layout>

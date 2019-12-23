@@ -24,6 +24,7 @@ object Modules {
 
     //features
     const val featureSearch = ":features:search"
+    const val featureCalendar = ":features:calendar"
 }
 
 object Versions {
@@ -46,8 +47,6 @@ object Libs {
     const val junit = "junit:junit:4.12"
     const val robolectric = "org.robolectric:robolectric:4.3"
     const val mockK = "io.mockk:mockk:1.9.3"
-
-    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
 
     const val appauth = "net.openid:appauth:0.7.1"
 
@@ -203,5 +202,10 @@ object Libs {
         private const val version = "0.1.7"
         const val library = "com.github.MatrixDev.Roomigrant:RoomigrantLib:$version"
         const val compiler = "com.github.MatrixDev.Roomigrant:RoomigrantCompiler:$version"
+    }
+
+    object Debug {
+        const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
+        const val dbDebug = "com.amitshekhar.android:debug-db:1.0.6"
     }
 }

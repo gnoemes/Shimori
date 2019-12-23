@@ -1,28 +1,33 @@
 package com.gnoemes.shimori.main
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
-import com.gnoemes.common.di.ViewModelKey
 import com.gnoemes.shimori.base.di.PerActivity
+import com.gnoemes.shimori.calendar.CalendarBuilder
 import com.gnoemes.shimori.search.SearchBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import dagger.multibindings.IntoMap
 
 @Module
-abstract class MainBuilder {
+internal abstract class MainBuilder {
     @ContributesAndroidInjector(modules = [
-        SearchBuilder::class
+        MainModule::class,
+        SearchBuilder::class,
+        CalendarBuilder::class
     ])
-    abstract fun mainAcitivity(): MainActivity
+
+    internal abstract fun mainActivity(): MainActivity
+}
+
+@Module(includes = [MainModuleBinds::class])
+class MainModule {
+
+}
+
+@Module
+abstract class MainModuleBinds {
 
     @Binds
     @PerActivity
     abstract fun bindContext(activity: MainActivity): Context
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    abstract fun bindViewModel(viewModel: MainViewModel): ViewModel
 }

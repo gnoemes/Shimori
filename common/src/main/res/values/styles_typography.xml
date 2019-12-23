@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="TextAppearance.Shimori.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:fontFamily">sans-serif-medium</item>
@@ -71,8 +72,8 @@
     </style>
 
     <style name="TextAppearance.Shimori.Button" parent="TextAppearance.MaterialComponents.Button">
-        <item name="fontFamily">sans-serif</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0.0125</item>
     </style>
@@ -94,5 +95,11 @@
     <style name="TextAppearance.Shimori.PopupMenu.Header" parent="TextAppearance.Shimori.Button">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.Shimori.TextProtector" parent="TextAppearance.Shimori.Caption">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/colorOnProtector</item>
     </style>
 </resources>

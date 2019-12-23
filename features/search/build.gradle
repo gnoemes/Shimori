@@ -1,7 +1,2 @@
-import com.gnoemes.shimori.Libs
-
 apply from: '../../android_feature_dependencies.gradle'
 
-dependencies {
-    implementation Libs.Glide.glide
-}

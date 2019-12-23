@@ -1,10 +1,13 @@
 package com.gnoemes.shimori.model.rate
 
-enum class RateStatus(val shikimoriValue : String) {
-    PLANNED("planned"),
-    WATCHING("watching"),
-    REWATCHING("rewatching"),
-    COMPLETED("completed"),
-    ON_HOLD("on_hold"),
-    DROPPED("dropped");
+enum class RateStatus(
+    val priority: Int,
+    val shikimoriValue: String
+) {
+    PLANNED(0, "planned"),
+    WATCHING(1, "watching"),
+    REWATCHING(2, "rewatching"),
+    COMPLETED(3, "completed"),
+    ON_HOLD(4, "on_hold"),
+    DROPPED(5, "dropped");
 }

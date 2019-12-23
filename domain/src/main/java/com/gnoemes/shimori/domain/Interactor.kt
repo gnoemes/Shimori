@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.domain
 
 import androidx.paging.PagedList
+import com.gnoemes.shimori.base.entities.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.sendBlocking
@@ -87,13 +88,3 @@ fun <I : ObservableInteractor<T>, T> CoroutineScope.launchObserve(
         f(interactor.observe())
     }
 }
-
-sealed class InvokeStatus
-
-object InvokeIdle : InvokeStatus()
-object InvokeStarted : InvokeStatus()
-
-object InvokeSuccess : InvokeStatus()
-
-data class InvokeError(val throwable: Throwable) : InvokeStatus()
-object InvokeTimeout : InvokeStatus()

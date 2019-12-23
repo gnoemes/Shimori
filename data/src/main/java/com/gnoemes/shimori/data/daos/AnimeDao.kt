@@ -21,16 +21,15 @@ abstract class AnimeDao : EntityDao<Anime> {
     companion object {
         private const val QUERY_CALENDAR = """
            SELECT * FROM animes
-           LEFT JOIN rates ON animes.rate_id = rates.shikimori_id
-           WHERE datetime(next_episode_date) < datetime('now','start of day','+1 day','-1 minute') 
+           WHERE datetime(next_episode_date) > datetime('now','start of day') 
            ORDER BY datetime(next_episode_date) ASC
         """
+        //TODO to lower case for ru
         private const val QUERY_CALENDAR_FILTER = """
-           SELECT * FROM animes
-           LEFT JOIN rates ON animes.rate_id = rates.shikimori_id
-           WHERE datetime(next_episode_date) < datetime('now','start of day','+1 day','-1 minute') 
-           AND name MATCH :filter
-           OR name_ru MATCH :filter
+           SELECT * FROM animes_fts AS fts
+           JOIN animes ON animes.id = fts.docid
+           WHERE datetime(next_episode_date) > datetime('now','start of day')
+           AND animes_fts MATCH :filter
            ORDER BY datetime(next_episode_date) ASC
         """
     }

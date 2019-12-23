@@ -4,6 +4,8 @@
     <string name="common_search">Поиск</string>
     <string name="common_main">Главная</string>
     <string name="common_profile">Профиль</string>
+    <string name="common_today">Сегодня</string>
+    <string name="common_tomorrow">Завтра</string>
 
     <string name="status_anons">Анонс</string>
     <string name="status_ongoing">Онгоинг</string>
@@ -21,7 +23,26 @@
     <string name="type_ova" translatable="false">OVA</string>
     <string name="type_ona" translatable="false">ONA</string>
 
+    <string name="episode_format">%d эпизод</string>
     <string name="episode_short">эп.</string>
     <string name="episode_short_format">%d эп.</string>
+
+    <string name="rate_planned">Запланировано</string>
+    <string name="rate_planned_short">В планах</string>
+    <string name="rate_on_hold">Отложено</string>
+    <string name="rate_dropped">Брошено</string>
+<!--    Anime-->
+    <string name="rate_watching">Смотрю</string>
+    <string name="rate_rewatch">Пересматриваю</string>
+    <string name="rate_rewatch_short">Пересмотр</string>
+    <string name="rate_watched">Просмотрено</string>
+<!--    Manga-->
+    <string name="rate_reading">Читаю</string>
+    <string name="rate_rereading">Перечитываю</string>
+    <string name="rate_readed">Прочитано</string>
+
+    <string name="time_minute_short_format">%s мин</string>
+    <string name="time_hour_short_format">%s ч</string>
+    <string name="time_hour_and_minute_short_format">%s ч %s мин</string>
 
 </resources>

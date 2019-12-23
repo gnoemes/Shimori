@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.base.extensions
 
-import com.gnoemes.shimori.base.data.entities.ErrorResult
-import com.gnoemes.shimori.base.data.entities.Result
-import com.gnoemes.shimori.base.data.entities.Success
+import com.gnoemes.shimori.base.entities.ErrorResult
+import com.gnoemes.shimori.base.entities.Result
+import com.gnoemes.shimori.base.entities.Success
 import retrofit2.HttpException
 import retrofit2.Response
 

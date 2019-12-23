@@ -2,6 +2,7 @@ package com.gnoemes.shikimori.services
 
 import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
+import com.gnoemes.shikimori.entities.anime.CalendarResponse
 import com.gnoemes.shikimori.entities.anime.ScreenshotResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
 import com.gnoemes.shikimori.entities.common.RelatedResponse
@@ -37,4 +38,6 @@ internal interface AnimeService {
     @GET("/api/animes/{id}/screenshots")
     suspend fun getScreenshots(@Path("id") animeId: Long): Response<MutableList<ScreenshotResponse>>
 
+    @GET("/api/calendar")
+    suspend fun getCalendar(): Response<List<CalendarResponse>>
 }

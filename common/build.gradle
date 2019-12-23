@@ -19,7 +19,7 @@ dependencies {
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.Navigation.ui
     implementation Libs.AndroidX.Navigation.fragment
-    implementation Libs.AndroidX.swiperefresh
+    api Libs.AndroidX.swiperefresh
 
     implementation Libs.AndroidX.Lifecycle.extensions
     implementation Libs.AndroidX.Lifecycle.viewmodel

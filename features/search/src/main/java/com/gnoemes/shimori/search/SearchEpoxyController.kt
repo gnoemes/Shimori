@@ -7,7 +7,7 @@ import com.gnoemes.shimori.base.extensions.observable
 import com.gnoemes.shimori.model.common.ContentType
 import javax.inject.Inject
 
-class SearchEpoxyController @Inject constructor(
+internal class SearchEpoxyController @Inject constructor(
     private val textCreator: AnimeTextCreator
 ) : EpoxyController() {
     var callbacks: Callbacks? by observable(null, ::requestModelBuild)
@@ -26,7 +26,7 @@ class SearchEpoxyController @Inject constructor(
                 item(item)
                 image(item.image)
                 textCreator(textCreator)
-                clickListener { _ -> callbacks?.onItemClicked(item.id, item.contentType) }
+                clickListener { _ -> callbacks?.onItemClicked(item.shikimoriId!!, item.contentType) }
                 spanSizeOverride(SearchSpanOverride)
             }
         }

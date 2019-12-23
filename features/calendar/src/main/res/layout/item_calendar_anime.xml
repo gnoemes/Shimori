@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="textCreator"
+            type="com.gnoemes.common.textcreators.AnimeTextCreator" />
+
+        <variable
+            name="calendarTextCreator"
+            type="com.gnoemes.shimori.calendar.CalendarTextCreator" />
+
+        <variable
+            name="item"
+            type="com.gnoemes.shimori.model.anime.Anime" />
+
+        <variable
+            name="rate"
+            type="com.gnoemes.shimori.model.rate.Rate" />
+
+        <variable
+            name="image"
+            type="com.gnoemes.shimori.model.common.ShimoriImage" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener}">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/posterContainer"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/calendar_poster_height"
+            app:cardCornerRadius="@dimen/image_round_corners"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:layout_constraintDimensionRatio="h, 1.25:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorDivider"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/posterView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:image="@{image}"
+                app:roundedCornerOutlineProvider="@{@dimen/image_round_corners}"
+                tools:src="@drawable/poster_debug" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rateIndicator"
+                style="@style/Widget.Shimori.Button.Circle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                app:backgroundTint="?attr/colorPrimary"
+                app:rateIcon="@{rate.status}"
+                app:visibleIfNotNull="@{rate}"
+                tools:icon="@drawable/ic_rate_watching" />
+
+            <TextView
+                android:id="@+id/seasonEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:background="@drawable/bg_protector_top_right"
+                android:includeFontPadding="false"
+                android:padding="5dp"
+                android:text="@string/calendar_season_end"
+                android:textAppearance="@style/TextAppearance.Shimori.TextProtector"
+                app:visible="@{!item.isMovie &amp;&amp; item.nextEpisode == item.episodes}" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{textCreator.showTitle(item)}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
+            app:layout_constraintStart_toStartOf="@+id/posterContainer"
+            app:layout_constraintTop_toBottomOf="@+id/posterContainer"
+            tools:text="Вторжение гигантов 3. Часть 2" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{calendarTextCreator.showDescription(item)}"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="?attr/colorOnPrimarySecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
+            app:layout_constraintStart_toStartOf="@+id/posterContainer"
+            app:layout_constraintTop_toBottomOf="@+id/titleView"
+            app:layout_constraintVertical_bias="0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

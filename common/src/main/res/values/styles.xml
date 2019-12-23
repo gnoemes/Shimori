@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="ThemeOverlay.Shimori.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="Widget.Shimori.Toolbar" parent="Widget.AppCompat.Toolbar">
@@ -13,6 +14,7 @@
         <item name="itemBackground">?attr/selectableItemBackground</item>
     </style>
 
+    <!--    TOOLBAR-->
     <style name="Widget.Shimori.DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">?attr/colorOnPrimary</item>
     </style>
@@ -23,6 +25,39 @@
 
     <style name="Widget.Shimori.Toolbar.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">?attr/colorOnPrimary</item>
+    </style>
+
+    <!--    BUTTONS-->
+    <style name="Widget.Shimori.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
+    </style>
+
+    <style name="Widget.Shimori.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
+    </style>
+
+    <style name="Widget.Shimori.Button.Circle" parent="Widget.Shimori.Button.Outlined">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Circle</item>
+        <item name="iconTint">@null</item>
+    </style>
+
+    <style name="Widget.Shimori.Button.Circle.Secondary.Transparent" parent="Widget.Shimori.Button.Circle">
+        <item name="iconTint">@color/selector_default_text_color</item>
+        <item name="android:textColor">@color/selector_default_text_color</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/selector_button_gray_stroke_color</item>
+        <item name="android:shadowColor">?attr/colorSecondaryTransparent</item>
+        <item name="rippleColor">@color/selector_default_ripple_color</item>
+    </style>
+
+    <!--SHAPES-->
+    <style name="ShapeAppearanceOverlay.Circle" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSize">24dp</item>
     </style>
 
 </resources>

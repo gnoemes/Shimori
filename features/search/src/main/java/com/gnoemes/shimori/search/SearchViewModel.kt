@@ -13,7 +13,7 @@ import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class SearchViewModel @AssistedInject constructor(
+internal class SearchViewModel @AssistedInject constructor(
     @Assisted initialState: SearchViewState,
     private val searchItems: SearchPaginated,
     private val getMyUser: GetMyUser

@@ -8,8 +8,10 @@ import com.gnoemes.shimori.model.common.Genre
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
 
 object ShimoriTypeConverters {
+    private val dateFormat = ISODateTimeFormat.dateTimeNoMillis()
 
     private val ageRatings by lazy(LazyThreadSafetyMode.NONE) { AgeRating.values() }
     private val contentStatuses by lazy(LazyThreadSafetyMode.NONE) { ContentStatus.values() }
@@ -19,11 +21,11 @@ object ShimoriTypeConverters {
 
     @TypeConverter
     @JvmStatic
-    fun toDateTime(mills: Long?) = mills?.let { DateTime(it) }
+    fun toDateTime(value: String?) = value?.let { dateFormat.parseDateTime(value) }
 
     @TypeConverter
     @JvmStatic
-    fun fromDateTime(dateTime: DateTime?): Long? = dateTime?.millis
+    fun fromDateTime(dateTime: DateTime?): String? = dateTime?.toString(dateFormat)
 
     @TypeConverter
     @JvmStatic

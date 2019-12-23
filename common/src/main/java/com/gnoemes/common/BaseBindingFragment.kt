@@ -23,15 +23,15 @@ abstract class BaseBindingFragment<Binding : ViewDataBinding> : BaseFragment() {
 
     protected fun requireBinding(): Binding = requireNotNull(binding)
 
-    protected abstract fun onViewCreated(binding: Binding, savedInstanceState: Bundle?)
-
-    protected abstract fun invalidate(binding: Binding)
-
     protected abstract fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): Binding
+
+    protected abstract fun onViewCreated(binding: Binding, savedInstanceState: Bundle?)
+
+    protected abstract fun invalidate(binding: Binding)
 
     override fun onDestroyView() {
         super.onDestroyView()
