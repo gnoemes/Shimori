@@ -13,9 +13,10 @@ import javax.inject.Inject
 
 class EpoxyInitializer @Inject constructor() : AppInitializer {
     override fun init(app: Application) {
-        // Make EpoxyController diffing async by default
+        // Make EpoxyController diffing and model building async by default
         val asyncHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultDiffingHandler = asyncHandler
+        EpoxyController.defaultModelBuildingHandler = asyncHandler
 
         // Also setup Carousel to use a more sane snapping behavior
         Carousel.setDefaultGlobalSnapHelperFactory(object : Carousel.SnapHelperFactory() {
