@@ -19,6 +19,11 @@ abstract class BaseBindingFragment<Binding : ViewDataBinding> : BaseFragment() {
         onViewCreated(requireBinding(), savedInstanceState)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        invalidate()
+    }
+
     final override fun invalidate() = invalidate(requireBinding())
 
     protected fun requireBinding(): Binding = requireNotNull(binding)
