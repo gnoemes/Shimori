@@ -23,4 +23,4 @@ fun Context.colorStateList(@ColorRes colorRes: Int): ColorStateList {
     return AppCompatResources.getColorStateList(this, colorRes)
 }
 
-fun Context.dimen(@DimenRes dimen: Int) = this.resources.getDimension(dimen)
+fun Context.dimen(@DimenRes dimen: Int) = this.resources.getDimension(dimen).toInt()

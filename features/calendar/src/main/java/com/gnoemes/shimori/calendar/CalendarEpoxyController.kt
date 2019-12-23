@@ -5,7 +5,7 @@ import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.EpoxyController
 import com.gnoemes.common.epoxy.withModelsFrom
 import com.gnoemes.common.extensions.dimen
-import com.gnoemes.common.extensions.dp
+import com.gnoemes.common.searchEmpty
 import com.gnoemes.common.textcreators.AnimeTextCreator
 import com.gnoemes.common.ui.widgets.shimoriCarousel
 import com.gnoemes.common.vertSpacerNormal
@@ -30,8 +30,11 @@ internal class CalendarEpoxyController @Inject constructor(
         val items = state.results
 
         if (items.isNullOrEmpty()) {
-            //TODO
-
+            searchEmpty {
+                id("calendar_empty")
+                title(context.getString(R.string.calendar_empty_title))
+                description(context.getString(R.string.calendar_empty_description))
+            }
             return
         }
 
@@ -48,8 +51,8 @@ internal class CalendarEpoxyController @Inject constructor(
                 id("carousel_${item.date.millis}")
                 hasFixedSize(false)
 
-                val normalSpacing = context.dimen(R.dimen.spacing_normal).toInt()
-                val itemSpacing = context.dp(8)
+                val normalSpacing = context.dimen(R.dimen.spacing_normal)
+                val itemSpacing = context.dimen(R.dimen.spacing_small)
 
                 padding(Carousel.Padding(normalSpacing, normalSpacing, normalSpacing, normalSpacing, itemSpacing))
 

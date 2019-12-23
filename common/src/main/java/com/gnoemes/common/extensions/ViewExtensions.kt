@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.DimenRes
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -49,6 +50,8 @@ fun Fragment.setupSnackbar(lifecycleOwner: LifecycleOwner, snackbarEvent: LiveDa
 fun ViewGroup.beginDelayedTransition(duration: Long = 200) {
     TransitionManager.beginDelayedTransition(this, AutoTransition().apply { setDuration(duration) })
 }
+
+fun View.dimen(@DimenRes dimenRes : Int) = context.dimen(dimenRes)
 
 /**
  * Call [View.requestApplyInsets] in a safe away. If we're attached it calls it straight-away.
