@@ -35,7 +35,6 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
 
     override fun onViewCreated(binding: FragmentCalendarBinding, savedInstanceState: Bundle?) {
         binding.recyclerView.run {
-            setHasFixedSize(false)
             setController(controller)
             addOnScrollListener(HideImeOnScrollListener())
         }

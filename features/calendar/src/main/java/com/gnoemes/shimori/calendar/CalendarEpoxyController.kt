@@ -2,7 +2,7 @@ package com.gnoemes.shimori.calendar
 
 import android.content.Context
 import com.airbnb.epoxy.Carousel
-import com.airbnb.epoxy.EpoxyController
+import com.gnoemes.common.epoxy.ShimoriEpoxyController
 import com.gnoemes.common.epoxy.withModelsFrom
 import com.gnoemes.common.extensions.dimen
 import com.gnoemes.common.searchEmpty
@@ -18,15 +18,14 @@ internal class CalendarEpoxyController @Inject constructor(
     @PerActivity private val context: Context,
     private val calendarTextCreator: CalendarTextCreator,
     private val animeTextCreator: AnimeTextCreator
-) : EpoxyController() {
-    var callbacks: Callbacks? by observable(null, ::requestModelBuild)
-    var state by observable(CalendarViewState(), ::requestModelBuild)
+) : ShimoriEpoxyController<CalendarViewState>() {
+    var callbacks: Callbacks? by observable(null, { state })
 
     interface Callbacks {
         fun onItemClicked(id: Long, type: ContentType)
     }
 
-    override fun buildModels() {
+    override fun buildModels(state: CalendarViewState) {
         val items = state.results
 
         if (items.isNullOrEmpty()) {
@@ -39,17 +38,14 @@ internal class CalendarEpoxyController @Inject constructor(
         }
 
         items.forEach { item ->
-            if (item.animes.isEmpty()) return
-
             calendarHeader {
-                id("calendar_${item.date.millis}")
+                id("calendar_${item.date}")
                 item(item)
                 textCreator(calendarTextCreator)
             }
 
             shimoriCarousel {
-                id("carousel_${item.date.millis}")
-                hasFixedSize(false)
+                id("carousel_${item.date}")
 
                 val normalSpacing = context.dimen(R.dimen.spacing_normal)
                 val itemSpacing = context.dimen(R.dimen.spacing_small)
@@ -72,7 +68,8 @@ internal class CalendarEpoxyController @Inject constructor(
             }
 
             vertSpacerNormal {
-                id("calendar_bottom_spacer")
+                //must be unique too
+                id("calendar_bottom_spacer_${item.date}")
             }
         }
     }
