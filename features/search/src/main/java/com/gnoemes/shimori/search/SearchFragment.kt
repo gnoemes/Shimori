@@ -16,9 +16,9 @@ class SearchFragment : BaseBindingFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by fragmentViewModel()
 
     @Inject
-    lateinit var viewModelFactory: SearchViewModel.Factory
+    internal lateinit var viewModelFactory: SearchViewModel.Factory
     @Inject
-    lateinit var controller: SearchEpoxyController
+    internal lateinit var controller: SearchEpoxyController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

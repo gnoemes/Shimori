@@ -66,10 +66,8 @@
     <color name="amoled_colorSnackBar">#212121</color>
     <color name="amoled_colorStatusBar">#de000000</color>
 
-    <color name="colorTextProtector">#96000000</color>
-    <color name="colorTextProtectorVariant">#de000000</color>
-    <color name="colorOnProtector">#DEffffff</color>
-    <color name="colorOnProtectorVariant">#ffffff</color>
+    <color name="colorTextProtector">#de000000</color>
+    <color name="colorOnProtector">#ffffff</color>
     <color name="colorShimmer">#8b8a8a</color>
 
     <color name="black">#000000</color>

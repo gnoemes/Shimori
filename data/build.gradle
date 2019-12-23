@@ -23,9 +23,9 @@ dependencies {
     implementation project(Modules.shikimoriAuth)
     implementation project(Modules.model)
 
-    implementation Libs.AndroidX.Room.common
+    api Libs.AndroidX.Room.common
+    api Libs.AndroidX.Room.ktx
     implementation Libs.AndroidX.Room.runtime
-    implementation Libs.AndroidX.Room.ktx
     kapt Libs.AndroidX.Room.compiler
 
     implementation Libs.AndroidX.Paging.runtime

@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/navigation_calendar"
-    app:startDestination="@id/test">
+    app:startDestination="@id/calendar">
 
     <fragment
-        android:id="@+id/test"
-        android:name="com.gnoemes.shimori.presentation.test.TestFragment" />
+        android:id="@+id/calendar"
+        android:name="com.gnoemes.shimori.calendar.CalendarFragment" />
 
 </navigation>

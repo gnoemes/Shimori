@@ -9,14 +9,17 @@ kapt {
     correctErrorTypes = true
 }
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     compileSdkVersion Versions.compileSdk
-
-    androidExtensions { experimental = true }
-
+    
     defaultConfig {
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

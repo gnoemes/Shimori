@@ -80,6 +80,7 @@ dependencies {
     implementation project(Modules.shikimoriAuth)
 
     implementation project(Modules.featureSearch)
+    implementation project(Modules.featureCalendar)
 
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler
@@ -106,8 +107,10 @@ dependencies {
     implementation Libs.Glide.glide
     kapt Libs.Glide.compiler
 
-    debugImplementation Libs.leakCanary
 
     testImplementation Libs.junit
     testImplementation Libs.robolectric
+
+    debugImplementation Libs.Debug.leakCanary
+    debugImplementation Libs.Debug.dbDebug
 }

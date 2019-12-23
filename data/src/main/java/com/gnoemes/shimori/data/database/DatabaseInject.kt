@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.database
 
 import android.content.Context
 import androidx.room.Room
+import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import dagger.Binds
 import dagger.Module
@@ -29,7 +30,10 @@ abstract class DatabaseBindings {
     abstract fun bindDatabase(db: ShimoriRoomDatabase): ShimoriDatabase
 
     @Binds
-    abstract fun bindTransactionRunner(runner: RoomTransactionRunner) : DatabaseTransactionRunner
+    abstract fun bindTransactionRunner(runner: RoomTransactionRunner): DatabaseTransactionRunner
+
+    @Binds
+    abstract fun bindEntityInserter(inserter: ShimoriEntityInserter): EntityInserter
 }
 
 @Module

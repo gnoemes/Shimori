@@ -12,12 +12,12 @@ import javax.inject.Inject
 
 internal class DateTimeResponseConverterImpl @Inject constructor() : DateTimeResponseConverter {
     override fun serialize(src: DateTime, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-        return JsonPrimitive(src.withZone(DateTimeZone.UTC).toLocalDateTime().toString())
+        return JsonPrimitive(src.withZone(DateTimeZone.getDefault()).toString())
     }
 
     override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext): DateTime =
         try {
-             DateTime(json.asString, DateTimeZone.UTC).withZone(DateTimeZone.getDefault())
+             DateTime(json.asString, DateTimeZone.getDefault())
         } catch (e: IllegalArgumentException) {
             val date = context.deserialize<Date>(json, Date::class.java)
              DateTime(date)

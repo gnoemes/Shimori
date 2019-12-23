@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c6bcdaf63acc11a478c310252d3755c3",
+    "identityHash": "e96a681339cb675e3fc3e7ce3a6a09b9",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` INTEGER, `date_released` INTEGER, `next_episode` INTEGER, `next_episode_date` INTEGER, `next_episode_end_date` INTEGER, `age_rating` TEXT, `duration` INTEGER NOT NULL, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL COLLATE NOCASE, `name_ru` TEXT COLLATE NOCASE, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -71,13 +71,13 @@
           {
             "fieldPath": "dateAired",
             "columnName": "date_aired",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "dateReleased",
             "columnName": "date_released",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -89,13 +89,13 @@
           {
             "fieldPath": "nextEpisodeDate",
             "columnName": "next_episode_date",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "nextEpisodeEndDate",
             "columnName": "next_episode_end_date",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -107,8 +107,8 @@
           {
             "fieldPath": "duration",
             "columnName": "duration",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "description",
@@ -217,8 +217,49 @@
         ]
       },
       {
+        "ftsVersion": "FTS4",
+        "ftsOptions": {
+          "tokenizer": "simple",
+          "tokenizerArgs": [],
+          "contentTable": "animes",
+          "languageIdColumnName": "",
+          "matchInfo": "FTS4",
+          "notIndexedColumns": [],
+          "prefixSizes": [],
+          "preferredOrder": "ASC"
+        },
+        "contentSyncTriggers": [
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_BEFORE_UPDATE BEFORE UPDATE ON `animes` BEGIN DELETE FROM `animes_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_BEFORE_DELETE BEFORE DELETE ON `animes` BEGIN DELETE FROM `animes_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_UPDATE AFTER UPDATE ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_INSERT AFTER INSERT ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru`); END"
+        ],
+        "tableName": "animes_fts",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`name` TEXT COLLATE NOCASE, `name_ru` TEXT COLLATE NOCASE, content=`animes`)",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameRu",
+            "columnName": "name_ru",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
         "tableName": "rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `target_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` INTEGER, `date_updated` INTEGER, FOREIGN KEY(`target_id`) REFERENCES `animes`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `target_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` TEXT, `date_updated` TEXT, FOREIGN KEY(`target_id`) REFERENCES `animes`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -283,13 +324,13 @@
           {
             "fieldPath": "dateCreated",
             "columnName": "date_created",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "dateUpdated",
             "columnName": "date_updated",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -344,7 +385,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6bcdaf63acc11a478c310252d3755c3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e96a681339cb675e3fc3e7ce3a6a09b9')"
     ]
   }
 }

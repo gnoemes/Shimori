@@ -1,3 +1,4 @@
+import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
@@ -5,4 +6,5 @@ apply from: '../android_commons.gradle'
 
 dependencies {
     api project(Modules.base)
+    implementation Libs.jodaTime
 }

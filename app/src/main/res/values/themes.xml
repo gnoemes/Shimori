@@ -67,6 +67,8 @@
         <item name="colorStatusBar">@color/default_colorStatusBar</item>
         <item name="colorNavigationBar">@color/default_colorStatusBar</item>
         <item name="lightStatusBar">true</item>
+
+        <item name="themeStrokeWidth">1dp</item>
     </style>
 
 </resources>

@@ -12,7 +12,10 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.gnoemes.common.ui.widgets.MaxLinesToggleClickListener
+import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.model.common.ShimoriImage
+import com.gnoemes.shimori.model.rate.RateStatus
+import com.google.android.material.button.MaterialButton
 
 @BindingAdapter("visible")
 fun visible(view: View, value: Boolean) {
@@ -72,4 +75,16 @@ fun loadImage(view: ImageView, oldImage: ShimoriImage?, image: ShimoriImage?) {
     } else {
         view.setImageDrawable(null)
     }
+}
+
+@BindingAdapter("rateIcon")
+fun rateIcon(button: MaterialButton, status: RateStatus?) {
+    if (status == null) return
+
+    button.setIconResource(RateUtils.getIcon(status))
+}
+
+@BindingAdapter("query")
+fun setQuery(view: androidx.appcompat.widget.SearchView, query: String?) {
+    view.setQuery(query, false)
 }

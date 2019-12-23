@@ -28,6 +28,7 @@ dependencies {
     kapt Libs.Epoxy.processor
 
     implementation Libs.gravitySnapHelper
+    implementation Libs.Glide.glide
 
     testImplementation Libs.junit
     testImplementation Libs.mockK

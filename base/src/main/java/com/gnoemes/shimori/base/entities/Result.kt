@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.base.data.entities
+package com.gnoemes.shimori.base.entities
 
 
 sealed class Result<T> {

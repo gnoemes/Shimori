@@ -36,7 +36,7 @@ data class Anime(
     @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: DateTime? = null,
     @ColumnInfo(name = "next_episode_end_date") val nextEpisodeEndDate: DateTime? = null,
     @ColumnInfo(name = "age_rating") val ageRating: AgeRating? = null,
-    val duration: Int = 0,
+    val duration: DateTime? = null,
     val description: String? = null,
     @ColumnInfo(name = "description_html") val descriptionHtml: String? = null,
     val franchise: String? = null,
@@ -58,4 +58,7 @@ data class Anime(
     @get:Ignore
     override val contentType: ContentType
         get() = ContentType.ANIME
+
+    val isMovie: Boolean
+        get() = type != null && type == AnimeType.MOVIE
 }

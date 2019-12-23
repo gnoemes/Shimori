@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.gnoemes.shimori.model.anime.Anime
+import com.gnoemes.shimori.model.anime.AnimeFts
 import com.gnoemes.shimori.model.rate.Rate
 import dev.matrix.roomigrant.GenerateRoomMigrations
 
@@ -11,6 +12,7 @@ import dev.matrix.roomigrant.GenerateRoomMigrations
 @Database(
         entities = [
             Anime::class,
+            AnimeFts::class,
             Rate::class
         ],
         version = 1
