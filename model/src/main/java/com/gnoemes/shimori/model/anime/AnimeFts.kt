@@ -8,5 +8,5 @@ import androidx.room.Fts4
 @Entity(tableName = "animes_fts")
 data class AnimeFts(
     @ColumnInfo(name = "name", collate = ColumnInfo.NOCASE) val name: String? = null,
-    @ColumnInfo(name = "name_ru") val nameRu: String? = null
+    @ColumnInfo(name = "name_ru_lower_case") val nameRu: String? = null
 )

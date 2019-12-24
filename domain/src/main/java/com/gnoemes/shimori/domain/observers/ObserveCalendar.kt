@@ -17,7 +17,7 @@ class ObserveCalendar @Inject constructor(
     override val dispatcher: CoroutineDispatcher = dispatchers.io
 
     override fun createObservable(params: Params): Flow<Calendar> {
-        return repository.observeCalendar(params.filter)
+        return repository.observeCalendar(params.filter?.toLowerCase())
             .mapLatest { groupByDates(it) }
     }
 

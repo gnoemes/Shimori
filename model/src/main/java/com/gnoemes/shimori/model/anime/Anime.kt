@@ -46,6 +46,10 @@ data class Anime(
     @ColumnInfo(name = "rate_id") val rateId: Long? = null
 ) : ShimoriEntity, ShikimoriContentEntity {
 
+    //local
+    @ColumnInfo(name = "name_ru_lower_case")
+    var searchName: String? = nameRu?.toLowerCase()
+
     @Ignore
     var videos: List<AnimeVideo>? = null
     @Ignore
