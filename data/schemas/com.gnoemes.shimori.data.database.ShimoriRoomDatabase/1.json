@@ -2,12 +2,18 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e96a681339cb675e3fc3e7ce3a6a09b9",
+    "identityHash": "34fcafba2b3fce819ec72c6f4cbffd7e",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL COLLATE NOCASE, `name_ru` TEXT COLLATE NOCASE, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
+          {
+            "fieldPath": "_searchName",
+            "columnName": "name_ru_lower_case",
+            "affinity": "TEXT",
+            "notNull": false
+          },
           {
             "fieldPath": "id",
             "columnName": "id",
@@ -231,11 +237,11 @@
         "contentSyncTriggers": [
           "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_BEFORE_UPDATE BEFORE UPDATE ON `animes` BEGIN DELETE FROM `animes_fts` WHERE `docid`=OLD.`rowid`; END",
           "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_BEFORE_DELETE BEFORE DELETE ON `animes` BEGIN DELETE FROM `animes_fts` WHERE `docid`=OLD.`rowid`; END",
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_UPDATE AFTER UPDATE ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru`); END",
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_INSERT AFTER INSERT ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru`); END"
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_UPDATE AFTER UPDATE ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru_lower_case`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru_lower_case`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_animes_fts_AFTER_INSERT AFTER INSERT ON `animes` BEGIN INSERT INTO `animes_fts`(`docid`, `name`, `name_ru_lower_case`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`name_ru_lower_case`); END"
         ],
         "tableName": "animes_fts",
-        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`name` TEXT COLLATE NOCASE, `name_ru` TEXT COLLATE NOCASE, content=`animes`)",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`name` TEXT COLLATE NOCASE, `name_ru_lower_case` TEXT, content=`animes`)",
         "fields": [
           {
             "fieldPath": "name",
@@ -245,7 +251,7 @@
           },
           {
             "fieldPath": "nameRu",
-            "columnName": "name_ru",
+            "columnName": "name_ru_lower_case",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -385,7 +391,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e96a681339cb675e3fc3e7ce3a6a09b9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '34fcafba2b3fce819ec72c6f4cbffd7e')"
     ]
   }
 }
