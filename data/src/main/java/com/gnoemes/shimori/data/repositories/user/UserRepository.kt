@@ -7,7 +7,14 @@ import javax.inject.Inject
 class UserRepository @Inject constructor(
     @Shikimori private val source: UserDataSource
 ) {
-    suspend fun getMyUser()  {
+
+    //TODO
+    suspend fun getMyUser() {
         return source.getMyUser()
+    }
+
+    //TODO
+    suspend fun getMyUserId(): Long? {
+        return 344725
     }
 }

@@ -1,7 +1,7 @@
 package com.gnoemes.shikimori.repositories
 
-import com.gnoemes.shikimori.mappers.AnimeResponseMapper
-import com.gnoemes.shikimori.mappers.CalendarMapper
+import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
+import com.gnoemes.shikimori.mappers.anime.CalendarMapper
 import com.gnoemes.shikimori.services.AnimeService
 import com.gnoemes.shimori.base.entities.Result
 import com.gnoemes.shimori.base.entities.Success

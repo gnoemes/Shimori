@@ -1,6 +1,7 @@
 package com.gnoemes.shikimori
 
 import com.gnoemes.shikimori.repositories.ShikimoriAnimeDataSource
+import com.gnoemes.shikimori.repositories.ShikimoriRateDataSource
 import com.gnoemes.shikimori.repositories.ShikimoriUserDataSource
 import com.gnoemes.shikimori.services.AnimeService
 import com.gnoemes.shikimori.services.AuthService
@@ -10,6 +11,7 @@ import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
+import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.data_base.sources.UserDataSource
 import com.gnoemes.shimori.model.ShimoriConstants
 import com.google.gson.Gson
@@ -51,6 +53,11 @@ internal abstract class RepositoryModule {
     @Singleton
     @Shikimori
     abstract fun bindUserSource(source: ShikimoriUserDataSource): UserDataSource
+
+    @Binds
+    @Singleton
+    @Shikimori
+    abstract fun bindRateSource(source: ShikimoriRateDataSource): RateDataSource
 }
 
 

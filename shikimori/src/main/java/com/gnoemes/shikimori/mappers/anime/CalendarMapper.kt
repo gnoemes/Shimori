@@ -1,4 +1,4 @@
-package com.gnoemes.shikimori.mappers
+package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
 import com.gnoemes.shimori.data_base.mappers.Mapper

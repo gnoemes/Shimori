@@ -4,18 +4,12 @@ import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.common.*
-import com.gnoemes.shimori.model.rate.Rate
 import org.joda.time.DateTime
 
 @Entity(tableName = "animes",
         indices = [
             Index(value = ["shikimori_id"], unique = true),
-            Index(value = ["rate_id", "next_episode_date"])
-        ],
-        foreignKeys = [
-            ForeignKey(entity = Rate::class,
-                    parentColumns = ["shikimori_id"],
-                    childColumns = ["rate_id"])
+            Index(value = ["next_episode_date"])
         ]
 )
 data class Anime(
@@ -42,8 +36,7 @@ data class Anime(
     val franchise: String? = null,
     val favorite: Boolean = false,
     @ColumnInfo(name = "topic_id") val topicId: Long? = null,
-    val genres: List<Genre>? = null,
-    @ColumnInfo(name = "rate_id") val rateId: Long? = null
+    val genres: List<Genre>? = null
 ) : ShimoriEntity, ShikimoriContentEntity {
 
     //local

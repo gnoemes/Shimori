@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.Flow
 abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
+    @Query("SELECT * FROM animes")
+    abstract suspend fun queryAll(): List<Anime>
+
+    @Transaction
     @Query(QUERY_CALENDAR)
     abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
 
@@ -24,7 +28,7 @@ abstract class AnimeDao : EntityDao<Anime> {
            WHERE datetime(next_episode_date) > datetime('now','start of day') 
            ORDER BY datetime(next_episode_date) ASC
         """
-        //TODO to lower case for ru
+
         private const val QUERY_CALENDAR_FILTER = """
            SELECT * FROM animes_fts AS fts
            JOIN animes ON animes.id = fts.docid

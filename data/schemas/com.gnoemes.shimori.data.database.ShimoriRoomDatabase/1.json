@@ -2,14 +2,14 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "34fcafba2b3fce819ec72c6f4cbffd7e",
+    "identityHash": "55f039135f4a2fc3a818169105ae9ec5",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `rate_id` INTEGER, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT, FOREIGN KEY(`rate_id`) REFERENCES `rates`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
         "fields": [
           {
-            "fieldPath": "_searchName",
+            "fieldPath": "searchName",
             "columnName": "name_ru_lower_case",
             "affinity": "TEXT",
             "notNull": false
@@ -153,12 +153,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "rateId",
-            "columnName": "rate_id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
             "fieldPath": "image.original",
             "columnName": "image_original",
             "affinity": "TEXT",
@@ -199,28 +193,15 @@
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_animes_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
           },
           {
-            "name": "index_animes_rate_id_next_episode_date",
+            "name": "index_animes_next_episode_date",
             "unique": false,
             "columnNames": [
-              "rate_id",
               "next_episode_date"
             ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_animes_rate_id_next_episode_date` ON `${TABLE_NAME}` (`rate_id`, `next_episode_date`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_animes_next_episode_date` ON `${TABLE_NAME}` (`next_episode_date`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "rates",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "rate_id"
-            ],
-            "referencedColumns": [
-              "shikimori_id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "ftsVersion": "FTS4",
@@ -265,7 +246,7 @@
       },
       {
         "tableName": "rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `target_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` TEXT, `date_updated` TEXT, FOREIGN KEY(`target_id`) REFERENCES `animes`(`shikimori_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `anime_id` INTEGER, `manga_id` INTEGER, `ranobe_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` TEXT, `date_updated` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -280,8 +261,20 @@
             "notNull": false
           },
           {
-            "fieldPath": "targetId",
-            "columnName": "target_id",
+            "fieldPath": "animeId",
+            "columnName": "anime_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mangaId",
+            "columnName": "manga_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ranobeId",
+            "columnName": "ranobe_id",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -348,21 +341,36 @@
         },
         "indices": [
           {
-            "name": "index_rates_target_id_target_type",
-            "unique": true,
-            "columnNames": [
-              "target_id",
-              "target_type"
-            ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_target_id_target_type` ON `${TABLE_NAME}` (`target_id`, `target_type`)"
-          },
-          {
             "name": "index_rates_shikimori_id",
             "unique": true,
             "columnNames": [
               "shikimori_id"
             ],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
+          },
+          {
+            "name": "index_rates_anime_id",
+            "unique": true,
+            "columnNames": [
+              "anime_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_anime_id` ON `${TABLE_NAME}` (`anime_id`)"
+          },
+          {
+            "name": "index_rates_manga_id",
+            "unique": true,
+            "columnNames": [
+              "manga_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_manga_id` ON `${TABLE_NAME}` (`manga_id`)"
+          },
+          {
+            "name": "index_rates_ranobe_id",
+            "unique": true,
+            "columnNames": [
+              "ranobe_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rates_ranobe_id` ON `${TABLE_NAME}` (`ranobe_id`)"
           },
           {
             "name": "index_rates_date_created",
@@ -373,25 +381,13 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_rates_date_created` ON `${TABLE_NAME}` (`date_created`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "animes",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "target_id"
-            ],
-            "referencedColumns": [
-              "shikimori_id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '34fcafba2b3fce819ec72c6f4cbffd7e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55f039135f4a2fc3a818169105ae9ec5')"
     ]
   }
 }

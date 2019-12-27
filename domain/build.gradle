@@ -9,6 +9,9 @@ dependencies {
     implementation project(Modules.model)
     api project(Modules.data)
 
+    api Libs.AndroidX.Work.runtimeKtx
+
+    implementation Libs.Dagger.dagger
     kapt Libs.Dagger.compiler
 
     implementation Libs.AndroidX.Paging.common

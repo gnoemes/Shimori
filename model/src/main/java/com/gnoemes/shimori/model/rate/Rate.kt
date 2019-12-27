@@ -3,25 +3,23 @@ package com.gnoemes.shimori.model.rate
 import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriEntity
 import com.gnoemes.shimori.model.ShimoriEntity
-import com.gnoemes.shimori.model.anime.Anime
 import org.joda.time.DateTime
 
 @Entity(tableName = "rates",
         indices = [
-            Index(value = ["target_id", "target_type"], unique = true),
             Index(value = ["shikimori_id"], unique = true),
+            Index(value = ["anime_id"], unique = true),
+            Index(value = ["manga_id"], unique = true),
+            Index(value = ["ranobe_id"], unique = true),
             Index(value = ["date_created"])
-        ],
-        foreignKeys = [
-            ForeignKey(entity = Anime::class,
-                    parentColumns = ["shikimori_id"],
-                    childColumns = ["target_id"])
         ]
 )
-data class Rate (
+data class Rate(
     @PrimaryKey(autoGenerate = true) override val id: Long = 0,
     @ColumnInfo(name = "shikimori_id") override val shikimoriId: Long? = null,
-    @ColumnInfo(name = "target_id") var targetId: Long? = null,
+    @ColumnInfo(name = "anime_id") val animeId: Long? = null,
+    @ColumnInfo(name = "manga_id") val mangaId: Long? = null,
+    @ColumnInfo(name = "ranobe_id") val ranobeId: Long? = null,
     @ColumnInfo(name = "target_type") val targetType: RateTargetType? = null,
     @ColumnInfo(name = "status") val status: RateStatus? = null,
     @ColumnInfo(name = "comment") val comment: String? = null,

@@ -1,7 +1,9 @@
-package com.gnoemes.shikimori.mappers
+package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
+import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shimori.data_base.mappers.Mapper
+import com.gnoemes.shimori.model.ShimoriConstants
 import com.gnoemes.shimori.model.anime.Anime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +19,7 @@ internal class AnimeResponseMapper @Inject constructor(
             name = from.name,
             nameRu = from.nameRu,
             image = imageMapper.map(from.image),
-            url = from.url,
+            url = from.url.appendHostIfNeed(),
             type = typeMapper.map(from.type),
             score = from.score,
             status = from.status,
@@ -26,4 +28,8 @@ internal class AnimeResponseMapper @Inject constructor(
             dateAired = from.dateAired,
             dateReleased = from.dateReleased
     )
+
+    private fun String.appendHostIfNeed(host: String = ShimoriConstants.ShikimoriBaseUrl): String {
+        return if (this.contains("http")) this else host + this
+    }
 }
