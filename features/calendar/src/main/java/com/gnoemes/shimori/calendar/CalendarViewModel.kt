@@ -44,7 +44,6 @@ internal class CalendarViewModel @AssistedInject constructor(
                 }
         }
 
-
         viewModelScope.launch {
             searchQuery.asFlow()
                 .debounce(300)
