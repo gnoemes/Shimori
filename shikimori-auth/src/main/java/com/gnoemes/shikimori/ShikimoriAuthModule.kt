@@ -6,12 +6,19 @@ import androidx.core.net.toUri
 import com.example.shikimori.auth.R
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import net.openid.appauth.*
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 class ShikimoriAuthModule {
+
+    @Provides
+    fun provideAuthState(manager: ShikimoriManager) = runBlocking {
+        manager.state.first()
+    }
 
     @Provides
     @Singleton
