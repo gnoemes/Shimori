@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeFts
+import com.gnoemes.shimori.model.app.LastRequest
 import com.gnoemes.shimori.model.rate.Rate
 import dev.matrix.roomigrant.GenerateRoomMigrations
 
@@ -13,7 +14,8 @@ import dev.matrix.roomigrant.GenerateRoomMigrations
         entities = [
             Anime::class,
             AnimeFts::class,
-            Rate::class
+            Rate::class,
+            LastRequest::class
         ],
         version = 1
 )

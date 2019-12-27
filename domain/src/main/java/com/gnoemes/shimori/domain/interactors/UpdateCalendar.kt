@@ -2,7 +2,7 @@ package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.anime.CalendarRepository
+import com.gnoemes.shimori.data.repositories.calendar.CalendarRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
@@ -16,7 +16,9 @@ class UpdateCalendar @Inject constructor(
     override val scope: CoroutineScope = processScope + dispatcher.io
 
     override suspend fun doWork(params: Params) {
-        repository.updateCalendar()
+        if (params.forceRefresh || repository.needUpdateCalendar()) {
+            repository.updateCalendar()
+        }
     }
 
     data class Params(val forceRefresh: Boolean)

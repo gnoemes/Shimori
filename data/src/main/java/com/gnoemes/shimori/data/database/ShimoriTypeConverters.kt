@@ -2,12 +2,14 @@ package com.gnoemes.shimori.data.database
 
 import androidx.room.TypeConverter
 import com.gnoemes.shimori.model.anime.AnimeType
+import com.gnoemes.shimori.model.app.Request
 import com.gnoemes.shimori.model.common.AgeRating
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.gnoemes.shimori.model.common.Genre
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime
+import org.joda.time.Instant
 import org.joda.time.format.ISODateTimeFormat
 
 object ShimoriTypeConverters {
@@ -18,6 +20,7 @@ object ShimoriTypeConverters {
     private val animeTypes by lazy(LazyThreadSafetyMode.NONE) { AnimeType.values() }
     private val rateStatuses by lazy(LazyThreadSafetyMode.NONE) { RateStatus.values() }
     private val rateTargetTypes by lazy(LazyThreadSafetyMode.NONE) { RateTargetType.values() }
+    private val requestValues by lazy(LazyThreadSafetyMode.NONE) { Request.values() }
 
     @TypeConverter
     @JvmStatic
@@ -26,6 +29,14 @@ object ShimoriTypeConverters {
     @TypeConverter
     @JvmStatic
     fun fromDateTime(dateTime: DateTime?): String? = dateTime?.toString(dateFormat)
+
+    @TypeConverter
+    @JvmStatic
+    fun toInstant(value: Long?) = value?.let { Instant(it) }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromInstant(instant: Instant?) = instant?.millis
 
     @TypeConverter
     @JvmStatic
@@ -83,5 +94,13 @@ object ShimoriTypeConverters {
 
         return builder.toString()
     }
+
+    @TypeConverter
+    @JvmStatic
+    fun toRequest(tag: String) = requestValues.firstOrNull { it.tag == tag }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromRequest(request: Request) = request.tag
 
 }

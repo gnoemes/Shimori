@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.observers
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.anime.CalendarRepository
+import com.gnoemes.shimori.data.repositories.calendar.CalendarRepository
 import com.gnoemes.shimori.domain.SubjectInteractor
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import kotlinx.coroutines.CoroutineDispatcher
