@@ -1,11 +1,8 @@
-package com.example.shikimori
+package com.gnoemes.shikimori
 
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.util.Log
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.edit
-import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.base.di.ProcessLifetime
@@ -27,8 +24,7 @@ class ShikimoriManager @Inject constructor(
     @Named("auth") private val prefs: SharedPreferences,
     @Named("app") private val appNavigator: AppNavigator,
     private val dispatchers: AppCoroutineDispatchers,
-        //TODO visibility
-    val request: AuthorizationRequest,
+    private val request: AuthorizationRequest,
     private val clientAuth: ClientAuthentication,
     @ProcessLifetime private val processScope: CoroutineScope,
     private val shikimori: Shikimori
@@ -77,11 +73,7 @@ class ShikimoriManager @Inject constructor(
     private fun performAuth(code: Int, service: AuthorizationService) {
         service.performAuthorizationRequest(
                 request,
-                appNavigator.provideAuthHandleIntent(code),
-                //TODO remove. urn:ietf:wg:oauth:2.0:oob redirect doesn't work
-                CustomTabsIntent.Builder()
-                    .setActionButton(Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888), "Выбрать", appNavigator.provideAuthHandleIntent(code))
-                    .build()
+                appNavigator.provideAuthHandleIntent(code)
         )
     }
 

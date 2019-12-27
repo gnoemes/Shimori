@@ -1,4 +1,4 @@
-package com.example.shikimori
+package com.gnoemes.shikimori
 
 object ShikimoriConstants {
     const val AUTHORIZATION_ENDPOINT = "https://shikimori.one/oauth/authorize"

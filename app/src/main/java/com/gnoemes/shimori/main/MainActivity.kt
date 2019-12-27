@@ -7,9 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import com.airbnb.mvrx.viewModel
-import com.example.shikimori.ShikimoriConstants
 import com.gnoemes.common.BaseActivity
 import com.gnoemes.common.extensions.setupWithNavController
+import com.gnoemes.shikimori.ShikimoriConstants
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.databinding.ActivityMainBinding
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
@@ -57,17 +57,7 @@ class MainActivity : BaseActivity() {
     override fun handleIntent(intent: Intent) {
         when (intent.action) {
             ShikimoriConstants.AUTH_HANDLE_ACTION -> {
-
-                //TODO remove
-                val code = intent.data?.toString()?.let {
-                    it.substring(it.lastIndexOf("/"))
-                        .replaceFirst("/", "")
-                }
-                val response = AuthorizationResponse.Builder(viewModel.shikimoriManager.request)
-                    .setAuthorizationCode(code)
-                    .build()
-
-//                val response = AuthorizationResponse.fromIntent(intent)
+                val response = AuthorizationResponse.fromIntent(intent)
                 val error = AuthorizationException.fromIntent(intent)
                 viewModel.onAuthResult(authService, response, error)
             }

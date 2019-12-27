@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.di
 
-import com.example.shikimori.ShikimoriAuthModule
+import com.gnoemes.shikimori.ShikimoriAuthModule
 import com.gnoemes.common.epoxy.EpoxyModule
 import com.gnoemes.shikimori.ShikimoriModule
 import com.gnoemes.shimori.ShimoriApplication
