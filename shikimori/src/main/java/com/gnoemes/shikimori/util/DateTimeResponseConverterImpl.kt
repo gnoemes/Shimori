@@ -17,10 +17,10 @@ internal class DateTimeResponseConverterImpl @Inject constructor() : DateTimeRes
 
     override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext): DateTime =
         try {
-             DateTime(json.asString, DateTimeZone.getDefault())
+            DateTime(json.asString, DateTimeZone.getDefault()).withMillisOfSecond(0)
         } catch (e: IllegalArgumentException) {
             val date = context.deserialize<Date>(json, Date::class.java)
-             DateTime(date)
+            DateTime(date).withMillisOfSecond(0)
         }
 
 }

@@ -8,7 +8,7 @@ class AnimeWithRate {
     @Embedded
     var anime: Anime? = null
 
-    @Relation(parentColumn = "rate_id", entityColumn = "shikimori_id")
+    @Relation(parentColumn = "shikimori_id", entityColumn = "anime_id")
     var rate: Rate? = null
 
     override fun equals(other: Any?): Boolean = when {

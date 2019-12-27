@@ -21,7 +21,7 @@ object RateUtils {
     @StringRes
     fun getName(type: RateTargetType, status: RateStatus) = when (type) {
         RateTargetType.ANIME -> getAnimeName(status)
-        RateTargetType.MANGA -> getMangaName(status)
+        else -> getMangaName(status)
     }
 
     @StringRes
