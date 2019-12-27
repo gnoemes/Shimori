@@ -12,8 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Shimori" >
-        <activity android:name="com.gnoemes.shimori.main.MainActivity" >
+        android:theme="@style/Theme.Shimori">
+        <activity android:name="com.gnoemes.shimori.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/shikimori_redirect_scheme" />
+                <data
+                    android:host="@string/shikimori_redirect_host"
+                    android:path="@string/shikimori_redirect_path"
+                    android:scheme="@string/shikimori_redirect_scheme" />
+
             </intent-filter>
         </activity>
 

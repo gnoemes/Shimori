@@ -1,4 +1,4 @@
-package com.example.shikimori
+package com.gnoemes.shikimori
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -22,8 +22,13 @@ class ShikimoriAuthModule {
 
     @Provides
     @Named("shikimori-oauth-redirect")
-    fun provideOAuthRedirect(context: Context) =
-        context.getString(R.string.shikimori_redirect_scheme)
+    fun provideOAuthRedirect(context: Context): String {
+        val scheme = context.getString(R.string.shikimori_redirect_scheme)
+        val host = context.getString(R.string.shikimori_redirect_host)
+        val path = context.getString(R.string.shikimori_redirect_path)
+
+        return "$scheme://$host$path"
+    }
 
     @Singleton
     @Provides
@@ -47,7 +52,8 @@ class ShikimoriAuthModule {
             redirect.toUri()
     ).apply {
         setAdditionalParameters(mapOf("User-agent" to "Shimori"))
-        setScopes("user_rates", "comments", "topics", "friends")
+        //TODO return friends
+        setScopes("user_rates", "comments", "topics")
         setCodeVerifier(null)
     }.build()
 

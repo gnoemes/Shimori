@@ -3,7 +3,7 @@ package com.gnoemes.shimori
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.example.shikimori.ShikimoriConstants
+import com.gnoemes.shikimori.ShikimoriConstants
 import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.main.MainActivity
 import javax.inject.Inject

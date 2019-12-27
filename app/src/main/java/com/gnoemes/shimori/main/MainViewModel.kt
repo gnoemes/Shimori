@@ -2,8 +2,8 @@ package com.gnoemes.shimori.main
 
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.example.shikimori.ShikimoriManager
 import com.gnoemes.common.BaseViewModel
+import com.gnoemes.shikimori.ShikimoriManager
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import net.openid.appauth.AuthorizationException
@@ -12,8 +12,7 @@ import net.openid.appauth.AuthorizationService
 
 class MainViewModel @AssistedInject constructor(
     @Assisted initialState: MainViewState,
-    //TODO visibility
-    val shikimoriManager: ShikimoriManager
+    private val shikimoriManager: ShikimoriManager
 ) : BaseViewModel<MainViewState>(initialState) {
 
     fun onAuth(service: AuthorizationService) {
