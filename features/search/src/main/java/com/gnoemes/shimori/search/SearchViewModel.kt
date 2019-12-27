@@ -5,7 +5,6 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
-import com.gnoemes.shimori.domain.interactors.GetMyUser
 import com.gnoemes.shimori.domain.interactors.SearchPaginated
 import com.gnoemes.shimori.domain.launchObserve
 import com.squareup.inject.assisted.Assisted
@@ -15,8 +14,7 @@ import kotlinx.coroutines.launch
 
 internal class SearchViewModel @AssistedInject constructor(
     @Assisted initialState: SearchViewState,
-    private val searchItems: SearchPaginated,
-    private val getMyUser: GetMyUser
+    private val searchItems: SearchPaginated
 ) : BaseViewModel<SearchViewState>(initialState) {
 
     init {
@@ -30,8 +28,6 @@ internal class SearchViewModel @AssistedInject constructor(
                 it.execute { copy(resuls = it()) }
             }
         }
-
-        withState {  getMyUser(GetMyUser.Params) }
     }
 
     @AssistedInject.Factory

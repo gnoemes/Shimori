@@ -13,12 +13,11 @@ class GetMyUser @Inject constructor(
     private val userRepository: UserRepository,
     dispatchers: AppCoroutineDispatchers,
     @ProcessLifetime val processScope: CoroutineScope
-) : Interactor<GetMyUser.Params>() {
+) : Interactor<Unit>() {
     override val scope: CoroutineScope = processScope + dispatchers.io
 
-    override suspend fun doWork(params: Params) {
+    override suspend fun doWork(params: Unit) {
        return userRepository.getMyUser()
     }
 
-    object Params
 }
