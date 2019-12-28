@@ -29,7 +29,7 @@
             app:cardElevation="3dp"
             app:cardPreventCornerOverlap="false"
             app:strokeColor="?attr/colorDivider"
-            app:strokeWidth="?attr/themeStrokeWidth">
+            app:strokeWidth="1dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

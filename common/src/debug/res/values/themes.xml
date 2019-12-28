@@ -36,37 +36,38 @@
     </style>
 
     <style name="Theme.Shimori" parent="Base.Theme.Shimori">
-        <item name="colorPrimary">@color/default_colorPrimary</item>
-        <item name="colorOnPrimary">@color/default_colorOnPrimary</item>
-        <item name="colorOnPrimarySecondary">@color/default_colorOnPrimarySecondary</item>
+        <item name="colorPrimary">@color/shimori_colorPrimary</item>
+        <item name="colorOnPrimary">@color/shimori_colorOnPrimary</item>
+        <item name="colorOnPrimarySecondary">@color/shimori_colorOnPrimarySecondary</item>
 
-        <item name="colorPrimaryVariant">@color/default_colorPrimaryVariant</item>
-        <item name="colorPrimaryDark">@color/default_colorPrimaryVariant</item>
+        <item name="colorPrimaryVariant">@color/shimori_colorPrimaryVariant</item>
+        <item name="colorPrimaryDark">@color/shimori_colorPrimaryVariant</item>
 
-        <item name="colorSecondary">@color/default_colorSecondary</item>
-        <item name="colorSecondaryTransparent">@color/default_colorSecondaryTransparent</item>
-        <item name="colorOnSecondary">@color/default_colorOnSecondary</item>
+        <item name="colorSecondary">@color/shimori_colorSecondary</item>
+        <item name="colorSecondaryTransparent">@color/shimori_colorSecondaryTransparent</item>
+        <item name="colorOnSecondary">@color/shimori_colorOnSecondary</item>
 
-        <item name="colorSurface">@color/default_colorSurface</item>
-        <item name="colorOnSurface">@color/default_colorOnSurface</item>
+        <item name="colorSurface">@color/shimori_colorSurface</item>
+        <item name="colorOnSurface">@color/shimori_colorOnSurface</item>
 
-        <item name="colorOnBackground">@color/default_colorOnBackground</item>
-        <item name="colorDivider">@color/default_colorDivider</item>
-        <item name="colorControlHighlight">@color/default_colorRipple</item>
+        <item name="android:colorBackground">@color/shimori_colorBackground</item>
+        <item name="colorOnBackground">@color/shimori_colorOnBackground</item>
+        <item name="colorDivider">@color/shimori_colorDivider</item>
+        <item name="colorControlHighlight">@color/shimori_colorRipple</item>
 
-        <item name="colorDialogSurface">@color/default_colorDialogSurface</item>
-        <item name="colorRateMenuBackground">@color/default_colorRateMenuBackground</item>
-        <item name="colorRateDialog">@color/default_colorRateDialog</item>
-        <item name="colorSnackbarSurface">@color/default_colorSnackBar</item>
+        <item name="colorBackgroundFloating">@color/shimori_colorDialogSurface</item>
+        <item name="colorDialogSurface">@color/shimori_colorDialogSurface</item>
+        <item name="colorRateMenuBackground">@color/shimori_colorRateMenuBackground</item>
+        <item name="colorRateDialog">@color/shimori_colorRateDialog</item>
+        <item name="colorSnackbarSurface">@color/shimori_colorSnackBar</item>
 
         <item name="colorRateDefault">@color/rate_default_transparent</item>
         <item name="colorRateWatched">@color/rate_watched_transparent</item>
         <item name="colorRateOnHold">@color/rate_on_hold_transparent</item>
         <item name="colorRateDropped">@color/rate_dropped_transparent</item>
 
-        <item name="colorStatusBar">@color/default_colorStatusBar</item>
-        <item name="colorNavigationBar">@color/default_colorStatusBar</item>
-        <item name="lightStatusBar">true</item>
+        <item name="colorStatusBar">@color/shimori_colorStatusBar</item>
+        <item name="colorNavigationBar">@color/shimori_colorStatusBar</item>
     </style>
 
 </resources>
