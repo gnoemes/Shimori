@@ -46,4 +46,7 @@ class DaoModule {
 
     @Provides
     fun provideLastRequestDao(db: ShimoriDatabase) = db.lastRequestDao()
+
+    @Provides
+    fun provideUserDao(db: ShimoriDatabase) = db.userDao()
 }

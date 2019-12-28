@@ -8,16 +8,27 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 import javax.inject.Inject
 
-//TODO delete
-class GetMyUser @Inject constructor(
+class UpdateUser @Inject constructor(
     private val userRepository: UserRepository,
     dispatchers: AppCoroutineDispatchers,
     @ProcessLifetime val processScope: CoroutineScope
-) : Interactor<Unit>() {
+) : Interactor<UpdateUser.Params>() {
     override val scope: CoroutineScope = processScope + dispatchers.io
 
-    override suspend fun doWork(params: Unit) {
-       return userRepository.getMyUser()
+    override suspend fun doWork(params: Params) {
+        if (params.id != null) {
+            userRepository.updateUser(params.id)
+            return
+        }
+
+        if (params.isMe) {
+            userRepository.updateMyUser()
+        }
     }
+
+    data class Params(
+        val id: Long?,
+        val isMe: Boolean = false
+    )
 
 }

@@ -7,6 +7,7 @@ import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +28,7 @@ class ShikimoriManager @Inject constructor(
     private val request: AuthorizationRequest,
     private val clientAuth: ClientAuthentication,
     @ProcessLifetime private val processScope: CoroutineScope,
-    private val shikimori: Shikimori
+    private val shikimori: Lazy<Shikimori>
 ) {
 
     private val authState = ConflatedBroadcastChannel<AuthState>()
@@ -42,7 +43,7 @@ class ShikimoriManager @Inject constructor(
             authState.asFlow().collect {
                 updateAuthState(it)
 
-                shikimori.run {
+                shikimori.get().run {
                     accessToken = it.accessToken
                     refreshToken = it.refreshToken
                 }
@@ -93,6 +94,10 @@ class ShikimoriManager @Inject constructor(
         val newState = AuthState().apply { update(response, e) }
         e?.printStackTrace()
 
+        processScope.launch(dispatchers.main) {
+            authState.send(newState)
+        }
+
         processScope.launch(dispatchers.io) {
             persistAuthState(newState)
         }
@@ -107,7 +112,7 @@ class ShikimoriManager @Inject constructor(
     }
 
     private fun persistAuthState(state: AuthState) {
-        Log.i("DEVE", "persist ${state.jsonSerializeString()}")
+        Log.i("AUTH", "persist ${state.jsonSerializeString()}")
         prefs.edit {
             putString("stateJson", state.jsonSerializeString())
         }
