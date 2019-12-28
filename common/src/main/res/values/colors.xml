@@ -5,7 +5,7 @@
     <color name="shimori_colorSecondary">#ff7043</color>
     <color name="shimori_colorSurface">#ffffff</color>
     <color name="shimori_colorOnSecondary">#FFFFFF</color>
-    <color name="shimori_colorBackground">#f5f5f5</color>
+    <color name="shimori_colorBackground">#FFFFFF</color>
     <color name="shimori_colorOnSurface">#DE000000</color>
     <color name="shimori_colorOnPrimary">#000000</color>
     <color name="shimori_colorOnPrimarySecondary">#99000000</color>
