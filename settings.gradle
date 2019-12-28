@@ -14,5 +14,6 @@ include ':model'
 
 include ':features:search'
 include ':features:calendar'
+include ':features:rates'
 
 rootProject.name='Shimori'

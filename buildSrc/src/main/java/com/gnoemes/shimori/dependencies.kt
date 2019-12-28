@@ -25,6 +25,7 @@ object Modules {
     //features
     const val featureSearch = ":features:search"
     const val featureCalendar = ":features:calendar"
+    const val featureRates = ":features:rates"
 }
 
 object Versions {
@@ -49,6 +50,8 @@ object Libs {
     const val mockK = "io.mockk:mockk:1.9.3"
 
     const val appauth = "net.openid:appauth:0.7.1"
+
+    const val advancedDrawer = "com.infideap.drawerbehavior:drawer-behavior:0.2.2"
 
     object Google {
         const val material = "com.google.android.material:material:${Versions.material}"

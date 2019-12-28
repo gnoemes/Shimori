@@ -1,0 +1,7 @@
+apply from: '../../android_feature_dependencies.gradle'
+
+import com.gnoemes.shimori.Libs
+
+dependencies {
+    implementation Libs.advancedDrawer
+}
