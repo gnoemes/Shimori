@@ -1,9 +1,11 @@
 package com.gnoemes.shimori.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.coroutineScope
+import androidx.preference.PreferenceManager
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.ShimoriApplication
 import com.gnoemes.shimori.base.di.*
@@ -109,6 +111,13 @@ class AppModule {
             .mediumDateTime()
             .withLocale(app.resources.configuration.locale)
             .withZone(DateTimeZone.getDefault())
+    }
+
+    @Singleton
+    @Provides
+    @Named("app")
+    fun provideAppPreferences(app : ShimoriApplication) : SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(app)
     }
 
 }
