@@ -6,7 +6,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.shikimori.ShikimoriManager
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
-import com.gnoemes.shimori.domain.interactors.GetMyUser
+import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
@@ -21,17 +21,17 @@ import net.openid.appauth.AuthorizationService
 class MainViewModel @AssistedInject constructor(
     @Assisted initialState: MainViewState,
     observeShikimoriAuth: ObserveShikimoriAuth,
-    getMyUser: GetMyUser,
+    updateUser: UpdateUser,
     private val shikimoriManager: ShikimoriManager
 ) : BaseViewModel<MainViewState>(initialState) {
 
     init {
         viewModelScope.launchObserve(observeShikimoriAuth) { flow ->
             flow.distinctUntilChanged().onEach {
-                    if (it == ShikimoriAuthState.LOGGED_IN) {
-                        getMyUser()
-                    }
+                if (it == ShikimoriAuthState.LOGGED_IN) {
+                    updateUser(UpdateUser.Params(null, isMe = true))
                 }
+            }.execute { copy() }
         }
 
         observeShikimoriAuth()

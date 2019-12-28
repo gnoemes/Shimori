@@ -103,4 +103,12 @@ object ShimoriTypeConverters {
     @JvmStatic
     fun fromRequest(request: Request) = request.tag
 
+    @TypeConverter
+    @JvmStatic
+    fun toBoolean(value: Int) = value != 0
+
+    @TypeConverter
+    @JvmStatic
+    fun fromBoolean(value: Boolean?) = if (value == true) 1 else 0
+
 }
