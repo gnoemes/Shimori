@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="shimori_colorPrimary">#2a2a2a</color>
+    <color name="shimori_colorPrimaryVariant">#99ffffff</color>
+    <color name="shimori_colorSecondary">#ff7043</color>
+    <color name="shimori_colorSurface">#212121</color>
+    <color name="shimori_colorOnSecondary">#212121</color>
+    <color name="shimori_colorBackground">#212121</color>
+    <color name="shimori_colorOnSurface">#deffffff</color>
+    <color name="shimori_colorOnPrimary">#ffffff</color>
+    <color name="shimori_colorOnPrimarySecondary">#99ffffff</color>
+    <color name="shimori_colorOnPrimaryDisabled">#1FFFFFFF</color>
+    <color name="shimori_colorOnBackground">#61ffffff</color>
+    <color name="shimori_colorSecondaryTransparent">#1ffe5722</color>
+    <color name="shimori_colorDivider">#0FFFFFFF</color>
+    <color name="shimori_colorRipple">#0FFFFFFF</color>
+    <color name="shimori_colorTransparentBackground">#80000000</color>
+    <color name="shimori_colorOnTransparentBackground">#99ffffff</color>
+    <color name="shimori_colorDialogSurface">#212121</color>
+    <color name="shimori_colorRateMenuBackground">#1d1d1d</color>
+    <color name="shimori_colorRateDialog">#212121</color>
+    <color name="shimori_colorSnackBar">#424242</color>
+    <color name="shimori_colorStatusBar">#de2a2a2a</color>
+</resources>

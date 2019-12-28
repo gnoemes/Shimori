@@ -22,9 +22,10 @@ internal class CalendarTextCreator @Inject constructor(
     private val dateFormatter: SimpleDateTimeFormatter
 ) {
 
-    //TODO dark/light
     private val dividerColor by lazy {
-        Color.BLACK.let { ColorUtils.setAlphaComponent(it, 97) }
+        val lightTheme = context.resources.getBoolean(R.bool.is_light_theme)
+        (if (lightTheme) Color.BLACK else Color.WHITE)
+            .let { ColorUtils.setAlphaComponent(it, 97) }
     }
 
     fun showDate(dateTime: DateTime?): String? {

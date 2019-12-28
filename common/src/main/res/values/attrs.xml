@@ -16,9 +16,6 @@
     <attr name="editRateBackground" format="reference" />
     <attr name="colorSnackbarSurface" format="reference" />
 
-    <attr name="themeStrokeWidth" format="dimension" />
-    <attr name="lightStatusBar" format="boolean" />
-
     <attr name="colorRateDefault" format="color" />
     <attr name="colorRateWatched" format="color" />
     <attr name="colorRateOnHold" format="color" />
