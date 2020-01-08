@@ -33,7 +33,7 @@ object Versions {
     const val minSdk = 16
     const val targetSdk = 29
 
-    const val material = "1.2.0-alpha02"
+    const val material = "1.2.0-alpha03"
 }
 
 object Libs {

@@ -1,5 +1,6 @@
 package com.gnoemes.common.databinding
 
+import android.annotation.SuppressLint
 import android.graphics.Outline
 import android.os.Build
 import android.view.View
@@ -16,6 +17,8 @@ import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
 
 @BindingAdapter("visible")
 fun visible(view: View, value: Boolean) {
@@ -61,6 +64,17 @@ fun roundedCornerOutlineProvider(view: View, oldRadius: Float, radius: Float) {
                 outline.setRoundRect(0, 0, view.width, view.height, radius)
             }
         }
+    }
+}
+
+@SuppressLint("UnsafeExperimentalUsageError")
+@BindingAdapter("roundedCorners")
+fun roundedCorners(view: ShapeableImageView, oldRadius: Float, radius: Float) {
+    if (oldRadius != radius) {
+        view.shapeAppearanceModel = view.shapeAppearanceModel
+            .toBuilder()
+            .setAllCorners(CornerFamily.ROUNDED, radius)
+            .build()
     }
 }
 

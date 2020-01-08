@@ -27,53 +27,40 @@
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/posterContainer"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/posterView"
+            style="@style/ShapeableImageView.Stroke"
             android:layout_width="0dp"
             android:layout_height="@dimen/search_image_grid_poster_height"
-            app:cardCornerRadius="@dimen/image_round_corners"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:cardPreventCornerOverlap="false"
+            app:image="@{image}"
             app:layout_constraintDimensionRatio="h, 4:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="?attr/colorDivider"
-            app:strokeWidth="1dp">
-
-            <ImageView
-                android:id="@+id/posterView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:image="@{image}"
-                app:roundedCornerOutlineProvider="@{@dimen/image_round_corners}"
-                tools:src="@drawable/poster_debug" />
-
-        </com.google.android.material.card.MaterialCardView>
+            app:roundedCorners="@{@dimen/image_corners}"
+            tools:src="@drawable/poster_debug" />
 
         <TextView
             android:id="@+id/titleView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/spacing_micro"
             android:ellipsize="end"
             android:gravity="center_horizontal"
             android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@{textCreator.showTitle(item)}"
             android:textAppearance="?attr/textAppearanceSubtitle1"
-            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
-            app:layout_constraintStart_toStartOf="@+id/posterContainer"
-            app:layout_constraintTop_toBottomOf="@+id/posterContainer"
+            app:layout_constraintEnd_toEndOf="@+id/posterView"
+            app:layout_constraintStart_toStartOf="@+id/posterView"
+            app:layout_constraintTop_toBottomOf="@+id/posterView"
             tools:text="Вторжение гигантов 3. Часть 2" />
 
         <TextView
             android:id="@+id/descriptionView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/spacing_micro"
             android:gravity="center_horizontal"
             android:includeFontPadding="false"
             android:maxLines="1"
@@ -81,8 +68,8 @@
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textColor="?attr/colorOnPrimarySecondary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/posterContainer"
-            app:layout_constraintStart_toStartOf="@+id/posterContainer"
+            app:layout_constraintEnd_toEndOf="@+id/posterView"
+            app:layout_constraintStart_toStartOf="@+id/posterView"
             app:layout_constraintTop_toBottomOf="@+id/titleView"
             app:layout_constraintVertical_bias="0" />
 
