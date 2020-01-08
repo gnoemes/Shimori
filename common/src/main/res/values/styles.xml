@@ -14,7 +14,7 @@
         <item name="itemBackground">?attr/selectableItemBackground</item>
     </style>
 
-    <!--    TOOLBAR-->
+    <!--TOOLBAR-->
     <style name="Widget.Shimori.DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">?attr/colorOnPrimary</item>
     </style>
@@ -27,7 +27,7 @@
         <item name="android:tint">?attr/colorOnPrimary</item>
     </style>
 
-    <!--    BUTTONS-->
+    <!--BUTTONS-->
     <style name="Widget.Shimori.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
     </style>
@@ -53,6 +53,28 @@
         <item name="strokeColor">@color/selector_button_gray_stroke_color</item>
         <item name="android:shadowColor">?attr/colorSecondaryTransparent</item>
         <item name="rippleColor">@color/selector_default_ripple_color</item>
+    </style>
+
+    <!--NAVIGATION VIEW-->
+    <style name="Widget.Shimori.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="listPreferredItemHeightSmall">@dimen/menu_item_height</item>
+        <item name="selectableItemBackground">@drawable/bg_menu_item_ripple</item>
+    </style>
+
+    <style name="Widget.Shimori.NavigationView.Large" parent="Widget.Shimori.NavigationView">
+        <item name="listPreferredItemHeightSmall">@dimen/menu_item_large_height</item>
+        <item name="selectableItemBackground">@drawable/bg_menu_item_ripple_large</item>
+    </style>
+
+    <!--IMAGE VIEW-->
+    <style name="ShapeableImageView">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="ShapeableImageView.Stroke" parent="ShapeableImageView">
+        <item name="strokeColor">?attr/colorDivider</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
     <!--SHAPES-->

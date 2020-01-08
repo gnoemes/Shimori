@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorDivider">
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+
+            <solid android:color="?attr/colorSurface" />
+
+            <corners
+                android:bottomLeftRadius="@dimen/menu_item_large_corner_size"
+                android:topLeftRadius="@dimen/menu_item_large_corner_size" />
+
+            <size android:height="@dimen/menu_item_large_height" />
+
+        </shape>
+    </item>
+
+</ripple>
