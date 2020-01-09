@@ -1,5 +1,6 @@
 package com.gnoemes.common.utils
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.gnoemes.common.R
@@ -42,5 +43,35 @@ object RateUtils {
         RateStatus.COMPLETED -> R.string.rate_readed
         RateStatus.ON_HOLD -> R.string.rate_on_hold
         RateStatus.DROPPED -> R.string.rate_dropped
+    }
+
+    @ColorRes
+    fun getTextColor(status: RateStatus) = when (status) {
+        RateStatus.COMPLETED -> R.color.selector_rate_text_color_completed
+        RateStatus.ON_HOLD -> R.color.selector_rate_text_color_on_hold
+        RateStatus.DROPPED -> R.color.selector_rate_text_color_dropped
+        else -> R.color.selector_rate_text_color_default
+    }
+
+    @DrawableRes
+    fun getMenuBackground(status: RateStatus, large: Boolean = false) =
+        if (large)
+            when (status) {
+                RateStatus.COMPLETED -> R.drawable.selector_rate_menu_completed_large
+                RateStatus.ON_HOLD -> R.drawable.selector_rate_menu_on_hold_large
+                RateStatus.DROPPED -> R.drawable.selector_rate_menu_dropped_large
+                else -> R.drawable.selector_rate_menu_default_large
+            }
+        else
+            when (status) {
+                RateStatus.COMPLETED -> R.drawable.selector_rate_menu_completed
+                RateStatus.ON_HOLD -> R.drawable.selector_rate_menu_on_hold
+                RateStatus.DROPPED -> R.drawable.selector_rate_menu_dropped
+                else -> R.drawable.selector_rate_menu_default
+            }
+
+    fun fromPriority(priority: Int): RateStatus {
+        return RateStatus.values().find { it.priority == priority }
+            ?: throw IllegalArgumentException("Rate status with $priority priority doesn't exist")
     }
 }

@@ -30,7 +30,8 @@
 
         <include
             android:id="@+id/searchBar"
-            layout="@layout/layout_toolbar_search" />
+            layout="@layout/layout_toolbar_search"
+            app:hint="@{@string/calendar_search_hint}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

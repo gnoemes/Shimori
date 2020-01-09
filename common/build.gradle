@@ -44,4 +44,6 @@ dependencies {
     kapt Libs.Glide.compiler
 
     implementation Libs.gravitySnapHelper
+
+    implementation Libs.advancedDrawer
 }

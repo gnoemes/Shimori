@@ -6,6 +6,10 @@
     <string name="common_profile">Профиль</string>
     <string name="common_today">Сегодня</string>
     <string name="common_tomorrow">Завтра</string>
+    <string name="common_anime">Аниме</string>
+    <string name="common_manga">Манга</string>
+    <string name="common_ranobe">Ранобэ</string>
+    <string name="common_manga_and_ranobe">Манга и ранобэ</string>
 
     <string name="status_anons">Анонс</string>
     <string name="status_ongoing">Онгоинг</string>

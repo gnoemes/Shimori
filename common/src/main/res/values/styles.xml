@@ -57,13 +57,21 @@
 
     <!--NAVIGATION VIEW-->
     <style name="Widget.Shimori.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">?attr/colorOnSurface</item>
+        <item name="itemTextColor">?attr/colorOnSurface</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.Shimori.NavigationView.Normal" parent="Widget.Shimori.NavigationView">
         <item name="listPreferredItemHeightSmall">@dimen/menu_item_height</item>
         <item name="selectableItemBackground">@drawable/bg_menu_item_ripple</item>
+        <item name="itemTextAppearance">?attr/textAppearanceBody2</item>
     </style>
 
     <style name="Widget.Shimori.NavigationView.Large" parent="Widget.Shimori.NavigationView">
         <item name="listPreferredItemHeightSmall">@dimen/menu_item_large_height</item>
         <item name="selectableItemBackground">@drawable/bg_menu_item_ripple_large</item>
+        <item name="itemTextAppearance">?attr/textAppearanceBody1</item>
     </style>
 
     <!--IMAGE VIEW-->
