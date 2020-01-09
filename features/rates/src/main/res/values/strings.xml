@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rate_empty">Здесь пока ничего нет</string>
+
+    <string name="rate_drawer_open" translatable="false">rate_drawer_open</string>
+    <string name="rate_drawer_close" translatable="false">rate_drawer_close</string>
+
+    <string name="rate_empty_anime">Поиск аниме</string>
+    <string name="rate_empty_manga">Поиск манги</string>
+
+</resources>

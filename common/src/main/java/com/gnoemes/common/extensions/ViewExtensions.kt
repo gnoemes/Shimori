@@ -3,7 +3,6 @@ package com.gnoemes.common.extensions
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -52,56 +51,6 @@ fun ViewGroup.beginDelayedTransition(duration: Long = 200) {
 }
 
 fun View.dimen(@DimenRes dimenRes : Int) = context.dimen(dimenRes)
-
-/**
- * Call [View.requestApplyInsets] in a safe away. If we're attached it calls it straight-away.
- * If not it sets an [View.OnAttachStateChangeListener] and waits to be attached before calling
- * [View.requestApplyInsets].
- */
-fun View.requestApplyInsetsWhenAttached() = doOnAttach {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-        it.requestApplyInsets()
-    }
-}
-
-fun View.doOnAttach(f: (View) -> Unit) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return
-
-    if (isAttachedToWindow) {
-        f(this)
-    } else {
-        addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) {
-                f(v)
-                removeOnAttachStateChangeListener(this)
-            }
-
-            override fun onViewDetachedFromWindow(v: View) {
-                removeOnAttachStateChangeListener(this)
-            }
-        })
-    }
-}
-
-inline fun View.doOnLayouts(crossinline action: (view: View) -> Boolean) {
-    addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-        override fun onLayoutChange(
-            view: View,
-            left: Int,
-            top: Int,
-            right: Int,
-            bottom: Int,
-            oldLeft: Int,
-            oldTop: Int,
-            oldRight: Int,
-            oldBottom: Int
-        ) {
-            if (!action(view)) {
-                view.removeOnLayoutChangeListener(this)
-            }
-        }
-    })
-}
 
 inline fun View.doOnSizeChange(crossinline action: (view: View) -> Boolean) {
     addOnLayoutChangeListener(object : View.OnLayoutChangeListener {

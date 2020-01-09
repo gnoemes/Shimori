@@ -13,6 +13,7 @@ import com.gnoemes.common.extensions.doOnSizeChange
 import com.gnoemes.common.extensions.dp
 import com.gnoemes.common.extensions.hideSoftInput
 import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
+import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.shimori.calendar.databinding.FragmentCalendarBinding
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 import javax.inject.Inject
@@ -42,8 +43,8 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
         binding.refreshLayout.setOnRefreshListener(viewModel::refresh)
 
         view?.findViewById<View>(R.id.searchBar)?.apply {
-            with(findViewById<SearchView>(R.id.searchView)) {
-                queryHint = getString(R.string.calendar_search_hint)
+            with(findViewById<ShimoriSearchView>(R.id.searchView)) {
+                setIcon(R.drawable.ic_search)
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         hideSoftInput()
