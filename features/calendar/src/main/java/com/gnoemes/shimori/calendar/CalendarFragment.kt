@@ -59,9 +59,7 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
             }
             doOnApplyWindowInsets { view, insets, initialState ->
                 binding.recyclerView.updatePadding(top = insets.systemWindowInsetTop + dp(84))
-                view.updatePadding(left = insets.systemWindowInsetLeft + initialState.paddings.left,
-                        right = insets.systemWindowInsetRight + initialState.paddings.left,
-                        top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
+                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
             }
 
             doOnSizeChange {

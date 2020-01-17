@@ -56,7 +56,7 @@
     </style>
 
     <!--NAVIGATION VIEW-->
-    <style name="Widget.Shimori.NavigationView" parent="Widget.Design.NavigationView">
+    <style name="Widget.Shimori.NavigationView" parent="">
         <item name="itemIconTint">?attr/colorOnSurface</item>
         <item name="itemTextColor">?attr/colorOnSurface</item>
         <item name="elevation">0dp</item>

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.iterator
+import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.airbnb.mvrx.fragmentViewModel
@@ -30,6 +30,10 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
     @Inject
     internal lateinit var viewModelFactory: RateViewModel.Factory
 
+    companion object {
+        private const val DRAWER_KEY = "DRAWER_KEY"
+    }
+
     override fun createBinding(inflater: LayoutInflater,
                                container: ViewGroup?,
                                savedInstanceState: Bundle?
@@ -47,6 +51,12 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
             setRadius(Gravity.START, 35f)
             setViewElevation(Gravity.START, 20f)
             toggle.syncState()
+
+            savedInstanceState?.let {
+                this.post {
+                    toggleDrawer(it.getBoolean(DRAWER_KEY))
+                }
+            }
         }
 
         binding.navView.run {
@@ -57,9 +67,8 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
                 }
             setNavigationItemSelectedListener {
                 viewModel.submitAction(RateAction.ChangeCategory(RateUtils.fromPriority(it.itemId)))
-                navView.menu.iterator().forEach { item -> item.actionView?.isSelected = false }
-                it.actionView?.isSelected = true
-                true
+                toggleDrawer(false)
+                false
             }
             doOnApplyWindowInsets { _, insets, initialState ->
                 binding.drawer.updatePadding(
@@ -86,9 +95,7 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
             }
             doOnApplyWindowInsets { view, insets, initialState ->
                 binding.recyclerView.updatePadding(top = insets.systemWindowInsetTop + dp(84))
-                view.updatePadding(left = insets.systemWindowInsetLeft + initialState.paddings.left,
-                        right = insets.systemWindowInsetRight + initialState.paddings.left,
-                        top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
+                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
             }
 
             doOnSizeChange {
@@ -98,6 +105,20 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
                 )
                 true
             }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(DRAWER_KEY, drawer?.isDrawerOpen(GravityCompat.START) ?: false)
+    }
+
+    private fun toggleDrawer(open: Boolean) {
+        requireBinding().drawer.run {
+            if (isDrawerOpen(GravityCompat.START) == open) return
+
+            if (open) openDrawer(GravityCompat.START)
+            closeDrawer(GravityCompat.START)
         }
     }
 

@@ -59,9 +59,11 @@
             android:paddingLeft="0dp"
             android:paddingEnd="12dp"
             android:paddingRight="12dp"
+            android:theme="@style/Widget.Shimori.NavigationView.Normal"
             app:categories="@{state.categories}"
             app:categoriesRefreshing="@{state.categoriesRefreshing}"
-            app:selectedStatus="@{state.selectedStatus}">
+            app:selectedCategory="@{state.selectedCategory}"
+            app:targetType="@{state.type}">
 
             <include
                 layout="@layout/layout_progress"
