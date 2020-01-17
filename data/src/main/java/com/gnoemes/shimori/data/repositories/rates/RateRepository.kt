@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
+import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +18,7 @@ class RateRepository @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    fun observeAnimeRates() = rateStore.observeRates()
+    fun observeRates(type: RateTargetType) = rateStore.observeRates(type)
 
     suspend fun getRates(userId: Long) {
         asyncOrAwait("get_rates") {

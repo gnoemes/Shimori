@@ -66,7 +66,6 @@ abstract class RateDao : EntityDao<Rate> {
 
         private const val QUERY_ANIME_RATES = """
            SELECT * FROM rates AS r
-           INNER JOIN animes AS a ON r.anime_id = a.shikimori_id
            WHERE r.target_type = "anime"
         """
 

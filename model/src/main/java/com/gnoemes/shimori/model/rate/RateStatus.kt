@@ -10,4 +10,11 @@ enum class RateStatus(
     COMPLETED(3, "completed"),
     ON_HOLD(4, "on_hold"),
     DROPPED(5, "dropped");
+
+    companion object {
+        fun watchingFirstValues() =
+            arrayOf(WATCHING, PLANNED, REWATCHING, COMPLETED, ON_HOLD, DROPPED)
+
+        fun priorityValues() = values().sortedBy { it.priority }
+    }
 }

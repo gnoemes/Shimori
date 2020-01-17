@@ -9,13 +9,13 @@ import com.gnoemes.shimori.model.rate.RateTargetType
 
 data class RateViewState(
     val query: String? = null,
-    val selectedStatus: RateStatus? = null,
+    val selectedCategory: RateStatus? = null,
+    val categories: List<RateCategory> = emptyList(),
     val sort: RateSortOption = RateSortOption.NAME,
     val isDescending: Boolean = false,
-    val categories: List<RateCategory> = emptyList(),
-    val type : RateTargetType = RateTargetType.ANIME,
+    val type: RateTargetType = RateTargetType.ANIME,
     val rates: List<Rate>? = null,
     val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
     val isRefreshing: Boolean = false,
-    val categoriesRefreshing : Boolean = false
+    val categoriesRefreshing: Boolean = false
 ) : MvRxState

@@ -16,7 +16,7 @@ abstract class BaseViewModel<S : MvRxState>(
     ) = execute({ it }, stateReducer)
 
     protected suspend inline fun <T, V> Flow<T>.execute(
-        crossinline mapper: (T) -> V,
+        crossinline mapper: suspend (T) -> V,
         crossinline stateReducer: S.(Async<V>) -> S
     ) {
         setState { stateReducer(Loading()) }
@@ -26,7 +26,7 @@ abstract class BaseViewModel<S : MvRxState>(
             .catch {
                 if (BuildConfig.DEBUG) {
                     Log.e(this@BaseViewModel::class.java.simpleName,
-                        "Exception during observe", it)
+                            "Exception during observe", it)
                 }
                 emit(Fail(it))
             }
