@@ -8,21 +8,21 @@ import org.joda.time.DateTime
 
 @Entity(tableName = "animes",
         indices = [
-            Index(value = ["shikimori_id"], unique = true),
+            Index(value = ["anime_shikimori_id"], unique = true),
             Index(value = ["next_episode_date"])
         ]
 )
 data class Anime(
     @PrimaryKey(autoGenerate = true) override val id: Long = 0,
-    @ColumnInfo(name = "shikimori_id") override val shikimoriId: Long? = null,
+    @ColumnInfo(name = "anime_shikimori_id") override val shikimoriId: Long? = null,
     override val name: String = "",
     @ColumnInfo(name = "name_ru") override val nameRu: String? = null,
     @Embedded(prefix = "image_") override val image: ShimoriImage? = null,
     val url: String? = null,
     val type: AnimeType? = null,
-    val score: Double? = null,
-    val status: ContentStatus? = null,
-    val episodes: Int = 0,
+    @ColumnInfo(name = "rating") val score: Double? = null,
+    @ColumnInfo(name = "anime_status") val status: ContentStatus? = null,
+    @ColumnInfo(name = "episodes_size") val episodes: Int = 0,
     val episodesAired: Int = 0,
     @ColumnInfo(name = "date_aired") val dateAired: DateTime? = null,
     @ColumnInfo(name = "date_released") val dateReleased: DateTime? = null,

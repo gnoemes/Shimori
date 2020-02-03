@@ -18,7 +18,9 @@ internal class CalendarMapper @Inject constructor(
                     duration = convertDuration(from.nextEpisodeDate, from.duration)
             )
 
-    private fun convertDuration(nextEpisodeDate: DateTime, duration: String): DateTime? {
+    private fun convertDuration(nextEpisodeDate: DateTime?, duration: String?): DateTime? {
+        if (nextEpisodeDate == null || duration.isNullOrEmpty()) return null
+
         return when (duration.contains("/")) {
             true -> DateTime(nextEpisodeDate).plusMinutes(duration.substring(0, duration.indexOf("/")).toDouble().toInt())
             else -> DateTime(nextEpisodeDate).plusSeconds(duration.toDouble().toInt())

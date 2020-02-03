@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cfdd40a08fb02f41f925acceb21d9b7a",
+    "identityHash": "4ad2293613140506a195fc67a3c7b2fa",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `score` REAL, `status` TEXT, `episodes` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `anime_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `anime_status` TEXT, `episodes_size` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
         "fields": [
           {
             "fieldPath": "searchName",
@@ -22,7 +22,7 @@
           },
           {
             "fieldPath": "shikimoriId",
-            "columnName": "shikimori_id",
+            "columnName": "anime_shikimori_id",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -52,19 +52,19 @@
           },
           {
             "fieldPath": "score",
-            "columnName": "score",
+            "columnName": "rating",
             "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "status",
-            "columnName": "status",
+            "columnName": "anime_status",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "episodes",
-            "columnName": "episodes",
+            "columnName": "episodes_size",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -185,12 +185,12 @@
         },
         "indices": [
           {
-            "name": "index_animes_shikimori_id",
+            "name": "index_animes_anime_shikimori_id",
             "unique": true,
             "columnNames": [
-              "shikimori_id"
+              "anime_shikimori_id"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_animes_shikimori_id` ON `${TABLE_NAME}` (`shikimori_id`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_animes_anime_shikimori_id` ON `${TABLE_NAME}` (`anime_shikimori_id`)"
           },
           {
             "name": "index_animes_next_episode_date",
@@ -246,7 +246,7 @@
       },
       {
         "tableName": "rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `anime_id` INTEGER, `manga_id` INTEGER, `ranobe_id` INTEGER, `target_type` TEXT, `status` TEXT, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` TEXT, `date_updated` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shikimori_id` INTEGER, `anime_id` INTEGER, `manga_id` INTEGER, `ranobe_id` INTEGER, `target_type` TEXT, `status` TEXT, `score` INTEGER, `comment` TEXT, `episodes` INTEGER, `chapters` INTEGER, `volumes` INTEGER, `re_counter` INTEGER, `date_created` TEXT, `date_updated` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -288,6 +288,12 @@
             "fieldPath": "status",
             "columnName": "status",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -598,7 +604,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cfdd40a08fb02f41f925acceb21d9b7a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ad2293613140506a195fc67a3c7b2fa')"
     ]
   }
 }

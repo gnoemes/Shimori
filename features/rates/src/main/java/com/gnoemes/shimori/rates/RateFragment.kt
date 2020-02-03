@@ -17,6 +17,7 @@ import com.gnoemes.common.BaseBindingFragment
 import com.gnoemes.common.extensions.doOnSizeChange
 import com.gnoemes.common.extensions.dp
 import com.gnoemes.common.extensions.hideSoftInput
+import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
 import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.rates.databinding.FragmentRateBinding
@@ -29,6 +30,8 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
 
     @Inject
     internal lateinit var viewModelFactory: RateViewModel.Factory
+    @Inject
+    internal lateinit var controller: RateEpoxyController
 
     companion object {
         private const val DRAWER_KEY = "DRAWER_KEY"
@@ -42,6 +45,19 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
     }
 
     override fun onViewCreated(binding: FragmentRateBinding, savedInstanceState: Bundle?) {
+        binding.recyclerView.run {
+            setController(controller)
+            addOnScrollListener(HideImeOnScrollListener())
+            setItemSpacingRes(R.dimen.spacing_small)
+            doOnApplyWindowInsets { view, insets, initialState ->
+                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top)
+            }
+        }
+
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.submitAction(RateAction.Refresh)
+        }
+
         binding.drawer.run {
             val toggle = ActionBarDrawerToggle(
                     activity, drawer, view?.findViewById(R.id.toolbar), R.string.rate_drawer_open, R.string.rate_drawer_close)
@@ -94,7 +110,6 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
                 })
             }
             doOnApplyWindowInsets { view, insets, initialState ->
-                binding.recyclerView.updatePadding(top = insets.systemWindowInsetTop + dp(84))
                 view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
             }
 
@@ -124,5 +139,12 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
 
     override fun invalidate(binding: FragmentRateBinding) = withState(viewModel) { state ->
         binding.state = state
+        controller.state = state
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        controller.cancelPendingModelBuild()
+        controller.clear()
     }
 }

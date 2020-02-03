@@ -45,18 +45,6 @@ abstract class RateDao : EntityDao<Rate> {
     @Query(QUERY_ANIME_RATES)
     abstract fun observeAnimeRates(): Flow<List<Rate>>
 
-    ///////////////////////////////////////////////////////////////////////////
-    // ANIME WITH RATE
-    ///////////////////////////////////////////////////////////////////////////
-
-//    @Transaction
-//    @Query(QUERY_ANIME_RATES_WITH_STATUS_NAME)
-//    abstract suspend fun observeAnimeRatesWithStatusByName(status: RateStatus): Flow<List<AnimeWithRate>>
-//
-//    @Transaction
-//    @Query(QUERY_ANIME_RATES_WITH_STATUS_NAME_FILTER)
-//    abstract suspend fun observeAnimeRatesWithStatusByNameFilter(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
-
     companion object {
         private const val QUERY_BY_ANIME_TARGET = """
            SELECT * from rates
