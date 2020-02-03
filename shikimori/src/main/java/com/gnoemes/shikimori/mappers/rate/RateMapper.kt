@@ -25,6 +25,7 @@ internal class RateMapper @Inject constructor(
                 animeId = animeId,
                 mangaId = mangaId,
                 ranobeId = ranobeId,
+                score = from.score?.toInt(),
                 targetType = targetType,
                 status = statusMapper.map(from.status),
                 dateCreated = from.dateCreated,
