@@ -8,9 +8,11 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import com.gnoemes.common.R
 import com.gnoemes.common.extensions.color
+import com.gnoemes.common.extensions.fontFamilyAndScale
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
+import com.gnoemes.shimori.model.rate.Rate
 import javax.inject.Inject
 
 class AnimeTextCreator @Inject constructor(
@@ -54,7 +56,7 @@ class AnimeTextCreator @Inject constructor(
     }
 
     private fun SpannableStringBuilder.appendYear(anime: Anime) {
-        if (anime.status != ContentStatus.ONGOING) {
+        if (!anime.isOngoing) {
             //smart cast doesn't work through modules
             anime.dateReleased?.let { date ->
                 appendDotIfNotEmpty()
@@ -83,7 +85,7 @@ class AnimeTextCreator @Inject constructor(
                 appendDotIfNotEmpty()
                 append(anime.episodes.toString())
             }
-        } else if (anime.status == ContentStatus.ONGOING) {
+        } else if (anime.isOngoing) {
             appendDotIfNotEmpty()
             append("${anime.episodesAired}/${anime.episodes.invalidIfNullOrZero()} ${context.getString(R.string.episode_short)}")
         } else {
@@ -112,4 +114,15 @@ class AnimeTextCreator @Inject constructor(
 
     private fun Int?.invalidIfNullOrZero(): String =
         if (this == null || this == 0) "-" else this.toString()
+
+    fun rateProgress(rate: Rate, anime: Anime): CharSequence = buildSpannedString {
+        val progress = rate.episodes.invalidIfNullOrZero()
+        val size =
+            (if (anime.isOngoing) anime.episodesAired else anime.episodes).invalidIfNullOrZero()
+
+        val format = " / $size"
+
+        fontFamilyAndScale("sans-serif-medium", 1.3f) { append(progress) }
+        color(dividerColor) { append(format) }
+    }
 }

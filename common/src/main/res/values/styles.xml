@@ -108,6 +108,12 @@
         <item name="cardBackgroundColor">@android:color/transparent</item>
     </style>
 
+    <style name="Widget.Shimori.MaterialCardView.Stroke.Search" parent="Widget.Shimori.MaterialCardView.Stroke">
+        <item name="cardElevation">3dp</item>
+        <item name="cardCornerRadius">@dimen/card_corners_normal</item>
+        <item name="cardBackgroundColor">?attr/colorPrimary</item>
+    </style>
+
     <!--SHAPES-->
     <style name="ShapeAppearanceOverlay.Circle" parent="ShapeAppearance.MaterialComponents">
         <item name="cornerSize">24dp</item>

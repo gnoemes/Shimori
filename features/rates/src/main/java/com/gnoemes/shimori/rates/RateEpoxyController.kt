@@ -38,11 +38,6 @@ internal class RateEpoxyController @Inject constructor(
                 entity(entity)
                 textCreator(compoundTextCreator)
                 //TODO
-                progress(
-                        if (entity is Anime) rate?.episodes
-                        else rate?.chapters
-                )
-
                 if (entity is ShikimoriContentEntity) {
                     image(entity.image)
                     clickListener { _ -> callbacks?.onItemClicked(entity.shikimoriId!!, entity.contentType!!) }

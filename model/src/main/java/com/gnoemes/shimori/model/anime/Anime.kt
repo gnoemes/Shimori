@@ -58,4 +58,7 @@ data class Anime(
 
     val isMovie: Boolean
         get() = type != null && type == AnimeType.MOVIE
+
+    val isOngoing: Boolean
+        get() = status != null && status == ContentStatus.ONGOING
 }
