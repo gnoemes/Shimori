@@ -7,9 +7,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.common.utils.ObservableLoadingCounter
+import com.gnoemes.common.utils.collectFrom
 import com.gnoemes.shimori.data_base.mappers.toLambda
-import com.gnoemes.shimori.domain.interactors.UpdateRates
+import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.launchObserve
+import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveRates
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.squareup.inject.assisted.Assisted
@@ -22,7 +24,8 @@ import kotlinx.coroutines.launch
 internal class RateViewModel @AssistedInject constructor(
     @Assisted initialState: RateViewState,
     observeRates: ObserveRates,
-    private val updateRates: UpdateRates,
+    private val updateAnimeRates: UpdateAnimeRates,
+    private val observeAnimeRates: ObserveAnimeRates,
     rateCategoryMapper: RateCategoryMapper
 ) : BaseViewModel<RateViewState>(initialState) {
 
@@ -37,6 +40,12 @@ internal class RateViewModel @AssistedInject constructor(
             }
         }
 
+        viewModelScope.launch {
+            updateRatesLoadingState.observable.collect { loading ->
+                setState { copy(isRefreshing = loading) }
+            }
+        }
+
         viewModelScope.launchObserve(observeRates) { flow ->
             flow.distinctUntilChanged()
                 .execute(rateCategoryMapper.toLambda()) {
@@ -45,6 +54,10 @@ internal class RateViewModel @AssistedInject constructor(
                         copy(selectedCategory = status, categories = it())
                     } else this
                 }
+        }
+
+        viewModelScope.launchObserve(observeAnimeRates) { flow ->
+            flow.distinctUntilChanged().execute { copy(rates = it) }
         }
 
         viewModelScope.launch {
@@ -57,6 +70,8 @@ internal class RateViewModel @AssistedInject constructor(
 
         withState {
             observeRates(ObserveRates.Params(it.type))
+            observeAnimeRates(ObserveAnimeRates.Params(it.selectedCategory
+                ?: RateStatus.WATCHING, null))
         }
 
         refresh(false)
@@ -66,15 +81,24 @@ internal class RateViewModel @AssistedInject constructor(
         setState {
             copy(selectedCategory = action.newCategory)
         }
+        observeAnimeRates(ObserveAnimeRates.Params(action.newCategory, null))
     }
 
     fun submitAction(action: RateAction) {
         viewModelScope.launch { pendingActions.send(action) }
     }
 
-    private fun refresh(force: Boolean) {
+    private fun refresh(force: Boolean) = withState { state ->
+        state.selectedCategory?.let { status ->
+            updateAnimeRates(UpdateAnimeRates.Params(force, status)).also {
+                viewModelScope.launch {
+                    updateRatesLoadingState.collectFrom(it)
+                }
+            }
+        }
 
     }
+
 
     @AssistedInject.Factory
     interface Factory {

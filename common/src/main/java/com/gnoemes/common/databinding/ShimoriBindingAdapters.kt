@@ -36,6 +36,18 @@ fun textOrGoneIfEmpty(view: TextView, s: CharSequence?) {
     view.isGone = s.isNullOrEmpty()
 }
 
+@BindingAdapter("textOrGoneIfNullOrZero")
+fun textOrGoneIfNullOrZero(view: TextView, s: Int?) {
+    view.text = "$s"
+    view.isGone = s == null || s == 0
+}
+
+@BindingAdapter("textOrDashIfNullOrZero")
+fun textOrDashIfNullOrZero(view: TextView, s: Int?) {
+    val exist = s != null && s != 0
+    view.text = if (exist) "$s" else "-"
+}
+
 @BindingAdapter("srcRes")
 fun srcRes(view: ImageView, drawableRes: Int) {
     if (drawableRes == 0) view.setImageDrawable(null)

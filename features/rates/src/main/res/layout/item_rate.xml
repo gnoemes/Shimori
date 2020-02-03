@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="rate"
+            type="com.gnoemes.shimori.model.rate.Rate" />
+
+        <variable
+            name="image"
+            type="com.gnoemes.shimori.model.common.ShimoriImage" />
+
+        <variable
+            name="textCreator"
+            type="com.gnoemes.common.textcreators.CompoundTextCreator" />
+
+        <variable
+            name="entity"
+            type="com.gnoemes.shimori.model.ShimoriEntity" />
+
+        <variable
+            name="progress"
+            type="Integer" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container"
+        style="@style/Widget.Shimori.MaterialCardView.Stroke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginLeft="@dimen/spacing_normal"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginRight="@dimen/spacing_normal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{clickListener}">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/posterView"
+                style="@style/ShapeableImageView.Stroke"
+                android:layout_width="@dimen/rate_poster_width"
+                android:layout_height="@dimen/rate_poster_height"
+                app:image="@{image}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:roundedCorners="@{@dimen/image_corners}"
+                tools:src="@drawable/poster_debug" />
+
+            <TextView
+                android:id="@+id/ratingView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/bg_protector_bottom_right"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorOnProtector"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="@+id/posterView"
+                app:layout_constraintTop_toTopOf="@+id/posterView"
+                app:textOrGoneIfNullOrZero="@{rate.score}"
+                tools:ignore="SmallSp"
+                tools:text="10" />
+
+            <TextView
+                android:id="@+id/titleView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xsmall"
+                android:layout_marginLeft="@dimen/spacing_xsmall"
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:layout_marginEnd="@dimen/spacing_xsmall"
+                android:layout_marginRight="@dimen/spacing_xsmall"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:text="@{textCreator.title(entity)}"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/posterView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Алиса или Алиса: Брат-сисконщик и сёстры близняшки" />
+
+            <TextView
+                android:id="@+id/descriptionView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_micro"
+                android:includeFontPadding="false"
+                android:text="@{textCreator.rateDescription(entity)}"
+                android:textColor="?attr/colorOnPrimarySecondary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/titleView"
+                app:layout_constraintTop_toBottomOf="@+id/titleView"
+                tools:text="Онгоинг • TV • 11/12 эп." />
+
+            <TextView
+                android:id="@+id/progressView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginBottom="18dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/descriptionView"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionView"
+                app:layout_constraintVertical_bias="1"
+                app:textOrDashIfNullOrZero="@{progress}"
+                tools:text="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rateEditBtn"
+                style="@style/Widget.Shimori.Button.Circle.Secondary.Transparent"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                android:layout_marginRight="@dimen/spacing_normal"
+                android:layout_marginBottom="@dimen/spacing_xsmall"
+                app:icon="@drawable/ic_edit_small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/playBtn"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionView"
+                app:layout_constraintVertical_bias="1"
+                app:layout_goneMarginEnd="@dimen/spacing_xsmall"
+                app:layout_goneMarginRight="@dimen/spacing_xsmall" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/playBtn"
+                style="@style/Widget.Shimori.Button.Circle.Secondary.Transparent"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_marginEnd="@dimen/spacing_xsmall"
+                android:layout_marginRight="@dimen/spacing_normal"
+                app:icon="@drawable/ic_play_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/rateEditBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/rateEditBtn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
+
+

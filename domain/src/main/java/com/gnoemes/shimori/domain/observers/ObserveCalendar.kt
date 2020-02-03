@@ -27,7 +27,7 @@ class ObserveCalendar @Inject constructor(
 
         if (animes.isEmpty()) return groupList
 
-        var groupDate = animes.firstOrNull()?.anime?.nextEpisodeDate
+        var groupDate = animes.firstOrNull()?.entity?.nextEpisodeDate
         val groupAnimes = mutableListOf<AnimeWithRate>()
 
         var todayPastFlag = groupDate?.let { !DateTime.now().isBefore(it) } ?: true
@@ -42,11 +42,11 @@ class ObserveCalendar @Inject constructor(
         }
 
         animes.forEach { animeWithRate ->
-            val anime = animeWithRate.anime
+            val anime = animeWithRate.entity
             val isTodayPastItem =
-                anime?.nextEpisodeDate?.let { DateTime.now().isAfter(it) } ?: true
+                anime.nextEpisodeDate?.let { DateTime.now().isAfter(it) } ?: true
 
-            val isSameDay = groupDate?.dayOfYear == anime?.nextEpisodeDate?.dayOfYear
+            val isSameDay = groupDate?.dayOfYear == anime.nextEpisodeDate?.dayOfYear
 
             if (!isSameDay || (todayPastFlag && !isTodayPastItem && groupAnimes.isNotEmpty())) {
                 addGroup()
@@ -55,7 +55,7 @@ class ObserveCalendar @Inject constructor(
             }
 
             groupAnimes.add(animeWithRate)
-            groupDate = anime?.nextEpisodeDate
+            groupDate = anime.nextEpisodeDate
         }
 
         if (groupAnimes.isNotEmpty()) {

@@ -55,6 +55,10 @@
         <item name="colorDivider">@color/shimori_colorDivider</item>
         <item name="colorControlHighlight">@color/shimori_colorRipple</item>
 
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
+        <item name="android:textColorSecondary">?attr/colorOnPrimarySecondary</item>
+
         <item name="colorBackgroundFloating">@color/shimori_colorDialogSurface</item>
         <item name="colorDialogSurface">@color/shimori_colorDialogSurface</item>
         <item name="colorRateMenuBackground">@color/shimori_colorRateMenuBackground</item>

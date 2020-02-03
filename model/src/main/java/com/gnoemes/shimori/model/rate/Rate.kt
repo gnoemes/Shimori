@@ -22,6 +22,7 @@ data class Rate(
     @ColumnInfo(name = "ranobe_id") val ranobeId: Long? = null,
     @ColumnInfo(name = "target_type") val targetType: RateTargetType? = null,
     @ColumnInfo(name = "status") val status: RateStatus? = null,
+    @ColumnInfo(name = "score") val score: Int? = null,
     @ColumnInfo(name = "comment") val comment: String? = null,
     @ColumnInfo(name = "episodes") val episodes: Int? = null,
     @ColumnInfo(name = "chapters") val chapters: Int? = null,

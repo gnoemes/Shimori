@@ -53,7 +53,7 @@ internal class CalendarEpoxyController @Inject constructor(
                 padding(Carousel.Padding(normalSpacing, normalSpacing, normalSpacing, normalSpacing, itemSpacing))
 
                 withModelsFrom(item.animes) { animeWithRate ->
-                    val anime = animeWithRate.anime!!
+                    val anime = animeWithRate.entity
                     val rate = animeWithRate.rate
 
                     CalendarAnimeBindingModel_()

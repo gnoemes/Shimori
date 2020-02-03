@@ -29,13 +29,15 @@
                 android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:isRefreshing="@{state.refreshing}"
+                app:isRefreshing="@{state.isRefreshing}"
                 app:layout_behavior="com.gnoemes.common.ui.OverlapHeaderScrollingBehavior">
 
                 <com.gnoemes.common.ui.widgets.OffsetEpoxyRecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/rate_list_padding_top"
+                    android:paddingBottom="@dimen/spacing_normal" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -57,8 +59,8 @@
             android:maxWidth="@dimen/rate_nav_width"
             android:paddingStart="0dp"
             android:paddingLeft="0dp"
-            android:paddingEnd="12dp"
-            android:paddingRight="12dp"
+            android:paddingEnd="@dimen/spacing_xsmall"
+            android:paddingRight="@dimen/spacing_xsmall"
             android:theme="@style/Widget.Shimori.NavigationView.Normal"
             app:categories="@{state.categories}"
             app:categoriesRefreshing="@{state.categoriesRefreshing}"

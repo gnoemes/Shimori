@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="image_corners">8dp</dimen>
+    <dimen name="card_corners_normal">8dp</dimen>
+    <dimen name="card_corners_big">16dp</dimen>
+
     <dimen name="spacing_xlarge">64dp</dimen>
     <dimen name="spacing_large">48dp</dimen>
     <dimen name="spacing_big">24dp</dimen>
@@ -14,4 +17,8 @@
 
     <dimen name="menu_item_large_height">56dp</dimen>
     <dimen name="menu_item_large_corner_size">28dp</dimen>
+
+    <dimen name="circle_button_size">32dp</dimen>
+    <dimen name="circle_button_size_big">48dp</dimen>
+
 </resources>

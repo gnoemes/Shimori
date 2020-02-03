@@ -22,56 +22,79 @@ class AnimeTextCreator @Inject constructor(
         private const val divider = "  •  "
     }
 
-    private val dividerColor by lazy { ColorUtils.setAlphaComponent(Color.BLACK, 97) }
+    private val dividerColor by lazy {
+        val lightTheme = context.resources.getBoolean(R.bool.is_light_theme)
+        (if (lightTheme) Color.BLACK else Color.WHITE)
+            .let { ColorUtils.setAlphaComponent(it, 97) }
+    }
 
     //TODO romadzi
-    fun showTitle(anime: Anime): String = anime.nameRu ?: anime.name
+    fun title(anime: Anime): String = anime.nameRu ?: anime.name
 
-    fun showDescription(anime: Anime): CharSequence = buildSpannedString {
+    fun searchDescription(anime: Anime): CharSequence = buildSpannedString {
+        appendStatus(anime.status)
+        appendYear(anime)
+        appendLocalizedType(anime.type)
+        appendEpisodes(anime)
+    }
 
-        when (anime.status) {
+    fun rateDescription(anime: Anime): CharSequence = buildSpannedString {
+        appendStatus(anime.status)
+        appendYear(anime)
+        appendLocalizedType(anime.type)
+        appendEpisodes(anime)
+    }
+
+    private fun SpannableStringBuilder.appendStatus(status: ContentStatus?) {
+        when (status) {
             ContentStatus.ANONS -> color(context.color(R.color.status_anons)) { append(context.getString(R.string.status_anons)) }
             ContentStatus.ONGOING -> color(context.color(R.color.status_ongoing)) { append(context.getString(R.string.status_ongoing)) }
             else -> Unit
         }
+    }
 
+    private fun SpannableStringBuilder.appendYear(anime: Anime) {
         if (anime.status != ContentStatus.ONGOING) {
             //smart cast doesn't work through modules
             anime.dateReleased?.let { date ->
-                appendDotIfNotEmpty(this)
+                appendDotIfNotEmpty()
                 append(date.year.toString())
             } ?: anime.dateAired?.let { date ->
-                appendDotIfNotEmpty(this)
+                appendDotIfNotEmpty()
                 append(date.year.toString())
             }
         }
+    }
 
-        val type = getLocalizedType(anime.type)
+    private fun SpannableStringBuilder.appendLocalizedType(type: AnimeType?) {
+        val localizedType = getLocalizedType(type)
 
-        if (type != null) {
-            appendDotIfNotEmpty(this)
-            append(type)
+        if (localizedType != null) {
+            appendDotIfNotEmpty()
+            append(localizedType)
         }
+    }
 
-        if (anime.type == AnimeType.MOVIE) {
-            return@buildSpannedString
+    private fun SpannableStringBuilder.appendEpisodes(anime: Anime) {
+        if (anime.isMovie) {
+            return
         } else if (anime.status == ContentStatus.ANONS) {
             if (anime.episodes != 0) {
-                appendDotIfNotEmpty(this)
+                appendDotIfNotEmpty()
                 append(anime.episodes.toString())
             }
         } else if (anime.status == ContentStatus.ONGOING) {
-            appendDotIfNotEmpty(this)
+            appendDotIfNotEmpty()
             append("${anime.episodesAired}/${anime.episodes.invalidIfNullOrZero()} ${context.getString(R.string.episode_short)}")
         } else {
-            appendDotIfNotEmpty(this)
+            appendDotIfNotEmpty()
             append(context.getString(R.string.episode_short_format, anime.episodes))
         }
     }
 
-    private fun appendDotIfNotEmpty(builder: SpannableStringBuilder) {
-        if (builder.isNotEmpty()) {
-            builder.color(dividerColor) { append(divider) }
+    private fun SpannableStringBuilder.appendDotIfNotEmpty() {
+        if (this.isNotEmpty()) {
+            color(dividerColor) { append(divider) }
         }
     }
 
