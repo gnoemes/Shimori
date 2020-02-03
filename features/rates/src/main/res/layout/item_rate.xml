@@ -22,10 +22,6 @@
             type="com.gnoemes.shimori.model.ShimoriEntity" />
 
         <variable
-            name="progress"
-            type="Integer" />
-
-        <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
 
@@ -64,13 +60,10 @@
                 android:layout_height="24dp"
                 android:background="@drawable/bg_protector_bottom_right"
                 android:gravity="center"
-                android:textAllCaps="true"
-                android:textColor="@color/colorOnProtector"
-                android:textSize="10sp"
+                android:textAppearance="@style/TextAppearance.Shimori.TextProtector"
                 app:layout_constraintStart_toStartOf="@+id/posterView"
                 app:layout_constraintTop_toTopOf="@+id/posterView"
                 app:textOrGoneIfNullOrZero="@{rate.score}"
-                tools:ignore="SmallSp"
                 tools:text="10" />
 
             <TextView
@@ -83,10 +76,9 @@
                 android:layout_marginEnd="@dimen/spacing_xsmall"
                 android:layout_marginRight="@dimen/spacing_xsmall"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-medium"
                 android:maxLines="2"
                 android:text="@{textCreator.title(entity)}"
-                android:textSize="12sp"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/posterView"
                 app:layout_constraintTop_toTopOf="parent"
@@ -111,13 +103,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:layout_marginBottom="18dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="16sp"
+                android:textColor="?attr/colorOnPrimarySecondary"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/descriptionView"
                 app:layout_constraintTop_toBottomOf="@+id/descriptionView"
                 app:layout_constraintVertical_bias="1"
-                app:textOrDashIfNullOrZero="@{progress}"
+                app:textOrGoneIfEmpty="@{textCreator.rateProgress(rate, entity)}"
                 tools:text="1" />
 
             <com.google.android.material.button.MaterialButton
