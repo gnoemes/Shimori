@@ -10,6 +10,7 @@ import com.gnoemes.common.utils.ObservableLoadingCounter
 import com.gnoemes.common.utils.collectFrom
 import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
+import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveRates
@@ -26,6 +27,7 @@ internal class RateViewModel @AssistedInject constructor(
     observeRates: ObserveRates,
     private val updateAnimeRates: UpdateAnimeRates,
     private val observeAnimeRates: ObserveAnimeRates,
+    private val updateRates: UpdateRates,
     rateCategoryMapper: RateCategoryMapper
 ) : BaseViewModel<RateViewState>(initialState) {
 
@@ -94,6 +96,11 @@ internal class RateViewModel @AssistedInject constructor(
                 viewModelScope.launch {
                     updateRatesLoadingState.collectFrom(it)
                 }
+            }
+        }
+        updateRates(Unit).also {
+            viewModelScope.launch {
+                updateRatesCountLoadingState.collectFrom(it)
             }
         }
 
