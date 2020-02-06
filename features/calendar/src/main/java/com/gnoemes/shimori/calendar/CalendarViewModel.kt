@@ -8,7 +8,6 @@ import com.gnoemes.common.BaseViewModel
 import com.gnoemes.common.utils.ObservableLoadingCounter
 import com.gnoemes.common.utils.collectFrom
 import com.gnoemes.shimori.domain.interactors.UpdateCalendar
-import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.observers.ObserveCalendar
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -20,8 +19,7 @@ import kotlinx.coroutines.launch
 internal class CalendarViewModel @AssistedInject constructor(
     @Assisted initialState: CalendarViewState,
     private val observeCalendar: ObserveCalendar,
-    private val updateCalendar: UpdateCalendar,
-    private val updateRates: UpdateRates
+    private val updateCalendar: UpdateCalendar
 ) : BaseViewModel<CalendarViewState>(initialState) {
     private val searchQuery = ConflatedBroadcastChannel<String>()
     private val updateLoadingState = ObservableLoadingCounter()
@@ -62,7 +60,6 @@ internal class CalendarViewModel @AssistedInject constructor(
 
     fun refresh() {
         refresh(true)
-        updateRates(Unit)
     }
 
     fun setSearchQuery(newText: String) {
