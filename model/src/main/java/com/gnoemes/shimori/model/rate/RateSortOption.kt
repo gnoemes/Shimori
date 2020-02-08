@@ -13,9 +13,9 @@ enum class RateSortOption {
         fun values() : List<RateSortOption> = listOf(
                 NAME,
                 PROGRESS,
-                DATE_AIRED,
                 DATE_CREATED,
                 DATE_UPDATED,
+                DATE_AIRED,
                 SCORE,
                 SIZE
         )
