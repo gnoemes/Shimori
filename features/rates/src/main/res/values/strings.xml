@@ -8,4 +8,14 @@
     <string name="rate_empty_anime">Поиск аниме</string>
     <string name="rate_empty_manga">Поиск манги</string>
 
+    <string name="rate_sort">Сортировка</string>
+    <string name="rate_sort_name">По названию</string>
+    <string name="rate_sort_progress">По прогрессу</string>
+    <string name="rate_sort_date_added">По дате добавления</string>
+    <string name="rate_sort_date_updated">По дате изменения</string>
+    <string name="rate_sort_date">По дате выхода</string>
+    <string name="rate_sort_score">По оценке</string>
+    <string name="rate_sort_episodes">По эпизодам</string>
+    <string name="rate_sort_chapters">По главам</string>
+
 </resources>

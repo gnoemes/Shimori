@@ -5,6 +5,7 @@ import com.airbnb.epoxy.IdUtils
 import com.airbnb.mvrx.Success
 import com.gnoemes.common.epoxy.ShimoriEpoxyController
 import com.gnoemes.common.textcreators.CompoundTextCreator
+import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.base.extensions.observable
 import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 internal class RateEpoxyController @Inject constructor(
     private val context: Context,
-    private val compoundTextCreator: CompoundTextCreator
+    private val compoundTextCreator: CompoundTextCreator,
+    private val rateSortTextCreator: RateSortTextCreator
 ) : ShimoriEpoxyController<RateViewState>() {
     var callbacks: Callbacks? by observable(null, { state })
 
@@ -27,8 +29,20 @@ internal class RateEpoxyController @Inject constructor(
 
         val items = state.rates()
 
+        if (items.isNullOrEmpty()) return
 
-        items?.forEach { entityWithRate ->
+        rateSort {
+            id("rate_sort")
+            type(state.type)
+            state.selectedCategory?.let {
+                rateName(context.getString(RateUtils.getName(state.type, it)))
+            }
+            sort(state.sort)
+            descending(state.isDescending)
+            textCreator(rateSortTextCreator)
+        }
+
+        items.forEach { entityWithRate ->
             val entity = entityWithRate.entity
             val rate = entityWithRate.rate
 
