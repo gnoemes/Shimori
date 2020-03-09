@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeFts
 import com.gnoemes.shimori.model.app.LastRequest
+import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.user.User
 import dev.matrix.roomigrant.GenerateRoomMigrations
@@ -17,7 +18,8 @@ import dev.matrix.roomigrant.GenerateRoomMigrations
             AnimeFts::class,
             Rate::class,
             LastRequest::class,
-            User::class
+            User::class,
+            RateSort::class
         ],
         version = 1
 )

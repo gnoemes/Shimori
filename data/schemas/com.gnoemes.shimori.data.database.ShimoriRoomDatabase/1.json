@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4ad2293613140506a195fc67a3c7b2fa",
+    "identityHash": "609729fc35e31736cc5f14b1c4133e17",
     "entities": [
       {
         "tableName": "animes",
@@ -599,12 +599,66 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "rate_sort",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `status` TEXT, `sortOption` TEXT NOT NULL, `isDescending` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sortOption",
+            "columnName": "sortOption",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDescending",
+            "columnName": "isDescending",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_rate_sort_type_status",
+            "unique": true,
+            "columnNames": [
+              "type",
+              "status"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rate_sort_type_status` ON `${TABLE_NAME}` (`type`, `status`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ad2293613140506a195fc67a3c7b2fa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '609729fc35e31736cc5f14b1c4133e17')"
     ]
   }
 }

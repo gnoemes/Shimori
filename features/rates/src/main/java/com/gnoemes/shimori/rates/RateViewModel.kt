@@ -10,10 +10,13 @@ import com.gnoemes.common.utils.ObservableLoadingCounter
 import com.gnoemes.common.utils.collectFrom
 import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
+import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
+import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRates
+import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -27,7 +30,9 @@ internal class RateViewModel @AssistedInject constructor(
     observeRates: ObserveRates,
     private val updateAnimeRates: UpdateAnimeRates,
     private val observeAnimeRates: ObserveAnimeRates,
+    private val observeRateSort: ObserveRateSort,
     private val updateRates: UpdateRates,
+    private val updateRateSort: UpdateRateSort,
     rateCategoryMapper: RateCategoryMapper
 ) : BaseViewModel<RateViewState>(initialState) {
 
@@ -62,10 +67,19 @@ internal class RateViewModel @AssistedInject constructor(
             flow.distinctUntilChanged().execute { copy(rates = it) }
         }
 
+        viewModelScope.launchObserve(observeRateSort) { flow ->
+            flow.distinctUntilChanged().execute {
+                if (it is Success) {
+                    it()?.let { rateSort -> copy(sort = rateSort) } ?: this
+                } else this
+            }
+        }
+
         viewModelScope.launch {
             for (action in pendingActions) when (action) {
                 is RateAction.Refresh -> refresh(true)
                 is RateAction.ChangeCategory -> onCategoryChanged(action)
+                is RateAction.ChangeOrder -> onChangeOrder()
             }
 
         }
@@ -74,16 +88,35 @@ internal class RateViewModel @AssistedInject constructor(
             observeRates(ObserveRates.Params(it.type))
             observeAnimeRates(ObserveAnimeRates.Params(it.selectedCategory
                 ?: RateStatus.WATCHING, null))
+            observeRateSort(ObserveRateSort.Params(it.type, it.selectedCategory
+                ?: RateStatus.WATCHING))
         }
 
         refresh(false)
     }
 
+    private fun onChangeOrder() {
+        withState {
+            updateRateSort(UpdateRateSort.Params(
+                    it.type,
+                    it.selectedCategory!!,
+                    it.sort.sortOption,
+                    it.sort.isDescending.not())
+            )
+        }
+    }
+
     private fun onCategoryChanged(action: RateAction.ChangeCategory) {
         setState {
-            copy(selectedCategory = action.newCategory)
+            copy(
+                    selectedCategory = action.newCategory,
+                    sort = RateSort.default().copy(status = action.newCategory)
+            )
         }
-        observeAnimeRates(ObserveAnimeRates.Params(action.newCategory, null))
+        withState {
+            observeAnimeRates(ObserveAnimeRates.Params(action.newCategory, null))
+            observeRateSort(ObserveRateSort.Params(it.type, action.newCategory))
+        }
     }
 
     fun submitAction(action: RateAction) {

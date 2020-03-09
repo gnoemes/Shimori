@@ -39,7 +39,7 @@ class ShimoriBottomSheetDialog(
     internal var maxPeekHeight: Int = -1
     private var actualPeekHeight: Int by notNull()
 
-    var dismissWithAnimation = false
+    var dismissWithAnimation = true
 
     var dialogCancelable: Boolean = true
     private var dialogCanceledOnTouchOutside = true

@@ -10,7 +10,7 @@ enum class RateSortOption {
     DATE_UPDATED;
 
     companion object {
-        fun values() : List<RateSortOption> = listOf(
+        fun priorityValues() : List<RateSortOption> = listOf(
                 NAME,
                 PROGRESS,
                 DATE_CREATED,

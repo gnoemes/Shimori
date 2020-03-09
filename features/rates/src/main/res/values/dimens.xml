@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="rate_nav_width">228dp</dimen>
-    <dimen name="rate_list_padding_top">80dp</dimen>
+    <dimen name="rate_list_padding_top">78dp</dimen>
 
     <dimen name="rate_poster_height">120dp</dimen>
     <dimen name="rate_poster_width">96dp</dimen>

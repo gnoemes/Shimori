@@ -6,6 +6,7 @@ import com.gnoemes.shimori.model.app.Request
 import com.gnoemes.shimori.model.common.AgeRating
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.gnoemes.shimori.model.common.Genre
+import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime
@@ -111,4 +112,11 @@ object ShimoriTypeConverters {
     @JvmStatic
     fun fromBoolean(value: Boolean?) = if (value == true) 1 else 0
 
+    @TypeConverter
+    @JvmStatic
+    fun toRateSort(rateSortOption : RateSortOption) = rateSortOption.name
+
+    @TypeConverter
+    @JvmStatic
+    fun fromRateSort(value : String) = RateSortOption.valueOf(value)
 }

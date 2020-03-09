@@ -24,3 +24,12 @@ fun Context.colorStateList(@ColorRes colorRes: Int): ColorStateList {
 }
 
 fun Context.dimen(@DimenRes dimen: Int) = this.resources.getDimension(dimen).toInt()
+
+fun Context.navigationBarSize() : Int {
+    val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        return resources.getDimensionPixelSize(resourceId)
+    }
+
+    return 0
+}

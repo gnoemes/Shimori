@@ -20,7 +20,11 @@ import com.gnoemes.common.extensions.hideSoftInput
 import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
 import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.common.utils.RateUtils
+import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.common.ContentType
+import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.databinding.FragmentRateBinding
+import com.gnoemes.shimori.rates.sort.RateSortDialogFragment
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 import kotlinx.android.synthetic.main.fragment_rate.*
 import javax.inject.Inject
@@ -121,6 +125,22 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
                 true
             }
         }
+
+        controller.callbacks = object : RateEpoxyController.Callbacks {
+            override fun onItemClicked(id: Long, type: ContentType) {
+            }
+
+            override fun onSortClicked() {
+                withState(viewModel) {
+                    showRateSortDialog(it.type, it.sort)
+                }
+            }
+
+            override fun onOrderChangeClicked() {
+                viewModel.submitAction(RateAction.ChangeOrder)
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -135,6 +155,11 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
             if (open) openDrawer(GravityCompat.START)
             closeDrawer(GravityCompat.START)
         }
+    }
+
+    private fun showRateSortDialog(type: RateTargetType, sort: RateSort) {
+        val dialog = RateSortDialogFragment.newInstance(type, sort)
+        dialog.show(childFragmentManager, "SortDialog")
     }
 
     override fun invalidate(binding: FragmentRateBinding) = withState(viewModel) { state ->
