@@ -49,4 +49,7 @@ class DaoModule {
 
     @Provides
     fun provideUserDao(db: ShimoriDatabase) = db.userDao()
+
+    @Provides
+    fun provideRateSortDao(db: ShimoriDatabase) = db.rateSortDao()
 }

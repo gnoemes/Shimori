@@ -22,6 +22,10 @@ internal class RateEpoxyController @Inject constructor(
 
     interface Callbacks {
         fun onItemClicked(id: Long, type: ContentType)
+
+        fun onSortClicked()
+
+        fun onOrderChangeClicked()
     }
 
     override fun buildModels(state: RateViewState) {
@@ -38,8 +42,8 @@ internal class RateEpoxyController @Inject constructor(
                 rateName(context.getString(RateUtils.getName(state.type, it)))
             }
             sort(state.sort)
-            descending(state.isDescending)
             textCreator(rateSortTextCreator)
+            rateCallbacks(callbacks)
         }
 
         items.forEach { entityWithRate ->
