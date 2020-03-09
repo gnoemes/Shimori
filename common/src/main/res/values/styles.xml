@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ThemeOverlay.Shimori.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="Theme.Shimori.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
+        </item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">?attr/colorDialogSurface</item>
+        <item name="bottomSheetStyle">@style/Widget.Shimori.BottomSheet</item>
+    </style>
 
     <style name="Widget.Shimori.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextAppearance">?attr/textAppearanceHeadline6</item>
@@ -12,6 +24,13 @@
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
         <item name="itemBackground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Widget.Shimori.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">?attr/colorDialogSurface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.BottomSheet</item>
+        <item name="behavior_skipCollapsed">true</item>
+        <item name="android:elevation" tools:ignore="NewApi">0dp</item>
     </style>
 
     <!--TOOLBAR-->
@@ -83,6 +102,19 @@
         <item name="itemTextAppearance">?attr/textAppearanceBody1</item>
     </style>
 
+    <style name="Widget.Shimori.NavigationView.Normal.Accent" parent="Widget.Shimori.NavigationView.Normal">
+        <item name="itemBackground">@drawable/selector_menu_item_accent</item>
+        <item name="itemTextColor">@color/selector_menu_text_color_accent</item>
+        <item name="itemIconTint">@color/selector_menu_text_color_accent</item>
+    </style>
+
+    <style name="Widget.Shimori.NavigationView.Large.Accent" parent="Widget.Shimori.NavigationView.Large">
+        <item name="itemBackground">@drawable/selector_menu_item_accent_large</item>
+        <item name="itemTextColor">@color/selector_menu_text_color_accent</item>
+        <item name="itemIconTint">@color/selector_menu_text_color_accent</item>
+        <item name="itemTextAppearance">?attr/textAppearanceSubtitle1</item>
+    </style>
+
     <!--IMAGE VIEW-->
     <style name="ShapeableImageView">
         <item name="android:adjustViewBounds">true</item>
@@ -117,6 +149,13 @@
     <!--SHAPES-->
     <style name="ShapeAppearanceOverlay.Circle" parent="ShapeAppearance.MaterialComponents">
         <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ShapeAppearance.BottomSheet" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
     </style>
 
 </resources>
