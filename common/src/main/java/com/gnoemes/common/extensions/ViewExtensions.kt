@@ -31,6 +31,7 @@ fun Fragment.dp(dp: Int) = resources.dp(dp)
 fun Activity.dp(dp: Int) = resources.dp(dp)
 fun Context.dp(dp: Int) = resources.dp(dp)
 fun Resources.dp(dp: Int) = (displayMetrics.density * dp).roundToInt()
+fun View.dp(dp: Int) = resources.dp(dp)
 
 fun Fragment.showSnackbar(snackbarText: String, timeLength: Int) {
     activity?.let {
@@ -50,7 +51,7 @@ fun ViewGroup.beginDelayedTransition(duration: Long = 200) {
     TransitionManager.beginDelayedTransition(this, AutoTransition().apply { setDuration(duration) })
 }
 
-fun View.dimen(@DimenRes dimenRes : Int) = context.dimen(dimenRes)
+fun View.dimen(@DimenRes dimenRes: Int) = context.dimen(dimenRes)
 
 inline fun View.doOnSizeChange(crossinline action: (view: View) -> Boolean) {
     addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
