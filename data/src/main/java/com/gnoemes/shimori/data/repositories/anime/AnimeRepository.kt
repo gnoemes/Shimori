@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
+import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,8 +17,8 @@ class AnimeRepository @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    fun observeAnimeWithStatus(status: RateStatus, filter: String?) =
-        animeStore.observeAnimeWithStatus(status, filter)
+    fun observeAnimeWithStatus(status: RateStatus, sort : RateSort, filter: String?) =
+        animeStore.observeAnimeWithStatus(status, sort, filter)
 
     suspend fun updateMyAnimeWithStatus(status: RateStatus) {
         asyncOrAwait("update_animes_with_status_$status") {

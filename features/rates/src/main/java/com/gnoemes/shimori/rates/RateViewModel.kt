@@ -86,12 +86,16 @@ internal class RateViewModel @AssistedInject constructor(
 
         withState {
             observeRates(ObserveRates.Params(it.type))
-            observeAnimeRates(ObserveAnimeRates.Params(it.selectedCategory
-                ?: RateStatus.WATCHING, null))
-            observeRateSort(ObserveRateSort.Params(it.type, it.selectedCategory
-                ?: RateStatus.WATCHING))
+            val rateStatus = it.selectedCategory ?: RateStatus.WATCHING
+            observeRateSort(ObserveRateSort.Params(it.type, rateStatus))
         }
 
+        selectSubscribe(RateViewState::sort,  RateViewState::query) { sort, query ->
+            withState { state ->
+                val status = state.selectedCategory ?: RateStatus.WATCHING
+                observeAnimeRates(ObserveAnimeRates.Params(status, sort, query))
+            }
+        }
         refresh(false)
     }
 
@@ -114,7 +118,6 @@ internal class RateViewModel @AssistedInject constructor(
             )
         }
         withState {
-            observeAnimeRates(ObserveAnimeRates.Params(action.newCategory, null))
             observeRateSort(ObserveRateSort.Params(it.type, action.newCategory))
         }
     }

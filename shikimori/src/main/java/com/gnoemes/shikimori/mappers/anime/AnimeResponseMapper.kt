@@ -16,8 +16,8 @@ internal class AnimeResponseMapper @Inject constructor(
 
     override suspend fun map(from: AnimeResponse) = Anime(
             shikimoriId = from.id,
-            name = from.name,
-            nameRu = from.nameRu,
+            name = from.name.trim(),
+            nameRu = from.nameRu?.trim(),
             image = imageMapper.map(from.image),
             url = from.url.appendHostIfNeed(),
             type = typeMapper.map(from.type),

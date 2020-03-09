@@ -28,8 +28,12 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract fun observeAnimeWithStatus(status: RateStatus): Flow<List<AnimeWithRate>>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_FILTER)
-    abstract fun observeAnimeWithStatus(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    @Query(QUERY_ANIME_WITH_STATUS_BY_NAME)
+    abstract fun observeAnimeWithStatusByName(status: RateStatus): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_DESC)
+    abstract fun observeAnimeWithStatusByNameDesc(status: RateStatus): Flow<List<AnimeWithRate>>
 
     companion object {
         private const val QUERY_CALENDAR = """
@@ -52,12 +56,18 @@ abstract class AnimeDao : EntityDao<Anime> {
             WHERE r.status = :status
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_FILTER = """
-            SELECT * from animes_fts AS fts
-            JOIN animes AS a ON a.id = fts.docid
+        private const val QUERY_ANIME_WITH_STATUS_BY_NAME = """
+            SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
-            AND animes_fts MATCH :filter
+            ORDER BY name_ru_lower_case ASC
+        """
+
+        private const val QUERY_ANIME_WITH_STATUS_BY_NAME_DESC = """
+            SELECT * from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            WHERE r.status = :status
+            ORDER BY name_ru_lower_case DESC
         """
     }
 }
