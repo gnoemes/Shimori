@@ -5,6 +5,8 @@ interface ShimoriPreferences {
 
     val themePreference: Theme
 
+    var isRussianNaming : Boolean
+
     enum class Theme {
         LIGHT,
         DARK,

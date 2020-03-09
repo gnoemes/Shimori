@@ -18,6 +18,7 @@ class ShimoriPreferencesImpl @Inject constructor(
 
     companion object {
         private const val THEME_KEY = "pref_theme"
+        const val IS_ROMADZI_NAMING = "IS_ROMADZI_NAMING"
     }
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -26,16 +27,20 @@ class ShimoriPreferencesImpl @Inject constructor(
         }
     }
 
+    override fun setup() {
+        updateUsingThemePreference()
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
     override var themePreference: Theme
         get() = getThemeForStorageValue(prefs.getString(THEME_KEY, defaultThemeValue)!!)
         set(value) = prefs.edit {
             putString(THEME_KEY, getStorageKeyForTheme(value))
         }
 
-    override fun setup() {
-        updateUsingThemePreference()
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
+    override var isRussianNaming: Boolean
+        get() = prefs.getBoolean(IS_ROMADZI_NAMING, true)
+        set(value) = prefs.edit { putBoolean(IS_ROMADZI_NAMING, value) }
 
     private fun updateUsingThemePreference() = when (themePreference) {
         Theme.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

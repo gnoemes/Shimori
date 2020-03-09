@@ -49,6 +49,5 @@
     <style name="TextAppearance.Shimori.TextProtector" parent="TextAppearance.Shimori.Caption">
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/colorOnProtector</item>
     </style>
 </resources>

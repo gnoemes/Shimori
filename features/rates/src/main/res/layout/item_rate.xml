@@ -61,6 +61,7 @@
                 android:background="@drawable/bg_protector_bottom_right"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Shimori.TextProtector"
+                android:textColor="@color/colorOnProtector"
                 app:layout_constraintStart_toStartOf="@+id/posterView"
                 app:layout_constraintTop_toTopOf="@+id/posterView"
                 app:textOrGoneIfNullOrZero="@{rate.score}"
