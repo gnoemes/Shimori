@@ -24,7 +24,7 @@
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
         <item name="itemBackground">?attr/selectableItemBackground</item>
-<!--        elevation changes makes default colorPrimary lighter-->
+<!--        elevation makes default colorPrimary lighter-->
         <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
