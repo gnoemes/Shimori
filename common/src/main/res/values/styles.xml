@@ -24,6 +24,8 @@
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
         <item name="itemBackground">?attr/selectableItemBackground</item>
+<!--        elevation changes makes default colorPrimary lighter-->
+        <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.Shimori.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
