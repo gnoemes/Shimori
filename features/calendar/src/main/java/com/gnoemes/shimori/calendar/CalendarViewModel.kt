@@ -52,7 +52,11 @@ internal class CalendarViewModel @AssistedInject constructor(
                 }
         }
 
-        subscribe(::updateCalendar)
+        selectSubscribe(CalendarViewState::query) { query ->
+            observeCalendar(ObserveCalendar.Params(
+                    filter = query
+            ))
+        }
         observeCalendar(ObserveCalendar.Params(null))
 
         refresh(false)
@@ -64,12 +68,6 @@ internal class CalendarViewModel @AssistedInject constructor(
 
     fun setSearchQuery(newText: String) {
         searchQuery.sendBlocking(newText)
-    }
-
-    private fun updateCalendar(state: CalendarViewState) {
-        observeCalendar(ObserveCalendar.Params(
-                filter = state.query
-        ))
     }
 
     private fun refresh(force: Boolean) {

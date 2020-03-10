@@ -51,80 +51,80 @@ class AnimeStore @Inject constructor(
         return if (settings.isRussianNaming) observeNameSortRu(status, descending, filter)
         else if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByNameDesc(status)
-            else animeDao.observeAnimeWithStatusByNameDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByNameDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByName(status)
-            else animeDao.observeAnimeWithStatusByName(status, filter)
+            else animeDao.observeAnimeWithStatusByName(status, "*$filter*")
         }
     }
 
     private fun observeNameSortRu(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByNameRuDesc(status)
-            else animeDao.observeAnimeWithStatusByNameRuDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByNameRuDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByNameRu(status)
-            else animeDao.observeAnimeWithStatusByNameRu(status, filter)
+            else animeDao.observeAnimeWithStatusByNameRu(status, "*$filter*")
         }
     }
 
     private fun observeProgressSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByProgressDesc(status)
-            else animeDao.observeAnimeWithStatusByProgressDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByProgressDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByProgress(status)
-            else animeDao.observeAnimeWithStatusByProgress(status, filter)
+            else animeDao.observeAnimeWithStatusByProgress(status, "*$filter*")
         }
     }
 
     private fun observeDateCreatedSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateCreatedDesc(status)
-            else animeDao.observeAnimeWithStatusByDateCreatedDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByDateCreatedDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateCreated(status)
-            else animeDao.observeAnimeWithStatusByDateCreated(status, filter)
+            else animeDao.observeAnimeWithStatusByDateCreated(status, "*$filter*")
         }
     }
 
     private fun observeDateUpdatedSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateUpdatedDesc(status)
-            else animeDao.observeAnimeWithStatusByDateUpdatedDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByDateUpdatedDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateUpdated(status)
-            else animeDao.observeAnimeWithStatusByDateUpdated(status, filter)
+            else animeDao.observeAnimeWithStatusByDateUpdated(status, "*$filter*")
         }
     }
 
     private fun observeDateAiredSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateAiredDesc(status)
-            else animeDao.observeAnimeWithStatusByDateAiredDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByDateAiredDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByDateAired(status)
-            else animeDao.observeAnimeWithStatusByDateAired(status, filter)
+            else animeDao.observeAnimeWithStatusByDateAired(status, "*$filter*")
         }
     }
 
     private fun observeScoreSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByScoreDesc(status)
-            else animeDao.observeAnimeWithStatusByScoreDesc(status, filter)
+            else animeDao.observeAnimeWithStatusByScoreDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByScore(status)
-            else animeDao.observeAnimeWithStatusByScore(status, filter)
+            else animeDao.observeAnimeWithStatusByScore(status, "*$filter*")
         }
     }
 
     private fun observeSizeSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
         return if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusBySizeDesc(status)
-            else animeDao.observeAnimeWithStatusBySizeDesc(status, filter)
+            else animeDao.observeAnimeWithStatusBySizeDesc(status, "*$filter*")
         } else {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusBySize(status)
-            else animeDao.observeAnimeWithStatusBySize(status, filter)
+            else animeDao.observeAnimeWithStatusBySize(status, "*$filter*")
         }
     }
 
