@@ -9,6 +9,7 @@ import androidx.core.text.color
 import com.gnoemes.common.R
 import com.gnoemes.common.extensions.color
 import com.gnoemes.common.extensions.fontFamilyAndScale
+import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
@@ -16,8 +17,8 @@ import com.gnoemes.shimori.model.rate.Rate
 import javax.inject.Inject
 
 class AnimeTextCreator @Inject constructor(
-    private val context: Context
-//TODO romadzi naming setting
+    private val context: Context,
+    private val settings: ShimoriPreferences
 ) {
 
     companion object {
@@ -30,8 +31,10 @@ class AnimeTextCreator @Inject constructor(
             .let { ColorUtils.setAlphaComponent(it, 97) }
     }
 
-    //TODO romadzi
-    fun title(anime: Anime): String = anime.nameRu ?: anime.name
+    fun title(anime: Anime): String =
+        if (settings.isRussianNaming) anime.nameRu ?: anime.name
+        else anime.name
+
 
     fun searchDescription(anime: Anime): CharSequence = buildSpannedString {
         appendStatus(anime.status)
