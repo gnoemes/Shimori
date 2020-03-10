@@ -1,39 +1,32 @@
-import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Application
+import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Modules
-import org.moallemi.gradle.internal.VersionCodeType
 
 apply plugin: 'com.android.application'
 apply from: '../android_commons.gradle'
 apply from: '../android_core_dependencies.gradle'
-apply plugin: 'org.moallemi.advanced-build-version'
 
 android {
     def version = readVersion(new File("${project.projectDir}/version.properties"))
 
-    advancedVersioning {
-        nameOptions {
-            versionMajor version["major"] as int
-            versionMinor version["minor"] as int
-            versionPatch version["patch"] as int
-            versionBuild version["build"] as int
-        }
-        codeOptions {
-            versionCodeType VersionCodeType.AUTO_INCREMENT_ONE_STEP
-            dependsOnTasks 'release'
-        }
+    def versionMajor = version["major"] as int
+    def versionMinor = version["minor"] as int
+    def versionPatch = version["patch"] as int
+    def versionBuild = version["build"] as int
 
-        outputOptions {
-            renameOutput true
-            nameFormat 'Shimori-v' + versionName + '-${buildType}'
-        }
-    }
+    //TODO increment version on release builds
+    def autoIncrementVersionCode = version["AI_VERSION_CODE"] as int
 
-
-    def appVersionName = advancedVersioning.versionName
-    def appVersionCode = advancedVersioning.versionCode
+    def appVersionName = "$versionMajor.$versionMinor.$versionPatch"
+    def appVersionCode = autoIncrementVersionCode
 
     println "config code: ${appVersionCode}, name: ${appVersionName}"
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "Shimori-v${versionName}-${variant.buildType.name}"
+        }
+    }
 
     defaultConfig {
         applicationId Application.id
