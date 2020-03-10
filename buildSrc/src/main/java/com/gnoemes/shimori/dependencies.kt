@@ -37,7 +37,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.1"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta01"
     const val advancedVersioning = "org.moallemi.gradle.advanced-build-version:gradle-plugin:1.6.0"
     const val mvRx = "com.airbnb.android:mvrx:1.3.0"
 
@@ -103,7 +103,7 @@ object Libs {
         }
 
         object Fragment {
-            private const val version = "1.2.0-alpha02"
+            private const val version = "1.2.2"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }

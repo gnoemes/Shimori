@@ -14,8 +14,6 @@ buildscript {
         classpath Libs.Kotlin.gradlePlugin
         classpath Libs.Kotlin.extensions
 
-        classpath Libs.advancedVersioning
-
         classpath Libs.AndroidX.Navigation.safeArgs
     }
 }

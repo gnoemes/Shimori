@@ -120,7 +120,7 @@
     <!--IMAGE VIEW-->
     <style name="ShapeableImageView">
         <item name="android:adjustViewBounds">true</item>
-        <item name="android:scaleType">centerInside</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="ShapeableImageView.Stroke" parent="ShapeableImageView">
