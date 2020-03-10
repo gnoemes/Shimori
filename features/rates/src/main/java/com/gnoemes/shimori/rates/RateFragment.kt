@@ -98,7 +98,7 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
             }
         }
 
-        view?.findViewById<View>(R.id.rateSearch)?.apply {
+        rateSearch.apply {
             with(findViewById<ShimoriSearchView>(R.id.searchView)) {
                 setIcon(null)
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -108,7 +108,7 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
                     }
 
                     override fun onQueryTextChange(newText: String): Boolean {
-//                        viewModel.setSearchQuery(newText)
+                        viewModel.setSearchQuery(newText)
                         return true
                     }
                 })

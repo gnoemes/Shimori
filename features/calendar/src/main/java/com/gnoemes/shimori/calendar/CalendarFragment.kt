@@ -16,6 +16,7 @@ import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
 import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.shimori.calendar.databinding.FragmentCalendarBinding
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
+import kotlinx.android.synthetic.main.fragment_calendar.*
 import javax.inject.Inject
 
 class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
@@ -42,7 +43,7 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
 
         binding.refreshLayout.setOnRefreshListener(viewModel::refresh)
 
-        view?.findViewById<View>(R.id.searchBar)?.apply {
+        searchBar?.apply {
             with(findViewById<ShimoriSearchView>(R.id.searchView)) {
                 setIcon(R.drawable.ic_search)
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {

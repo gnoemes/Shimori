@@ -21,8 +21,9 @@ import com.gnoemes.shimori.model.rate.RateStatus
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class RateViewModel @AssistedInject constructor(
@@ -36,6 +37,7 @@ internal class RateViewModel @AssistedInject constructor(
     rateCategoryMapper: RateCategoryMapper
 ) : BaseViewModel<RateViewState>(initialState) {
 
+    private val searchQuery = ConflatedBroadcastChannel<String>()
     private val updateRatesCountLoadingState = ObservableLoadingCounter()
     private val updateRatesLoadingState = ObservableLoadingCounter()
     private val pendingActions = Channel<RateAction>(Channel.BUFFERED)
@@ -51,6 +53,16 @@ internal class RateViewModel @AssistedInject constructor(
             updateRatesLoadingState.observable.collect { loading ->
                 setState { copy(isRefreshing = loading) }
             }
+        }
+
+        viewModelScope.launch {
+            searchQuery.asFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .collectLatest { query ->
+                    val filter = if (query.isBlank()) null else query
+                    setState { copy(query = filter) }
+                }
         }
 
         viewModelScope.launchObserve(observeRates) { flow ->
@@ -96,6 +108,7 @@ internal class RateViewModel @AssistedInject constructor(
                 observeAnimeRates(ObserveAnimeRates.Params(status, sort, query))
             }
         }
+
         refresh(false)
     }
 
@@ -124,6 +137,10 @@ internal class RateViewModel @AssistedInject constructor(
 
     fun submitAction(action: RateAction) {
         viewModelScope.launch { pendingActions.send(action) }
+    }
+
+    fun setSearchQuery(newText: String) {
+        searchQuery.sendBlocking(newText)
     }
 
     private fun refresh(force: Boolean) = withState { state ->
