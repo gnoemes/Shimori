@@ -17,8 +17,10 @@ class AnimeRepository @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    fun observeAnimeWithStatus(status: RateStatus, sort : RateSort, filter: String?) =
+    fun observeAnimeWithStatus(status: RateStatus, sort: RateSort, filter: String?) =
         animeStore.observeAnimeWithStatus(status, sort, filter)
+
+    suspend fun queryAnimesWithStatus(status: RateStatus) = animeStore.queryAnimesWithStatus(status)
 
     suspend fun updateMyAnimeWithStatus(status: RateStatus) {
         asyncOrAwait("update_animes_with_status_$status") {

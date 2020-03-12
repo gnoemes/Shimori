@@ -12,6 +12,7 @@ import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.interactors.UpdateRates
+import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
@@ -102,7 +103,7 @@ internal class RateViewModel @AssistedInject constructor(
             observeRateSort(ObserveRateSort.Params(it.type, rateStatus))
         }
 
-        selectSubscribe(RateViewState::sort,  RateViewState::query) { sort, query ->
+        selectSubscribe(RateViewState::sort, RateViewState::query) { sort, query ->
             withState { state ->
                 val status = state.selectedCategory ?: RateStatus.WATCHING
                 observeAnimeRates(ObserveAnimeRates.Params(status, sort, query))
@@ -132,6 +133,7 @@ internal class RateViewModel @AssistedInject constructor(
         }
         withState {
             observeRateSort(ObserveRateSort.Params(it.type, action.newCategory))
+            refresh(false)
         }
     }
 
@@ -145,18 +147,21 @@ internal class RateViewModel @AssistedInject constructor(
 
     private fun refresh(force: Boolean) = withState { state ->
         state.selectedCategory?.let { status ->
-            updateAnimeRates(UpdateAnimeRates.Params(force, status)).also {
+            val categorySize = state.categories.find { it.status == status }?.count
+            updateAnimeRates(UpdateAnimeRates.Params(force, status, categorySize)).also {
                 viewModelScope.launch {
                     updateRatesLoadingState.collectFrom(it)
                 }
             }
         }
-        updateRates(Unit).also {
-            viewModelScope.launch {
-                updateRatesCountLoadingState.collectFrom(it)
+
+        if (force) {
+            updateRates().also {
+                viewModelScope.launch {
+                    updateRatesCountLoadingState.collectFrom(it)
+                }
             }
         }
-
     }
 
 
