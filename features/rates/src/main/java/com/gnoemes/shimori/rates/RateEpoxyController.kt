@@ -35,10 +35,12 @@ internal class RateEpoxyController @Inject constructor(
         val items = state.rates()
 
         if (items.isNullOrEmpty()) {
-            searchEmpty {
-                id("rate_search_empty")
-                title(context.getString(R.string.rate_search_empty_title))
-                description(context.getString(R.string.rate_search_empty_message))
+            if (!state.query.isNullOrBlank()) {
+                searchEmpty {
+                    id("rate_search_empty")
+                    title(context.getString(R.string.rate_search_empty_title))
+                    description(context.getString(R.string.rate_search_empty_message))
+                }
             }
             return
         }

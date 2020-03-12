@@ -11,7 +11,8 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
         </item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">?attr/colorDialogSurface</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">?attr/colorDialogSurface
+        </item>
         <item name="bottomSheetStyle">@style/Widget.Shimori.BottomSheet</item>
     </style>
 
@@ -24,7 +25,7 @@
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
         <item name="itemBackground">?attr/selectableItemBackground</item>
-<!--        elevation makes default colorPrimary lighter-->
+        <!--        elevation makes default colorPrimary lighter-->
         <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
@@ -53,8 +54,20 @@
         <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
     </style>
 
-    <style name="Widget.Shimori.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Widget.Shimori.Button.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
+    </style>
+
+    <style name="Widget.Shimori.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/selector_default_text_color</item>
+        <item name="backgroundTint">@color/selector_outlined_bg_color</item>
+        <item name="strokeColor">@color/selector_button_gray_stroke_color</item>
+        <item name="iconTint">@color/selector_default_text_color</item>
+        <item name="rippleColor">@color/selector_default_ripple_color</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Shimori.Button</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0.03</item>
     </style>
 
     <style name="Widget.Shimori.Button.Circle" parent="Widget.Shimori.Button.Outlined">
@@ -65,15 +78,11 @@
         <item name="iconPadding">0dp</item>
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Circle</item>
         <item name="iconTint">@null</item>
+        <item name="cornerRadius">@null</item>
     </style>
 
     <style name="Widget.Shimori.Button.Circle.Gray.Transparent" parent="Widget.Shimori.Button.Circle">
-        <item name="iconTint">@color/selector_default_text_color</item>
-        <item name="android:textColor">@color/selector_default_text_color</item>
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/selector_button_gray_stroke_color</item>
         <item name="android:shadowColor">?attr/colorSecondaryTransparent</item>
-        <item name="rippleColor">@color/selector_default_ripple_color</item>
     </style>
 
     <style name="Widget.Shimori.Button.Circle.Secondary.Transparent" parent="Widget.Shimori.Button.Circle">
@@ -83,6 +92,17 @@
         <item name="backgroundTint">?attr/colorSecondaryTransparent</item>
         <item name="android:shadowColor">?attr/colorSecondaryTransparent</item>
         <item name="rippleColor">?attr/colorSecondaryTransparent</item>
+    </style>
+
+    <style name="Widget.Shimori.Button.Action" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textColor">@color/selector_action_text_color</item>
+        <item name="iconTint">@color/selector_action_text_color</item>
+        <item name="strokeColor">@color/selector_default_stroke_color</item>
+        <item name="backgroundTint">@color/selector_action_bg_color</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="rippleColor">?attr/colorDivider</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0.03</item>
     </style>
 
     <!--NAVIGATION VIEW-->

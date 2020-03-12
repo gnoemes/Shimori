@@ -35,12 +35,12 @@
     <string name="rate_planned_short">В планах</string>
     <string name="rate_on_hold">Отложено</string>
     <string name="rate_dropped">Брошено</string>
-<!--    Anime-->
+    <!--    Anime-->
     <string name="rate_watching">Смотрю</string>
     <string name="rate_rewatch">Пересматриваю</string>
     <string name="rate_rewatch_short">Пересмотр</string>
     <string name="rate_watched">Просмотрено</string>
-<!--    Manga-->
+    <!--    Manga-->
     <string name="rate_reading">Читаю</string>
     <string name="rate_rereading">Перечитываю</string>
     <string name="rate_readed">Прочитано</string>
@@ -48,5 +48,10 @@
     <string name="time_minute_short_format">%s мин</string>
     <string name="time_hour_short_format">%s ч</string>
     <string name="time_hour_and_minute_short_format">%s ч %s мин</string>
+
+    <string name="auth_title">Вы не вошли в аккаунт</string>
+    <string name="auth_description">Войдите, чтобы все функции стали доступны.</string>
+    <string name="auth_sign_up">Создать аккаунт</string>
+    <string name="auth_sign_in">Войти</string>
 
 </resources>

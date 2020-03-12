@@ -25,6 +25,7 @@ import com.gnoemes.shimori.model.common.ContentType
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.databinding.FragmentRateBinding
 import com.gnoemes.shimori.rates.sort.RateSortDialogFragment
+import com.google.android.material.button.MaterialButton
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 import kotlinx.android.synthetic.main.fragment_rate.*
 import javax.inject.Inject
@@ -60,6 +61,16 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
 
         binding.refreshLayout.setOnRefreshListener {
             viewModel.submitAction(RateAction.Refresh)
+        }
+
+        binding.drawer.run {
+            findViewById<MaterialButton>(R.id.signUpBtn)?.setOnClickListener {
+                viewModel.submitAction(RateAction.Auth(true))
+            }
+
+            findViewById<MaterialButton>(R.id.signInBtn)?.setOnClickListener {
+                viewModel.submitAction(RateAction.Auth(false))
+            }
         }
 
         binding.drawer.run {

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.gnoemes.shikimori.entities.user.ShikimoriAuthState" />
+
         <import type="com.gnoemes.shimori.model.rate.RateTargetType" />
 
         <variable
@@ -45,6 +47,11 @@
                 android:id="@+id/rateSearch"
                 layout="@layout/layout_toolbar_search"
                 app:hint="@{state.type == RateTargetType.ANIME ? @string/common_anime : @string/common_manga_and_ranobe}" />
+
+            <include
+                android:id="@+id/authLayout"
+                layout="@layout/layout_auth"
+                app:visible="@{state.authState == ShikimoriAuthState.LOGGED_OUT}" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

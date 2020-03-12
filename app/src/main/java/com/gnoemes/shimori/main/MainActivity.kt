@@ -82,7 +82,7 @@ class MainActivity : BaseActivity() {
         }
 
         binding.bottomNav.setOnNavigationItemReselectedListener {
-            startAuth()
+            //TODO root fragment action
         }
     }
 }

@@ -1,12 +1,14 @@
 package com.gnoemes.shimori.main
 
 import android.content.Context
+import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.base.di.PerActivity
 import com.gnoemes.shimori.calendar.CalendarBuilder
 import com.gnoemes.shimori.rates.RateBuilder
 import com.gnoemes.shimori.search.SearchBuilder
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 
 @Module
@@ -23,6 +25,9 @@ internal abstract class MainBuilder {
 
 @Module(includes = [MainModuleBinds::class])
 class MainModule {
+
+    @Provides
+    fun provideAppNavigator(activity: MainActivity) : AppNavigator = MainAppNavigator(activity)
 
 }
 

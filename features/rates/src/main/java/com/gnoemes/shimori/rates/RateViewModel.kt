@@ -1,22 +1,24 @@
 package com.gnoemes.shimori.rates
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.common.utils.ObservableLoadingCounter
 import com.gnoemes.common.utils.collectFrom
+import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
+import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.interactors.UpdateRates
+import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRates
+import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.squareup.inject.assisted.Assisted
@@ -26,16 +28,19 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Provider
 
 internal class RateViewModel @AssistedInject constructor(
     @Assisted initialState: RateViewState,
     observeRates: ObserveRates,
+    observeShikimoriAuth: ObserveShikimoriAuth,
     private val updateAnimeRates: UpdateAnimeRates,
     private val observeAnimeRates: ObserveAnimeRates,
     private val observeRateSort: ObserveRateSort,
     private val updateRates: UpdateRates,
     private val updateRateSort: UpdateRateSort,
-    rateCategoryMapper: RateCategoryMapper
+    rateCategoryMapper: RateCategoryMapper,
+    private val appNavigator: Provider<AppNavigator>
 ) : BaseViewModel<RateViewState>(initialState) {
 
     private val searchQuery = ConflatedBroadcastChannel<String>()
@@ -88,11 +93,29 @@ internal class RateViewModel @AssistedInject constructor(
             }
         }
 
+        viewModelScope.launchObserve(observeShikimoriAuth) { flow ->
+            flow.distinctUntilChanged()
+                .debounce(300)
+                .onEach {
+                    if (it == ShikimoriAuthState.LOGGED_IN) {
+                        refresh(true)
+                    }
+                }.execute {
+                    if (it is Success) {
+                        val category =
+                            if (it() == ShikimoriAuthState.LOGGED_IN) RateStatus.WATCHING
+                            else null
+                        copy(authState = it(), selectedCategory = category)
+                    } else this
+                }
+        }
+
         viewModelScope.launch {
             for (action in pendingActions) when (action) {
                 is RateAction.Refresh -> refresh(true)
                 is RateAction.ChangeCategory -> onCategoryChanged(action)
                 is RateAction.ChangeOrder -> onChangeOrder()
+                is RateAction.Auth -> onAuth(action)
             }
 
         }
@@ -110,7 +133,15 @@ internal class RateViewModel @AssistedInject constructor(
             }
         }
 
+        observeShikimoriAuth()
         refresh(false)
+    }
+
+    private fun onAuth(action: RateAction.Auth) {
+        appNavigator.get().run {
+            if (action.register) startSignUp()
+            else startSignIn()
+        }
     }
 
     private fun onChangeOrder() {
