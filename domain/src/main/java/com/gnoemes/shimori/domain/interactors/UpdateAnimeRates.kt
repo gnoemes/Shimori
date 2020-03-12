@@ -19,11 +19,19 @@ class UpdateAnimeRates @Inject constructor(
     override suspend fun doWork(params: Params) {
         if (params.force) {
             repository.updateMyAnimeWithStatus(params.status)
+        } else if (params.categorySize != null) {
+            val animes = repository.queryAnimesWithStatus(params.status)
+
+            //refresh if local animes diffs with rate category size
+            if (animes.size != params.categorySize) {
+                repository.updateMyAnimeWithStatus(params.status)
+            }
         }
     }
 
     data class Params(
         val force: Boolean,
-        val status: RateStatus
+        val status: RateStatus,
+        val categorySize: Int?
     )
 }

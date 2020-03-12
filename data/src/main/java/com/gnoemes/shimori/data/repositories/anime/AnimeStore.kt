@@ -26,13 +26,15 @@ class AnimeStore @Inject constructor(
             { entity, id -> entity.copy(id = id ?: 0) }
     )
 
+    suspend fun updateAnimes(animes: List<Anime>) = runner {
+        syncer.sync(animeDao.queryAll(), animes, removeNotMatched = false)
+    }
+
+    suspend fun queryAnimesWithStatus(status: RateStatus) = animeDao.queryAnimesWithStatus(status)
+
     fun observeCalendar(filter: String?): Flow<List<AnimeWithRate>> = when {
         filter.isNullOrBlank() -> animeDao.observeCalendar()
         else -> animeDao.observeCalendarFilter("*$filter*")
-    }
-
-    suspend fun updateAnimes(animes: List<Anime>) = runner {
-        syncer.sync(animeDao.queryAll(), animes, removeNotMatched = false)
     }
 
     fun observeAnimeWithStatus(status: RateStatus, sort: RateSort, filter: String?): Flow<List<AnimeWithRate>> =
