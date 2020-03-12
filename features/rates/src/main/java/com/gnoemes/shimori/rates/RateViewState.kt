@@ -14,9 +14,9 @@ data class RateViewState(
     val query: String? = null,
     val selectedCategory: RateStatus? = null,
     val categories: List<RateCategory> = emptyList(),
-    val sort : RateSort = RateSort.default(),
+    val sort: RateSort = RateSort.default(),
     val rates: Async<List<EntityWithRate<*>>> = Uninitialized,
-    val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
+    val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_IN,
     val isRefreshing: Boolean = false,
     val categoriesRefreshing: Boolean = true
 ) : MvRxState

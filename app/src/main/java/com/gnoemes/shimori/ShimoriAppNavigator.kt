@@ -8,7 +8,7 @@ import com.gnoemes.shimori.base.AppNavigator
 import com.gnoemes.shimori.main.MainActivity
 import javax.inject.Inject
 
-class ShimoriAppNavigator @Inject constructor(
+open class ShimoriAppNavigator @Inject constructor(
     private val context: Context
 ) : AppNavigator {
     override fun provideAuthHandleIntent(requestCode: Int): PendingIntent {
@@ -16,5 +16,13 @@ class ShimoriAppNavigator @Inject constructor(
             action = ShikimoriConstants.AUTH_HANDLE_ACTION
         }
         return PendingIntent.getActivity(context, requestCode, intent, 0)
+    }
+
+    override fun startSignIn() {
+        throw IllegalStateException("App navigator can't handle this")
+    }
+
+    override fun startSignUp() {
+        throw IllegalStateException("App navigator can't handle this")
     }
 }

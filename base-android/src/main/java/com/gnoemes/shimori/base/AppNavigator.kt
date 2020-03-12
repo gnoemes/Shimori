@@ -4,4 +4,6 @@ import android.app.PendingIntent
 
 interface AppNavigator {
     fun provideAuthHandleIntent(requestCode : Int) : PendingIntent
+    fun startSignIn()
+    fun startSignUp()
 }
