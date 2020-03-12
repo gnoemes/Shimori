@@ -18,4 +18,7 @@
     <string name="rate_sort_episodes">По эпизодам</string>
     <string name="rate_sort_chapters">По главам</string>
 
+    <string name="rate_search_empty_title">В этом списке ничего не найдено</string>
+    <string name="rate_search_empty_message">Измените запрос или воспользуйтесь разделом поиска.</string>
+
 </resources>

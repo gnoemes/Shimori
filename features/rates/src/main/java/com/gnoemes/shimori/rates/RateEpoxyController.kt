@@ -4,6 +4,7 @@ import android.content.Context
 import com.airbnb.epoxy.IdUtils
 import com.airbnb.mvrx.Success
 import com.gnoemes.common.epoxy.ShimoriEpoxyController
+import com.gnoemes.common.searchEmpty
 import com.gnoemes.common.textcreators.CompoundTextCreator
 import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.base.extensions.observable
@@ -33,7 +34,14 @@ internal class RateEpoxyController @Inject constructor(
 
         val items = state.rates()
 
-        if (items.isNullOrEmpty()) return
+        if (items.isNullOrEmpty()) {
+            searchEmpty {
+                id("rate_search_empty")
+                title(context.getString(R.string.rate_search_empty_title))
+                description(context.getString(R.string.rate_search_empty_message))
+            }
+            return
+        }
 
         rateSort {
             id("rate_sort")
