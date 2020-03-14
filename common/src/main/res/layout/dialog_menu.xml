@@ -7,7 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/layout_bottom_sheet_toolbar" />
+        <include
+            android:id="@+id/bottomSheetToolbar"
+            layout="@layout/layout_bottom_sheet_toolbar" />
 
         <ImageView
             android:layout_width="wrap_content"

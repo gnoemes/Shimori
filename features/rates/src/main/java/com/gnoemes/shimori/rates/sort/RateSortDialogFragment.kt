@@ -48,7 +48,7 @@ class RateSortDialogFragment : BaseBottomSheetDialog<DialogMenuBinding>(LayoutMo
 
     override fun onDialogViewCreated(binding: DialogMenuBinding) {
         with(binding) {
-            container.findViewById<Toolbar>(R.id.toolbar).setTitle(R.string.rate_sort)
+            bottomSheetToolbar.toolbar.setTitle(R.string.rate_sort)
 
             navView.updatePadding(bottom = requireContext().navigationBarSize() + navView.paddingBottom)
 

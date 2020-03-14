@@ -13,10 +13,8 @@ import com.gnoemes.common.extensions.doOnSizeChange
 import com.gnoemes.common.extensions.dp
 import com.gnoemes.common.extensions.hideSoftInput
 import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
-import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.shimori.calendar.databinding.FragmentCalendarBinding
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import javax.inject.Inject
 
 class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
@@ -24,6 +22,7 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
 
     @Inject
     internal lateinit var viewModelFactory: CalendarViewModel.Factory
+
     @Inject
     internal lateinit var controller: CalendarEpoxyController
 
@@ -36,40 +35,45 @@ class CalendarFragment : BaseBindingFragment<FragmentCalendarBinding>() {
     }
 
     override fun onViewCreated(binding: FragmentCalendarBinding, savedInstanceState: Bundle?) {
-        binding.recyclerView.run {
-            setController(controller)
-            addOnScrollListener(HideImeOnScrollListener())
-        }
+        with(binding) {
+            recyclerView.run {
+                setController(controller)
+                addOnScrollListener(HideImeOnScrollListener())
+            }
 
-        binding.refreshLayout.setOnRefreshListener(viewModel::refresh)
+            searchBar.run {
+                with(searchView) {
+                    setIcon(R.drawable.ic_search)
+                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            hideSoftInput()
+                            return true
+                        }
 
-        searchBar?.apply {
-            with(findViewById<ShimoriSearchView>(R.id.searchView)) {
-                setIcon(R.drawable.ic_search)
-                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        hideSoftInput()
-                        return true
+                        override fun onQueryTextChange(newText: String): Boolean {
+                            viewModel.setSearchQuery(newText)
+                            return true
+                        }
+                    })
+                }
+
+                with(root) {
+                    doOnApplyWindowInsets { view, insets, initialState ->
+                        binding.recyclerView.updatePadding(top = insets.systemWindowInsetTop + dp(84))
+                        view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
                     }
 
-                    override fun onQueryTextChange(newText: String): Boolean {
-                        viewModel.setSearchQuery(newText)
-                        return true
+                    doOnSizeChange {
+                        binding.refreshLayout.setProgressViewOffset(true,
+                                0,
+                                it.height + binding.refreshLayout.progressCircleDiameter / 2
+                        )
+                        true
                     }
-                })
-            }
-            doOnApplyWindowInsets { view, insets, initialState ->
-                binding.recyclerView.updatePadding(top = insets.systemWindowInsetTop + dp(84))
-                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
+                }
             }
 
-            doOnSizeChange {
-                binding.refreshLayout.setProgressViewOffset(true,
-                        0,
-                        it.height + binding.refreshLayout.progressCircleDiameter / 2
-                )
-                true
-            }
+            refreshLayout.setOnRefreshListener(viewModel::refresh)
         }
     }
 
