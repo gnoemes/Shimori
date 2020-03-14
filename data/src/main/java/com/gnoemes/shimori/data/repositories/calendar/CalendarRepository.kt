@@ -30,7 +30,7 @@ class CalendarRepository @Inject constructor(
         }
     }
 
-    suspend fun needUpdateCalendar(expiry: Instant = instantInPast(hours = 12)): Boolean {
+    suspend fun needUpdateCalendar(expiry: Instant = instantInPast(hours = 2)): Boolean {
         return lastRequestStore.isRequestBefore(expiry)
     }
 }
