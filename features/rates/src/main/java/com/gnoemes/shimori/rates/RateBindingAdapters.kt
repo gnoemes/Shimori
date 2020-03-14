@@ -51,7 +51,7 @@ fun setupCategories(view: NavigationView,
             setGroupCheckable(0, true, true)
         }
 
-        if (oldCategory == selectedCategory || selectedCategory == null) return
+        if (selectedCategory == null) return
 
         view.menu.iterator().forEach { item ->
             if (item.itemId == selectedCategory.priority) {

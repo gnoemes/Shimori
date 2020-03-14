@@ -5,12 +5,16 @@ import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data_base.sources.UserDataSource
 import com.gnoemes.shimori.model.user.User
+import com.gnoemes.shimori.model.user.UserShort
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val userStore: UserStore,
     @Shikimori private val userSource: UserDataSource
 ) {
+
+    fun observeMeShort(): Flow<UserShort?> = userStore.observeMeShort()
 
     suspend fun getMyUser(): User? {
         return userStore.queryMe()
