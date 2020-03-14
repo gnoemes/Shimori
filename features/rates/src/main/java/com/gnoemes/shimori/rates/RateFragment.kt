@@ -35,6 +35,7 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
 
     @Inject
     internal lateinit var viewModelFactory: RateViewModel.Factory
+
     @Inject
     internal lateinit var controller: RateEpoxyController
 
@@ -50,90 +51,87 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
     }
 
     override fun onViewCreated(binding: FragmentRateBinding, savedInstanceState: Bundle?) {
-        binding.recyclerView.run {
-            setController(controller)
-            addOnScrollListener(HideImeOnScrollListener())
-            setItemSpacingRes(R.dimen.spacing_small)
-            doOnApplyWindowInsets { view, insets, initialState ->
-                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top)
-            }
-        }
-
-        binding.refreshLayout.setOnRefreshListener {
-            viewModel.submitAction(RateAction.Refresh)
-        }
-
-        binding.drawer.run {
-            findViewById<MaterialButton>(R.id.signUpBtn)?.setOnClickListener {
-                viewModel.submitAction(RateAction.Auth(true))
-            }
-
-            findViewById<MaterialButton>(R.id.signInBtn)?.setOnClickListener {
-                viewModel.submitAction(RateAction.Auth(false))
-            }
-        }
-
-        binding.drawer.run {
-            val toggle = ActionBarDrawerToggle(
-                    activity, drawer, view?.findViewById(R.id.toolbar), R.string.rate_drawer_open, R.string.rate_drawer_close)
-
-            addDrawerListener(toggle)
-            setViewScale(Gravity.START, 0.9f)
-            setRadius(Gravity.START, 35f)
-            setViewElevation(Gravity.START, 20f)
-            toggle.syncState()
-
-            savedInstanceState?.let {
-                this.post {
-                    toggleDrawer(it.getBoolean(DRAWER_KEY))
+        with(binding) {
+            recyclerView.run {
+                setController(controller)
+                addOnScrollListener(HideImeOnScrollListener())
+                setItemSpacingRes(R.dimen.spacing_small)
+                doOnApplyWindowInsets { view, insets, initialState ->
+                    view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top)
                 }
             }
-        }
 
-        binding.navView.run {
-            findViewById<View>(R.id.design_navigation_view)
-                .updateLayoutParams<FrameLayout.LayoutParams> {
-                    height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    gravity = Gravity.CENTER_VERTICAL
+            drawer.run {
+                val toggle = ActionBarDrawerToggle(
+                        activity, drawer, view?.findViewById(R.id.toolbar), R.string.rate_drawer_open, R.string.rate_drawer_close)
+
+                addDrawerListener(toggle)
+                setViewScale(Gravity.START, 0.9f)
+                setRadius(Gravity.START, 35f)
+                setViewElevation(Gravity.START, 20f)
+                toggle.syncState()
+
+                savedInstanceState?.let {
+                    this.post {
+                        toggleDrawer(it.getBoolean(DRAWER_KEY))
+                    }
                 }
-            setNavigationItemSelectedListener {
-                viewModel.submitAction(RateAction.ChangeCategory(RateUtils.fromPriority(it.itemId)))
-                toggleDrawer(false)
-                false
             }
-            doOnApplyWindowInsets { _, insets, initialState ->
-                binding.drawer.updatePadding(
-                        top = insets.systemWindowInsetTop + initialState.paddings.top,
-                        bottom = insets.systemWindowInsetBottom + initialState.paddings.bottom
-                )
-            }
-        }
 
-        rateSearch.apply {
-            with(findViewById<ShimoriSearchView>(R.id.searchView)) {
-                setIcon(null)
-                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        hideSoftInput()
-                        return true
+            navView.run {
+                findViewById<View>(R.id.design_navigation_view)
+                    .updateLayoutParams<FrameLayout.LayoutParams> {
+                        height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                setNavigationItemSelectedListener {
+                    viewModel.submitAction(RateAction.ChangeCategory(RateUtils.fromPriority(it.itemId)))
+                    toggleDrawer(false)
+                    false
+                }
+                doOnApplyWindowInsets { _, insets, initialState ->
+                    binding.drawer.updatePadding(
+                            top = insets.systemWindowInsetTop + initialState.paddings.top,
+                            bottom = insets.systemWindowInsetBottom + initialState.paddings.bottom
+                    )
+                }
+            }
+
+            rateSearch.run {
+                with(searchView) {
+                    setIcon(null)
+                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            hideSoftInput()
+                            return true
+                        }
+
+                        override fun onQueryTextChange(newText: String): Boolean {
+                            viewModel.setSearchQuery(newText)
+                            return true
+                        }
+                    })
+                }
+
+                with(root) {
+                    doOnApplyWindowInsets { view, insets, initialState ->
+                        view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
                     }
 
-                    override fun onQueryTextChange(newText: String): Boolean {
-                        viewModel.setSearchQuery(newText)
-                        return true
+                    doOnSizeChange {
+                        binding.refreshLayout.setProgressViewOffset(true,
+                                0,
+                                it.height + binding.refreshLayout.progressCircleDiameter / 2
+                        )
+                        true
                     }
-                })
-            }
-            doOnApplyWindowInsets { view, insets, initialState ->
-                view.updatePadding(top = insets.systemWindowInsetTop + initialState.paddings.top + dp(8))
+                }
             }
 
-            doOnSizeChange {
-                binding.refreshLayout.setProgressViewOffset(true,
-                        0,
-                        it.height + binding.refreshLayout.progressCircleDiameter / 2
-                )
-                true
+            refreshLayout.setOnRefreshListener { viewModel.submitAction(RateAction.Refresh) }
+            authLayout.run {
+                signUpBtn.setOnClickListener { viewModel.submitAction(RateAction.Auth(true)) }
+                signInBtn.setOnClickListener { viewModel.submitAction(RateAction.Auth(false)) }
             }
         }
 
