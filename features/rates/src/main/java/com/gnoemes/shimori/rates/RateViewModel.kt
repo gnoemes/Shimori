@@ -1,8 +1,10 @@
 package com.gnoemes.shimori.rates
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.common.utils.ObservableLoadingCounter
 import com.gnoemes.common.utils.collectFrom
@@ -12,15 +14,15 @@ import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.interactors.UpdateRates
-import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
+import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRates
-import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.user.exists
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
@@ -33,7 +35,7 @@ import javax.inject.Provider
 internal class RateViewModel @AssistedInject constructor(
     @Assisted initialState: RateViewState,
     observeRates: ObserveRates,
-    observeShikimoriAuth: ObserveShikimoriAuth,
+    observeMyUser: ObserveMyUserShort,
     private val updateAnimeRates: UpdateAnimeRates,
     private val observeAnimeRates: ObserveAnimeRates,
     private val observeRateSort: ObserveRateSort,
@@ -93,19 +95,22 @@ internal class RateViewModel @AssistedInject constructor(
             }
         }
 
-        viewModelScope.launchObserve(observeShikimoriAuth) { flow ->
+        viewModelScope.launchObserve(observeMyUser) { flow ->
             flow.distinctUntilChanged()
-                .debounce(300)
                 .onEach {
-                    if (it == ShikimoriAuthState.LOGGED_IN) {
+                    if (it != null && it.exists) {
                         refresh(true)
                     }
                 }.execute {
                     if (it is Success) {
+                        val user = it()
                         val category =
-                            if (it() == ShikimoriAuthState.LOGGED_IN) RateStatus.WATCHING
+                            if (user.exists()) RateStatus.WATCHING
                             else null
-                        copy(authState = it(), selectedCategory = category)
+                        val authState =
+                            if (user.exists()) ShikimoriAuthState.LOGGED_IN
+                            else ShikimoriAuthState.LOGGED_OUT
+                        copy(authState = authState, selectedCategory = category)
                     } else this
                 }
         }
@@ -133,7 +138,7 @@ internal class RateViewModel @AssistedInject constructor(
             }
         }
 
-        observeShikimoriAuth()
+        observeMyUser()
         refresh(false)
     }
 

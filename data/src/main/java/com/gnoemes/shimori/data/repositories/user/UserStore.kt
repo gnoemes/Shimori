@@ -5,6 +5,7 @@ import com.gnoemes.shimori.data.daos.UserDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import com.gnoemes.shimori.model.user.User
+import com.gnoemes.shimori.model.user.UserShort
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -20,7 +21,11 @@ class UserStore @Inject constructor(
             { entity, id -> entity.copy(id = id ?: 0) }
     )
 
-    suspend fun observeMe(): Flow<User> {
+    fun observeMeShort() : Flow<UserShort?> {
+        return dao.observeMeShort()
+    }
+
+    fun observeMe(): Flow<User?> {
         return dao.observeMe()
     }
 
