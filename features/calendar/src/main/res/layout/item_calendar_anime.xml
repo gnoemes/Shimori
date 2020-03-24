@@ -76,6 +76,7 @@
             android:padding="5dp"
             android:text="@string/calendar_season_end"
             android:textAppearance="@style/TextAppearance.Shimori.TextProtector"
+            android:textColor="@color/colorOnProtector"
             app:layout_constraintBottom_toBottomOf="@+id/posterView"
             app:layout_constraintStart_toStartOf="@+id/posterView"
             app:visible="@{!item.isMovie &amp;&amp; item.nextEpisode == item.episodes}" />
