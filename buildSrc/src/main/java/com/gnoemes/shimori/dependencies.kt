@@ -37,7 +37,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta01"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta02"
     const val advancedVersioning = "org.moallemi.gradle.advanced-build-version:gradle-plugin:1.6.0"
     const val mvRx = "com.airbnb.android:mvrx:1.3.0"
 
