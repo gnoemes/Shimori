@@ -1,10 +1,13 @@
 import com.gnoemes.shimori.Libs
+import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
 apply from: '../android_commons.gradle'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
-  implementation Libs.AndroidX.Navigation.ui
-  implementation Libs.AndroidX.Navigation.fragment
+    implementation project(Modules.model)
+
+    implementation Libs.AndroidX.Navigation.ui
+    implementation Libs.AndroidX.Navigation.fragment
 }
