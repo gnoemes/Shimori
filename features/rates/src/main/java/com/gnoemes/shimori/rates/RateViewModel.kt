@@ -98,7 +98,7 @@ internal class RateViewModel @AssistedInject constructor(
         viewModelScope.launchObserve(observeMyUser) { flow ->
             flow.distinctUntilChanged()
                 .onEach {
-                    if (it != null && it.exists) {
+                    if (it.exists()) {
                         refresh(true)
                     }
                 }.execute {
