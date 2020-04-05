@@ -1,4 +1,4 @@
-package com.gnoemes.shikimori.entities.common
+package com.gnoemes.shikimori.entities.auth
 
 import com.google.gson.annotations.SerializedName
 
