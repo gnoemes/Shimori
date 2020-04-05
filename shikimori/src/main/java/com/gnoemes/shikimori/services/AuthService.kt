@@ -1,7 +1,7 @@
 package com.gnoemes.shikimori.services
 
-import com.gnoemes.shikimori.entities.common.TokenResponse
-import retrofit2.Response
+import com.gnoemes.shikimori.entities.auth.TokenResponse
+import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -14,5 +14,5 @@ interface AuthService {
         @Query("redirect_uri") redirectUri: String,
         @Query("refresh_token") refreshToken: String,
         @Query("grant_type") grantType : String = "refresh_token"
-    ): Response<TokenResponse>
+    ): Call<TokenResponse>
 }
