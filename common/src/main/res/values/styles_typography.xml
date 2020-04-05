@@ -37,7 +37,6 @@
     <style name="TextAppearance.Shimori.Caption" parent="TextAppearance.MaterialComponents.Caption"/>
 
     <style name="TextAppearance.Shimori.Overline" parent="TextAppearance.MaterialComponents.Overline">
-        <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
