@@ -35,7 +35,37 @@ data class Rate(
     @Ignore
     var userId: Long? = null
 
+    val progress: Int?
+        get() = when (targetType) {
+            RateTargetType.ANIME -> episodes
+            RateTargetType.MANGA -> chapters
+            RateTargetType.RANOBE -> chapters
+            else -> null
+        }
+
     companion object {
         val EMPTY = Rate()
+
+        val DEFAULT_ANIME = Rate(targetType = RateTargetType.ANIME, status = RateStatus.WATCHING, episodes = 0)
+        val DEFAULT_MANGA = Rate(targetType = RateTargetType.MANGA, status = RateStatus.WATCHING, chapters = 0)
+        val DEFAULT_RANOBE = Rate(targetType = RateTargetType.RANOBE, status = RateStatus.WATCHING, chapters = 0)
+    }
+}
+
+fun Rate.copyProgress(newProgress: Int): Rate {
+    return when (targetType) {
+        RateTargetType.ANIME -> copy(episodes = newProgress)
+        RateTargetType.MANGA -> copy(chapters = newProgress)
+        RateTargetType.RANOBE -> copy(chapters = newProgress)
+        else -> this
+    }
+}
+
+fun Rate.copyTargetId(newTargetId : Long?) : Rate {
+    return when (targetType) {
+        RateTargetType.ANIME -> copy(animeId = newTargetId)
+        RateTargetType.MANGA -> copy(mangaId = newTargetId)
+        RateTargetType.RANOBE -> copy(ranobeId = newTargetId)
+        else -> this
     }
 }

@@ -4,8 +4,34 @@
     android:id="@id/navigation_rates"
     app:startDestination="@id/rates">
 
+    <action
+        android:id="@+id/action_rate_edit"
+        app:destination="@id/rate_edit" />
+
     <fragment
         android:id="@+id/rates"
         android:name="com.gnoemes.shimori.rates.RateFragment" />
+
+    <dialog
+        android:id="@+id/rate_edit"
+        android:name="com.gnoemes.shimori.rates.edit.RateEditDialogFragment">
+
+        <argument
+            android:name="id"
+            app:argType="long" />
+
+        <argument
+            android:name="type"
+            app:argType="com.gnoemes.shimori.model.rate.RateTargetType" />
+
+        <argument
+            android:name="name"
+            app:argType="string" />
+
+        <argument
+            android:name="targetId"
+            app:argType="long" />
+
+    </dialog>
 
 </navigation>

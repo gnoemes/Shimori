@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.gnoemes.common.BaseBindingFragment
@@ -18,14 +19,15 @@ import com.gnoemes.common.extensions.doOnSizeChange
 import com.gnoemes.common.extensions.dp
 import com.gnoemes.common.extensions.hideSoftInput
 import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
-import com.gnoemes.common.ui.widgets.ShimoriSearchView
 import com.gnoemes.common.utils.RateUtils
+import com.gnoemes.shimori.model.ShikimoriContentEntity
+import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.common.ContentType
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.databinding.FragmentRateBinding
+import com.gnoemes.shimori.rates.edit.RateEditDialogFragmentDirections
 import com.gnoemes.shimori.rates.sort.RateSortDialogFragment
-import com.google.android.material.button.MaterialButton
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 import kotlinx.android.synthetic.main.fragment_rate.*
 import javax.inject.Inject
@@ -147,6 +149,16 @@ class RateFragment : BaseBindingFragment<FragmentRateBinding>() {
 
             override fun onOrderChangeClicked() {
                 viewModel.submitAction(RateAction.ChangeOrder)
+            }
+
+            override fun onEditRate(id: Long, name: String, entity: ShimoriEntity) {
+                withState(viewModel) { state ->
+                    val targetId =
+                        if (entity is ShikimoriContentEntity) entity.shikimoriId ?: 0
+                        else 0
+                    findNavController()
+                        .navigate(RateEditDialogFragmentDirections.actionRateEdit(id, state.type, name, targetId))
+                }
             }
         }
 

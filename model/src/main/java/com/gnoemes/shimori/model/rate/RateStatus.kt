@@ -13,7 +13,7 @@ enum class RateStatus(
 
     companion object {
         fun watchingFirstValues() =
-            arrayOf(WATCHING, PLANNED, REWATCHING, COMPLETED, ON_HOLD, DROPPED)
+            listOf(WATCHING, PLANNED, REWATCHING, COMPLETED, ON_HOLD, DROPPED)
 
         fun priorityValues() = values().sortedBy { it.priority }
     }

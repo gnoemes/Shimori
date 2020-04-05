@@ -1,9 +1,10 @@
-package com.gnoemes.shimori.rates
+package com.gnoemes.shimori.rates.sort
 
 import android.content.Context
 import com.gnoemes.shimori.base.di.PerActivity
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.rates.R
 import javax.inject.Inject
 
 class RateSortTextCreator @Inject constructor(

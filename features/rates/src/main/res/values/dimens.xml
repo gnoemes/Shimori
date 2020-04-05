@@ -5,4 +5,10 @@
 
     <dimen name="rate_poster_height">120dp</dimen>
     <dimen name="rate_poster_width">96dp</dimen>
+
+    <dimen name="rate_edit_button_size">40dp</dimen>
+    <dimen name="rate_edit_status_vertical_padding">24dp</dimen>
+    <dimen name="rate_edit_status_horizontal_padding">32dp</dimen>
+
+    <dimen name="rate_edit_rate_horizontal_padding">20dp</dimen>
 </resources>

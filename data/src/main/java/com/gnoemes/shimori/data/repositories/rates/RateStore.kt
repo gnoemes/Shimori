@@ -12,7 +12,7 @@ import javax.inject.Inject
 class RateStore @Inject constructor(
     private val inserter: EntityInserter,
     private val runner: DatabaseTransactionRunner,
-    private val dao: RateDao
+    val dao: RateDao
 ) {
     private val syncer = syncerForEntity(
             dao,
@@ -20,11 +20,21 @@ class RateStore @Inject constructor(
             { entity, id -> entity.copy(id = id ?: 0) }
     )
 
+    fun observeRate(shikimoriId: Long) = dao.observeRate(shikimoriId)
+
     fun observeRates(target: RateTargetType): Flow<List<Rate>> =
         when (target) {
             RateTargetType.ANIME -> dao.observeAnimeRates()
             else -> throw IllegalArgumentException("$target is not supported yet")
         }
+
+    suspend fun createOrUpdate(rate: Rate): Long {
+        return if (rate.shikimoriId == null) dao.insert(rate)
+        else {
+            dao.update(rate)
+            rate.id
+        }
+    }
 
     suspend fun updateRates(rates: List<Rate>) {
         val localRates = dao.queryWithShikimoriIds(rates.mapNotNull { it.shikimoriId })
@@ -42,5 +52,4 @@ class RateStore @Inject constructor(
     suspend fun syncAll(data: List<Rate>) = runner {
         syncer.sync(dao.queryAll(), data)
     }
-
 }

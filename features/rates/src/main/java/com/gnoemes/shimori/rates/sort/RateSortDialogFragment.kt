@@ -3,7 +3,6 @@ package com.gnoemes.shimori.rates.sort
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import com.airbnb.mvrx.fragmentViewModel
@@ -16,7 +15,6 @@ import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.R
-import com.gnoemes.shimori.rates.RateSortTextCreator
 import javax.inject.Inject
 
 
@@ -24,7 +22,7 @@ class RateSortDialogFragment : BaseBottomSheetDialog<DialogMenuBinding>(LayoutMo
     private val viewModel: RateSortViewModel by fragmentViewModel()
 
     @Inject
-    lateinit var textCreator: RateSortTextCreator
+    internal lateinit var textCreator: RateSortTextCreator
 
     @Inject
     internal lateinit var viewModelFactory: RateSortViewModel.Factory

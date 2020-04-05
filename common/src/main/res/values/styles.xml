@@ -7,6 +7,7 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
@@ -83,6 +84,10 @@
 
     <style name="Widget.Shimori.Button.Circle.Gray.Transparent" parent="Widget.Shimori.Button.Circle">
         <item name="android:shadowColor">?attr/colorSecondaryTransparent</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="backgroundTint">@color/selector_circle_gray_bg_color</item>
+        <item name="iconTint">@color/selector_default_text_color</item>
+        <item name="rippleColor">@color/selector_default_ripple_color</item>
     </style>
 
     <style name="Widget.Shimori.Button.Circle.Secondary.Transparent" parent="Widget.Shimori.Button.Circle">

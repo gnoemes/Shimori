@@ -122,7 +122,6 @@ internal class RateViewModel @AssistedInject constructor(
                 is RateAction.ChangeOrder -> onChangeOrder()
                 is RateAction.Auth -> onAuth(action)
             }
-
         }
 
         withState {

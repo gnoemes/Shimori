@@ -237,7 +237,7 @@ class ShimoriBottomSheetDialog(
 
     override fun dismiss() {
         if (onDismiss()) return
-        super.dismiss()
+        if (isShowing) super.dismiss()
     }
 
     override fun setCanceledOnTouchOutside(cancel: Boolean) {

@@ -1,9 +1,11 @@
 package com.gnoemes.shikimori.repositories
 
+import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.mappers.rate.RateMapper
 import com.gnoemes.shikimori.services.RateService
 import com.gnoemes.shimori.base.entities.Result
 import com.gnoemes.shimori.base.extensions.toResult
+import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.model.rate.Rate
@@ -21,12 +23,14 @@ internal class ShikimoriRateDataSource @Inject constructor(
             .toResult(mapper.toListMapper())
     }
 
-    override suspend fun createRate(rate: Rate) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun createRate(rate: Rate): Result<Rate> {
+        return service.createRate(UserRateCreateOrUpdateRequest(mapper.mapInverse(rate)))
+            .toResult(mapper.toLambda())
     }
 
-    override suspend fun updateRate(rate: Rate) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun updateRate(rate: Rate): Result<Rate> {
+        return service.updateRate(rate.shikimoriId!!, UserRateCreateOrUpdateRequest(mapper.mapInverse(rate)))
+            .toResult(mapper.toLambda())
     }
 
     override suspend fun deleteRate(id: Long) {
