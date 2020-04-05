@@ -17,7 +17,7 @@ class ShikimoriAuthenticator @Inject constructor(
     }
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (Shikimori.BASE_URL != response.request.url.host) {
+        if (Shikimori.BASE_HOST != response.request.url.host) {
             return null
         }
 
