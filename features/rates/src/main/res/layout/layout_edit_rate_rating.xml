@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.gnoemes.common.utils.RatingUtils" />
+
+        <variable
+            name="rating"
+            type="Integer" />
+
+    </data>
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/spacing_big">
+
+        <com.willy.ratingbar.ScaleRatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/rate_edit_rate_horizontal_padding"
+            android:layout_marginLeft="@dimen/rate_edit_rate_horizontal_padding"
+            app:emptyDrawable="@{ @drawable/ic_big_star_empty }"
+            app:filledDrawable="@{ @drawable/ic_big_star_filled }"
+            app:rating="@{rating}"
+            app:srb_numStars="5"
+            app:srb_starPadding="2dp"
+            app:srb_stepSize="0.5" />
+
+        <LinearLayout
+            android:id="@+id/ratingGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_big"
+            android:orientation="vertical"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingEnd="@dimen/spacing_xsmall"
+            android:paddingRight="@dimen/spacing_xsmall">
+
+            <TextView
+                android:id="@+id/ratingValueView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-medium"
+                android:text="@{ String.valueOf(rating) }"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                app:layout_constraintBottom_toTopOf="@+id/ratingDescriptionView"
+                app:layout_constraintEnd_toEndOf="@+id/ratingDescriptionView"
+                app:layout_constraintStart_toStartOf="@+id/ratingDescriptionView"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/ratingDescriptionView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@{RatingUtils.INSTANCE.getDescription(rating)}"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimarySecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/ratingBar"
+                tools:text="Более-менее" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

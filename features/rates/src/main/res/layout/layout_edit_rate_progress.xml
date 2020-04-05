@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.gnoemes.common.utils.RateUtils" />
+
+        <import type="com.gnoemes.shimori.model.rate.RateStatus" />
+
+        <variable
+            name="type"
+            type="com.gnoemes.shimori.model.rate.RateTargetType" />
+
+        <variable
+            name="progress"
+            type="Integer" />
+
+        <variable
+            name="rewatches"
+            type="Integer" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:focusableInTouchMode="true"
+            android:paddingVertical="@dimen/spacing_big">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/progressView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xbig"
+                android:layout_marginLeft="@dimen/spacing_xbig"
+                android:background="@null"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:inputType="number"
+                android:maxLength="4"
+                android:minWidth="48dp"
+                android:nextFocusRight="@id/rewatchesView"
+                android:text="@{String.valueOf(progress)}"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintBottom_toTopOf="@+id/progressLabelView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="32621" />
+
+            <TextView
+                android:id="@+id/progressLabelView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xbig"
+                android:layout_marginLeft="@dimen/spacing_xbig"
+                android:text="@{RateUtils.INSTANCE.getName(type, RateStatus.COMPLETED, false)}"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimarySecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Просмотрено" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/progressDecrementView"
+                style="@style/Widget.Shimori.Button.Circle.Gray.Transparent"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_marginEnd="@dimen/spacing_big"
+                android:layout_marginRight="@dimen/spacing_big"
+                app:icon="@drawable/ic_minus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/progressIncrementView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/progressIncrementView"
+                style="@style/Widget.Shimori.Button.Circle.Gray.Transparent"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_marginEnd="@dimen/spacing_big"
+                android:layout_marginRight="@dimen/spacing_big"
+                app:icon="@drawable/ic_plus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorDivider" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginLeft="@dimen/spacing_big"
+            android:layout_weight="1.5"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/rewatchesView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:fontFamily="sans-serif-medium"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="48dp"
+                android:nextFocusDown="@id/commentView"
+                android:text="@{String.valueOf(rewatches)}"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="88" />
+
+            <TextView
+                android:id="@+id/rewatchesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{RateUtils.INSTANCE.getName(type, RateStatus.REWATCHING, true)}"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimarySecondary"
+                tools:text="Пересмотр" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

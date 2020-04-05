@@ -8,6 +8,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
 import androidx.annotation.DrawableRes
+import androidx.core.graphics.drawable.DrawableCompat
 
 fun Resources.Theme.attr(@AttrRes attribute: Int): TypedValue {
     val typedValue = TypedValue()
@@ -39,6 +40,17 @@ fun Context.colorAttr(@AttrRes attribute: Int): Int = theme.color(attribute)
 fun Context.drawableAttr(@AttrRes attribute: Int): Drawable? = drawable(theme.drawable(attribute))
 
 fun Context.attr(@AttrRes attribute: Int): TypedValue = theme.attr(attribute)
+
+fun Drawable.tint(@ColorInt color: Int) {
+    DrawableCompat.setTint(this, color)
+    mutate()
+}
+
+fun Drawable.tint(context: Context, @AttrRes attr: Int) {
+    val color = context.colorAttr(attr)
+    DrawableCompat.setTint(this, color)
+    mutate()
+}
 
 @Dimension(unit = Dimension.PX)
 fun Context.dimenAttr(@AttrRes attribute: Int): Int =

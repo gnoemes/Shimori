@@ -9,10 +9,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class RateDao : EntityDao<Rate> {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // SINGLE RATE
-    ///////////////////////////////////////////////////////////////////////////
-
     @Transaction
     @Query("SELECT * FROM rates")
     abstract suspend fun queryAll(): List<Rate>
@@ -44,6 +40,10 @@ abstract class RateDao : EntityDao<Rate> {
     @Transaction
     @Query(QUERY_ANIME_RATES)
     abstract fun observeAnimeRates(): Flow<List<Rate>>
+
+    @Transaction
+    @Query("SELECT * from rates WHERE shikimori_id = :shikimoriId")
+    abstract fun observeRate(shikimoriId: Long): Flow<Rate?>
 
     companion object {
         private const val QUERY_BY_ANIME_TARGET = """

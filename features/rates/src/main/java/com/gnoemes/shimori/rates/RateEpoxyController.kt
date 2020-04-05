@@ -12,6 +12,7 @@ import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.common.ContentType
+import com.gnoemes.shimori.rates.sort.RateSortTextCreator
 import javax.inject.Inject
 
 internal class RateEpoxyController @Inject constructor(
@@ -27,6 +28,8 @@ internal class RateEpoxyController @Inject constructor(
         fun onSortClicked()
 
         fun onOrderChangeClicked()
+
+        fun onEditRate(id: Long, name: String, entity: ShimoriEntity)
     }
 
     override fun buildModels(state: RateViewState) {
@@ -65,7 +68,7 @@ internal class RateEpoxyController @Inject constructor(
                 rate(rate)
                 entity(entity)
                 textCreator(compoundTextCreator)
-                //TODO
+                callbacks(callbacks)
                 if (entity is ShikimoriContentEntity) {
                     image(entity.image)
                     clickListener { _ -> callbacks?.onItemClicked(entity.shikimoriId!!, entity.contentType!!) }

@@ -7,6 +7,7 @@ import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime
@@ -22,10 +23,29 @@ class RateRepository @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
+    fun observeRate(shikimoriId: Long) = rateStore.observeRate(shikimoriId)
+
     fun observeRates(type: RateTargetType) = rateStore.observeRates(type)
 
     fun observeRateSort(type: RateTargetType, status: RateStatus) =
         rateSortStore.observeSort(type, status)
+
+    suspend fun createOrUpdate(rate: Rate) {
+        asyncOrAwait("crate_or_update_rate") {
+            val id = rateStore.createOrUpdate(rate)
+            //TODO plan to upload
+            val localRate = rateStore.dao.queryWithId(id)
+            if (localRate != null) {
+                val result =
+                    if (localRate.shikimoriId == null) rateSource.createRate(localRate)
+                    else rateSource.updateRate(localRate)
+
+                if (result is Success) {
+                    rateStore.createOrUpdate(result.data)
+                }
+            }
+        }
+    }
 
     suspend fun getRates(userId: Long) {
         asyncOrAwait("get_rates") {
@@ -47,7 +67,7 @@ class RateRepository @Inject constructor(
         }
     }
 
-    suspend fun updateRateSort(sort : RateSort)  = rateSortStore.updateSort(sort)
+    suspend fun updateRateSort(sort: RateSort) = rateSortStore.updateSort(sort)
 
     //TODO
     suspend fun needSyncRates(expiry: DateTime): Boolean {

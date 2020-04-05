@@ -33,6 +33,7 @@ class ShikimoriAuthenticator @Inject constructor(
         val refreshResponse = shikimori.refreshToken(rfToken)
         val token = refreshResponse.body()
         if (!refreshResponse.isSuccessful || token == null) {
+            //TODO notify app
             return null
         }
 

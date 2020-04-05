@@ -3,6 +3,7 @@ package com.gnoemes.common.extensions
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
@@ -33,3 +34,5 @@ fun Context.navigationBarSize() : Int {
 
     return 0
 }
+
+fun View.drawable(@DrawableRes drawableResId: Int) : Drawable? = context.drawable(drawableResId)

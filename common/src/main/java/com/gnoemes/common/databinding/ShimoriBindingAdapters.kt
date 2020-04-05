@@ -12,6 +12,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.gnoemes.common.extensions.colorStateList
 import com.gnoemes.common.ui.widgets.MaxLinesToggleClickListener
 import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.model.common.ShimoriImage
@@ -40,6 +41,11 @@ fun textOrGoneIfEmpty(view: TextView, s: CharSequence?) {
 fun textOrGoneIfNullOrZero(view: TextView, s: Int?) {
     view.text = "$s"
     view.isGone = s == null || s == 0
+}
+
+@BindingAdapter("selected")
+fun selected(view: View, value: Boolean) {
+    view.isSelected = value
 }
 
 @BindingAdapter("textOrDashIfNullOrZero")
@@ -108,6 +114,21 @@ fun rateIcon(button: MaterialButton, status: RateStatus?) {
     if (status == null) return
 
     button.setIconResource(RateUtils.getIcon(status))
+}
+
+@BindingAdapter("backgroundTintBinding")
+fun backgroundTintBinding(button: MaterialButton, res: Int) {
+    button.backgroundTintList = button.context.colorStateList(res)
+}
+
+@BindingAdapter("iconTintBinding")
+fun iconTintBinding(button: MaterialButton, res: Int) {
+    button.iconTint = button.context.colorStateList(res)
+}
+
+@BindingAdapter("rippleTintBinding")
+fun rippleTintBinding(button: MaterialButton, res: Int) {
+    button.rippleColor = button.context.colorStateList(res)
 }
 
 @BindingAdapter("query")

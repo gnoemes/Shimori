@@ -54,4 +54,16 @@
     <string name="auth_sign_up">Создать аккаунт</string>
     <string name="auth_sign_in">Войти</string>
 
+    <string name="rating_empty">Нет оценки</string>
+    <string name="rating_bad_ass">Хуже некуда</string>
+    <string name="rating_awful">Ужасно</string>
+    <string name="rating_very_bad">Очень плохо</string>
+    <string name="rating_bad">Плохо</string>
+    <string name="rating_not_bad">Не плохо</string>
+    <string name="rating_normal">Нормально</string>
+    <string name="rating_good">Хорошо</string>
+    <string name="rating_fine">Отлично</string>
+    <string name="rating_nuts">Великолепно</string>
+    <string name="rating_perfect">Шедевр!</string>
+
 </resources>

@@ -21,4 +21,6 @@
     <string name="rate_search_empty_title">В этом списке ничего не найдено</string>
     <string name="rate_search_empty_message">Измените запрос или воспользуйтесь разделом поиска.</string>
 
+    <string name="rate_edit_comment_hint">Добавить комментарий к списку</string>
+
 </resources>

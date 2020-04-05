@@ -10,16 +10,20 @@
             type="com.gnoemes.shimori.model.rate.Rate" />
 
         <variable
-            name="image"
-            type="com.gnoemes.shimori.model.common.ShimoriImage" />
-
-        <variable
             name="textCreator"
             type="com.gnoemes.common.textcreators.CompoundTextCreator" />
 
         <variable
             name="entity"
             type="com.gnoemes.shimori.model.ShimoriEntity" />
+
+        <variable
+            name="callbacks"
+            type="com.gnoemes.shimori.rates.RateEpoxyController.Callbacks" />
+
+        <variable
+            name="image"
+            type="com.gnoemes.shimori.model.common.ShimoriImage" />
 
         <variable
             name="clickListener"
@@ -121,6 +125,7 @@
                 android:layout_marginEnd="@dimen/spacing_normal"
                 android:layout_marginRight="@dimen/spacing_normal"
                 android:layout_marginBottom="@dimen/spacing_xsmall"
+                android:onClick="@{() -> callbacks.onEditRate(rate.shikimoriId, textCreator.title(entity), entity)}"
                 app:icon="@drawable/ic_edit_small"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/playBtn"

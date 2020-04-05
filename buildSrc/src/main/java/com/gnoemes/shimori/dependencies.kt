@@ -37,7 +37,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta02"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta03"
     const val advancedVersioning = "org.moallemi.gradle.advanced-build-version:gradle-plugin:1.6.0"
     const val mvRx = "com.airbnb.android:mvrx:1.3.0"
 
@@ -52,6 +52,7 @@ object Libs {
     const val appauth = "net.openid:appauth:0.7.1"
 
     const val advancedDrawer = "com.infideap.drawerbehavior:drawer-behavior:0.2.2"
+    const val ratingBar = "com.github.ome450901:SimpleRatingBar:1.4.2"
 
     object Google {
         const val material = "com.google.android.material:material:${Versions.material}"

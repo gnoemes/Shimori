@@ -1,7 +1,8 @@
 package com.gnoemes.shikimori.mappers.rate
 
+import com.gnoemes.shikimori.entities.common.ShikimoriContentType
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.data_base.mappers.Mapper
+import com.gnoemes.shimori.data_base.mappers.TwoWayMapper
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateTargetType
 import javax.inject.Inject
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 internal class RateMapper @Inject constructor(
     private val typeMapper: RateTargetTypeMapper,
     private val statusMapper: RateStatusMapper
-) : Mapper<UserRateResponse, Rate> {
+) : TwoWayMapper<UserRateResponse, Rate> {
 
     override suspend fun map(from: UserRateResponse): Rate {
         val targetType = typeMapper.map(from.targetType)
@@ -35,6 +36,32 @@ internal class RateMapper @Inject constructor(
                 volumes = from.volumes,
                 reCounter = from.rewatches,
                 comment = from.text
+        )
+    }
+
+    override suspend fun mapInverse(from: Rate): UserRateResponse {
+        val targetType = typeMapper.mapInverse(from.targetType)
+
+        val targetId = when (targetType) {
+            ShikimoriContentType.ANIME -> from.animeId
+            ShikimoriContentType.MANGA -> from.mangaId
+            ShikimoriContentType.RANOBE -> from.ranobeId
+            else -> null
+        }
+
+        return UserRateResponse(
+                id = from.shikimoriId,
+                targetId = targetId,
+                targetType = targetType,
+                score = from.score?.toDouble(),
+                status = statusMapper.mapInverse(from.status),
+                dateCreated = from.dateCreated,
+                dateUpdated = from.dateUpdated,
+                episodes = from.episodes,
+                chapters = from.chapters,
+                volumes = from.volumes,
+                rewatches = from.reCounter,
+                text = from.comment
         )
     }
 }
