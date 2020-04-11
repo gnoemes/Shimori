@@ -31,9 +31,9 @@ class RateRepository @Inject constructor(
         rateSortStore.observeSort(type, status)
 
     suspend fun createOrUpdate(rate: Rate) {
-        asyncOrAwait("crate_or_update_rate") {
+        asyncOrAwait("create_or_update_rate") {
             val id = rateStore.createOrUpdate(rate)
-            //TODO plan to upload
+            //TODO plan to upload?
             val localRate = rateStore.dao.queryWithId(id)
             if (localRate != null) {
                 val result =
@@ -42,6 +42,20 @@ class RateRepository @Inject constructor(
 
                 if (result is Success) {
                     rateStore.createOrUpdate(result.data)
+                }
+            }
+        }
+    }
+
+    suspend fun deleteRate(rate: Rate) {
+        asyncOrAwait("delete_rate") {
+            val localRate = rateStore.dao.queryWithId(rate.id)
+            //TODO plan to delete?
+            localRate?.shikimoriId?.let {
+                val result = rateSource.deleteRate(it)
+
+                if (result is Success) {
+                    rateStore.dao.deleteWithId(localRate.id)
                 }
             }
         }

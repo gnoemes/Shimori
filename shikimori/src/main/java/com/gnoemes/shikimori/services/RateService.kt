@@ -3,8 +3,8 @@ package com.gnoemes.shikimori.services
 import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import retrofit2.http.*
 import retrofit2.Response
+import retrofit2.http.*
 
 internal interface RateService {
 
@@ -33,7 +33,7 @@ internal interface RateService {
     suspend fun getRate(@Path("id") id: Long): Response<UserRateResponse>
 
     @DELETE("/api/v2/user_rates/{id}")
-    suspend fun deleteRate(@Path("id") id: Long)
+    suspend fun deleteRate(@Path("id") id: Long): Response<Unit>
 
     @POST("/api/v2/user_rates")
     suspend fun createRate(@Body request: UserRateCreateOrUpdateRequest): Response<UserRateResponse>

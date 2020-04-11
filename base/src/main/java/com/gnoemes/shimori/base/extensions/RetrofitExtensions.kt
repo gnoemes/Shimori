@@ -6,6 +6,9 @@ import com.gnoemes.shimori.base.entities.Success
 import retrofit2.HttpException
 import retrofit2.Response
 
+
+suspend fun <T> Response<T>.toResultUnit(): Result<Unit> = toResult { Unit }
+
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend fun <T> Response<T>.toResult(): Result<T> = toResult { it }
 
@@ -30,4 +33,16 @@ fun <T> Response<T>.bodyOrThrow(): T {
 
 fun <T> Response<T>.isFromNetwork(): Boolean {
     return raw().cacheResponse == null
+}
+
+suspend fun Response<Unit>.unitResult(): Result<Unit> {
+    return try {
+        if (isSuccessful) {
+            Success(data = Unit, responseModified = isFromNetwork())
+        } else {
+            ErrorResult(toException())
+        }
+    } catch (e: Exception) {
+        ErrorResult(e)
+    }
 }

@@ -48,7 +48,7 @@ class RateEditDialogFragment : BaseBottomSheetDialog<DialogFragmentEditRateBindi
             }
 
             acceptBtn.setOnClickListener { viewModel.submitAction(RateEditAction.Done); dismiss() }
-            deleteBtn.setOnClickListener { viewModel.submitAction(RateEditAction.Delete) }
+            deleteBtn.setOnClickListener { viewModel.submitAction(RateEditAction.Delete); dismiss() }
 
             with(rateRating) {
                 ratingBar.setOnRatingChangeListener { _, rating ->
