@@ -17,7 +17,7 @@ import com.gnoemes.shimori.rates.databinding.DialogFragmentEditRateBinding
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class RateEditDialogFragment : BaseBottomSheetDialog<DialogFragmentEditRateBinding>(LayoutMode.WRAP_CONTENT) {
+class RateEditDialogFragment : BaseBottomSheetDialog<DialogFragmentEditRateBinding>(LayoutMode.MATCH_PARENT) {
     private val viewModel: RateEditViewModel by fragmentViewModel()
 
     @Inject
@@ -68,14 +68,22 @@ class RateEditDialogFragment : BaseBottomSheetDialog<DialogFragmentEditRateBindi
 
             with(rateProgress) {
                 progressView.doOnTextChanged { text, _, _, _ ->
-                    val newProgress = text?.toString()?.toIntOrNull()
+                    val newText = if (text.isNullOrEmpty()) {
+                        progressView.setText("0")
+                        "0"
+                    } else text
+                    val newProgress = newText.toString().toIntOrNull()
                     if (newProgress != null) {
                         viewModel.submitAction(RateEditAction.ProgressChanged(newProgress))
                     }
                 }
 
                 rewatchesView.doOnTextChanged { text, _, _, _ ->
-                    val newRewatches = text?.toString()?.toIntOrNull()
+                    val newText = if (text.isNullOrEmpty()) {
+                        progressView.setText("0")
+                        "0"
+                    } else text
+                    val newRewatches = newText?.toString()?.toIntOrNull()
                     if (newRewatches != null) {
                         viewModel.submitAction(RateEditAction.ReWatchesChanged(newRewatches))
                     }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/appBarLayout">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -17,6 +16,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -84,52 +84,57 @@
             android:layout_marginTop="@dimen/spacing_micro"
             app:srcCompat="@drawable/ic_knob" />
 
-        <LinearLayout
-            android:id="@+id/editContainer"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/shape_divider"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/spacing_big"
-            android:showDividers="middle"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
-                android:id="@+id/statusRecyclerView"
+            <LinearLayout
+                android:id="@+id/editContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/rate_edit_status_horizontal_padding"
-                android:paddingVertical="@dimen/rate_edit_status_vertical_padding" />
+                android:divider="@drawable/shape_divider"
+                android:orientation="vertical"
+                android:showDividers="middle">
 
-            <include
-                android:id="@+id/rateRating"
-                layout="@layout/layout_edit_rate_rating"
-                app:rating="@{state.rate.score ?? 0}" />
+                <com.airbnb.epoxy.EpoxyRecyclerView
+                    android:id="@+id/statusRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/rate_edit_status_horizontal_padding"
+                    android:paddingVertical="@dimen/rate_edit_status_vertical_padding" />
 
-            <include
-                android:id="@+id/rateProgress"
-                layout="@layout/layout_edit_rate_progress"
-                app:progress="@{state.rate.progress ?? 0}"
-                app:rewatches="@{state.rate.reCounter ?? 0}"
-                app:type="@{state.type}" />
+                <include
+                    android:id="@+id/rateRating"
+                    layout="@layout/layout_edit_rate_rating"
+                    app:rating="@{state.rate.score ?? 0}" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/commentView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_big"
-                android:background="@android:color/transparent"
-                android:gravity="start"
-                android:hint="@string/rate_edit_comment_hint"
-                android:inputType="textNoSuggestions|textVisiblePassword|textMultiLine"
-                android:minHeight="96dp"
-                android:text="@{state.rate.comment}"
-                android:textAppearance="?textAppearanceBody2"
-                android:textColor="?attr/colorOnSurface"
-                android:textColorHint="?attr/colorOnPrimarySecondary" />
+                <include
+                    android:id="@+id/rateProgress"
+                    layout="@layout/layout_edit_rate_progress"
+                    app:progress="@{state.rate.progress ?? 0}"
+                    app:rewatches="@{state.rate.reCounter ?? 0}"
+                    app:type="@{state.type}" />
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/commentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/spacing_big"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"
+                    android:hint="@string/rate_edit_comment_hint"
+                    android:inputType="textNoSuggestions|textVisiblePassword|textMultiLine"
+                    android:minHeight="48dp"
+                    android:text="@{state.rate.comment}"
+                    android:textAppearance="?textAppearanceBody2"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnPrimarySecondary" />
 
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
