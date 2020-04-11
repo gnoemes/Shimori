@@ -8,6 +8,7 @@ import androidx.annotation.Dimension
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import com.gnoemes.common.ui.widgets.OffsetEpoxyRecyclerView
+import java.lang.ref.WeakReference
 import kotlin.math.max
 import kotlin.math.min
 
@@ -25,7 +26,7 @@ class HideTopViewOnScrollBehavior<V : View> @JvmOverloads constructor(
     private var currentState = STATE_SCROLLED_DOWN
     private var additionalHiddenOffsetY = 0
 
-    private var recycler: OffsetEpoxyRecyclerView? = null
+    private var recycler: WeakReference<OffsetEpoxyRecyclerView>? = null
 
     override fun onLayoutChild(parent: CoordinatorLayout,
                                child: V,
@@ -52,13 +53,13 @@ class HideTopViewOnScrollBehavior<V : View> @JvmOverloads constructor(
         type: Int
     ): Boolean {
         if (target is OffsetEpoxyRecyclerView) {
-            recycler = target
+            recycler = WeakReference(target)
         } else if (target is ViewGroup) {
-            recycler = target.findViewWithTag(OffsetEpoxyRecyclerView.TAG)
+            recycler = WeakReference(target.findViewWithTag(OffsetEpoxyRecyclerView.TAG))
         }
 
         recycler?.run {
-            offsetLimitY = this@HideTopViewOnScrollBehavior.height + additionalHiddenOffsetY
+            get()?.offsetLimitY = this@HideTopViewOnScrollBehavior.height + additionalHiddenOffsetY
         }
 
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
@@ -76,9 +77,9 @@ class HideTopViewOnScrollBehavior<V : View> @JvmOverloads constructor(
         consumed: IntArray
     ) {
         val offset = if (currentState == STATE_SCROLLED_UP) {
-            min(recycler!!.offsetY, height + additionalHiddenOffsetY)
+            min(offsetY, height + additionalHiddenOffsetY)
         } else {
-            max(0, recycler!!.offsetY)
+            max(0, offsetY)
         }
 
         if (dyConsumed < 0) {
@@ -98,4 +99,7 @@ class HideTopViewOnScrollBehavior<V : View> @JvmOverloads constructor(
         super.onDetachedFromLayoutParams()
         recycler = null
     }
+
+    private val offsetY: Int
+        get() = recycler?.get()?.offsetY ?: 0
 }
