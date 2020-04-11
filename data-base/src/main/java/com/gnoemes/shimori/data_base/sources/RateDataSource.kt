@@ -11,5 +11,5 @@ interface RateDataSource {
 
     suspend fun updateRate(rate: Rate): Result<Rate>
 
-    suspend fun deleteRate(id: Long)
+    suspend fun deleteRate(id: Long) : Result<Unit>
 }

@@ -161,7 +161,7 @@ object Libs {
     }
 
     object Retrofit {
-        private const val version = "2.6.2"
+        private const val version = "2.8.1"
         const val retrofit = "com.squareup.retrofit2:retrofit:$version"
         const val retrofit_rxjava_adapter = "com.squareup.retrofit2:adapter-rxjava2:$version"
         const val gsonConverter = "com.squareup.retrofit2:converter-gson:$version"

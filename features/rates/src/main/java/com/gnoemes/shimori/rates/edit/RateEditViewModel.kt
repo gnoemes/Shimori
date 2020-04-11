@@ -7,6 +7,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
+import com.gnoemes.shimori.domain.interactors.DeleteRate
 import com.gnoemes.shimori.domain.launchObserve
 import com.gnoemes.shimori.domain.observers.ObserveRate
 import com.gnoemes.shimori.model.rate.Rate
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 internal class RateEditViewModel @AssistedInject constructor(
     @Assisted initialState: RateEditViewState,
     private val observeRate: ObserveRate,
-    private val createOrUpdateRate: CreateOrUpdateRate
+    private val createOrUpdateRate: CreateOrUpdateRate,
+    private val deleteRate: DeleteRate
 ) : BaseViewModel<RateEditViewState>(initialState) {
 
     private val pendingActions = Channel<RateEditAction>(Channel.BUFFERED)
@@ -53,6 +55,10 @@ internal class RateEditViewModel @AssistedInject constructor(
         }
     }
 
+    fun submitAction(action: RateEditAction) {
+        viewModelScope.launch { pendingActions.send(action) }
+    }
+
     private fun onCreateOrUpdate() {
         withState { state ->
             var rate = state.rate
@@ -68,11 +74,10 @@ internal class RateEditViewModel @AssistedInject constructor(
     }
 
     private fun onDelete() {
-        //TODO delete rate
-    }
-
-    fun submitAction(action: RateEditAction) {
-        viewModelScope.launch { pendingActions.send(action) }
+        withState { state ->
+            val rate = state.rate
+            rate?.let { deleteRate(DeleteRate.Params(it)) }
+        }
     }
 
     private fun onCommentChanged(action: RateEditAction.CommentChanged) {

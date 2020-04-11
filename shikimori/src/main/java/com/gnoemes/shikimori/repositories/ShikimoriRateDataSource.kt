@@ -5,6 +5,7 @@ import com.gnoemes.shikimori.mappers.rate.RateMapper
 import com.gnoemes.shikimori.services.RateService
 import com.gnoemes.shimori.base.entities.Result
 import com.gnoemes.shimori.base.extensions.toResult
+import com.gnoemes.shimori.base.extensions.unitResult
 import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.RateDataSource
@@ -33,7 +34,8 @@ internal class ShikimoriRateDataSource @Inject constructor(
             .toResult(mapper.toLambda())
     }
 
-    override suspend fun deleteRate(id: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun deleteRate(id: Long) : Result<Unit> {
+        return service.deleteRate(id)
+            .unitResult()
     }
 }
