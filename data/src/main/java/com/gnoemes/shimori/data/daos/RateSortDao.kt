@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.daos
 
 import androidx.room.*
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.Flow

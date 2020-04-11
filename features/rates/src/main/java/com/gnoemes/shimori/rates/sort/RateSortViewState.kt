@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.rates.sort
 
 import com.airbnb.mvrx.MvRxState
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
 

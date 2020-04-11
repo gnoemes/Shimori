@@ -14,7 +14,7 @@
 
         <variable
             name="sort"
-            type="com.gnoemes.shimori.model.app.RateSort" />
+            type="com.gnoemes.shimori.model.rate.RateSort" />
 
         <variable
             name="rateName"

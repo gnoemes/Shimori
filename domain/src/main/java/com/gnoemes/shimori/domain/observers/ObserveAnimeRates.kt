@@ -4,7 +4,7 @@ import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.domain.SubjectInteractor
 import com.gnoemes.shimori.model.anime.AnimeWithRate
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

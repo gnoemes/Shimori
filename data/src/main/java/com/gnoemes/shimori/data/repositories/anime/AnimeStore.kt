@@ -7,7 +7,7 @@ import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeWithRate
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import kotlinx.coroutines.flow.Flow

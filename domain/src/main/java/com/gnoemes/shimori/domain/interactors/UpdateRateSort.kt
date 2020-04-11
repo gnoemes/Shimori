@@ -4,7 +4,7 @@ import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.rates.RateRepository
 import com.gnoemes.shimori.domain.Interactor
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
