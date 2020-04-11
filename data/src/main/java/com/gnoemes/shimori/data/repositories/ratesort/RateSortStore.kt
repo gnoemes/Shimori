@@ -3,7 +3,7 @@ package com.gnoemes.shimori.data.repositories.ratesort
 import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.daos.RateSortDao
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import javax.inject.Inject

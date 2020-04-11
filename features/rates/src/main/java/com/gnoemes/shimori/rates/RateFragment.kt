@@ -22,8 +22,8 @@ import com.gnoemes.common.ui.recyclerview.HideImeOnScrollListener
 import com.gnoemes.common.utils.RateUtils
 import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
-import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.common.ContentType
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.databinding.FragmentRateBinding
 import com.gnoemes.shimori.rates.edit.RateEditDialogFragmentDirections

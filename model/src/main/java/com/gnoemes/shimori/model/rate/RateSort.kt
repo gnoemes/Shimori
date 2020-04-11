@@ -1,12 +1,9 @@
-package com.gnoemes.shimori.model.app
+package com.gnoemes.shimori.model.rate
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.gnoemes.shimori.model.ShimoriEntity
-import com.gnoemes.shimori.model.rate.RateSortOption
-import com.gnoemes.shimori.model.rate.RateStatus
-import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

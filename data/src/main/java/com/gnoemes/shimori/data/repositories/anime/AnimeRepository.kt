@@ -5,7 +5,7 @@ import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import javax.inject.Inject
 import javax.inject.Singleton

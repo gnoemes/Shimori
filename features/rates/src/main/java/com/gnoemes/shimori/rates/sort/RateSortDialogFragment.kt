@@ -11,7 +11,7 @@ import com.gnoemes.common.BaseBottomSheetDialog
 import com.gnoemes.common.databinding.DialogMenuBinding
 import com.gnoemes.common.extensions.navigationBarSize
 import com.gnoemes.common.ui.widgets.dialog.LayoutMode
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.rates.R

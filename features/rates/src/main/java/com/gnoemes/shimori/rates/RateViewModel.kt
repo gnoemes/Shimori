@@ -20,7 +20,7 @@ import com.gnoemes.shimori.domain.observers.ObserveAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRates
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.user.exists
 import com.squareup.inject.assisted.Assisted

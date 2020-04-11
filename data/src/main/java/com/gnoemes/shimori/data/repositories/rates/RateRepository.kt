@@ -6,8 +6,8 @@ import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
-import com.gnoemes.shimori.model.app.RateSort
 import com.gnoemes.shimori.model.rate.Rate
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.joda.time.DateTime

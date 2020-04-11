@@ -3,7 +3,7 @@ package com.gnoemes.shimori.domain.observers
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.rates.RateRepository
 import com.gnoemes.shimori.domain.SubjectInteractor
-import com.gnoemes.shimori.model.app.RateSort
+import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.CoroutineDispatcher
