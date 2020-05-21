@@ -50,4 +50,8 @@ class UserRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun deleteMe() {
+        return userStore.deleteMe()
+    }
 }

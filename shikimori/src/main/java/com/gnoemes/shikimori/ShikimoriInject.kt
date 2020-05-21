@@ -9,6 +9,7 @@ import com.gnoemes.shikimori.services.RateService
 import com.gnoemes.shikimori.services.UserService
 import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
+import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
 import com.gnoemes.shimori.data_base.sources.RateDataSource
@@ -19,6 +20,7 @@ import com.google.gson.GsonBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -192,6 +194,6 @@ internal class AuthNetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuth(shikimori: com.gnoemes.shikimori.Shikimori): Authenticator =
-        ShikimoriAuthenticator(shikimori)
+    fun provideAuth(shikimori: com.gnoemes.shikimori.Shikimori, @ProcessLifetime scope: CoroutineScope): Authenticator =
+        ShikimoriAuthenticator(shikimori, scope)
 }

@@ -29,6 +29,8 @@ class UserStore @Inject constructor(
         return dao.observeMe()
     }
 
+    suspend fun deleteMe() = dao.deleteMe()
+
     suspend fun queryMe(): User? = dao.queryMe()
 
     suspend fun queryMyId(): Long? = dao.queryMyId()

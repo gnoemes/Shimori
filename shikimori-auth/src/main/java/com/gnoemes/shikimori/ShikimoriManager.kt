@@ -31,7 +31,7 @@ class ShikimoriManager @Inject constructor(
     private val shikimori: Lazy<Shikimori>
 ) {
 
-    private val authState = ConflatedBroadcastChannel<AuthState>()
+    private val authState = ConflatedBroadcastChannel<AuthState?>()
 
     private val _state = ConflatedBroadcastChannel(ShikimoriAuthState.LOGGED_OUT)
 
@@ -40,12 +40,12 @@ class ShikimoriManager @Inject constructor(
 
     init {
         processScope.launch {
-            authState.asFlow().collect {
-                updateAuthState(it)
+            authState.asFlow().collect {state ->
+                updateAuthState(state)
 
                 shikimori.get().run {
-                    accessToken = it.accessToken
-                    refreshToken = it.refreshToken
+                    accessToken = state?.accessToken
+                    refreshToken = state?.refreshToken
                 }
 
             }
@@ -57,10 +57,18 @@ class ShikimoriManager @Inject constructor(
             }
             authState.send(state)
         }
+
+        processScope.launch {
+            shikimori.get().authErrorState.asFlow().collect { error ->
+                if (error) {
+                    updateAndPersistState(null)
+                }
+            }
+        }
     }
 
-    private suspend fun updateAuthState(authState: AuthState) {
-        if (authState.isAuthorized) {
+    private suspend fun updateAuthState(authState: AuthState?) {
+        if (authState != null && authState.isAuthorized) {
             _state.send(ShikimoriAuthState.LOGGED_IN)
         } else {
             _state.send(ShikimoriAuthState.LOGGED_OUT)
@@ -93,7 +101,10 @@ class ShikimoriManager @Inject constructor(
     private fun onToken(response: TokenResponse?, e: AuthorizationException?) {
         val newState = AuthState().apply { update(response, e) }
         e?.printStackTrace()
+        updateAndPersistState(newState)
+    }
 
+    private fun updateAndPersistState(newState: AuthState?) {
         processScope.launch(dispatchers.main) {
             authState.send(newState)
         }
@@ -111,10 +122,10 @@ class ShikimoriManager @Inject constructor(
         }
     }
 
-    private fun persistAuthState(state: AuthState) {
-        Log.i("AUTH", "persist ${state.jsonSerializeString()}")
+    private fun persistAuthState(state: AuthState?) {
+        Log.i("AUTH", "persist ${state?.jsonSerializeString()}")
         prefs.edit {
-            putString("stateJson", state.jsonSerializeString())
+            putString("stateJson", state?.jsonSerializeString())
         }
     }
 

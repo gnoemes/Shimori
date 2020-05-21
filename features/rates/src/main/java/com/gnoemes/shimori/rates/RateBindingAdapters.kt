@@ -15,14 +15,16 @@ import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.android.material.navigation.NavigationView
 
-@BindingAdapter("categories", "targetType", "selectedCategory", requireAll = true)
+@BindingAdapter("categories", "targetType", "selectedCategory", "authorized", requireAll = true)
 fun setupCategories(view: NavigationView,
                     oldCategories: List<RateCategory>?,
                     oldType: RateTargetType?,
                     oldCategory: RateStatus?,
+                    oldAuthorized: Boolean?,
                     categories: List<RateCategory>,
                     type: RateTargetType,
-                    selectedCategory: RateStatus?
+                    selectedCategory: RateStatus?,
+                    authorized: Boolean?
 ) {
     selectedCategory?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -34,10 +36,10 @@ fun setupCategories(view: NavigationView,
     }
 
     view.menu.run {
-        if (oldCategories != categories || categories.isEmpty()) {
+        if (oldCategories != categories || categories.isEmpty() || oldAuthorized != authorized) {
             clear()
 
-            if (categories.isEmpty()) {
+            if (categories.isEmpty() || (authorized == true).not()) {
                 add(R.string.rate_empty)
                 return
             }
