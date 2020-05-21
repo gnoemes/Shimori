@@ -1,6 +1,9 @@
 package com.gnoemes.shikimori.util
 
 import com.gnoemes.shikimori.Shikimori
+import com.gnoemes.shimori.base.di.ProcessLifetime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -9,7 +12,8 @@ import javax.inject.Inject
 
 
 class ShikimoriAuthenticator @Inject constructor(
-    private val shikimori: Shikimori
+    private val shikimori: Shikimori,
+    @ProcessLifetime private val processScope: CoroutineScope
 ) : Authenticator {
 
     companion object {
@@ -34,6 +38,9 @@ class ShikimoriAuthenticator @Inject constructor(
         val token = refreshResponse.body()
         if (!refreshResponse.isSuccessful || token == null) {
             //TODO notify app
+            processScope.launch {
+                shikimori.onAuthExpired()
+            }
             return null
         }
 

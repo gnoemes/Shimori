@@ -6,6 +6,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.gnoemes.common.BaseViewModel
 import com.gnoemes.shikimori.ShikimoriManager
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
+import com.gnoemes.shimori.domain.interactors.DeleteMyUser
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.launchObserve
@@ -22,6 +23,7 @@ class MainViewModel @AssistedInject constructor(
     @Assisted initialState: MainViewState,
     observeShikimoriAuth: ObserveShikimoriAuth,
     updateUser: UpdateUser,
+    deleteMyUser: DeleteMyUser,
     private val shikimoriManager: ShikimoriManager
 ) : BaseViewModel<MainViewState>(initialState) {
 
@@ -30,6 +32,8 @@ class MainViewModel @AssistedInject constructor(
             flow.distinctUntilChanged().onEach {
                 if (it == ShikimoriAuthState.LOGGED_IN) {
                     updateUser(UpdateUser.Params(null, isMe = true))
+                } else {
+                    deleteMyUser()
                 }
             }.execute { copy() }
         }
