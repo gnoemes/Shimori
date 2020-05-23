@@ -75,6 +75,7 @@ dependencies {
     implementation project(Modules.featureSearch)
     implementation project(Modules.featureCalendar)
     implementation project(Modules.featureRates)
+    implementation project(Modules.featureProfile)
 
     implementation Libs.Dagger.androidSupport
     kapt Libs.Dagger.compiler

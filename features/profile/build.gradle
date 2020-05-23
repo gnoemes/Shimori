@@ -1,0 +1,1 @@
+apply from: '../../android_feature_dependencies.gradle'
