@@ -26,6 +26,7 @@ object Modules {
     const val featureSearch = ":features:search"
     const val featureCalendar = ":features:calendar"
     const val featureRates = ":features:rates"
+    const val featureProfile = ":features:profile"
 }
 
 object Versions {
