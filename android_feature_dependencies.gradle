@@ -1,41 +1,13 @@
-import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
 apply from: '../../android_core_dependencies.gradle'
 apply from: '../../android_commons.gradle'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
     implementation project(Modules.baseAndroid)
     implementation project(Modules.common)
     implementation project(Modules.domain)
     implementation project(Modules.model)
-    implementation project(Modules.navigation)
 
-    implementation Libs.Dagger.androidSupport
-    kapt Libs.Dagger.compiler
-    kapt Libs.Dagger.androidProcessor
-
-    compileOnly Libs.AssistedInject.annotationDagger2
-    kapt Libs.AssistedInject.processorDagger2
-
-    implementation Libs.mvRx
-
-    implementation Libs.Epoxy.epoxy
-    implementation Libs.Epoxy.paging
-    implementation Libs.Epoxy.dataBinding
-    kapt Libs.Epoxy.processor
-
-    implementation Libs.gravitySnapHelper
-    implementation Libs.Glide.glide
-
-    testImplementation Libs.junit
-    testImplementation Libs.mockK
-    testImplementation Libs.robolectric
-    androidTestImplementation Libs.AndroidX.Test.core
-    androidTestImplementation Libs.AndroidX.Test.runner
-    androidTestImplementation Libs.AndroidX.Test.rules
-    androidTestImplementation Libs.AndroidX.Test.espressoCore
-    androidTestImplementation Libs.AndroidX.Test.junit
 }

@@ -1,8 +1,6 @@
-include ':app'
 include ':base'
 include ':base-android'
 include ':common'
-include ':navigation'
 
 include ':data-base'
 include ':data'
@@ -11,5 +9,10 @@ include ':shikimori-auth'
 
 include ':domain'
 include ':model'
+include ':app'
 
 rootProject.name='Shimori'
+
+// Enable Gradle's version catalog support
+// https://docs.gradle.org/current/userguide/platforms.html
+enableFeaturePreview("VERSION_CATALOGS")

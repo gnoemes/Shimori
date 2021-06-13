@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <id name="navigation_rates" />
-    <id name="navigation_calendar" />
-    <id name="navigation_search" />
-    <id name="navigation_news" />
-    <id name="navigation_profile" />
-</resources>
