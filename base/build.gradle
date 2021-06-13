@@ -1,11 +1,9 @@
-import com.gnoemes.shimori.Libs
-
 apply plugin: 'kotlin'
 
 dependencies {
-    implementation Libs.Kotlin.stdlib
-    api Libs.Coroutines.core
-    api Libs.Dagger.dagger
-    api Libs.Retrofit.retrofit
-    api Libs.OkHttp.loggingInterceptor
+    implementation libs.kotlin.stdlib
+    api libs.kotlin.coroutines.core
+    api libs.dagger.dagger
+    api libs.retrofit.retrofit
+    api libs.okhttp.loggingInterceptor
 }

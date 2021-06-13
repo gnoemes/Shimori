@@ -1,11 +1,9 @@
-import com.gnoemes.shimori.Libs
-
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    implementation Libs.Kotlin.stdlib
-    implementation Libs.gson
-    implementation Libs.AndroidX.Room.common
-    api Libs.jodaTime
+    implementation libs.kotlin.stdlib
+    implementation libs.gson
+    implementation libs.androidx.room.common
+    api libs.threeTenAbp
 }

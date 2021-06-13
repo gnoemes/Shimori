@@ -1,25 +1,17 @@
-import com.gnoemes.shimori.Libs
-import com.gnoemes.shimori.Versions
-
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 kapt {
     correctErrorTypes = true
-}
-
-androidExtensions {
-    experimental = true
+    useBuildCache = true
 }
 
 android {
-    compileSdkVersion Versions.compileSdk
+    compileSdkVersion buildConfig.compileSdk
     
     defaultConfig {
-        minSdkVersion Versions.minSdk
-        targetSdkVersion Versions.targetSdk
-        vectorDrawables.useSupportLibrary = true
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
     }
     buildTypes {
         release {
@@ -34,5 +26,5 @@ android {
 }
 
 dependencies {
-    implementation Libs.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
 }

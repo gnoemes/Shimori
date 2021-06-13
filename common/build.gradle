@@ -1,50 +1,38 @@
-import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
 apply from: '../android_commons.gradle'
 
 android {
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 }
 
 dependencies {
     implementation project(Modules.baseAndroid)
-    implementation project(Modules.navigation)
     implementation project(Modules.model)
 
-    implementation Libs.AndroidX.appcompat
-    implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.constraintlayout
-    implementation Libs.AndroidX.Navigation.ui
-    implementation Libs.AndroidX.Navigation.fragment
-    api Libs.AndroidX.swiperefresh
+    implementation libs.androidx.core
 
-    implementation Libs.AndroidX.Lifecycle.extensions
-    implementation Libs.AndroidX.Lifecycle.viewmodel
+    api libs.androidx.lifecycle.runtime
 
-    api Libs.Insetter.dbx
-    api Libs.Insetter.ktx
+    implementation libs.compose.ui.ui
+    implementation libs.compose.foundation.foundation
+    implementation libs.compose.foundation.layout
+    implementation libs.compose.material.material
+    implementation libs.compose.animation.animation
+    implementation libs.compose.ui.tooling
 
-    implementation Libs.Google.material
+    implementation libs.androidx.paging.compose
 
-    implementation Libs.Dagger.androidSupport
-    kapt Libs.Dagger.compiler
-    kapt Libs.Dagger.androidProcessor
+    implementation libs.kotlin.stdlib
 
-    implementation Libs.mvRx
-
-    implementation Libs.Epoxy.epoxy
-    implementation Libs.Epoxy.dataBinding
-    implementation Libs.Epoxy.paging
-    kapt Libs.Epoxy.processor
-
-    implementation Libs.Glide.glide
-    kapt Libs.Glide.compiler
-
-    implementation Libs.gravitySnapHelper
-
-    implementation Libs.advancedDrawer
+    implementation libs.accompanist.coil
+    implementation libs.accompanist.insets
+    implementation libs.accompanist.swiperefresh
 }

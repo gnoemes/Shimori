@@ -1,42 +1,76 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-import com.gnoemes.shimori.Libs
-
 buildscript {
-    ext {
-        kotlin_version = '1.3.72'
-    }
+    ext.buildConfig = [
+            'compileSdk': 30,
+            'minSdk'    : 21,
+            'targetSdk' : 30,
+    ]
+
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
+        // Used for Accompanist snapshots
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
+
     dependencies {
-        classpath Libs.androidGradlePlugin
+        classpath libs.android.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
 
-        classpath Libs.Kotlin.gradlePlugin
-        classpath Libs.Kotlin.extensions
+        classpath libs.kotlin.extensions
 
-        classpath Libs.AndroidX.Navigation.safeArgs
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath libs.google.gmsGoogleServices
+        classpath libs.google.crashlyticsGradle
+
+        classpath libs.hilt.gradlePlugin
     }
 }
 
 plugins {
-    id 'com.github.ben-manes.versions' version "0.25.0"
+    id 'com.github.ben-manes.versions' version "0.39.0"
 }
+
+
 
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
+
+        // Jetpack Compose SNAPSHOTs
+        def composeSnapshot = libs.versions.composesnapshot.get()
+        if (composeSnapshot.length() > 1) {
+            maven { url "https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/" }
+        }
+
+        // Used for Accompanist snapshots
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }
 
 subprojects {
+    configurations.configureEach {
+        // We forcefully exclude AppCompat + MDC from any transitive dependencies.
+        // This is a Compose app, so there's no need for these.
+        exclude group: 'androidx.appcompat'
+        exclude group: 'com.google.android.material', module: 'material'
+
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlinx'
+                    && details.requested.module.name == 'kotlinx-collections-immutable-jvm') {
+                // kotlinx-collections-immutable-jvm 0.3.4+ is available on Maven Central
+                details.useVersion '0.3.4'
+            }
+        }
+    }
+
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
+            // Treat all Kotlin warnings as errors
+            allWarningsAsErrors = true
 
             freeCompilerArgs += [
                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
@@ -49,11 +83,6 @@ subprojects {
         }
     }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
 
 Object propOrDef(String propertyName, Object defaultValue) {
     def propertyValue = project.properties[propertyName]

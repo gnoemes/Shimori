@@ -1,4 +1,3 @@
-import com.gnoemes.shimori.Libs
 import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
@@ -23,29 +22,11 @@ dependencies {
     implementation project(Modules.baseAndroid)
     implementation project(Modules.model)
 
-    api Libs.AndroidX.Room.common
-    api Libs.AndroidX.Room.ktx
-    implementation Libs.AndroidX.Room.runtime
-    kapt Libs.AndroidX.Room.compiler
+    api libs.androidx.paging.common
+    api libs.androidx.room.common
+    implementation libs.androidx.collection
 
-    implementation Libs.AndroidX.Paging.runtime
-    implementation Libs.Coroutines.core
+    api libs.store
 
-    kapt Libs.Dagger.compiler
-
-    implementation Libs.jodaTime
-
-    implementation Libs.Roomigrant.library
-    kapt Libs.Roomigrant.compiler
-
-    testImplementation Libs.junit
-    testImplementation Libs.robolectric
-    testImplementation Libs.mockK
-
-    testImplementation Libs.AndroidX.Test.archCoreTesting
-    testImplementation Libs.AndroidX.Test.core
-    testImplementation Libs.AndroidX.Room.testing
-    testImplementation Libs.Coroutines.test
-    kaptTest Libs.AndroidX.Room.compiler
-    kaptTest Libs.Dagger.compiler
+    api libs.threeTenAbp
 }
