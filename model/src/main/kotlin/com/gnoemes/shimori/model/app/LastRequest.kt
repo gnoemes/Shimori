@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.gnoemes.shimori.model.ShimoriEntity
-import org.joda.time.Instant
+import org.threeten.bp.Instant
 
 @Entity(
         tableName = "last_requests",

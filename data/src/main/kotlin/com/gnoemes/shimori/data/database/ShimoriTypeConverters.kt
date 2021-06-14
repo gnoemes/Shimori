@@ -9,12 +9,12 @@ import com.gnoemes.shimori.model.common.Genre
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
-import org.joda.time.DateTime
-import org.joda.time.Instant
-import org.joda.time.format.ISODateTimeFormat
+import org.threeten.bp.Instant
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 object ShimoriTypeConverters {
-    private val dateFormat = ISODateTimeFormat.dateTimeNoMillis()
+    private val formatter = DateTimeFormatter.ISO_DATE_TIME
 
     private val ageRatings by lazy(LazyThreadSafetyMode.NONE) { AgeRating.values() }
     private val contentStatuses by lazy(LazyThreadSafetyMode.NONE) { ContentStatus.values() }
@@ -25,19 +25,19 @@ object ShimoriTypeConverters {
 
     @TypeConverter
     @JvmStatic
-    fun toDateTime(value: String?) = value?.let { dateFormat.parseDateTime(value) }
+    fun toDateTime(value: String?) = value?.let { OffsetDateTime.parse(it, formatter) }
 
     @TypeConverter
     @JvmStatic
-    fun fromDateTime(dateTime: DateTime?): String? = dateTime?.toString(dateFormat)
+    fun fromDateTime(dateTime: OffsetDateTime?): String? = dateTime?.format(formatter)
 
     @TypeConverter
     @JvmStatic
-    fun toInstant(value: Long?) = value?.let { Instant(it) }
+    fun toInstant(value: Long?) = value?.let { Instant.ofEpochMilli(it) }
 
     @TypeConverter
     @JvmStatic
-    fun fromInstant(instant: Instant?) = instant?.millis
+    fun fromInstant(instant: Instant?) = instant?.toEpochMilli()
 
     @TypeConverter
     @JvmStatic
@@ -114,9 +114,9 @@ object ShimoriTypeConverters {
 
     @TypeConverter
     @JvmStatic
-    fun toRateSort(rateSortOption : RateSortOption) = rateSortOption.name
+    fun toRateSort(rateSortOption: RateSortOption) = rateSortOption.name
 
     @TypeConverter
     @JvmStatic
-    fun fromRateSort(value : String) = RateSortOption.valueOf(value)
+    fun fromRateSort(value: String) = RateSortOption.valueOf(value)
 }

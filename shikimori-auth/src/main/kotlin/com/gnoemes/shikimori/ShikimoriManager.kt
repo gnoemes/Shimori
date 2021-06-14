@@ -4,44 +4,45 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.content.edit
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
-import com.gnoemes.shimori.base.AppNavigator
-import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import dagger.Lazy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.openid.appauth.*
+import net.openid.appauth.AuthState
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+@OptIn(DelicateCoroutinesApi::class)
 @Singleton
 class ShikimoriManager @Inject constructor(
     @Named("auth") private val prefs: SharedPreferences,
-    @Named("app") private val appNavigator: AppNavigator,
     private val dispatchers: AppCoroutineDispatchers,
-    private val request: AuthorizationRequest,
-    private val clientAuth: ClientAuthentication,
-    @ProcessLifetime private val processScope: CoroutineScope,
     private val shikimori: Lazy<Shikimori>
 ) {
+    private val authState = MutableStateFlow<AuthState?>(EmptyAuthState)
 
-    private val authState = ConflatedBroadcastChannel<AuthState?>()
+    private val _state = MutableStateFlow(ShikimoriAuthState.LOGGED_OUT)
 
-    private val _state = ConflatedBroadcastChannel(ShikimoriAuthState.LOGGED_OUT)
-
-    val state: Flow<ShikimoriAuthState>
-        get() = _state.asFlow()
+    val state: StateFlow<ShikimoriAuthState>
+        get() = _state
 
     init {
-        processScope.launch {
-            authState.asFlow().collect {state ->
-                updateAuthState(state)
+        GlobalScope.launch(dispatchers.io) {
+            authState.collect { state ->
+
+                val newShikimoriAuthState = when (state?.isAuthorized) {
+                    true -> ShikimoriAuthState.LOGGED_IN
+                    else -> ShikimoriAuthState.LOGGED_OUT
+                }
+
+                _state.emit(newShikimoriAuthState)
+
 
                 shikimori.get().run {
                     accessToken = state?.accessToken
@@ -51,71 +52,32 @@ class ShikimoriManager @Inject constructor(
             }
         }
 
-        processScope.launch {
-            val state = withContext(dispatchers.io) {
-                readAuthState()
-            }
-            authState.send(state)
+        GlobalScope.launch(dispatchers.main) {
+            val state = withContext(dispatchers.io) { readAuthState() }
+            authState.value = state
         }
 
-        processScope.launch {
-            shikimori.get().authErrorState.asFlow().collect { error ->
-                if (error) {
-                    updateAndPersistState(null)
+        GlobalScope.launch(dispatchers.io) {
+            shikimori.get().authErrorState.collect { error ->
+                if (error == true) {
+                    onNewAuthState(EmptyAuthState)
                 }
             }
         }
     }
 
-    private suspend fun updateAuthState(authState: AuthState?) {
-        if (authState != null && authState.isAuthorized) {
-            _state.send(ShikimoriAuthState.LOGGED_IN)
-        } else {
-            _state.send(ShikimoriAuthState.LOGGED_OUT)
-        }
-    }
-
-    fun startAuth(requestCode: Int, service: AuthorizationService, signUp: Boolean) {
-        performAuth(requestCode, service)
-    }
-
-    private fun performAuth(code: Int, service: AuthorizationService) {
-        service.performAuthorizationRequest(
-                request,
-                appNavigator.provideAuthHandleIntent(code)
-        )
-    }
-
-    fun onAuthResponse(service: AuthorizationService, response: AuthorizationResponse) {
-        service.performTokenRequest(
-                response.createTokenExchangeRequest(),
-                clientAuth,
-                ::onToken
-        )
-    }
-
-    fun onAuthException(error: AuthorizationException) {
-        error.printStackTrace()
-    }
-
-    private fun onToken(response: TokenResponse?, e: AuthorizationException?) {
-        val newState = AuthState().apply { update(response, e) }
-        e?.printStackTrace()
-        updateAndPersistState(newState)
-    }
-
-    private fun updateAndPersistState(newState: AuthState?) {
-        processScope.launch(dispatchers.main) {
-            authState.send(newState)
+    fun onNewAuthState(newState: AuthState) {
+        GlobalScope.launch(dispatchers.main) {
+            authState.value = newState
         }
 
-        processScope.launch(dispatchers.io) {
+        GlobalScope.launch(dispatchers.io) {
             persistAuthState(newState)
         }
     }
 
     private fun readAuthState(): AuthState {
-        val stateJson = prefs.getString("stateJson", null)
+        val stateJson = prefs.getString(PrefKey, null)
         return when {
             stateJson != null -> AuthState.jsonDeserialize(stateJson)
             else -> AuthState()
@@ -125,8 +87,13 @@ class ShikimoriManager @Inject constructor(
     private fun persistAuthState(state: AuthState?) {
         Log.i("AUTH", "persist ${state?.jsonSerializeString()}")
         prefs.edit {
-            putString("stateJson", state?.jsonSerializeString())
+            putString(PrefKey, state?.jsonSerializeString())
         }
     }
 
+
+    companion object {
+        private val EmptyAuthState = AuthState()
+        private const val PrefKey = "stateJson"
+    }
 }

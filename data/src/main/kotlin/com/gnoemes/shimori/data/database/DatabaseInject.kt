@@ -18,7 +18,6 @@ class RoomDatabaseModule {
     @Provides
     fun provideDatabase(context: Context): ShimoriRoomDatabase =
         Room.databaseBuilder(context, ShimoriRoomDatabase::class.java, "shimori.db")
-            .addMigrations(*ShimoriRoomDatabase_Migrations.build())
             .fallbackToDestructiveMigration()
             .build()
 }

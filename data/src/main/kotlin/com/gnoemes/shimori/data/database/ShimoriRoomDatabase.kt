@@ -9,7 +9,6 @@ import com.gnoemes.shimori.model.app.LastRequest
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.user.User
-import dev.matrix.roomigrant.GenerateRoomMigrations
 
 
 @Database(
@@ -24,5 +23,4 @@ import dev.matrix.roomigrant.GenerateRoomMigrations
         version = 1
 )
 @TypeConverters(ShimoriTypeConverters::class)
-@GenerateRoomMigrations
 abstract class ShimoriRoomDatabase : RoomDatabase(), ShimoriDatabase

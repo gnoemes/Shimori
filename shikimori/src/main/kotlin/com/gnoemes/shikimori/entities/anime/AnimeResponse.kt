@@ -3,7 +3,7 @@ package com.gnoemes.shikimori.entities.anime
 import com.gnoemes.shikimori.entities.common.ImageResponse
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.google.gson.annotations.SerializedName
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 internal data class AnimeResponse(
     @field:SerializedName("id") val id: Long,
@@ -16,6 +16,6 @@ internal data class AnimeResponse(
     @field:SerializedName("status") val status: ContentStatus?,
     @field:SerializedName("episodes") val episodes: Int,
     @field:SerializedName("episodes_aired") val episodesAired: Int,
-    @field:SerializedName("aired_on") val dateAired: DateTime?,
-    @field:SerializedName("released_on") val dateReleased: DateTime?
+    @field:SerializedName("aired_on") val dateAired: OffsetDateTime?,
+    @field:SerializedName("released_on") val dateReleased: OffsetDateTime?
 )

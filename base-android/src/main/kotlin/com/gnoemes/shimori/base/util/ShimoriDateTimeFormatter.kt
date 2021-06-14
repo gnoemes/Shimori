@@ -5,8 +5,9 @@ import com.gnoemes.shimori.base.di.MediumDate
 import com.gnoemes.shimori.base.di.MediumDateTime
 import com.gnoemes.shimori.base.di.ShortDate
 import com.gnoemes.shimori.base.di.ShortTime
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.temporal.Temporal
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,37 +19,38 @@ class ShimoriDateTimeFormatter @Inject constructor(
     @MediumDateTime private val mediumDateTimeFormatter: DateTimeFormatter
 ) {
 
-    fun formatShortTime(dateTime: DateTime): String = shortTimeFormatter.print(dateTime)
+    fun formatShortTime(temporalAmount: Temporal): String = shortTimeFormatter.format(temporalAmount)
 
-    fun formatShortDate(dateTime: DateTime): String = shortDateFormatter.print(dateTime)
+    fun formatShortDate(temporalAmount: Temporal): String = shortDateFormatter.format(temporalAmount)
 
-    fun formatMediumDate(dateTime: DateTime): String = mediumDateFormatter.print(dateTime)
+    fun formatMediumDate(temporalAmount: Temporal): String = mediumDateFormatter.format(temporalAmount)
 
-    fun formatMediumDateTime(dateTime: DateTime): String = mediumDateTimeFormatter.print(dateTime)
+    fun formatMediumDateTime(temporalAmount: Temporal): String = mediumDateTimeFormatter.format(temporalAmount)
 
-    fun formatRelativeTime(dateTime: DateTime?): CharSequence? {
+    fun formatRelativeTime(dateTime: OffsetDateTime?): CharSequence? {
         if (dateTime == null) return null
 
-        val now = DateTime.now()
+        val now = OffsetDateTime.now()
 
         return if (dateTime.isBefore(now)) {
             if (dateTime.year == now.year || dateTime.isAfter(now.minusDays(1))) {
                 DateUtils.getRelativeTimeSpanString(
-                        dateTime.millis,
-                        now.millis,
+                        dateTime.toInstant().toEpochMilli(),
+                        System.currentTimeMillis(),
                         DateUtils.MINUTE_IN_MILLIS,
                         DateUtils.FORMAT_SHOW_DATE
-                )
+                ).toString()
             } else {
                 formatShortDate(dateTime)
             }
         } else {
             if (dateTime.year == now.year || dateTime.isBefore(now.plusDays(7))) {
                 DateUtils.getRelativeTimeSpanString(
-                        dateTime.millis,
+                        dateTime.toInstant().toEpochMilli(),
                         System.currentTimeMillis(),
                         DateUtils.MINUTE_IN_MILLIS,
-                        DateUtils.FORMAT_SHOW_DATE)
+                        DateUtils.FORMAT_SHOW_DATE
+                ).toString()
             } else {
                 formatShortDate(dateTime)
             }

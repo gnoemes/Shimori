@@ -2,19 +2,21 @@ package com.gnoemes.shimori.settings
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.base.settings.ShimoriPreferences.Theme
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Named
 
 class ShimoriPreferencesImpl @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     @Named("app") private val prefs: SharedPreferences
 ) : ShimoriPreferences {
-    private val defaultThemeValue = context.getString(R.string.pref_theme_default_value)
+    private val defaultThemeValue = context.getString(R.string.pref_theme_system_value)
+    private val preferenceKeyChangedFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
     companion object {
         private const val THEME_KEY = "pref_theme"
@@ -22,45 +24,42 @@ class ShimoriPreferencesImpl @Inject constructor(
     }
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        when (key) {
-            THEME_KEY -> updateUsingThemePreference()
-        }
+        preferenceKeyChangedFlow.tryEmit(key)
     }
 
     override fun setup() {
-        updateUsingThemePreference()
         prefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
-    override var themePreference: Theme
+    override var theme: Theme
         get() = getThemeForStorageValue(prefs.getString(THEME_KEY, defaultThemeValue)!!)
         set(value) = prefs.edit {
             putString(THEME_KEY, getStorageKeyForTheme(value))
         }
 
+    override fun observeTheme(): Flow<Theme> {
+        return preferenceKeyChangedFlow
+            // Emit on start so that we always send the initial value
+            .onStart { emit(THEME_KEY) }
+            .filter { it == THEME_KEY }
+            .map { theme }
+            .distinctUntilChanged()
+    }
+
     override var isRussianNaming: Boolean
         get() = prefs.getBoolean(IS_ROMADZI_NAMING, true)
         set(value) = prefs.edit { putBoolean(IS_ROMADZI_NAMING, value) }
 
-    private fun updateUsingThemePreference() = when (themePreference) {
-        Theme.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        Theme.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        Theme.SYSTEM -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        Theme.BATTERY_SAVER_ONLY -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-    }
 
     private fun getStorageKeyForTheme(theme: Theme) = when (theme) {
         Theme.LIGHT -> context.getString(R.string.pref_theme_light_value)
         Theme.DARK -> context.getString(R.string.pref_theme_dark_value)
-        Theme.BATTERY_SAVER_ONLY -> context.getString(R.string.pref_theme_battery_value)
         Theme.SYSTEM -> context.getString(R.string.pref_theme_system_value)
     }
 
     private fun getThemeForStorageValue(value: String) = when (value) {
-        context.getString(R.string.pref_theme_system_value) -> Theme.SYSTEM
         context.getString(R.string.pref_theme_light_value) -> Theme.LIGHT
         context.getString(R.string.pref_theme_dark_value) -> Theme.DARK
-        context.getString(R.string.pref_theme_battery_value) -> Theme.BATTERY_SAVER_ONLY
-        else -> throw IllegalArgumentException("Invalid preference value for theme")
+        else -> Theme.SYSTEM
     }
 }

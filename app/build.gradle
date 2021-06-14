@@ -1,4 +1,3 @@
-import com.gnoemes.shimori.Application
 import com.gnoemes.shimori.Modules
 
 plugins {
@@ -34,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId Application.id
+        applicationId com.gnoemes.shimori.Application.id
         versionCode appVersionCode
         versionName appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

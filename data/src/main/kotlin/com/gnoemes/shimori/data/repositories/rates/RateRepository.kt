@@ -2,7 +2,6 @@ package com.gnoemes.shimori.data.repositories.rates
 
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.entities.Success
-import com.gnoemes.shimori.base.extensions.asyncOrAwait
 import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
@@ -10,7 +9,6 @@ import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
-import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,47 +29,41 @@ class RateRepository @Inject constructor(
         rateSortStore.observeSort(type, status)
 
     suspend fun createOrUpdate(rate: Rate) {
-        asyncOrAwait("create_or_update_rate") {
-            val id = rateStore.createOrUpdate(rate)
-            //TODO plan to upload?
-            val localRate = rateStore.dao.queryWithId(id)
-            if (localRate != null) {
-                val result =
-                    if (localRate.shikimoriId == null) rateSource.createRate(localRate)
-                    else rateSource.updateRate(localRate)
+        val id = rateStore.createOrUpdate(rate)
+        //TODO plan to upload?
+        val localRate = rateStore.dao.queryWithId(id)
+        if (localRate != null) {
+            val result =
+                if (localRate.shikimoriId == null) rateSource.createRate(localRate)
+                else rateSource.updateRate(localRate)
 
-                if (result is Success) {
-                    rateStore.createOrUpdate(result.data)
-                }
+            if (result is Success) {
+                rateStore.createOrUpdate(result.data)
             }
         }
     }
 
     suspend fun deleteRate(rate: Rate) {
-        asyncOrAwait("delete_rate") {
-            val localRate = rateStore.dao.queryWithId(rate.id)
-            //TODO plan to delete?
-            localRate?.shikimoriId?.let {
-                val result = rateSource.deleteRate(it)
+        val localRate = rateStore.dao.queryWithId(rate.id)
+        //TODO plan to delete?
+        localRate?.shikimoriId?.let {
+            val result = rateSource.deleteRate(it)
 
-                if (result is Success) {
-                    rateStore.dao.deleteWithId(localRate.id)
-                }
+            if (result is Success) {
+                rateStore.dao.deleteWithId(localRate.id)
             }
         }
     }
 
     suspend fun getRates(userId: Long) {
-        asyncOrAwait("get_rates") {
-            val results = rateSource.getRates(userId)
-            if (results is Success && results.data.isNotEmpty()) {
-                rateStore.updateRates(results.data)
-                return@asyncOrAwait
-            }
+        val results = rateSource.getRates(userId)
+        if (results is Success && results.data.isNotEmpty()) {
+            rateStore.updateRates(results.data)
+            return
         }
     }
 
-    suspend fun syncRates() = asyncOrAwait("sync_rates") {
+    suspend fun syncRates() {
         val userId = userRepository.getMyUserId()
 
         //TODO pending rates
@@ -83,10 +75,6 @@ class RateRepository @Inject constructor(
 
     suspend fun updateRateSort(sort: RateSort) = rateSortStore.updateSort(sort)
 
-    //TODO
-    suspend fun needSyncRates(expiry: DateTime): Boolean {
-        return false
-    }
 
     private suspend fun diffAndUpdateRates(userId: Long) {
         val remote = rateSource.getRates(userId)

@@ -2,6 +2,6 @@ package com.gnoemes.shikimori.util
 
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonSerializer
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
-internal interface DateTimeResponseConverter : JsonSerializer<DateTime>, JsonDeserializer<DateTime>
+internal interface DateTimeResponseConverter : JsonSerializer<OffsetDateTime>, JsonDeserializer<OffsetDateTime>

@@ -22,9 +22,14 @@ dependencies {
     implementation project(Modules.baseAndroid)
     implementation project(Modules.model)
 
+    api libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    kapt libs.androidx.room.compiler
+
     api libs.androidx.paging.common
-    api libs.androidx.room.common
     implementation libs.androidx.collection
+
+    implementation libs.kotlin.coroutines.core
 
     api libs.store
 

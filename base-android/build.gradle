@@ -6,4 +6,5 @@ apply from: '../android_commons.gradle'
 dependencies {
     api project(Modules.base)
     implementation libs.threeTenAbp
+    implementation libs.androidx.core
 }
