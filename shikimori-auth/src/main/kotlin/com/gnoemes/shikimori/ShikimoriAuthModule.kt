@@ -3,15 +3,18 @@ package com.gnoemes.shikimori
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.net.toUri
-import com.example.shikimori.auth.R
+import com.gnoemes.shikimori.auth.R
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import net.openid.appauth.*
 import javax.inject.Named
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class ShikimoriAuthModule {
 
@@ -30,7 +33,8 @@ class ShikimoriAuthModule {
     @Provides
     @Named("shikimori-oauth-redirect")
     fun provideOAuthRedirect(context: Context): String {
-        val scheme = context.getString(R.string.shikimori_redirect_scheme)
+        val scheme =
+            context.getString(R.string.shikimori_redirect_scheme)
         val host = context.getString(R.string.shikimori_redirect_host)
         val path = context.getString(R.string.shikimori_redirect_path)
 

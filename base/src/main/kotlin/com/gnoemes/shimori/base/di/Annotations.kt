@@ -20,11 +20,6 @@ annotation class Shikimori
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 @MustBeDocumented
-annotation class ProcessLifetime
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-@MustBeDocumented
 annotation class ShortDate
 
 @Retention(AnnotationRetention.RUNTIME)

@@ -2,7 +2,7 @@ package com.gnoemes.shikimori
 
 import com.gnoemes.shikimori.entities.auth.TokenResponse
 import com.gnoemes.shikimori.services.AuthService
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Named
@@ -22,7 +22,7 @@ class Shikimori @Inject constructor(
         const val BASE_URL = "https://$BASE_HOST/"
     }
 
-    val authErrorState = ConflatedBroadcastChannel<Boolean>()
+    val authErrorState = MutableStateFlow<Boolean?>(null)
 
     var accessToken: String? = null
     var refreshToken: String? = null
@@ -37,7 +37,7 @@ class Shikimori @Inject constructor(
     }
 
     suspend fun onAuthExpired() {
-        authErrorState.send(true)
+        authErrorState.emit(true)
     }
 
 }

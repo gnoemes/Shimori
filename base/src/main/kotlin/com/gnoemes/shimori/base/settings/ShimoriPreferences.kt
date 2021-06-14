@@ -1,16 +1,18 @@
 package com.gnoemes.shimori.base.settings
 
+import kotlinx.coroutines.flow.Flow
+
 interface ShimoriPreferences {
     fun setup()
 
-    val themePreference: Theme
+    var theme: Theme
+    fun observeTheme() : Flow<Theme>
 
     var isRussianNaming : Boolean
 
     enum class Theme {
         LIGHT,
         DARK,
-        BATTERY_SAVER_ONLY,
         SYSTEM
     }
 }

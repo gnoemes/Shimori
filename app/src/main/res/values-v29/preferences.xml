@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="pref_theme_default_value" translatable="false">@string/pref_theme_system_value</string>
-</resources>

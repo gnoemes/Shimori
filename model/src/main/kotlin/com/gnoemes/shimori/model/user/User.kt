@@ -4,7 +4,7 @@ import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriEntity
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.common.ShimoriImage
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "users",
         indices = [
@@ -21,7 +21,7 @@ data class User(
     @ColumnInfo(name = "common_info") val commonInfo: String? = null,
     val sex: String? = null,
     val website: String? = null,
-    @ColumnInfo(name = "date_birth") val dateBirth: DateTime? = null,
+    @ColumnInfo(name = "date_birth") val dateBirth: OffsetDateTime? = null,
     val locale: String? = null,
     @ColumnInfo(name = "full_years") val fullYears: Int? = null,
     val location: String? = null,
@@ -29,6 +29,6 @@ data class User(
     val friend: Boolean = false,
     val ignored: Boolean = false,
     val banned: Boolean = false,
-    @ColumnInfo(name = "last_online") val lastOnlineAt: DateTime? = null,
+    @ColumnInfo(name = "last_online") val lastOnlineAt: OffsetDateTime? = null,
     @ColumnInfo(name = "is_me") val isMe: Boolean = false
 ) : ShimoriEntity, ShikimoriEntity

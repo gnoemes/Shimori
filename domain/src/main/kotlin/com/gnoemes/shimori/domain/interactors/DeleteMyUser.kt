@@ -1,21 +1,19 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.domain.Interactor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DeleteMyUser @Inject constructor(
     private val userRepository: UserRepository,
-    dispatchers: AppCoroutineDispatchers,
-    @ProcessLifetime val processScope: CoroutineScope
+    private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<Unit>() {
-    override val scope: CoroutineScope = processScope + dispatchers.io
 
     override suspend fun doWork(params: Unit) {
-        userRepository.deleteMe()
+        withContext(dispatchers.io) {
+            userRepository.deleteMe()
+        }
     }
 }

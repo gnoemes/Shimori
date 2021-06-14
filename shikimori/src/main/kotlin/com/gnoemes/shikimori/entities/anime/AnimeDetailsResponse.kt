@@ -7,7 +7,7 @@ import com.gnoemes.shikimori.entities.rates.UserRateResponse
 import com.gnoemes.shimori.model.common.AgeRating
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.google.gson.annotations.SerializedName
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 internal data class AnimeDetailsResponse(
     @field:SerializedName("id") val id: Long,
@@ -19,9 +19,9 @@ internal data class AnimeDetailsResponse(
     @field:SerializedName("status") val status: ContentStatus?,
     @field:SerializedName("episodes") val episodes: Int,
     @field:SerializedName("episodes_aired") val episodesAired: Int,
-    @field:SerializedName("aired_on") val dateAired: DateTime?,
-    @field:SerializedName("next_episode_at") val nextEpisodeDate: DateTime?,
-    @field:SerializedName("released_on") val dateReleased: DateTime?,
+    @field:SerializedName("aired_on") val dateAired: OffsetDateTime?,
+    @field:SerializedName("next_episode_at") val nextEpisodeDate: OffsetDateTime?,
+    @field:SerializedName("released_on") val dateReleased: OffsetDateTime?,
     @field:SerializedName("english") val namesEnglish: List<String?>?,
     @field:SerializedName("japanese") val namesJapanese: List<String?>?,
     @field:SerializedName("rating") val ageRating: AgeRating,

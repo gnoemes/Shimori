@@ -3,30 +3,31 @@ package com.gnoemes.shimori.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.preference.PreferenceManager
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.ShimoriApplication
-import com.gnoemes.shimori.base.di.*
+import com.gnoemes.shimori.base.di.MediumDate
+import com.gnoemes.shimori.base.di.MediumDateTime
+import com.gnoemes.shimori.base.di.ShortDate
+import com.gnoemes.shimori.base.di.ShortTime
+import com.gnoemes.shimori.base.extensions.withLocale
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineScope
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
-import org.joda.time.DateTimeZone
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.inject.Named
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module(includes = [AppModuleBinds::class])
-class AppModule {
-
-    @Provides
-    fun provideContext(app: ShimoriApplication): Context = app.applicationContext
+object AppModule {
 
     @Singleton
     @Provides
@@ -62,61 +63,39 @@ class AppModule {
     @Named("shikimori-secret-key")
     fun provideShimoriSecretKey(): String = BuildConfig.ShikimoriClientSecret
 
-    @Provides
-    @ProcessLifetime
-    fun provideLifetimeScope(): CoroutineScope {
-        return ProcessLifecycleOwner.get().lifecycle.coroutineScope
-    }
-
     @Singleton
     @Provides
     @ShortDate
-    fun provideShortDateFormatter(app: ShimoriApplication): DateTimeFormatter {
-        @Suppress("DEPRECATION")
-        return DateTimeFormat
-            .shortDate()
-            .withLocale(app.resources.configuration.locale)
-            .withZone(DateTimeZone.getDefault())
+    fun provideShortDateFormatter(@ApplicationContext context: Context): DateTimeFormatter {
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(context)
     }
 
     @Singleton
     @Provides
     @ShortTime
-    fun provideShortTimeFormatter(app : ShimoriApplication) : DateTimeFormatter {
-        @Suppress("DEPRECATION")
-        return DateTimeFormat
-            .shortTime()
-            .withLocale(app.resources.configuration.locale)
-            .withZone(DateTimeZone.getDefault())
+    fun provideShortTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(context)
     }
 
     @Singleton
     @Provides
     @MediumDate
-    fun provideMediumDateFormatter(app : ShimoriApplication) : DateTimeFormatter {
-        @Suppress("DEPRECATION")
-        return DateTimeFormat
-            .mediumDate()
-            .withLocale(app.resources.configuration.locale)
-            .withZone(DateTimeZone.getDefault())
+    fun provideMediumDateFormatter(@ApplicationContext context: Context): DateTimeFormatter {
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(context)
     }
 
     @Singleton
     @Provides
     @MediumDateTime
-    fun provideMediumDateTimeFormatter(app : ShimoriApplication) : DateTimeFormatter {
-        @Suppress("DEPRECATION")
-        return DateTimeFormat
-            .mediumDateTime()
-            .withLocale(app.resources.configuration.locale)
-            .withZone(DateTimeZone.getDefault())
+    fun provideMediumDateTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(context)
     }
 
     @Singleton
     @Provides
     @Named("app")
-    fun provideAppPreferences(app : ShimoriApplication) : SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(app)
+    fun provideAppPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
     }
 
 }

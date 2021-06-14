@@ -9,8 +9,8 @@ import com.gnoemes.shikimori.services.RateService
 import com.gnoemes.shikimori.services.UserService
 import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
-import com.gnoemes.shimori.base.di.ProcessLifetime
 import com.gnoemes.shimori.base.di.Shikimori
+import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.data_base.sources.UserDataSource
@@ -20,11 +20,11 @@ import com.google.gson.GsonBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineScope
 import okhttp3.Authenticator
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -113,6 +113,11 @@ internal class RetrofitModule {
             readTimeout(ShimoriConstants.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
 //            cache(Cache(File(cacheDir, "okhttp_cache"), 10 * 1024 * 1024))
         }
+        .dispatcher(
+                Dispatcher().apply {
+                    maxRequestsPerHost = 5
+                }
+        )
 
     @Provides
     @Singleton
@@ -121,7 +126,7 @@ internal class RetrofitModule {
     @Provides
     @Singleton
     fun provideGson(dateTimeResponseConverter: DateTimeResponseConverter) = GsonBuilder()
-        .registerTypeAdapter(DateTime::class.java, dateTimeResponseConverter)
+        .registerTypeAdapter(OffsetDateTime::class.java, dateTimeResponseConverter)
         .create()
 
     @Provides
@@ -194,6 +199,6 @@ internal class AuthNetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuth(shikimori: com.gnoemes.shikimori.Shikimori, @ProcessLifetime scope: CoroutineScope): Authenticator =
-        ShikimoriAuthenticator(shikimori, scope)
+    fun provideAuth(shikimori: com.gnoemes.shikimori.Shikimori, dispatchers: AppCoroutineDispatchers): Authenticator =
+        ShikimoriAuthenticator(shikimori, dispatchers)
 }

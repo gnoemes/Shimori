@@ -3,7 +3,7 @@ package com.gnoemes.shimori.data.repositories.lastrequests
 import com.gnoemes.shimori.data.daos.LastRequestDao
 import com.gnoemes.shimori.model.app.LastRequest
 import com.gnoemes.shimori.model.app.Request
-import org.joda.time.Instant
+import org.threeten.bp.Instant
 
 
 open class EntityLastRequestStore(

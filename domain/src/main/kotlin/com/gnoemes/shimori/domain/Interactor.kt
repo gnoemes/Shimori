@@ -1,40 +1,31 @@
 package com.gnoemes.shimori.domain
 
-import androidx.paging.PagedList
-import com.gnoemes.shimori.base.entities.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.sendBlocking
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.gnoemes.shimori.base.entities.InvokeError
+import com.gnoemes.shimori.base.entities.InvokeStarted
+import com.gnoemes.shimori.base.entities.InvokeStatus
+import com.gnoemes.shimori.base.entities.InvokeSuccess
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withTimeout
 import java.util.concurrent.TimeUnit
 
 abstract class Interactor<in P> {
-    protected abstract val scope: CoroutineScope
 
     operator fun invoke(params: P, timeoutMs: Long = defaultTimeoutMs): Flow<InvokeStatus> {
-        val channel = ConflatedBroadcastChannel<InvokeStatus>(InvokeIdle)
-        scope.launch {
-            try {
-                withTimeout(timeoutMs) {
-                    channel.send(InvokeStarted)
-                    try {
-                        doWork(params)
-                        channel.send(InvokeSuccess)
-                    } catch (t: Throwable) {
-                        channel.send(InvokeError(t))
-                    }
-                }
-            } catch (t: TimeoutCancellationException) {
-                channel.send(InvokeTimeout)
+        return flow {
+            withTimeout(timeoutMs) {
+                emit(InvokeStarted)
+                doWork(params)
+                emit(InvokeSuccess)
             }
+        }.catch { t ->
+            emit(InvokeError(t))
         }
-        return channel.asFlow()
     }
 
-    suspend fun executeSync(params: P) = withContext(scope.coroutineContext) { doWork(params) }
+    suspend fun executeSync(params: P) = doWork(params)
 
     protected abstract suspend fun doWork(params: P)
 
@@ -43,48 +34,42 @@ abstract class Interactor<in P> {
     }
 }
 
-interface ObservableInteractor<T> {
-    val dispatcher: CoroutineDispatcher
-    fun observe(): Flow<T>
-}
-
-abstract class PagingInteractor<P : PagingInteractor.Parameters<T>, T> : SubjectInteractor<P, PagedList<T>>() {
-    interface Parameters<T> {
-        val pagingConfig: PagedList.Config
-        val boundaryCallback: PagedList.BoundaryCallback<T>?
+abstract class PagingInteractor<P : PagingInteractor.Parameters<T>, T : Any> : SubjectInteractor<P, PagingData<T>>() {
+    interface Parameters<T : Any> {
+        val pagingConfig: PagingConfig
     }
 }
 
-abstract class SuspendingWorkInteractor<P : Any, T : Any> : ObservableInteractor<T> {
-    private val channel = ConflatedBroadcastChannel<T>()
-
-    suspend operator fun invoke(params: P) = channel.send(doWork(params))
+abstract class SuspendingWorkInteractor<P : Any, T : Any> : SubjectInteractor<P, T>() {
+    override fun createObservable(params: P): Flow<T> = flow {
+        emit(doWork(params))
+    }
 
     abstract suspend fun doWork(params: P): T
-
-    override fun observe(): Flow<T> = channel.asFlow()
 }
 
-abstract class SubjectInteractor<P : Any, T> : ObservableInteractor<T> {
-    private val channel = ConflatedBroadcastChannel<P>()
+abstract class SubjectInteractor<P : Any, T> {
+    private val paramState = MutableSharedFlow<P>(
+            replay = 1,
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    operator fun invoke(params: P) = channel.sendBlocking(params)
+    operator fun invoke(params: P) {
+        paramState.tryEmit(params)
+    }
 
     protected abstract fun createObservable(params: P): Flow<T>
 
-    override fun observe(): Flow<T> = channel.asFlow()
-            .distinctUntilChanged()
-            .flatMapLatest { createObservable(it) }
+    fun observe(): Flow<T> = paramState.flatMapLatest { createObservable(it) }
 }
 
-operator fun Interactor<Unit>.invoke() = invoke(Unit)
-operator fun <T> SubjectInteractor<Unit, T>.invoke() = invoke(Unit)
-
-fun <I : ObservableInteractor<T>, T> CoroutineScope.launchObserve(
-    interactor: I,
-    f: suspend (Flow<T>) -> Unit
-) {
-    launch(interactor.dispatcher) {
-        f(interactor.observe())
+abstract class ResultInteractor<in P, R> {
+    operator fun invoke(params: P): Flow<R> = flow {
+        emit(doWork(params))
     }
+
+    suspend fun executeSync(params: P): R = doWork(params)
+
+    protected abstract suspend fun doWork(params: P): R
 }

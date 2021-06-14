@@ -9,10 +9,12 @@ dependencies {
     implementation project(Modules.baseAndroid)
     api project(Modules.shikimori)
 
-    kapt libs.dagger.compiler
+    implementation libs.hilt.library
+    kapt libs.hilt.compiler
 
     implementation libs.androidx.browser
     implementation libs.androidx.core
+    implementation libs.androidx.activity.compose
 
     api libs.appauth
 }

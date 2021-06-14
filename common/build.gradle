@@ -21,16 +21,18 @@ dependencies {
 
     api libs.androidx.lifecycle.runtime
 
-    implementation libs.compose.ui.ui
+    implementation libs.androidx.fragment
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.navigation.compose
+
     implementation libs.compose.foundation.foundation
     implementation libs.compose.foundation.layout
     implementation libs.compose.material.material
     implementation libs.compose.animation.animation
     implementation libs.compose.ui.tooling
+    implementation libs.compose.ui.viewbinding
 
     implementation libs.androidx.paging.compose
-
-    implementation libs.kotlin.stdlib
 
     implementation libs.accompanist.coil
     implementation libs.accompanist.insets

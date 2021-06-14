@@ -3,7 +3,7 @@ package com.gnoemes.shimori.model.rate
 import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriEntity
 import com.gnoemes.shimori.model.ShimoriEntity
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "rates",
         indices = [
@@ -28,8 +28,8 @@ data class Rate(
     @ColumnInfo(name = "chapters") val chapters: Int? = null,
     @ColumnInfo(name = "volumes") val volumes: Int? = null,
     @ColumnInfo(name = "re_counter") val reCounter: Int? = null,
-    @ColumnInfo(name = "date_created") val dateCreated: DateTime? = null,
-    @ColumnInfo(name = "date_updated") val dateUpdated: DateTime? = null
+    @ColumnInfo(name = "date_created") val dateCreated: OffsetDateTime? = null,
+    @ColumnInfo(name = "date_updated") val dateUpdated: OffsetDateTime? = null
 ) : ShimoriEntity, ShikimoriEntity {
 
     @Ignore

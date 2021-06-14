@@ -4,7 +4,7 @@ import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.common.*
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "animes",
         indices = [
@@ -24,13 +24,13 @@ data class Anime(
     @ColumnInfo(name = "anime_status") val status: ContentStatus? = null,
     @ColumnInfo(name = "episodes_size") val episodes: Int = 0,
     val episodesAired: Int = 0,
-    @ColumnInfo(name = "date_aired") val dateAired: DateTime? = null,
-    @ColumnInfo(name = "date_released") val dateReleased: DateTime? = null,
+    @ColumnInfo(name = "date_aired") val dateAired: OffsetDateTime? = null,
+    @ColumnInfo(name = "date_released") val dateReleased: OffsetDateTime? = null,
     @ColumnInfo(name = "next_episode") val nextEpisode: Int? = null,
-    @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: DateTime? = null,
-    @ColumnInfo(name = "next_episode_end_date") val nextEpisodeEndDate: DateTime? = null,
+    @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: OffsetDateTime? = null,
+    @ColumnInfo(name = "next_episode_end_date") val nextEpisodeEndDate: OffsetDateTime? = null,
     @ColumnInfo(name = "age_rating") val ageRating: AgeRating? = null,
-    val duration: DateTime? = null,
+    val duration: OffsetDateTime? = null,
     val description: String? = null,
     @ColumnInfo(name = "description_html") val descriptionHtml: String? = null,
     val franchise: String? = null,
@@ -41,7 +41,7 @@ data class Anime(
 
     //local
     @ColumnInfo(name = "name_ru_lower_case")
-    var searchName: String? = nameRu?.toLowerCase()
+    var searchName: String? = nameRu?.lowercase()
 
     @Ignore
     var videos: List<AnimeVideo>? = null
@@ -51,10 +51,6 @@ data class Anime(
     var rateScoresStats: List<Statistic>? = null
     @Ignore
     var rateStatusesStats: List<Statistic>? = null
-
-    @get:Ignore
-    override val contentType: ContentType
-        get() = ContentType.ANIME
 
     val isMovie: Boolean
         get() = type != null && type == AnimeType.MOVIE

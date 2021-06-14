@@ -2,7 +2,7 @@ package com.gnoemes.shikimori.entities.rates
 
 import com.gnoemes.shikimori.entities.common.ShikimoriContentType
 import com.google.gson.annotations.SerializedName
-import org.joda.time.DateTime
+import org.threeten.bp.OffsetDateTime
 
 internal data class UserRateResponse(
     @field:SerializedName("id") val id: Long? = null,
@@ -17,6 +17,6 @@ internal data class UserRateResponse(
     @field:SerializedName("chapters") val chapters: Int? = null,
     @field:SerializedName("text") val text: String? = null,
     @field:SerializedName("text_html") val textHtml: String? = null,
-    @field:SerializedName("created_at") val dateCreated: DateTime? = null,
-    @field:SerializedName("updated_at") val dateUpdated: DateTime? = null
+    @field:SerializedName("created_at") val dateCreated: OffsetDateTime? = null,
+    @field:SerializedName("updated_at") val dateUpdated: OffsetDateTime? = null
 )
