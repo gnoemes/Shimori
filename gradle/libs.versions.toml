@@ -4,7 +4,7 @@ androidxhilt = "1.0.0"
 androidxlifecycle = "2.4.0-alpha01"
 androidxtest = "1.3.0"
 coil = "1.2.2"
-compose = "1.0.0-beta08"
+compose = "1.0.0-beta09"
 composesnapshot = "-" # a single character = no snapshot
 coroutines = "1.5.0"
 dagger = "2.36"

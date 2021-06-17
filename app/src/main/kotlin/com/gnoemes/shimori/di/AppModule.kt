@@ -1,10 +1,11 @@
 package com.gnoemes.shimori.di
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import com.gnoemes.shikimori.ShikimoriModule
 import com.gnoemes.shimori.BuildConfig
-import com.gnoemes.shimori.ShimoriApplication
 import com.gnoemes.shimori.base.di.MediumDate
 import com.gnoemes.shimori.base.di.MediumDateTime
 import com.gnoemes.shimori.base.di.ShortDate
@@ -26,7 +27,10 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
-@Module(includes = [AppModuleBinds::class])
+@Module(includes = [
+    AppModuleBinds::class,
+    ShikimoriModule::class
+])
 object AppModule {
 
     @Singleton
@@ -53,7 +57,7 @@ object AppModule {
     @Provides
     @Singleton
     @Named("cache")
-    fun provideCacheDir(app: ShimoriApplication): File = app.cacheDir
+    fun provideCacheDir(app: Application): File = app.cacheDir
 
     @Provides
     @Named("shikimori-client-id")

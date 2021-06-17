@@ -73,3 +73,6 @@ abstract class ResultInteractor<in P, R> {
 
     protected abstract suspend fun doWork(params: P): R
 }
+
+operator fun Interactor<Unit>.invoke() = invoke(Unit)
+operator fun <T> SubjectInteractor<Unit, T>.invoke() = invoke(Unit)

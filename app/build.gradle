@@ -28,7 +28,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "Shimori-v${versionName}-${variant.buildType.name}"
+            outputFileName = "Shimori-v${versionName}-${variant.buildType.name}.apk"
         }
     }
 
@@ -76,6 +76,8 @@ dependencies {
 
     implementation libs.google.crashlytics
     implementation libs.google.analytics
+
+    implementation libs.gson
 
     debugImplementation libs.leakCanary
 

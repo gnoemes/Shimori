@@ -10,6 +10,8 @@ interface ShimoriPreferences {
 
     var isRussianNaming : Boolean
 
+    var preferredRateType : String?
+
     enum class Theme {
         LIGHT,
         DARK,
