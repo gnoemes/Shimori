@@ -49,15 +49,16 @@ class SimpleDateTimeFormatter @Inject constructor(
                 val hours = duration.toHours().toInt()
                 val minutes = duration.toMinutes().toInt() % 60
 
-                return if (hours < 1) {
-                    context.getString(R.string.time_minute_short_format, minutes.addZeroIfNeed())
-                } else {
-                    context.getString(
-                            R.string.time_hour_and_minute_short_format,
-                            hours.addZeroIfNeed(),
-                            minutes.addZeroIfNeed()
-                    )
-                }
+                //TODO FIX
+                return ""
+//                return if (hours < 1) {
+//                    context.getString(R.string.time_minute_short_format, minutes.addZeroIfNeed())
+//                } else {
+//                    context.getString(
+//                            R.string.time_hour_and_minute_short_format,
+//                            hours.addZeroIfNeed(),
+//                            minutes.addZeroIfNeed()
+//                    )
             }
         }
     }

@@ -34,6 +34,9 @@ dependencies {
 
     implementation libs.androidx.paging.compose
 
+    implementation libs.hilt.library
+    kapt libs.hilt.compiler
+
     implementation libs.accompanist.coil
     implementation libs.accompanist.insets
     implementation libs.accompanist.swiperefresh

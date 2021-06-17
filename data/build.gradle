@@ -26,6 +26,9 @@ dependencies {
     implementation libs.androidx.room.ktx
     kapt libs.androidx.room.compiler
 
+    implementation libs.hilt.library
+    kapt libs.hilt.compiler
+
     api libs.androidx.paging.common
     implementation libs.androidx.collection
 

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Platform.Theme.Shimori" parent="android:Theme.Material.Light" />
+    <style name="Platform.Theme.Shimori" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:navigationBarColor">@color/shimori_colorNavigationBar</item>
+        <item name="android:statusBarColor">@color/shimori_colorStatusBar</item>
+    </style>
 
     <style name="Base.Theme.Shimori" parent="Platform.Theme.Shimori">
         <item name="android:windowActionModeOverlay">true</item>

@@ -1,69 +1,14 @@
 <resources>
-    <string name="common_rates">Списки</string>
-    <string name="common_calendar">Календарь</string>
-    <string name="common_search">Поиск</string>
-    <string name="common_main">Главная</string>
-    <string name="common_profile">Профиль</string>
-    <string name="common_today">Сегодня</string>
-    <string name="common_tomorrow">Завтра</string>
-    <string name="common_anime">Аниме</string>
-    <string name="common_manga">Манга</string>
-    <string name="common_ranobe">Ранобэ</string>
-    <string name="common_manga_and_ranobe">Манга и ранобэ</string>
+    <string name="anime">Anime</string>
+    <string name="manga">Manga</string>
+    <string name="ranobe">Ranobe</string>
 
-    <string name="status_anons">Анонс</string>
-    <string name="status_ongoing">Онгоинг</string>
-    <string name="status_released">Завершен</string>
+    <string name="lists_title">Lists</string>
+    <string name="explore_title">Explore</string>
+    <string name="forum_title">Forum</string>
+    <string name="conversations_title">Conversations</string>
 
-    <string name="type_tv_translatable">TV сериал</string>
-    <string name="type_tv_long_translatable">Сериал</string>
-    <string name="type_tv_short_translatable">TV</string>
-    <string name="type_movie_translatable">Фильм</string>
-    <string name="type_special_translatable">Спешл</string>
-    <string name="type_music_translatable">Клип</string>
-    <string name="type_tv_13" translatable="false">TV 13</string>
-    <string name="type_tv_24" translatable="false">TV 24</string>
-    <string name="type_tv_48" translatable="false">TV 48</string>
-    <string name="type_ova" translatable="false">OVA</string>
-    <string name="type_ona" translatable="false">ONA</string>
+    <string name="titles">Titles</string>
 
-    <string name="episode_format">%d эпизод</string>
-    <string name="episode_short">эп.</string>
-    <string name="episode_short_format">%d эп.</string>
-
-    <string name="rate_planned">Запланировано</string>
-    <string name="rate_planned_short">В планах</string>
-    <string name="rate_on_hold">Отложено</string>
-    <string name="rate_dropped">Брошено</string>
-    <!--    Anime-->
-    <string name="rate_watching">Смотрю</string>
-    <string name="rate_rewatch">Пересматриваю</string>
-    <string name="rate_rewatch_short">Пересмотр</string>
-    <string name="rate_watched">Просмотрено</string>
-    <!--    Manga-->
-    <string name="rate_reading">Читаю</string>
-    <string name="rate_rereading">Перечитываю</string>
-    <string name="rate_readed">Прочитано</string>
-
-    <string name="time_minute_short_format">%s мин</string>
-    <string name="time_hour_short_format">%s ч</string>
-    <string name="time_hour_and_minute_short_format">%s ч %s мин</string>
-
-    <string name="auth_title">Вы не вошли в аккаунт</string>
-    <string name="auth_description">Войдите, чтобы все функции стали доступны.</string>
-    <string name="auth_sign_up">Создать аккаунт</string>
-    <string name="auth_sign_in">Войти</string>
-
-    <string name="rating_empty">Нет оценки</string>
-    <string name="rating_bad_ass">Хуже некуда</string>
-    <string name="rating_awful">Ужасно</string>
-    <string name="rating_very_bad">Очень плохо</string>
-    <string name="rating_bad">Плохо</string>
-    <string name="rating_not_bad">Не плохо</string>
-    <string name="rating_normal">Нормально</string>
-    <string name="rating_good">Хорошо</string>
-    <string name="rating_fine">Отлично</string>
-    <string name="rating_nuts">Великолепно</string>
-    <string name="rating_perfect">Шедевр!</string>
-
+    <string name="open_random_title_from_list">Random from the current list</string>
 </resources>

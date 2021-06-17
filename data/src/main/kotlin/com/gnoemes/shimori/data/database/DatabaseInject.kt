@@ -7,21 +7,24 @@ import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module(includes = [RoomDatabaseModule::class, DatabaseBindings::class, DaoModule::class])
-class DatabaseModule
 
+@InstallIn(SingletonComponent::class)
 @Module
 class RoomDatabaseModule {
     @Singleton
     @Provides
-    fun provideDatabase(context: Context): ShimoriRoomDatabase =
+    fun provideDatabase(@ApplicationContext context: Context): ShimoriRoomDatabase =
         Room.databaseBuilder(context, ShimoriRoomDatabase::class.java, "shimori.db")
             .fallbackToDestructiveMigration()
             .build()
 }
 
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class DatabaseBindings {
 
@@ -35,6 +38,7 @@ abstract class DatabaseBindings {
     abstract fun bindEntityInserter(inserter: ShimoriEntityInserter): EntityInserter
 }
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DaoModule {
     @Provides

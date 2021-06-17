@@ -7,6 +7,7 @@ import com.gnoemes.shikimori.auth.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -26,13 +27,13 @@ class ShikimoriAuthModule {
     @Provides
     @Singleton
     @Named("auth")
-    fun provideAuthPrefs(context: Context): SharedPreferences {
+    fun provideAuthPrefs(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("shikimori_auth", Context.MODE_PRIVATE)
     }
 
     @Provides
     @Named("shikimori-oauth-redirect")
-    fun provideOAuthRedirect(context: Context): String {
+    fun provideOAuthRedirect(@ApplicationContext context: Context): String {
         val scheme =
             context.getString(R.string.shikimori_redirect_scheme)
         val host = context.getString(R.string.shikimori_redirect_host)
