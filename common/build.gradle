@@ -17,6 +17,8 @@ dependencies {
     implementation project(Modules.baseAndroid)
     implementation project(Modules.model)
 
+    api project(Modules.commonImageLoading)
+
     implementation libs.androidx.core
 
     api libs.androidx.lifecycle.runtime

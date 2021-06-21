@@ -70,9 +70,12 @@ android {
 dependencies {
     implementation project(Modules.baseAndroid)
     implementation project(Modules.common)
+    implementation project(Modules.commonImageLoading)
     implementation project(Modules.domain)
     implementation project(Modules.model)
     implementation project(Modules.shikimoriAuth)
+
+    implementation project(Modules.uiLists)
 
     implementation libs.google.crashlytics
     implementation libs.google.analytics

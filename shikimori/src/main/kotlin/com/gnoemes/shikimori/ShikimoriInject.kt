@@ -100,8 +100,8 @@ internal class RetrofitModule {
 
     @Provides
     @Singleton
-    @Named("okhttp-default")
-    fun provideDefaultOkHttp(
+    @Named("okhttp-shikimori-builder")
+    fun provideDefaultOkHttpBuilder(
         interceptor: HttpLoggingInterceptor,
         userAgentInterceptor: UserAgentInterceptor,
         @Named("cache") cacheDir: File
@@ -139,12 +139,13 @@ internal class RetrofitModule {
 internal class CommonNetworkModule {
     @Provides
     @Singleton
-    fun provideOkHttpClient(@Named("okhttp-default") builder: OkHttpClient.Builder) =
+    @Named("okhttp-shikimori")
+    fun provideOkHttpClient(@Named("okhttp-shikimori-builder") builder: OkHttpClient.Builder) =
         builder.build()
 
     @Provides
     @Singleton
-    fun provideRetrofitBuilder(factory: Converter.Factory, client: OkHttpClient): Retrofit.Builder {
+    fun provideRetrofitBuilder(factory: Converter.Factory, @Named("okhttp-shikimori") client: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder()
             .client(client)
             .addConverterFactory(factory)
@@ -159,13 +160,11 @@ internal class CommonNetworkModule {
 
 @Module
 internal class AuthNetworkModule {
-    //TODO
-
     @Provides
     @Singleton
     @Auth
     fun provideAuthOkHttpClient(
-        @Named("okhttp-default") builder: OkHttpClient.Builder,
+        @Named("okhttp-shikimori-builder") builder: OkHttpClient.Builder,
         @Auth tokenInterceptor: ShikimoriTokenInterceptor,
         @Auth authenticator: Authenticator
     ) =

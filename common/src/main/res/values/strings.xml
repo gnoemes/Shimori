@@ -3,6 +3,9 @@
     <string name="manga">Manga</string>
     <string name="ranobe">Ranobe</string>
 
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
+
     <string name="lists_title">Lists</string>
     <string name="explore_title">Explore</string>
     <string name="forum_title">Forum</string>
