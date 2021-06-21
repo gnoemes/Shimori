@@ -20,10 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
-import com.gnoemes.shimori.Screen
+import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.Scaffold
@@ -65,22 +66,20 @@ internal fun Main(
 
     Scaffold(
             bottomBar = {
-                var currentSelectedItem by remember { mutableStateOf<Screen>(Screen.Lists) }
-//                val currentSelectedItem by navController.currentScreenAsState()
+                val currentSelectedItem by navController.currentScreenAsState()
 
                 MainBottomNavigation(
                         viewState,
                         selectedScreen = currentSelectedItem,
                         onScreenSelected = { selected ->
-                            currentSelectedItem = selected
-//                            navController.navigate(selected.route) {
-//                                launchSingleTop = true
-//                                restoreState = true
-//
-//                                popUpTo(navController.graph.findStartDestination().id) {
-//                                    saveState = true
-//                                }
-//                            }
+                            navController.navigate(selected.route) {
+                                launchSingleTop = true
+                                restoreState = true
+
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                            }
                         },
                         actioner
                 )
@@ -119,8 +118,8 @@ internal fun Main(
 @Composable
 internal fun MainBottomNavigation(
     viewState: MainViewState,
-    selectedScreen: Screen,
-    onScreenSelected: (Screen) -> Unit,
+    selectedScreen: RootScreen,
+    onScreenSelected: (RootScreen) -> Unit,
     actioner: (MainAction) -> Unit
 ) {
 
@@ -140,30 +139,30 @@ internal fun MainBottomNavigation(
 
             RateSelectionNavigationItem(
                     viewState.rateTargetType,
-                    selected = selectedScreen == Screen.Lists,
-                    onClick = { onScreenSelected(Screen.Lists) },
+                    selected = selectedScreen == RootScreen.Lists,
+                    onClick = { onScreenSelected(RootScreen.Lists) },
                     onReselect = { actioner(MainAction.RateTypeDialog) }
             )
 
             MainBottomNavigationItem(
-                    selected = selectedScreen == Screen.Explore,
+                    selected = selectedScreen == RootScreen.Explore,
                     stringResource(R.string.explore_title),
                     painter = painterResource(R.drawable.ic_explore),
-                    onClick = { onScreenSelected(Screen.Explore) }
+                    onClick = { onScreenSelected(RootScreen.Explore) }
             )
 
             MainBottomNavigationItem(
-                    selected = selectedScreen == Screen.Forum,
+                    selected = selectedScreen == RootScreen.Forum,
                     stringResource(R.string.forum_title),
                     painter = painterResource(R.drawable.ic_feed),
-                    onClick = { onScreenSelected(Screen.Forum) }
+                    onClick = { onScreenSelected(RootScreen.Forum) }
             )
 
             MainBottomNavigationItem(
-                    selected = selectedScreen == Screen.Conversations,
+                    selected = selectedScreen == RootScreen.Conversations,
                     stringResource(R.string.conversations_title),
                     painter = painterResource(R.drawable.ic_conversation),
-                    onClick = { onScreenSelected(Screen.Conversations) }
+                    onClick = { onScreenSelected(RootScreen.Conversations) }
             )
         }
 
@@ -339,23 +338,23 @@ private fun RateTypeSelectBottomSheet(
  */
 @Stable
 @Composable
-private fun NavController.currentScreenAsState(): State<Screen> {
-    val selectedItem = remember { mutableStateOf<Screen>(Screen.Lists) }
+private fun NavController.currentScreenAsState(): State<RootScreen> {
+    val selectedItem = remember { mutableStateOf<RootScreen>(RootScreen.Lists) }
 
     DisposableEffect(this) {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             when {
-                destination.hierarchy.any { it.route == Screen.Lists.route } -> {
-                    selectedItem.value = Screen.Lists
+                destination.hierarchy.any { it.route == RootScreen.Lists.route } -> {
+                    selectedItem.value = RootScreen.Lists
                 }
-                destination.hierarchy.any { it.route == Screen.Explore.route } -> {
-                    selectedItem.value = Screen.Explore
+                destination.hierarchy.any { it.route == RootScreen.Explore.route } -> {
+                    selectedItem.value = RootScreen.Explore
                 }
-                destination.hierarchy.any { it.route == Screen.Forum.route } -> {
-                    selectedItem.value = Screen.Forum
+                destination.hierarchy.any { it.route == RootScreen.Forum.route } -> {
+                    selectedItem.value = RootScreen.Forum
                 }
-                destination.hierarchy.any { it.route == Screen.Conversations.route } -> {
-                    selectedItem.value = Screen.Conversations
+                destination.hierarchy.any { it.route == RootScreen.Conversations.route } -> {
+                    selectedItem.value = RootScreen.Conversations
                 }
             }
         }
