@@ -10,6 +10,7 @@ object Modules {
     const val base = ":base"
     const val baseAndroid = ":base-android"
     const val common = ":common"
+    const val commonImageLoading = ":common-imageloading"
 
     //data
     const val dataBase = ":data-base"
@@ -20,5 +21,8 @@ object Modules {
     //domain
     const val domain = ":domain"
     const val model = ":model"
+
+    //ui
+    const val uiLists = ":ui:lists"
 
 }
