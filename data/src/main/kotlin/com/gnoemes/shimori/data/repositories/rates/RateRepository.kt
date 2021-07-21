@@ -7,7 +7,6 @@ import com.gnoemes.shimori.data.repositories.user.UserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,8 +24,7 @@ class RateRepository @Inject constructor(
 
     fun observeRates(type: RateTargetType) = rateStore.observeRates(type)
 
-    fun observeRateSort(type: RateTargetType, status: RateStatus) =
-        rateSortStore.observeSort(type, status)
+    fun observeRateSort(type: RateTargetType) = rateSortStore.observeSort(type)
 
     suspend fun createOrUpdate(rate: Rate) {
         val id = rateStore.createOrUpdate(rate)

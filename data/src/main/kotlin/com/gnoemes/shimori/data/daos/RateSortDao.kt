@@ -2,7 +2,6 @@ package com.gnoemes.shimori.data.daos
 
 import androidx.room.*
 import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.Flow
 
@@ -10,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 abstract class RateSortDao : EntityDao<RateSort> {
 
     @Query(QUERY_SORT)
-    abstract suspend fun querySort(type: RateTargetType, status: RateStatus): RateSort?
+    abstract suspend fun querySort(type: RateTargetType): RateSort?
 
     @Transaction
     @Query(QUERY_SORT)
-    abstract fun observeSort(type: RateTargetType, status: RateStatus): Flow<RateSort?>
+    abstract fun observeSort(type: RateTargetType): Flow<RateSort?>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,7 +21,7 @@ abstract class RateSortDao : EntityDao<RateSort> {
 
     companion object {
         private const val QUERY_SORT = """
-            SELECT * FROM rate_sort WHERE type = :type AND status = :status
+            SELECT * FROM rate_sort WHERE type = :type
         """
     }
 

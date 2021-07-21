@@ -13,6 +13,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.user.User
+import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun RootScreenToolbar(
@@ -27,6 +28,7 @@ fun RootScreenToolbar(
             backgroundColor = MaterialTheme.colors.toolbar,
             contentPadding = PaddingValues(16.dp),
             modifier = Modifier
+                .statusBarsPadding()
                 .height(64.dp)
                 .fillMaxWidth()
     ) {
