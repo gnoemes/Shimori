@@ -5,7 +5,6 @@ import com.gnoemes.shimori.data.repositories.rates.RateRepository
 import com.gnoemes.shimori.domain.Interactor
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
-import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,7 +18,6 @@ class UpdateRateSort @Inject constructor(
         withContext(dispatchers.io) {
             val rateSort = RateSort(
                     type = params.type,
-                    status = params.status,
                     sortOption = params.sort,
                     isDescending = params.isDescending
             )
@@ -29,7 +27,6 @@ class UpdateRateSort @Inject constructor(
 
     data class Params(
         val type: RateTargetType,
-        val status: RateStatus,
         val sort: RateSortOption,
         val isDescending: Boolean
     )

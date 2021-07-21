@@ -15,24 +15,42 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.gnoemes.shimori.lists.Lists
 
 internal sealed class RootScreen(val route: String) {
-    object Lists : RootScreen("listsroot")
-    object Explore : RootScreen("exploreroot")
-    object Forum : RootScreen("forumroot")
-    object Conversations : RootScreen("conversationsroot")
+    abstract fun getStartDestination(): Screen
+
+    object Lists : RootScreen("listsroot") {
+        override fun getStartDestination() = Screen.Lists
+    }
+
+    object Explore : RootScreen("exploreroot") {
+        override fun getStartDestination() = Screen.Explore
+    }
+
+    object Forum : RootScreen("forumroot") {
+        override fun getStartDestination() = Screen.Forum
+    }
+
+    object Conversations : RootScreen("conversationsroot") {
+        override fun getStartDestination() = Screen.Conversations
+    }
 }
 
 internal sealed class Screen(val route: String) {
     object Lists : Screen("lists")
+
     object Explore : Screen("explore")
     object Forum : Screen("forum")
     object Conversations : Screen("conversations")
+
+    object Profile : Screen("profile")
+    object Search : Screen("search")
 }
 
 @Composable
 internal fun AppNavigation(
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     NavHost(
             navController = navController,
@@ -53,6 +71,7 @@ private fun NavGraphBuilder.addListsRoot(
             startDestination = Screen.Lists.route
     ) {
         addLists(navController)
+        addExplore(navController)
     }
 }
 
@@ -91,8 +110,13 @@ private fun NavGraphBuilder.addConversationsRoot(
 
 
 private fun NavGraphBuilder.addLists(navController: NavController) {
-    composable(Screen.Lists.route) {
-        MockScreen(Screen.Lists.route)
+    composable(
+            Screen.Lists.route,
+    ) {
+        Lists(
+                openUser = { navController.navigate(Screen.Explore.route) },
+                openSearch = { navController.navigate(Screen.Search.route) }
+        )
     }
 }
 

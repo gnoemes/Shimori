@@ -23,6 +23,7 @@ dependencies {
     implementation libs.compose.ui.tooling
     implementation libs.compose.ui.viewbinding
 
+    implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.insets
 
     implementation libs.threeTenAbp

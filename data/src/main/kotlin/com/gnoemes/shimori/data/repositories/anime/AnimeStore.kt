@@ -37,6 +37,7 @@ class AnimeStore @Inject constructor(
         else -> animeDao.observeCalendarFilter("*$filter*")
     }
 
+    //TODO: add all sorts from RateSortOption.kt
     fun observeAnimeWithStatus(status: RateStatus, sort: RateSort, filter: String?): Flow<List<AnimeWithRate>> =
         when (sort.sortOption) {
             RateSortOption.NAME -> observeNameSort(status, sort.isDescending, filter)
@@ -44,7 +45,7 @@ class AnimeStore @Inject constructor(
             RateSortOption.DATE_CREATED -> observeDateCreatedSort(status, sort.isDescending, filter)
             RateSortOption.DATE_UPDATED -> observeDateUpdatedSort(status, sort.isDescending, filter)
             RateSortOption.DATE_AIRED -> observeDateAiredSort(status, sort.isDescending, filter)
-            RateSortOption.SCORE -> observeScoreSort(status, sort.isDescending, filter)
+            RateSortOption.MY_SCORE -> observeScoreSort(status, sort.isDescending, filter)
             RateSortOption.SIZE -> observeSizeSort(status, sort.isDescending, filter)
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }

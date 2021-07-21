@@ -2,18 +2,12 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "609729fc35e31736cc5f14b1c4133e17",
+    "identityHash": "a50953d1675c62937f5309e4794e7eb7",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name_ru_lower_case` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `anime_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `anime_status` TEXT, `episodes_size` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `anime_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `anime_status` TEXT, `episodes_size` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `name_ru_lower_case` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
         "fields": [
-          {
-            "fieldPath": "searchName",
-            "columnName": "name_ru_lower_case",
-            "affinity": "TEXT",
-            "notNull": false
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
@@ -149,6 +143,12 @@
           {
             "fieldPath": "genres",
             "columnName": "genres",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "searchName",
+            "columnName": "name_ru_lower_case",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -602,7 +602,7 @@
       },
       {
         "tableName": "rate_sort",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `status` TEXT, `sortOption` TEXT NOT NULL, `isDescending` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `sortOption` TEXT NOT NULL, `isDescending` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -613,12 +613,6 @@
           {
             "fieldPath": "type",
             "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "status",
-            "columnName": "status",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -643,13 +637,12 @@
         },
         "indices": [
           {
-            "name": "index_rate_sort_type_status",
+            "name": "index_rate_sort_type",
             "unique": true,
             "columnNames": [
-              "type",
-              "status"
+              "type"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rate_sort_type_status` ON `${TABLE_NAME}` (`type`, `status`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rate_sort_type` ON `${TABLE_NAME}` (`type`)"
           }
         ],
         "foreignKeys": []
@@ -658,7 +651,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '609729fc35e31736cc5f14b1c4133e17')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a50953d1675c62937f5309e4794e7eb7')"
     ]
   }
 }

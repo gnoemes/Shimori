@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
+import com.gnoemes.shimori.Screen
 import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.Scaffold
@@ -32,10 +33,11 @@ import com.gnoemes.shimori.common.compose.ShimoriIconButton
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.common.compose.theme.toolbar
-import com.gnoemes.shimori.common.extensions.rememberFlowWithLifecycle
+import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -51,8 +53,7 @@ internal fun Main(
 ) {
     val navController = rememberNavController()
 
-    val viewState by rememberFlowWithLifecycle(viewModel.state)
-        .collectAsState(initial = MainViewState.Empty)
+    val viewState by viewModel.state.collectAsStateWithLifecycle(MainViewState.Empty)
 
     var openBottomSheet by remember { mutableStateOf(false) }
 
@@ -68,27 +69,40 @@ internal fun Main(
             bottomBar = {
                 val currentSelectedItem by navController.currentScreenAsState()
 
+                val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
+
                 MainBottomNavigation(
                         viewState,
+                        canShowListIcon = canShowBottomSheet,
                         selectedScreen = currentSelectedItem,
                         onScreenSelected = { selected ->
+
                             navController.navigate(selected.route) {
                                 launchSingleTop = true
                                 restoreState = true
 
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
+
                                 }
                             }
                         },
-                        actioner
+                        onScreenReSelected = { selected ->
+
+                            //show list type select bottom sheet if lists tab was reselected twice
+                            if (canShowBottomSheet) {
+                                openBottomSheet = true
+                            } else {
+                                navController.popBackStack(selected.getStartDestination().route, false)
+                            }
+                        },
                 )
 
             }
     ) {
         Box(Modifier.fillMaxSize()) {
             AppNavigation(
-                    navController = navController
+                    navController = navController,
             )
         }
     }
@@ -107,11 +121,15 @@ internal fun Main(
                     }
                 },
         )
+
+        val coroutineScope = rememberCoroutineScope()
+
+
         LaunchedEffect(key1 = viewModel) {
-            sheetState.show()
+            launch { sheetState.show() }
         }
 
-        RateTypeSelectBottomSheet(action = actioner, selectedRateType = viewState.rateTargetType, sheetState = sheetState)
+        RateTypeSelectBottomSheet(coroutineScope = coroutineScope, action = actioner, selectedRateType = viewState.rateTargetType, sheetState = sheetState)
     }
 }
 
@@ -119,8 +137,9 @@ internal fun Main(
 internal fun MainBottomNavigation(
     viewState: MainViewState,
     selectedScreen: RootScreen,
+    canShowListIcon: Boolean,
     onScreenSelected: (RootScreen) -> Unit,
-    actioner: (MainAction) -> Unit
+    onScreenReSelected: (RootScreen) -> Unit
 ) {
 
     Surface(
@@ -139,30 +158,43 @@ internal fun MainBottomNavigation(
 
             RateSelectionNavigationItem(
                     viewState.rateTargetType,
+                    canShowListIcon = canShowListIcon,
                     selected = selectedScreen == RootScreen.Lists,
                     onClick = { onScreenSelected(RootScreen.Lists) },
-                    onReselect = { actioner(MainAction.RateTypeDialog) }
+                    onReselect = { onScreenReSelected(RootScreen.Lists) }
             )
 
             MainBottomNavigationItem(
                     selected = selectedScreen == RootScreen.Explore,
                     stringResource(R.string.explore_title),
                     painter = painterResource(R.drawable.ic_explore),
-                    onClick = { onScreenSelected(RootScreen.Explore) }
+                    onClick = {
+                        val screen = RootScreen.Explore
+                        if (selectedScreen == screen) onScreenReSelected(screen)
+                        else onScreenSelected(screen)
+                    }
             )
 
             MainBottomNavigationItem(
                     selected = selectedScreen == RootScreen.Forum,
                     stringResource(R.string.forum_title),
                     painter = painterResource(R.drawable.ic_feed),
-                    onClick = { onScreenSelected(RootScreen.Forum) }
+                    onClick = {
+                        val screen = RootScreen.Forum
+                        if (selectedScreen == screen) onScreenReSelected(screen)
+                        else onScreenSelected(screen)
+                    }
             )
 
             MainBottomNavigationItem(
                     selected = selectedScreen == RootScreen.Conversations,
                     stringResource(R.string.conversations_title),
                     painter = painterResource(R.drawable.ic_conversation),
-                    onClick = { onScreenSelected(RootScreen.Conversations) }
+                    onClick = {
+                        val screen = RootScreen.Conversations
+                        if (selectedScreen == screen) onScreenReSelected(screen)
+                        else onScreenSelected(screen)
+                    }
             )
         }
 
@@ -174,6 +206,7 @@ internal fun MainBottomNavigation(
 private fun RowScope.RateSelectionNavigationItem(
     selectedRateType: RateTargetType,
     selected: Boolean,
+    canShowListIcon: Boolean,
     onClick: () -> Unit,
     onReselect: () -> Unit
 ) {
@@ -192,7 +225,7 @@ private fun RowScope.RateSelectionNavigationItem(
     ) {
 
         AnimatedVisibility(
-                visible = selected,
+                visible = selected && canShowListIcon,
                 enter = fadeIn(initialAlpha = 0.4f),
                 exit = fadeOut(animationSpec = tween(durationMillis = 250))
 
@@ -227,11 +260,11 @@ private fun MainBottomNavigationItem(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun RateTypeSelectBottomSheet(
+    coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     action: (MainAction) -> Unit,
     selectedRateType: RateTargetType
 ) {
-    val coroutineScope = rememberCoroutineScope()
 
     val bottomSheetOnClick = { childAction: () -> Unit ->
         childAction()
@@ -358,6 +391,7 @@ private fun NavController.currentScreenAsState(): State<RootScreen> {
                 }
             }
         }
+
         addOnDestinationChangedListener(listener)
 
         onDispose {
@@ -366,4 +400,23 @@ private fun NavController.currentScreenAsState(): State<RootScreen> {
     }
 
     return selectedItem
+}
+
+@Composable
+private fun NavController.canShowListTypeBottomSheetAsState(): State<Boolean> {
+    val canShow = remember { mutableStateOf(false) }
+
+    DisposableEffect("canShowBottomSheet") {
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            canShow.value = destination.route == Screen.Lists.route
+        }
+
+        addOnDestinationChangedListener(listener)
+
+        onDispose {
+            removeOnDestinationChangedListener(listener)
+        }
+    }
+
+    return canShow
 }

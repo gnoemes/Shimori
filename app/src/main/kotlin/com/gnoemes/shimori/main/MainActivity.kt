@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.common.BaseActivity
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
+import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
 import com.gnoemes.shimori.common.utils.ShimoriRateUtil
+import com.gnoemes.shimori.common.utils.ShimoriTextCreator
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -24,7 +26,8 @@ class MainActivity : BaseActivity() {
     internal lateinit var prefs: ShimoriPreferences
     @Inject
     internal lateinit var rateUtil: ShimoriRateUtil
-
+    @Inject
+    internal lateinit var textCreator : ShimoriTextCreator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,8 @@ class MainActivity : BaseActivity() {
         setContent {
             CompositionLocalProvider(
                     LocalElevationOverlay provides null,
-                    LocalShimoriRateUtil provides rateUtil
+                    LocalShimoriRateUtil provides rateUtil,
+                    LocalShimoriTextCreator provides textCreator
             ) {
                 ProvideWindowInsets(consumeWindowInsets = false) {
                     ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {

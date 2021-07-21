@@ -14,4 +14,15 @@
     <string name="titles">Titles</string>
 
     <string name="open_random_title_from_list">Random from the current list</string>
+
+
+    <string name="list_sort_progress">Progress</string>
+    <string name="list_sort_size_anime">Episodes</string>
+    <string name="list_sort_size_manga">Chapters</string>
+    <string name="list_sort_last_changed">Last changed</string>
+    <string name="list_sort_last_added">Last added</string>
+    <string name="list_sort_last_released">Last released</string>
+    <string name="list_sort_name">Name</string>
+    <string name="list_sort_your_score">Your score</string>
+    <string name="list_sort_rating">User\'s score</string>
 </resources>
