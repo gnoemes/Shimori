@@ -49,7 +49,7 @@ internal fun Lists(
     openSearch: () -> Unit,
 ) {
 
-    val viewState by viewModel.state.collectAsStateWithLifecycle(ListsViewState.Empty)
+    val viewState by viewModel.state.collectAsStateWithLifecycle(initial = viewModel.state.value)
 
     if (viewState.authStatus.isAuthorized) {
         Lists(
