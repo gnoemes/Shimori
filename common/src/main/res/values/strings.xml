@@ -15,6 +15,12 @@
 
     <string name="open_random_title_from_list">Random from the current list</string>
 
+    <string name="sign_in_title">I didn\'t recognize you</string>
+    <string name="sign_in_message">Sign in or create an account to use lists.</string>
+
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Create account</string>
+
 
     <string name="list_sort_progress">Progress</string>
     <string name="list_sort_size_anime">Episodes</string>

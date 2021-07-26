@@ -115,7 +115,7 @@ private fun NavGraphBuilder.addLists(navController: NavController) {
     ) {
         Lists(
                 openUser = { navController.navigate(Screen.Explore.route) },
-                openSearch = { navController.navigate(Screen.Search.route) }
+                openSearch = { navController.navigate(Screen.Search.route) },
         )
     }
 }

@@ -26,6 +26,7 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
+import com.gnoemes.shimori.common.compose.ChevronIcon
 import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.Scaffold
@@ -310,11 +311,7 @@ private fun RateTypeSelectBottomSheet(
                             .height(48.dp)
                             .fillMaxWidth()
                 ) {
-                    Icon(
-                            painter = painterResource(R.drawable.ic_chevron_right),
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.onPrimary
-                    )
+                    ChevronIcon()
                 }
 
                 EnlargedButton(

@@ -3,6 +3,7 @@ package com.gnoemes.shimori.lists
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shikimori.ShikimoriAuthManager
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
@@ -23,7 +24,8 @@ internal class ListsViewModel @Inject constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
     observeRateSort: ObserveRateSort,
     private val updateRateSort: UpdateRateSort,
-) : ViewModel() {
+    shikimoriAuthManager: ShikimoriAuthManager
+) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
     private val listType: RateTargetType = RateTargetType.findOrDefault(null)
 
     private val pendingActions = MutableSharedFlow<ListsAction>()

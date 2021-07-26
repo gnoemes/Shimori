@@ -1,18 +1,29 @@
 package com.gnoemes.shimori.lists
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.*
+import com.gnoemes.shimori.common.compose.theme.alpha
+import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
@@ -22,7 +33,7 @@ import com.gnoemes.shimori.model.user.User
 @Composable
 fun Lists(
     openUser: () -> Unit,
-    openSearch: () -> Unit
+    openSearch: () -> Unit,
 ) {
     Lists(
             viewModel = hiltViewModel(),
@@ -40,12 +51,110 @@ internal fun Lists(
 
     val viewState by viewModel.state.collectAsStateWithLifecycle(ListsViewState.Empty)
 
-    Lists(
-            viewState,
-            openUser,
-            openSearch
-    ) { action ->
-        viewModel.submitAction(action)
+    if (viewState.authStatus.isAuthorized) {
+        Lists(
+                viewState,
+                openUser,
+                openSearch
+        ) { action ->
+            viewModel.submitAction(action)
+        }
+    } else {
+        val signInLauncher =
+            rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
+                if (result != null) {
+                    viewModel.onLoginResult(result)
+                }
+            }
+
+        val signUpLauncher =
+            rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
+                if (result != null) {
+                    viewModel.onLoginResult(result)
+                }
+            }
+
+
+        NeedAuthLists(
+                signIn = { signInLauncher.launch(Unit) },
+                signUp = { signUpLauncher.launch(Unit) }
+        )
+    }
+}
+
+@Composable
+internal fun NeedAuthLists(
+    signIn: () -> Unit,
+    signUp: () -> Unit
+) {
+
+    Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+    ) {
+
+        Spacer(modifier = Modifier.height(152.dp))
+
+        Icon(
+                painter = painterResource(id = R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.profile),
+                modifier = Modifier
+                    .size(96.dp)
+                    .background(color = MaterialTheme.colors.alpha, shape = CircleShape)
+                    .padding(24.dp)
+                    .align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+                text = stringResource(id = R.string.sign_in_title),
+                color = MaterialTheme.colors.onPrimary,
+                style = MaterialTheme.typography.h2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+                text = stringResource(id = R.string.sign_in_message),
+                color = MaterialTheme.colors.caption,
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(64.dp))
+
+        EnlargedButton(
+                selected = false,
+                onClick = signIn,
+                painter = painterResource(id = R.drawable.ic_sign_in),
+                text = stringResource(id = R.string.sign_in),
+                modifier = Modifier
+                    .height(48.dp)
+                    .fillMaxWidth()
+        ) {
+            ChevronIcon()
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        EnlargedButton(
+                selected = false,
+                onClick = signUp,
+                painter = painterResource(id = R.drawable.ic_create_account),
+                text = stringResource(id = R.string.sign_up),
+                modifier = Modifier
+                    .height(48.dp)
+                    .fillMaxWidth()
+        ) {
+            ChevronIcon()
+        }
+
+
     }
 }
 

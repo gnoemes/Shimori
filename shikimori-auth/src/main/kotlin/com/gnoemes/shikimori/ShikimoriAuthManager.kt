@@ -8,7 +8,9 @@ import net.openid.appauth.AuthorizationResponse
 
 interface ShikimoriAuthManager {
     fun buildLoginActivityResult(): LoginShikimori = LoginShikimori(buildLoginIntent())
+    fun buildRegisterActivityResult(): LoginShikimori = LoginShikimori(buildRegisterIntent())
     fun buildLoginIntent(): Intent
+    fun buildRegisterIntent(): Intent
     fun onLoginResult(result: LoginShikimori.Result)
 }
 

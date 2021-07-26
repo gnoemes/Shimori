@@ -9,11 +9,13 @@ import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.ClientAuthentication
 import javax.inject.Inject
+import javax.inject.Named
 
 internal class ActivityShikimoriAuthManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val shikimoriManager: ShikimoriManager,
-    private val requestProvider: Lazy<AuthorizationRequest>,
+    @Named("login") private val loginRequestProvider: Lazy<AuthorizationRequest>,
+    @Named("register") private val registerRequestProvider: Lazy<AuthorizationRequest>,
     private val clientAuth: Lazy<ClientAuthentication>
 ) : ShikimoriAuthManager {
     private val authService by lazy(LazyThreadSafetyMode.NONE) {
@@ -21,7 +23,11 @@ internal class ActivityShikimoriAuthManager @Inject constructor(
     }
 
     override fun buildLoginIntent(): Intent {
-        return authService.getAuthorizationRequestIntent(requestProvider.get())
+        return authService.getAuthorizationRequestIntent(loginRequestProvider.get())
+    }
+
+    override fun buildRegisterIntent(): Intent {
+        return authService.getAuthorizationRequestIntent(registerRequestProvider.get())
     }
 
     override fun onLoginResult(result: LoginShikimori.Result) {
