@@ -44,17 +44,28 @@ class ShikimoriAuthModule {
 
     @Singleton
     @Provides
+    @Named("login-config")
     fun provideAuthConfig(): AuthorizationServiceConfiguration {
         return AuthorizationServiceConfiguration(
                 ShikimoriConstants.AUTHORIZATION_ENDPOINT.toUri(),
                 ShikimoriConstants.TOKEN_ENDPOINT.toUri(),
-                ShikimoriConstants.REGISTRATION_ENDPOINT.toUri()
+        )
+    }
+
+    @Singleton
+    @Provides
+    @Named("register-config")
+    fun provideRegisterConfig(): AuthorizationServiceConfiguration {
+        return AuthorizationServiceConfiguration(
+                ShikimoriConstants.REGISTRATION_ENDPOINT.toUri(),
+                ShikimoriConstants.TOKEN_ENDPOINT.toUri(),
         )
     }
 
     @Provides
+    @Named("login")
     fun provideAuthRequest(
-        authServiceConfig: AuthorizationServiceConfiguration,
+        @Named("login-config") authServiceConfig: AuthorizationServiceConfiguration,
         @Named("shikimori-client-id") clientId: String,
         @Named("shikimori-oauth-redirect") redirect: String
     ): AuthorizationRequest = AuthorizationRequest.Builder(
@@ -62,15 +73,33 @@ class ShikimoriAuthModule {
             clientId,
             ResponseTypeValues.CODE,
             redirect.toUri()
-    ).apply {
-        setAdditionalParameters(mapOf("User-agent" to "Shimori"))
-        //TODO return friends
-        setScopes("user_rates", "comments", "topics")
-        setCodeVerifier(null)
-    }.build()
+    ).defaultConfig().build()
+
+    @Provides
+    @Named("register")
+    fun provideRegisterRequest(
+        @Named("register-config") authServiceConfig: AuthorizationServiceConfiguration,
+        @Named("shikimori-client-id") clientId: String,
+        @Named("shikimori-oauth-redirect") redirect: String
+    ): AuthorizationRequest = AuthorizationRequest.Builder(
+            authServiceConfig,
+            clientId,
+            ResponseTypeValues.CODE,
+            redirect.toUri()
+    ).defaultConfig().build()
+
 
     @Provides
     @Singleton
     fun provideClientAuth(@Named("shikimori-secret-key") clientSecret: String): ClientAuthentication =
         ClientSecretPost(clientSecret)
+
+
+    private fun AuthorizationRequest.Builder.defaultConfig(): AuthorizationRequest.Builder {
+        setAdditionalParameters(mapOf("User-agent" to "Shimori"))
+        //TODO return friends
+        setScopes("user_rates", "comments", "topics")
+        setCodeVerifier(null)
+        return this
+    }
 }
