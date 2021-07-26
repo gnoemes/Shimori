@@ -11,10 +11,7 @@ import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,16 +27,7 @@ internal class ListsViewModel @Inject constructor(
 
     private val pendingActions = MutableSharedFlow<ListsAction>()
 
-    val state = combine(
-            observeShikimoriAuth.observe().distinctUntilChanged(),
-            observeRateSort.observe().distinctUntilChanged(),
-    ) { auth, activeRateSort ->
-        ListsViewState(
-                authStatus = auth,
-                type = listType,
-                activeSort = activeRateSort ?: RateSort.defaultForType(listType),
-        )
-    }
+    val state = MutableStateFlow(ListsViewState.Empty)
 
     init {
         viewModelScope.launch {
@@ -51,6 +39,18 @@ internal class ListsViewModel @Inject constructor(
             }
         }
 
+        viewModelScope.launch {
+            combine(
+                    observeShikimoriAuth.observe().distinctUntilChanged(),
+                    observeRateSort.observe().distinctUntilChanged()
+            ) { auth, activeRateSort ->
+                ListsViewState(
+                        authStatus = auth,
+                        type = listType,
+                        activeSort = activeRateSort ?: RateSort.defaultForType(listType),
+                )
+            }.collect { state.emit(it) }
+        }
 
         observeShikimoriAuth(Unit)
         observeRateSort(ObserveRateSort.Params(listType))
