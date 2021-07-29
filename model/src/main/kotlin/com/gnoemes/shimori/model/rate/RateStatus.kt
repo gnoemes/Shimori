@@ -15,6 +15,8 @@ enum class RateStatus(
         fun watchingFirstValues() =
             listOf(WATCHING, PLANNED, REWATCHING, COMPLETED, ON_HOLD, DROPPED)
 
+        val listPagesOrder = listOf(WATCHING, REWATCHING, ON_HOLD, PLANNED, COMPLETED, DROPPED)
+
         fun priorityValues() = values().sortedBy { it.priority }
     }
 }

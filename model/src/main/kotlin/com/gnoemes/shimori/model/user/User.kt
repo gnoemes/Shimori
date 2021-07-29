@@ -21,7 +21,7 @@ data class User(
     @ColumnInfo(name = "common_info") val commonInfo: String? = null,
     val sex: String? = null,
     val website: String? = null,
-    @ColumnInfo(name = "date_birth") val dateBirth: OffsetDateTime? = null,
+    @ColumnInfo(name = "date_birth") val dateBirth: String? = null,
     val locale: String? = null,
     @ColumnInfo(name = "full_years") val fullYears: Int? = null,
     val location: String? = null,

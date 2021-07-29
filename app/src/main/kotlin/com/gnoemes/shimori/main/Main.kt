@@ -315,7 +315,7 @@ private fun RateTypeSelectBottomSheet(
                 }
 
                 EnlargedButton(
-                        selected = selectedRateType == RateTargetType.ANIME,
+                        selected = selectedRateType.anime,
                         onClick = { bottomSheetOnClick { action(MainAction.ChangeRateType(RateTargetType.ANIME)) } },
                         painter = painterResource(R.drawable.ic_anime),
                         text = stringResource(R.string.anime),

@@ -4,9 +4,13 @@ import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.daos.RateDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
+import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.Rate
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RateStore @Inject constructor(
@@ -27,6 +31,33 @@ class RateStore @Inject constructor(
             RateTargetType.ANIME -> dao.observeAnimeRates()
             else -> throw IllegalArgumentException("$target is not supported yet")
         }
+
+    fun observeListsPages(target: RateTargetType): Flow<List<ListsPage>> {
+        return combine(
+                *RateStatus.listPagesOrder.map { status ->
+                    dao.observePageExist(target, status)
+                        .map { count -> status to (count > 0) }
+                }
+                    .toTypedArray()
+        ) { statuses ->
+            val pages = mutableListOf<ListsPage>()
+
+
+            val pinExist = statuses.any { it.second }
+
+            if (pinExist) {
+                pages += ListsPage.PINNED
+            }
+
+            statuses
+                .filter { it.second }
+                .forEach { (status, _) ->
+                    ListsPage.find(status)?.let { pages += it }
+                }
+
+            pages
+        }
+    }
 
     suspend fun createOrUpdate(rate: Rate): Long {
         return if (rate.shikimoriId == null) dao.insert(rate)

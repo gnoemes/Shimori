@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shikimori.ShikimoriAuthManager
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
+import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.rate.RateSort
@@ -20,8 +21,9 @@ internal class ListsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeShikimoriAuth: ObserveShikimoriAuth,
     observeRateSort: ObserveRateSort,
+    observeListsPages: ObserveListsPages,
     private val updateRateSort: UpdateRateSort,
-    shikimoriAuthManager: ShikimoriAuthManager
+    shikimoriAuthManager: ShikimoriAuthManager,
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
     private val listType: RateTargetType = RateTargetType.findOrDefault(null)
 
@@ -42,18 +44,21 @@ internal class ListsViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                     observeShikimoriAuth.observe().distinctUntilChanged(),
-                    observeRateSort.observe().distinctUntilChanged()
-            ) { auth, activeRateSort ->
+                    observeRateSort.observe().distinctUntilChanged(),
+                    observeListsPages.observe().distinctUntilChanged()
+            ) { auth, activeRateSort, pages ->
                 ListsViewState(
                         authStatus = auth,
                         type = listType,
                         activeSort = activeRateSort ?: RateSort.defaultForType(listType),
+                        pages = pages
                 )
             }.collect { state.emit(it) }
         }
 
         observeShikimoriAuth(Unit)
         observeRateSort(ObserveRateSort.Params(listType))
+        observeListsPages(ObserveListsPages.Params(listType))
     }
 
     private fun updateRateSort(option: RateSortOption, isDescending: Boolean) {

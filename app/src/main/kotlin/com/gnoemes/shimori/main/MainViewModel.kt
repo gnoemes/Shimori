@@ -2,11 +2,9 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.domain.interactors.DeleteMyUser
 import com.gnoemes.shimori.domain.interactors.UpdateUser
-import com.gnoemes.shimori.domain.invoke
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +27,7 @@ class MainViewModel @Inject constructor(
 
     val state = combine(
             rateTargetType,
-            observeShikimoriAuth.observe()
+            observeShikimoriAuth.observe().distinctUntilChanged()
     ) { rateTargetType, authState ->
         MainViewState(
                 rateTargetType = rateTargetType,
@@ -42,7 +40,7 @@ class MainViewModel @Inject constructor(
             observeShikimoriAuth.observe()
                 .distinctUntilChanged()
                 .onEach {
-                    if (it == ShikimoriAuthState.LOGGED_IN) {
+                    if (it.isAuthorized) {
                         updateUser.executeSync(UpdateUser.Params(null, isMe = true))
                     } else {
                         deleteMyUser.executeSync(Unit)
@@ -50,11 +48,11 @@ class MainViewModel @Inject constructor(
                 }
         }
 
-        observeShikimoriAuth()
+        observeShikimoriAuth(Unit)
 
         viewModelScope.launch {
             pendingActions.collect { action ->
-                when(action) {
+                when (action) {
                     MainAction.Random -> openRandomTitle()
                     is MainAction.ChangeRateType -> changeRateType(action.rateTargetType)
                 }

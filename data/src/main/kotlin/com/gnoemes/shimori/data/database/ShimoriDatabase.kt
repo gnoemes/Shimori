@@ -8,4 +8,5 @@ interface ShimoriDatabase {
     fun lastRequestDao(): LastRequestDao
     fun userDao(): UserDao
     fun rateSortDao() : RateSortDao
+    fun listPinDao() : ListPinDao
 }

@@ -42,4 +42,6 @@ dependencies {
     implementation libs.accompanist.coil
     implementation libs.accompanist.insets
     implementation libs.accompanist.swiperefresh
+    implementation libs.accompanist.pager
+    implementation libs.accompanist.pagerindicators
 }

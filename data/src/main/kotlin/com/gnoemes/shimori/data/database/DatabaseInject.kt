@@ -55,4 +55,7 @@ class DaoModule {
 
     @Provides
     fun provideRateSortDao(db: ShimoriDatabase) = db.rateSortDao()
+
+    @Provides
+    fun provideListPinDao(db : ShimoriDatabase) = db.listPinDao()
 }
