@@ -11,7 +11,7 @@ internal data class UserDetailsResponse(
     @field:SerializedName("name") val name: String?,
     @field:SerializedName("sex") val sex: String?,
     @field:SerializedName("website") val website: String?,
-    @field:SerializedName("birth_on") val dateBirth: OffsetDateTime?,
+    @field:SerializedName("birth_on") val dateBirth: String?,
     @field:SerializedName("locale") val locale: String?,
     @field:SerializedName("full_years") val fullYears: Int?,
     @field:SerializedName("last_online") val lastOnline: String,

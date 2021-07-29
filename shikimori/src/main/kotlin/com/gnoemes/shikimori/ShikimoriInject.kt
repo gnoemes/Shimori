@@ -125,13 +125,13 @@ internal class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideGson(dateTimeResponseConverter: DateTimeResponseConverter) = GsonBuilder()
+    fun provideGson(dateTimeResponseConverter: OffsetDateTimeResponseConverter) = GsonBuilder()
         .registerTypeAdapter(OffsetDateTime::class.java, dateTimeResponseConverter)
         .create()
 
     @Provides
     @Singleton
-    fun provideDateResponseConverter(): DateTimeResponseConverter = DateTimeResponseConverterImpl()
+    fun provideDateResponseConverter(): OffsetDateTimeResponseConverter = OffsetDateTimeResponseConverterImpl()
 
 }
 

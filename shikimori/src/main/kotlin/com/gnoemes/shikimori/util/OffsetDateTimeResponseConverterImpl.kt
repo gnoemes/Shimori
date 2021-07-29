@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 import java.util.*
 import javax.inject.Inject
 
-internal class DateTimeResponseConverterImpl @Inject constructor() : DateTimeResponseConverter {
+internal class OffsetDateTimeResponseConverterImpl @Inject constructor() : OffsetDateTimeResponseConverter {
     override fun serialize(src: OffsetDateTime, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
         return JsonPrimitive(src.toZonedDateTime().withZoneSameInstant(ZoneId.systemDefault()).toString())
     }

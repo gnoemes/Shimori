@@ -98,6 +98,7 @@ class ShikimoriAuthModule {
     private fun AuthorizationRequest.Builder.defaultConfig(): AuthorizationRequest.Builder {
         setAdditionalParameters(mapOf("User-agent" to "Shimori"))
         //TODO return friends
+        setPrompt(AuthorizationRequest.Prompt.LOGIN)
         setScopes("user_rates", "comments", "topics")
         setCodeVerifier(null)
         return this

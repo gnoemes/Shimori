@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.repositories.anime
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.daos.AnimeDao
 import com.gnoemes.shimori.data.daos.EntityInserter
+import com.gnoemes.shimori.data.daos.ListPinDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import com.gnoemes.shimori.model.anime.Anime
@@ -17,7 +18,8 @@ class AnimeStore @Inject constructor(
     private val inserter: EntityInserter,
     private val runner: DatabaseTransactionRunner,
     private val animeDao: AnimeDao,
-    private val settings: ShimoriPreferences
+    private val settings: ShimoriPreferences,
+    private val pinDao: ListPinDao,
 ) {
 
     private val syncer = syncerForEntity(
