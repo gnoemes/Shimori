@@ -31,7 +31,7 @@ import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
-import com.gnoemes.shimori.model.user.User
+import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -247,7 +247,7 @@ internal fun Lists(
 private fun ListsTopBar(
     title: String,
     authorized: Boolean,
-    user: User?,
+    user: UserShort?,
     listType: RateTargetType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,

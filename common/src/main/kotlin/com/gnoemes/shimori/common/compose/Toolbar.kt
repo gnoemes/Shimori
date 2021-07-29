@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.compose.theme.toolbar
-import com.gnoemes.shimori.model.user.User
+import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
@@ -20,7 +20,7 @@ fun RootScreenToolbar(
     title: String,
     showSearchButton: Boolean,
     searchButtonClick: () -> Unit = {},
-    user: User? = null,
+    user: UserShort? = null,
     authorized: Boolean = false,
     avatarClick: () -> Unit = {}
 ) {
