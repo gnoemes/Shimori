@@ -26,6 +26,8 @@ dependencies {
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.insets
 
+    implementation libs.coil.compose
+
     implementation libs.threeTenAbp
 
     implementation libs.kotlin.coroutines.core

@@ -6,7 +6,7 @@ import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
-import com.gnoemes.shimori.model.user.User
+import com.gnoemes.shimori.model.user.UserShort
 
 @Immutable
 internal data class ListsViewState(
@@ -14,7 +14,7 @@ internal data class ListsViewState(
     val type: RateTargetType = RateTargetType.ANIME,
     val activeSort: RateSort = RateSort.defaultForType(type),
     val sorts: List<RateSortOption> = RateSortOption.priorityForType(type),
-    val user: User? = null,
+    val user: UserShort? = null,
     val pages: List<ListsPage> = emptyList(),
 ) {
     companion object {

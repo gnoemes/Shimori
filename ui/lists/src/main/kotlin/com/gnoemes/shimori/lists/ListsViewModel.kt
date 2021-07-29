@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.gnoemes.shikimori.ShikimoriAuthManager
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.ObserveListsPages
+import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.rate.RateSort
@@ -22,6 +23,7 @@ internal class ListsViewModel @Inject constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
     observeRateSort: ObserveRateSort,
     observeListsPages: ObserveListsPages,
+    observeUser : ObserveMyUserShort,
     private val updateRateSort: UpdateRateSort,
     shikimoriAuthManager: ShikimoriAuthManager,
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
@@ -45,11 +47,13 @@ internal class ListsViewModel @Inject constructor(
             combine(
                     observeShikimoriAuth.observe().distinctUntilChanged(),
                     observeRateSort.observe().distinctUntilChanged(),
-                    observeListsPages.observe().distinctUntilChanged()
-            ) { auth, activeRateSort, pages ->
+                    observeUser.observe().distinctUntilChanged(),
+                    observeListsPages.observe().distinctUntilChanged(),
+            ) { auth, activeRateSort, user, pages ->
                 ListsViewState(
                         authStatus = auth,
                         type = listType,
+                        user = user,
                         activeSort = activeRateSort ?: RateSort.defaultForType(listType),
                         pages = pages
                 )
@@ -58,6 +62,7 @@ internal class ListsViewModel @Inject constructor(
 
         observeShikimoriAuth(Unit)
         observeRateSort(ObserveRateSort.Params(listType))
+        observeUser(Unit)
         observeListsPages(ObserveListsPages.Params(listType))
     }
 
