@@ -15,7 +15,6 @@ internal data class ListsViewState(
     val activeSort: RateSort = RateSort.defaultForType(type),
     val sorts: List<RateSortOption> = RateSortOption.priorityForType(type),
     val user: UserShort? = null,
-    val currentPage : ListsPage = ListsPage.WATCHING,
     val pages: List<ListsPage> = emptyList(),
 ) {
     companion object {
