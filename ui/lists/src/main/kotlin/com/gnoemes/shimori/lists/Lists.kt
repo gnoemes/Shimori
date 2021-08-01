@@ -9,7 +9,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,7 +36,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -175,16 +177,6 @@ internal fun Lists(
 
     val pagerState = rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size.coerceAtLeast(1))
 
-
-    LaunchedEffect(pagerState) {
-        pagerState.pageChanges.collect { index ->
-            val page = viewState.pages.getOrNull(index)
-//            if (page != null && viewState.currentPage != page) {
-//                actioner(ListsAction.PageSelected(page))
-//            }
-        }
-    }
-
     val scope =  rememberCoroutineScope()
 
     Scaffold(
@@ -196,7 +188,6 @@ internal fun Lists(
                         listType = viewState.type,
                         activeSort = viewState.activeSort,
                         sortsOptions = viewState.sorts,
-                        currentPage = viewState.currentPage,
                         pages = viewState.pages,
                         pagerState = pagerState,
                         openUser = openUser,
@@ -205,7 +196,6 @@ internal fun Lists(
                             actioner(ListsAction.UpdateListSort(option, isDescending))
                         },
                         onPageClick = { page ->
-//                            actioner(ListsAction.PageSelected(page))
                             val index = viewState.pages.indexOf(page)
 
                             scope.launch {
@@ -243,7 +233,6 @@ private fun ListsTopBar(
     listType: RateTargetType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,
-    currentPage: ListsPage,
     pages: List<ListsPage>,
     pagerState: PagerState,
     openUser: () -> Unit,
@@ -298,13 +287,6 @@ private fun ListsTopBar(
                     },
                     divider = {}
             ) {
-//                val coroutineScope = rememberCoroutineScope()
-//
-//                coroutineScope.launch {
-//                    val index = pages.indexOf(currentPage)
-//                    if (index >= 0) pagerState.animateScrollToPage(index)
-//                }
-
                 pages.forEachIndexed { index, listPage ->
                     Tab(
                             text = {
