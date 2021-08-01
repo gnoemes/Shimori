@@ -9,10 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,7 +23,6 @@ import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
-import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
@@ -58,7 +54,7 @@ internal fun Lists(
     openSearch: () -> Unit,
 ) {
 
-    val viewState by viewModel.state.collectAsStateWithLifecycle(initial = viewModel.state.value)
+    val viewState by viewModel.state.collectAsState()
 
     if (viewState.authStatus.isAuthorized) {
         Lists(
