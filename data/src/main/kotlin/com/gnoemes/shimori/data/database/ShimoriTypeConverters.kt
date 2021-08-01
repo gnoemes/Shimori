@@ -10,6 +10,7 @@ import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -38,6 +39,14 @@ object ShimoriTypeConverters {
     @TypeConverter
     @JvmStatic
     fun fromInstant(instant: Instant?) = instant?.toEpochMilli()
+
+    @TypeConverter
+    @JvmStatic
+    fun toLocalDate(value: String?) = value?.let { LocalDate.parse(it) }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromlocalDate(localDate: LocalDate?) = localDate?.toString()
 
     @TypeConverter
     @JvmStatic

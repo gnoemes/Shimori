@@ -24,6 +24,7 @@ import okhttp3.Authenticator
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -125,13 +126,10 @@ internal class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideGson(dateTimeResponseConverter: OffsetDateTimeResponseConverter) = GsonBuilder()
-        .registerTypeAdapter(OffsetDateTime::class.java, dateTimeResponseConverter)
+    fun provideGson() = GsonBuilder()
+        .registerTypeAdapter(OffsetDateTime::class.java, OffsetDateTimeConverter())
+        .registerTypeAdapter(LocalDate::class.java, LocalDateConverter())
         .create()
-
-    @Provides
-    @Singleton
-    fun provideDateResponseConverter(): OffsetDateTimeResponseConverter = OffsetDateTimeResponseConverterImpl()
 
 }
 

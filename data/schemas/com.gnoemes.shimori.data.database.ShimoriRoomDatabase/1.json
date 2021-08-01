@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ddb904ed3de99eacde7b735788646330",
+    "identityHash": "c618677baee83278c7da870b110bf33d",
     "entities": [
       {
         "tableName": "animes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `anime_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `anime_status` TEXT, `episodes_size` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `name_ru_lower_case` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `anime_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `name_eng` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `anime_status` TEXT, `episodes_size` INTEGER NOT NULL, `episodesAired` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `next_episode` INTEGER, `next_episode_date` TEXT, `next_episode_end_date` TEXT, `age_rating` TEXT, `duration` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `name_ru_lower_case` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "nameRu",
             "columnName": "name_ru",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameEng",
+            "columnName": "name_eng",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -692,7 +698,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ddb904ed3de99eacde7b735788646330')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c618677baee83278c7da870b110bf33d')"
     ]
   }
 }

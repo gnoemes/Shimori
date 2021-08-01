@@ -47,8 +47,8 @@ class ShimoriPreferencesImpl @Inject constructor(
             .distinctUntilChanged()
     }
 
-    override var isRussianNaming: Boolean
-        get() = prefs.getBoolean(IS_ROMADZI_NAMING, true)
+    override var isRomadziNaming: Boolean
+        get() = prefs.getBoolean(IS_ROMADZI_NAMING, false)
         set(value) = prefs.edit { putBoolean(IS_ROMADZI_NAMING, value) }
 
     override var preferredRateType: String?

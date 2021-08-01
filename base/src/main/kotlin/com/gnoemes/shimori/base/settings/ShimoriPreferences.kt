@@ -8,7 +8,7 @@ interface ShimoriPreferences {
     var theme: Theme
     fun observeTheme() : Flow<Theme>
 
-    var isRussianNaming : Boolean
+    var isRomadziNaming : Boolean
 
     var preferredRateType : String?
 
