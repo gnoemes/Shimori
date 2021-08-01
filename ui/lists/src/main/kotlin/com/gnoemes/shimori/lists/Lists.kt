@@ -23,6 +23,7 @@ import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
+import com.gnoemes.shimori.lists.page.ListPage
 import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
@@ -172,20 +173,19 @@ internal fun Lists(
     actioner: (ListsAction) -> Unit
 ) {
 
-    val pagerState =
-        if (viewState.pages.isNotEmpty()) rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size)
-        else rememberPagerState(pageCount = 0)
+    val pagerState = rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size.coerceAtLeast(1))
 
 
     LaunchedEffect(pagerState) {
         pagerState.pageChanges.collect { index ->
             val page = viewState.pages.getOrNull(index)
-            if (page != null && viewState.currentPage != page) {
-                actioner(ListsAction.PageSelected(page))
-            }
+//            if (page != null && viewState.currentPage != page) {
+//                actioner(ListsAction.PageSelected(page))
+//            }
         }
     }
 
+    val scope =  rememberCoroutineScope()
 
     Scaffold(
             topBar = {
@@ -205,7 +205,12 @@ internal fun Lists(
                             actioner(ListsAction.UpdateListSort(option, isDescending))
                         },
                         onPageClick = { page ->
-                            actioner(ListsAction.PageSelected(page))
+//                            actioner(ListsAction.PageSelected(page))
+                            val index = viewState.pages.indexOf(page)
+
+                            scope.launch {
+                                pagerState.animateScrollToPage(page = index)
+                            }
                         }
                 )
             },
@@ -220,7 +225,7 @@ internal fun Lists(
                         .padding(paddingValues)
                         .padding(horizontal = 16.dp)
             ) { page ->
-//                ListPage(viewState.type, viewState.currentPage)
+                ListPage(viewState.pages[page])
             }
         }
 
@@ -293,12 +298,12 @@ private fun ListsTopBar(
                     },
                     divider = {}
             ) {
-                val coroutineScope = rememberCoroutineScope()
-
-                coroutineScope.launch {
-                    val index = pages.indexOf(currentPage)
-                    if (index >= 0) pagerState.animateScrollToPage(index)
-                }
+//                val coroutineScope = rememberCoroutineScope()
+//
+//                coroutineScope.launch {
+//                    val index = pages.indexOf(currentPage)
+//                    if (index >= 0) pagerState.animateScrollToPage(index)
+//                }
 
                 pages.forEachIndexed { index, listPage ->
                     Tab(
