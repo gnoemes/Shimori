@@ -34,7 +34,6 @@ import com.gnoemes.shimori.common.compose.ShimoriIconButton
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.common.compose.theme.toolbar
-import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
@@ -54,7 +53,7 @@ internal fun Main(
 ) {
     val navController = rememberNavController()
 
-    val viewState by viewModel.state.collectAsStateWithLifecycle(MainViewState.Empty)
+    val viewState by viewModel.state.collectAsState()
 
     var openBottomSheet by remember { mutableStateOf(false) }
 

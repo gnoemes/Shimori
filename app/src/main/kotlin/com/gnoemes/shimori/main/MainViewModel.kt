@@ -23,17 +23,11 @@ class MainViewModel @Inject constructor(
     private val rateTargetType =
         MutableStateFlow(RateTargetType.findOrDefault(prefs.preferredRateType))
 
+    private val _state = MutableStateFlow(MainViewState.Empty)
+
     private val pendingActions = MutableSharedFlow<MainAction>()
 
-    val state = combine(
-            rateTargetType,
-            observeShikimoriAuth.observe().distinctUntilChanged()
-    ) { rateTargetType, authState ->
-        MainViewState(
-                rateTargetType = rateTargetType,
-                authState = authState
-        )
-    }
+    val state: StateFlow<MainViewState> get() = _state
 
     init {
         viewModelScope.launch {
@@ -46,6 +40,18 @@ class MainViewModel @Inject constructor(
                         deleteMyUser.executeSync(Unit)
                     }
                 }
+        }
+
+        viewModelScope.launch {
+            combine(
+                    rateTargetType,
+                    observeShikimoriAuth.observe()
+            ) { rateTargetType, authState ->
+                MainViewState(
+                        rateTargetType = rateTargetType,
+                        authState = authState
+                )
+            }.collect { _state.emit(it) }
         }
 
         observeShikimoriAuth(Unit)

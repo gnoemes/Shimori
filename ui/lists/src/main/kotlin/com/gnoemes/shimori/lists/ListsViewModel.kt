@@ -29,10 +29,11 @@ internal class ListsViewModel @Inject constructor(
     shikimoriAuthManager: ShikimoriAuthManager,
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
     private val listType: RateTargetType = RateTargetType.findOrDefault(null)
-
     private val pendingActions = MutableSharedFlow<ListsAction>()
 
-    val state = MutableStateFlow(ListsViewState.Empty)
+    private val _state = MutableStateFlow(ListsViewState.Empty)
+
+    val state : StateFlow<ListsViewState> get() = _state
 
     private val currentPage = MutableStateFlow(ListsPage.WATCHING)
 
@@ -64,7 +65,7 @@ internal class ListsViewModel @Inject constructor(
                         currentPage = currentPage,
                         pages = pages
                 )
-            }.collect { state.emit(it) }
+            }.collect { _state.emit(it) }
         }
 
         observeShikimoriAuth(Unit)
