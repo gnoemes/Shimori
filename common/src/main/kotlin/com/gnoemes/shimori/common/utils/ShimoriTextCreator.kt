@@ -105,7 +105,7 @@ class ShimoriTextCreator @Inject constructor(
         val stringRes = when (listsPage) {
             ListsPage.PINNED -> R.string.List_page_pinned
             ListsPage.WATCHING -> if (type.anime) R.string.List_page_watching else R.string.List_page_reading
-            ListsPage.RE_WATCHING -> R.string.List_page_re_watching
+            ListsPage.RE_WATCHING -> if (type.anime) R.string.List_page_re_watching else R.string.rate_status_manga_re_reading
             ListsPage.ON_HOLD -> R.string.List_page_on_hold
             ListsPage.PLANNED -> R.string.List_page_planned
             ListsPage.COMPLETED -> R.string.List_page_completed
