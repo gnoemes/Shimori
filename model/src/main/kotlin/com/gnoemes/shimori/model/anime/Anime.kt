@@ -4,6 +4,7 @@ import androidx.room.*
 import com.gnoemes.shimori.model.ShikimoriContentEntity
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.common.*
+import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "animes",
@@ -17,6 +18,7 @@ data class Anime(
     @ColumnInfo(name = "anime_shikimori_id") override val shikimoriId: Long? = null,
     override val name: String = "",
     @ColumnInfo(name = "name_ru") override val nameRu: String? = null,
+    @ColumnInfo(name = "name_eng") val nameEng: String? = null,
     @Embedded(prefix = "image_") override val image: ShimoriImage? = null,
     val url: String? = null,
     val type: AnimeType? = null,
@@ -24,8 +26,8 @@ data class Anime(
     @ColumnInfo(name = "anime_status") val status: ContentStatus? = null,
     @ColumnInfo(name = "episodes_size") val episodes: Int = 0,
     val episodesAired: Int = 0,
-    @ColumnInfo(name = "date_aired") val dateAired: OffsetDateTime? = null,
-    @ColumnInfo(name = "date_released") val dateReleased: OffsetDateTime? = null,
+    @ColumnInfo(name = "date_aired") val dateAired: LocalDate? = null,
+    @ColumnInfo(name = "date_released") val dateReleased: LocalDate? = null,
     @ColumnInfo(name = "next_episode") val nextEpisode: Int? = null,
     @ColumnInfo(name = "next_episode_date") val nextEpisodeDate: OffsetDateTime? = null,
     @ColumnInfo(name = "next_episode_end_date") val nextEpisodeEndDate: OffsetDateTime? = null,

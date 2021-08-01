@@ -33,7 +33,15 @@ fun <T> Flow<T>.collectAsStateWithLifecycle(
     lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED
 ): State<T> {
-    return remember(this, lifecycle) {
-        flowWithLifecycle(lifecycle, minActiveState)
-    }.collectAsState(initial)
+    return rememberFlowWithLifecycle(this, lifecycle, minActiveState)
+        .collectAsState(initial)
+}
+
+@Composable
+fun <T> rememberFlowWithLifecycle(
+    flow: Flow<T>,
+    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED
+): Flow<T> = remember(flow, lifecycle) {
+    flow.flowWithLifecycle(lifecycle, minActiveState)
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabPosition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -16,6 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.map
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
@@ -75,3 +80,11 @@ fun Modifier.pagerTabIndicatorOffsetFixedSize(
         .offset(x = targetIndicatorOffset)
         .width(indicatorWidth)
 }
+
+@ExperimentalPagerApi
+inline val PagerState.pageChanges: Flow<Int>
+    get() = snapshotFlow { isScrollInProgress }
+        // Only emit when the scroll has finished
+        .filterNot { it }
+        .map { currentPage }
+        .distinctUntilChanged()

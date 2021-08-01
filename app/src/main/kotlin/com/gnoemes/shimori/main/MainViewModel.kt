@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             observeShikimoriAuth.observe()
                 .distinctUntilChanged()
-                .onEach {
+                .collect {
                     if (it.isAuthorized) {
                         updateUser.executeSync(UpdateUser.Params(null, isMe = true))
                     } else {

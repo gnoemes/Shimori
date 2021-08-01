@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.common.BaseActivity
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
+import com.gnoemes.shimori.common.compose.LocalShimoriSettings
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
@@ -39,7 +40,8 @@ class MainActivity : BaseActivity() {
             CompositionLocalProvider(
                     LocalElevationOverlay provides null,
                     LocalShimoriRateUtil provides rateUtil,
-                    LocalShimoriTextCreator provides textCreator
+                    LocalShimoriTextCreator provides textCreator,
+                    LocalShimoriSettings provides prefs
             ) {
                 ProvideWindowInsets(consumeWindowInsets = false) {
                     ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {

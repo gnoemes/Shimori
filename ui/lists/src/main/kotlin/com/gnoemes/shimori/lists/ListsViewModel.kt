@@ -9,6 +9,7 @@ import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -23,7 +24,7 @@ internal class ListsViewModel @Inject constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
     observeRateSort: ObserveRateSort,
     observeListsPages: ObserveListsPages,
-    observeUser : ObserveMyUserShort,
+    observeUser: ObserveMyUserShort,
     private val updateRateSort: UpdateRateSort,
     shikimoriAuthManager: ShikimoriAuthManager,
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
@@ -33,11 +34,15 @@ internal class ListsViewModel @Inject constructor(
 
     val state = MutableStateFlow(ListsViewState.Empty)
 
+    private val currentPage = MutableStateFlow(ListsPage.WATCHING)
+
+
     init {
         viewModelScope.launch {
             pendingActions.collect { action ->
                 when (action) {
                     is ListsAction.UpdateListSort -> updateRateSort(action.option, action.isDescending)
+                    is ListsAction.PageSelected -> updateSelectedPage(action.newPage)
                 }
 
             }
@@ -48,13 +53,15 @@ internal class ListsViewModel @Inject constructor(
                     observeShikimoriAuth.observe().distinctUntilChanged(),
                     observeRateSort.observe().distinctUntilChanged(),
                     observeUser.observe().distinctUntilChanged(),
+                    currentPage,
                     observeListsPages.observe().distinctUntilChanged(),
-            ) { auth, activeRateSort, user, pages ->
+            ) { auth, activeRateSort, user, currentPage, pages ->
                 ListsViewState(
                         authStatus = auth,
                         type = listType,
                         user = user,
                         activeSort = activeRateSort ?: RateSort.defaultForType(listType),
+                        currentPage = currentPage,
                         pages = pages
                 )
             }.collect { state.emit(it) }
@@ -64,6 +71,10 @@ internal class ListsViewModel @Inject constructor(
         observeRateSort(ObserveRateSort.Params(listType))
         observeUser(Unit)
         observeListsPages(ObserveListsPages.Params(listType))
+    }
+
+    private fun updateSelectedPage(newPage: ListsPage) {
+        currentPage.value = newPage
     }
 
     private fun updateRateSort(option: RateSortOption, isDescending: Boolean) {

@@ -13,6 +13,8 @@
 
     <string name="titles">Titles</string>
 
+    <string name="cover">Cover</string>
+
     <string name="open_random_title_from_list">Random from the current list</string>
 
     <string name="sign_in_title">I didn\'t recognize you</string>
@@ -49,5 +51,22 @@
     <string name="List_page_planned">@string/rate_status_planned</string>
     <string name="List_page_completed">@string/rate_status_completed</string>
     <string name="List_page_dropped">@string/rate_status_dropped</string>
+
+    <string name="status_anons">Anons</string>
+    <string name="status_ongoing">Ongoing</string>
+    <string name="status_released">Released</string>
+
+    <string name="ongoing_episode_format">%d ep in %d %s</string>
+
+    <string name="minute_short">min</string>
+    <string name="hour_short">h</string>
+    <string name="day_short">d</string>
+
+    <string name="type_tv">TV</string>
+    <string name="type_movie">Movie</string>
+    <string name="type_special">Special</string>
+    <string name="type_music">Music</string>
+    <string name="type_ova" translatable="false">OVA</string>
+    <string name="type_ona" translatable="false">ONA</string>
 
 </resources>

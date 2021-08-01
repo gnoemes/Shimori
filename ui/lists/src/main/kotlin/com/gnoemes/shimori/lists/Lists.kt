@@ -5,12 +5,12 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -36,6 +36,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -180,6 +181,16 @@ internal fun Lists(
         else rememberPagerState(pageCount = 0)
 
 
+    LaunchedEffect(pagerState) {
+        pagerState.pageChanges.collect { index ->
+            val page = viewState.pages.getOrNull(index)
+            if (page != null && viewState.currentPage != page) {
+                actioner(ListsAction.PageSelected(page))
+            }
+        }
+    }
+
+
     Scaffold(
             topBar = {
                 ListsTopBar(
@@ -189,18 +200,21 @@ internal fun Lists(
                         listType = viewState.type,
                         activeSort = viewState.activeSort,
                         sortsOptions = viewState.sorts,
+                        currentPage = viewState.currentPage,
                         pages = viewState.pages,
                         pagerState = pagerState,
                         openUser = openUser,
                         searchClick = openSearch,
                         onSortClick = { option, isDescending ->
                             actioner(ListsAction.UpdateListSort(option, isDescending))
+                        },
+                        onPageClick = { page ->
+                            actioner(ListsAction.PageSelected(page))
                         }
                 )
             },
             backgroundColor = MaterialTheme.colors.primary,
     ) { paddingValues ->
-
 
         Surface(
                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
@@ -210,30 +224,7 @@ internal fun Lists(
                         .padding(paddingValues)
                         .padding(horizontal = 16.dp)
             ) { page ->
-
-                LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-
-                ) {
-                    repeat(10) { num ->
-                        item(num) {
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Row(
-                                    modifier = Modifier
-                                        .background(when (num) {
-                                            0 -> MaterialTheme.colors.secondary
-                                            1 -> MaterialTheme.colors.secondaryVariant
-                                            2 -> MaterialTheme.colors.primary
-                                            3 -> MaterialTheme.colors.error
-                                            else -> MaterialTheme.colors.background
-                                        })
-                                        .fillMaxWidth()
-                                        .height(120.dp)
-                            ) {}
-                        }
-                    }
-                }
+//                ListPage(viewState.type, viewState.currentPage)
             }
         }
 
@@ -251,11 +242,13 @@ private fun ListsTopBar(
     listType: RateTargetType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,
+    currentPage: ListsPage,
     pages: List<ListsPage>,
     pagerState: PagerState,
     openUser: () -> Unit,
     searchClick: () -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit,
+    onPageClick: (ListsPage) -> Unit,
 ) {
 
     Column(
@@ -292,34 +285,37 @@ private fun ListsTopBar(
             Spacer(modifier = Modifier.width(8.dp))
         }
 
-        ScrollableTabRow(
-                selectedTabIndex = pagerState.currentPage,
-                backgroundColor = MaterialTheme.colors.primary,
-                edgePadding = 0.dp,
-                indicator = { tabPositions ->
-                    Indicator(
-                            Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
-                    )
-                },
-                divider = {}
-        ) {
-            val coroutineScope = rememberCoroutineScope()
+        if (pages.isNotEmpty()) {
+            ScrollableTabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    backgroundColor = MaterialTheme.colors.primary,
+                    edgePadding = 0.dp,
+                    indicator = { tabPositions ->
+                        Indicator(
+                                Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
+                        )
+                    },
+                    divider = {}
+            ) {
+                val coroutineScope = rememberCoroutineScope()
 
-            pages.forEachIndexed { index, listPage ->
-                Tab(
-                        text = {
-                            Text(
-                                    text = LocalShimoriTextCreator.current.listsPageText(listType, listPage),
-                                    style = MaterialTheme.typography.subInfoStyle,
-                                    color = MaterialTheme.colors.caption)
-                        },
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
-                )
+                coroutineScope.launch {
+                    val index = pages.indexOf(currentPage)
+                    if (index >= 0) pagerState.animateScrollToPage(index)
+                }
+
+                pages.forEachIndexed { index, listPage ->
+                    Tab(
+                            text = {
+                                Text(
+                                        text = LocalShimoriTextCreator.current.listsPageText(listType, listPage),
+                                        style = MaterialTheme.typography.subInfoStyle,
+                                        color = MaterialTheme.colors.caption)
+                            },
+                            selected = pagerState.currentPage == index,
+                            onClick = { onPageClick(listPage) },
+                    )
+                }
             }
         }
     }
