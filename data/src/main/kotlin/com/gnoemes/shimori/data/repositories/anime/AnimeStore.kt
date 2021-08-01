@@ -53,7 +53,7 @@ class AnimeStore @Inject constructor(
         }
 
     private fun observeNameSort(status: RateStatus, descending: Boolean, filter: String?): Flow<List<AnimeWithRate>> {
-        return if (settings.isRussianNaming) observeNameSortRu(status, descending, filter)
+        return if (settings.isRomadziNaming) observeNameSortRu(status, descending, filter)
         else if (descending) {
             if (filter.isNullOrBlank()) animeDao.observeAnimeWithStatusByNameDesc(status)
             else animeDao.observeAnimeWithStatusByNameDesc(status, "*$filter*")
