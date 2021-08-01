@@ -6,6 +6,7 @@ import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.domain.interactors.DeleteMyUser
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -18,10 +19,8 @@ class MainViewModel @Inject constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
     updateUser: UpdateUser,
     deleteMyUser: DeleteMyUser,
+    private val listsStateManager: ListsStateManager,
 ) : ViewModel() {
-
-    private val rateTargetType =
-        MutableStateFlow(RateTargetType.findOrDefault(prefs.preferredRateType))
 
     private val _state = MutableStateFlow(MainViewState.Empty)
 
@@ -44,7 +43,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
-                    rateTargetType,
+                    listsStateManager.currentType,
                     observeShikimoriAuth.observe()
             ) { rateTargetType, authState ->
                 MainViewState(
@@ -77,11 +76,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun changeRateType(newType: RateTargetType) {
-        //TODO callback to lists
         viewModelScope.launch {
-            rateTargetType.emit(newType)
+            listsStateManager.updateType(newType)
+            prefs.preferredRateType = newType.type
         }
-        prefs.preferredRateType = newType.type
     }
 
 }

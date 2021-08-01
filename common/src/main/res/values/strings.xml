@@ -27,6 +27,7 @@
     <string name="rate_status_anime_re_watching">Rewatching</string>
 
     <string name="rate_status_manga_reading">Reading</string>
+    <string name="rate_status_manga_re_reading">Rereading</string>
 
     <string name="rate_status_on_hold">On hold</string>
     <string name="rate_status_planned">Planned</string>
@@ -47,6 +48,7 @@
     <string name="List_page_watching">@string/rate_status_anime_watching</string>
     <string name="List_page_reading">@string/rate_status_manga_reading</string>
     <string name="List_page_re_watching">@string/rate_status_anime_re_watching</string>
+    <string name="List_page_re_reading">@string/rate_status_manga_re_reading</string>
     <string name="List_page_on_hold">@string/rate_status_on_hold</string>
     <string name="List_page_planned">@string/rate_status_planned</string>
     <string name="List_page_completed">@string/rate_status_completed</string>
