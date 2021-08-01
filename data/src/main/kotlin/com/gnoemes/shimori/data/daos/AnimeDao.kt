@@ -161,6 +161,10 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract fun pagedSizeDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
+    @Query(QUERY_WITH_STATUS_BY_RATING)
+    abstract fun pagedRating(status: RateStatus, descending: Boolean) : PagingSource<Int, AnimeWithRate>
+
+    @Transaction
     @Query(QUERY_PINNED_BY_NAME)
     abstract fun pagingPinnedName(descending: Boolean): PagingSource<Int, AnimeWithRate>
 
@@ -191,6 +195,10 @@ abstract class AnimeDao : EntityDao<Anime> {
     @Transaction
     @Query(QUERY_PINNED_BY_SIZE)
     abstract fun pagingPinnedSize(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_RATING)
+    abstract fun pagingPinnedRating(descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     companion object {
         private const val QUERY_CALENDAR = """
@@ -469,6 +477,15 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY episodes_size DESC
         """
 
+        private const val QUERY_WITH_STATUS_BY_RATING = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            WHERE r.status = :status
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN rating END) DESC,
+            (CASE :descending WHEN 0 THEN rating END) ASC
+        """
+
         private const val QUERY_PINNED_BY_NAME = """
             SELECT a.*, r.* FROM animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
@@ -548,5 +565,16 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 1 THEN episodes_size END) DESC,
             (CASE :descending WHEN 0 THEN episodes_size END) ASC
         """
+
+        private const val QUERY_PINNED_BY_RATING = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN rating END) DESC,
+            (CASE :descending WHEN 0 THEN rating END) ASC
+        """
+
     }
 }

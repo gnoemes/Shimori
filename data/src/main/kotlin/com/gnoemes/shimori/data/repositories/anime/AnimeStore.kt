@@ -57,6 +57,7 @@ class AnimeStore @Inject constructor(
             RateSortOption.DATE_AIRED -> observeDateAiredSort(status, sort.isDescending, filter)
             RateSortOption.MY_SCORE -> observeScoreSort(status, sort.isDescending, filter)
             RateSortOption.SIZE -> observeSizeSort(status, sort.isDescending, filter)
+            RateSortOption.RATING -> animeDao.pagedRating(status, sort.isDescending)
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }
     }
@@ -73,6 +74,7 @@ class AnimeStore @Inject constructor(
             RateSortOption.DATE_AIRED -> animeDao.pagingPinnedDateAired(sort.isDescending)
             RateSortOption.MY_SCORE -> animeDao.pagingPinnedScore(sort.isDescending)
             RateSortOption.SIZE -> animeDao.pagingPinnedSize(sort.isDescending)
+            RateSortOption.RATING -> animeDao.pagingPinnedRating(sort.isDescending)
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }
     }
@@ -158,6 +160,5 @@ class AnimeStore @Inject constructor(
             else animeDao.pagedSize(status, "*$filter*")
         }
     }
-
 }
 
