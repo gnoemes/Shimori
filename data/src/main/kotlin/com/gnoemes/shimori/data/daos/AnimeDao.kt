@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.daos
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -33,131 +34,163 @@ abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME)
-    abstract fun observeAnimeWithStatusByName(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingName(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_FILTER)
-    abstract fun observeAnimeWithStatusByName(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingName(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_DESC)
-    abstract fun observeAnimeWithStatusByNameDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByNameDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_RU)
-    abstract fun observeAnimeWithStatusByNameRu(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameRu(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_RU_FILTER)
-    abstract fun observeAnimeWithStatusByNameRu(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameRu(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_RU_DESC)
-    abstract fun observeAnimeWithStatusByNameRuDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameRuDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_RU_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByNameRuDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingNameRuDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_PROGRESS)
-    abstract fun observeAnimeWithStatusByProgress(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingProgress(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_PROGRESS_FILTER)
-    abstract fun observeAnimeWithStatusByProgress(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingProgress(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_PROGRESS_DESC)
-    abstract fun observeAnimeWithStatusByProgressDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingProgressDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_PROGRESS_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByProgressDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingProgressDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED)
-    abstract fun observeAnimeWithStatusByDateCreated(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateCreated(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED_FILTER)
-    abstract fun observeAnimeWithStatusByDateCreated(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateCreated(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED_DESC)
-    abstract fun observeAnimeWithStatusByDateCreatedDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateCreatedDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByDateCreatedDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateCreatedDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED)
-    abstract fun observeAnimeWithStatusByDateUpdated(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateUpdated(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED_FILTER)
-    abstract fun observeAnimeWithStatusByDateUpdated(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateUpdated(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED_DESC)
-    abstract fun observeAnimeWithStatusByDateUpdatedDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateUpdatedDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByDateUpdatedDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagingDateUpdatedDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED)
-    abstract fun observeAnimeWithStatusByDateAired(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateAired(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED_FILTER)
-    abstract fun observeAnimeWithStatusByDateAired(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateAired(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED_DESC)
-    abstract fun observeAnimeWithStatusByDateAiredDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateAiredDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByDateAiredDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedDateAiredDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SCORE)
-    abstract fun observeAnimeWithStatusByScore(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedScore(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SCORE_FILTER)
-    abstract fun observeAnimeWithStatusByScore(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedScore(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SCORE_DESC)
-    abstract fun observeAnimeWithStatusByScoreDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedScoreDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SCORE_DESC_FILTER)
-    abstract fun observeAnimeWithStatusByScoreDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedScoreDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SIZE)
-    abstract fun observeAnimeWithStatusBySize(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedSize(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SIZE_FILTER)
-    abstract fun observeAnimeWithStatusBySize(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedSize(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SIZE_DESC)
-    abstract fun observeAnimeWithStatusBySizeDesc(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun pagedSizeDesc(status: RateStatus): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS_BY_SIZE_DESC_FILTER)
-    abstract fun observeAnimeWithStatusBySizeDesc(status: RateStatus, filter: String): Flow<List<AnimeWithRate>>
+    abstract fun pagedSizeDesc(status: RateStatus, filter: String): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_NAME)
+    abstract fun pagingPinnedName(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_NAME_RU)
+    abstract fun pagingPinnedNameRu(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_PROGRESS)
+    abstract fun pagingPinnedProgress(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_DATE_CREATED)
+    abstract fun pagingPinnedDateCreated(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_DATE_UPDATED)
+    abstract fun pagingPinnedDateUpdated(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_DATE_AIRED)
+    abstract fun pagingPinnedDateAired(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_SCORE)
+    abstract fun pagingPinnedScore(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_BY_SIZE)
+    abstract fun pagingPinnedSize(descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     companion object {
         private const val QUERY_CALENDAR = """
@@ -436,5 +469,84 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY episodes_size DESC
         """
 
+        private const val QUERY_PINNED_BY_NAME = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name END) DESC,
+            (CASE :descending WHEN 0 THEN name END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_NAME_RU = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name_ru_lower_case END) DESC,
+            (CASE :descending WHEN 0 THEN name_ru_lower_case END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_PROGRESS = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN episodes END) DESC,
+            (CASE :descending WHEN 0 THEN episodes END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_DATE_CREATED = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_DATE_UPDATED = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_DATE_AIRED = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_SCORE = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN score END) DESC,
+            (CASE :descending WHEN 0 THEN score END) ASC
+        """
+
+        private const val QUERY_PINNED_BY_SIZE = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN episodes_size END) DESC,
+            (CASE :descending WHEN 0 THEN episodes_size END) ASC
+        """
     }
 }
