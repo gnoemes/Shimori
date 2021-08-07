@@ -3,7 +3,7 @@ package com.gnoemes.shimori.data.repositories.rates
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
-import com.gnoemes.shimori.data.repositories.user.UserRepository
+import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
@@ -17,7 +17,7 @@ class RateRepository @Inject constructor(
     private val rateStore: RateStore,
     private val rateSortStore: RateSortStore,
     @Shikimori private val rateSource: RateDataSource,
-    private val userRepository: UserRepository
+    private val userRepository: ShikimoriUserRepository
 ) {
 
     fun observeRate(shikimoriId: Long) = rateStore.observeRate(shikimoriId)

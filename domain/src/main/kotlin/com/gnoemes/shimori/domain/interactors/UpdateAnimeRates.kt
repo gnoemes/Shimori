@@ -29,7 +29,7 @@ class UpdateAnimeRates @Inject constructor(
 
     data class Params(
         val force: Boolean,
-        val status: RateStatus,
+        val status: RateStatus?,
         val categorySize: Int?
     )
 }

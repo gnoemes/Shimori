@@ -17,6 +17,10 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract suspend fun queryAll(): List<Anime>
 
     @Transaction
+    @Query(QUERY_ALL_ANIME_WITH_STATUS)
+    abstract suspend fun queryAllAnimesWithStatus() : List<AnimeWithRate>
+
+    @Transaction
     @Query(QUERY_ANIME_WITH_STATUS)
     abstract suspend fun queryAnimesWithStatus(status: RateStatus): List<AnimeWithRate>
 
@@ -117,6 +121,13 @@ abstract class AnimeDao : EntityDao<Anime> {
            WHERE datetime(next_episode_date) > datetime('now','start of day')
            AND animes_fts MATCH :filter
            ORDER BY datetime(next_episode_date) ASC
+        """
+
+        //Null check just in case. Status actually can't be null if rate exist
+        private const val QUERY_ALL_ANIME_WITH_STATUS = """
+            SELECT * from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            WHERE r.status IS NOT NULL
         """
 
         private const val QUERY_ANIME_WITH_STATUS = """

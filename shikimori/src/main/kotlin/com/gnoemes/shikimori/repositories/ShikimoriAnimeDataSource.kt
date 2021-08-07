@@ -41,7 +41,7 @@ internal class ShikimoriAnimeDataSource @Inject constructor(
         service.getCalendar()
             .toResult(calendarMapper.toListMapper())
 
-    override suspend fun getAnimeWithStatus(userId: Long, status: RateStatus): Result<List<Anime>> =
-        service.getUserAnimeRates(userId, status.shikimoriValue)
+    override suspend fun getAnimeWithStatus(userId: Long, status: RateStatus?): Result<List<Anime>> =
+        service.getUserAnimeRates(userId, status?.shikimoriValue)
             .toResult(rateToAnimeMapper.toListMapper())
 }

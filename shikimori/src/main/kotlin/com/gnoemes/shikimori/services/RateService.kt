@@ -1,24 +1,11 @@
 package com.gnoemes.shikimori.services
 
-import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
 import retrofit2.Response
 import retrofit2.http.*
 
 internal interface RateService {
-
-    @GET("/api/users/{id}/anime_rates")
-    suspend fun getUserAnimeRates(@Path("id") id: Long,
-                                  @Query("page") page: Int,
-                                  @Query("limit") limit: Int,
-                                  @Query("status") status: String): Response<MutableList<RateResponse>>
-
-    @GET("/api/users/{id}/manga_rates")
-    suspend fun getUserMangaRates(@Path("id") id: Long,
-                                  @Query("page") page: Int,
-                                  @Query("limit") limit: Int,
-                                  @Query("status") status: String): Response<MutableList<RateResponse>>
 
     @GET("/api/v2/user_rates")
     suspend fun getUserRates(@Query("user_id") userId: Long,

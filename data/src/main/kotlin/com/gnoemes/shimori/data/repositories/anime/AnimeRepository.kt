@@ -2,7 +2,7 @@ package com.gnoemes.shimori.data.repositories.anime
 
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.entities.Success
-import com.gnoemes.shimori.data.repositories.user.UserRepository
+import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
@@ -13,15 +13,15 @@ import javax.inject.Singleton
 class AnimeRepository @Inject constructor(
     private val animeStore: AnimeStore,
     @Shikimori private val animeDataSource: AnimeDataSource,
-    private val userRepository: UserRepository
+    private val userRepository: ShikimoriUserRepository
 ) {
 
     fun observeByStatusForPaging(status: RateStatus?, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
 
 
-    suspend fun queryAnimesWithStatus(status: RateStatus) = animeStore.queryAnimesWithStatus(status)
+    suspend fun queryAnimesWithStatus(status: RateStatus?) = animeStore.queryAnimesWithStatus(status)
 
-    suspend fun updateMyAnimeWithStatus(status: RateStatus) {
+    suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
         val userId = userRepository.getMyUserId() ?: return
 
         val results = animeDataSource.getAnimeWithStatus(userId, status)

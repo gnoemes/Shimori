@@ -15,9 +15,19 @@ class ListsStateManager @Inject constructor(
     private val _currentType =
         MutableStateFlow(RateTargetType.findOrDefault(prefs.preferredRateType))
 
+    val currentType: StateFlow<RateTargetType> get() = _currentType
+
+    private val _updatingRates = MutableStateFlow(false)
+
+    val updatingRates: StateFlow<Boolean> = _updatingRates
+
     fun updateType(type: RateTargetType) {
         _currentType.value = type
     }
 
-    val currentType: StateFlow<RateTargetType> get() = _currentType
+    fun updatingRates(updating: Boolean) {
+        _updatingRates.value = updating
+    }
+
+
 }

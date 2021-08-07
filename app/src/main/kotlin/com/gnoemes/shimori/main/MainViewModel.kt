@@ -2,7 +2,11 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.base.entities.InvokeSuccess
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
+import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
+import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.lists.ListsStateManager
@@ -17,9 +21,11 @@ class MainViewModel @Inject constructor(
     private val prefs: ShimoriPreferences,
     observeShikimoriAuth: ObserveShikimoriAuth,
     private val updateUser: UpdateUser,
+    private val updateRates: UpdateRates,
     private val listsStateManager: ListsStateManager,
 ) : ViewModel() {
 
+    private val updatingUserDataState = ObservableLoadingCounter()
     private val _state = MutableStateFlow(MainViewState.Empty)
 
     private val pendingActions = MutableSharedFlow<MainAction>()
@@ -45,7 +51,7 @@ class MainViewModel @Inject constructor(
                 .map { it.authState }
                 .distinctUntilChanged()
                 .collect {
-                    if (it.isAuthorized) refreshUser()
+                    if (it.isAuthorized) updateUserAndRates()
                 }
         }
 
@@ -58,6 +64,10 @@ class MainViewModel @Inject constructor(
             }
         }
 
+        viewModelScope.launch {
+            updatingUserDataState.observable.collect { listsStateManager.updatingRates(it) }
+        }
+
         observeShikimoriAuth(Unit)
     }
 
@@ -67,9 +77,18 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun refreshUser() {
+    private fun updateUserAndRates() {
         viewModelScope.launch {
-            updateUser.executeSync(UpdateUser.Params(null, isMe = true))
+            updateUser(UpdateUser.Params(null, isMe = true))
+                .collectInto(updatingUserDataState) { status ->
+                    if (status is InvokeSuccess) updateRates()
+                }
+        }
+    }
+
+    private fun updateRates() {
+        viewModelScope.launch {
+            updateRates(Unit).collectInto(updatingUserDataState)
         }
     }
 
