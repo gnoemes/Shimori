@@ -16,6 +16,8 @@ class UpdateAnimeRates @Inject constructor(
         withContext(dispatchers.io) {
             if (params.force) {
                 repository.updateMyAnimeWithStatus(params.status)
+            } else if (params.optionalUpdate && repository.needUpdateAnimeWithStatus()) {
+                repository.updateMyAnimeWithStatus(params.status)
             } else if (params.categorySize != null) {
                 val animes = repository.queryAnimesWithStatus(params.status)
 
@@ -29,7 +31,13 @@ class UpdateAnimeRates @Inject constructor(
 
     data class Params(
         val force: Boolean,
+        val optionalUpdate: Boolean,
         val status: RateStatus?,
         val categorySize: Int?
-    )
+    ) {
+        companion object {
+            val FullUpdate = Params(force = true, optionalUpdate = false, null, null)
+            val OptionalUpdate = Params(force = false, optionalUpdate = true, null, null)
+        }
+    }
 }
