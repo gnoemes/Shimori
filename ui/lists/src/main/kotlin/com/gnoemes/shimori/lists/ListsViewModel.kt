@@ -4,6 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shikimori.ShikimoriAuthManager
+import com.gnoemes.shimori.base.extensions.combine
+import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
+import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
@@ -11,6 +15,7 @@ import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,9 +29,11 @@ internal class ListsViewModel @Inject constructor(
     observeListsPages: ObserveListsPages,
     observeUser: ObserveMyUserShort,
     private val updateRateSort: UpdateRateSort,
+    private val updateAnimeRates: UpdateAnimeRates,
     shikimoriAuthManager: ShikimoriAuthManager,
     private val stateManager: ListsStateManager
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
+    private val ratesUpdateState = ObservableLoadingCounter()
     private val pendingActions = MutableSharedFlow<ListsAction>()
 
     private val _state = MutableStateFlow(ListsViewState.Empty)
@@ -45,13 +52,16 @@ internal class ListsViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
+                    stateManager.updatingRates,
+                    ratesUpdateState.observable,
                     observeShikimoriAuth.observe().distinctUntilChanged(),
                     stateManager.currentType,
                     observeRateSort.observe().distinctUntilChanged(),
                     observeUser.observe().distinctUntilChanged(),
                     observeListsPages.observe().distinctUntilChanged(),
-            ) { auth, type, activeRateSort, user, pages ->
+            ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pages ->
                 ListsViewState(
+                        loading = globalLoading || typeLoading,
                         authStatus = auth,
                         type = type,
                         user = user,
@@ -59,6 +69,23 @@ internal class ListsViewModel @Inject constructor(
                         pages = pages
                 )
             }.collect { _state.emit(it) }
+        }
+
+        viewModelScope.launch {
+            combine(
+                    state.map { it.authStatus }.distinctUntilChanged(),
+                    state.map { it.type }.distinctUntilChanged(),
+                    stateManager.updatingRates
+            ) { authState, type, loadingRates -> Triple(authState, type, loadingRates)
+            }.collect { (authState, type, loadingRates) ->
+                if (authState.isAuthorized && !loadingRates) {
+                    when(type) {
+                        RateTargetType.ANIME -> updateAnimeRates()
+                        //TODO: add manga
+                        else -> Unit
+                    }
+                }
+            }
         }
 
         observeShikimoriAuth(Unit)
@@ -69,6 +96,12 @@ internal class ListsViewModel @Inject constructor(
                 observeRateSort(ObserveRateSort.Params(type))
                 observeListsPages(ObserveListsPages.Params(type))
             }
+        }
+    }
+
+    fun submitAction(action: ListsAction) {
+        viewModelScope.launch {
+            pendingActions.emit(action)
         }
     }
 
@@ -83,9 +116,9 @@ internal class ListsViewModel @Inject constructor(
         }
     }
 
-    fun submitAction(action: ListsAction) {
+    private fun updateAnimeRates() {
         viewModelScope.launch {
-            pendingActions.emit(action)
+            updateAnimeRates(UpdateAnimeRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
         }
     }
 }

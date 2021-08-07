@@ -10,6 +10,7 @@ import com.gnoemes.shimori.model.user.UserShort
 
 @Immutable
 internal data class ListsViewState(
+    val loading : Boolean = true,
     val authStatus: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
     val type: RateTargetType = RateTargetType.ANIME,
     val activeSort: RateSort = RateSort.defaultForType(type),
