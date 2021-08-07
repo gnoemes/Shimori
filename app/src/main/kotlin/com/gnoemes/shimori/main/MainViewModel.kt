@@ -3,7 +3,6 @@ package com.gnoemes.shimori.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
-import com.gnoemes.shimori.domain.interactors.DeleteMyUser
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.lists.ListsStateManager
@@ -17,8 +16,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val prefs: ShimoriPreferences,
     observeShikimoriAuth: ObserveShikimoriAuth,
-    updateUser: UpdateUser,
-    deleteMyUser: DeleteMyUser,
+    private val updateUser: UpdateUser,
     private val listsStateManager: ListsStateManager,
 ) : ViewModel() {
 
@@ -29,22 +27,11 @@ class MainViewModel @Inject constructor(
     val state: StateFlow<MainViewState> get() = _state
 
     init {
-        viewModelScope.launch {
-            observeShikimoriAuth.observe()
-                .distinctUntilChanged()
-                .collect {
-                    if (it.isAuthorized) {
-                        updateUser.executeSync(UpdateUser.Params(null, isMe = true))
-                    } else {
-                        deleteMyUser.executeSync(Unit)
-                    }
-                }
-        }
 
         viewModelScope.launch {
             combine(
                     listsStateManager.currentType,
-                    observeShikimoriAuth.observe()
+                    observeShikimoriAuth.observe().distinctUntilChanged()
             ) { rateTargetType, authState ->
                 MainViewState(
                         rateTargetType = rateTargetType,
@@ -53,7 +40,14 @@ class MainViewModel @Inject constructor(
             }.collect { _state.emit(it) }
         }
 
-        observeShikimoriAuth(Unit)
+        viewModelScope.launch {
+            _state
+                .map { it.authState }
+                .distinctUntilChanged()
+                .collect {
+                    if (it.isAuthorized) refreshUser()
+                }
+        }
 
         viewModelScope.launch {
             pendingActions.collect { action ->
@@ -63,11 +57,19 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
+        observeShikimoriAuth(Unit)
     }
 
     internal fun submitAction(action: MainAction) {
         viewModelScope.launch {
             pendingActions.emit(action)
+        }
+    }
+
+    private fun refreshUser() {
+        viewModelScope.launch {
+            updateUser.executeSync(UpdateUser.Params(null, isMe = true))
         }
     }
 
