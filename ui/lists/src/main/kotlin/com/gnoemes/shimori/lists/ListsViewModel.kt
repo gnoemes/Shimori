@@ -74,12 +74,12 @@ internal class ListsViewModel @Inject constructor(
 
     private fun updateRateSort(option: RateSortOption, isDescending: Boolean) {
         viewModelScope.launch {
-            updateRateSort(
+            updateRateSort.executeSync(
                     UpdateRateSort.Params(
                             type = stateManager.currentType.value,
                             sort = option,
                             isDescending = isDescending)
-            ).collect()
+            )
         }
     }
 

@@ -46,7 +46,7 @@ internal interface AnimeService {
 
     @GET("/api/users/{id}/anime_rates")
     suspend fun getUserAnimeRates(@Path("id") id: Long,
-                          @Query("status") status: String,
+                          @Query("status") status: String?,
                           @Query("page") page: Int = 1,
                           @Query("limit") limit: Int = ShimoriConstants.MAX_PAGE_SIZE,
                           @Query("censored") censored: Boolean = true

@@ -25,3 +25,12 @@ suspend fun Flow<InvokeStatus>.collectInto(counter: ObservableLoadingCounter) {
         .onCompletion { counter.removeLoader() }
         .collect()
 }
+
+suspend fun Flow<InvokeStatus>.collectInto(
+    counter: ObservableLoadingCounter,
+    action: suspend (value: InvokeStatus) -> Unit
+) {
+    return onStart { counter.addLoader() }
+        .onCompletion { counter.removeLoader() }
+        .collect(action)
+}

@@ -10,5 +10,5 @@ interface AnimeDataSource {
 
     suspend fun getCalendar(): Result<List<Anime>>
 
-    suspend fun getAnimeWithStatus(userId : Long, status: RateStatus): Result<List<Anime>>
+    suspend fun getAnimeWithStatus(userId : Long, status: RateStatus?): Result<List<Anime>>
 }

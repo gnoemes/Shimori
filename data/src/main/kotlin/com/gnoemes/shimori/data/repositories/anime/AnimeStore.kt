@@ -33,7 +33,9 @@ class AnimeStore @Inject constructor(
         syncer.sync(animeDao.queryAll(), animes, removeNotMatched = false)
     }
 
-    suspend fun queryAnimesWithStatus(status: RateStatus) = animeDao.queryAnimesWithStatus(status)
+    suspend fun queryAnimesWithStatus(status: RateStatus?) =
+        if (status == null) animeDao.queryAllAnimesWithStatus()
+        else animeDao.queryAnimesWithStatus(status)
 
     fun observeCalendar(filter: String?): Flow<List<AnimeWithRate>> = when {
         filter.isNullOrBlank() -> animeDao.observeCalendar()

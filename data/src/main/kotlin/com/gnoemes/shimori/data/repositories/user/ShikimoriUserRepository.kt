@@ -8,7 +8,7 @@ import com.gnoemes.shimori.model.user.UserShort
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(
+class ShikimoriUserRepository @Inject constructor(
     private val userStore: UserStore,
     @Shikimori private val userSource: UserDataSource
 ) {
