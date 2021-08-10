@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.alpha
@@ -173,13 +172,81 @@ internal fun Lists(
     actioner: (ListsAction) -> Unit
 ) {
 
+    when {
+        viewState.loading -> {
+            ListsLoading(
+                    title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
+                    authorized = viewState.authStatus.isAuthorized,
+                    user = viewState.user,
+                    openUser = openUser,
+                    openSearch = openSearch
+            )
+        }
+        viewState.pages.isEmpty() -> {
+            //TODO add empty state
+        }
+        else -> {
+            ListsLoaded(
+                    type = viewState.type,
+                    authorized = viewState.authStatus.isAuthorized,
+                    user = viewState.user,
+                    activeSort = viewState.activeSort,
+                    sorts = viewState.sorts,
+                    pages = viewState.pages,
+                    openUser = openUser,
+                    openSearch = openSearch,
+                    onPageChanged = { actioner(ListsAction.UpdateCurrentPage(it)) },
+                    onSortClick = { option, isDescending ->
+                        actioner(ListsAction.UpdateListSort(option, isDescending))
+                    }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ListsLoading(
+    title: String,
+    user: UserShort?,
+    authorized: Boolean,
+    openSearch: () -> Unit,
+    openUser: () -> Unit
+) {
+    Column() {
+        RootScreenToolbar(
+                title = title,
+                showSearchButton = true,
+                user = user,
+                authorized = authorized,
+                searchButtonClick = openSearch,
+                avatarClick = openUser
+        )
+
+        //TODO add loading
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun ListsLoaded(
+    type: RateTargetType,
+    authorized: Boolean,
+    user: UserShort?,
+    activeSort: RateSort,
+    sorts: List<RateSortOption>,
+    pages: List<ListsPage>,
+    openUser: () -> Unit,
+    openSearch: () -> Unit,
+    onPageChanged: (ListsPage) -> Unit,
+    onSortClick: (RateSortOption, Boolean) -> Unit
+) {
     val pagerState =
-        rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size.coerceAtLeast(1))
+        rememberPagerState(pageCount = pages.size, initialOffscreenLimit = pages.size.coerceAtLeast(1))
 
     LaunchedEffect(pagerState) {
         pagerState.pageChanges.collect { page ->
-            val newPage = viewState.pages[page]
-            actioner.invoke(ListsAction.UpdateCurrentPage(newPage))
+            val newPage = pages[page]
+            onPageChanged(newPage)
         }
     }
 
@@ -188,27 +255,27 @@ internal fun Lists(
     Scaffold(
             topBar = {
                 ListsTopBar(
-                        title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
-                        authorized = viewState.authStatus == ShikimoriAuthState.LOGGED_IN,
-                        user = viewState.user,
-                        listType = viewState.type,
-                        activeSort = viewState.activeSort,
-                        sortsOptions = viewState.sorts,
-                        pages = viewState.pages,
-                        pagerState = pagerState,
+                        title = LocalShimoriRateUtil.current.rateTargetTypeName(type),
+                        authorized = authorized,
+                        user = user,
+                        listType = type,
+                        activeSort = activeSort,
+                        sortsOptions = sorts,
                         openUser = openUser,
                         searchClick = openSearch,
-                        onSortClick = { option, isDescending ->
-                            actioner(ListsAction.UpdateListSort(option, isDescending))
-                        },
-                        onPageClick = { page ->
-                            val index = viewState.pages.indexOf(page)
-
-                            scope.launch {
-                                pagerState.animateScrollToPage(page = index)
+                        onSortClick = onSortClick,
+                ) {
+                    ListsTabs(
+                            pagerState = pagerState,
+                            listType = type,
+                            pages = pages,
+                            onClick = { page ->
+                                scope.launch {
+                                    pagerState.animateScrollToPage(page = page)
+                                }
                             }
-                        }
-                )
+                    )
+                }
             },
             backgroundColor = MaterialTheme.colors.primary,
     ) { paddingValues ->
@@ -221,14 +288,13 @@ internal fun Lists(
                         .padding(paddingValues)
                         .padding(horizontal = 16.dp)
             ) { page ->
-                ListPage(viewState.pages[page])
+                ListPage(pages[page])
             }
         }
     }
 }
 
 
-@ExperimentalPagerApi
 @Composable
 private fun ListsTopBar(
     title: String,
@@ -237,16 +303,13 @@ private fun ListsTopBar(
     listType: RateTargetType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,
-    pages: List<ListsPage>,
-    pagerState: PagerState,
     openUser: () -> Unit,
     searchClick: () -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit,
-    onPageClick: (ListsPage) -> Unit,
+    content: @Composable () -> Unit
 ) {
 
-    Column(
-    ) {
+    Column {
         RootScreenToolbar(
                 title = title,
                 showSearchButton = true,
@@ -256,57 +319,81 @@ private fun ListsTopBar(
                 avatarClick = openUser
         )
 
-        Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .padding(vertical = 12.dp)
-                    .horizontalScroll(rememberScrollState())
-                    .animateContentSize(),
-        ) {
-            Spacer(modifier = Modifier.width(16.dp))
-            sortsOptions.forEach { option ->
-                val isActiveSort = activeSort.sortOption == option
-                SortChip(
-                        text = LocalShimoriTextCreator.current.listSortText(listType, option),
-                        selected = isActiveSort,
-                        isDescending = isActiveSort && activeSort.isDescending,
-                        onClick = { onSortClick(option, activeSort.isDescending) },
-                        onReselect = { onSortClick(option, !activeSort.isDescending) }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-        }
+        SortOptions(
+                listType = listType,
+                activeSort = activeSort,
+                sortsOptions = sortsOptions,
+                onSortClick = onSortClick
+        )
 
-        if (pages.isNotEmpty()) {
-            ScrollableTabRow(
-                    selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = MaterialTheme.colors.primary,
-                    edgePadding = 0.dp,
-                    indicator = { tabPositions ->
-                        Indicator(
-                                Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
-                        )
+        content()
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun ListsTabs(
+    pagerState: PagerState,
+    listType: RateTargetType,
+    pages: List<ListsPage>,
+    onClick: (Int) -> Unit
+) {
+    ScrollableTabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = MaterialTheme.colors.primary,
+            edgePadding = 0.dp,
+            indicator = { tabPositions ->
+                Indicator(
+                        Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
+                )
+            },
+            divider = {}
+    ) {
+        pages.forEachIndexed { index, listPage ->
+            Tab(
+                    text = {
+                        Text(
+                                text = LocalShimoriTextCreator.current.listsPageText(listType, listPage),
+                                style = MaterialTheme.typography.subInfoStyle,
+                                color = MaterialTheme.colors.caption)
                     },
-                    divider = {}
-            ) {
-                pages.forEachIndexed { index, listPage ->
-                    Tab(
-                            text = {
-                                Text(
-                                        text = LocalShimoriTextCreator.current.listsPageText(listType, listPage),
-                                        style = MaterialTheme.typography.subInfoStyle,
-                                        color = MaterialTheme.colors.caption)
-                            },
-                            selected = pagerState.currentPage == index,
-                            onClick = { onPageClick(listPage) },
-                    )
-                }
-            }
+                    selected = pagerState.currentPage == index,
+                    onClick = { onClick(index) },
+            )
         }
     }
+}
 
+
+@Composable
+private fun SortOptions(
+    listType: RateTargetType,
+    activeSort: RateSort,
+    sortsOptions: List<RateSortOption>,
+    onSortClick: (RateSortOption, Boolean) -> Unit
+) {
+    Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(vertical = 12.dp)
+                .horizontalScroll(rememberScrollState())
+                .animateContentSize(),
+    ) {
+        Spacer(modifier = Modifier.width(16.dp))
+        sortsOptions.forEach { option ->
+            val isActiveSort = activeSort.sortOption == option
+            SortChip(
+                    text = LocalShimoriTextCreator.current.listSortText(listType, option),
+                    selected = isActiveSort,
+                    isDescending = isActiveSort && activeSort.isDescending,
+                    onClick = { onSortClick(option, activeSort.isDescending) },
+                    onReselect = { onSortClick(option, !activeSort.isDescending) }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+    }
 }
 
 @Composable
