@@ -1,52 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Platform.Theme.Shimori" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:navigationBarColor">@color/shimori_colorNavigationBar</item>
-        <item name="android:statusBarColor">@color/shimori_colorStatusBar</item>
-    </style>
+    <style name="Platform.Theme.Shimori" parent="android:Theme.Material.Light.NoActionBar" />
 
     <style name="Base.Theme.Shimori" parent="Platform.Theme.Shimori">
         <item name="android:windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Theme.Shimori" parent="Base.Theme.Shimori">
-<!--        <item name="colorPrimary">@color/shimori_colorPrimary</item>-->
-<!--        <item name="colorOnPrimary">@color/shimori_colorOnPrimary</item>-->
-<!--        <item name="colorOnPrimarySecondary">@color/shimori_colorOnPrimarySecondary</item>-->
-
-<!--        <item name="colorPrimaryVariant">@color/shimori_colorPrimaryVariant</item>-->
-<!--        <item name="colorPrimaryDark">@color/shimori_colorPrimaryVariant</item>-->
-
-<!--        <item name="colorSecondary">@color/shimori_colorSecondary</item>-->
-<!--        <item name="colorSecondaryTransparent">@color/shimori_colorSecondaryTransparent</item>-->
-<!--        <item name="colorOnSecondary">@color/shimori_colorOnSecondary</item>-->
-
-<!--        <item name="colorSurface">@color/shimori_colorSurface</item>-->
-<!--        <item name="colorOnSurface">@color/shimori_colorOnSurface</item>-->
-
-<!--        <item name="android:colorBackground">@color/shimori_colorBackground</item>-->
-<!--        <item name="colorOnBackground">@color/shimori_colorOnBackground</item>-->
-<!--        <item name="colorDivider">@color/shimori_colorDivider</item>-->
-<!--        <item name="colorControlHighlight">@color/shimori_colorRipple</item>-->
-
-<!--        <item name="android:textColor">?attr/colorOnSurface</item>-->
-<!--        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>-->
-<!--        <item name="android:textColorSecondary">?attr/colorOnPrimarySecondary</item>-->
-
-<!--        <item name="colorBackgroundFloating">@color/shimori_colorDialogSurface</item>-->
-<!--        <item name="colorDialogSurface">@color/shimori_colorDialogSurface</item>-->
-<!--        <item name="colorRateMenuBackground">@color/shimori_colorRateMenuBackground</item>-->
-<!--        <item name="colorRateDialog">@color/shimori_colorRateDialog</item>-->
-<!--        <item name="colorSnackbarSurface">@color/shimori_colorSnackBar</item>-->
-
-<!--        <item name="colorRateDefault">@color/rate_default_transparent</item>-->
-<!--        <item name="colorRateWatched">@color/rate_watched_transparent</item>-->
-<!--        <item name="colorRateOnHold">@color/rate_on_hold_transparent</item>-->
-<!--        <item name="colorRateDropped">@color/rate_dropped_transparent</item>-->
-
-<!--        <item name="colorStatusBar">@color/shimori_colorStatusBar</item>-->
-<!--        <item name="colorNavigationBar">@color/shimori_colorStatusBar</item>-->
-    </style>
-
+    <style name="Theme.Shimori" parent="Base.Theme.Shimori" />
 </resources>
