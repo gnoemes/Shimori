@@ -62,7 +62,7 @@ class MainActivity : BaseActivity() {
                                 color = statusBarColor,
                                 darkIcons = isLightTheme
                         )
-                        systemUiController.setSystemBarsColor(
+                        systemUiController.setNavigationBarColor(
                                 color = navigationColor,
                                 darkIcons = isLightTheme
                         )
