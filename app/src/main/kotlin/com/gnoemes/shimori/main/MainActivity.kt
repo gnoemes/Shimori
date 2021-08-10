@@ -3,7 +3,9 @@ package com.gnoemes.shimori.main
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material.LocalElevationOverlay
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
@@ -16,6 +18,7 @@ import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
 import com.gnoemes.shimori.common.utils.ShimoriRateUtil
 import com.gnoemes.shimori.common.utils.ShimoriTextCreator
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,10 +28,12 @@ class MainActivity : BaseActivity() {
 
     @Inject
     internal lateinit var prefs: ShimoriPreferences
+
     @Inject
     internal lateinit var rateUtil: ShimoriRateUtil
+
     @Inject
-    internal lateinit var textCreator : ShimoriTextCreator
+    internal lateinit var textCreator: ShimoriTextCreator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +42,33 @@ class MainActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         setContent {
+
             CompositionLocalProvider(
                     LocalElevationOverlay provides null,
                     LocalShimoriRateUtil provides rateUtil,
                     LocalShimoriTextCreator provides textCreator,
                     LocalShimoriSettings provides prefs
             ) {
-                ProvideWindowInsets(consumeWindowInsets = false) {
-                    ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {
+
+                ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {
+
+                    val systemUiController = rememberSystemUiController()
+                    val isLightTheme = MaterialTheme.colors.isLight
+                    val navigationColor = MaterialTheme.colors.surface
+                    val statusBarColor = MaterialTheme.colors.primary
+
+                    SideEffect {
+                        systemUiController.setStatusBarColor(
+                                color = statusBarColor,
+                                darkIcons = isLightTheme
+                        )
+                        systemUiController.setSystemBarsColor(
+                                color = navigationColor,
+                                darkIcons = isLightTheme
+                        )
+                    }
+
+                    ProvideWindowInsets(consumeWindowInsets = false) {
                         Main()
                     }
                 }

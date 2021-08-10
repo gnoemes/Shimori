@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -140,61 +142,69 @@ internal fun MainBottomNavigation(
     onScreenReSelected: (RootScreen) -> Unit
 ) {
 
-    Surface(
-            color = MaterialTheme.colors.surface,
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsHeight(additional = 56.dp)
-    ) {
-        Row(
-                Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(),
+    Column {
+        Surface(
+                color = MaterialTheme.colors.surface,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
         ) {
+            Row(
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+            ) {
 
+                RateSelectionNavigationItem(
+                        viewState.rateTargetType,
+                        canShowListIcon = canShowListIcon,
+                        selected = selectedScreen == RootScreen.Lists,
+                        onClick = { onScreenSelected(RootScreen.Lists) },
+                        onReselect = { onScreenReSelected(RootScreen.Lists) }
+                )
 
-            RateSelectionNavigationItem(
-                    viewState.rateTargetType,
-                    canShowListIcon = canShowListIcon,
-                    selected = selectedScreen == RootScreen.Lists,
-                    onClick = { onScreenSelected(RootScreen.Lists) },
-                    onReselect = { onScreenReSelected(RootScreen.Lists) }
-            )
+                MainBottomNavigationItem(
+                        selected = selectedScreen == RootScreen.Explore,
+                        stringResource(R.string.explore_title),
+                        painter = painterResource(R.drawable.ic_explore),
+                        onClick = {
+                            val screen = RootScreen.Explore
+                            if (selectedScreen == screen) onScreenReSelected(screen)
+                            else onScreenSelected(screen)
+                        }
+                )
 
-            MainBottomNavigationItem(
-                    selected = selectedScreen == RootScreen.Explore,
-                    stringResource(R.string.explore_title),
-                    painter = painterResource(R.drawable.ic_explore),
-                    onClick = {
-                        val screen = RootScreen.Explore
-                        if (selectedScreen == screen) onScreenReSelected(screen)
-                        else onScreenSelected(screen)
-                    }
-            )
+                MainBottomNavigationItem(
+                        selected = selectedScreen == RootScreen.Forum,
+                        stringResource(R.string.forum_title),
+                        painter = painterResource(R.drawable.ic_feed),
+                        onClick = {
+                            val screen = RootScreen.Forum
+                            if (selectedScreen == screen) onScreenReSelected(screen)
+                            else onScreenSelected(screen)
+                        }
+                )
 
-            MainBottomNavigationItem(
-                    selected = selectedScreen == RootScreen.Forum,
-                    stringResource(R.string.forum_title),
-                    painter = painterResource(R.drawable.ic_feed),
-                    onClick = {
-                        val screen = RootScreen.Forum
-                        if (selectedScreen == screen) onScreenReSelected(screen)
-                        else onScreenSelected(screen)
-                    }
-            )
+                MainBottomNavigationItem(
+                        selected = selectedScreen == RootScreen.Conversations,
+                        stringResource(R.string.conversations_title),
+                        painter = painterResource(R.drawable.ic_conversation),
+                        onClick = {
+                            val screen = RootScreen.Conversations
+                            if (selectedScreen == screen) onScreenReSelected(screen)
+                            else onScreenSelected(screen)
+                        }
+                )
+            }
 
-            MainBottomNavigationItem(
-                    selected = selectedScreen == RootScreen.Conversations,
-                    stringResource(R.string.conversations_title),
-                    painter = painterResource(R.drawable.ic_conversation),
-                    onClick = {
-                        val screen = RootScreen.Conversations
-                        if (selectedScreen == screen) onScreenReSelected(screen)
-                        else onScreenSelected(screen)
-                    }
-            )
         }
 
+        Spacer(
+                Modifier
+                    .navigationBarsHeight()
+                    .fillMaxWidth()
+                    .background(Color.Transparent)
+        )
     }
 }
 
