@@ -37,7 +37,6 @@ import com.gnoemes.shimori.common.compose.ShimoriIconButton
 import com.gnoemes.shimori.common.compose.theme.*
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.navigationBarsHeight
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -52,85 +51,85 @@ internal fun Main(
     viewModel: MainViewModel
 ) {
     val navController = rememberNavController()
-
     val viewState by viewModel.state.collectAsState()
 
-    var openBottomSheet by remember { mutableStateOf(false) }
+    val actioner = { action: MainAction -> viewModel.submitAction(action) }
 
-    val actioner = { action: MainAction ->
-        when (action) {
-            MainAction.RateTypeDialog -> openBottomSheet = true
-            MainAction.RateTypeDialogClosed -> openBottomSheet = false
-            else -> viewModel.submitAction(action)
-        }
-    }
+    val sheetState = rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            confirmStateChange = { value ->
+                when (value) {
+                    ModalBottomSheetValue.Expanded -> true
+                    ModalBottomSheetValue.HalfExpanded -> false
+                    ModalBottomSheetValue.Hidden -> true
+                }
+            },
+    )
+
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
             bottomBar = {
-                val currentSelectedItem by navController.currentScreenAsState()
-
-                val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
-
-                MainBottomNavigation(
-                        viewState,
-                        canShowListIcon = canShowBottomSheet,
-                        selectedScreen = currentSelectedItem,
-                        onScreenSelected = { selected ->
-
-                            navController.navigate(selected.route) {
-                                launchSingleTop = true
-                                restoreState = true
-
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-
-                                }
-                            }
-                        },
-                        onScreenReSelected = { selected ->
-
-                            //show list type select bottom sheet if lists tab was reselected twice
-                            if (canShowBottomSheet) {
-                                openBottomSheet = true
-                            } else {
-                                navController.popBackStack(selected.getStartDestination().route, false)
-                            }
-                        },
+                MainBoottomBar(
+                        viewState = viewState,
+                        navController = navController,
+                        showBottomSheet = { coroutineScope.launch { sheetState.show() } }
                 )
-
             }
     ) {
         Box(Modifier.fillMaxSize()) {
-            AppNavigation(
-                    navController = navController,
-            )
+            AppNavigation(navController = navController)
         }
     }
 
-    if (openBottomSheet) {
-        val sheetState = rememberModalBottomSheetState(
-                initialValue = ModalBottomSheetValue.Hidden,
-                confirmStateChange = { value ->
-                    when (value) {
-                        ModalBottomSheetValue.Expanded -> true
-                        ModalBottomSheetValue.HalfExpanded -> false
-                        ModalBottomSheetValue.Hidden -> {
-                            actioner(MainAction.RateTypeDialogClosed)
-                            true
-                        }
+    val onBottomSheetClick: (MainAction) -> Unit = {
+        coroutineScope.launch { sheetState.hide() }
+        actioner(it)
+    }
+
+    RateTypeSelectBottomSheet(
+            sheetState = sheetState,
+            action = onBottomSheetClick,
+            selectedRateType = viewState.rateTargetType
+    )
+}
+
+@Composable
+internal fun MainBoottomBar(
+    viewState: MainViewState,
+    navController: NavController,
+    showBottomSheet: () -> Unit
+) {
+    val currentSelectedItem by navController.currentScreenAsState()
+
+    val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
+
+    MainBottomNavigation(
+            viewState,
+            canShowListIcon = canShowBottomSheet,
+            selectedScreen = currentSelectedItem,
+            onScreenSelected = { selected ->
+
+                navController.navigate(selected.route) {
+                    launchSingleTop = true
+                    restoreState = true
+
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+
                     }
-                },
-        )
+                }
+            },
+            onScreenReSelected = { selected ->
 
-        val coroutineScope = rememberCoroutineScope()
-
-
-        LaunchedEffect(key1 = viewModel) {
-            launch { sheetState.show() }
-        }
-
-        RateTypeSelectBottomSheet(coroutineScope = coroutineScope, action = actioner, selectedRateType = viewState.rateTargetType, sheetState = sheetState)
-    }
+                //show list type select bottom sheet if lists tab was reselected twice
+                if (canShowBottomSheet) {
+                    showBottomSheet()
+                } else {
+                    navController.popBackStack(selected.getStartDestination().route, false)
+                }
+            },
+    )
 }
 
 @Composable
@@ -219,7 +218,8 @@ private fun RowScope.RateSelectionNavigationItem(
 ) {
 
     val text = LocalShimoriRateUtil.current.rateTargetTypeName(selectedRateType)
-    val contentColor = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary
+    val contentColor =
+        if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary
     val buttonColors = ButtonDefaults.buttonColors(
             backgroundColor = if (selected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.button
     )
@@ -287,20 +287,10 @@ private fun MainBottomNavigationItem(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun RateTypeSelectBottomSheet(
-    coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     action: (MainAction) -> Unit,
     selectedRateType: RateTargetType
 ) {
-
-    val bottomSheetOnClick = { childAction: () -> Unit ->
-        childAction()
-        coroutineScope.launch {
-            //Manual close doesn't trigger confirmStateChange
-            sheetState.hide()
-            action(MainAction.RateTypeDialogClosed)
-        }
-    }
 
     ModalBottomSheetLayout(
             sheetContent = {
@@ -329,7 +319,7 @@ private fun RateTypeSelectBottomSheet(
 
                 EnlargedButton(
                         selected = false,
-                        onClick = { bottomSheetOnClick { action(MainAction.Random) } },
+                        onClick = { action(MainAction.Random) },
                         painter = painterResource(R.drawable.ic_random),
                         text = stringResource(R.string.open_random_title_from_list),
                         modifier = Modifier
@@ -342,7 +332,7 @@ private fun RateTypeSelectBottomSheet(
 
                 EnlargedButton(
                         selected = selectedRateType.anime,
-                        onClick = { bottomSheetOnClick { action(MainAction.ChangeRateType(RateTargetType.ANIME)) } },
+                        onClick = { action(MainAction.ChangeRateType(RateTargetType.ANIME)) },
                         painter = painterResource(R.drawable.ic_anime),
                         text = stringResource(R.string.anime),
                         modifier = Modifier
@@ -354,7 +344,7 @@ private fun RateTypeSelectBottomSheet(
 
                 EnlargedButton(
                         selected = selectedRateType == RateTargetType.MANGA,
-                        onClick = { bottomSheetOnClick { action(MainAction.ChangeRateType(RateTargetType.MANGA)) } },
+                        onClick = { action(MainAction.ChangeRateType(RateTargetType.MANGA)) },
                         painter = painterResource(R.drawable.ic_manga),
                         text = stringResource(R.string.manga),
                         modifier = Modifier
@@ -365,7 +355,7 @@ private fun RateTypeSelectBottomSheet(
 
                 EnlargedButton(
                         selected = selectedRateType == RateTargetType.RANOBE,
-                        onClick = { bottomSheetOnClick { action(MainAction.ChangeRateType(RateTargetType.RANOBE)) } },
+                        onClick = { action(MainAction.ChangeRateType(RateTargetType.RANOBE)) },
                         painter = painterResource(R.drawable.ic_ranobe),
                         text = stringResource(R.string.ranobe),
                         modifier = Modifier
