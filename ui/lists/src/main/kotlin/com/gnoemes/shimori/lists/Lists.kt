@@ -9,10 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +33,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -175,9 +173,17 @@ internal fun Lists(
     actioner: (ListsAction) -> Unit
 ) {
 
-    val pagerState = rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size.coerceAtLeast(1))
+    val pagerState =
+        rememberPagerState(pageCount = viewState.pages.size, initialOffscreenLimit = viewState.pages.size.coerceAtLeast(1))
 
-    val scope =  rememberCoroutineScope()
+    LaunchedEffect(pagerState) {
+        pagerState.pageChanges.collect { page ->
+            val newPage = viewState.pages[page]
+            actioner.invoke(ListsAction.UpdateCurrentPage(newPage))
+        }
+    }
+
+    val scope = rememberCoroutineScope()
 
     Scaffold(
             topBar = {
@@ -218,9 +224,7 @@ internal fun Lists(
                 ListPage(viewState.pages[page])
             }
         }
-
     }
-
 }
 
 

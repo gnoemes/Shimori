@@ -13,6 +13,7 @@ import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -45,6 +46,7 @@ internal class ListsViewModel @Inject constructor(
             pendingActions.collect { action ->
                 when (action) {
                     is ListsAction.UpdateListSort -> updateRateSort(action.option, action.isDescending)
+                    is ListsAction.UpdateCurrentPage -> updateCurrentPage(action.page)
                 }
 
             }
@@ -113,6 +115,12 @@ internal class ListsViewModel @Inject constructor(
                             sort = option,
                             isDescending = isDescending)
             )
+        }
+    }
+
+    private fun updateCurrentPage(page: ListsPage) {
+        viewModelScope.launch {
+            stateManager.updateCurrentPage(page)
         }
     }
 

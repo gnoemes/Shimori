@@ -1,12 +1,15 @@
 package com.gnoemes.shimori.lists.page
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
+import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
 import com.gnoemes.shimori.domain.observers.ObservePagedAnimeRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
+import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import dagger.Module
@@ -20,6 +23,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class ListPageViewModel @AssistedInject constructor(
@@ -27,6 +31,7 @@ class ListPageViewModel @AssistedInject constructor(
     private val observeAnimeRates: ObservePagedAnimeRates,
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,
+    private val getRandomTitleWithStatus: GetRandomTitleWithStatus
 ) : ViewModel() {
 
     val list get() = observeAnimeRates.observe()
@@ -50,6 +55,26 @@ class ListPageViewModel @AssistedInject constructor(
         viewModelScope.launch {
             stateManager.currentType.collect {
                 observeRateSort(ObserveRateSort.Params(it))
+            }
+        }
+
+        viewModelScope.launch {
+            stateManager.openRandomTitle
+                .filter { stateManager.currentPage.value == page }
+                .collect { openRandomTitle() }
+        }
+    }
+
+    private fun openRandomTitle() {
+        viewModelScope.launch {
+            getRandomTitleWithStatus(
+                    GetRandomTitleWithStatus.Params(
+                            type = stateManager.currentType.value,
+                            status = page.status
+                    )
+            ).collect {
+                //TODO navigate to details
+                Log.i("DEVE", "${(it?.entity as? Anime)?.name}")
             }
         }
     }

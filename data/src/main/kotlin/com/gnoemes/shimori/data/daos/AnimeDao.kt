@@ -18,7 +18,7 @@ abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
     @Query(QUERY_ALL_ANIME_WITH_STATUS)
-    abstract suspend fun queryAllAnimesWithStatus() : List<AnimeWithRate>
+    abstract suspend fun queryAllAnimesWithStatus(): List<AnimeWithRate>
 
     @Transaction
     @Query(QUERY_ANIME_WITH_STATUS)
@@ -70,7 +70,7 @@ abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
     @Query(QUERY_WITH_STATUS_BY_RATING)
-    abstract fun pagingRating(status: RateStatus, descending: Boolean) : PagingSource<Int, AnimeWithRate>
+    abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_PINNED_BY_NAME)
@@ -107,6 +107,14 @@ abstract class AnimeDao : EntityDao<Anime> {
     @Transaction
     @Query(QUERY_PINNED_BY_RATING)
     abstract fun pagingPinnedRating(descending: Boolean): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_RANDOM_PINNED)
+    abstract suspend fun queryRandomPinned(): AnimeWithRate?
+
+    @Transaction
+    @Query(QUERY_RANDOM_WITH_STATUS)
+    abstract suspend fun queryRandomWithStatus(status: RateStatus): AnimeWithRate?
 
     companion object {
         private const val QUERY_CALENDAR = """
@@ -305,6 +313,21 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY  
             (CASE :descending WHEN 1 THEN rating END) DESC,
             (CASE :descending WHEN 0 THEN rating END) ASC
+        """
+
+        private const val QUERY_RANDOM_PINNED = """
+            SELECT a.*, r.* FROM animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY RANDOM() LIMIT 1
+        """
+
+        private const val QUERY_RANDOM_WITH_STATUS = """
+            SELECT * from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            WHERE r.status = :status
+            ORDER BY RANDOM() LIMIT 1
         """
 
     }
