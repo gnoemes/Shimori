@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,12 +32,9 @@ import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.Scaffold
 import com.gnoemes.shimori.common.compose.ShimoriIconButton
-import com.gnoemes.shimori.common.compose.theme.caption
-import com.gnoemes.shimori.common.compose.theme.subInfoStyle
-import com.gnoemes.shimori.common.compose.theme.toolbar
+import com.gnoemes.shimori.common.compose.theme.*
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -147,7 +145,6 @@ internal fun MainBottomNavigation(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsHeight(additional = 56.dp)
-                .navigationBarsPadding(start = false, end = false)
     ) {
         Row(
                 Modifier
@@ -211,18 +208,38 @@ private fun RowScope.RateSelectionNavigationItem(
     onReselect: () -> Unit
 ) {
 
-    EnlargedButton(
-            selected = selected,
+    val text = LocalShimoriRateUtil.current.rateTargetTypeName(selectedRateType)
+    val contentColor = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary
+    val buttonColors = ButtonDefaults.buttonColors(
+            backgroundColor = if (selected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.button
+    )
+
+    TextButton(
+            colors = buttonColors,
+            shape = RoundedCornerShape(32.dp),
             onClick = if (selected) onReselect else onClick,
+            border = BorderStroke(1.dp, MaterialTheme.colors.alpha),
             modifier = Modifier
                 .padding(start = 16.dp, top = 12.dp, end = 12.dp, bottom = 12.dp)
                 .height(32.dp)
                 .widthIn(min = 152.dp, max = 400.dp)
                 .weight(1f),
-            painter = painterResource(id = LocalShimoriRateUtil.current.rateTargetTypeIcon(selectedRateType)),
-            text = LocalShimoriRateUtil.current.rateTargetTypeName(selectedRateType),
-            textStyle = MaterialTheme.typography.subInfoStyle
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
     ) {
+        Icon(
+                painter = painterResource(id = LocalShimoriRateUtil.current.rateTargetTypeIcon(selectedRateType)),
+                contentDescription = text,
+                tint = contentColor,
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+                text = text,
+                style = MaterialTheme.typography.subInfoStyle,
+                color = contentColor,
+                modifier = Modifier.weight(1f)
+        )
 
         AnimatedVisibility(
                 visible = selected && canShowListIcon,

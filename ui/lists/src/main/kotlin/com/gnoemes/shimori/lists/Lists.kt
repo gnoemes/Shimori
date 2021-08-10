@@ -320,7 +320,7 @@ private fun SortChip(
     ShimoriButton(
             selected = selected,
             onClick = if (selected) onReselect else onClick,
-            modifier = Modifier.height(32.dp),
+            modifier = Modifier.heightIn(32.dp, 56.dp),
             text = text,
             painter = painter
     )
