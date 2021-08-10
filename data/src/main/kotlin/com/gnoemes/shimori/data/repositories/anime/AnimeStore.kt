@@ -37,6 +37,10 @@ class AnimeStore @Inject constructor(
         if (status == null) animeDao.queryAllAnimesWithStatus()
         else animeDao.queryAnimesWithStatus(status)
 
+    suspend fun queryRandomAnimeWithStatus(status: RateStatus?) =
+        if (status == null) animeDao.queryRandomPinned()
+        else animeDao.queryRandomWithStatus(status)
+
     fun observeCalendar(filter: String?): Flow<List<AnimeWithRate>> = when {
         filter.isNullOrBlank() -> animeDao.observeCalendar()
         else -> animeDao.observeCalendarFilter("*$filter*")

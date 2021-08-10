@@ -93,7 +93,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun openRandomTitle() {
-        //TODO callback to lists
+        viewModelScope.launch {
+            listsStateManager.openRandomTitle()
+        }
     }
 
     private fun changeRateType(newType: RateTargetType) {

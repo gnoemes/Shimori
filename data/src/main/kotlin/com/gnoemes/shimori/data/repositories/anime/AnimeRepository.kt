@@ -23,6 +23,8 @@ class AnimeRepository @Inject constructor(
 
     suspend fun queryAnimesWithStatus(status: RateStatus?) = animeStore.queryAnimesWithStatus(status)
 
+    suspend fun queryRandomAnimeWithStatus(status: RateStatus?) = animeStore.queryRandomAnimeWithStatus(status)
+
     suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
         val userId = userRepository.getMyUserId() ?: return
 
