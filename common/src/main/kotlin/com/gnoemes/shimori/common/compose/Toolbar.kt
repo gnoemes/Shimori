@@ -27,10 +27,11 @@ fun RootScreenToolbar(
     TopAppBar(
             backgroundColor = MaterialTheme.colors.toolbar,
             contentPadding = PaddingValues(16.dp),
+            elevation = 0.dp,
             modifier = Modifier
                 .statusBarsPadding()
                 .height(64.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
     ) {
 
         Text(
