@@ -28,6 +28,7 @@ import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.model.user.UserShort
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -55,35 +56,71 @@ internal fun Lists(
 ) {
 
     val viewState by viewModel.state.collectAsState()
+    val signInLauncher =
+        rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
+            if (result != null) {
+                viewModel.onLoginResult(result)
+            }
+        }
 
-    if (viewState.authStatus.isAuthorized) {
+    val signUpLauncher =
+        rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
+            if (result != null) {
+                viewModel.onLoginResult(result)
+            }
+        }
+
+    if (viewState.loading) {
+        ListsLoading(
+                title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
+                authorized = false,
+                user = null,
+                openUser = openUser,
+                openSearch = openSearch
+        )
+    } else {
         Lists(
                 viewState,
                 openUser,
-                openSearch
-        ) { action ->
-            viewModel.submitAction(action)
-        }
-    } else {
-        val signInLauncher =
-            rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
-                if (result != null) {
-                    viewModel.onLoginResult(result)
-                }
-            }
-
-        val signUpLauncher =
-            rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
-                if (result != null) {
-                    viewModel.onLoginResult(result)
-                }
-            }
-
-
-        NeedAuthLists(
+                openSearch,
                 signIn = { signInLauncher.launch(Unit) },
                 signUp = { signUpLauncher.launch(Unit) }
-        )
+        ) { action -> viewModel.submitAction(action) }
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+internal fun Lists(
+    viewState: ListsViewState,
+    openUser: () -> Unit,
+    openSearch: () -> Unit,
+    signIn: () -> Unit,
+    signUp: () -> Unit,
+    actioner: (ListsAction) -> Unit
+) {
+
+    when {
+        !viewState.authStatus.isAuthorized -> NeedAuthLists(signIn, signUp)
+        viewState.pages.isEmpty() -> {
+            //TODO add empty state
+        }
+        else -> {
+            ListsLoaded(
+                    type = viewState.type,
+                    authorized = viewState.authStatus.isAuthorized,
+                    user = viewState.user,
+                    activeSort = viewState.activeSort,
+                    sorts = viewState.sorts,
+                    pages = viewState.pages,
+                    openUser = openUser,
+                    openSearch = openSearch,
+                    onPageChanged = { actioner(ListsAction.UpdateCurrentPage(it)) },
+                    onSortClick = { option, isDescending ->
+                        actioner(ListsAction.UpdateListSort(option, isDescending))
+                    }
+            )
+        }
     }
 }
 
@@ -163,47 +200,6 @@ internal fun NeedAuthLists(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-internal fun Lists(
-    viewState: ListsViewState,
-    openUser: () -> Unit,
-    openSearch: () -> Unit,
-    actioner: (ListsAction) -> Unit
-) {
-
-    when {
-        viewState.loading -> {
-            ListsLoading(
-                    title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
-                    authorized = viewState.authStatus.isAuthorized,
-                    user = viewState.user,
-                    openUser = openUser,
-                    openSearch = openSearch
-            )
-        }
-        viewState.pages.isEmpty() -> {
-            //TODO add empty state
-        }
-        else -> {
-            ListsLoaded(
-                    type = viewState.type,
-                    authorized = viewState.authStatus.isAuthorized,
-                    user = viewState.user,
-                    activeSort = viewState.activeSort,
-                    sorts = viewState.sorts,
-                    pages = viewState.pages,
-                    openUser = openUser,
-                    openSearch = openSearch,
-                    onPageChanged = { actioner(ListsAction.UpdateCurrentPage(it)) },
-                    onSortClick = { option, isDescending ->
-                        actioner(ListsAction.UpdateListSort(option, isDescending))
-                    }
-            )
-        }
-    }
-}
-
 @Composable
 private fun ListsLoading(
     title: String,
@@ -212,7 +208,7 @@ private fun ListsLoading(
     openSearch: () -> Unit,
     openUser: () -> Unit
 ) {
-    Column() {
+    Column {
         RootScreenToolbar(
                 title = title,
                 showSearchButton = true,
@@ -222,7 +218,15 @@ private fun ListsLoading(
                 avatarClick = openUser
         )
 
-        //TODO add loading
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+        ) {
+            CircularProgressIndicator(
+                    color = MaterialTheme.colors.secondary,
+                    modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }
 
