@@ -34,6 +34,9 @@
     <string name="rate_status_completed">Completed</string>
     <string name="rate_status_dropped">Dropped</string>
 
+    <string name="no_pinned_titles">No pinned titles</string>
+    <string name="no_pinned_titles_description">Hold cover or edit any titles to pin</string>
+
     <string name="list_sort_progress">Progress</string>
     <string name="list_sort_size_anime">Episodes</string>
     <string name="list_sort_size_manga">Chapters</string>

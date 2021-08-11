@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class ListPageViewModel @AssistedInject constructor(
-    @Assisted private val page: ListsPage,
+    @Assisted internal val page: ListsPage,
     private val observeAnimeRates: ObservePagedAnimeRates,
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,
