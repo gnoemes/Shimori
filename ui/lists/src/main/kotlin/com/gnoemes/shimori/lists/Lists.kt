@@ -73,8 +73,8 @@ internal fun Lists(
     if (viewState.loading) {
         ListsLoading(
                 title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
-                authorized = false,
-                user = null,
+                authorized = viewState.authStatus.isAuthorized,
+                user = viewState.user,
                 openUser = openUser,
                 openSearch = openSearch
         )
