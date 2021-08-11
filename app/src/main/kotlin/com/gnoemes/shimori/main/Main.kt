@@ -1,10 +1,6 @@
 package com.gnoemes.shimori.main
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -251,12 +247,7 @@ private fun RowScope.RateSelectionNavigationItem(
                 modifier = Modifier.weight(1f)
         )
 
-        AnimatedVisibility(
-                visible = selected && canShowListIcon,
-                enter = fadeIn(initialAlpha = 0.4f),
-                exit = fadeOut(animationSpec = tween(durationMillis = 250))
-
-        ) {
+        if (selected && canShowListIcon) {
             Icon(
                     painter = painterResource(R.drawable.ic_unfold),
                     contentDescription = stringResource(R.string.lists_title),
