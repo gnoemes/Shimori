@@ -80,6 +80,8 @@ dependencies {
     implementation libs.google.crashlytics
     implementation libs.google.analytics
 
+    implementation libs.accompanist.navigationmaterial
+
     implementation libs.gson
 
     debugImplementation libs.leakCanary
