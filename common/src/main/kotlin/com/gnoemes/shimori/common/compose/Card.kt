@@ -16,8 +16,9 @@ import com.gnoemes.shimori.common.compose.theme.keyInfoStyle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 
 @Composable
-fun animeListCard(
-    anime: AnimeWithRate
+fun AnimeListCard(
+    anime: AnimeWithRate,
+    onCoverLongClick : () -> Unit
 ) {
     Row(
             modifier = Modifier
@@ -27,6 +28,7 @@ fun animeListCard(
 
         Cover(
                 painter = rememberImagePainter(anime.entity.image),
+                onLongClick = onCoverLongClick,
                 modifier = Modifier
                     .height(120.dp)
                     .width(96.dp)

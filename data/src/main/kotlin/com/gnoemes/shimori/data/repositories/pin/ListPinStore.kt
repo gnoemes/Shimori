@@ -1,20 +1,20 @@
 package com.gnoemes.shimori.data.repositories.pin
 
 import com.gnoemes.shimori.data.daos.ListPinDao
+import com.gnoemes.shimori.model.app.ListPin
 import com.gnoemes.shimori.model.rate.RateTargetType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ListPinStore @Inject constructor(
     private val dao: ListPinDao
 ) {
 
-    fun observeHasPinPage(type: RateTargetType): Flow<Boolean> {
-        return dao.observePinnedSize(type).map { it > 0 }
-    }
-
-    suspend fun pin(id: Long, type: RateTargetType) {
-        //TODO
+    suspend fun togglePin(type: RateTargetType, shikimoriId: Long) {
+        val local = dao.queryById(shikimoriId)
+        if (local != null) {
+            dao.delete(local)
+        } else {
+            dao.insert(ListPin(targetId = shikimoriId, targetType = type))
+        }
     }
 }
