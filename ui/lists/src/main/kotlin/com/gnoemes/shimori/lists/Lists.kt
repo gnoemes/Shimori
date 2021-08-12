@@ -7,7 +7,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -283,18 +282,12 @@ private fun ListsLoaded(
             },
             backgroundColor = MaterialTheme.colors.primary,
     ) { paddingValues ->
-
-        Surface(
-                color = MaterialTheme.colors.primary,
-                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-        ) {
-            HorizontalPager(state = pagerState,
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .padding(horizontal = 16.dp)
-            ) { page ->
-                ListPage(pages[page])
-            }
+        HorizontalPager(state = pagerState,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp)
+        ) { page ->
+            ListPage(pages[page])
         }
     }
 }
