@@ -9,9 +9,11 @@ import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.lists.page.ListPageAction
 import com.gnoemes.shimori.model.anime.Anime
-import com.gnoemes.shimori.model.rate.ListsPage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,7 +46,8 @@ internal class ListPinnedPageViewModel @Inject constructor(
 
         viewModelScope.launch {
             stateManager.openRandomTitle
-                .filter { stateManager.currentPage.value == ListsPage.PINNED }
+                    //TODO type
+//                .filter { stateManager.currentType.value == ListsPage.PINNED }
                 .collect { openRandomTitle() }
         }
 

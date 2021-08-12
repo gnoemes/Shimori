@@ -13,9 +13,9 @@ import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -46,7 +46,7 @@ internal class ListsViewModel @Inject constructor(
             pendingActions.collect { action ->
                 when (action) {
                     is ListsAction.UpdateListSort -> updateRateSort(action.option, action.isDescending)
-                    is ListsAction.UpdateCurrentPage -> updateCurrentPage(action.page)
+                    is ListsAction.PageChanged -> updateCurrentPage(action.newPage)
                 }
 
             }
@@ -118,9 +118,9 @@ internal class ListsViewModel @Inject constructor(
         }
     }
 
-    private fun updateCurrentPage(page: ListsPage) {
+    private fun updateCurrentPage(newPage: RateStatus) {
         viewModelScope.launch {
-            stateManager.updateCurrentPage(page)
+            stateManager.updateCurrentPage(newPage)
         }
     }
 

@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.lists
 
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
-import com.gnoemes.shimori.model.rate.ListsPage
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +22,11 @@ class ListsStateManager @Inject constructor(
     private val _updatingRates = MutableStateFlow(false)
     val updatingRates: StateFlow<Boolean> get() = _updatingRates
 
-    private val _currentPage = MutableStateFlow(ListsPage.PINNED)
-    val currentPage: StateFlow<ListsPage> get() = _currentPage
+    private val _currentPage = MutableStateFlow(RateStatus.WATCHING)
+    val currentPage: StateFlow<RateStatus> get() = _currentPage
 
     private val _openRandomTitle = MutableSharedFlow<Unit>()
-    val openRandomTitle : SharedFlow<Unit> get() = _openRandomTitle
+    val openRandomTitle: SharedFlow<Unit> get() = _openRandomTitle
 
     fun updateType(type: RateTargetType) {
         _currentType.value = type
@@ -36,8 +36,8 @@ class ListsStateManager @Inject constructor(
         _updatingRates.value = updating
     }
 
-    fun updateCurrentPage(page: ListsPage) {
-        _currentPage.value = page
+    fun updateCurrentPage(status: RateStatus) {
+        _currentPage.value = status
     }
 
     suspend fun openRandomTitle() {

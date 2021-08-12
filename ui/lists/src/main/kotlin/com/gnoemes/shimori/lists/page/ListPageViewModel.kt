@@ -11,8 +11,8 @@ import com.gnoemes.shimori.domain.observers.ObservePagedTitleRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.anime.Anime
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
+import com.gnoemes.shimori.model.rate.RateStatus
 import dagger.Module
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListPageViewModel @AssistedInject constructor(
-    @Assisted internal val page: ListsPage,
+    @Assisted internal val status: RateStatus,
     private val observeTitleRates: ObservePagedTitleRates,
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,
@@ -45,7 +45,7 @@ internal class ListPageViewModel @AssistedInject constructor(
             ) { type, sort ->
                 ObservePagedTitleRates.Params(
                         type = type,
-                        page = page,
+                        status = status,
                         sort = sort ?: RateSort.defaultForType(type),
                         pagingConfig = PAGING_CONFIG
                 )
@@ -61,7 +61,7 @@ internal class ListPageViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             stateManager.openRandomTitle
-                .filter { stateManager.currentPage.value == page }
+                .filter { stateManager.currentPage.value == status }
                 .collect { openRandomTitle() }
         }
 
@@ -92,7 +92,7 @@ internal class ListPageViewModel @AssistedInject constructor(
             getRandomTitleWithStatus(
                     GetRandomTitleWithStatus.Params(
                             type = stateManager.currentType.value,
-                            status = page.status
+                            status = status
                     )
             ).collect {
                 //TODO navigate to details
@@ -104,10 +104,10 @@ internal class ListPageViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: Factory,
-            page: ListsPage
+            status: RateStatus
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(page) as T
+                return assistedFactory.create(status) as T
             }
         }
 
@@ -120,7 +120,7 @@ internal class ListPageViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(page: ListsPage): ListPageViewModel
+        fun create(status: RateStatus): ListPageViewModel
     }
 
     @Module

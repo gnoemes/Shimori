@@ -19,7 +19,7 @@ class AnimeRepository @Inject constructor(
     private val ratesLastRequestStore: AnimeWithStatusLastRequestStore
 ) {
 
-    fun observeByStatusForPaging(status: RateStatus?, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
+    fun observeByStatusForPaging(status: RateStatus, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
 
     suspend fun queryAnimesWithStatus(status: RateStatus?) = animeStore.queryAnimesWithStatus(status)
 

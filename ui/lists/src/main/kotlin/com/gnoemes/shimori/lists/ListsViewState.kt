@@ -2,9 +2,9 @@ package com.gnoemes.shimori.lists
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.model.user.UserShort
 
@@ -16,7 +16,7 @@ internal data class ListsViewState(
     val activeSort: RateSort = RateSort.defaultForType(type),
     val sorts: List<RateSortOption> = RateSortOption.priorityForType(type),
     val user: UserShort? = null,
-    val pages: List<ListsPage> = emptyList(),
+    val pages: List<RateStatus> = emptyList(),
 ) {
     companion object {
         val Empty = ListsViewState()

@@ -7,8 +7,8 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.qualifiers.ActivityContext
 import org.threeten.bp.OffsetDateTime
@@ -101,15 +101,14 @@ class ShimoriTextCreator @Inject constructor(
         return context.getString(stringRes)
     }
 
-    fun listsPageText(type: RateTargetType, listsPage: ListsPage): String {
-        val stringRes = when (listsPage) {
-            ListsPage.PINNED -> R.string.List_page_pinned
-            ListsPage.WATCHING -> if (type.anime) R.string.List_page_watching else R.string.List_page_reading
-            ListsPage.RE_WATCHING -> if (type.anime) R.string.List_page_re_watching else R.string.rate_status_manga_re_reading
-            ListsPage.ON_HOLD -> R.string.List_page_on_hold
-            ListsPage.PLANNED -> R.string.List_page_planned
-            ListsPage.COMPLETED -> R.string.List_page_completed
-            ListsPage.DROPPED -> R.string.List_page_dropped
+    fun rateStatusText(type: RateTargetType, status: RateStatus): String {
+        val stringRes = when (status) {
+            RateStatus.WATCHING -> if (type.anime) R.string.List_page_watching else R.string.List_page_reading
+            RateStatus.REWATCHING -> if (type.anime) R.string.List_page_re_watching else R.string.rate_status_manga_re_reading
+            RateStatus.ON_HOLD -> R.string.List_page_on_hold
+            RateStatus.PLANNED -> R.string.List_page_planned
+            RateStatus.COMPLETED -> R.string.List_page_completed
+            RateStatus.DROPPED -> R.string.List_page_dropped
         }
 
         return context.getString(stringRes)

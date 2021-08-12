@@ -4,7 +4,6 @@ import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.daos.RateDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -32,7 +31,7 @@ class RateStore @Inject constructor(
             else -> throw IllegalArgumentException("$target is not supported yet")
         }
 
-    fun observeListsPages(target: RateTargetType): Flow<List<ListsPage>> {
+    fun observeListsPages(target: RateTargetType): Flow<List<RateStatus>> {
         return combine(
                 *RateStatus.listPagesOrder.map { status ->
                     dao.observePageExist(target, status)
@@ -40,22 +39,9 @@ class RateStore @Inject constructor(
                 }
                     .toTypedArray()
         ) { statuses ->
-            val pages = mutableListOf<ListsPage>()
-
-
-            val pinExist = statuses.any { it.second }
-
-            if (pinExist) {
-                pages += ListsPage.PINNED
-            }
-
             statuses
                 .filter { it.second }
-                .forEach { (status, _) ->
-                    ListsPage.find(status)?.let { pages += it }
-                }
-
-            pages
+                .map { it.first }
         }
     }
 
