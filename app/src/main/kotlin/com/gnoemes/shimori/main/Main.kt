@@ -136,7 +136,6 @@ internal fun MainBottomNavigation(
     onScreenSelected: (RootScreen) -> Unit,
     onScreenReSelected: (RootScreen) -> Unit
 ) {
-
     Column {
         Surface(
                 color = MaterialTheme.colors.surface,

@@ -285,6 +285,7 @@ private fun ListsLoaded(
     ) { paddingValues ->
 
         Surface(
+                color = MaterialTheme.colors.primary,
                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         ) {
             HorizontalPager(state = pagerState,
@@ -351,7 +352,6 @@ private fun ListsTabs(
                         Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
                 )
             },
-            divider = {}
     ) {
         pages.forEachIndexed { index, listPage ->
             Tab(

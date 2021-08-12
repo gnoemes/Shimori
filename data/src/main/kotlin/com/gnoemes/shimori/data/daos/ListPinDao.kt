@@ -12,14 +12,14 @@ abstract class ListPinDao : EntityDao<ListPin> {
 
     @Transaction
     @Query("SELECT * from pinned")
-    abstract fun queryAll(): List<ListPin>
+    abstract suspend fun queryAll(): List<ListPin>
+
+    @Transaction
+    @Query("SELECT * FROM pinned WHERE target_id = :id")
+    abstract suspend fun queryById(id: Long): ListPin?
 
     @Transaction
     @Query("SELECT * FROM pinned WHERE target_type = :type")
     abstract fun observeByType(type: RateTargetType): Flow<List<ListPin>>
-
-    @Transaction
-    @Query("SELECT COUNT(*) FROM pinned WHERE target_type = :type")
-    abstract fun observePinnedSize(type: RateTargetType): Flow<Long>
 
 }

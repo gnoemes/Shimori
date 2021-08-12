@@ -12,12 +12,12 @@ import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ObservePagedAnimeRates @Inject constructor(
-    private val animeRepository: AnimeRepository
-) : PagingInteractor<ObservePagedAnimeRates.Params, AnimeWithRate>() {
+class ObservePagedTitleRates @Inject constructor(
+    private val animeRepository: AnimeRepository,
+) : PagingInteractor<ObservePagedTitleRates.Params, AnimeWithRate>() {
 
     override fun createObservable(params: Params): Flow<PagingData<AnimeWithRate>> =
-        Pager(config = params.pagingConfig) {
+         Pager(config = params.pagingConfig) {
             when (params.type) {
                 RateTargetType.ANIME -> animeRepository.observeByStatusForPaging(params.page.status, params.sort)
                 else -> throw IllegalArgumentException()

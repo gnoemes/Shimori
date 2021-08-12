@@ -1,7 +1,8 @@
 package com.gnoemes.shimori.common.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,12 +17,14 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.rate.RateStatus
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Cover(
     painter: Painter,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(8.dp),
     onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
     onStatusClick: (() -> Unit)? = null,
     status: RateStatus? = null,
     showAddStatus: Boolean = false,
@@ -32,10 +35,13 @@ fun Cover(
 
     ) {
         Image(
-                modifier = Modifier.apply { if (onClick != null) clickable { onClick() } }
+                modifier = Modifier
+                    .combinedClickable(
+                            onLongClick = onLongClick,
+                            onClick = { onClick?.invoke() }
+                    )
                     .fillMaxSize()
-                    .clip(shape)
-                ,
+                    .clip(shape),
                 painter = painter,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop

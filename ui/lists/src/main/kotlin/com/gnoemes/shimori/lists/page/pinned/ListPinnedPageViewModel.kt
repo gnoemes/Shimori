@@ -1,32 +1,22 @@
-package com.gnoemes.shimori.lists.page
+package com.gnoemes.shimori.lists.page.pinned
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingConfig
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
 import com.gnoemes.shimori.domain.interactors.ToggleListPin
-import com.gnoemes.shimori.domain.observers.ObservePagedTitleRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
+import com.gnoemes.shimori.lists.page.ListPageAction
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.rate.ListsPage
-import com.gnoemes.shimori.model.rate.RateSort
-import dagger.Module
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class ListPageViewModel @AssistedInject constructor(
-    @Assisted internal val page: ListsPage,
-    private val observeTitleRates: ObservePagedTitleRates,
+@HiltViewModel
+internal class ListPinnedPageViewModel @Inject constructor(
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,
     private val getRandomTitleWithStatus: GetRandomTitleWithStatus,
@@ -35,7 +25,6 @@ internal class ListPageViewModel @AssistedInject constructor(
 
     private val pendingActions = MutableSharedFlow<ListPageAction>()
 
-    val list get() = observeTitleRates.observe()
 
     init {
         viewModelScope.launch {
@@ -43,14 +32,8 @@ internal class ListPageViewModel @AssistedInject constructor(
                     stateManager.currentType,
                     observeRateSort.observe().distinctUntilChanged()
             ) { type, sort ->
-                ObservePagedTitleRates.Params(
-                        type = type,
-                        page = page,
-                        sort = sort ?: RateSort.defaultForType(type),
-                        pagingConfig = PAGING_CONFIG
-                )
+
             }
-                .collect { observeTitleRates(it) }
         }
 
         viewModelScope.launch {
@@ -61,7 +44,7 @@ internal class ListPageViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             stateManager.openRandomTitle
-                .filter { stateManager.currentPage.value == page }
+                .filter { stateManager.currentPage.value == ListsPage.PINNED }
                 .collect { openRandomTitle() }
         }
 
@@ -92,44 +75,12 @@ internal class ListPageViewModel @AssistedInject constructor(
             getRandomTitleWithStatus(
                     GetRandomTitleWithStatus.Params(
                             type = stateManager.currentType.value,
-                            status = page.status
+                            status = null
                     )
             ).collect {
                 //TODO navigate to details
                 Log.i("DEVE", "${(it?.entity as? Anime)?.name}")
             }
         }
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: Factory,
-            page: ListsPage
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(page) as T
-            }
-        }
-
-        private val PAGING_CONFIG = PagingConfig(
-                pageSize = 50,
-                initialLoadSize = 50,
-                prefetchDistance = 20
-        )
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(page: ListsPage): ListPageViewModel
-    }
-
-    @Module
-    @InstallIn(ActivityRetainedComponent::class)
-    interface AssistedInjectModule
-
-    @EntryPoint
-    @InstallIn(ActivityComponent::class)
-    internal interface ViewModelFactoryProvider {
-        fun pageFactory(): Factory
     }
 }
