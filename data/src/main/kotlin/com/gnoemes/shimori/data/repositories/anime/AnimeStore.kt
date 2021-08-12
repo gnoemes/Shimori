@@ -47,11 +47,9 @@ class AnimeStore @Inject constructor(
     }
 
     fun observeByStatusForPaging(
-        status: RateStatus?,
+        status: RateStatus,
         sort: RateSort
     ): PagingSource<Int, AnimeWithRate> {
-        if (status == null) return observePinnedForPaging(sort)
-
         return when (sort.sortOption) {
             RateSortOption.NAME -> {
                 //TODO paging eng

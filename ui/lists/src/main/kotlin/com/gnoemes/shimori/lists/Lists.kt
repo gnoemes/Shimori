@@ -23,9 +23,9 @@ import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.lists.page.ListPage
-import com.gnoemes.shimori.model.rate.ListsPage
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.navigationBarsPadding
@@ -115,7 +115,7 @@ internal fun Lists(
                     pages = viewState.pages,
                     openUser = openUser,
                     openSearch = openSearch,
-                    onPageChanged = { actioner(ListsAction.UpdateCurrentPage(it)) },
+                    onPageChanged = { actioner(ListsAction.PageChanged(it)) },
                     onSortClick = { option, isDescending ->
                         actioner(ListsAction.UpdateListSort(option, isDescending))
                     }
@@ -238,10 +238,10 @@ private fun ListsLoaded(
     user: UserShort?,
     activeSort: RateSort,
     sorts: List<RateSortOption>,
-    pages: List<ListsPage>,
+    pages: List<RateStatus>,
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    onPageChanged: (ListsPage) -> Unit,
+    onPageChanged: (RateStatus) -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit
 ) {
     val pagerState =
@@ -340,7 +340,7 @@ private fun ListsTopBar(
 private fun ListsTabs(
     pagerState: PagerState,
     listType: RateTargetType,
-    pages: List<ListsPage>,
+    pages: List<RateStatus>,
     onClick: (Int) -> Unit
 ) {
     ScrollableTabRow(
@@ -357,7 +357,7 @@ private fun ListsTabs(
             Tab(
                     text = {
                         Text(
-                                text = LocalShimoriTextCreator.current.listsPageText(listType, listPage),
+                                text = LocalShimoriTextCreator.current.rateStatusText(listType, listPage),
                                 style = MaterialTheme.typography.subInfoStyle,
                                 color = MaterialTheme.colors.caption)
                     },

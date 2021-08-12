@@ -17,7 +17,7 @@ import androidx.paging.compose.items
 import com.gnoemes.shimori.common.compose.AnimeListCard
 import com.gnoemes.shimori.common.extensions.rememberFlowWithLifecycle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
-import com.gnoemes.shimori.model.rate.ListsPage
+import com.gnoemes.shimori.model.rate.RateStatus
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import dagger.hilt.android.EntryPointAccessors
@@ -25,19 +25,19 @@ import dagger.hilt.android.EntryPointAccessors
 
 @Composable
 fun ListPage(
-    page: ListsPage
+    status: RateStatus
 ) {
-    ListStatusPage(viewModel = viewModel(factory = pageViewModel(page = page), key = "$page"))
+    ListStatusPage(viewModel = viewModel(factory = pageViewModel(status = status), key = "$status"))
 }
 
 @Composable
-internal fun pageViewModel(page: ListsPage): ViewModelProvider.Factory {
+internal fun pageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
             ListPageViewModel.ViewModelFactoryProvider::class.java
     ).pageFactory()
 
-    return ListPageViewModel.provideFactory(factory, page)
+    return ListPageViewModel.provideFactory(factory, status)
 }
 
 @Composable

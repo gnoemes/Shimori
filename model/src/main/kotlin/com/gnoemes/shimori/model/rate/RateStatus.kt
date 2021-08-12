@@ -18,5 +18,7 @@ enum class RateStatus(
         val listPagesOrder = listOf(WATCHING, REWATCHING, ON_HOLD, PLANNED, COMPLETED, DROPPED)
 
         fun priorityValues() = values().sortedBy { it.priority }
+
+        fun find(value : String?) = values().find { it.shikimoriValue == value }
     }
 }
