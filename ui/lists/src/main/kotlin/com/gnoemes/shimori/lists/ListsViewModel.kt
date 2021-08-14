@@ -13,10 +13,10 @@ import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
-import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -78,11 +78,12 @@ internal class ListsViewModel @Inject constructor(
                     state.map { it.authStatus }.distinctUntilChanged(),
                     state.map { it.type }.distinctUntilChanged(),
                     stateManager.updatingRates
-            ) { authState, type, loadingRates -> Triple(authState, type, loadingRates)
+            ) { authState, type, loadingRates ->
+                Triple(authState, type, loadingRates)
             }.collect { (authState, type, loadingRates) ->
                 if (authState.isAuthorized && !loadingRates) {
-                    when(type) {
-                        RateTargetType.ANIME -> updateAnimeRates()
+                    when (type) {
+                        ListType.Anime -> updateAnimeRates()
                         //TODO: add manga
                         else -> Unit
                     }
@@ -96,7 +97,10 @@ internal class ListsViewModel @Inject constructor(
         viewModelScope.launch {
             stateManager.currentType.collect { type ->
                 observeRateSort(ObserveRateSort.Params(type))
-                observeListsPages(ObserveListsPages.Params(type))
+
+                type.rateType?.let {
+                    observeListsPages(ObserveListsPages.Params(it))
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ import com.gnoemes.shimori.common.compose.AnimeListCard
 import com.gnoemes.shimori.common.extensions.rememberFlowWithLifecycle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import dagger.hilt.android.EntryPointAccessors
@@ -61,7 +62,7 @@ internal fun PagingPage(
             if (item != null) {
                 AnimeListCard(
                         anime = item,
-                        onCoverLongClick = { item.entity.shikimoriId?.let { id -> actioner(ListPageAction.TogglePin(id)) } }
+                        onCoverLongClick = { item.entity.shikimoriId?.let { id -> actioner(ListPageAction.TogglePin(id, RateTargetType.ANIME)) } }
                 )
             }
         }

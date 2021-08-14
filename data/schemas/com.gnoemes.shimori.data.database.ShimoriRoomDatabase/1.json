@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c618677baee83278c7da870b110bf33d",
+    "identityHash": "13dce1fff9a6fba727b8f715cc53ce24",
     "entities": [
       {
         "tableName": "animes",
@@ -608,7 +608,7 @@
       },
       {
         "tableName": "rate_sort",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `sortOption` TEXT NOT NULL, `isDescending` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` INTEGER, `sortOption` TEXT NOT NULL, `isDescending` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -619,7 +619,7 @@
           {
             "fieldPath": "type",
             "columnName": "type",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -698,7 +698,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c618677baee83278c7da870b110bf33d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '13dce1fff9a6fba727b8f715cc53ce24')"
     ]
   }
 }

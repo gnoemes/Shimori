@@ -22,10 +22,7 @@ import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.lists.page.ListPage
-import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateSortOption
-import com.gnoemes.shimori.model.rate.RateStatus
-import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.model.rate.*
 import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -71,7 +68,7 @@ internal fun Lists(
 
     if (viewState.loading) {
         ListsLoading(
-                title = LocalShimoriRateUtil.current.rateTargetTypeName(viewState.type),
+                title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
                 authorized = viewState.authStatus.isAuthorized,
                 user = viewState.user,
                 openUser = openUser,
@@ -232,7 +229,7 @@ private fun ListsLoading(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ListsLoaded(
-    type: RateTargetType,
+    type: ListType,
     authorized: Boolean,
     user: UserShort?,
     activeSort: RateSort,
@@ -258,7 +255,7 @@ private fun ListsLoaded(
     Scaffold(
             topBar = {
                 ListsTopBar(
-                        title = LocalShimoriRateUtil.current.rateTargetTypeName(type),
+                        title = LocalShimoriRateUtil.current.listTypeName(type),
                         authorized = authorized,
                         user = user,
                         listType = type,
@@ -270,7 +267,7 @@ private fun ListsLoaded(
                 ) {
                     ListsTabs(
                             pagerState = pagerState,
-                            listType = type,
+                            listType = type.rateType!!,
                             pages = pages,
                             onClick = { page ->
                                 scope.launch {
@@ -298,7 +295,7 @@ private fun ListsTopBar(
     title: String,
     authorized: Boolean,
     user: UserShort?,
-    listType: RateTargetType,
+    listType: ListType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,
     openUser: () -> Unit,
@@ -364,7 +361,7 @@ private fun ListsTabs(
 
 @Composable
 private fun SortOptions(
-    listType: RateTargetType,
+    listType: ListType,
     activeSort: RateSort,
     sortsOptions: List<RateSortOption>,
     onSortClick: (RateSortOption, Boolean) -> Unit

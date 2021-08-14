@@ -11,8 +11,10 @@ import com.gnoemes.shimori.domain.observers.ObservePagedTitleRates
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.anime.Anime
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.Module
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,11 +42,11 @@ internal class ListPageViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             combine(
-                    stateManager.currentType,
+                    stateManager.currentType.filter { it != ListType.Pinned }.distinctUntilChanged(),
                     observeRateSort.observe().distinctUntilChanged()
             ) { type, sort ->
                 ObservePagedTitleRates.Params(
-                        type = type,
+                        type = type.rateType!!,
                         status = status,
                         sort = sort ?: RateSort.defaultForType(type),
                         pagingConfig = PAGING_CONFIG
@@ -68,7 +70,7 @@ internal class ListPageViewModel @AssistedInject constructor(
         viewModelScope.launch {
             pendingActions.collect { action ->
                 when (action) {
-                    is ListPageAction.TogglePin -> togglePin(action.id)
+                    is ListPageAction.TogglePin -> togglePin(action.id, action.targetType)
                 }
             }
         }
@@ -80,9 +82,8 @@ internal class ListPageViewModel @AssistedInject constructor(
         }
     }
 
-    private fun togglePin(shikimoriId: Long) {
+    private fun togglePin(shikimoriId: Long, targetType: RateTargetType) {
         viewModelScope.launch {
-            val targetType = stateManager.currentType.value
             togglePin(ToggleListPin.Params(targetType, shikimoriId)).collect()
         }
     }

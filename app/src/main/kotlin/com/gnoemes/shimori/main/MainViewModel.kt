@@ -10,7 +10,7 @@ import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.lists.ListsStateManager
-import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.model.rate.ListType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -38,9 +38,9 @@ class MainViewModel @Inject constructor(
             combine(
                     listsStateManager.currentType,
                     observeShikimoriAuth.observe().distinctUntilChanged()
-            ) { rateTargetType, authState ->
+            ) { listType, authState ->
                 MainViewState(
-                        rateTargetType = rateTargetType,
+                        listType = listType,
                         authState = authState
                 )
             }.collect { _state.emit(it) }
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
             pendingActions.collect { action ->
                 when (action) {
                     MainAction.Random -> openRandomTitle()
-                    is MainAction.ChangeRateType -> changeRateType(action.rateTargetType)
+                    is MainAction.ChangeListType -> changeListType(action.listType)
                 }
             }
         }
@@ -98,10 +98,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun changeRateType(newType: RateTargetType) {
+    private fun changeListType(newType: ListType) {
         viewModelScope.launch {
             listsStateManager.updateType(newType)
-            prefs.preferredRateType = newType.type
+            prefs.preferredListType = newType.type
         }
     }
 

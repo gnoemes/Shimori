@@ -32,7 +32,7 @@ internal fun EmptyPinListPage() {
         Spacer(modifier = Modifier.height(64.dp))
 
         Icon(
-                painter = painterResource(id = R.drawable.ic_pin),
+                painter = painterResource(id = R.drawable.ic_pin_big),
                 contentDescription = stringResource(id = R.string.no_pinned_titles),
                 modifier = Modifier
                     .size(96.dp)

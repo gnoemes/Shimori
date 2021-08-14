@@ -32,10 +32,11 @@ enum class RateSortOption {
 
         val animePriorityValues : List<RateSortOption> = default
 
-        fun priorityForType(type: RateTargetType): List<RateSortOption> = when(type) {
-            RateTargetType.ANIME -> animePriorityValues
-            RateTargetType.MANGA -> default
-            RateTargetType.RANOBE -> default
+        fun priorityForType(type: ListType): List<RateSortOption> = when(type) {
+            ListType.Anime -> animePriorityValues
+            ListType.Manga -> default
+            ListType.Ranobe -> default
+            else -> default
         }
     }
 }

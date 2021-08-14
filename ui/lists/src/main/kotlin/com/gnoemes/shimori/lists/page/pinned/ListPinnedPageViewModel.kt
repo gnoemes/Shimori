@@ -9,11 +9,10 @@ import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.lists.page.ListPageAction
 import com.gnoemes.shimori.model.anime.Anime
+import com.gnoemes.shimori.model.rate.ListType
+import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,15 +45,14 @@ internal class ListPinnedPageViewModel @Inject constructor(
 
         viewModelScope.launch {
             stateManager.openRandomTitle
-                    //TODO type
-//                .filter { stateManager.currentType.value == ListsPage.PINNED }
+                .filter { stateManager.currentType.value == ListType.Pinned }
                 .collect { openRandomTitle() }
         }
 
         viewModelScope.launch {
             pendingActions.collect { action ->
                 when (action) {
-                    is ListPageAction.TogglePin -> togglePin(action.id)
+                    is ListPageAction.TogglePin -> togglePin(action.id, action.targetType)
                 }
             }
         }
@@ -66,9 +64,8 @@ internal class ListPinnedPageViewModel @Inject constructor(
         }
     }
 
-    private fun togglePin(shikimoriId: Long) {
+    private fun togglePin(shikimoriId: Long, targetType: RateTargetType) {
         viewModelScope.launch {
-            val targetType = stateManager.currentType.value
             togglePin(ToggleListPin.Params(targetType, shikimoriId)).collect()
         }
     }

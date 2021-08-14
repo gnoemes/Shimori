@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -22,7 +23,7 @@ class RateRepository @Inject constructor(
 
     fun observeRate(shikimoriId: Long) = rateStore.observeRate(shikimoriId)
     fun observeRates(type: RateTargetType) = rateStore.observeRates(type)
-    fun observeRateSort(type: RateTargetType) = rateSortStore.observeSort(type)
+    fun observeRateSort(type: ListType) = rateSortStore.observeSort(type)
     fun observeListsPages(type: RateTargetType) = rateStore.observeListsPages(type)
 
     suspend fun createOrUpdate(rate: Rate) {
