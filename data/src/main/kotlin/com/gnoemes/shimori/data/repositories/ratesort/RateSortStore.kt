@@ -3,8 +3,8 @@ package com.gnoemes.shimori.data.repositories.ratesort
 import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.daos.RateSortDao
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateTargetType
 import javax.inject.Inject
 
 class RateSortStore @Inject constructor(
@@ -13,8 +13,8 @@ class RateSortStore @Inject constructor(
     private val dao: RateSortDao
 ) {
 
-    fun observeSort(type: RateTargetType) =
-        dao.observeSort(type)
+    fun observeSort(type: ListType) =
+        dao.observeSort(type.type)
 
     suspend fun updateSort(sort: RateSort) {
         if (sort.type == null) return

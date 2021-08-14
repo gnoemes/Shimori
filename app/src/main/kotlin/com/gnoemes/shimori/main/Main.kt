@@ -31,7 +31,7 @@ import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.Scaffold
 import com.gnoemes.shimori.common.compose.ShimoriIconButton
 import com.gnoemes.shimori.common.compose.theme.*
-import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
 import kotlinx.coroutines.launch
 
@@ -86,7 +86,7 @@ internal fun Main(
     RateTypeSelectBottomSheet(
             sheetState = sheetState,
             action = onBottomSheetClick,
-            selectedRateType = viewState.rateTargetType
+            selectedListType = viewState.listType
     )
 }
 
@@ -150,7 +150,7 @@ internal fun MainBottomNavigation(
             ) {
 
                 RateSelectionNavigationItem(
-                        viewState.rateTargetType,
+                        viewState.listType,
                         canShowListIcon = canShowListIcon,
                         selected = selectedScreen == RootScreen.Lists,
                         onClick = { onScreenSelected(RootScreen.Lists) },
@@ -205,14 +205,14 @@ internal fun MainBottomNavigation(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun RowScope.RateSelectionNavigationItem(
-    selectedRateType: RateTargetType,
+    selectedListType: ListType,
     selected: Boolean,
     canShowListIcon: Boolean,
     onClick: () -> Unit,
     onReselect: () -> Unit
 ) {
 
-    val text = LocalShimoriRateUtil.current.rateTargetTypeName(selectedRateType)
+    val text = LocalShimoriRateUtil.current.listTypeName(selectedListType)
     val contentColor =
         if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary
     val buttonColors = ButtonDefaults.buttonColors(
@@ -232,9 +232,10 @@ private fun RowScope.RateSelectionNavigationItem(
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
     ) {
         Icon(
-                painter = painterResource(id = LocalShimoriRateUtil.current.rateTargetTypeIcon(selectedRateType)),
+                painter = painterResource(id = LocalShimoriRateUtil.current.listTypeIcon(selectedListType)),
                 contentDescription = text,
                 tint = contentColor,
+                modifier = Modifier.size(16.dp)
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -251,7 +252,9 @@ private fun RowScope.RateSelectionNavigationItem(
                     painter = painterResource(R.drawable.ic_unfold),
                     contentDescription = stringResource(R.string.lists_title),
                     tint = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.wrapContentWidth(Alignment.End)
+                    modifier = Modifier
+                        .size(16.dp)
+                        .wrapContentWidth(Alignment.End)
             )
         }
     }
@@ -279,7 +282,7 @@ private fun MainBottomNavigationItem(
 private fun RateTypeSelectBottomSheet(
     sheetState: ModalBottomSheetState,
     action: (MainAction) -> Unit,
-    selectedRateType: RateTargetType
+    selectedListType: ListType
 ) {
 
     ModalBottomSheetLayout(
@@ -321,8 +324,19 @@ private fun RateTypeSelectBottomSheet(
                 }
 
                 EnlargedButton(
-                        selected = selectedRateType.anime,
-                        onClick = { action(MainAction.ChangeRateType(RateTargetType.ANIME)) },
+                        selected = selectedListType == ListType.Pinned,
+                        onClick = { action(MainAction.ChangeListType(ListType.Pinned)) },
+                        painter = painterResource(R.drawable.ic_pin),
+                        text = stringResource(R.string.pinned),
+                        modifier = Modifier
+                            .padding(start = 16.dp, top = 12.dp, end = 12.dp)
+                            .height(48.dp)
+                            .fillMaxWidth()
+                )
+
+                EnlargedButton(
+                        selected = selectedListType == ListType.Anime,
+                        onClick = { action(MainAction.ChangeListType(ListType.Anime)) },
                         painter = painterResource(R.drawable.ic_anime),
                         text = stringResource(R.string.anime),
                         modifier = Modifier
@@ -333,8 +347,8 @@ private fun RateTypeSelectBottomSheet(
 
 
                 EnlargedButton(
-                        selected = selectedRateType == RateTargetType.MANGA,
-                        onClick = { action(MainAction.ChangeRateType(RateTargetType.MANGA)) },
+                        selected = selectedListType == ListType.Manga,
+                        onClick = { action(MainAction.ChangeListType(ListType.Manga)) },
                         painter = painterResource(R.drawable.ic_manga),
                         text = stringResource(R.string.manga),
                         modifier = Modifier
@@ -344,8 +358,8 @@ private fun RateTypeSelectBottomSheet(
                 )
 
                 EnlargedButton(
-                        selected = selectedRateType == RateTargetType.RANOBE,
-                        onClick = { action(MainAction.ChangeRateType(RateTargetType.RANOBE)) },
+                        selected = selectedListType == ListType.Ranobe,
+                        onClick = { action(MainAction.ChangeListType(ListType.Ranobe)) },
                         painter = painterResource(R.drawable.ic_ranobe),
                         text = stringResource(R.string.ranobe),
                         modifier = Modifier
@@ -353,18 +367,17 @@ private fun RateTypeSelectBottomSheet(
                             .height(48.dp)
                             .fillMaxWidth()
                 )
-
+                
                 Spacer(modifier = Modifier.navigationBarsHeight())
+
             },
             scrimColor = MaterialTheme.colors.toolbar,
             sheetState = sheetState,
             sheetElevation = 8.dp,
-            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
 
     }
-
-
 }
 
 

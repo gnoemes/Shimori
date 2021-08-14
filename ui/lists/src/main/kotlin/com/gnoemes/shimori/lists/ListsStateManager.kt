@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.lists
 
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
-import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,8 +16,8 @@ class ListsStateManager @Inject constructor(
 ) {
 
     private val _currentType =
-        MutableStateFlow(RateTargetType.findOrDefault(prefs.preferredRateType))
-    val currentType: StateFlow<RateTargetType> get() = _currentType
+        MutableStateFlow(ListType.findOrDefault(prefs.preferredListType))
+    val currentType: StateFlow<ListType> get() = _currentType
 
     private val _updatingRates = MutableStateFlow(false)
     val updatingRates: StateFlow<Boolean> get() = _updatingRates
@@ -28,7 +28,7 @@ class ListsStateManager @Inject constructor(
     private val _openRandomTitle = MutableSharedFlow<Unit>()
     val openRandomTitle: SharedFlow<Unit> get() = _openRandomTitle
 
-    fun updateType(type: RateTargetType) {
+    fun updateType(type: ListType) {
         _currentType.value = type
     }
 

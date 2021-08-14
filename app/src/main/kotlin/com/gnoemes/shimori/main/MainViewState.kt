@@ -2,11 +2,11 @@ package com.gnoemes.shimori.main
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
-import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.model.rate.ListType
 
 @Immutable
 data class MainViewState(
-    val rateTargetType: RateTargetType = RateTargetType.ANIME,
+    val listType: ListType = ListType.Pinned,
     val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT
 ) {
 

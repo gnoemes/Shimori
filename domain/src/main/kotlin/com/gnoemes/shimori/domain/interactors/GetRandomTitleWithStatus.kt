@@ -5,8 +5,8 @@ import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.domain.ResultInteractor
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.ShimoriEntity
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
-import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -18,13 +18,13 @@ class GetRandomTitleWithStatus @Inject constructor(
     override suspend fun doWork(params: Params): EntityWithRate<out ShimoriEntity>? =
         withContext(dispatchers.io) {
             when (params.type) {
-                RateTargetType.ANIME -> animeRepository.queryRandomAnimeWithStatus(params.status)
+                ListType.Anime -> animeRepository.queryRandomAnimeWithStatus(params.status)
                 else -> throw IllegalArgumentException("${params.type} is not supported")
             }
         }
 
     data class Params(
-        val type: RateTargetType,
+        val type: ListType,
         val status: RateStatus?,
     )
 }

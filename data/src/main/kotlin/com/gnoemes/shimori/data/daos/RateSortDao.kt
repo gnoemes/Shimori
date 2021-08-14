@@ -2,18 +2,17 @@ package com.gnoemes.shimori.data.daos
 
 import androidx.room.*
 import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateTargetType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class RateSortDao : EntityDao<RateSort> {
 
     @Query(QUERY_SORT)
-    abstract suspend fun querySort(type: RateTargetType): RateSort?
+    abstract suspend fun querySort(type: Int): RateSort?
 
     @Transaction
     @Query(QUERY_SORT)
-    abstract fun observeSort(type: RateTargetType): Flow<RateSort?>
+    abstract fun observeSort(type: Int): Flow<RateSort?>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

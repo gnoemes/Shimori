@@ -2,6 +2,7 @@
     <string name="anime">Anime</string>
     <string name="manga">Manga</string>
     <string name="ranobe">Ranobe</string>
+    <string name="pinned">Pinned</string>
 
     <string name="search">Search</string>
     <string name="profile">Profile</string>
@@ -47,7 +48,6 @@
     <string name="list_sort_your_score">Your score</string>
     <string name="list_sort_rating">User\'s score</string>
 
-    <string name="List_page_pinned">Pinned</string>
     <string name="List_page_watching">@string/rate_status_anime_watching</string>
     <string name="List_page_reading">@string/rate_status_manga_reading</string>
     <string name="List_page_re_watching">@string/rate_status_anime_re_watching</string>

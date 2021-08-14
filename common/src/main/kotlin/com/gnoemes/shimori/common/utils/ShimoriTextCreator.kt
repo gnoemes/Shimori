@@ -7,6 +7,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -81,7 +82,7 @@ class ShimoriTextCreator @Inject constructor(
         }
     }
 
-    fun listSortText(type: RateTargetType, option: RateSortOption): String {
+    fun listSortText(type: ListType, option: RateSortOption): String {
         val stringRes = when (option) {
             RateSortOption.PROGRESS -> R.string.list_sort_progress
             RateSortOption.DATE_CREATED -> R.string.list_sort_last_added
@@ -92,7 +93,7 @@ class ShimoriTextCreator @Inject constructor(
             RateSortOption.NAME -> R.string.list_sort_name
             RateSortOption.SIZE -> {
                 when (type) {
-                    RateTargetType.ANIME -> R.string.list_sort_size_anime
+                    ListType.Anime -> R.string.list_sort_size_anime
                     else -> R.string.list_sort_size_manga
                 }
             }

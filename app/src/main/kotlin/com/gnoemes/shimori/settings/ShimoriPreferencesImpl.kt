@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.base.settings.ShimoriPreferences.Theme
+import com.gnoemes.shimori.model.rate.ListType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class ShimoriPreferencesImpl @Inject constructor(
     companion object {
         private const val THEME_KEY = "pref_theme"
         private const val IS_ROMADZI_NAMING = "IS_ROMADZI_NAMING"
-        private const val PREFERRED_RATE_TYPE = "PREFERRED_RATE_TYPE"
+        private const val PREFERRED_LIST_TYPE = "PREFERRED_LIST_TYPE"
     }
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -51,9 +52,9 @@ class ShimoriPreferencesImpl @Inject constructor(
         get() = prefs.getBoolean(IS_ROMADZI_NAMING, false)
         set(value) = prefs.edit { putBoolean(IS_ROMADZI_NAMING, value) }
 
-    override var preferredRateType: String?
-        get() = prefs.getString(PREFERRED_RATE_TYPE, null)
-        set(value) = prefs.edit { putString(PREFERRED_RATE_TYPE, value) }
+    override var preferredListType: Int
+        get() = prefs.getInt(PREFERRED_LIST_TYPE, ListType.Anime.type)
+        set(value) = prefs.edit { putInt(PREFERRED_LIST_TYPE, value) }
 
     private fun getStorageKeyForTheme(theme: Theme) = when (theme) {
         Theme.LIGHT -> context.getString(R.string.pref_theme_light_value)
