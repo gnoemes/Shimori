@@ -12,7 +12,10 @@ import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +34,7 @@ internal class ListPinnedPageViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                     stateManager.currentType,
-                    observeRateSort.observe().distinctUntilChanged()
+                    observeRateSort.flow
             ) { type, sort ->
 
             }

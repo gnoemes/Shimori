@@ -56,11 +56,11 @@ internal class ListsViewModel @Inject constructor(
             combine(
                     stateManager.updatingRates,
                     ratesUpdateState.observable,
-                    observeShikimoriAuth.observe().distinctUntilChanged(),
+                    observeShikimoriAuth.flow,
                     stateManager.currentType,
-                    observeRateSort.observe().distinctUntilChanged(),
-                    observeUser.observe().distinctUntilChanged(),
-                    observeListsPages.observe().distinctUntilChanged(),
+                    observeRateSort.flow,
+                    observeUser.flow,
+                    observeListsPages.flow,
             ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pages ->
                 ListsViewState(
                         loading = globalLoading || typeLoading,

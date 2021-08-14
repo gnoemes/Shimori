@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
 import com.gnoemes.shimori.domain.interactors.ToggleListPin
 import com.gnoemes.shimori.domain.observers.ObservePagedTitleRates
@@ -37,13 +38,13 @@ internal class ListPageViewModel @AssistedInject constructor(
 
     private val pendingActions = MutableSharedFlow<ListPageAction>()
 
-    val list get() = observeTitleRates.observe()
+    val list get() = observeTitleRates.flow.cachedIn(viewModelScope)
 
     init {
         viewModelScope.launch {
             combine(
                     stateManager.currentType.filter { it != ListType.Pinned }.distinctUntilChanged(),
-                    observeRateSort.observe().distinctUntilChanged()
+                    observeRateSort.flow
             ) { type, sort ->
                 ObservePagedTitleRates.Params(
                         type = type.rateType!!,
