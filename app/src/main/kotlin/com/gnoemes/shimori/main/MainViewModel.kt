@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                     listsStateManager.currentType,
-                    observeShikimoriAuth.observe().distinctUntilChanged()
+                    observeShikimoriAuth.flow
             ) { listType, authState ->
                 MainViewState(
                         listType = listType,
