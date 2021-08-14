@@ -25,11 +25,10 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
-import com.gnoemes.shimori.common.compose.ChevronIcon
-import com.gnoemes.shimori.common.compose.EnlargedButton
-import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
+import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.Scaffold
-import com.gnoemes.shimori.common.compose.ShimoriIconButton
+import com.gnoemes.shimori.common.compose.material.ModalBottomSheetState
+import com.gnoemes.shimori.common.compose.material.ModalBottomSheetValue
 import com.gnoemes.shimori.common.compose.theme.*
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
@@ -51,16 +50,8 @@ internal fun Main(
 
     val actioner = { action: MainAction -> viewModel.submitAction(action) }
 
-    val sheetState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
-            confirmStateChange = { value ->
-                when (value) {
-                    ModalBottomSheetValue.Expanded -> true
-                    ModalBottomSheetValue.HalfExpanded -> false
-                    ModalBottomSheetValue.Hidden -> true
-                }
-            },
-    )
+    val sheetState =
+        rememberSkipHalfExpandModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -285,7 +276,7 @@ private fun RateTypeSelectBottomSheet(
     selectedListType: ListType
 ) {
 
-    ModalBottomSheetLayout(
+    SkipHalfExpandHeightModalBottomSheetLayout(
             sheetContent = {
                 val thumbColor = MaterialTheme.colors.caption
                 Canvas(modifier = Modifier
@@ -367,7 +358,7 @@ private fun RateTypeSelectBottomSheet(
                             .height(48.dp)
                             .fillMaxWidth()
                 )
-                
+
                 Spacer(modifier = Modifier.navigationBarsHeight())
 
             },
