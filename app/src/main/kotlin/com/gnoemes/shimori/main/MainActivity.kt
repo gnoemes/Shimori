@@ -6,6 +6,7 @@ import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
@@ -38,6 +39,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        installSplashScreen()
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -74,6 +77,5 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-
     }
 }
