@@ -104,5 +104,5 @@ class MainViewModel @Inject constructor(
             prefs.preferredListType = newType.type
         }
     }
-
 }
+
