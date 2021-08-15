@@ -75,13 +75,17 @@ internal fun Lists(
                 openSearch = openSearch
         )
     } else {
+        val submit = { action: ListsAction -> viewModel.submitAction(action) }
+
         Lists(
                 viewState,
                 openUser,
                 openSearch,
                 signIn = { signInLauncher.launch(Unit) },
-                signUp = { signUpLauncher.launch(Unit) }
-        ) { action -> viewModel.submitAction(action) }
+                signUp = { signUpLauncher.launch(Unit) },
+                onPageChanged = { submit(ListsAction.PageChanged(it)) },
+                onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) }
+        )
     }
 }
 
@@ -93,7 +97,8 @@ internal fun Lists(
     openSearch: () -> Unit,
     signIn: () -> Unit,
     signUp: () -> Unit,
-    actioner: (ListsAction) -> Unit
+    onPageChanged: (RateStatus) -> Unit,
+    onSortClick: (RateSortOption, Boolean) -> Unit
 ) {
 
     when {
@@ -111,10 +116,8 @@ internal fun Lists(
                     pages = viewState.pages,
                     openUser = openUser,
                     openSearch = openSearch,
-                    onPageChanged = { actioner(ListsAction.PageChanged(it)) },
-                    onSortClick = { option, isDescending ->
-                        actioner(ListsAction.UpdateListSort(option, isDescending))
-                    }
+                    onPageChanged = onPageChanged,
+                    onSortClick = onSortClick
             )
         }
     }

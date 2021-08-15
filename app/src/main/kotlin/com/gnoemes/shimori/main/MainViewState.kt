@@ -6,7 +6,7 @@ import com.gnoemes.shimori.model.rate.ListType
 
 @Immutable
 data class MainViewState(
-    val listType: ListType = ListType.Pinned,
+    val listType: ListType = ListType.Anime,
     val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT
 ) {
 

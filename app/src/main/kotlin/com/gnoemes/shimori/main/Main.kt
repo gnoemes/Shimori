@@ -48,7 +48,7 @@ internal fun Main(
     val navController = rememberNavController()
     val viewState by viewModel.state.collectAsState()
 
-    val actioner = { action: MainAction -> viewModel.submitAction(action) }
+    val submit = { action: MainAction -> viewModel.submitAction(action) }
 
     val sheetState =
         rememberSkipHalfExpandModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -71,7 +71,7 @@ internal fun Main(
 
     val onBottomSheetClick: (MainAction) -> Unit = {
         coroutineScope.launch { sheetState.hide() }
-        actioner(it)
+        submit(it)
     }
 
     RateTypeSelectBottomSheet(
