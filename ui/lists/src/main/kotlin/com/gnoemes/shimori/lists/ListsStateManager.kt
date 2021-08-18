@@ -15,33 +15,68 @@ class ListsStateManager @Inject constructor(
     prefs: ShimoriPreferences
 ) {
 
-    private val _currentType =
-        MutableStateFlow(ListType.findOrDefault(prefs.preferredListType))
-    val currentType: StateFlow<ListType> get() = _currentType
+    /**
+     * Represents selected [ListType]
+     */
+    val type = object : State<ListType> {
+        private val currentType = MutableStateFlow(ListType.findOrDefault(prefs.preferredListType))
+        override fun update(newState: ListType) =
+            kotlin.run { currentType.value = newState }
 
-    private val _updatingRates = MutableStateFlow(false)
-    val updatingRates: StateFlow<Boolean> get() = _updatingRates
-
-    private val _currentPage = MutableStateFlow(RateStatus.WATCHING)
-    val currentPage: StateFlow<RateStatus> get() = _currentPage
-
-    private val _openRandomTitle = MutableSharedFlow<Unit>()
-    val openRandomTitle: SharedFlow<Unit> get() = _openRandomTitle
-
-    fun updateType(type: ListType) {
-        _currentType.value = type
+        override val observe: StateFlow<ListType> get() = currentType
     }
 
-    fun updatingRates(updating: Boolean) {
-        _updatingRates.value = updating
+    /**
+     * Represents current active list page by [RateStatus]
+     */
+    val page = object : State<RateStatus> {
+        private val currentPage = MutableStateFlow(RateStatus.WATCHING)
+        override fun update(newState: RateStatus) =
+            kotlin.run { currentPage.value = newState }
+
+        override val observe: StateFlow<RateStatus> get() = currentPage
     }
 
-    fun updateCurrentPage(status: RateStatus) {
-        _currentPage.value = status
+    /**
+     * Sync loading across screens
+     */
+    val ratesLoading = object : State<Boolean> {
+        private val updatingRates = MutableStateFlow(false)
+        override fun update(newState: Boolean) =
+            kotlin.run { updatingRates.value = newState }
+
+        override val observe: StateFlow<Boolean> get() = updatingRates
     }
 
-    suspend fun openRandomTitle() {
-        _openRandomTitle.emit(Unit)
+    /**
+     * Event to notify listeners to open random title from current [RateStatus] or [ListType.Pinned]
+     */
+    val openRandomTitleEvent = object : EventState<Unit> {
+        private val openRandomTitle = MutableSharedFlow<Unit>()
+        override suspend fun update(newState: Unit) =
+            kotlin.run { openRandomTitle.emit(newState) }
+
+        override val observe: SharedFlow<Unit> get() = openRandomTitle
     }
 
+    /**
+     * Interface for common used state features
+     */
+    interface State<T> {
+        fun update(newState: T)
+        val observe: StateFlow<T>
+        val value: T get() = observe.value
+
+        operator fun invoke(newState: T) = update(newState = newState)
+    }
+
+    /**
+     * Interface for trigger events
+     */
+    interface EventState<T> {
+        suspend fun update(newState: T)
+        val observe: SharedFlow<T>
+
+        suspend operator fun invoke(newState: T) = update(newState = newState)
+    }
 }

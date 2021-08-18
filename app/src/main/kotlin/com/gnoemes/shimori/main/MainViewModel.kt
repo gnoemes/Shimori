@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
-                    listsStateManager.currentType,
+                    listsStateManager.type.observe,
                     observeShikimoriAuth.flow
             ) { listType, authState ->
                 MainViewState(
@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            updatingUserDataState.observable.collect { listsStateManager.updatingRates(it) }
+            updatingUserDataState.observable.collect { listsStateManager.ratesLoading.update(it) }
         }
 
         observeShikimoriAuth(Unit)
@@ -94,15 +94,14 @@ class MainViewModel @Inject constructor(
 
     private fun openRandomTitle() {
         viewModelScope.launch {
-            listsStateManager.openRandomTitle()
+            listsStateManager.openRandomTitleEvent(Unit)
         }
     }
 
     private fun changeListType(newType: ListType) {
         viewModelScope.launch {
-            listsStateManager.updateType(newType)
+            listsStateManager.type(newType)
             prefs.preferredListType = newType.type
         }
     }
 }
-

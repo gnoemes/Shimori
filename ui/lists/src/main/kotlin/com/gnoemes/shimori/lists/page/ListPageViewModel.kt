@@ -43,7 +43,7 @@ internal class ListPageViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             combine(
-                    stateManager.currentType.filter { it != ListType.Pinned }.distinctUntilChanged(),
+                    stateManager.type.observe.filter { it != ListType.Pinned }.distinctUntilChanged(),
                     observeRateSort.flow
             ) { type, sort ->
                 ObservePagedTitleRates.Params(
@@ -57,14 +57,14 @@ internal class ListPageViewModel @AssistedInject constructor(
         }
 
         viewModelScope.launch {
-            stateManager.currentType.collect {
+            stateManager.type.observe.collect {
                 observeRateSort(ObserveRateSort.Params(it))
             }
         }
 
         viewModelScope.launch {
-            stateManager.openRandomTitle
-                .filter { stateManager.currentPage.value == status }
+            stateManager.openRandomTitleEvent.observe
+                .filter { stateManager.page.value == status }
                 .collect { openRandomTitle() }
         }
 
@@ -93,7 +93,7 @@ internal class ListPageViewModel @AssistedInject constructor(
         viewModelScope.launch {
             getRandomTitleWithStatus(
                     GetRandomTitleWithStatus.Params(
-                            type = stateManager.currentType.value,
+                            type = stateManager.type.value,
                             status = status
                     )
             ).collect {
