@@ -33,7 +33,7 @@ internal class ListPinnedPageViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             combine(
-                    stateManager.currentType,
+                    stateManager.type.observe,
                     observeRateSort.flow
             ) { type, sort ->
 
@@ -41,14 +41,14 @@ internal class ListPinnedPageViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            stateManager.currentType.collect {
+            stateManager.type.observe.collect {
                 observeRateSort(ObserveRateSort.Params(it))
             }
         }
 
         viewModelScope.launch {
-            stateManager.openRandomTitle
-                .filter { stateManager.currentType.value == ListType.Pinned }
+            stateManager.openRandomTitleEvent.observe
+                .filter { stateManager.type.value == ListType.Pinned }
                 .collect { openRandomTitle() }
         }
 
@@ -77,7 +77,7 @@ internal class ListPinnedPageViewModel @Inject constructor(
         viewModelScope.launch {
             getRandomTitleWithStatus(
                     GetRandomTitleWithStatus.Params(
-                            type = stateManager.currentType.value,
+                            type = stateManager.type.value,
                             status = null
                     )
             ).collect {

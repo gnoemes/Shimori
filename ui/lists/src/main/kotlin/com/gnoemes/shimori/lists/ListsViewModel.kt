@@ -55,10 +55,10 @@ internal class ListsViewModel @Inject constructor(
 
         viewModelScope.launch {
             combine(
-                    stateManager.updatingRates,
+                    stateManager.ratesLoading.observe,
                     ratesUpdateState.observable,
                     observeShikimoriAuth.flow,
-                    stateManager.currentType,
+                    stateManager.type.observe,
                     observeRateSort.flow,
                     observeUser.flow,
                     observeListsPages.flow,
@@ -78,7 +78,7 @@ internal class ListsViewModel @Inject constructor(
             combine(
                     state.map { it.authStatus }.distinctUntilChanged(),
                     state.map { it.type }.distinctUntilChanged(),
-                    stateManager.updatingRates
+                    stateManager.ratesLoading.observe
             ) { authState, type, loadingRates ->
                 Triple(authState, type, loadingRates)
             }.collect { (authState, type, loadingRates) ->
@@ -96,7 +96,7 @@ internal class ListsViewModel @Inject constructor(
         observeUser(Unit)
 
         viewModelScope.launch {
-            stateManager.currentType.collect { type ->
+            stateManager.type.observe.collect { type ->
                 observeRateSort(ObserveRateSort.Params(type))
 
                 type.rateType?.let {
@@ -116,7 +116,7 @@ internal class ListsViewModel @Inject constructor(
         viewModelScope.launch {
             updateRateSort.executeSync(
                     UpdateRateSort.Params(
-                            type = stateManager.currentType.value,
+                            type = stateManager.type.value,
                             sort = option,
                             isDescending = isDescending)
             )
@@ -125,13 +125,13 @@ internal class ListsViewModel @Inject constructor(
 
     private fun updateCurrentType(newType: ListType) {
         viewModelScope.launch {
-            stateManager.updateType(newType)
+            stateManager.type(newType)
         }
     }
 
     private fun updateCurrentPage(newPage: RateStatus) {
         viewModelScope.launch {
-            stateManager.updateCurrentPage(newPage)
+            stateManager.page(newPage)
         }
     }
 
