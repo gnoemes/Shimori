@@ -13,18 +13,20 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.*
 
 @Composable
 fun ShimoriButton(
+    modifier: Modifier,
     selected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier,
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.subInfoStyle,
     painter: Painter? = null,
+    iconSize: Dp = 24.dp
 ) {
     ShimoriButton(
             onClick = onClick,
@@ -32,6 +34,7 @@ fun ShimoriButton(
             painter = painter,
             text = text,
             textStyle = textStyle,
+            iconSize = iconSize,
             contentColor = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
             buttonColors = ButtonDefaults.buttonColors(
                     backgroundColor = if (selected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.button
@@ -48,8 +51,9 @@ fun ShimoriButton(
     buttonColors: ButtonColors,
     textStyle: TextStyle = MaterialTheme.typography.subInfoStyle,
     painter: Painter? = null,
+    iconSize : Dp = 24.dp
 ) {
-    
+
     val contentPadding =
         if (painter == null) PaddingValues(horizontal = 12.dp, vertical = 8.dp)
         else PaddingValues(start = 12.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
@@ -66,6 +70,7 @@ fun ShimoriButton(
 
         if (painter != null) {
             Icon(
+                    modifier = Modifier.size(iconSize),
                     painter = painter,
                     contentDescription = text,
                     tint = contentColor,

@@ -22,6 +22,7 @@ import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.lists.page.ListPage
+import com.gnoemes.shimori.lists.page.pinned.ListPinnedPage
 import com.gnoemes.shimori.model.rate.*
 import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.navigationBarsPadding
@@ -84,7 +85,10 @@ internal fun Lists(
                 signIn = { signInLauncher.launch(Unit) },
                 signUp = { signUpLauncher.launch(Unit) },
                 onPageChanged = { submit(ListsAction.PageChanged(it)) },
-                onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) }
+                onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) },
+                onEmptyAnimeClick = { submit(ListsAction.ListTypeChanged(ListType.Anime)) },
+                onEmptyMangaClick = { submit(ListsAction.ListTypeChanged(ListType.Manga)) },
+                onEmptyRanobeClick = { submit(ListsAction.ListTypeChanged(ListType.Ranobe)) },
         )
     }
 }
@@ -98,26 +102,58 @@ internal fun Lists(
     signIn: () -> Unit,
     signUp: () -> Unit,
     onPageChanged: (RateStatus) -> Unit,
-    onSortClick: (RateSortOption, Boolean) -> Unit
+    onSortClick: (RateSortOption, Boolean) -> Unit,
+    onEmptyAnimeClick: () -> Unit,
+    onEmptyMangaClick: () -> Unit,
+    onEmptyRanobeClick: () -> Unit
 ) {
+
+    val sorts = @Composable {
+        val sortsOptions = viewState.sorts
+        val notPinOrExist = viewState.type != ListType.Pinned || !viewState.noPinnedTitles
+        if (sortsOptions.isNotEmpty() && notPinOrExist) {
+            SortOptions(
+                    listType = viewState.type,
+                    activeSort = viewState.activeSort,
+                    sortsOptions = sortsOptions,
+                    onSortClick = onSortClick
+            )
+        }
+    }
+
+    val toolbar = @Composable {
+        RootScreenToolbar(
+                title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
+                showSearchButton = true,
+                user = viewState.user,
+                authorized = viewState.authStatus.isAuthorized,
+                searchButtonClick = openSearch,
+                avatarClick = openUser
+        )
+    }
+
 
     when {
         !viewState.authStatus.isAuthorized -> NeedAuthLists(signIn, signUp)
         viewState.pages.isEmpty() -> {
             //TODO add empty state
         }
+        viewState.type == ListType.Pinned -> {
+            ListsPinned(
+                    noPinnedTitles = viewState.noPinnedTitles,
+                    onEmptyAnimeClick = onEmptyAnimeClick,
+                    onEmptyMangaClick = onEmptyMangaClick,
+                    onEmptyRanobeClick = onEmptyRanobeClick,
+                    topBar = toolbar
+            )
+        }
         else -> {
             ListsLoaded(
                     type = viewState.type,
-                    authorized = viewState.authStatus.isAuthorized,
-                    user = viewState.user,
-                    activeSort = viewState.activeSort,
-                    sorts = viewState.sorts,
                     pages = viewState.pages,
-                    openUser = openUser,
-                    openSearch = openSearch,
                     onPageChanged = onPageChanged,
-                    onSortClick = onSortClick
+                    toolbar = toolbar,
+                    sorts = sorts
             )
         }
     }
@@ -229,19 +265,134 @@ private fun ListsLoading(
     }
 }
 
+@Composable
+private fun ListsPinned(
+    noPinnedTitles: Boolean,
+    onEmptyAnimeClick: () -> Unit,
+    onEmptyMangaClick: () -> Unit,
+    onEmptyRanobeClick: () -> Unit,
+    topBar: @Composable () -> Unit,
+) {
+    Scaffold(
+            topBar = {
+                topBar()
+            },
+            backgroundColor = MaterialTheme.colors.primary,
+    ) { paddingValues ->
+
+        if (noPinnedTitles) {
+            ListsPinnedEmpty(
+                    onAnimeClick = onEmptyAnimeClick,
+                    onMangaClick = onEmptyMangaClick,
+                    onRanobeClick = onEmptyRanobeClick
+            )
+        } else {
+
+            Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 16.dp)
+            ) {
+                ListPinnedPage()
+            }
+        }
+    }
+}
+
+@Composable
+private fun ListsPinnedEmpty(
+    onAnimeClick: () -> Unit,
+    onMangaClick: () -> Unit,
+    onRanobeClick: () -> Unit,
+) {
+    Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+    ) {
+        Spacer(modifier = Modifier.height(64.dp))
+
+        Icon(
+                painter = painterResource(id = R.drawable.ic_pin_big),
+                contentDescription = stringResource(id = R.string.no_pinned_titles),
+                modifier = Modifier
+                    .size(96.dp)
+                    .background(color = MaterialTheme.colors.alpha, shape = CircleShape)
+                    .padding(24.dp)
+                    .align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+                text = stringResource(id = R.string.no_pinned_titles),
+                color = MaterialTheme.colors.onPrimary,
+                style = MaterialTheme.typography.h2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+                text = stringResource(id = R.string.no_pinned_titles_description),
+                color = MaterialTheme.colors.caption,
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        ) {
+            ShimoriButton(
+                    modifier = Modifier
+                        .heightIn(min = 32.dp)
+                        .weight(1f),
+                    selected = false,
+                    onClick = onAnimeClick,
+                    text = LocalShimoriRateUtil.current.listTypeName(ListType.Anime),
+                    painter = painterResource(id = R.drawable.ic_anime),
+                    iconSize = 16.dp
+            )
+
+            ShimoriButton(
+                    modifier = Modifier
+                        .heightIn(min = 32.dp)
+                        .weight(1f),
+                    selected = false,
+                    onClick = onMangaClick,
+                    text = LocalShimoriRateUtil.current.listTypeName(ListType.Manga),
+                    painter = painterResource(id = R.drawable.ic_manga),
+                    iconSize = 16.dp
+            )
+
+            ShimoriButton(
+                    modifier = Modifier
+                        .heightIn(min = 32.dp)
+                        .weight(1f),
+                    selected = false,
+                    onClick = onRanobeClick,
+                    text = LocalShimoriRateUtil.current.listTypeName(ListType.Ranobe),
+                    painter = painterResource(id = R.drawable.ic_ranobe),
+                    iconSize = 16.dp
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ListsLoaded(
     type: ListType,
-    authorized: Boolean,
-    user: UserShort?,
-    activeSort: RateSort,
-    sorts: List<RateSortOption>,
     pages: List<RateStatus>,
-    openUser: () -> Unit,
-    openSearch: () -> Unit,
     onPageChanged: (RateStatus) -> Unit,
-    onSortClick: (RateSortOption, Boolean) -> Unit
+    toolbar: @Composable () -> Unit,
+    sorts: @Composable () -> Unit,
 ) {
     val pagerState =
         rememberPagerState(pageCount = pages.size, initialOffscreenLimit = pages.size.coerceAtLeast(1))
@@ -257,17 +408,11 @@ private fun ListsLoaded(
 
     Scaffold(
             topBar = {
-                ListsTopBar(
-                        title = LocalShimoriRateUtil.current.listTypeName(type),
-                        authorized = authorized,
-                        user = user,
-                        listType = type,
-                        activeSort = activeSort,
-                        sortsOptions = sorts,
-                        openUser = openUser,
-                        searchClick = openSearch,
-                        onSortClick = onSortClick,
-                ) {
+
+                Column {
+                    toolbar()
+                    sorts()
+
                     ListsTabs(
                             pagerState = pagerState,
                             listType = type.rateType!!,
@@ -279,6 +424,7 @@ private fun ListsLoaded(
                             }
                     )
                 }
+
             },
             backgroundColor = MaterialTheme.colors.primary,
     ) { paddingValues ->
@@ -292,41 +438,6 @@ private fun ListsLoaded(
     }
 }
 
-
-@Composable
-private fun ListsTopBar(
-    title: String,
-    authorized: Boolean,
-    user: UserShort?,
-    listType: ListType,
-    activeSort: RateSort,
-    sortsOptions: List<RateSortOption>,
-    openUser: () -> Unit,
-    searchClick: () -> Unit,
-    onSortClick: (RateSortOption, Boolean) -> Unit,
-    content: @Composable () -> Unit
-) {
-
-    Column {
-        RootScreenToolbar(
-                title = title,
-                showSearchButton = true,
-                searchButtonClick = searchClick,
-                user = user,
-                authorized = authorized,
-                avatarClick = openUser
-        )
-
-        SortOptions(
-                listType = listType,
-                activeSort = activeSort,
-                sortsOptions = sortsOptions,
-                onSortClick = onSortClick
-        )
-
-        content()
-    }
-}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
