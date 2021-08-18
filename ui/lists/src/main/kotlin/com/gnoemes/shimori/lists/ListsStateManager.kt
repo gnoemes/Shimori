@@ -38,14 +38,14 @@ class ListsStateManager @Inject constructor(
     }
 
     /**
-     * Sync loading across screens
+     * Sync loading status across screens
      */
     val ratesLoading = object : State<Boolean> {
-        private val updatingRates = MutableStateFlow(false)
+        private val ratesLoading = MutableStateFlow(false)
         override fun update(newState: Boolean) =
-            kotlin.run { updatingRates.value = newState }
+            kotlin.run { ratesLoading.value = newState }
 
-        override val observe: StateFlow<Boolean> get() = updatingRates
+        override val observe: StateFlow<Boolean> get() = ratesLoading
     }
 
     /**
