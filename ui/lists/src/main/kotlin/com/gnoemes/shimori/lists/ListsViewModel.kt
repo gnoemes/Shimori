@@ -47,6 +47,7 @@ internal class ListsViewModel @Inject constructor(
                 when (action) {
                     is ListsAction.UpdateListSort -> updateRateSort(action.option, action.isDescending)
                     is ListsAction.PageChanged -> updateCurrentPage(action.newPage)
+                    is ListsAction.ListTypeChanged -> updateCurrentType(action.newType)
                 }
 
             }
@@ -119,6 +120,12 @@ internal class ListsViewModel @Inject constructor(
                             sort = option,
                             isDescending = isDescending)
             )
+        }
+    }
+
+    private fun updateCurrentType(newType: ListType) {
+        viewModelScope.launch {
+            stateManager.updateType(newType)
         }
     }
 

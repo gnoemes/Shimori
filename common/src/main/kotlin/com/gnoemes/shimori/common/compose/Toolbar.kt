@@ -19,9 +19,9 @@ import com.google.accompanist.insets.statusBarsPadding
 fun RootScreenToolbar(
     title: String,
     showSearchButton: Boolean,
-    searchButtonClick: () -> Unit = {},
     user: UserShort? = null,
     authorized: Boolean = false,
+    searchButtonClick: () -> Unit = {},
     avatarClick: () -> Unit = {}
 ) {
     TopAppBar(

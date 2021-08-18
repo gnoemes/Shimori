@@ -17,6 +17,7 @@ internal data class ListsViewState(
     val sorts: List<RateSortOption> = RateSortOption.priorityForType(type),
     val user: UserShort? = null,
     val pages: List<RateStatus> = emptyList(),
+    val noPinnedTitles : Boolean = true,
 ) {
     companion object {
         val Empty = ListsViewState()
