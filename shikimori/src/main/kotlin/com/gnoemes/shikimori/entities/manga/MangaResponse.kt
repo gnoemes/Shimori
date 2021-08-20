@@ -3,7 +3,7 @@ package com.gnoemes.shikimori.entities.manga
 import com.gnoemes.shikimori.entities.common.ImageResponse
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.google.gson.annotations.SerializedName
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDate
 
 internal data class MangaResponse(
     @field:SerializedName("id") val id: Long,
@@ -16,6 +16,6 @@ internal data class MangaResponse(
     @field:SerializedName("status") val status: ContentStatus?,
     @field:SerializedName("volumes") val volumes: Int,
     @field:SerializedName("chapters") val chapters: Int,
-    @field:SerializedName("aired_on") val dateAired: OffsetDateTime?,
-    @field:SerializedName("released_on") val dateReleased: OffsetDateTime?
+    @field:SerializedName("aired_on") val dateAired: LocalDate?,
+    @field:SerializedName("released_on") val dateReleased: LocalDate?
 ) 
