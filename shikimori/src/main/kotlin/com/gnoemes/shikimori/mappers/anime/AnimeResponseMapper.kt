@@ -20,7 +20,7 @@ internal class AnimeResponseMapper @Inject constructor(
             nameRu = from.nameRu?.trim()?.ifEmpty { null },
             image = imageMapper.map(from.image),
             url = from.url.appendHostIfNeed(),
-            type = typeMapper.map(from.type),
+            _type = typeMapper.map(from.type)?.type,
             score = from.score,
             status = from.status,
             episodes = from.episodes,
