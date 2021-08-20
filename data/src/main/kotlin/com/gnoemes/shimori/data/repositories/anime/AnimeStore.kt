@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.daos.AnimeDao
 import com.gnoemes.shimori.data.daos.EntityInserter
-import com.gnoemes.shimori.data.daos.ListPinDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
 import com.gnoemes.shimori.model.anime.Anime
@@ -20,7 +19,6 @@ class AnimeStore @Inject constructor(
     private val runner: DatabaseTransactionRunner,
     private val animeDao: AnimeDao,
     private val settings: ShimoriPreferences,
-    private val pinDao: ListPinDao,
 ) {
 
     private val syncer = syncerForEntity(
@@ -29,7 +27,7 @@ class AnimeStore @Inject constructor(
             { entity, id -> entity.copy(id = id ?: 0) }
     )
 
-    suspend fun updateAnimes(animes: List<Anime>) = runner {
+    suspend fun update(animes: List<Anime>) = runner {
         syncer.sync(animeDao.queryAll(), animes, removeNotMatched = false)
     }
 

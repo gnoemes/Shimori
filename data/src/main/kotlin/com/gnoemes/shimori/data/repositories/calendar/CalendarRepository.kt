@@ -21,7 +21,7 @@ class CalendarRepository @Inject constructor(
     suspend fun updateCalendar() {
         val results = animeDataSource.getCalendar()
         if (results is Success && results.data.isNotEmpty()) {
-            animeStore.updateAnimes(results.data)
+            animeStore.update(results.data)
             lastRequestStore.updateLastRequest()
             return
         }
