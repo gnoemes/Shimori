@@ -279,7 +279,6 @@ private fun ListsPinned(
             },
             backgroundColor = MaterialTheme.colors.primary,
     ) { paddingValues ->
-
         if (noPinnedTitles) {
             ListsPinnedEmpty(
                     onAnimeClick = onEmptyAnimeClick,
@@ -287,7 +286,6 @@ private fun ListsPinned(
                     onRanobeClick = onEmptyRanobeClick
             )
         } else {
-
             Box(
                     modifier = Modifier
                         .fillMaxSize()

@@ -9,10 +9,7 @@ import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
-import com.gnoemes.shimori.domain.observers.ObserveListsPages
-import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
-import com.gnoemes.shimori.domain.observers.ObserveRateSort
-import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.domain.observers.*
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
@@ -29,6 +26,7 @@ internal class ListsViewModel @Inject constructor(
     observeRateSort: ObserveRateSort,
     observeListsPages: ObserveListsPages,
     observeUser: ObserveMyUserShort,
+    observeHasPinnedTitles: ObserveHasPinnedTitles,
     private val updateRateSort: UpdateRateSort,
     private val updateAnimeRates: UpdateAnimeRates,
     shikimoriAuthManager: ShikimoriAuthManager,
@@ -62,14 +60,16 @@ internal class ListsViewModel @Inject constructor(
                     observeRateSort.flow,
                     observeUser.flow,
                     observeListsPages.flow,
-            ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pages ->
+                    observeHasPinnedTitles.flow
+            ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pages, pinsExist ->
                 ListsViewState(
                         loading = globalLoading || typeLoading,
                         authStatus = auth,
                         type = type,
                         user = user,
                         activeSort = activeRateSort ?: RateSort.defaultForType(type),
-                        pages = pages
+                        pages = pages,
+                        noPinnedTitles = !pinsExist
                 )
             }.collect { _state.emit(it) }
         }
@@ -94,6 +94,7 @@ internal class ListsViewModel @Inject constructor(
 
         observeShikimoriAuth(Unit)
         observeUser(Unit)
+        observeHasPinnedTitles(Unit)
 
         viewModelScope.launch {
             stateManager.type.observe.collect { type ->
