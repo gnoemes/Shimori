@@ -24,7 +24,7 @@ data class Manga(
     @ColumnInfo(name = "rating") val score: Double? = null,
     @ColumnInfo(name = "manga_status") val status: ContentStatus? = null,
     @ColumnInfo(name = "volumes") val volumes: Int = 0,
-    @ColumnInfo(name = "chapters") val chapters: Int = 0,
+    @ColumnInfo(name = "chapters_size") val chapters: Int = 0,
     @ColumnInfo(name = "date_aired") val dateAired: LocalDate? = null,
     @ColumnInfo(name = "date_released") val dateReleased: LocalDate? = null,
     @ColumnInfo(name = "age_rating") val ageRating: AgeRating? = null,
@@ -37,6 +37,10 @@ data class Manga(
 ) : ShimoriEntity, ShikimoriContentEntity {
 
     val type get() = MangaType.find(_type)
+
+    //local
+    @ColumnInfo(name = "name_ru_lower_case")
+    var searchName: String? = nameRu?.lowercase()
 
     @Ignore
     var rateScoresStats: List<Statistic>? = null

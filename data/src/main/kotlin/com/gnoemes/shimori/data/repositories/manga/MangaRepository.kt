@@ -1,10 +1,10 @@
-package com.gnoemes.shimori.data.repositories.anime
+package com.gnoemes.shimori.data.repositories.manga
 
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.instantInPast
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
-import com.gnoemes.shimori.data_base.sources.AnimeDataSource
+import com.gnoemes.shimori.data_base.sources.MangaDataSource
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import org.threeten.bp.Instant
@@ -12,25 +12,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AnimeRepository @Inject constructor(
-    private val animeStore: AnimeStore,
-    @Shikimori private val animeDataSource: AnimeDataSource,
+class MangaRepository @Inject constructor(
+    private val mangaStore: MangaStore,
+    @Shikimori private val mangaDataSource: MangaDataSource,
     private val userRepository: ShikimoriUserRepository,
-    private val ratesLastRequestStore: AnimeWithStatusLastRequestStore
+    private val ratesLastRequestStore: MangaWithStatusLastRequestStore
 ) {
 
-    fun observeByStatusForPaging(status: RateStatus, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
+    fun observeByStatusForPaging(status : RateStatus, sort: RateSort) = mangaStore.observeByStatusForPaging(status, sort)
 
-    suspend fun queryAnimesWithStatus(status: RateStatus?) = animeStore.queryAnimesWithStatus(status)
-
-    suspend fun queryRandomAnimeWithStatus(status: RateStatus?) = animeStore.queryRandomAnimeWithStatus(status)
-
-    suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
+    suspend fun updateMyMangaWithStatus(status: RateStatus?) {
         val userId = userRepository.getMyUserId() ?: return
 
-        val results = animeDataSource.getAnimeWithStatus(userId, status)
+        val results = mangaDataSource.getMangaWithStatus(userId, status)
         if (results is Success && results.data.isNotEmpty()) {
-            animeStore.update(results.data)
+            mangaStore.update(results.data)
             ratesLastRequestStore.updateLastRequest()
             return
         }
