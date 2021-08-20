@@ -9,5 +9,7 @@ class ListPinRepository @Inject constructor(
     private val store : ListPinStore
 ) {
 
+    fun observeHasPins() = store.observeHasPins()
+
     suspend fun togglePin(type : RateTargetType, shikimoriId : Long) = store.togglePin(type, shikimoriId)
 }
