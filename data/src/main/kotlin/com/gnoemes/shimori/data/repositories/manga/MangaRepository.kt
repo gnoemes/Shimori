@@ -32,7 +32,7 @@ class MangaRepository @Inject constructor(
         }
     }
 
-    suspend fun needUpdateAnimeWithStatus(expiry: Instant = instantInPast(hours = 2)): Boolean {
+    suspend fun needUpdateMangaWithStatus(expiry: Instant = instantInPast(hours = 2)): Boolean {
         return ratesLastRequestStore.isRequestBefore(expiry)
     }
 
