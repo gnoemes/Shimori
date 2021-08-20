@@ -72,12 +72,12 @@ class ShimoriTextCreator @Inject constructor(
 
     fun typeDescription(anime: Anime): String? {
         return when (anime.type) {
-            AnimeType.TV -> context.getString(R.string.type_tv)
+            AnimeType.Tv -> context.getString(R.string.type_tv)
             AnimeType.OVA -> context.getString(R.string.type_ova)
             AnimeType.ONA -> context.getString(R.string.type_ona)
-            AnimeType.MUSIC -> context.getString(R.string.type_music)
-            AnimeType.MOVIE -> context.getString(R.string.type_movie)
-            AnimeType.SPECIAL -> context.getString(R.string.type_special)
+            AnimeType.Movie -> context.getString(R.string.type_music)
+            AnimeType.Movie -> context.getString(R.string.type_movie)
+            AnimeType.Special -> context.getString(R.string.type_special)
             else -> null
         }
     }

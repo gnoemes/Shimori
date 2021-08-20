@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.database
 
 import androidx.room.TypeConverter
-import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.app.Request
 import com.gnoemes.shimori.model.common.AgeRating
 import com.gnoemes.shimori.model.common.ContentStatus
@@ -19,7 +18,6 @@ object ShimoriTypeConverters {
 
     private val ageRatings by lazy(LazyThreadSafetyMode.NONE) { AgeRating.values() }
     private val contentStatuses by lazy(LazyThreadSafetyMode.NONE) { ContentStatus.values() }
-    private val animeTypes by lazy(LazyThreadSafetyMode.NONE) { AnimeType.values() }
     private val rateStatuses by lazy(LazyThreadSafetyMode.NONE) { RateStatus.values() }
     private val rateTargetTypes by lazy(LazyThreadSafetyMode.NONE) { RateTargetType.values() }
     private val requestValues by lazy(LazyThreadSafetyMode.NONE) { Request.values() }
@@ -47,14 +45,6 @@ object ShimoriTypeConverters {
     @TypeConverter
     @JvmStatic
     fun fromlocalDate(localDate: LocalDate?) = localDate?.toString()
-
-    @TypeConverter
-    @JvmStatic
-    fun toAnimeType(type: String?) = animeTypes.firstOrNull { it.type == type }
-
-    @TypeConverter
-    @JvmStatic
-    fun fromAnimeType(type: AnimeType?) = type?.type
 
     @TypeConverter
     @JvmStatic

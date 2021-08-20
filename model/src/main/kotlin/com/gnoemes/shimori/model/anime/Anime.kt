@@ -21,7 +21,7 @@ data class Anime(
     @ColumnInfo(name = "name_eng") val nameEng: String? = null,
     @Embedded(prefix = "image_") override val image: ShimoriImage? = null,
     val url: String? = null,
-    val type: AnimeType? = null,
+    @ColumnInfo(name = "type") val _type: String? = null,
     @ColumnInfo(name = "rating") val score: Double? = null,
     @ColumnInfo(name = "anime_status") val status: ContentStatus? = null,
     @ColumnInfo(name = "episodes_size") val episodes: Int = 0,
@@ -41,6 +41,8 @@ data class Anime(
     val genres: List<Genre>? = null
 ) : ShimoriEntity, ShikimoriContentEntity {
 
+    val type get() = AnimeType.find(_type)
+
     //local
     @ColumnInfo(name = "name_ru_lower_case")
     var searchName: String? = nameRu?.lowercase()
@@ -55,7 +57,7 @@ data class Anime(
     var rateStatusesStats: List<Statistic>? = null
 
     val isMovie: Boolean
-        get() = type != null && type == AnimeType.MOVIE
+        get() = type == AnimeType.Movie
 
     val isOngoing: Boolean
         get() = status != null && status == ContentStatus.ONGOING

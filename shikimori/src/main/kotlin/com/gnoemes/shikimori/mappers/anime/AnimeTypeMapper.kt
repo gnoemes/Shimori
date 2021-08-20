@@ -10,15 +10,15 @@ import javax.inject.Singleton
 internal class AnimeTypeMapper @Inject constructor(): Mapper<ShikimoriAnimeType?, AnimeType?> {
 
     override suspend fun map(from: ShikimoriAnimeType?) = when(from) {
-        ShikimoriAnimeType.TV -> AnimeType.TV
-        ShikimoriAnimeType.MOVIE -> AnimeType.MOVIE
-        ShikimoriAnimeType.SPECIAL -> AnimeType.SPECIAL
-        ShikimoriAnimeType.MUSIC -> AnimeType.MUSIC
+        ShikimoriAnimeType.TV -> AnimeType.Tv
+        ShikimoriAnimeType.MOVIE -> AnimeType.Movie
+        ShikimoriAnimeType.SPECIAL -> AnimeType.Special
+        ShikimoriAnimeType.MUSIC -> AnimeType.Music
         ShikimoriAnimeType.OVA -> AnimeType.OVA
         ShikimoriAnimeType.ONA -> AnimeType.ONA
-        ShikimoriAnimeType.TV_13 -> AnimeType.TV_13
-        ShikimoriAnimeType.TV_24 -> AnimeType.TV_24
-        ShikimoriAnimeType.TV_48 -> AnimeType.TV_48
+        ShikimoriAnimeType.TV_13 -> AnimeType.Tv_13
+        ShikimoriAnimeType.TV_24 -> AnimeType.Tv_24
+        ShikimoriAnimeType.TV_48 -> AnimeType.Tv_48
         else -> null
     }
 }
