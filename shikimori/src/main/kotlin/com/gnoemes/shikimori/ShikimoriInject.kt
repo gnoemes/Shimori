@@ -1,17 +1,16 @@
 package com.gnoemes.shikimori
 
 import com.gnoemes.shikimori.repositories.ShikimoriAnimeDataSource
+import com.gnoemes.shikimori.repositories.ShikimoriMangaDataSource
 import com.gnoemes.shikimori.repositories.ShikimoriRateDataSource
 import com.gnoemes.shikimori.repositories.ShikimoriUserDataSource
-import com.gnoemes.shikimori.services.AnimeService
-import com.gnoemes.shikimori.services.AuthService
-import com.gnoemes.shikimori.services.RateService
-import com.gnoemes.shikimori.services.UserService
+import com.gnoemes.shikimori.services.*
 import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
+import com.gnoemes.shimori.data_base.sources.MangaDataSource
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.data_base.sources.UserDataSource
 import com.gnoemes.shimori.model.ShimoriConstants
@@ -54,6 +53,11 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     @Shikimori
+    abstract fun bindMangaSource(source: ShikimoriMangaDataSource): MangaDataSource
+
+    @Binds
+    @Singleton
+    @Shikimori
     abstract fun bindUserSource(source: ShikimoriUserDataSource): UserDataSource
 
     @Binds
@@ -89,6 +93,13 @@ internal class ApiServices {
     fun provideAuthService(retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun mangaService(retrofit: Retrofit): MangaService {
+        return retrofit.create(MangaService::class.java)
+    }
+
 }
 
 @Module
