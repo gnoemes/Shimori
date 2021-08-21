@@ -21,7 +21,19 @@ class RateStore @Inject constructor(
     private val syncer = syncerForEntity(
             dao,
             { it.shikimoriId },
-            { entity, id -> entity.copy(id = id ?: 0) }
+            { remote, local ->
+                if (local == null || local.targetType != RateTargetType.RANOBE) {
+                    remote.copy(id = local?.id ?: 0)
+                } else {
+                    //fix shikimori rates (supports only Anime And Manga)
+                    remote.copy(
+                            id = local.id,
+                            mangaId = null,
+                            ranobeId = local.ranobeId,
+                            targetType = RateTargetType.RANOBE
+                    )
+                }
+            }
     )
 
     fun observeRate(shikimoriId: Long) = dao.observeRate(shikimoriId)

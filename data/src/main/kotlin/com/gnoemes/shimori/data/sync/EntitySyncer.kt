@@ -6,55 +6,55 @@ import com.gnoemes.shimori.model.ShimoriEntity
 
 /**
  * @param NT Network type
- * @param ET local entity type
+ * @param LocalType local entity type
  * @param NID Network ID type
  */
-class EntitySyncer<ET : ShimoriEntity, NT, NID>(
-    private val insertFunc: suspend (ET) -> Long,
-    private val updateFunc: suspend (ET) -> Unit,
-    private val deleteFunc: suspend (ET) -> Int,
-    private val etToIdFunc: suspend (ET) -> NID?,
-    private val ntToIdFunc: suspend (NT) -> NID,
-    private val ntToEtFunc: suspend (NT, Long?) -> ET
+class EntitySyncer<LocalType : ShimoriEntity, NetworkType, Key>(
+    private val insertEntity: suspend (LocalType) -> Long,
+    private val updateEntity: suspend (LocalType) -> Unit,
+    private val deleteEntity: suspend (LocalType) -> Int,
+    private val localEntityToKey: suspend (LocalType) -> Key?,
+    private val networkEntityToKey: suspend (NetworkType) -> Key,
+    private val networkEntityToLocalEntity: suspend (NetworkType, LocalType?) -> LocalType,
 ) {
 
     suspend fun sync(
-        currentValues: Collection<ET>,
-        networkValues: Collection<NT>,
+        currentValues: Collection<LocalType>,
+        networkValues: Collection<NetworkType>,
         removeNotMatched: Boolean = true
-    ): EntitySyncerResult<ET> {
+    ): EntitySyncerResult<LocalType> {
         val localValues = currentValues.toMutableList()
 
-        val added = mutableListOf<ET>()
-        val updated = mutableListOf<ET>()
-        val removed = mutableListOf<ET>()
+        val added = mutableListOf<LocalType>()
+        val updated = mutableListOf<LocalType>()
+        val removed = mutableListOf<LocalType>()
 
         for (networkEntity in networkValues) {
-            val remoteId = ntToIdFunc(networkEntity) ?: break
-            val localEntity = localValues.find { etToIdFunc(it) == remoteId }
+            val remoteId = networkEntityToKey(networkEntity) ?: break
+            val localEntity = localValues.find { localEntityToKey(it) == remoteId }
 
             if (localEntity != null) {
-                val entity = ntToEtFunc(networkEntity, localEntity.id)
+                val entity = networkEntityToLocalEntity(networkEntity, localEntity)
                 if (localEntity != entity) {
                     Log.i("Syncer", "updating: $localEntity \n $entity")
-                    updateFunc(entity)
+                    updateEntity(entity)
                     updated += entity
                 }
                 localValues -= localEntity
             } else {
-                added += ntToEtFunc(networkEntity, null)
+                added += networkEntityToLocalEntity(networkEntity, null)
             }
         }
 
         if (removeNotMatched) {
             localValues.forEach {
-                deleteFunc(it)
+                deleteEntity(it)
                 removed += it
             }
         }
 
         added.forEach {
-            insertFunc(it)
+            insertEntity(it)
         }
 
         Log.i("Syncer", "added: $added")
@@ -70,10 +70,10 @@ class EntitySyncer<ET : ShimoriEntity, NT, NID>(
     )
 }
 
-fun <ET : ShimoriEntity, NID> syncerForEntity(
-    dao: EntityDao<ET>,
-    etToIdFunc: suspend (ET) -> NID?,
-    mapper: suspend (ET, Long?) -> ET
+fun <Type : ShimoriEntity, Key> syncerForEntity(
+    dao: EntityDao<Type>,
+    etToIdFunc: suspend (Type) -> Key?,
+    mapper: suspend (Type, Type?) -> Type
 ) = EntitySyncer(
         dao::insert,
         dao::update,

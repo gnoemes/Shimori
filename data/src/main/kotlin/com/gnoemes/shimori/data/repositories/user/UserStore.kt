@@ -18,7 +18,7 @@ class UserStore @Inject constructor(
     private val syncer = syncerForEntity(
             dao,
             { it.shikimoriId },
-            { entity, id -> entity.copy(id = id ?: 0) }
+            { remote, local -> remote.copy(id = local?.id ?: 0) }
     )
 
     fun observeMeShort() : Flow<UserShort?> {
