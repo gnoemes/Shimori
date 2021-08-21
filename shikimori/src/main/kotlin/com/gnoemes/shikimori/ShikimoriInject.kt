@@ -1,18 +1,12 @@
 package com.gnoemes.shikimori
 
-import com.gnoemes.shikimori.repositories.ShikimoriAnimeDataSource
-import com.gnoemes.shikimori.repositories.ShikimoriMangaDataSource
-import com.gnoemes.shikimori.repositories.ShikimoriRateDataSource
-import com.gnoemes.shikimori.repositories.ShikimoriUserDataSource
+import com.gnoemes.shikimori.repositories.*
 import com.gnoemes.shikimori.services.*
 import com.gnoemes.shikimori.util.*
 import com.gnoemes.shimori.base.di.Auth
 import com.gnoemes.shimori.base.di.Shikimori
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data_base.sources.AnimeDataSource
-import com.gnoemes.shimori.data_base.sources.MangaDataSource
-import com.gnoemes.shimori.data_base.sources.RateDataSource
-import com.gnoemes.shimori.data_base.sources.UserDataSource
+import com.gnoemes.shimori.data_base.sources.*
 import com.gnoemes.shimori.model.ShimoriConstants
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -20,6 +14,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.Authenticator
+import okhttp3.Cache
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -54,6 +49,11 @@ internal abstract class RepositoryModule {
     @Singleton
     @Shikimori
     abstract fun bindMangaSource(source: ShikimoriMangaDataSource): MangaDataSource
+
+    @Binds
+    @Singleton
+    @Shikimori
+    abstract fun bindRanobeSource(source: ShikimoriRanobeDataSource): RanobeDataSource
 
     @Binds
     @Singleton
@@ -100,6 +100,12 @@ internal class ApiServices {
         return retrofit.create(MangaService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun ranobeService(retrofit: Retrofit): RanobeService {
+        return retrofit.create(RanobeService::class.java)
+    }
+
 }
 
 @Module
@@ -123,7 +129,7 @@ internal class RetrofitModule {
             addNetworkInterceptor(interceptor)
             connectTimeout(ShimoriConstants.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(ShimoriConstants.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-//            cache(Cache(File(cacheDir, "okhttp_cache"), 10 * 1024 * 1024))
+            cache(Cache(File(cacheDir, "okhttp_cache"), 10 * 1024 * 1024))
         }
         .dispatcher(
                 Dispatcher().apply {
