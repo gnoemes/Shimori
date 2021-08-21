@@ -9,6 +9,7 @@ import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateMangaRates
+import com.gnoemes.shimori.domain.interactors.UpdateRanobeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.*
 import com.gnoemes.shimori.model.rate.ListType
@@ -31,6 +32,7 @@ internal class ListsViewModel @Inject constructor(
     private val updateRateSort: UpdateRateSort,
     private val updateAnimeRates: UpdateAnimeRates,
     private val updateMangaRates: UpdateMangaRates,
+    private val updateRanobeRates: UpdateRanobeRates,
     shikimoriAuthManager: ShikimoriAuthManager,
     private val stateManager: ListsStateManager
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
@@ -87,7 +89,7 @@ internal class ListsViewModel @Inject constructor(
                     when (type) {
                         ListType.Anime -> updateAnimeRates()
                         ListType.Manga -> updateMangaRates()
-                        //TODO: add ranobe
+                        ListType.Ranobe -> updateRanobeRates()
                         else -> Unit
                     }
                 }
@@ -149,4 +151,11 @@ internal class ListsViewModel @Inject constructor(
             updateMangaRates(UpdateMangaRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
         }
     }
+
+    private fun updateRanobeRates() {
+        viewModelScope.launch {
+            updateRanobeRates(UpdateRanobeRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
+        }
+    }
+
 }

@@ -1,23 +1,23 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.manga.MangaRepository
+import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
 import com.gnoemes.shimori.domain.Interactor
 import com.gnoemes.shimori.model.rate.RateStatus
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class UpdateMangaRates @Inject constructor(
-    private val repository: MangaRepository,
+class UpdateRanobeRates @Inject constructor(
+    private val repository: RanobeRepository,
     private val dispatchers: AppCoroutineDispatchers
-) : Interactor<UpdateMangaRates.Params>() {
+) : Interactor<UpdateRanobeRates.Params>() {
 
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) {
-                repository.updateMyMangaWithStatus(params.status)
-            } else if (params.optionalUpdate && repository.needUpdateMangaWithStatus()) {
-                repository.updateMyMangaWithStatus(params.status)
+                repository.updateMyRanobeWithStatus(params.status)
+            } else if (params.optionalUpdate && repository.needUpdateRanobeWithStatus()) {
+                repository.updateMyRanobeWithStatus(params.status)
             }
         }
     }
