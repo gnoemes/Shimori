@@ -17,12 +17,12 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract suspend fun queryAll(): List<Anime>
 
     @Transaction
-    @Query(QUERY_ALL_ANIME_WITH_STATUS)
-    abstract suspend fun queryAllAnimesWithStatus(): List<AnimeWithRate>
+    @Query(QUERY_ALL_WITH_STATUS)
+    abstract suspend fun queryAllWithStatus(): List<AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS)
-    abstract suspend fun queryAnimesWithStatus(status: RateStatus): List<AnimeWithRate>
+    @Query(QUERY_BY_STATUS)
+    abstract suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate>
 
     @Transaction
     @Query(QUERY_CALENDAR)
@@ -33,88 +33,52 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract fun observeCalendarFilter(filter: String): Flow<List<AnimeWithRate>>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS)
-    abstract fun observeAnimeWithStatus(status: RateStatus): Flow<List<AnimeWithRate>>
+    @Query(QUERY_BY_STATUS)
+    abstract fun observeAnimeBYStatus(status: RateStatus): Flow<List<AnimeWithRate>>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_NAME)
+    @Query(QUERY_BY_STATUS_NAME_SORT)
     abstract fun pagingName(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_NAME_RU)
+    @Query(QUERY_BY_STATUS_NAME_RU_SORT)
     abstract fun pagingNameRu(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_PROGRESS)
+    @Query(QUERY_BY_STATUS_PROGRESS_SORT)
     abstract fun pagingProgress(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED)
+    @Query(QUERY_BY_STATUS_DATE_CREATED_SORT)
     abstract fun pagingDateCreated(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED)
-    abstract fun pagingdDateUpdated(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    @Query(QUERY_BY_STATUS_DATE_UPDATED_SORT)
+    abstract fun pagingDateUpdated(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED)
+    @Query(QUERY_BY_STATUS_DATE_AIRED_SORT)
     abstract fun pagingDateAired(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_SCORE)
+    @Query(QUERY_BY_STATUS_SCORE_SORT)
     abstract fun pagingScore(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_ANIME_WITH_STATUS_BY_SIZE)
+    @Query(QUERY_BY_STATUS_SIZE_SORT)
     abstract fun pagingSize(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
-    @Query(QUERY_WITH_STATUS_BY_RATING)
+    @Query(QUERY_BY_STATUS_RATING_SORT)
     abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_NAME)
-    abstract fun pagingPinnedName(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_NAME_RU)
-    abstract fun pagingPinnedNameRu(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_PROGRESS)
-    abstract fun pagingPinnedProgress(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_DATE_CREATED)
-    abstract fun pagingPinnedDateCreated(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_DATE_UPDATED)
-    abstract fun pagingPinnedDateUpdated(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_DATE_AIRED)
-    abstract fun pagingPinnedDateAired(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_SCORE)
-    abstract fun pagingPinnedScore(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_SIZE)
-    abstract fun pagingPinnedSize(descending: Boolean): PagingSource<Int, AnimeWithRate>
-
-    @Transaction
-    @Query(QUERY_PINNED_BY_RATING)
-    abstract fun pagingPinnedRating(descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_RANDOM_PINNED)
     abstract suspend fun queryRandomPinned(): AnimeWithRate?
 
     @Transaction
-    @Query(QUERY_RANDOM_WITH_STATUS)
-    abstract suspend fun queryRandomWithStatus(status: RateStatus): AnimeWithRate?
+    @Query(QUERY_RANDOM_BY_STATUS)
+    abstract suspend fun queryRandomByStatus(status: RateStatus): AnimeWithRate?
 
     companion object {
         private const val QUERY_CALENDAR = """
@@ -132,19 +96,19 @@ abstract class AnimeDao : EntityDao<Anime> {
         """
 
         //Null check just in case. Status actually can't be null if rate exist
-        private const val QUERY_ALL_ANIME_WITH_STATUS = """
+        private const val QUERY_ALL_WITH_STATUS = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status IS NOT NULL
         """
 
-        private const val QUERY_ANIME_WITH_STATUS = """
+        private const val QUERY_BY_STATUS = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_NAME = """
+        private const val QUERY_BY_STATUS_NAME_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -153,7 +117,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN name END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_NAME_RU = """
+        private const val QUERY_BY_STATUS_NAME_RU_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -162,7 +126,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN name_ru_lower_case END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_PROGRESS = """
+        private const val QUERY_BY_STATUS_PROGRESS_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -171,7 +135,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN episodes END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_DATE_CREATED = """
+        private const val QUERY_BY_STATUS_DATE_CREATED_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -180,7 +144,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_DATE_UPDATED = """
+        private const val QUERY_BY_STATUS_DATE_UPDATED_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -189,7 +153,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_DATE_AIRED = """
+        private const val QUERY_BY_STATUS_DATE_AIRED_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -198,7 +162,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_SCORE = """
+        private const val QUERY_BY_STATUS_SCORE_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -207,7 +171,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN score END) ASC
         """
 
-        private const val QUERY_ANIME_WITH_STATUS_BY_SIZE = """
+        private const val QUERY_BY_STATUS_SIZE_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
@@ -216,100 +180,10 @@ abstract class AnimeDao : EntityDao<Anime> {
             (CASE :descending WHEN 0 THEN episodes_size END) ASC
         """
 
-        private const val QUERY_WITH_STATUS_BY_RATING = """
+        private const val QUERY_BY_STATUS_RATING_SORT = """
             SELECT a.*, r.* FROM animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN rating END) DESC,
-            (CASE :descending WHEN 0 THEN rating END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_NAME = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN name END) DESC,
-            (CASE :descending WHEN 0 THEN name END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_NAME_RU = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN name_ru_lower_case END) DESC,
-            (CASE :descending WHEN 0 THEN name_ru_lower_case END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_PROGRESS = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN episodes END) DESC,
-            (CASE :descending WHEN 0 THEN episodes END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_DATE_CREATED = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
-            (CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_DATE_UPDATED = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
-            (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_DATE_AIRED = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
-            (CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_SCORE = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN score END) DESC,
-            (CASE :descending WHEN 0 THEN score END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_SIZE = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
-            ORDER BY  
-            (CASE :descending WHEN 1 THEN episodes_size END) DESC,
-            (CASE :descending WHEN 0 THEN episodes_size END) ASC
-        """
-
-        private const val QUERY_PINNED_BY_RATING = """
-            SELECT a.*, r.* FROM animes AS a
-            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
-            WHERE pin.target_type = "anime"
             ORDER BY  
             (CASE :descending WHEN 1 THEN rating END) DESC,
             (CASE :descending WHEN 0 THEN rating END) ASC
@@ -323,7 +197,7 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY RANDOM() LIMIT 1
         """
 
-        private const val QUERY_RANDOM_WITH_STATUS = """
+        private const val QUERY_RANDOM_BY_STATUS = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
             WHERE r.status = :status

@@ -20,7 +20,7 @@ class GetRandomTitleWithStatus @Inject constructor(
     override suspend fun doWork(params: Params): EntityWithRate<out ShimoriEntity>? =
         withContext(dispatchers.io) {
             when (params.type) {
-                ListType.Anime -> animeRepository.queryRandomAnimeWithStatus(params.status)
+                ListType.Anime -> animeRepository.queryRandomByStatus(params.status)
                 ListType.Manga -> mangaRepository.queryRandomByStatus(params.status)
                 else -> throw IllegalArgumentException("${params.type} is not supported")
             }

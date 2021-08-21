@@ -21,9 +21,9 @@ class AnimeRepository @Inject constructor(
 
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
 
-    suspend fun queryAnimesWithStatus(status: RateStatus?) = animeStore.queryAnimesWithStatus(status)
+    suspend fun queryByStatus(status: RateStatus?) = animeStore.queryByStatus(status)
 
-    suspend fun queryRandomAnimeWithStatus(status: RateStatus?) = animeStore.queryRandomAnimeWithStatus(status)
+    suspend fun queryRandomByStatus(status: RateStatus?) = animeStore.queryRandomByStatus(status)
 
     suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
         val userId = userRepository.getMyUserId() ?: return

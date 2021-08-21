@@ -31,13 +31,13 @@ class AnimeStore @Inject constructor(
         syncer.sync(animeDao.queryAll(), animes, removeNotMatched = false)
     }
 
-    suspend fun queryAnimesWithStatus(status: RateStatus?) =
-        if (status == null) animeDao.queryAllAnimesWithStatus()
-        else animeDao.queryAnimesWithStatus(status)
+    suspend fun queryByStatus(status: RateStatus?) =
+        if (status == null) animeDao.queryAllWithStatus()
+        else animeDao.queryByStatus(status)
 
-    suspend fun queryRandomAnimeWithStatus(status: RateStatus?) =
+    suspend fun queryRandomByStatus(status: RateStatus?) =
         if (status == null) animeDao.queryRandomPinned()
-        else animeDao.queryRandomWithStatus(status)
+        else animeDao.queryRandomByStatus(status)
 
     fun observeCalendar(filter: String?): Flow<List<AnimeWithRate>> = when {
         filter.isNullOrBlank() -> animeDao.observeCalendar()
@@ -56,29 +56,11 @@ class AnimeStore @Inject constructor(
             }
             RateSortOption.PROGRESS -> animeDao.pagingProgress(status, sort.isDescending)
             RateSortOption.DATE_CREATED -> animeDao.pagingDateCreated(status, sort.isDescending)
-            RateSortOption.DATE_UPDATED -> animeDao.pagingdDateUpdated(status, sort.isDescending)
+            RateSortOption.DATE_UPDATED -> animeDao.pagingDateUpdated(status, sort.isDescending)
             RateSortOption.DATE_AIRED -> animeDao.pagingDateAired(status, sort.isDescending)
             RateSortOption.MY_SCORE -> animeDao.pagingScore(status, sort.isDescending)
             RateSortOption.SIZE -> animeDao.pagingSize(status, sort.isDescending)
             RateSortOption.RATING -> animeDao.pagingRating(status, sort.isDescending)
-            else -> throw IllegalArgumentException("$sort sort is not supported")
-        }
-    }
-
-    private fun observePinnedForPaging(sort: RateSort): PagingSource<Int, AnimeWithRate> {
-        return when (sort.sortOption) {
-            RateSortOption.NAME -> {
-                //TODO paging eng
-                if (!settings.isRomadziNaming) animeDao.pagingPinnedNameRu(sort.isDescending)
-                else animeDao.pagingPinnedName(sort.isDescending)
-            }
-            RateSortOption.PROGRESS -> animeDao.pagingPinnedProgress(sort.isDescending)
-            RateSortOption.DATE_CREATED -> animeDao.pagingPinnedDateCreated(sort.isDescending)
-            RateSortOption.DATE_UPDATED -> animeDao.pagingPinnedDateUpdated(sort.isDescending)
-            RateSortOption.DATE_AIRED -> animeDao.pagingPinnedDateAired(sort.isDescending)
-            RateSortOption.MY_SCORE -> animeDao.pagingPinnedScore(sort.isDescending)
-            RateSortOption.SIZE -> animeDao.pagingPinnedSize(sort.isDescending)
-            RateSortOption.RATING -> animeDao.pagingPinnedRating(sort.isDescending)
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }
     }
