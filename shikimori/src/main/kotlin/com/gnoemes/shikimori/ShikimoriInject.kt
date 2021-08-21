@@ -14,7 +14,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.Authenticator
-import okhttp3.Cache
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -129,7 +128,7 @@ internal class RetrofitModule {
             addNetworkInterceptor(interceptor)
             connectTimeout(ShimoriConstants.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(ShimoriConstants.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            cache(Cache(File(cacheDir, "okhttp_cache"), 10 * 1024 * 1024))
+//            cache(Cache(File(cacheDir, "okhttp_cache"), 10 * 1024 * 1024))
         }
         .dispatcher(
                 Dispatcher().apply {

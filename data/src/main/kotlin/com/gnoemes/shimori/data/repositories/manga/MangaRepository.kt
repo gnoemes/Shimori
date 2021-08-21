@@ -28,7 +28,8 @@ class MangaRepository @Inject constructor(
 
         val results = mangaDataSource.getMangaWithStatus(userId, status)
         if (results is Success && results.data.isNotEmpty()) {
-            mangaStore.update(results.data)
+            val mangas = results.data.filterNot { it.type == null }
+            mangaStore.update(mangas)
             ratesLastRequestStore.updateLastRequest()
             return
         }

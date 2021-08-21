@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5d6900b57b310a28d2962365fd4a8164",
+    "identityHash": "c51dbc8f691b3a3785bd32d065bfbcde",
     "entities": [
       {
         "tableName": "animes",
@@ -419,6 +419,179 @@
               "manga_shikimori_id"
             ],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_mangas_manga_shikimori_id` ON `${TABLE_NAME}` (`manga_shikimori_id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ranobe",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ranobe_shikimori_id` INTEGER, `name` TEXT NOT NULL, `name_ru` TEXT, `name_eng` TEXT, `url` TEXT, `type` TEXT, `rating` REAL, `ranobe_status` TEXT, `volumes` INTEGER NOT NULL, `chapters_size` INTEGER NOT NULL, `date_aired` TEXT, `date_released` TEXT, `age_rating` TEXT, `description` TEXT, `description_html` TEXT, `franchise` TEXT, `favorite` INTEGER NOT NULL, `topic_id` INTEGER, `genres` TEXT, `name_ru_lower_case` TEXT, `image_original` TEXT, `image_preview` TEXT, `image_x96` TEXT, `image_x48` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shikimoriId",
+            "columnName": "ranobe_shikimori_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameRu",
+            "columnName": "name_ru",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameEng",
+            "columnName": "name_eng",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "_type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "rating",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "ranobe_status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "volumes",
+            "columnName": "volumes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapters",
+            "columnName": "chapters_size",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateAired",
+            "columnName": "date_aired",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateReleased",
+            "columnName": "date_released",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ageRating",
+            "columnName": "age_rating",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "descriptionHtml",
+            "columnName": "description_html",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "franchise",
+            "columnName": "franchise",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "favorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topicId",
+            "columnName": "topic_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "genres",
+            "columnName": "genres",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "searchName",
+            "columnName": "name_ru_lower_case",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.original",
+            "columnName": "image_original",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.preview",
+            "columnName": "image_preview",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.x96",
+            "columnName": "image_x96",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image.x48",
+            "columnName": "image_x48",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_ranobe_ranobe_shikimori_id",
+            "unique": true,
+            "columnNames": [
+              "ranobe_shikimori_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ranobe_ranobe_shikimori_id` ON `${TABLE_NAME}` (`ranobe_shikimori_id`)"
           }
         ],
         "foreignKeys": []
@@ -871,7 +1044,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5d6900b57b310a28d2962365fd4a8164')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c51dbc8f691b3a3785bd32d065bfbcde')"
     ]
   }
 }

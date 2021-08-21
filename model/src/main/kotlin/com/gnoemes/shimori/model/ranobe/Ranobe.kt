@@ -6,7 +6,7 @@ import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.common.*
 import org.threeten.bp.LocalDate
 
-@Entity(tableName = "ranobes",
+@Entity(tableName = "ranobe",
         indices = [
             Index(value = ["ranobe_shikimori_id"], unique = true),
         ]
