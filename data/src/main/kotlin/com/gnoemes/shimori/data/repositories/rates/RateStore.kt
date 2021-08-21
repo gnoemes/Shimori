@@ -4,6 +4,7 @@ import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.daos.RateDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
+import com.gnoemes.shimori.model.ranobe.Ranobe
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
@@ -24,12 +25,6 @@ class RateStore @Inject constructor(
     )
 
     fun observeRate(shikimoriId: Long) = dao.observeRate(shikimoriId)
-
-    fun observeRates(target: RateTargetType): Flow<List<Rate>> =
-        when (target) {
-            RateTargetType.ANIME -> dao.observeAnimeRates()
-            else -> throw IllegalArgumentException("$target is not supported yet")
-        }
 
     fun observeListsPages(target: RateTargetType): Flow<List<RateStatus>> {
         return combine(
@@ -68,5 +63,17 @@ class RateStore @Inject constructor(
 
     suspend fun syncAll(data: List<Rate>) = runner {
         syncer.sync(dao.queryAll(), data)
+    }
+
+    suspend fun fixRanobeRates(ranobe: List<Ranobe>) {
+        val localRates = dao.queryByMangaIds(ranobe.mapNotNull { it.shikimoriId })
+
+        val fixedRates = localRates.map { localRate ->
+            val id = localRate.mangaId
+
+            localRate.copy(mangaId = null, ranobeId = id, targetType = RateTargetType.RANOBE)
+        }
+
+        inserter.insertOrUpdate(dao, fixedRates)
     }
 }

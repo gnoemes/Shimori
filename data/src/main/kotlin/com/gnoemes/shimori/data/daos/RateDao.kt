@@ -20,6 +20,14 @@ abstract class RateDao : EntityDao<Rate> {
     abstract suspend fun queryWithId(id: Long): Rate?
 
     @Transaction
+    @Query("SELECT * FROM rates WHERE manga_id = :id")
+    abstract suspend fun queryByMangaId(id: Long): Rate?
+
+    @Transaction
+    @Query("SELECT * FROM rates WHERE manga_id IN (:ids)")
+    abstract suspend fun queryByMangaIds(ids: List<Long>): List<Rate>
+
+    @Transaction
     @Query("SELECT * FROM rates WHERE shikimori_id IN (:ids)")
     abstract suspend fun queryWithShikimoriIds(ids: List<Long>): List<Rate>
 

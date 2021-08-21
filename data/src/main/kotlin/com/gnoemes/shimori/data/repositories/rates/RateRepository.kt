@@ -22,7 +22,6 @@ class RateRepository @Inject constructor(
 ) {
 
     fun observeRate(shikimoriId: Long) = rateStore.observeRate(shikimoriId)
-    fun observeRates(type: RateTargetType) = rateStore.observeRates(type)
     fun observeRateSort(type: ListType) = rateSortStore.observeSort(type)
     fun observeListsPages(type: RateTargetType) = rateStore.observeListsPages(type)
 
