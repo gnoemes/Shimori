@@ -47,11 +47,9 @@ internal class MangaListPageViewModel @AssistedInject constructor(
         }
     }
 
-
     @AssistedFactory
     interface Factory {
         fun create(status: RateStatus): MangaListPageViewModel
     }
-
 
 }

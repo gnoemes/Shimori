@@ -15,6 +15,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.keyInfoStyle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.manga.MangaWithRate
+import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 
 @Composable
 fun AnimeListCard(
@@ -143,6 +144,75 @@ fun MangaListCard(
 
                 val size = manga.entity.chapters.let { if (it == 0) "?" else "$it" }
                 val progress = manga.rate?.episodes ?: 0
+
+                Text(
+                        text = "$progress / $size",
+                        style = MaterialTheme.typography.keyInfoStyle,
+                        color = MaterialTheme.colors.secondary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RanobeListCard(
+    ranobe: RanobeWithRate,
+    onCoverLongClick : () -> Unit
+) {
+    Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+    ) {
+
+        Cover(
+                painter = rememberImagePainter(ranobe.entity.image),
+                onLongClick = onCoverLongClick,
+                modifier = Modifier
+                    .height(120.dp)
+                    .width(96.dp)
+        )
+
+        Spacer(Modifier.width(12.dp))
+
+        Column {
+            Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = LocalShimoriTextCreator.current.name(ranobe.entity),
+                    style = MaterialTheme.typography.keyInfoStyle,
+                    color = MaterialTheme.colors.onPrimary,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+            )
+
+            RanobeDescription(
+                    ranobe = ranobe.entity,
+                    format = DescriptionFormat.List,
+                    modifier = Modifier.fillMaxWidth()
+            )
+
+            Row {
+                val score = ranobe.rate?.score
+                if (score != null && score > 0) {
+                    Icon(
+                            painter = painterResource(R.drawable.ic_star),
+                            tint = MaterialTheme.colors.secondary,
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            contentDescription = null
+                    )
+
+                    Text(
+                            text = "$score",
+                            style = MaterialTheme.typography.keyInfoStyle,
+                            color = MaterialTheme.colors.secondary,
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+
+                val size = ranobe.entity.chapters.let { if (it == 0) "?" else "$it" }
+                val progress = ranobe.rate?.episodes ?: 0
 
                 Text(
                         text = "$progress / $size",

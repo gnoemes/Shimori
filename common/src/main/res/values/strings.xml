@@ -81,6 +81,9 @@
     <string name="type_one_shot">One shot</string>
     <string name="type_doujin">Doujin</string>
 
+    <string name="type_novel">Novel</string>
+    <string name="type_light_novel">Light Novel</string>
+
     <string name="today">Today</string>
 
 </resources>

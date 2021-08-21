@@ -12,6 +12,7 @@ import com.gnoemes.shimori.common.compose.theme.titleOngoing
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.gnoemes.shimori.model.manga.Manga
+import com.gnoemes.shimori.model.ranobe.Ranobe
 
 const val Divider = " • "
 
@@ -60,6 +61,28 @@ fun MangaDescription(
 }
 
 @Composable
+fun RanobeDescription(
+    ranobe: Ranobe,
+    format: DescriptionFormat,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.caption,
+    color: Color = MaterialTheme.colors.caption
+) {
+
+    val text = when (format) {
+        DescriptionFormat.List -> buildListText(ranobe = ranobe)
+        else -> buildAnnotatedString { }
+    }
+
+    Text(
+            text = text,
+            modifier = modifier,
+            style = style,
+            color = color
+    )
+}
+
+@Composable
 private fun buildListText(anime: Anime) = buildAnnotatedString {
     val statusInfo = LocalShimoriTextCreator.current.statusDescription(anime)
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(anime)
@@ -88,6 +111,29 @@ private fun buildListText(manga: Manga) = buildAnnotatedString {
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(manga)
 
     val color = when (manga.status) {
+        ContentStatus.ANONS -> titleAnnounced
+        ContentStatus.ONGOING -> titleOngoing
+        else -> null
+    }
+
+    if (!statusInfo.isNullOrEmpty()) {
+        val append: AnnotatedString.Builder.() -> Unit = { append(statusInfo) }
+        color?.let { withStyle(style = SpanStyle(color = color), append) } ?: append()
+    }
+
+    if (!typeInfo.isNullOrEmpty()) {
+        if (length > 0) append(Divider)
+
+        append(typeInfo)
+    }
+}
+
+@Composable
+private fun buildListText(ranobe: Ranobe) = buildAnnotatedString {
+    val statusInfo = LocalShimoriTextCreator.current.statusDescription(ranobe)
+    val typeInfo = LocalShimoriTextCreator.current.typeDescription(ranobe)
+
+    val color = when (ranobe.status) {
         ContentStatus.ANONS -> titleAnnounced
         ContentStatus.ONGOING -> titleOngoing
         else -> null

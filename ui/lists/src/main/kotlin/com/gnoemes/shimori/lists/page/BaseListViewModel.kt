@@ -100,6 +100,15 @@ internal abstract class BaseListViewModel(
             }
         }
 
+        fun provideFactory(
+            assistedFactory: RanobeListPageViewModel.Factory,
+            status: RateStatus
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(status) as T
+            }
+        }
+
         val PAGING_CONFIG = PagingConfig(
                 pageSize = 50,
                 initialLoadSize = 50,
@@ -117,5 +126,6 @@ internal abstract class BaseListViewModel(
     internal interface ViewModelFactoryProvider {
         fun animePageFactory(): AnimeListPageViewModel.Factory
         fun mangaPageFactory(): MangaListPageViewModel.Factory
+        fun ranobePageFactory(): RanobeListPageViewModel.Factory
     }
 }

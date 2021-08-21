@@ -23,6 +23,7 @@ import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
 import com.gnoemes.shimori.lists.page.AnimeListPage
 import com.gnoemes.shimori.lists.page.MangaListPage
+import com.gnoemes.shimori.lists.page.RanobeListPage
 import com.gnoemes.shimori.lists.page.pinned.ListPinnedPage
 import com.gnoemes.shimori.model.rate.*
 import com.gnoemes.shimori.model.user.UserShort
@@ -435,6 +436,7 @@ private fun ListsLoaded(
             when (type) {
                 ListType.Anime -> AnimeListPage(pages[page])
                 ListType.Manga -> MangaListPage(pages[page])
+                ListType.Ranobe -> RanobeListPage(pages[page])
             }
         }
     }
