@@ -9,6 +9,8 @@ import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
 import com.gnoemes.shimori.model.manga.Manga
 import com.gnoemes.shimori.model.manga.MangaType
+import com.gnoemes.shimori.model.ranobe.Ranobe
+import com.gnoemes.shimori.model.ranobe.RanobeType
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
@@ -35,6 +37,12 @@ class ShimoriTextCreator @Inject constructor(
     fun name(manga: Manga): String {
         return if (prefs.isRomadziNaming) manga.name
         else manga.nameRu ?: manga.name
+    }
+
+    //TODO check locale
+    fun name(ranobe: Ranobe): String {
+        return if (prefs.isRomadziNaming) ranobe.name
+        else ranobe.nameRu ?: ranobe.name
     }
 
     fun statusDescription(anime: Anime): String? {
@@ -101,6 +109,14 @@ class ShimoriTextCreator @Inject constructor(
         }
     }
 
+    fun statusDescription(ranobe: Ranobe): String? {
+        return when (ranobe.status) {
+            ContentStatus.ANONS -> context.getString(R.string.status_anons)
+            ContentStatus.ONGOING -> context.getString(R.string.status_ongoing)
+            ContentStatus.RELEASED -> ranobe.dateReleased?.year?.toString()
+            else -> null
+        }
+    }
 
     fun typeDescription(anime: Anime): String? {
         return when (anime.type) {
@@ -121,6 +137,14 @@ class ShimoriTextCreator @Inject constructor(
             MangaType.Manhwa -> context.getString(R.string.type_manhwa)
             MangaType.OneShot -> context.getString(R.string.type_one_shot)
             MangaType.Doujin -> context.getString(R.string.type_doujin)
+            else -> null
+        }
+    }
+
+    fun typeDescription(ranobe: Ranobe): String? {
+        return when (ranobe.type) {
+            RanobeType.Novel -> context.getString(R.string.type_novel)
+            RanobeType.LightNovel -> context.getString(R.string.type_light_novel)
             else -> null
         }
     }

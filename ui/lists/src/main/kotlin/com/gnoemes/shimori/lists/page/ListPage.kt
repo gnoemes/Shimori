@@ -16,11 +16,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.gnoemes.shimori.common.compose.AnimeListCard
 import com.gnoemes.shimori.common.compose.MangaListCard
+import com.gnoemes.shimori.common.compose.RanobeListCard
 import com.gnoemes.shimori.common.extensions.rememberFlowWithLifecycle
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.manga.MangaWithRate
+import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
@@ -43,6 +45,13 @@ fun MangaListPage(
 }
 
 @Composable
+fun RanobeListPage(
+    status: RateStatus
+) {
+    RanobeListStatusPage(viewModel = viewModel(factory = ranobePageViewModel(status = status), key = "ranobe-$status"))
+}
+
+@Composable
 internal fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
@@ -58,6 +67,16 @@ internal fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
             LocalContext.current as Activity,
             BaseListViewModel.ViewModelFactoryProvider::class.java
     ).mangaPageFactory()
+
+    return BaseListViewModel.provideFactory(factory, status)
+}
+
+@Composable
+internal fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory {
+    val factory = EntryPointAccessors.fromActivity(
+            LocalContext.current as Activity,
+            BaseListViewModel.ViewModelFactoryProvider::class.java
+    ).ranobePageFactory()
 
     return BaseListViewModel.provideFactory(factory, status)
 }
@@ -91,6 +110,20 @@ internal fun MangaListStatusPage(
 }
 
 @Composable
+internal fun RanobeListStatusPage(
+    viewModel: RanobeListPageViewModel
+) {
+    val list = rememberFlowWithLifecycle(viewModel.list, key = "ranobe").collectAsLazyPagingItems()
+
+    val submit = { action: ListPageAction -> viewModel.submitAction(action) }
+
+    val onCoverLongCLick =
+        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.RANOBE)) }
+
+    PagingPage(list, onCoverLongCLick)
+}
+
+@Composable
 internal fun PagingPage(
     list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
     onCoverLongCLick: (Long) -> Unit
@@ -108,6 +141,12 @@ internal fun PagingPage(
                     is MangaWithRate -> {
                         MangaListCard(
                                 manga = item,
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                        )
+                    }
+                    is RanobeWithRate -> {
+                        RanobeListCard(
+                                ranobe = item,
                                 onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
                         )
                     }
