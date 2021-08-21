@@ -19,7 +19,7 @@ class UpdateAnimeRates @Inject constructor(
             } else if (params.optionalUpdate && repository.needUpdateAnimeWithStatus()) {
                 repository.updateMyAnimeWithStatus(params.status)
             } else if (params.categorySize != null) {
-                val animes = repository.queryAnimesWithStatus(params.status)
+                val animes = repository.queryByStatus(params.status)
 
                 //refresh if local animes diffs with rate category size
                 if (animes.size != params.categorySize) {
