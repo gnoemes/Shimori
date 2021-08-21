@@ -20,7 +20,7 @@ class MangaStore @Inject constructor(
     private val syncer = syncerForEntity(
             mangaDao,
             { it.shikimoriId },
-            { entity, id -> entity.copy(id = id ?: 0) }
+            { remote, local -> remote.copy(id = local?.id ?: 0) }
     )
 
     suspend fun update(mangas : List<Manga>) = runner {
