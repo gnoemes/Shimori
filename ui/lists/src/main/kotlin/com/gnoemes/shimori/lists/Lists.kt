@@ -449,7 +449,7 @@ private fun ListsTabs(
     pages: List<RateStatus>,
     onClick: (Int) -> Unit
 ) {
-    ScrollableTabRow(
+    CustomTabRow(
             modifier = Modifier.fillMaxWidth(),
             selectedTabIndex = pagerState.currentPage,
             backgroundColor = MaterialTheme.colors.primary,
