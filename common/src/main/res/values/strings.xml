@@ -61,6 +61,7 @@
     <string name="status_ongoing">Ongoing</string>
     <string name="status_released">Released</string>
 
+    <string name="anons_date_format">Airing in %d %s</string>
     <string name="ongoing_episode_format">%d ep in %d %s</string>
 
     <string name="minute_short">min</string>
@@ -79,5 +80,7 @@
     <string name="type_manhwa">Manhwa</string>
     <string name="type_one_shot">One shot</string>
     <string name="type_doujin">Doujin</string>
+
+    <string name="today">Today</string>
 
 </resources>
