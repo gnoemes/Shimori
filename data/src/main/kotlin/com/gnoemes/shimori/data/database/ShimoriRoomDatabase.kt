@@ -8,6 +8,7 @@ import com.gnoemes.shimori.model.anime.AnimeFts
 import com.gnoemes.shimori.model.app.LastRequest
 import com.gnoemes.shimori.model.app.ListPin
 import com.gnoemes.shimori.model.manga.Manga
+import com.gnoemes.shimori.model.ranobe.Ranobe
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.user.User
@@ -18,6 +19,7 @@ import com.gnoemes.shimori.model.user.User
             Anime::class,
             AnimeFts::class,
             Manga::class,
+            Ranobe::class,
             Rate::class,
             LastRequest::class,
             User::class,
