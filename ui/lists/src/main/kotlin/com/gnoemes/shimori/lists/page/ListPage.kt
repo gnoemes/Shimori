@@ -15,8 +15,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.gnoemes.shimori.common.compose.AnimeListCard
+import com.gnoemes.shimori.common.compose.MangaListCard
 import com.gnoemes.shimori.common.extensions.rememberFlowWithLifecycle
+import com.gnoemes.shimori.model.EntityWithRate
+import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.anime.AnimeWithRate
+import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
@@ -25,45 +29,89 @@ import dagger.hilt.android.EntryPointAccessors
 
 
 @Composable
-fun ListPage(
+fun AnimeListPage(
     status: RateStatus
 ) {
-    ListStatusPage(viewModel = viewModel(factory = pageViewModel(status = status), key = "$status"))
+    AnimeListStatusPage(viewModel = viewModel(factory = animePageViewModel(status = status), key = "anime-$status"))
 }
 
 @Composable
-internal fun pageViewModel(status: RateStatus): ViewModelProvider.Factory {
+fun MangaListPage(
+    status: RateStatus
+) {
+    MangaListStatusPage(viewModel = viewModel(factory = mangaPageViewModel(status = status), key = "manga-$status"))
+}
+
+@Composable
+internal fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
-            ListPageViewModel.ViewModelFactoryProvider::class.java
-    ).pageFactory()
+            BaseListViewModel.ViewModelFactoryProvider::class.java
+    ).animePageFactory()
 
-    return ListPageViewModel.provideFactory(factory, status)
+    return BaseListViewModel.provideFactory(factory, status)
 }
 
 @Composable
-internal fun ListStatusPage(
-    viewModel: ListPageViewModel
+internal fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
+    val factory = EntryPointAccessors.fromActivity(
+            LocalContext.current as Activity,
+            BaseListViewModel.ViewModelFactoryProvider::class.java
+    ).mangaPageFactory()
+
+    return BaseListViewModel.provideFactory(factory, status)
+}
+
+@Composable
+internal fun AnimeListStatusPage(
+    viewModel: AnimeListPageViewModel
 ) {
-    val list = rememberFlowWithLifecycle(viewModel.list).collectAsLazyPagingItems()
+    val list = rememberFlowWithLifecycle(viewModel.list, key = "anime").collectAsLazyPagingItems()
 
-    val actioner = { action: ListPageAction -> viewModel.submitAction(action) }
+    val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
-    PagingPage(list, actioner)
+    val onCoverLongCLick =
+        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.ANIME)) }
+
+    PagingPage(list, onCoverLongCLick)
+}
+
+@Composable
+internal fun MangaListStatusPage(
+    viewModel: MangaListPageViewModel
+) {
+    val list = rememberFlowWithLifecycle(viewModel.list, key = "manga").collectAsLazyPagingItems()
+
+    val submit = { action: ListPageAction -> viewModel.submitAction(action) }
+
+    val onCoverLongCLick =
+        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.MANGA)) }
+
+    PagingPage(list, onCoverLongCLick)
 }
 
 @Composable
 internal fun PagingPage(
-    list: LazyPagingItems<AnimeWithRate>,
-    actioner: (ListPageAction) -> Unit
+    list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
+    onCoverLongCLick: (Long) -> Unit
 ) {
     Page {
         items(list) { item ->
             if (item != null) {
-                AnimeListCard(
-                        anime = item,
-                        onCoverLongClick = { item.entity.shikimoriId?.let { id -> actioner(ListPageAction.TogglePin(id, RateTargetType.ANIME)) } }
-                )
+                when (item) {
+                    is AnimeWithRate -> {
+                        AnimeListCard(
+                                anime = item,
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                        )
+                    }
+                    is MangaWithRate -> {
+                        MangaListCard(
+                                manga = item,
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                        )
+                    }
+                }
             }
         }
     }

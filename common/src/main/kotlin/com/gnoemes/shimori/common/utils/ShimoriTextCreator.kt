@@ -7,6 +7,8 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.anime.AnimeType
 import com.gnoemes.shimori.model.common.ContentStatus
+import com.gnoemes.shimori.model.manga.Manga
+import com.gnoemes.shimori.model.manga.MangaType
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
@@ -28,7 +30,13 @@ class ShimoriTextCreator @Inject constructor(
         else anime.nameRu ?: anime.name
     }
 
-    fun episodesDescription(anime: Anime): String? {
+    //TODO check locale
+    fun name(manga: Manga): String {
+        return if (prefs.isRomadziNaming) manga.name
+        else manga.nameRu ?: manga.name
+    }
+
+    fun statusDescription(anime: Anime): String? {
         return when (anime.status) {
             ContentStatus.ANONS -> {
                 val date = anime.dateAired
@@ -69,6 +77,14 @@ class ShimoriTextCreator @Inject constructor(
         }
     }
 
+    fun statusDescription(manga: Manga) : String? {
+        return when (manga.status) {
+            ContentStatus.ANONS -> return context.getString(R.string.status_anons)
+            ContentStatus.ONGOING -> return context.getString(R.string.status_ongoing)
+            else -> null
+        }
+    }
+
 
     fun typeDescription(anime: Anime): String? {
         return when (anime.type) {
@@ -78,6 +94,17 @@ class ShimoriTextCreator @Inject constructor(
             AnimeType.Movie -> context.getString(R.string.type_music)
             AnimeType.Movie -> context.getString(R.string.type_movie)
             AnimeType.Special -> context.getString(R.string.type_special)
+            else -> null
+        }
+    }
+
+    fun typeDescription(manga: Manga): String? {
+        return when (manga.type) {
+            MangaType.Manga -> context.getString(R.string.type_manga)
+            MangaType.Manhua -> context.getString(R.string.type_manhua)
+            MangaType.Manhwa -> context.getString(R.string.type_manhwa)
+            MangaType.OneShot -> context.getString(R.string.type_one_shot)
+            MangaType.Doujin -> context.getString(R.string.type_doujin)
             else -> null
         }
     }

@@ -21,6 +21,8 @@ class MangaRepository @Inject constructor(
 
     fun observeByStatusForPaging(status : RateStatus, sort: RateSort) = mangaStore.observeByStatusForPaging(status, sort)
 
+    suspend fun queryRandomByStatus(status: RateStatus?) = mangaStore.queryRandomByStatus(status)
+
     suspend fun updateMyMangaWithStatus(status: RateStatus?) {
         val userId = userRepository.getMyUserId() ?: return
 

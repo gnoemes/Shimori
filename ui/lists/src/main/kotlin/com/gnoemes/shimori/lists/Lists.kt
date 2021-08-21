@@ -21,7 +21,8 @@ import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
-import com.gnoemes.shimori.lists.page.ListPage
+import com.gnoemes.shimori.lists.page.AnimeListPage
+import com.gnoemes.shimori.lists.page.MangaListPage
 import com.gnoemes.shimori.lists.page.pinned.ListPinnedPage
 import com.gnoemes.shimori.model.rate.*
 import com.gnoemes.shimori.model.user.UserShort
@@ -397,8 +398,8 @@ private fun ListsLoaded(
 
     LaunchedEffect(pagerState) {
         pagerState.pageChanges.collect { page ->
-            val newPage = pages[page]
-            onPageChanged(newPage)
+            val newPage = pages.getOrNull(page)
+            newPage?.let(onPageChanged)
         }
     }
 
@@ -431,7 +432,10 @@ private fun ListsLoaded(
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp)
         ) { page ->
-            ListPage(pages[page])
+            when (type) {
+                ListType.Anime -> AnimeListPage(pages[page])
+                ListType.Manga -> MangaListPage(pages[page])
+            }
         }
     }
 }
@@ -446,6 +450,7 @@ private fun ListsTabs(
     onClick: (Int) -> Unit
 ) {
     ScrollableTabRow(
+            modifier = Modifier.fillMaxWidth(),
             selectedTabIndex = pagerState.currentPage,
             backgroundColor = MaterialTheme.colors.primary,
             edgePadding = 0.dp,
