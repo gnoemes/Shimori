@@ -40,7 +40,7 @@ class RanobeRepository @Inject constructor(
         }
     }
 
-    suspend fun needUpdateRanobeWithStatus(expiry: Instant = instantInPast(hours = 2)): Boolean {
+    suspend fun needUpdateRanobeWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {
         return ratesLastRequestStore.isRequestBefore(expiry)
     }
 
