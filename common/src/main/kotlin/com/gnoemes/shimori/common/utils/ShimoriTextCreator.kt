@@ -14,6 +14,7 @@ import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.qualifiers.ActivityContext
+import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
 import javax.inject.Inject
@@ -39,9 +40,22 @@ class ShimoriTextCreator @Inject constructor(
     fun statusDescription(anime: Anime): String? {
         return when (anime.status) {
             ContentStatus.ANONS -> {
+                val now = LocalDate.now()
                 val date = anime.dateAired
-                if (date != null) {
-                    return formatter.formatMediumDate(date)
+                if (date != null && date.isAfter(now)) {
+                    val days = ChronoUnit.DAYS.between(now, date)
+
+                    if (days >= 30) {
+                        return formatter.formatMediumDate(date)
+                    }
+
+                    if (days == 0L) {
+                        return context.getString(R.string.today)
+                    }
+
+                    val formatRes = context.getString(R.string.anons_date_format)
+
+                    return formatRes.format(days, context.getString(R.string.day_short))
                 }
 
                 return context.getString(R.string.status_anons)
@@ -73,14 +87,16 @@ class ShimoriTextCreator @Inject constructor(
 
                 return context.getString(R.string.status_ongoing)
             }
+            ContentStatus.RELEASED -> anime.dateReleased?.year?.toString()
             else -> null
         }
     }
 
-    fun statusDescription(manga: Manga) : String? {
+    fun statusDescription(manga: Manga): String? {
         return when (manga.status) {
-            ContentStatus.ANONS -> return context.getString(R.string.status_anons)
-            ContentStatus.ONGOING -> return context.getString(R.string.status_ongoing)
+            ContentStatus.ANONS -> context.getString(R.string.status_anons)
+            ContentStatus.ONGOING -> context.getString(R.string.status_ongoing)
+            ContentStatus.RELEASED -> manga.dateReleased?.year?.toString()
             else -> null
         }
     }
@@ -91,7 +107,7 @@ class ShimoriTextCreator @Inject constructor(
             AnimeType.Tv -> context.getString(R.string.type_tv)
             AnimeType.OVA -> context.getString(R.string.type_ova)
             AnimeType.ONA -> context.getString(R.string.type_ona)
-            AnimeType.Movie -> context.getString(R.string.type_music)
+            AnimeType.Music -> context.getString(R.string.type_music)
             AnimeType.Movie -> context.getString(R.string.type_movie)
             AnimeType.Special -> context.getString(R.string.type_special)
             else -> null

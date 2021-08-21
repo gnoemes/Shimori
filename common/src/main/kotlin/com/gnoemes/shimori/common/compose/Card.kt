@@ -47,7 +47,7 @@ fun AnimeListCard(
                     overflow = TextOverflow.Ellipsis
             )
 
-            animeDescription(
+            AnimeDescription(
                     anime = anime.entity,
                     format = DescriptionFormat.List,
                     modifier = Modifier.fillMaxWidth()
@@ -116,7 +116,7 @@ fun MangaListCard(
                     overflow = TextOverflow.Ellipsis
             )
 
-            mangaDescription(
+            MangaDescription(
                     manga = manga.entity,
                     format = DescriptionFormat.List,
                     modifier = Modifier.fillMaxWidth()

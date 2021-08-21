@@ -5,10 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.*
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.titleAnnounced
 import com.gnoemes.shimori.common.compose.theme.titleOngoing
@@ -19,7 +16,7 @@ import com.gnoemes.shimori.model.manga.Manga
 const val Divider = " • "
 
 @Composable
-fun animeDescription(
+fun AnimeDescription(
     anime: Anime,
     format: DescriptionFormat,
     modifier: Modifier = Modifier,
@@ -41,7 +38,7 @@ fun animeDescription(
 }
 
 @Composable
-fun mangaDescription(
+fun MangaDescription(
     manga: Manga,
     format: DescriptionFormat,
     modifier: Modifier = Modifier,
@@ -64,18 +61,18 @@ fun mangaDescription(
 
 @Composable
 private fun buildListText(anime: Anime) = buildAnnotatedString {
-    val episodeInfo = LocalShimoriTextCreator.current.statusDescription(anime)
+    val statusInfo = LocalShimoriTextCreator.current.statusDescription(anime)
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(anime)
 
     val color = when (anime.status) {
         ContentStatus.ANONS -> titleAnnounced
-        else -> titleOngoing
+        ContentStatus.ONGOING -> titleOngoing
+        else -> null
     }
 
-    if (!episodeInfo.isNullOrEmpty()) {
-        withStyle(style = SpanStyle(color = color)) {
-            append(episodeInfo)
-        }
+    if (!statusInfo.isNullOrEmpty()) {
+        val append: AnnotatedString.Builder.() -> Unit = { append(statusInfo) }
+        color?.let { withStyle(style = SpanStyle(color = color), append) } ?: append()
     }
 
     if (!typeInfo.isNullOrEmpty()) {
@@ -92,13 +89,13 @@ private fun buildListText(manga: Manga) = buildAnnotatedString {
 
     val color = when (manga.status) {
         ContentStatus.ANONS -> titleAnnounced
-        else -> titleOngoing
+        ContentStatus.ONGOING -> titleOngoing
+        else -> null
     }
 
     if (!statusInfo.isNullOrEmpty()) {
-        withStyle(style = SpanStyle(color = color)) {
-            append(statusInfo)
-        }
+        val append: AnnotatedString.Builder.() -> Unit = { append(statusInfo) }
+        color?.let { withStyle(style = SpanStyle(color = color), append) } ?: append()
     }
 
     if (!typeInfo.isNullOrEmpty()) {
