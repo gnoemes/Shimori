@@ -8,6 +8,7 @@ import com.gnoemes.shimori.base.extensions.combine
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
+import com.gnoemes.shimori.domain.interactors.UpdateMangaRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.*
 import com.gnoemes.shimori.model.rate.ListType
@@ -29,6 +30,7 @@ internal class ListsViewModel @Inject constructor(
     observeHasPinnedTitles: ObserveHasPinnedTitles,
     private val updateRateSort: UpdateRateSort,
     private val updateAnimeRates: UpdateAnimeRates,
+    private val updateMangaRates: UpdateMangaRates,
     shikimoriAuthManager: ShikimoriAuthManager,
     private val stateManager: ListsStateManager
 ) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
@@ -47,7 +49,6 @@ internal class ListsViewModel @Inject constructor(
                     is ListsAction.PageChanged -> updateCurrentPage(action.newPage)
                     is ListsAction.ListTypeChanged -> updateCurrentType(action.newType)
                 }
-
             }
         }
 
@@ -85,7 +86,8 @@ internal class ListsViewModel @Inject constructor(
                 if (authState.isAuthorized && !loadingRates) {
                     when (type) {
                         ListType.Anime -> updateAnimeRates()
-                        //TODO: add manga
+                        ListType.Manga -> updateMangaRates()
+                        //TODO: add ranobe
                         else -> Unit
                     }
                 }
@@ -139,6 +141,12 @@ internal class ListsViewModel @Inject constructor(
     private fun updateAnimeRates() {
         viewModelScope.launch {
             updateAnimeRates(UpdateAnimeRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
+        }
+    }
+
+    private fun updateMangaRates() {
+        viewModelScope.launch {
+            updateMangaRates(UpdateMangaRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
         }
     }
 }

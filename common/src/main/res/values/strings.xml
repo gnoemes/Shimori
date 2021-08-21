@@ -74,4 +74,10 @@
     <string name="type_ova" translatable="false">OVA</string>
     <string name="type_ona" translatable="false">ONA</string>
 
+    <string name="type_manga">Manga</string>
+    <string name="type_manhua">Manhua</string>
+    <string name="type_manhwa">Manhwa</string>
+    <string name="type_one_shot">One shot</string>
+    <string name="type_doujin">Doujin</string>
+
 </resources>

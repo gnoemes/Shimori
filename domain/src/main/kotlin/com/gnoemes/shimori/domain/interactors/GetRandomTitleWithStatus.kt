@@ -2,6 +2,7 @@ package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
+import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.domain.ResultInteractor
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.ShimoriEntity
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class GetRandomTitleWithStatus @Inject constructor(
     private val animeRepository: AnimeRepository,
+    private val mangaRepository: MangaRepository,
     private val dispatchers: AppCoroutineDispatchers
 ) : ResultInteractor<GetRandomTitleWithStatus.Params, EntityWithRate<out ShimoriEntity>?>() {
 
@@ -19,6 +21,7 @@ class GetRandomTitleWithStatus @Inject constructor(
         withContext(dispatchers.io) {
             when (params.type) {
                 ListType.Anime -> animeRepository.queryRandomAnimeWithStatus(params.status)
+                ListType.Manga -> mangaRepository.queryRandomByStatus(params.status)
                 else -> throw IllegalArgumentException("${params.type} is not supported")
             }
         }

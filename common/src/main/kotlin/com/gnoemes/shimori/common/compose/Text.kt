@@ -14,6 +14,7 @@ import com.gnoemes.shimori.common.compose.theme.titleAnnounced
 import com.gnoemes.shimori.common.compose.theme.titleOngoing
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.common.ContentStatus
+import com.gnoemes.shimori.model.manga.Manga
 
 const val Divider = " • "
 
@@ -40,8 +41,30 @@ fun animeDescription(
 }
 
 @Composable
+fun mangaDescription(
+    manga: Manga,
+    format: DescriptionFormat,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.caption,
+    color: Color = MaterialTheme.colors.caption
+) {
+
+    val text = when (format) {
+        DescriptionFormat.List -> buildListText(manga = manga)
+        else -> buildAnnotatedString { }
+    }
+
+    Text(
+            text = text,
+            modifier = modifier,
+            style = style,
+            color = color
+    )
+}
+
+@Composable
 private fun buildListText(anime: Anime) = buildAnnotatedString {
-    val episodeInfo = LocalShimoriTextCreator.current.episodesDescription(anime)
+    val episodeInfo = LocalShimoriTextCreator.current.statusDescription(anime)
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(anime)
 
     val color = when (anime.status) {
@@ -52,6 +75,29 @@ private fun buildListText(anime: Anime) = buildAnnotatedString {
     if (!episodeInfo.isNullOrEmpty()) {
         withStyle(style = SpanStyle(color = color)) {
             append(episodeInfo)
+        }
+    }
+
+    if (!typeInfo.isNullOrEmpty()) {
+        if (length > 0) append(Divider)
+
+        append(typeInfo)
+    }
+}
+
+@Composable
+private fun buildListText(manga: Manga) = buildAnnotatedString {
+    val statusInfo = LocalShimoriTextCreator.current.statusDescription(manga)
+    val typeInfo = LocalShimoriTextCreator.current.typeDescription(manga)
+
+    val color = when (manga.status) {
+        ContentStatus.ANONS -> titleAnnounced
+        else -> titleOngoing
+    }
+
+    if (!statusInfo.isNullOrEmpty()) {
+        withStyle(style = SpanStyle(color = color)) {
+            append(statusInfo)
         }
     }
 

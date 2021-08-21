@@ -45,6 +45,9 @@ class DaoModule {
     fun provideAnimeDao(db: ShimoriDatabase) = db.animeDao()
 
     @Provides
+    fun provideMangaDao(db: ShimoriDatabase) = db.mangaDao()
+
+    @Provides
     fun provideRateDao(db: ShimoriDatabase) = db.rateDao()
 
     @Provides
@@ -57,5 +60,5 @@ class DaoModule {
     fun provideRateSortDao(db: ShimoriDatabase) = db.rateSortDao()
 
     @Provides
-    fun provideListPinDao(db : ShimoriDatabase) = db.listPinDao()
+    fun provideListPinDao(db: ShimoriDatabase) = db.listPinDao()
 }
