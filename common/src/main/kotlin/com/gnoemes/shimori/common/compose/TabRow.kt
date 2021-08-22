@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
 import com.gnoemes.shimori.common.compose.TabRowDefaults.tabIndicatorOffset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -123,11 +125,11 @@ fun CustomTabRow(
             val tabConstraints = constraints.copy(minWidth = minTabWidth)
 
             val tabPlaceables = subcompose(TabSlots.Tabs, tabs)
-                .map { it.measure(tabConstraints) }
+                .fastMap { it.measure(tabConstraints) }
 
             var layoutWidth = padding * 2
             var layoutHeight = 0
-            tabPlaceables.forEach {
+            tabPlaceables.fastForEach {
                 layoutWidth += it.width
                 layoutHeight = maxOf(layoutHeight, it.height)
             }
@@ -140,7 +142,7 @@ fun CustomTabRow(
                 // Place the tabs
                 val tabPositions = mutableListOf<TabPosition>()
                 var left = padding
-                tabPlaceables.forEach {
+                tabPlaceables.fastForEach {
                     it.placeRelative(left, 0)
                     tabPositions.add(TabPosition(left = left.toDp(), width = it.width.toDp()))
                     left += it.width
@@ -148,7 +150,7 @@ fun CustomTabRow(
 
                 // The divider is measured with its own height, and width equal to custom width
                 // of the tab row, and then placed on top of the tabs.
-                subcompose(TabSlots.Divider, divider).forEach {
+                subcompose(TabSlots.Divider, divider).fastForEach {
                     val placeable = it
                         .measure(
                                 constraints.copy(minWidth = customWidth, maxWidth = customWidth)
@@ -161,7 +163,7 @@ fun CustomTabRow(
                 // row, and then placed on top of the divider.
                 subcompose(TabSlots.Indicator) {
                     indicator(tabPositions)
-                }.forEach {
+                }.fastForEach {
                     it.measure(Constraints.fixed(layoutWidth, layoutHeight)).placeRelative(0, 0)
                 }
 

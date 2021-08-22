@@ -33,6 +33,8 @@ dependencies {
     implementation libs.compose.animation.animation
     implementation libs.compose.ui.tooling
     implementation libs.compose.ui.viewbinding
+    implementation libs.compose.ui.util
+    implementation libs.compose.ui.ui
 
     implementation libs.androidx.paging.compose
 
