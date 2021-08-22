@@ -33,7 +33,7 @@ internal class MangaListPageViewModel @AssistedInject constructor(
     stateManager: ListsStateManager,
     getRandomTitleWithStatus: GetRandomTitleWithStatus,
     togglePin: ToggleListPin
-) : BaseListViewModel(status, observeRateSort, stateManager, getRandomTitleWithStatus, togglePin) {
+) : BaseListPageViewModel(status, observeRateSort, stateManager, getRandomTitleWithStatus, togglePin) {
 
     val list get() = observeManga.flow.cachedIn(viewModelScope)
 
