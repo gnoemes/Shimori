@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
-internal abstract class BaseListViewModel(
+internal abstract class BaseListPageViewModel(
     private val status: RateStatus?,
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,

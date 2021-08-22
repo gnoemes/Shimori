@@ -34,7 +34,7 @@ internal class RanobeListPageViewModel @AssistedInject constructor(
     stateManager: ListsStateManager,
     getRandomTitleWithStatus: GetRandomTitleWithStatus,
     togglePin: ToggleListPin
-) : BaseListViewModel(status, observeRateSort, stateManager, getRandomTitleWithStatus, togglePin) {
+) : BaseListPageViewModel(status, observeRateSort, stateManager, getRandomTitleWithStatus, togglePin) {
 
     val list get() = observeRanobe.flow.cachedIn(viewModelScope)
 
