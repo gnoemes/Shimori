@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.lists.page
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
@@ -10,9 +12,14 @@ import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
+import dagger.Module
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -45,6 +52,27 @@ internal class AnimeListPageViewModel @AssistedInject constructor(
             }
                 .collect { observeAnime(it) }
         }
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            status: RateStatus
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(status) as T
+            }
+        }
+    }
+
+    @Module
+    @InstallIn(ActivityRetainedComponent::class)
+    interface AssistedInjectModule
+
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    internal interface ViewModelFactoryProvider {
+        fun animePageFactory(): Factory
     }
 
     @AssistedFactory

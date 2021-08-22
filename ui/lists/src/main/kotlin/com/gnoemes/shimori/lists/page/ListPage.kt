@@ -55,30 +55,30 @@ fun RanobeListPage(
 internal fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
-            BaseListViewModel.ViewModelFactoryProvider::class.java
+            AnimeListPageViewModel.ViewModelFactoryProvider::class.java
     ).animePageFactory()
 
-    return BaseListViewModel.provideFactory(factory, status)
+    return AnimeListPageViewModel.provideFactory(factory, status)
 }
 
 @Composable
 internal fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
-            BaseListViewModel.ViewModelFactoryProvider::class.java
+            MangaListPageViewModel.ViewModelFactoryProvider::class.java
     ).mangaPageFactory()
 
-    return BaseListViewModel.provideFactory(factory, status)
+    return MangaListPageViewModel.provideFactory(factory, status)
 }
 
 @Composable
 internal fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
-            BaseListViewModel.ViewModelFactoryProvider::class.java
+            RanobeListPageViewModel.ViewModelFactoryProvider::class.java
     ).ranobePageFactory()
 
-    return BaseListViewModel.provideFactory(factory, status)
+    return RanobeListPageViewModel.provideFactory(factory, status)
 }
 
 @Composable

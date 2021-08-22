@@ -2,7 +2,6 @@ package com.gnoemes.shimori.lists.page
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingConfig
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
@@ -12,23 +11,18 @@ import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
-import dagger.Module
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 internal abstract class BaseListViewModel(
-    private val status: RateStatus,
+    private val status: RateStatus?,
     private val observeRateSort: ObserveRateSort,
     private val stateManager: ListsStateManager,
     private val getRandomTitleWithStatus: GetRandomTitleWithStatus,
     private val togglePin: ToggleListPin
-) : ViewModel(){
+) : ViewModel() {
     private val pendingActions = MutableSharedFlow<ListPageAction>()
 
 
@@ -80,52 +74,11 @@ internal abstract class BaseListViewModel(
         }
     }
 
-
     companion object {
-        fun provideFactory(
-            assistedFactory: AnimeListPageViewModel.Factory,
-            status: RateStatus
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(status) as T
-            }
-        }
-
-        fun provideFactory(
-            assistedFactory: MangaListPageViewModel.Factory,
-            status: RateStatus
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(status) as T
-            }
-        }
-
-        fun provideFactory(
-            assistedFactory: RanobeListPageViewModel.Factory,
-            status: RateStatus
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(status) as T
-            }
-        }
-
         val PAGING_CONFIG = PagingConfig(
                 pageSize = 50,
                 initialLoadSize = 50,
                 prefetchDistance = 20
         )
-    }
-
-
-    @Module
-    @InstallIn(ActivityRetainedComponent::class)
-    interface AssistedInjectModule
-
-    @EntryPoint
-    @InstallIn(ActivityComponent::class)
-    internal interface ViewModelFactoryProvider {
-        fun animePageFactory(): AnimeListPageViewModel.Factory
-        fun mangaPageFactory(): MangaListPageViewModel.Factory
-        fun ranobePageFactory(): RanobeListPageViewModel.Factory
     }
 }
