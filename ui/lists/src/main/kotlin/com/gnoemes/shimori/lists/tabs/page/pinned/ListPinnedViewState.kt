@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists.page.pinned
+package com.gnoemes.shimori.lists.tabs.page.pinned
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shimori.model.EntityWithRate

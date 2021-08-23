@@ -11,11 +11,13 @@ import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateMangaRates
 import com.gnoemes.shimori.domain.interactors.UpdateRanobeRates
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
-import com.gnoemes.shimori.domain.observers.*
+import com.gnoemes.shimori.domain.observers.ObserveHasPinnedTitles
+import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
+import com.gnoemes.shimori.domain.observers.ObserveRateSort
+import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
-import com.gnoemes.shimori.model.rate.RateStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -26,7 +28,6 @@ internal class ListsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeShikimoriAuth: ObserveShikimoriAuth,
     observeRateSort: ObserveRateSort,
-    observeListsPages: ObserveListsPages,
     observeUser: ObserveMyUserShort,
     observeHasPinnedTitles: ObserveHasPinnedTitles,
     private val updateRateSort: UpdateRateSort,
@@ -48,7 +49,6 @@ internal class ListsViewModel @Inject constructor(
             pendingActions.collect { action ->
                 when (action) {
                     is ListsAction.UpdateListSort -> updateRateSort(action.option, action.isDescending)
-                    is ListsAction.PageChanged -> updateCurrentPage(action.newPage)
                     is ListsAction.ListTypeChanged -> updateCurrentType(action.newType)
                 }
             }
@@ -62,16 +62,14 @@ internal class ListsViewModel @Inject constructor(
                     stateManager.type.observe,
                     observeRateSort.flow,
                     observeUser.flow,
-                    observeListsPages.flow,
                     observeHasPinnedTitles.flow
-            ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pages, pinsExist ->
+            ) { globalLoading, typeLoading, auth, type, activeRateSort, user, pinsExist ->
                 ListsViewState(
                         loading = globalLoading || typeLoading,
                         authStatus = auth,
                         type = type,
                         user = user,
                         activeSort = activeRateSort ?: RateSort.defaultForType(type),
-                        pages = pages,
                         noPinnedTitles = !pinsExist
                 )
             }.collect { _state.emit(it) }
@@ -103,10 +101,6 @@ internal class ListsViewModel @Inject constructor(
         viewModelScope.launch {
             stateManager.type.observe.collect { type ->
                 observeRateSort(ObserveRateSort.Params(type))
-
-                type.rateType?.let {
-                    observeListsPages(ObserveListsPages.Params(it))
-                }
             }
         }
     }
@@ -131,12 +125,6 @@ internal class ListsViewModel @Inject constructor(
     private fun updateCurrentType(newType: ListType) {
         viewModelScope.launch {
             stateManager.type(newType)
-        }
-    }
-
-    private fun updateCurrentPage(newPage: RateStatus) {
-        viewModelScope.launch {
-            stateManager.page(newPage)
         }
     }
 

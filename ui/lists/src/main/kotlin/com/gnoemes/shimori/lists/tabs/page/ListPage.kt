@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists.page
+package com.gnoemes.shimori.lists.tabs.page
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
