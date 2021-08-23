@@ -29,17 +29,6 @@ enum class RateSortOption {
                 MY_SCORE,
                 RATING,
         )
-
-        private val pinned = listOf(
-                PROGRESS,
-                DATE_UPDATED,
-                DATE_CREATED,
-                DATE_AIRED,
-                NAME,
-                MY_SCORE,
-                RATING,
-        )
-
         val animePriorityValues: List<RateSortOption> = default
         val mangaPriorityValues: List<RateSortOption> = default
 
@@ -47,7 +36,7 @@ enum class RateSortOption {
             ListType.Anime -> animePriorityValues
             ListType.Manga -> mangaPriorityValues
             ListType.Ranobe -> default
-            ListType.Pinned -> pinned
+            ListType.Pinned -> emptyList()
             else -> default
         }
     }

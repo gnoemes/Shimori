@@ -64,5 +64,7 @@ class AnimeStore @Inject constructor(
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }
     }
+
+    fun observePinned() = animeDao.pinnedDateUpdated(true)
 }
 

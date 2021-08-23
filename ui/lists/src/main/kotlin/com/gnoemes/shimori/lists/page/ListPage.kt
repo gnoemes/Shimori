@@ -52,7 +52,7 @@ fun RanobeListPage(
 }
 
 @Composable
-internal fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
+private fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
             AnimeListPageViewModel.ViewModelFactoryProvider::class.java
@@ -62,7 +62,7 @@ internal fun animePageViewModel(status: RateStatus): ViewModelProvider.Factory {
 }
 
 @Composable
-internal fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
+private fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
             MangaListPageViewModel.ViewModelFactoryProvider::class.java
@@ -72,7 +72,7 @@ internal fun mangaPageViewModel(status: RateStatus): ViewModelProvider.Factory {
 }
 
 @Composable
-internal fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory {
+private fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory {
     val factory = EntryPointAccessors.fromActivity(
             LocalContext.current as Activity,
             RanobeListPageViewModel.ViewModelFactoryProvider::class.java
@@ -82,7 +82,7 @@ internal fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory 
 }
 
 @Composable
-internal fun AnimeListStatusPage(
+private fun AnimeListStatusPage(
     viewModel: AnimeListPageViewModel
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "anime").collectAsLazyPagingItems()
@@ -90,13 +90,13 @@ internal fun AnimeListStatusPage(
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
     val onCoverLongCLick =
-        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.ANIME)) }
+        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
 
     PagingPage(list, onCoverLongCLick)
 }
 
 @Composable
-internal fun MangaListStatusPage(
+private fun MangaListStatusPage(
     viewModel: MangaListPageViewModel
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "manga").collectAsLazyPagingItems()
@@ -104,13 +104,13 @@ internal fun MangaListStatusPage(
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
     val onCoverLongCLick =
-        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.MANGA)) }
+        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
 
     PagingPage(list, onCoverLongCLick)
 }
 
 @Composable
-internal fun RanobeListStatusPage(
+private fun RanobeListStatusPage(
     viewModel: RanobeListPageViewModel
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "ranobe").collectAsLazyPagingItems()
@@ -118,7 +118,7 @@ internal fun RanobeListStatusPage(
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
     val onCoverLongCLick =
-        { id: Long -> submit(ListPageAction.TogglePin(id, RateTargetType.RANOBE)) }
+        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
 
     PagingPage(list, onCoverLongCLick)
 }
@@ -126,7 +126,7 @@ internal fun RanobeListStatusPage(
 @Composable
 internal fun PagingPage(
     list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
-    onCoverLongCLick: (Long) -> Unit
+    onCoverLongCLick: (Long, RateTargetType) -> Unit
 ) {
     Page {
         items(list) { item ->
@@ -135,19 +135,19 @@ internal fun PagingPage(
                     is AnimeWithRate -> {
                         AnimeListCard(
                                 anime = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.ANIME) } }
                         )
                     }
                     is MangaWithRate -> {
                         MangaListCard(
                                 manga = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.MANGA) } }
                         )
                     }
                     is RanobeWithRate -> {
                         RanobeListCard(
                                 ranobe = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it) } }
+                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.RANOBE) } }
                         )
                     }
                 }

@@ -57,6 +57,10 @@ abstract class RanobeDao : EntityDao<Ranobe> {
     abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, RanobeWithRate>
 
     @Transaction
+    @Query(QUERY_PINNED_DATE_UPDATED_SORT)
+    abstract fun pinnedDateUpdated(descending: Boolean): Flow<List<RanobeWithRate>>
+
+    @Transaction
     @Query(QUERY_RANDOM_PINNED)
     abstract suspend fun queryRandomPinned(): RanobeWithRate?
 
@@ -165,6 +169,16 @@ abstract class RanobeDao : EntityDao<Ranobe> {
             INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id
             WHERE r.status = :status
             ORDER BY RANDOM() LIMIT 1
+        """
+
+        private const val QUERY_PINNED_DATE_UPDATED_SORT = """
+            SELECT * FROM ranobe AS t
+            INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id
+            INNER JOIN pinned AS pin ON t.ranobe_shikimori_id = pin.target_id
+            WHERE pin.target_type = "ranobe"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
         """
     }
 }

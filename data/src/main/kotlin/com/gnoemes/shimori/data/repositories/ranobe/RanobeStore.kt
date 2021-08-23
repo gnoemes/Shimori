@@ -51,4 +51,6 @@ class RanobeStore @Inject constructor(
         }
     }
 
+    fun observePinned() = ranobeDao.pinnedDateUpdated(true)
+
 }

@@ -73,6 +73,10 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
 
     @Transaction
+    @Query(QUERY_PINNED_DATE_UPDATED_SORT)
+    abstract fun pinnedDateUpdated(descending: Boolean) : Flow<List<AnimeWithRate>>
+
+    @Transaction
     @Query(QUERY_RANDOM_PINNED)
     abstract suspend fun queryRandomPinned(): AnimeWithRate?
 
@@ -204,5 +208,14 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY RANDOM() LIMIT 1
         """
 
+        private const val QUERY_PINNED_DATE_UPDATED_SORT = """
+            SELECT * from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+        """
     }
 }
