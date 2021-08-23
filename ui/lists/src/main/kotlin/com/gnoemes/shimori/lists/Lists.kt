@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,20 +22,15 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
-import com.gnoemes.shimori.common.compose.theme.subInfoStyle
-import com.gnoemes.shimori.lists.page.AnimeListPage
-import com.gnoemes.shimori.lists.page.MangaListPage
-import com.gnoemes.shimori.lists.page.RanobeListPage
-import com.gnoemes.shimori.lists.page.pinned.ListPinnedPage
-import com.gnoemes.shimori.model.rate.*
+import com.gnoemes.shimori.common.compose.theme.toolbar
+import com.gnoemes.shimori.lists.tabs.ListTabs
+import com.gnoemes.shimori.lists.tabs.page.pinned.ListPinnedPage
+import com.gnoemes.shimori.model.rate.ListType
+import com.gnoemes.shimori.model.rate.RateSort
+import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @Composable
 fun Lists(
@@ -86,7 +83,6 @@ internal fun Lists(
                 openSearch,
                 signIn = { signInLauncher.launch(Unit) },
                 signUp = { signUpLauncher.launch(Unit) },
-                onPageChanged = { submit(ListsAction.PageChanged(it)) },
                 onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) },
                 onEmptyAnimeClick = { submit(ListsAction.ListTypeChanged(ListType.Anime)) },
                 onEmptyMangaClick = { submit(ListsAction.ListTypeChanged(ListType.Manga)) },
@@ -103,7 +99,6 @@ internal fun Lists(
     openSearch: () -> Unit,
     signIn: () -> Unit,
     signUp: () -> Unit,
-    onPageChanged: (RateStatus) -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit,
     onEmptyAnimeClick: () -> Unit,
     onEmptyMangaClick: () -> Unit,
@@ -137,9 +132,6 @@ internal fun Lists(
 
     when {
         !viewState.authStatus.isAuthorized -> NeedAuthLists(signIn, signUp)
-        viewState.pages.isEmpty() -> {
-            //TODO add empty state
-        }
         viewState.type == ListType.Pinned -> {
             ListsPinned(
                     noPinnedTitles = viewState.noPinnedTitles,
@@ -150,10 +142,7 @@ internal fun Lists(
             )
         }
         else -> {
-            ListsLoaded(
-                    type = viewState.type,
-                    pages = viewState.pages,
-                    onPageChanged = onPageChanged,
+            ListTabs(
                     toolbar = toolbar,
                     sorts = sorts
             )
@@ -385,99 +374,6 @@ private fun ListsPinnedEmpty(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-private fun ListsLoaded(
-    type: ListType,
-    pages: List<RateStatus>,
-    onPageChanged: (RateStatus) -> Unit,
-    toolbar: @Composable () -> Unit,
-    sorts: @Composable () -> Unit,
-) {
-    val pagerState =
-        rememberPagerState(pageCount = pages.size, initialOffscreenLimit = pages.size.coerceAtLeast(1))
-
-    LaunchedEffect(pagerState) {
-        pagerState.pageChanges.collect { page ->
-            val newPage = pages.getOrNull(page)
-            newPage?.let(onPageChanged)
-        }
-    }
-
-    val scope = rememberCoroutineScope()
-
-    Scaffold(
-            topBar = {
-
-                Column {
-                    toolbar()
-                    sorts()
-
-                    ListsTabs(
-                            pagerState = pagerState,
-                            listType = type.rateType!!,
-                            pages = pages,
-                            onClick = { page ->
-                                scope.launch {
-                                    pagerState.animateScrollToPage(page = page)
-                                }
-                            }
-                    )
-                }
-
-            },
-            backgroundColor = MaterialTheme.colors.primary,
-    ) { paddingValues ->
-        HorizontalPager(state = pagerState,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(horizontal = 16.dp)
-        ) { page ->
-            when (type) {
-                ListType.Anime -> AnimeListPage(pages[page])
-                ListType.Manga -> MangaListPage(pages[page])
-                ListType.Ranobe -> RanobeListPage(pages[page])
-            }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-private fun ListsTabs(
-    pagerState: PagerState,
-    listType: RateTargetType,
-    pages: List<RateStatus>,
-    onClick: (Int) -> Unit
-) {
-    CustomTabRow(
-            modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.primary,
-            edgePadding = 0.dp,
-            indicator = { tabPositions ->
-                Indicator(
-                        Modifier.pagerTabIndicatorOffsetFixedSize(pagerState, tabPositions)
-                )
-            },
-    ) {
-        pages.forEachIndexed { index, listPage ->
-            Tab(
-                    text = {
-                        Text(
-                                text = LocalShimoriTextCreator.current.rateStatusText(listType, listPage),
-                                style = MaterialTheme.typography.subInfoStyle,
-                                color = MaterialTheme.colors.caption)
-                    },
-                    selected = pagerState.currentPage == index,
-                    onClick = { onClick(index) },
-            )
-        }
-    }
-}
-
-
 @Composable
 private fun SortOptions(
     listType: ListType,
@@ -487,6 +383,7 @@ private fun SortOptions(
 ) {
     Row(
             modifier = Modifier
+                .background(MaterialTheme.colors.toolbar)
                 .fillMaxWidth()
                 .height(56.dp)
                 .padding(vertical = 12.dp)

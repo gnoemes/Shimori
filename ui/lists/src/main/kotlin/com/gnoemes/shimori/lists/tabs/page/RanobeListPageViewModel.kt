@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists.page
+package com.gnoemes.shimori.lists.tabs.page
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

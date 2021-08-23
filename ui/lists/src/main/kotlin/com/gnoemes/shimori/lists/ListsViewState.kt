@@ -5,7 +5,6 @@ import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
-import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.user.UserShort
 
 @Immutable
@@ -16,7 +15,6 @@ internal data class ListsViewState(
     val activeSort: RateSort = RateSort.defaultForType(type),
     val sorts: List<RateSortOption> = RateSortOption.priorityForType(type),
     val user: UserShort? = null,
-    val pages: List<RateStatus> = emptyList(),
     val noPinnedTitles : Boolean = true,
 ) {
     companion object {

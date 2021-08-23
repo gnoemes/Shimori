@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists.page.pinned
+package com.gnoemes.shimori.lists.tabs.page.pinned
 
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -8,8 +8,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.AnimeListCard
 import com.gnoemes.shimori.common.compose.MangaListCard
 import com.gnoemes.shimori.common.compose.RanobeListCard
-import com.gnoemes.shimori.lists.page.ListPageAction
-import com.gnoemes.shimori.lists.page.Page
+import com.gnoemes.shimori.lists.tabs.page.ListPageAction
+import com.gnoemes.shimori.lists.tabs.page.Page
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.anime.AnimeWithRate
