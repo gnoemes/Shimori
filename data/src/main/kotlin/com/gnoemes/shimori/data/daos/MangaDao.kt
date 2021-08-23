@@ -57,12 +57,16 @@ abstract class MangaDao : EntityDao<Manga> {
     abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, MangaWithRate>
 
     @Transaction
+    @Query(QUERY_PINNED_DATE_UPDATED_SORT)
+    abstract fun pinnedDateUpdated(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
     @Query(QUERY_RANDOM_PINNED)
-    abstract suspend fun queryRandomPinned() : MangaWithRate?
+    abstract suspend fun queryRandomPinned(): MangaWithRate?
 
     @Transaction
     @Query(QUERY_RANDOM_BY_STATUS)
-    abstract suspend fun queryRandomByStatus(status: RateStatus) : MangaWithRate?
+    abstract suspend fun queryRandomByStatus(status: RateStatus): MangaWithRate?
 
     companion object {
         private const val QUERY_BY_STATUS = """
@@ -165,6 +169,16 @@ abstract class MangaDao : EntityDao<Manga> {
             INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
             WHERE r.status = :status
             ORDER BY RANDOM() LIMIT 1
+        """
+
+        private const val QUERY_PINNED_DATE_UPDATED_SORT = """
+            SELECT * FROM mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON m.manga_shikimori_id = pin.target_id
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
         """
     }
 }

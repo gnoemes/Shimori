@@ -23,7 +23,7 @@ class MangaStore @Inject constructor(
             { remote, local -> remote.copy(id = local?.id ?: 0) }
     )
 
-    suspend fun update(mangas : List<Manga>) = runner {
+    suspend fun update(mangas: List<Manga>) = runner {
         syncer.sync(mangaDao.queryAll(), mangas, removeNotMatched = false)
     }
 
@@ -34,8 +34,8 @@ class MangaStore @Inject constructor(
     fun observeByStatusForPaging(
         status: RateStatus,
         sort: RateSort
-    ) : PagingSource<Int, MangaWithRate> {
-        return when(sort.sortOption) {
+    ): PagingSource<Int, MangaWithRate> {
+        return when (sort.sortOption) {
             RateSortOption.NAME -> {
                 if (!settings.isRomadziNaming) mangaDao.pagingNameRu(status, sort.isDescending)
                 else mangaDao.pagingName(status, sort.isDescending)
@@ -50,5 +50,7 @@ class MangaStore @Inject constructor(
             else -> throw IllegalArgumentException("$sort sort is not supported")
         }
     }
+
+    fun observePinned() = mangaDao.pinnedDateUpdated(true)
 
 }
