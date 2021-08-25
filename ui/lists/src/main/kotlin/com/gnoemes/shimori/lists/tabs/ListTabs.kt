@@ -2,17 +2,25 @@ package com.gnoemes.shimori.lists.tabs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.subInfoStyle
+import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.lists.tabs.page.AnimeListPage
 import com.gnoemes.shimori.lists.tabs.page.MangaListPage
 import com.gnoemes.shimori.lists.tabs.page.RanobeListPage
@@ -24,6 +32,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun ListTabs(
@@ -82,9 +91,27 @@ private fun ListTabs(
 
     val scope = rememberCoroutineScope()
 
+    val toolbarHeight = 120.dp
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
+    val toolbarOffsetHeightPx = remember { mutableStateOf(0f) }
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx.value + delta
+                toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
+
+                return Offset.Zero
+            }
+        }
+    }
+
     Scaffold(
             topBar = {
-                Column {
+                Column(
+                        modifier = Modifier.offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) }
+                ) {
                     toolbar()
                     sorts()
 
@@ -96,7 +123,7 @@ private fun ListTabs(
                                 scope.launch {
                                     pagerState.animateScrollToPage(page = page)
                                 }
-                            }
+                            },
                     )
                 }
 
@@ -105,8 +132,8 @@ private fun ListTabs(
     ) { paddingValues ->
         HorizontalPager(state = pagerState,
                 modifier = Modifier
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(horizontal = 16.dp)
+                    .nestedScroll(nestedScrollConnection)
         ) { page ->
             when (type) {
                 RateTargetType.ANIME -> AnimeListPage(pages[page])
@@ -129,7 +156,7 @@ private fun Tabs(
     CustomTabRow(
             modifier = Modifier.fillMaxWidth(),
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.primary,
+            backgroundColor = MaterialTheme.colors.toolbar,
             edgePadding = 0.dp,
             indicator = { tabPositions ->
                 Indicator(
