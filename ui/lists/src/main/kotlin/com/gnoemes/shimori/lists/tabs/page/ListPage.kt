@@ -2,6 +2,7 @@ package com.gnoemes.shimori.lists.tabs.page
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -128,7 +129,17 @@ internal fun PagingPage(
     list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
     onCoverLongCLick: (Long, RateTargetType) -> Unit
 ) {
-    Page {
+
+    //toolbar height + sorts + tabs + status bar + first item spacing
+    val top = 192.dp
+    Page(
+            contentPadding = rememberInsetsPaddingValues(
+                    insets = LocalWindowInsets.current.systemBars,
+                    applyTop = true,
+                    additionalTop = top,
+                    additionalBottom = 56.dp + 24.dp
+            )
+    ) {
         items(list) { item ->
             if (item != null) {
                 when (item) {
@@ -158,18 +169,13 @@ internal fun PagingPage(
 
 @Composable
 internal fun Page(
+    contentPadding: PaddingValues,
     items: LazyListScope.() -> Unit
 ) {
     LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = rememberInsetsPaddingValues(
-                    insets = LocalWindowInsets.current.systemBars,
-                    applyTop = false,
-                    additionalTop = 24.dp,
-                    additionalBottom = 56.dp + 24.dp
-            ),
-            modifier = Modifier
-                .fillMaxSize(),
+            contentPadding = contentPadding,
+            modifier = Modifier.fillMaxSize(),
             content = items
     )
 }

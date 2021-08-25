@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.AnimeListCard
 import com.gnoemes.shimori.common.compose.MangaListCard
@@ -16,6 +17,8 @@ import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 import com.gnoemes.shimori.model.rate.RateTargetType
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 internal fun ListPinnedPage() {
@@ -43,7 +46,14 @@ private fun ListPage(
     list: List<EntityWithRate<out ShimoriEntity>>,
     onCoverLongCLick: (Long, RateTargetType) -> Unit
 ) {
-    Page {
+    Page(
+            contentPadding = rememberInsetsPaddingValues(
+                    insets = LocalWindowInsets.current.systemBars,
+                    applyTop = false,
+                    additionalTop = 24.dp,
+                    additionalBottom = 56.dp + 24.dp
+            )
+    ) {
         items(list) { item ->
             when (item) {
                 is AnimeWithRate -> {
