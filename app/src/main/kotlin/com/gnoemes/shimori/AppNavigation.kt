@@ -28,12 +28,12 @@ internal sealed class RootScreen(val route: String) {
         override fun getStartDestination() = Screen.Explore
     }
 
-    object Forum : RootScreen("forumroot") {
-        override fun getStartDestination() = Screen.Forum
+    object Feed : RootScreen("feedroot") {
+        override fun getStartDestination() = Screen.Feed
     }
 
-    object Conversations : RootScreen("conversationsroot") {
-        override fun getStartDestination() = Screen.Conversations
+    object Talks : RootScreen("talksroot") {
+        override fun getStartDestination() = Screen.Talks
     }
 }
 
@@ -41,8 +41,8 @@ internal sealed class Screen(val route: String) {
     object Lists : Screen("lists")
 
     object Explore : Screen("explore")
-    object Forum : Screen("forum")
-    object Conversations : Screen("conversations")
+    object Feed : Screen("feed")
+    object Talks : Screen("talks")
 
     object Profile : Screen("profile")
     object Search : Screen("search")
@@ -90,8 +90,8 @@ private fun NavGraphBuilder.addForumRoot(
     navController: NavController
 ) {
     navigation(
-            route = RootScreen.Forum.route,
-            startDestination = Screen.Forum.route
+            route = RootScreen.Feed.route,
+            startDestination = Screen.Feed.route
     ) {
         addForum(navController)
     }
@@ -101,8 +101,8 @@ private fun NavGraphBuilder.addConversationsRoot(
     navController: NavController
 ) {
     navigation(
-            route = RootScreen.Conversations.route,
-            startDestination = Screen.Conversations.route
+            route = RootScreen.Talks.route,
+            startDestination = Screen.Talks.route
     ) {
         addConversations(navController)
     }
@@ -127,14 +127,14 @@ private fun NavGraphBuilder.addExplore(navController: NavController) {
 }
 
 private fun NavGraphBuilder.addForum(navController: NavController) {
-    composable(Screen.Forum.route) {
-        MockScreen(Screen.Forum.route)
+    composable(Screen.Feed.route) {
+        MockScreen(Screen.Feed.route)
     }
 }
 
 private fun NavGraphBuilder.addConversations(navController: NavController) {
-    composable(Screen.Conversations.route) {
-        MockScreen(Screen.Conversations.route)
+    composable(Screen.Talks.route) {
+        MockScreen(Screen.Talks.route)
     }
 }
 
