@@ -16,20 +16,20 @@ buildscript {
     }
 
     dependencies {
-        classpath libs.android.gradlePlugin
-        classpath libs.kotlin.gradlePlugin
+        classpath libs.android.pluginGradle
+        classpath libs.kotlin.pluginGradle
 
         classpath libs.kotlin.extensions
 
         classpath libs.google.gmsGoogleServices
         classpath libs.google.crashlyticsGradle
 
-        classpath libs.hilt.gradlePlugin
+        classpath libs.hilt.pluginGradle
     }
 }
 
 plugins {
-    id 'com.github.ben-manes.versions' version "0.39.0"
+    alias(libs.plugins.gradleDependencyUpdate)
 }
 
 
@@ -109,4 +109,21 @@ Properties readVersion(File versionFile) {
     if (!version['patch']) version['patch'] = "0"
     if (!version['build']) version['build'] = "0"
     return version
+}
+
+
+/**
+ * Update dependencyUpdates task to reject versions which are more 'unstable' than our
+ * current version.
+ */
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        def current = DependencyUpdates.versionToRelease(it.currentVersion)
+        // If we're using a SNAPSHOT, ignore since we must be doing so for a reason.
+        if (current == ReleaseType.SNAPSHOT) return true
+
+        // Otherwise we reject if the candidate is more 'unstable' than our version
+        def candidate = DependencyUpdates.versionToRelease(it.candidate.version)
+        return candidate.isLessStableThan(current)
+    }
 }
