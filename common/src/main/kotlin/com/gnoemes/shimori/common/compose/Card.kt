@@ -10,13 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.R
+import com.gnoemes.shimori.common.compose.theme.dimens
 import com.gnoemes.shimori.common.compose.theme.keyInfoStyle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun AnimeListCard(
     anime: AnimeWithRate,
@@ -25,15 +28,15 @@ fun AnimeListCard(
     Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(MaterialTheme.dimens.listPosterHeight)
     ) {
 
         Cover(
                 painter = rememberImagePainter(anime.entity.image),
                 onLongClick = onCoverLongClick,
                 modifier = Modifier
-                    .height(120.dp)
-                    .width(96.dp)
+                    .height(MaterialTheme.dimens.listPosterHeight)
+                    .width(MaterialTheme.dimens.listPosterWidth)
         )
 
         Spacer(Modifier.width(12.dp))
@@ -86,6 +89,7 @@ fun AnimeListCard(
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun MangaListCard(
     manga: MangaWithRate,
@@ -94,15 +98,15 @@ fun MangaListCard(
     Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(MaterialTheme.dimens.listPosterHeight)
     ) {
 
         Cover(
                 painter = rememberImagePainter(manga.entity.image),
                 onLongClick = onCoverLongClick,
                 modifier = Modifier
-                    .height(120.dp)
-                    .width(96.dp)
+                    .height(MaterialTheme.dimens.listPosterHeight)
+                    .width(MaterialTheme.dimens.listPosterWidth)
         )
 
         Spacer(Modifier.width(12.dp))
@@ -155,23 +159,25 @@ fun MangaListCard(
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RanobeListCard(
     ranobe: RanobeWithRate,
     onCoverLongClick : () -> Unit
 ) {
+
     Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(MaterialTheme.dimens.listPosterHeight)
     ) {
 
         Cover(
                 painter = rememberImagePainter(ranobe.entity.image),
                 onLongClick = onCoverLongClick,
                 modifier = Modifier
-                    .height(120.dp)
-                    .width(96.dp)
+                    .height(MaterialTheme.dimens.listPosterHeight)
+                    .width(MaterialTheme.dimens.listPosterWidth)
         )
 
         Spacer(Modifier.width(12.dp))
