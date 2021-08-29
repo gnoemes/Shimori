@@ -6,15 +6,19 @@ import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.common.BaseActivity
+import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriSettings
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
+import com.gnoemes.shimori.common.compose.theme.defaultDimensions
+import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
 import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
 import com.gnoemes.shimori.common.utils.ShimoriRateUtil
 import com.gnoemes.shimori.common.utils.ShimoriTextCreator
@@ -46,11 +50,16 @@ class MainActivity : BaseActivity() {
 
         setContent {
 
+            val dimensions =
+                if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
+                else sw360Dimensions
+
             CompositionLocalProvider(
                     LocalElevationOverlay provides null,
                     LocalShimoriRateUtil provides rateUtil,
                     LocalShimoriTextCreator provides textCreator,
-                    LocalShimoriSettings provides prefs
+                    LocalShimoriSettings provides prefs,
+                    LocalShimoriDimensions provides dimensions
             ) {
 
                 ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {
