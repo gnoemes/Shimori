@@ -1,9 +1,8 @@
 package com.gnoemes.shimori.main
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.BorderStroke
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -11,11 +10,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -29,9 +27,13 @@ import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.Scaffold
 import com.gnoemes.shimori.common.compose.material.ModalBottomSheetState
 import com.gnoemes.shimori.common.compose.material.ModalBottomSheetValue
-import com.gnoemes.shimori.common.compose.theme.*
+import com.gnoemes.shimori.common.compose.theme.caption
+import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.rate.ListType
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.ui.BottomNavigation
 import kotlinx.coroutines.launch
 
 
@@ -92,10 +94,10 @@ internal fun MainBoottomBar(
     val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
 
     MainBottomNavigation(
-            viewState,
+            viewState.listType,
             canShowListIcon = canShowBottomSheet,
-            selectedScreen = currentSelectedItem,
-            onScreenSelected = { selected ->
+            selectedNavigation = currentSelectedItem,
+            onNavigationSelected = { selected ->
 
                 navController.navigate(selected.route) {
                     launchSingleTop = true
@@ -107,7 +109,7 @@ internal fun MainBoottomBar(
                     }
                 }
             },
-            onScreenReSelected = { selected ->
+            onNavigationReselected = { selected ->
 
                 //show list type select bottom sheet if lists tab was reselected twice
                 if (canShowBottomSheet) {
@@ -116,155 +118,89 @@ internal fun MainBoottomBar(
                     navController.popBackStack(selected.getStartDestination().route, false)
                 }
             },
+            modifier = Modifier.fillMaxWidth()
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MainBottomNavigation(
-    viewState: MainViewState,
-    selectedScreen: RootScreen,
+    listType: ListType,
+    selectedNavigation: RootScreen,
     canShowListIcon: Boolean,
-    onScreenSelected: (RootScreen) -> Unit,
-    onScreenReSelected: (RootScreen) -> Unit
-) {
-    Column {
-        Surface(
-                color = MaterialTheme.colors.surface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-        ) {
-            Row(
-                    Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(),
-            ) {
-
-                RateSelectionNavigationItem(
-                        viewState.listType,
-                        canShowListIcon = canShowListIcon,
-                        selected = selectedScreen == RootScreen.Lists,
-                        onClick = { onScreenSelected(RootScreen.Lists) },
-                        onReselect = { onScreenReSelected(RootScreen.Lists) }
-                )
-
-                MainBottomNavigationItem(
-                        selected = selectedScreen == RootScreen.Explore,
-                        stringResource(R.string.explore_title),
-                        painter = painterResource(R.drawable.ic_explore),
-                        onClick = {
-                            val screen = RootScreen.Explore
-                            if (selectedScreen == screen) onScreenReSelected(screen)
-                            else onScreenSelected(screen)
-                        }
-                )
-
-                MainBottomNavigationItem(
-                        selected = selectedScreen == RootScreen.Forum,
-                        stringResource(R.string.forum_title),
-                        painter = painterResource(R.drawable.ic_feed),
-                        onClick = {
-                            val screen = RootScreen.Forum
-                            if (selectedScreen == screen) onScreenReSelected(screen)
-                            else onScreenSelected(screen)
-                        }
-                )
-
-                MainBottomNavigationItem(
-                        selected = selectedScreen == RootScreen.Conversations,
-                        stringResource(R.string.conversations_title),
-                        painter = painterResource(R.drawable.ic_conversation),
-                        onClick = {
-                            val screen = RootScreen.Conversations
-                            if (selectedScreen == screen) onScreenReSelected(screen)
-                            else onScreenSelected(screen)
-                        }
-                )
-            }
-
-        }
-
-        Spacer(
-                Modifier
-                    .navigationBarsHeight()
-                    .fillMaxWidth()
-                    .background(Color.Transparent)
-        )
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun RowScope.RateSelectionNavigationItem(
-    selectedListType: ListType,
-    selected: Boolean,
-    canShowListIcon: Boolean,
-    onClick: () -> Unit,
-    onReselect: () -> Unit
+    onNavigationSelected: (RootScreen) -> Unit,
+    onNavigationReselected: (RootScreen) -> Unit,
+    modifier: Modifier
 ) {
 
-    val text = LocalShimoriRateUtil.current.listTypeName(selectedListType)
-    val contentColor =
-        if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary
-    val buttonColors = ButtonDefaults.buttonColors(
-            backgroundColor = if (selected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.button
-    )
-
-    TextButton(
-            colors = buttonColors,
-            shape = RoundedCornerShape(32.dp),
-            onClick = if (selected) onReselect else onClick,
-            border = BorderStroke(1.dp, MaterialTheme.colors.alpha),
-            modifier = Modifier
-                .padding(start = 16.dp, top = 12.dp, end = 12.dp, bottom = 12.dp)
-                .height(32.dp)
-                .widthIn(min = 152.dp, max = 400.dp)
-                .weight(1f),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+    BottomNavigation(
+            backgroundColor = MaterialTheme.colors.surface,
+            contentColor = MaterialTheme.colors.surface,
+            contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars),
+            modifier = modifier
     ) {
-        Icon(
-                painter = painterResource(id = LocalShimoriRateUtil.current.listTypeIcon(selectedListType)),
-                contentDescription = text,
-                tint = contentColor,
-                modifier = Modifier.size(16.dp)
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Text(
-                text = text,
-                style = MaterialTheme.typography.subInfoStyle,
-                color = contentColor,
-                modifier = Modifier.weight(1f)
-        )
-
-        if (selected && canShowListIcon) {
-            Icon(
-                    painter = painterResource(R.drawable.ic_unfold),
-                    contentDescription = stringResource(R.string.lists_title),
-                    tint = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .wrapContentWidth(Alignment.End)
+        MainNavigationItems.fastForEach { item ->
+            val selected = selectedNavigation == item.screen
+            BottomNavigationItem(
+                    icon = {
+                        MainNavigationItemIcon(item, selected, listType)
+                    },
+                    label = {
+                        EndContentBadgedBox(badge = {
+                            if (item is NavigationItem.ListTypeItem && canShowListIcon) {
+                                Icon(
+                                        painter = painterResource(id = R.drawable.ic_chevron_up),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(12.dp),
+                                        tint = MaterialTheme.colors.secondary
+                                )
+                            }
+                        }) {
+                            MainNavigationItemLabel(item, selected, listType)
+                        }
+                    },
+                    selected = selected,
+                    selectedContentColor = MaterialTheme.colors.secondary,
+                    unselectedContentColor = MaterialTheme.colors.caption,
+                    onClick = {
+                        if (selected) onNavigationReselected(item.screen)
+                        else onNavigationSelected(item.screen)
+                    }
             )
         }
     }
 }
 
 @Composable
-private fun MainBottomNavigationItem(
-    selected: Boolean,
-    contentDescription: String,
-    painter: Painter,
-    onClick: () -> Unit
-) {
-    ShimoriIconButton(onClick = onClick,
-            selected = selected,
+private fun MainNavigationItemIcon(item: NavigationItem, selected: Boolean, listType: ListType) {
+    val painter = when (item) {
+        is NavigationItem.ListTypeItem -> painterResource(id = item.iconResId(listType))
+        is NavigationItem.StaticItem -> painterResource(id = item.iconResId)
+    }
+
+    val contentDescription = when (item) {
+        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
+        is NavigationItem.StaticItem -> stringResource(id = item.contentDescriptionResId)
+    }
+
+
+    Icon(
             painter = painter,
-            modifier = Modifier
-                .padding(12.dp)
-                .size(32.dp),
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+    )
+}
+
+@Composable
+private fun MainNavigationItemLabel(item: NavigationItem, selected: Boolean, listType: ListType) {
+    val text = when (item) {
+        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
+        is NavigationItem.StaticItem -> stringResource(id = item.labelResId)
+    }
+
+    Text(
+            text = text,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier,
     )
 }
 
@@ -390,11 +326,11 @@ private fun NavController.currentScreenAsState(): State<RootScreen> {
                 destination.hierarchy.any { it.route == RootScreen.Explore.route } -> {
                     selectedItem.value = RootScreen.Explore
                 }
-                destination.hierarchy.any { it.route == RootScreen.Forum.route } -> {
-                    selectedItem.value = RootScreen.Forum
+                destination.hierarchy.any { it.route == RootScreen.Feed.route } -> {
+                    selectedItem.value = RootScreen.Feed
                 }
-                destination.hierarchy.any { it.route == RootScreen.Conversations.route } -> {
-                    selectedItem.value = RootScreen.Conversations
+                destination.hierarchy.any { it.route == RootScreen.Talks.route } -> {
+                    selectedItem.value = RootScreen.Talks
                 }
             }
         }
@@ -427,3 +363,54 @@ private fun NavController.canShowListTypeBottomSheetAsState(): State<Boolean> {
 
     return canShow
 }
+
+private sealed class NavigationItem(
+    val screen: RootScreen,
+) {
+    class ListTypeItem : NavigationItem(RootScreen.Lists) {
+        @StringRes
+         fun labelResId(type: ListType): Int =  when (type) {
+            ListType.Anime -> R.string.anime
+            ListType.Manga -> R.string.manga
+            ListType.Ranobe -> R.string.ranobe
+            else -> R.string.pinned
+        }
+
+        @DrawableRes
+        fun iconResId(type: ListType): Int = when (type) {
+            ListType.Anime -> R.drawable.ic_anime
+            ListType.Manga -> R.drawable.ic_manga
+            ListType.Ranobe -> R.drawable.ic_ranobe
+            else -> R.drawable.ic_pin
+        }
+    }
+
+    class StaticItem(
+        screen: RootScreen,
+        @StringRes val labelResId: Int,
+        @StringRes val contentDescriptionResId: Int,
+        @DrawableRes val iconResId: Int,
+    ) : NavigationItem(screen)
+}
+
+private val MainNavigationItems = listOf(
+        NavigationItem.ListTypeItem(),
+        NavigationItem.StaticItem(
+                screen = RootScreen.Explore,
+                labelResId = R.string.explore_title,
+                contentDescriptionResId = R.string.explore_title,
+                iconResId = R.drawable.ic_explore,
+        ),
+        NavigationItem.StaticItem(
+                screen = RootScreen.Feed,
+                labelResId = R.string.feed_title,
+                contentDescriptionResId = R.string.feed_title,
+                iconResId = R.drawable.ic_feed,
+        ),
+        NavigationItem.StaticItem(
+                screen = RootScreen.Talks,
+                labelResId = R.string.talks_title,
+                contentDescriptionResId = R.string.talks_title,
+                iconResId = R.drawable.ic_conversation,
+        ),
+)
