@@ -386,9 +386,9 @@ private fun SortOptions(
                 .background(MaterialTheme.colors.toolbar)
                 .fillMaxWidth()
                 .height(56.dp)
-                .padding(vertical = 12.dp)
                 .horizontalScroll(rememberScrollState())
                 .animateContentSize(),
+            verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(16.dp))
         sortsOptions.forEach { option ->
@@ -421,8 +421,9 @@ private fun SortChip(
     ShimoriButton(
             selected = selected,
             onClick = if (selected) onReselect else onClick,
-            modifier = Modifier.heightIn(32.dp, 56.dp),
+            modifier = Modifier.height(IntrinsicSize.Min),
             text = text,
-            painter = painter
+            painter = painter,
+            iconSize = 16.dp
     )
 }
