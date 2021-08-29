@@ -27,6 +27,7 @@ dependencies {
 
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.insets
+    implementation libs.accompanist.insetsui
 
     implementation libs.coil.compose
 
