@@ -1,7 +1,5 @@
 package com.gnoemes.shimori.common.compose
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
@@ -37,9 +35,6 @@ fun RootScreenToolbar(
                     applyEnd = true
             ),
             elevation = 0.dp,
-            modifier = Modifier
-                .height(64.dp)
-                .fillMaxWidth(),
             title = {
                 Text(
                         text = title,
