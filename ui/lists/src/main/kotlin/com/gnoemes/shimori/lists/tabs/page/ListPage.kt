@@ -130,8 +130,8 @@ internal fun PagingPage(
     onCoverLongCLick: (Long, RateTargetType) -> Unit
 ) {
 
-    //toolbar height + sorts + tabs + status bar + first item spacing
-    val top = 192.dp
+    //toolbar height + sorts + tabs + first item spacing
+    val top = 178.dp
     Page(
             contentPadding = rememberInsetsPaddingValues(
                     insets = LocalWindowInsets.current.systemBars,
