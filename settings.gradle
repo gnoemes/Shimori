@@ -12,6 +12,7 @@ include ':domain'
 include ':model'
 
 include ':ui:lists'
+include ':ui:lists-change'
 
 include ':app'
 

@@ -2,14 +2,12 @@ package com.gnoemes.shimori.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,22 +17,21 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.plusAssign
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
-import com.gnoemes.shimori.common.compose.ChevronIcon
 import com.gnoemes.shimori.common.compose.EndContentBadgedBox
-import com.gnoemes.shimori.common.compose.EnlargedButton
-import com.gnoemes.shimori.common.compose.Scaffold
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.BottomNavigation
-import kotlinx.coroutines.launch
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 
 
 @Composable
@@ -42,52 +39,47 @@ internal fun Main() {
     Main(viewModel = hiltViewModel())
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 @Composable
 internal fun Main(
     viewModel: MainViewModel
 ) {
-    val navController = rememberNavController()
+
+    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    val navController = rememberNavController().apply {
+        navigatorProvider += bottomSheetNavigator
+    }
+
+
     val viewState by viewModel.state.collectAsState()
 
-    val submit = { action: MainAction -> viewModel.submitAction(action) }
+    bottomSheetNavigator.popBackStack()
 
-    val sheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-
-    val coroutineScope = rememberCoroutineScope()
-
-    Scaffold(
-            bottomBar = {
-                MainBoottomBar(
-                        viewState = viewState,
-                        navController = navController,
-                        showBottomSheet = { coroutineScope.launch { sheetState.show() } }
-                )
-            }
+    ModalBottomSheetLayout(
+            bottomSheetNavigator = bottomSheetNavigator,
+            scrimColor = MaterialTheme.colors.toolbar,
+            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
-        Box(Modifier.fillMaxSize()) {
+        com.google.accompanist.insets.ui.Scaffold(
+                bottomBar = {
+                    MainBottomBar(
+                            viewState = viewState,
+                            navController = navController,
+                            onListsChange = { navController.navigate(Screen.ListsChangeSheet.route) }
+                    )
+                }
+        ) {
             AppNavigation(navController = navController)
+
         }
     }
-
-    val onBottomSheetClick: (MainAction) -> Unit = {
-        coroutineScope.launch { sheetState.hide() }
-        submit(it)
-    }
-
-    RateTypeSelectBottomSheet(
-            sheetState = sheetState,
-            action = onBottomSheetClick,
-            selectedListType = viewState.listType
-    )
 }
 
 @Composable
-internal fun MainBoottomBar(
+internal fun MainBottomBar(
     viewState: MainViewState,
     navController: NavController,
-    showBottomSheet: () -> Unit
+    onListsChange: () -> Unit
 ) {
     val currentSelectedItem by navController.currentScreenAsState()
 
@@ -113,7 +105,7 @@ internal fun MainBoottomBar(
 
                 //show list type select bottom sheet if lists tab was reselected twice
                 if (canShowBottomSheet) {
-                    showBottomSheet()
+                    onListsChange()
                 } else {
                     navController.popBackStack(selected.getStartDestination().route, false)
                 }
@@ -204,110 +196,6 @@ private fun MainNavigationItemLabel(item: NavigationItem, selected: Boolean, lis
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun RateTypeSelectBottomSheet(
-    sheetState: ModalBottomSheetState,
-    action: (MainAction) -> Unit,
-    selectedListType: ListType
-) {
-
-    ModalBottomSheetLayout(
-            sheetContent = {
-                val thumbColor = MaterialTheme.colors.caption
-                Canvas(modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .height(4.dp)
-                    .width(16.dp)
-                    .align(Alignment.CenterHorizontally)
-                ) {
-
-                    drawRoundRect(
-                            color = thumbColor,
-                            cornerRadius = CornerRadius(x = 16f, y = 16f)
-                    )
-                }
-
-                Text(
-                        text = stringResource(id = R.string.titles),
-                        style = MaterialTheme.typography.h2,
-                        color = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
-                            .fillMaxWidth()
-                )
-
-                EnlargedButton(
-                        selected = false,
-                        onClick = { action(MainAction.Random) },
-                        painter = painterResource(R.drawable.ic_random),
-                        text = stringResource(R.string.open_random_title_from_list),
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 12.dp, end = 12.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                ) {
-                    ChevronIcon()
-                }
-
-                EnlargedButton(
-                        selected = selectedListType == ListType.Pinned,
-                        onClick = { action(MainAction.ChangeListType(ListType.Pinned)) },
-                        painter = painterResource(R.drawable.ic_pin),
-                        text = stringResource(R.string.pinned),
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 12.dp, end = 12.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                )
-
-                EnlargedButton(
-                        selected = selectedListType == ListType.Anime,
-                        onClick = { action(MainAction.ChangeListType(ListType.Anime)) },
-                        painter = painterResource(R.drawable.ic_anime),
-                        text = stringResource(R.string.anime),
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 12.dp, end = 12.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                )
-
-
-                EnlargedButton(
-                        selected = selectedListType == ListType.Manga,
-                        onClick = { action(MainAction.ChangeListType(ListType.Manga)) },
-                        painter = painterResource(R.drawable.ic_manga),
-                        text = stringResource(R.string.manga),
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 12.dp, end = 12.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                )
-
-                EnlargedButton(
-                        selected = selectedListType == ListType.Ranobe,
-                        onClick = { action(MainAction.ChangeListType(ListType.Ranobe)) },
-                        painter = painterResource(R.drawable.ic_ranobe),
-                        text = stringResource(R.string.ranobe),
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 12.dp, end = 12.dp, bottom = 24.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.navigationBarsHeight())
-
-            },
-            scrimColor = MaterialTheme.colors.toolbar,
-            sheetState = sheetState,
-            sheetElevation = 8.dp,
-            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-    ) {
-
-    }
-}
-
-
 /**
  * Adds an [NavController.OnDestinationChangedListener] to this [NavController] and updates the
  * returned [State] which is updated as the destination changes.
@@ -369,7 +257,7 @@ private sealed class NavigationItem(
 ) {
     class ListTypeItem : NavigationItem(RootScreen.Lists) {
         @StringRes
-         fun labelResId(type: ListType): Int =  when (type) {
+        fun labelResId(type: ListType): Int = when (type) {
             ListType.Anime -> R.string.anime
             ListType.Manga -> R.string.manga
             ListType.Ranobe -> R.string.ranobe

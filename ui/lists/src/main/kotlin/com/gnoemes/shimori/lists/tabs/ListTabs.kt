@@ -26,6 +26,7 @@ import com.gnoemes.shimori.lists.tabs.page.MangaListPage
 import com.gnoemes.shimori.lists.tabs.page.RanobeListPage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
+import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState

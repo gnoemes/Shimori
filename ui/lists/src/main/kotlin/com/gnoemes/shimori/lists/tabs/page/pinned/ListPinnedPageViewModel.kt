@@ -1,11 +1,11 @@
 package com.gnoemes.shimori.lists.tabs.page.pinned
 
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
 import com.gnoemes.shimori.domain.interactors.ToggleListPin
 import com.gnoemes.shimori.domain.observers.ObservePinnedTitles
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
-import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.lists.tabs.page.BaseListPageViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
