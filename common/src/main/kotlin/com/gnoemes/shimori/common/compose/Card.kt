@@ -135,6 +135,8 @@ fun ListCard(
 
             description()
 
+            Spacer(Modifier.height(8.dp))
+
             Row {
                 if (score != null && score > 0) {
                     Icon(
