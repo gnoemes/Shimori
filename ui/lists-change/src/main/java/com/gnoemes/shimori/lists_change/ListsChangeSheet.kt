@@ -17,7 +17,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.ChevronIcon
 import com.gnoemes.shimori.common.compose.EnlargedButton
-import com.gnoemes.shimori.common.compose.NavigationBarColorSwitcher
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
@@ -40,10 +39,6 @@ private fun ListsChange(
         viewModel.submitAction(action)
         navigateUp()
     }
-
-    NavigationBarColorSwitcher(
-            newColor = MaterialTheme.colors.surface
-    )
 
     ListsChange(
             type = type,

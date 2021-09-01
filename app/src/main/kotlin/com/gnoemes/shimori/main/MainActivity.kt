@@ -66,7 +66,7 @@ class MainActivity : BaseActivity() {
 
                     val systemUiController = rememberSystemUiController()
                     val isLightTheme = MaterialTheme.colors.isLight
-                    val navigationColor = MaterialTheme.colors.surface.copy(alpha = 0.01f)
+                    val navigationColor = MaterialTheme.colors.surface
                     val statusBarColor = MaterialTheme.colors.primary
 
                     SideEffect {
