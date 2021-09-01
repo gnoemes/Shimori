@@ -17,6 +17,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.ChevronIcon
 import com.gnoemes.shimori.common.compose.EnlargedButton
+import com.gnoemes.shimori.common.compose.NavigationBarColorSwitcher
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
@@ -35,10 +36,14 @@ private fun ListsChange(
 ) {
     val type = viewModel.currentType
 
-    val submit = {
-        action: ListsChangeAction -> viewModel.submitAction(action)
+    val submit = { action: ListsChangeAction ->
+        viewModel.submitAction(action)
         navigateUp()
     }
+
+    NavigationBarColorSwitcher(
+            newColor = MaterialTheme.colors.surface
+    )
 
     ListsChange(
             type = type,
@@ -53,7 +58,8 @@ private fun ListsChange(
     onOpenRandomTitleClick: () -> Unit,
     onTypeSelected: (ListType) -> Unit
 ) {
-    Column() {
+
+    Column {
         val thumbColor = MaterialTheme.colors.caption
         Canvas(modifier = Modifier
             .padding(vertical = 4.dp)
@@ -103,7 +109,7 @@ private fun ListsChange(
             )
         }
 
-        Spacer(modifier = Modifier.navigationBarsHeight())
+        Spacer(modifier = Modifier.navigationBarsHeight(additional = 8.dp))
     }
 }
 
