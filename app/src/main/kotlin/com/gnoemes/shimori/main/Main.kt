@@ -2,6 +2,8 @@ package com.gnoemes.shimori.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,8 +28,7 @@ import com.gnoemes.shimori.common.compose.EndContentBadgedBox
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.rate.ListType
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.ui.BottomNavigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
@@ -85,33 +86,37 @@ internal fun MainBottomBar(
 
     val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
 
-    MainBottomNavigation(
-            viewState.listType,
-            canShowListIcon = canShowBottomSheet,
-            selectedNavigation = currentSelectedItem,
-            onNavigationSelected = { selected ->
+    Column {
+        MainBottomNavigation(
+                viewState.listType,
+                canShowListIcon = canShowBottomSheet,
+                selectedNavigation = currentSelectedItem,
+                onNavigationSelected = { selected ->
 
-                navController.navigate(selected.route) {
-                    launchSingleTop = true
-                    restoreState = true
+                    navController.navigate(selected.route) {
+                        launchSingleTop = true
+                        restoreState = true
 
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
 
+                        }
                     }
-                }
-            },
-            onNavigationReselected = { selected ->
+                },
+                onNavigationReselected = { selected ->
 
-                //show list type select bottom sheet if lists tab was reselected twice
-                if (canShowBottomSheet) {
-                    onListsChange()
-                } else {
-                    navController.popBackStack(selected.getStartDestination().route, false)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-    )
+                    //show list type select bottom sheet if lists tab was reselected twice
+                    if (canShowBottomSheet) {
+                        onListsChange()
+                    } else {
+                        navController.popBackStack(selected.getStartDestination().route, false)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.navigationBarsHeight())
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -128,7 +133,6 @@ internal fun MainBottomNavigation(
     BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.surface,
-            contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars),
             modifier = modifier
     ) {
         MainNavigationItems.fastForEach { item ->
