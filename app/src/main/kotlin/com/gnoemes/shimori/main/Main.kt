@@ -23,10 +23,10 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
-import com.gnoemes.shimori.common.compose.*
+import com.gnoemes.shimori.common.compose.ChevronIcon
+import com.gnoemes.shimori.common.compose.EndContentBadgedBox
+import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.Scaffold
-import com.gnoemes.shimori.common.compose.material.ModalBottomSheetState
-import com.gnoemes.shimori.common.compose.material.ModalBottomSheetValue
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.rate.ListType
@@ -53,7 +53,7 @@ internal fun Main(
     val submit = { action: MainAction -> viewModel.submitAction(action) }
 
     val sheetState =
-        rememberSkipHalfExpandModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -212,7 +212,7 @@ private fun RateTypeSelectBottomSheet(
     selectedListType: ListType
 ) {
 
-    SkipHalfExpandHeightModalBottomSheetLayout(
+    ModalBottomSheetLayout(
             sheetContent = {
                 val thumbColor = MaterialTheme.colors.caption
                 Canvas(modifier = Modifier
