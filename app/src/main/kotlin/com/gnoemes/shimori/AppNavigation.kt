@@ -42,7 +42,9 @@ internal sealed class RootScreen(val route: String) {
     }
 }
 
-internal sealed class Screen(val route: String) {
+internal sealed class Screen(private val route: String) {
+    fun createRoute(root: RootScreen) = "${root.route}/$route"
+
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
 
@@ -65,8 +67,8 @@ internal fun AppNavigation(
     ) {
         addListsRoot(navController)
         addExploreRoot(navController)
-        addForumRoot(navController)
-        addConversationsRoot(navController)
+        addFeedRoot(navController)
+        addTalksRoot(navController)
     }
 }
 
@@ -75,11 +77,11 @@ private fun NavGraphBuilder.addListsRoot(
 ) {
     navigation(
             route = RootScreen.Lists.route,
-            startDestination = Screen.Lists.route
+            startDestination = Screen.Lists.createRoute(RootScreen.Lists)
     ) {
-        addLists(navController)
-        addExplore(navController)
-        addListChangeBottomSheet(navController)
+        addLists(navController, RootScreen.Lists)
+        addExplore(navController, RootScreen.Lists)
+        addListChangeBottomSheet(navController, RootScreen.Lists)
     }
 }
 
@@ -88,67 +90,77 @@ private fun NavGraphBuilder.addExploreRoot(
 ) {
     navigation(
             route = RootScreen.Explore.route,
-            startDestination = Screen.Explore.route
+            startDestination = Screen.Explore.createRoute(RootScreen.Explore)
     ) {
-        addExplore(navController)
+        addExplore(navController, RootScreen.Explore)
     }
 }
 
-private fun NavGraphBuilder.addForumRoot(
+private fun NavGraphBuilder.addFeedRoot(
     navController: NavController
 ) {
     navigation(
             route = RootScreen.Feed.route,
-            startDestination = Screen.Feed.route
+            startDestination = Screen.Feed.createRoute(RootScreen.Feed)
     ) {
-        addForum(navController)
+        addFeed(navController, RootScreen.Feed)
     }
 }
 
-private fun NavGraphBuilder.addConversationsRoot(
+private fun NavGraphBuilder.addTalksRoot(
     navController: NavController
 ) {
     navigation(
             route = RootScreen.Talks.route,
-            startDestination = Screen.Talks.route
+            startDestination = Screen.Talks.createRoute(RootScreen.Talks)
     ) {
-        addConversations(navController)
+        addTalks(navController, RootScreen.Talks)
     }
 }
 
-
-private fun NavGraphBuilder.addLists(navController: NavController) {
+private fun NavGraphBuilder.addLists(navController: NavController, root: RootScreen) {
     composable(
-            Screen.Lists.route,
+            Screen.Lists.createRoute(root),
     ) {
         Lists(
-                openUser = { navController.navigate(Screen.Explore.route) },
-                openSearch = { navController.navigate(Screen.Search.route) },
+                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
+                openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
         )
     }
 }
 
-private fun NavGraphBuilder.addExplore(navController: NavController) {
-    composable(Screen.Explore.route) {
-        MockScreen(Screen.Explore.route)
+private fun NavGraphBuilder.addExplore(
+    navController: NavController,
+    root: RootScreen
+) {
+    composable(Screen.Explore.createRoute(root)) {
+        MockScreen(Screen.Explore.createRoute(root))
     }
 }
 
-private fun NavGraphBuilder.addForum(navController: NavController) {
-    composable(Screen.Feed.route) {
-        MockScreen(Screen.Feed.route)
+private fun NavGraphBuilder.addFeed(
+    navController: NavController,
+    root: RootScreen
+) {
+    composable(Screen.Feed.createRoute(root)) {
+        MockScreen(Screen.Feed.createRoute(root))
     }
 }
 
-private fun NavGraphBuilder.addConversations(navController: NavController) {
-    composable(Screen.Talks.route) {
-        MockScreen(Screen.Talks.route)
+private fun NavGraphBuilder.addTalks(
+    navController: NavController,
+    root: RootScreen
+) {
+    composable(Screen.Talks.createRoute(root)) {
+        MockScreen(Screen.Talks.createRoute(root))
     }
 }
 
-
-private fun NavGraphBuilder.addListChangeBottomSheet(navController: NavController) {
-    bottomSheet(Screen.ListsChangeSheet.route) {
+private fun NavGraphBuilder.addListChangeBottomSheet(
+    navController: NavController,
+    root: RootScreen
+) {
+    bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
         ListsChangeSheet(
                 navigateUp = { navController.navigateUp() }
         )
