@@ -32,19 +32,22 @@ private fun ListPinnedPage(viewModel: ListPinnedPageViewModel) {
 
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
-    val onCoverLongCLick =
-        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
-
     ListPage(
             list = viewState.list,
-            onCoverLongCLick = onCoverLongCLick
+            onCoverLongCLick = { id, type -> submit(ListPageAction.TogglePin(id, type)) },
+            onEditClick = { id, type -> submit(ListPageAction.Edit(id, type)) },
+            onIncrementClick = { id, type -> TODO("add increment") },
+            onIncrementHold = { id, type -> TODO("add increment tool") },
     )
 }
 
 @Composable
 private fun ListPage(
     list: List<EntityWithRate<out ShimoriEntity>>,
-    onCoverLongCLick: (Long, RateTargetType) -> Unit
+    onCoverLongCLick: (Long, RateTargetType) -> Unit,
+    onEditClick: (Long, RateTargetType) -> Unit,
+    onIncrementClick: (Long, RateTargetType) -> Unit,
+    onIncrementHold: (Long, RateTargetType) -> Unit,
 ) {
     Page(
             contentPadding = rememberInsetsPaddingValues(
@@ -57,21 +60,39 @@ private fun ListPage(
         items(list) { item ->
             when (item) {
                 is AnimeWithRate -> {
+                    val shikimoriId = item.entity.shikimoriId
+                    val type = RateTargetType.ANIME
+
                     AnimeListCard(
                             anime = item,
-                            onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.ANIME) } }
+                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
+                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
+                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
+                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
                     )
                 }
                 is MangaWithRate -> {
+                    val shikimoriId = item.entity.shikimoriId
+                    val type = RateTargetType.MANGA
+
                     MangaListCard(
                             manga = item,
-                            onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.MANGA) } }
+                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
+                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
+                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
+                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
                     )
                 }
                 is RanobeWithRate -> {
+                    val shikimoriId = item.entity.shikimoriId
+                    val type = RateTargetType.RANOBE
+
                     RanobeListCard(
                             ranobe = item,
-                            onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.RANOBE) } }
+                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
+                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
+                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
+                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
                     )
                 }
             }

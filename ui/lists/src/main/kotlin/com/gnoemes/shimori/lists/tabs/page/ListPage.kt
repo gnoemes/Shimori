@@ -90,10 +90,11 @@ private fun AnimeListStatusPage(
 
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
-    val onCoverLongCLick =
-        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
-
-    PagingPage(list, onCoverLongCLick)
+    ListStatusPage(
+            type = RateTargetType.ANIME,
+            list = list,
+            submit = submit
+    )
 }
 
 @Composable
@@ -104,10 +105,11 @@ private fun MangaListStatusPage(
 
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
-    val onCoverLongCLick =
-        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
-
-    PagingPage(list, onCoverLongCLick)
+    ListStatusPage(
+            type = RateTargetType.MANGA,
+            list = list,
+            submit = submit
+    )
 }
 
 @Composable
@@ -118,16 +120,35 @@ private fun RanobeListStatusPage(
 
     val submit = { action: ListPageAction -> viewModel.submitAction(action) }
 
-    val onCoverLongCLick =
-        { id: Long, type: RateTargetType -> submit(ListPageAction.TogglePin(id, type)) }
+    ListStatusPage(
+            type = RateTargetType.RANOBE,
+            list = list,
+            submit = submit
+    )
+}
 
-    PagingPage(list, onCoverLongCLick)
+@Composable
+private fun ListStatusPage(
+    type: RateTargetType,
+    submit: (ListPageAction) -> Unit,
+    list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>
+) {
+    PagingPage(
+            list = list,
+            onCoverLongCLick = { submit(ListPageAction.TogglePin(it, type)) },
+            onEditClick = { submit(ListPageAction.Edit(it, type)) },
+            onIncrementClick = { TODO("add increment") },
+            onIncrementHold = { TODO("add increment tool") },
+    )
 }
 
 @Composable
 internal fun PagingPage(
     list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
-    onCoverLongCLick: (Long, RateTargetType) -> Unit
+    onCoverLongCLick: (Long) -> Unit,
+    onEditClick: (Long) -> Unit,
+    onIncrementClick: (Long) -> Unit,
+    onIncrementHold: (Long) -> Unit,
 ) {
 
     //toolbar height + sorts + tabs + first item spacing
@@ -144,21 +165,36 @@ internal fun PagingPage(
             if (item != null) {
                 when (item) {
                     is AnimeWithRate -> {
+                        val shikimoriId = item.entity.shikimoriId
+
                         AnimeListCard(
                                 anime = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.ANIME) } }
+                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
+                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
+                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
+                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
                         )
                     }
                     is MangaWithRate -> {
+                        val shikimoriId = item.entity.shikimoriId
+
                         MangaListCard(
                                 manga = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.MANGA) } }
+                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
+                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
+                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
+                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
                         )
                     }
                     is RanobeWithRate -> {
+                        val shikimoriId = item.entity.shikimoriId
+
                         RanobeListCard(
                                 ranobe = item,
-                                onCoverLongClick = { item.entity.shikimoriId?.let { onCoverLongCLick(it, RateTargetType.RANOBE) } }
+                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
+                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
+                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
+                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
                         )
                     }
                 }

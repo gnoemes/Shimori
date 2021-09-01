@@ -25,7 +25,10 @@ import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 @Composable
 fun AnimeListCard(
     anime: AnimeWithRate,
-    onCoverLongClick: () -> Unit
+    onCoverLongClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onIncrementClick: () -> Unit,
+    onIncrementHold: () -> Unit,
 ) {
     ListCard(
             image = anime.entity.image,
@@ -42,7 +45,10 @@ fun AnimeListCard(
                     anime.rate?.episodes ?: 0,
                     anime.entity.episodesOrUnknown
             ),
-            onCoverLongClick = onCoverLongClick
+            onCoverLongClick = onCoverLongClick,
+            onEditClick = onEditClick,
+            onIncrementClick = onIncrementClick,
+            onIncrementHold = onIncrementHold
     )
 }
 
@@ -50,7 +56,10 @@ fun AnimeListCard(
 @Composable
 fun MangaListCard(
     manga: MangaWithRate,
-    onCoverLongClick: () -> Unit
+    onCoverLongClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onIncrementClick: () -> Unit,
+    onIncrementHold: () -> Unit,
 ) {
     ListCard(
             image = manga.entity.image,
@@ -67,7 +76,10 @@ fun MangaListCard(
                     manga.rate?.chapters ?: 0,
                     manga.entity.chaptersOrUnknown
             ),
-            onCoverLongClick = onCoverLongClick
+            onCoverLongClick = onCoverLongClick,
+            onEditClick = onEditClick,
+            onIncrementClick = onIncrementClick,
+            onIncrementHold = onIncrementHold
     )
 }
 
@@ -75,7 +87,10 @@ fun MangaListCard(
 @Composable
 fun RanobeListCard(
     ranobe: RanobeWithRate,
-    onCoverLongClick: () -> Unit
+    onCoverLongClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onIncrementClick: () -> Unit,
+    onIncrementHold: () -> Unit,
 ) {
     ListCard(
             image = ranobe.entity.image,
@@ -92,7 +107,10 @@ fun RanobeListCard(
                     ranobe.rate?.chapters ?: 0,
                     ranobe.entity.chaptersOrUnknown
             ),
-            onCoverLongClick = onCoverLongClick
+            onCoverLongClick = onCoverLongClick,
+            onEditClick = onEditClick,
+            onIncrementClick = onIncrementClick,
+            onIncrementHold = onIncrementHold
     )
 }
 
@@ -105,6 +123,9 @@ fun ListCard(
     score: Int?,
     progress: String,
     onCoverLongClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onIncrementClick: () -> Unit,
+    onIncrementHold: () -> Unit,
 ) {
 
     Row(
@@ -121,7 +142,7 @@ fun ListCard(
                     .width(MaterialTheme.dimens.listPosterWidth)
         )
 
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(16.dp))
 
         Column {
             Text(
@@ -159,6 +180,28 @@ fun ListCard(
                         text = progress,
                         style = MaterialTheme.typography.keyInfoStyle,
                         color = MaterialTheme.colors.secondary
+                )
+            }
+
+            Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.fillMaxSize()
+            ) {
+                ShimoriIconButton(
+                        selected = false,
+                        painter = painterResource(R.drawable.ic_edit),
+                        onClick = onEditClick,
+                        modifier = Modifier
+                            .size(32.dp),
+                )
+
+                ShimoriIconButton(
+                        selected = false,
+                        painter = painterResource(R.drawable.ic_add_one),
+                        onClick = onIncrementClick,
+                        modifier = Modifier
+                            .size(32.dp)
                 )
             }
         }
