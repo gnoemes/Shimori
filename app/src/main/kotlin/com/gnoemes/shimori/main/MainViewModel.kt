@@ -3,14 +3,12 @@ package com.gnoemes.shimori.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.entities.InvokeSuccess
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.interactors.UpdateUser
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
-import com.gnoemes.shimori.lists.ListsStateManager
-import com.gnoemes.shimori.model.rate.ListType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val prefs: ShimoriPreferences,
     observeShikimoriAuth: ObserveShikimoriAuth,
     private val updateUser: UpdateUser,
     private val updateRates: UpdateRates,
@@ -27,8 +24,6 @@ class MainViewModel @Inject constructor(
 
     private val updatingUserDataState = ObservableLoadingCounter()
     private val _state = MutableStateFlow(MainViewState.Empty)
-
-    private val pendingActions = MutableSharedFlow<MainAction>()
 
     val state: StateFlow<MainViewState> get() = _state
 
@@ -56,25 +51,10 @@ class MainViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            pendingActions.collect { action ->
-                when (action) {
-                    MainAction.Random -> openRandomTitle()
-                    is MainAction.ChangeListType -> changeListType(action.listType)
-                }
-            }
-        }
-
-        viewModelScope.launch {
             updatingUserDataState.observable.collect { listsStateManager.ratesLoading.update(it) }
         }
 
         observeShikimoriAuth(Unit)
-    }
-
-    internal fun submitAction(action: MainAction) {
-        viewModelScope.launch {
-            pendingActions.emit(action)
-        }
     }
 
     private fun updateUserAndRates() {
@@ -89,19 +69,6 @@ class MainViewModel @Inject constructor(
     private fun updateRates() {
         viewModelScope.launch {
             updateRates(Unit).collectInto(updatingUserDataState)
-        }
-    }
-
-    private fun openRandomTitle() {
-        viewModelScope.launch {
-            listsStateManager.openRandomTitleEvent(Unit)
-        }
-    }
-
-    private fun changeListType(newType: ListType) {
-        viewModelScope.launch {
-            listsStateManager.type(newType)
-            prefs.preferredListType = newType.type
         }
     }
 }

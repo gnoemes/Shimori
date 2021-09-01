@@ -2,8 +2,8 @@ package com.gnoemes.shimori.lists.tabs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.observers.ObserveListsPages
-import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.rate.RateStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

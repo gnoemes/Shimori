@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.GetRandomTitleWithStatus
 import com.gnoemes.shimori.domain.interactors.ToggleListPin
 import com.gnoemes.shimori.domain.observers.ObserveAnimeWithRatePaged
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
-import com.gnoemes.shimori.lists.ListsStateManager
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus

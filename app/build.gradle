@@ -76,6 +76,7 @@ dependencies {
     implementation project(Modules.shikimoriAuth)
 
     implementation project(Modules.uiLists)
+    implementation project(Modules.uiListsChange)
 
     implementation libs.google.crashlytics
     implementation libs.google.analytics

@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists
+package com.gnoemes.shimori.data.repositories.rates
 
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.model.rate.ListType

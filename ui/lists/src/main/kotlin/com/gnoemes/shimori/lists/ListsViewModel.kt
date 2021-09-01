@@ -7,6 +7,7 @@ import com.gnoemes.shikimori.ShikimoriAuthManager
 import com.gnoemes.shimori.base.extensions.combine
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateMangaRates
 import com.gnoemes.shimori.domain.interactors.UpdateRanobeRates

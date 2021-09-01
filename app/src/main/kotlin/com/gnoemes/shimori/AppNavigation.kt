@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialNavigationApi::class)
+
 package com.gnoemes.shimori
 
 import androidx.compose.foundation.layout.Box
@@ -16,6 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.gnoemes.shimori.lists.Lists
+import com.gnoemes.shimori.lists_change.ListsChangeSheet
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 
 internal sealed class RootScreen(val route: String) {
     abstract fun getStartDestination(): Screen
@@ -39,6 +44,7 @@ internal sealed class RootScreen(val route: String) {
 
 internal sealed class Screen(val route: String) {
     object Lists : Screen("lists")
+    object ListsChangeSheet : Screen("lists_change_sheet")
 
     object Explore : Screen("explore")
     object Feed : Screen("feed")
@@ -46,6 +52,7 @@ internal sealed class Screen(val route: String) {
 
     object Profile : Screen("profile")
     object Search : Screen("search")
+
 }
 
 @Composable
@@ -72,6 +79,7 @@ private fun NavGraphBuilder.addListsRoot(
     ) {
         addLists(navController)
         addExplore(navController)
+        addListChangeBottomSheet(navController)
     }
 }
 
@@ -135,6 +143,15 @@ private fun NavGraphBuilder.addForum(navController: NavController) {
 private fun NavGraphBuilder.addConversations(navController: NavController) {
     composable(Screen.Talks.route) {
         MockScreen(Screen.Talks.route)
+    }
+}
+
+
+private fun NavGraphBuilder.addListChangeBottomSheet(navController: NavController) {
+    bottomSheet(Screen.ListsChangeSheet.route) {
+        ListsChangeSheet(
+                navigateUp = { navController.navigateUp() }
+        )
     }
 }
 
