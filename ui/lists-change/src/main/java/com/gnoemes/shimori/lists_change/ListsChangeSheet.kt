@@ -2,22 +2,19 @@ package com.gnoemes.shimori.lists_change
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gnoemes.shimori.common.compose.BottomSheetThumb
 import com.gnoemes.shimori.common.compose.ChevronIcon
 import com.gnoemes.shimori.common.compose.EnlargedButton
-import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
 
@@ -55,19 +52,7 @@ private fun ListsChange(
 ) {
 
     Column {
-        val thumbColor = MaterialTheme.colors.caption
-        Canvas(modifier = Modifier
-            .padding(vertical = 4.dp)
-            .height(4.dp)
-            .width(16.dp)
-            .align(Alignment.CenterHorizontally)
-        ) {
-
-            drawRoundRect(
-                    color = thumbColor,
-                    cornerRadius = CornerRadius(x = 16f, y = 16f)
-            )
-        }
+        BottomSheetThumb(withSpace = false)
 
         Text(
                 text = stringResource(id = R.string.titles),

@@ -17,6 +17,10 @@ abstract class RanobeDao : EntityDao<Ranobe> {
     abstract suspend fun queryAll(): List<Ranobe>
 
     @Transaction
+    @Query(QUERY_BY_ID)
+    abstract fun observeById(id: Long): Flow<RanobeWithRate?>
+
+    @Transaction
     @Query(QUERY_BY_STATUS)
     abstract fun observeByStatus(status: RateStatus): Flow<List<RanobeWithRate>>
 
@@ -69,6 +73,11 @@ abstract class RanobeDao : EntityDao<Ranobe> {
     abstract suspend fun queryRandomByStatus(status: RateStatus): RanobeWithRate?
 
     companion object {
+        private const val QUERY_BY_ID = """
+            SELECT * FROM ranobe
+            WHERE id = :id
+        """
+
         private const val QUERY_BY_STATUS = """
             SELECT * FROM ranobe as t
             INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id

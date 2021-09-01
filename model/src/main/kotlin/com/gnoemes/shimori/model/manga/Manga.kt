@@ -53,4 +53,7 @@ data class Manga(
 
     val chaptersOrUnknown : String
         get() = chapters.let { if (it == 0) "?" else "$it" }
+
+    override val size: Int?
+        get() = chaptersOrUnknown.toIntOrNull()
 }

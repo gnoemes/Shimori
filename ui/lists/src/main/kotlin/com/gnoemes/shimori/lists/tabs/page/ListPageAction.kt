@@ -4,5 +4,4 @@ import com.gnoemes.shimori.model.rate.RateTargetType
 
 internal sealed class ListPageAction {
     data class TogglePin(val id : Long, val targetType : RateTargetType) : ListPageAction()
-    data class Edit(val id : Long, val targetType : RateTargetType) : ListPageAction()
 }

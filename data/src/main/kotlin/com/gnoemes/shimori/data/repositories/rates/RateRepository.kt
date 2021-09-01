@@ -21,14 +21,16 @@ class RateRepository @Inject constructor(
     private val userRepository: ShikimoriUserRepository
 ) {
 
-    fun observeRate(shikimoriId: Long) = rateStore.observeRate(shikimoriId)
+    fun observeById(id: Long) = rateStore.observeById(id)
+    fun observeByShikimoriId(shikimoriId: Long) = rateStore.observeByShikimoriId(shikimoriId)
+    fun observeByTarget(targetId: Long, targetType: RateTargetType) = rateStore.observeByTarget(targetId, targetType)
     fun observeRateSort(type: ListType) = rateSortStore.observeSort(type)
     fun observeListsPages(type: RateTargetType) = rateStore.observeListsPages(type)
 
     suspend fun createOrUpdate(rate: Rate) {
         val id = rateStore.createOrUpdate(rate)
         //TODO plan to upload?
-        val localRate = rateStore.dao.queryWithId(id)
+        val localRate = rateStore.dao.queryById(id)
         if (localRate != null) {
             val result =
                 if (localRate.shikimoriId == null) rateSource.createRate(localRate)
@@ -40,8 +42,8 @@ class RateRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteRate(rate: Rate) {
-        val localRate = rateStore.dao.queryWithId(rate.id)
+    suspend fun deleteRate(id: Long) {
+        val localRate = rateStore.dao.queryById(id)
         //TODO plan to delete?
         localRate?.shikimoriId?.let {
             val result = rateSource.deleteRate(it)

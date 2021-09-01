@@ -24,6 +24,9 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Create account</string>
 
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+
     <string name="rate_status_anime_watching">Watching</string>
     <string name="rate_status_anime_re_watching">Rewatching</string>
 
@@ -62,6 +65,12 @@
     <string name="status_released">Released</string>
 
     <string name="progress_format">%d / %s</string>
+
+    <string name="progress">Progress</string>
+    <string name="re_watches">Rewatches</string>
+
+    <string name="add_note">Add a note</string>
+    <string name="note">Note</string>
 
     <string name="anons_date_format">Airing in %d %s</string>
     <string name="ongoing_episode_format">%d ep in %d %s</string>

@@ -36,7 +36,13 @@ class RateStore @Inject constructor(
             }
     )
 
-    fun observeRate(shikimoriId: Long) = dao.observeRate(shikimoriId)
+    fun observeById(id: Long) = dao.observeById(id)
+    fun observeByShikimoriId(shikimoriId: Long) = dao.observeByShikimoriId(shikimoriId)
+    fun observeByTarget(targetId: Long, targetType: RateTargetType) = when (targetType) {
+        RateTargetType.ANIME -> dao.observeByAnimeId(targetId)
+        RateTargetType.MANGA -> dao.observeByMangaId(targetId)
+        RateTargetType.RANOBE -> dao.observeByRanobeId(targetId)
+    }
 
     fun observeListsPages(target: RateTargetType): Flow<List<RateStatus>> {
         return combine(

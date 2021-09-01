@@ -10,6 +10,11 @@ class ListPinStore @Inject constructor(
     private val dao: ListPinDao
 ) {
 
+    fun observeHasPin(
+        targetId: Long,
+        targetType: RateTargetType
+    ) = dao.observeByTarget(targetId, targetType).map { it > 0 }
+
     fun observeHasPins() = dao.observeSize().map { it > 0 }
 
     suspend fun togglePin(type: RateTargetType, shikimoriId: Long) {

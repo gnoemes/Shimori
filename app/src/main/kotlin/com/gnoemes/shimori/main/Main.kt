@@ -66,7 +66,7 @@ internal fun Main(
                     MainBottomBar(
                             viewState = viewState,
                             navController = navController,
-                            onListsChange = { navController.navigate(Screen.ListsChangeSheet.route) }
+                            onListsChange = { navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists)) }
                     )
                 }
         ) {
@@ -109,7 +109,7 @@ internal fun MainBottomBar(
                     if (canShowBottomSheet) {
                         onListsChange()
                     } else {
-                        navController.popBackStack(selected.getStartDestination().route, false)
+                        navController.popBackStack(selected.getStartDestination().createRoute(RootScreen.Lists), false)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -243,7 +243,7 @@ private fun NavController.canShowListTypeBottomSheetAsState(): State<Boolean> {
 
     DisposableEffect("canShowBottomSheet") {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            canShow.value = destination.route == Screen.Lists.route
+            canShow.value = destination.route == Screen.Lists.createRoute(RootScreen.Lists)
         }
 
         addOnDestinationChangedListener(listener)

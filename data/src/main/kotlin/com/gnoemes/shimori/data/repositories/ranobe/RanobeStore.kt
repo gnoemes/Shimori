@@ -52,5 +52,5 @@ class RanobeStore @Inject constructor(
     }
 
     fun observePinned() = ranobeDao.pinnedDateUpdated(true)
-
+    fun observeById(id : Long) = ranobeDao.observeById(id)
 }

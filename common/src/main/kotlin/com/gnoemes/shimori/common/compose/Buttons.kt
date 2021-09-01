@@ -156,7 +156,8 @@ fun ShimoriIconButton(
     selected: Boolean,
     painter: Painter,
     modifier: Modifier,
-    contentDescription: String? = null
+    contentDescription: String? = null,
+    enabled : Boolean = true,
 ) {
     Button(onClick = onClick,
             modifier = modifier.border(1.dp, MaterialTheme.colors.alpha, shape = CircleShape),
@@ -165,7 +166,8 @@ fun ShimoriIconButton(
                     backgroundColor = if (selected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.button
             ),
             elevation = null,
-            contentPadding = PaddingValues(8.dp)
+            contentPadding = PaddingValues(8.dp),
+            enabled = enabled
     ) {
         Icon(
                 painter = painter,

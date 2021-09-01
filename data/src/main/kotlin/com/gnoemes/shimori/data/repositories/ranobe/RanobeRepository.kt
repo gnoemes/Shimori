@@ -21,6 +21,7 @@ class RanobeRepository @Inject constructor(
     private val ratesLastRequestStore: RanobeWithStatusLastRequestStore
 ) {
 
+    fun observeById(id : Long) = ranobeStore.observeById(id)
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         ranobeStore.observeByStatusForPaging(status, sort)
 

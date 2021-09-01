@@ -17,7 +17,7 @@ abstract class RateDao : EntityDao<Rate> {
 
     @Transaction
     @Query("SELECT * FROM rates WHERE id = :id")
-    abstract suspend fun queryWithId(id: Long): Rate?
+    abstract suspend fun queryById(id: Long): Rate?
 
     @Transaction
     @Query("SELECT * FROM rates WHERE manga_id = :id")
@@ -52,8 +52,24 @@ abstract class RateDao : EntityDao<Rate> {
     abstract fun observeAnimeRates(): Flow<List<Rate>>
 
     @Transaction
+    @Query("SELECT * from rates WHERE id = :id")
+    abstract fun observeById(id: Long): Flow<Rate?>
+
+    @Transaction
     @Query("SELECT * from rates WHERE shikimori_id = :shikimoriId")
-    abstract fun observeRate(shikimoriId: Long): Flow<Rate?>
+    abstract fun observeByShikimoriId(shikimoriId: Long): Flow<Rate?>
+
+    @Transaction
+    @Query("SELECT * from rates WHERE anime_id = :shikimoriId")
+    abstract fun observeByAnimeId(shikimoriId: Long): Flow<Rate?>
+
+    @Transaction
+    @Query("SELECT * from rates WHERE manga_id = :shikimoriId")
+    abstract fun observeByMangaId(shikimoriId: Long): Flow<Rate?>
+
+    @Transaction
+    @Query("SELECT * from rates WHERE ranobe_id = :shikimoriId")
+    abstract fun observeByRanobeId(shikimoriId: Long): Flow<Rate?>
 
     @Transaction
     @Query(QUERY_PAGE_EXIST)

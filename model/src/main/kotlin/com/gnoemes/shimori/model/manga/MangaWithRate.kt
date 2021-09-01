@@ -22,4 +22,6 @@ class MangaWithRate : EntityWithRate<Manga> {
     }
 
     override fun hashCode(): Int = arrayOf(entity, rate).contentHashCode()
+
+    val id get() = entity.id
 }

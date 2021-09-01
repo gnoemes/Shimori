@@ -66,5 +66,6 @@ class AnimeStore @Inject constructor(
     }
 
     fun observePinned() = animeDao.pinnedDateUpdated(true)
+    fun observeById(id: Long) = animeDao.observeById(id)
 }
 

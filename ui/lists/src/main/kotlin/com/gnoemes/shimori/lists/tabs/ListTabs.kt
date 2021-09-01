@@ -39,9 +39,11 @@ import kotlin.math.roundToInt
 fun ListTabs(
     toolbar: @Composable () -> Unit,
     sorts: @Composable () -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
 ) {
     ListTabs(
             viewModel = hiltViewModel(),
+            openListsEdit = openListsEdit,
             toolbar = toolbar,
             sorts = sorts
     )
@@ -50,6 +52,7 @@ fun ListTabs(
 @Composable
 private fun ListTabs(
     viewModel: ListTabsViewModel,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     toolbar: @Composable () -> Unit,
     sorts: @Composable () -> Unit,
 ) {
@@ -60,6 +63,7 @@ private fun ListTabs(
 
     if (viewState.pages.isNotEmpty()) {
         ListTabs(
+                openListsEdit,
                 type = viewState.type,
                 pages = viewState.pages,
                 onPageChanged = onPageChanged,
@@ -74,6 +78,7 @@ private fun ListTabs(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ListTabs(
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     type: RateTargetType,
     pages: List<RateStatus>,
     onPageChanged: (RateStatus) -> Unit,
@@ -137,9 +142,9 @@ private fun ListTabs(
                     .nestedScroll(nestedScrollConnection)
         ) { page ->
             when (type) {
-                RateTargetType.ANIME -> AnimeListPage(pages[page])
-                RateTargetType.MANGA -> MangaListPage(pages[page])
-                RateTargetType.RANOBE -> RanobeListPage(pages[page])
+                RateTargetType.ANIME -> AnimeListPage(pages[page], openListsEdit)
+                RateTargetType.MANGA -> MangaListPage(pages[page], openListsEdit)
+                RateTargetType.RANOBE -> RanobeListPage(pages[page], openListsEdit)
             }
         }
     }

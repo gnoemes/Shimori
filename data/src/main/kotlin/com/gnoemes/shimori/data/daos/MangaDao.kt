@@ -17,6 +17,10 @@ abstract class MangaDao : EntityDao<Manga> {
     abstract suspend fun queryAll(): List<Manga>
 
     @Transaction
+    @Query(QUERY_BY_ID)
+    abstract fun observeById(id: Long): Flow<MangaWithRate?>
+
+    @Transaction
     @Query(QUERY_BY_STATUS)
     abstract fun observeByStatus(status: RateStatus): Flow<List<MangaWithRate>>
 
@@ -69,6 +73,11 @@ abstract class MangaDao : EntityDao<Manga> {
     abstract suspend fun queryRandomByStatus(status: RateStatus): MangaWithRate?
 
     companion object {
+        private const val QUERY_BY_ID = """
+            SELECT * FROM mangas
+            WHERE id = :id
+        """
+
         private const val QUERY_BY_STATUS = """
             SELECT * FROM mangas as m
             INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id

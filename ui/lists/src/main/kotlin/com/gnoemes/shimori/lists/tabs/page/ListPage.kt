@@ -33,23 +33,44 @@ import dagger.hilt.android.EntryPointAccessors
 
 @Composable
 fun AnimeListPage(
-    status: RateStatus
+    status: RateStatus,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
-    AnimeListStatusPage(viewModel = viewModel(factory = animePageViewModel(status = status), key = "anime-$status"))
+    AnimeListStatusPage(
+            viewModel = viewModel(
+                    factory = animePageViewModel(status = status),
+                    key = "anime-$status"
+            ),
+            openListsEdit = openListsEdit
+    )
 }
 
 @Composable
 fun MangaListPage(
-    status: RateStatus
+    status: RateStatus,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
-    MangaListStatusPage(viewModel = viewModel(factory = mangaPageViewModel(status = status), key = "manga-$status"))
+    MangaListStatusPage(
+            viewModel = viewModel(
+                    factory = mangaPageViewModel(status = status),
+                    key = "manga-$status"
+            ),
+            openListsEdit = openListsEdit
+    )
 }
 
 @Composable
 fun RanobeListPage(
-    status: RateStatus
+    status: RateStatus,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
-    RanobeListStatusPage(viewModel = viewModel(factory = ranobePageViewModel(status = status), key = "ranobe-$status"))
+    RanobeListStatusPage(
+            viewModel = viewModel(
+                    factory = ranobePageViewModel(status = status),
+                    key = "ranobe-$status"
+            ),
+            openListsEdit = openListsEdit
+    )
 }
 
 @Composable
@@ -84,7 +105,8 @@ private fun ranobePageViewModel(status: RateStatus): ViewModelProvider.Factory {
 
 @Composable
 private fun AnimeListStatusPage(
-    viewModel: AnimeListPageViewModel
+    viewModel: AnimeListPageViewModel,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "anime").collectAsLazyPagingItems()
 
@@ -93,13 +115,15 @@ private fun AnimeListStatusPage(
     ListStatusPage(
             type = RateTargetType.ANIME,
             list = list,
-            submit = submit
+            submit = submit,
+            openListsEdit = openListsEdit
     )
 }
 
 @Composable
 private fun MangaListStatusPage(
-    viewModel: MangaListPageViewModel
+    viewModel: MangaListPageViewModel,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "manga").collectAsLazyPagingItems()
 
@@ -107,14 +131,16 @@ private fun MangaListStatusPage(
 
     ListStatusPage(
             type = RateTargetType.MANGA,
+            submit = submit,
             list = list,
-            submit = submit
+            openListsEdit = openListsEdit
     )
 }
 
 @Composable
 private fun RanobeListStatusPage(
-    viewModel: RanobeListPageViewModel
+    viewModel: RanobeListPageViewModel,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
     val list = rememberFlowWithLifecycle(viewModel.list, key = "ranobe").collectAsLazyPagingItems()
 
@@ -122,8 +148,9 @@ private fun RanobeListStatusPage(
 
     ListStatusPage(
             type = RateTargetType.RANOBE,
+            submit = submit,
             list = list,
-            submit = submit
+            openListsEdit = openListsEdit
     )
 }
 
@@ -131,12 +158,13 @@ private fun RanobeListStatusPage(
 private fun ListStatusPage(
     type: RateTargetType,
     submit: (ListPageAction) -> Unit,
-    list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>
+    list: LazyPagingItems<out EntityWithRate<out ShimoriEntity>>,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
 ) {
     PagingPage(
             list = list,
             onCoverLongCLick = { submit(ListPageAction.TogglePin(it, type)) },
-            onEditClick = { submit(ListPageAction.Edit(it, type)) },
+            onEditClick = { openListsEdit(it, type) },
             onIncrementClick = { TODO("add increment") },
             onIncrementHold = { TODO("add increment tool") },
     )
@@ -165,36 +193,30 @@ internal fun PagingPage(
             if (item != null) {
                 when (item) {
                     is AnimeWithRate -> {
-                        val shikimoriId = item.entity.shikimoriId
-
                         AnimeListCard(
                                 anime = item,
-                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
-                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
-                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
-                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
+                                onCoverLongClick = { onCoverLongCLick(item.id) },
+                                onEditClick = { onEditClick(item.id) },
+                                onIncrementClick = { onIncrementClick(item.id) },
+                                onIncrementHold = { onIncrementHold(item.id) },
                         )
                     }
                     is MangaWithRate -> {
-                        val shikimoriId = item.entity.shikimoriId
-
                         MangaListCard(
                                 manga = item,
-                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
-                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
-                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
-                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
+                                onCoverLongClick = { onCoverLongCLick(item.id) },
+                                onEditClick = { onEditClick(item.id) },
+                                onIncrementClick = { onIncrementClick(item.id) },
+                                onIncrementHold = { onIncrementHold(item.id) },
                         )
                     }
                     is RanobeWithRate -> {
-                        val shikimoriId = item.entity.shikimoriId
-
                         RanobeListCard(
                                 ranobe = item,
-                                onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it) } },
-                                onEditClick = { shikimoriId?.let { onEditClick(it) } },
-                                onIncrementClick = { shikimoriId?.let { onIncrementClick(it) } },
-                                onIncrementHold = { shikimoriId?.let { onIncrementHold(it) } },
+                                onCoverLongClick = { onCoverLongCLick(item.id) },
+                                onEditClick = { onEditClick(item.id) },
+                                onIncrementClick = { onIncrementClick(item.id) },
+                                onIncrementHold = { onIncrementHold(item.id) },
                         )
                     }
                 }
