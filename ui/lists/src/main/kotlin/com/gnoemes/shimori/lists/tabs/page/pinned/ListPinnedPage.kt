@@ -21,12 +21,20 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
-internal fun ListPinnedPage() {
-    ListPinnedPage(viewModel = hiltViewModel())
+internal fun ListPinnedPage(
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
+) {
+    ListPinnedPage(
+            viewModel = hiltViewModel(),
+            openListsEdit = openListsEdit
+    )
 }
 
 @Composable
-private fun ListPinnedPage(viewModel: ListPinnedPageViewModel) {
+private fun ListPinnedPage(
+    viewModel: ListPinnedPageViewModel,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit
+) {
 
     val viewState by viewModel.state.collectAsState()
 
@@ -35,7 +43,7 @@ private fun ListPinnedPage(viewModel: ListPinnedPageViewModel) {
     ListPage(
             list = viewState.list,
             onCoverLongCLick = { id, type -> submit(ListPageAction.TogglePin(id, type)) },
-            onEditClick = { id, type -> submit(ListPageAction.Edit(id, type)) },
+            onEditClick = openListsEdit,
             onIncrementClick = { id, type -> TODO("add increment") },
             onIncrementHold = { id, type -> TODO("add increment tool") },
     )
@@ -60,15 +68,14 @@ private fun ListPage(
         items(list) { item ->
             when (item) {
                 is AnimeWithRate -> {
-                    val shikimoriId = item.entity.shikimoriId
                     val type = RateTargetType.ANIME
 
                     AnimeListCard(
                             anime = item,
-                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
-                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
-                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
-                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
+                            onCoverLongClick = { onCoverLongCLick(item.id, type)  },
+                            onEditClick = { onEditClick(item.id, type)  },
+                            onIncrementClick = { onIncrementClick(item.id, type)  },
+                            onIncrementHold = {  onIncrementHold(item.id, type)  },
                     )
                 }
                 is MangaWithRate -> {
@@ -77,10 +84,10 @@ private fun ListPage(
 
                     MangaListCard(
                             manga = item,
-                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
-                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
-                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
-                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
+                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(item.id, type) } },
+                            onEditClick = { shikimoriId?.let { onEditClick(item.id, type) } },
+                            onIncrementClick = { shikimoriId?.let { onIncrementClick(item.id, type) } },
+                            onIncrementHold = { shikimoriId?.let { onIncrementHold(item.id, type) } },
                     )
                 }
                 is RanobeWithRate -> {
@@ -89,10 +96,10 @@ private fun ListPage(
 
                     RanobeListCard(
                             ranobe = item,
-                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(it, type) } },
-                            onEditClick = { shikimoriId?.let { onEditClick(it, type) } },
-                            onIncrementClick = { shikimoriId?.let { onIncrementClick(it, type) } },
-                            onIncrementHold = { shikimoriId?.let { onIncrementHold(it, type) } },
+                            onCoverLongClick = { shikimoriId?.let { onCoverLongCLick(item.id, type) } },
+                            onEditClick = { shikimoriId?.let { onEditClick(item.id, type) } },
+                            onIncrementClick = { shikimoriId?.let { onIncrementClick(item.id, type) } },
+                            onIncrementHold = { shikimoriId?.let { onIncrementHold(item.id, type) } },
                     )
                 }
             }

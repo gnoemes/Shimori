@@ -25,6 +25,10 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate>
 
     @Transaction
+    @Query(QUERY_BY_ID)
+    abstract fun observeById(id: Long) : Flow<AnimeWithRate?>
+
+    @Transaction
     @Query(QUERY_CALENDAR)
     abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
 
@@ -84,7 +88,13 @@ abstract class AnimeDao : EntityDao<Anime> {
     @Query(QUERY_RANDOM_BY_STATUS)
     abstract suspend fun queryRandomByStatus(status: RateStatus): AnimeWithRate?
 
+
     companion object {
+        private const val QUERY_BY_ID = """
+           SELECT * FROM animes
+           WHERE id = :id 
+        """
+
         private const val QUERY_CALENDAR = """
            SELECT * FROM animes
            WHERE datetime(next_episode_date) > datetime('now','start of day') 

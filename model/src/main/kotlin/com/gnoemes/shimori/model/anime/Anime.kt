@@ -64,4 +64,7 @@ data class Anime(
 
     val episodesOrUnknown : String
         get() = episodes.let { if (it == 0) "?" else "$it" }
+
+    override val size: Int?
+        get() = episodesOrUnknown.toIntOrNull()
 }

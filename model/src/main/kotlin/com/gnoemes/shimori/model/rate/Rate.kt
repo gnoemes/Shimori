@@ -17,8 +17,11 @@ import org.threeten.bp.OffsetDateTime
 data class Rate(
     @PrimaryKey(autoGenerate = true) override val id: Long = 0,
     @ColumnInfo(name = "shikimori_id") override val shikimoriId: Long? = null,
+        //shikimori id
     @ColumnInfo(name = "anime_id") val animeId: Long? = null,
+        //shikimori id
     @ColumnInfo(name = "manga_id") val mangaId: Long? = null,
+        //shikimori id
     @ColumnInfo(name = "ranobe_id") val ranobeId: Long? = null,
     @ColumnInfo(name = "target_type") val targetType: RateTargetType? = null,
     @ColumnInfo(name = "status") val status: RateStatus? = null,
@@ -46,9 +49,12 @@ data class Rate(
     companion object {
         val EMPTY = Rate()
 
-        val DEFAULT_ANIME = Rate(targetType = RateTargetType.ANIME, status = RateStatus.WATCHING, episodes = 0)
-        val DEFAULT_MANGA = Rate(targetType = RateTargetType.MANGA, status = RateStatus.WATCHING, chapters = 0)
-        val DEFAULT_RANOBE = Rate(targetType = RateTargetType.RANOBE, status = RateStatus.WATCHING, chapters = 0)
+        val DEFAULT_ANIME =
+            Rate(targetType = RateTargetType.ANIME, status = RateStatus.WATCHING, episodes = 0)
+        val DEFAULT_MANGA =
+            Rate(targetType = RateTargetType.MANGA, status = RateStatus.WATCHING, chapters = 0)
+        val DEFAULT_RANOBE =
+            Rate(targetType = RateTargetType.RANOBE, status = RateStatus.WATCHING, chapters = 0)
     }
 }
 
@@ -61,7 +67,7 @@ fun Rate.copyProgress(newProgress: Int): Rate {
     }
 }
 
-fun Rate.copyTargetId(newTargetId : Long?) : Rate {
+fun Rate.copyTargetId(newTargetId: Long?): Rate {
     return when (targetType) {
         RateTargetType.ANIME -> copy(animeId = newTargetId)
         RateTargetType.MANGA -> copy(mangaId = newTargetId)

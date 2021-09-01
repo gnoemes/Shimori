@@ -15,6 +15,7 @@ interface ShikimoriContentEntity : ShikimoriEntity {
     val image: ShimoriImage?
     val name: String
     val nameRu: String?
+    val size : Int?
 }
 
 interface EntityWithRate<E : ShimoriEntity> {

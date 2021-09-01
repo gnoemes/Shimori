@@ -11,14 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.navArgument
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists_change.ListsChangeSheet
+import com.gnoemes.shimori.lists_edit.ListsEdit
+import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 
@@ -47,6 +47,11 @@ internal sealed class Screen(private val route: String) {
 
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
+    object ListsEditSheet : Screen("edit?targetId={id}&targetType={type}") {
+        fun createRoute(root: RootScreen, id: Long, type: RateTargetType): String {
+            return "${root.route}/edit?targetId=$id&targetType=$type"
+        }
+    }
 
     object Explore : Screen("explore")
     object Feed : Screen("feed")
@@ -82,6 +87,7 @@ private fun NavGraphBuilder.addListsRoot(
         addLists(navController, RootScreen.Lists)
         addExplore(navController, RootScreen.Lists)
         addListChangeBottomSheet(navController, RootScreen.Lists)
+        addListEditBottomSheet(navController, RootScreen.Lists)
     }
 }
 
@@ -125,6 +131,9 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
         Lists(
                 openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
                 openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
+                openListsEdit = { id, type ->
+                    navController.navigate(Screen.ListsEditSheet.createRoute(root, id, type))
+                }
         )
     }
 }
@@ -162,6 +171,25 @@ private fun NavGraphBuilder.addListChangeBottomSheet(
 ) {
     bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
         ListsChangeSheet(
+                navigateUp = { navController.navigateUp() }
+        )
+    }
+}
+
+private fun NavGraphBuilder.addListEditBottomSheet(
+    navController: NavController,
+    root: RootScreen
+) {
+    bottomSheet(
+            route = Screen.ListsEditSheet.createRoute(root),
+            arguments = listOf(
+                    navArgument("id") { type = NavType.LongType },
+                    navArgument("type") {
+                        type = NavType.EnumType(RateTargetType::class.java)
+                    },
+            )
+    ) {
+        ListsEdit(
                 navigateUp = { navController.navigateUp() }
         )
     }

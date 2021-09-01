@@ -18,9 +18,8 @@ class AnimeRepository @Inject constructor(
     private val userRepository: ShikimoriUserRepository,
     private val ratesLastRequestStore: AnimeWithStatusLastRequestStore
 ) {
-
+    fun observeById(id: Long) = animeStore.observeById(id)
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
-
     fun observePinned() = animeStore.observePinned()
 
     suspend fun queryByStatus(status: RateStatus?) = animeStore.queryByStatus(status)

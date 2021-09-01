@@ -14,7 +14,7 @@ val ShimoriLightColors = lightColors(
         onPrimary = lightOnPrimary,
         onSecondary = onSecondary,
         onBackground = lightOnPrimary,
-        onSurface = lightOnPrimary
+        onSurface = lightOnSurface
 )
 
 val ShimoriDarkColors = darkColors(
@@ -27,7 +27,7 @@ val ShimoriDarkColors = darkColors(
         onPrimary = darkOnPrimary,
         onSecondary = onSecondary,
         onBackground = darkOnPrimary,
-        onSurface = darkOnPrimary
+        onSurface = darkOnSurface
 )
 
 

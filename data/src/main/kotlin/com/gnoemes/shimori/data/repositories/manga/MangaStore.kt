@@ -52,5 +52,6 @@ class MangaStore @Inject constructor(
     }
 
     fun observePinned() = mangaDao.pinnedDateUpdated(true)
+    fun observeById(id : Long) = mangaDao.observeById(id)
 
 }

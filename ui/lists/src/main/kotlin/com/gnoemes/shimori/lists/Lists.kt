@@ -28,6 +28,7 @@ import com.gnoemes.shimori.lists.tabs.page.pinned.ListPinnedPage
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
+import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.model.user.UserShort
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -36,11 +37,13 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun Lists(
     openUser: () -> Unit,
     openSearch: () -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
 ) {
     Lists(
             viewModel = hiltViewModel(),
             openUser = openUser,
-            openSearch = openSearch
+            openSearch = openSearch,
+            openListsEdit = openListsEdit
     )
 }
 
@@ -49,6 +52,7 @@ internal fun Lists(
     viewModel: ListsViewModel,
     openUser: () -> Unit,
     openSearch: () -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
 ) {
 
     val viewState by viewModel.state.collectAsState()
@@ -81,6 +85,7 @@ internal fun Lists(
                 viewState,
                 openUser,
                 openSearch,
+                openListsEdit,
                 signIn = { signInLauncher.launch(Unit) },
                 signUp = { signUpLauncher.launch(Unit) },
                 onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) },
@@ -97,6 +102,7 @@ internal fun Lists(
     viewState: ListsViewState,
     openUser: () -> Unit,
     openSearch: () -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     signIn: () -> Unit,
     signUp: () -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit,
@@ -138,13 +144,15 @@ internal fun Lists(
                     onEmptyAnimeClick = onEmptyAnimeClick,
                     onEmptyMangaClick = onEmptyMangaClick,
                     onEmptyRanobeClick = onEmptyRanobeClick,
+                    openListsEdit = openListsEdit,
                     topBar = toolbar
             )
         }
         else -> {
             ListTabs(
                     toolbar = toolbar,
-                    sorts = sorts
+                    sorts = sorts,
+                    openListsEdit = openListsEdit,
             )
         }
     }
@@ -262,6 +270,7 @@ private fun ListsPinned(
     onEmptyAnimeClick: () -> Unit,
     onEmptyMangaClick: () -> Unit,
     onEmptyRanobeClick: () -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     topBar: @Composable () -> Unit,
 ) {
     Scaffold(
@@ -283,7 +292,7 @@ private fun ListsPinned(
                         .padding(paddingValues)
                         .padding(horizontal = 16.dp)
             ) {
-                ListPinnedPage()
+                ListPinnedPage(openListsEdit)
             }
         }
     }

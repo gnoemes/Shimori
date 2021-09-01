@@ -19,6 +19,7 @@ class MangaRepository @Inject constructor(
     private val ratesLastRequestStore: MangaWithStatusLastRequestStore
 ) {
 
+    fun observeById(id : Long) = mangaStore.observeById(id)
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         mangaStore.observeByStatusForPaging(status, sort)
 

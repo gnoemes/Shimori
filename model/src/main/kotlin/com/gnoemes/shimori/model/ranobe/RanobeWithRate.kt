@@ -22,4 +22,6 @@ class RanobeWithRate : EntityWithRate<Ranobe> {
     }
 
     override fun hashCode(): Int = arrayOf(entity, rate).contentHashCode()
+
+    val id get() = entity.id
 }

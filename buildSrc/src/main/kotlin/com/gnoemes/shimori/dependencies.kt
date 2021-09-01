@@ -25,5 +25,6 @@ object Modules {
     //ui
     const val uiLists = ":ui:lists"
     const val uiListsChange = ":ui:lists-change"
+    const val uiListsEdit = ":ui:lists-edit"
 
 }
