@@ -48,4 +48,5 @@ dependencies {
     implementation libs.accompanist.swiperefresh
     implementation libs.accompanist.pager
     implementation libs.accompanist.pagerindicators
+    implementation libs.accompanist.systemuicontroller
 }
