@@ -2,6 +2,7 @@ package com.gnoemes.shimori.lists_edit
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -11,18 +12,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -246,14 +251,21 @@ private fun Progress(
     onProgressChanged: (Int) -> Unit
 ) {
     OutlineBox {
+
+        val leftText =
+            if (progress == size) null
+            else stringResource(id = R.string.left_format, size?.let { it - progress } ?: "?")
+
         ValueWithIncrementDecrementButtons(
                 valueTitle = stringResource(id = R.string.progress),
-                valueText = stringResource(id = R.string.progress_format, progress, size ?: "?"),
+                leftText = leftText,
                 value = progress,
+                valueLimit = size ?: Integer.MAX_VALUE,
                 decrementEnabled = progress - 1 >= 0,
                 incrementEnabled = progress + 1 <= size ?: Integer.MAX_VALUE,
                 onDecrementClick = onProgressChanged,
-                onIncrementClick = onProgressChanged
+                onIncrementClick = onProgressChanged,
+                onValueChanged = onProgressChanged,
         )
     }
 }
@@ -266,12 +278,14 @@ private fun Rewatches(
     OutlineBox {
         ValueWithIncrementDecrementButtons(
                 valueTitle = stringResource(id = R.string.re_watches),
-                valueText = "$rewatches",
+                leftText = null,
                 value = rewatches,
+                valueLimit = Integer.MAX_VALUE,
                 decrementEnabled = rewatches - 1 >= 0,
                 incrementEnabled = true,
                 onDecrementClick = onRewatchesChanged,
-                onIncrementClick = onRewatchesChanged
+                onIncrementClick = onRewatchesChanged,
+                onValueChanged = onRewatchesChanged,
         )
     }
 }
@@ -317,8 +331,7 @@ private fun OutlineBox(
                 .height(56.dp)
                 .fillMaxWidth()
                 .border(1.dp, MaterialTheme.colors.onSurface, RoundedCornerShape(12.dp))
-                .padding(vertical = 12.dp, horizontal = 16.dp)
-            ,
+                .padding(vertical = 12.dp, horizontal = 16.dp),
             contentAlignment = Alignment.CenterStart
     ) {
 
@@ -330,15 +343,18 @@ private fun OutlineBox(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun RowScope.ValueWithIncrementDecrementButtons(
     valueTitle: String,
-    valueText: String,
     value: Int,
+    valueLimit: Int,
+    leftText: String? = null,
     decrementEnabled: Boolean,
     incrementEnabled: Boolean,
     onDecrementClick: (newValue: Int) -> Unit,
     onIncrementClick: (newValue: Int) -> Unit,
+    onValueChanged: (newValue: Int) -> Unit,
 ) {
     Text(
             text = valueTitle,
@@ -348,13 +364,41 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
 
     Spacer(modifier = Modifier.width(8.dp))
 
-    Text(
-            text = valueText,
-            style = MaterialTheme.typography.subHeadStyle,
-            color = MaterialTheme.colors.secondary
+    BasicTextField(
+            value = "$value",
+            textStyle = MaterialTheme.typography.subHeadStyle.copy(color = MaterialTheme.colors.secondary),
+            singleLine = true,
+            onValueChange = { text ->
+                val nums = text.replace(numberRegex, "")
+                val intValue = nums.toIntOrNull()
+                if (nums.isNotEmpty() && nums.length <= 4 && intValue != null && intValue <= valueLimit) {
+                    onValueChanged(intValue)
+                } else if (nums.isEmpty()) {
+                    onValueChanged(0)
+                } else if (intValue != null && intValue > valueLimit) {
+                    onValueChanged(valueLimit)
+                }
+
+            },
+            modifier = Modifier
+                .width(43.dp),
+            cursorBrush = SolidColor(MaterialTheme.colors.secondary),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     )
 
     Spacer(modifier = Modifier.weight(1f))
+
+    AnimatedVisibility(visible = leftText != null) {
+        Text(
+                text = leftText.orEmpty(),
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.caption,
+        )
+    }
+
+    if (leftText != null) {
+        Spacer(modifier = Modifier.width(16.dp))
+    }
 
     ShimoriIconButton(
             onClick = { onDecrementClick(value - 1) },
@@ -376,3 +420,5 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
                 .size(32.dp)
     )
 }
+
+private val numberRegex = "(?![0-9]{1,4})".toRegex()

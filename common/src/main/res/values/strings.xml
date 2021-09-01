@@ -65,6 +65,7 @@
     <string name="status_released">Released</string>
 
     <string name="progress_format">%d / %s</string>
+    <string name="left_format">%s left</string>
 
     <string name="progress">Progress</string>
     <string name="re_watches">Rewatches</string>
