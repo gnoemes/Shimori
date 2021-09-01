@@ -11,6 +11,7 @@ import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class GetRandomTitleWithStatus @Inject constructor(
     private val animeRepository: AnimeRepository,
@@ -25,6 +26,13 @@ class GetRandomTitleWithStatus @Inject constructor(
                 ListType.Anime -> animeRepository.queryRandomByStatus(params.status)
                 ListType.Manga -> mangaRepository.queryRandomByStatus(params.status)
                 ListType.Ranobe -> ranobeRepository.queryRandomByStatus(params.status)
+                ListType.Pinned -> {
+                    when((Math.random() * 100).roundToInt() % 3) {
+                        0 -> animeRepository.queryRandomByStatus(params.status)
+                        1 -> mangaRepository.queryRandomByStatus(params.status)
+                        else -> ranobeRepository.queryRandomByStatus(params.status)
+                    }
+                }
                 else -> throw IllegalArgumentException("${params.type} is not supported")
             }
         }
