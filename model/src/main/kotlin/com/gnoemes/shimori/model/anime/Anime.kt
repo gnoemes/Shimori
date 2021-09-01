@@ -61,4 +61,7 @@ data class Anime(
 
     val isOngoing: Boolean
         get() = status != null && status == ContentStatus.ONGOING
+
+    val episodesOrUnknown : String
+        get() = episodes.let { if (it == 0) "?" else "$it" }
 }

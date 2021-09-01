@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -16,6 +17,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.dimens
 import com.gnoemes.shimori.common.compose.theme.keyInfoStyle
 import com.gnoemes.shimori.model.anime.AnimeWithRate
+import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 
@@ -23,147 +25,86 @@ import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 @Composable
 fun AnimeListCard(
     anime: AnimeWithRate,
-    onCoverLongClick : () -> Unit
+    onCoverLongClick: () -> Unit
 ) {
-    Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(MaterialTheme.dimens.listPosterHeight)
-    ) {
-
-        Cover(
-                painter = rememberImagePainter(anime.entity.image),
-                onLongClick = onCoverLongClick,
-                modifier = Modifier
-                    .height(MaterialTheme.dimens.listPosterHeight)
-                    .width(MaterialTheme.dimens.listPosterWidth)
-        )
-
-        Spacer(Modifier.width(12.dp))
-
-        Column {
-            Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = LocalShimoriTextCreator.current.name(anime.entity),
-                    style = MaterialTheme.typography.keyInfoStyle,
-                    color = MaterialTheme.colors.onPrimary,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-            )
-
-            AnimeDescription(
-                    anime = anime.entity,
-                    format = DescriptionFormat.List,
-                    modifier = Modifier.fillMaxWidth()
-            )
-
-            Row {
-                val score = anime.rate?.score
-                if (score != null && score > 0) {
-                    Icon(
-                            painter = painterResource(R.drawable.ic_star),
-                            tint = MaterialTheme.colors.secondary,
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            contentDescription = null
-                    )
-
-                    Text(
-                            text = "$score",
-                            style = MaterialTheme.typography.keyInfoStyle,
-                            color = MaterialTheme.colors.secondary,
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-
-                val size = anime.entity.episodes.let { if (it == 0) "?" else "$it" }
-                val progress = anime.rate?.episodes ?: 0
-
-                Text(
-                        text = "$progress / $size",
-                        style = MaterialTheme.typography.keyInfoStyle,
-                        color = MaterialTheme.colors.secondary
+    ListCard(
+            image = anime.entity.image,
+            name = LocalShimoriTextCreator.current.name(anime.entity),
+            description = {
+                AnimeDescription(
+                        anime = anime.entity,
+                        format = DescriptionFormat.List,
+                        modifier = Modifier.fillMaxWidth()
                 )
-            }
-        }
-    }
+            },
+            score = anime.rate?.score,
+            progress = stringResource(R.string.progress_format,
+                    anime.rate?.episodes ?: 0,
+                    anime.entity.episodesOrUnknown
+            ),
+            onCoverLongClick = onCoverLongClick
+    )
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun MangaListCard(
     manga: MangaWithRate,
-    onCoverLongClick : () -> Unit
+    onCoverLongClick: () -> Unit
 ) {
-    Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(MaterialTheme.dimens.listPosterHeight)
-    ) {
-
-        Cover(
-                painter = rememberImagePainter(manga.entity.image),
-                onLongClick = onCoverLongClick,
-                modifier = Modifier
-                    .height(MaterialTheme.dimens.listPosterHeight)
-                    .width(MaterialTheme.dimens.listPosterWidth)
-        )
-
-        Spacer(Modifier.width(12.dp))
-
-        Column {
-            Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = LocalShimoriTextCreator.current.name(manga.entity),
-                    style = MaterialTheme.typography.keyInfoStyle,
-                    color = MaterialTheme.colors.onPrimary,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-            )
-
-            MangaDescription(
-                    manga = manga.entity,
-                    format = DescriptionFormat.List,
-                    modifier = Modifier.fillMaxWidth()
-            )
-
-            Row {
-                val score = manga.rate?.score
-                if (score != null && score > 0) {
-                    Icon(
-                            painter = painterResource(R.drawable.ic_star),
-                            tint = MaterialTheme.colors.secondary,
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            contentDescription = null
-                    )
-
-                    Text(
-                            text = "$score",
-                            style = MaterialTheme.typography.keyInfoStyle,
-                            color = MaterialTheme.colors.secondary,
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-
-                val size = manga.entity.chapters.let { if (it == 0) "?" else "$it" }
-                val progress = manga.rate?.episodes ?: 0
-
-                Text(
-                        text = "$progress / $size",
-                        style = MaterialTheme.typography.keyInfoStyle,
-                        color = MaterialTheme.colors.secondary
+    ListCard(
+            image = manga.entity.image,
+            name = LocalShimoriTextCreator.current.name(manga.entity),
+            description = {
+                MangaDescription(
+                        manga = manga.entity,
+                        format = DescriptionFormat.List,
+                        modifier = Modifier.fillMaxWidth()
                 )
-            }
-        }
-    }
+            },
+            score = manga.rate?.score,
+            progress = stringResource(R.string.progress_format,
+                    manga.rate?.chapters ?: 0,
+                    manga.entity.chaptersOrUnknown
+            ),
+            onCoverLongClick = onCoverLongClick
+    )
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RanobeListCard(
     ranobe: RanobeWithRate,
-    onCoverLongClick : () -> Unit
+    onCoverLongClick: () -> Unit
+) {
+    ListCard(
+            image = ranobe.entity.image,
+            name = LocalShimoriTextCreator.current.name(ranobe.entity),
+            description = {
+                RanobeDescription(
+                        ranobe = ranobe.entity,
+                        format = DescriptionFormat.List,
+                        modifier = Modifier.fillMaxWidth()
+                )
+            },
+            score = ranobe.rate?.score,
+            progress = stringResource(R.string.progress_format,
+                    ranobe.rate?.chapters ?: 0,
+                    ranobe.entity.chaptersOrUnknown
+            ),
+            onCoverLongClick = onCoverLongClick
+    )
+}
+
+@Composable
+@OptIn(ExperimentalCoilApi::class)
+fun ListCard(
+    image: ShimoriImage?,
+    name: String,
+    description: @Composable () -> Unit,
+    score: Int?,
+    progress: String,
+    onCoverLongClick: () -> Unit,
 ) {
 
     Row(
@@ -173,7 +114,7 @@ fun RanobeListCard(
     ) {
 
         Cover(
-                painter = rememberImagePainter(ranobe.entity.image),
+                painter = rememberImagePainter(image),
                 onLongClick = onCoverLongClick,
                 modifier = Modifier
                     .height(MaterialTheme.dimens.listPosterHeight)
@@ -185,21 +126,16 @@ fun RanobeListCard(
         Column {
             Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = LocalShimoriTextCreator.current.name(ranobe.entity),
+                    text = name,
                     style = MaterialTheme.typography.keyInfoStyle,
                     color = MaterialTheme.colors.onPrimary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
             )
 
-            RanobeDescription(
-                    ranobe = ranobe.entity,
-                    format = DescriptionFormat.List,
-                    modifier = Modifier.fillMaxWidth()
-            )
+            description()
 
             Row {
-                val score = ranobe.rate?.score
                 if (score != null && score > 0) {
                     Icon(
                             painter = painterResource(R.drawable.ic_star),
@@ -217,11 +153,8 @@ fun RanobeListCard(
                     Spacer(modifier = Modifier.width(8.dp))
                 }
 
-                val size = ranobe.entity.chapters.let { if (it == 0) "?" else "$it" }
-                val progress = ranobe.rate?.episodes ?: 0
-
                 Text(
-                        text = "$progress / $size",
+                        text = progress,
                         style = MaterialTheme.typography.keyInfoStyle,
                         color = MaterialTheme.colors.secondary
                 )

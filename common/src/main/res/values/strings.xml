@@ -61,6 +61,8 @@
     <string name="status_ongoing">Ongoing</string>
     <string name="status_released">Released</string>
 
+    <string name="progress_format">%d / %s</string>
+
     <string name="anons_date_format">Airing in %d %s</string>
     <string name="ongoing_episode_format">%d ep in %d %s</string>
 

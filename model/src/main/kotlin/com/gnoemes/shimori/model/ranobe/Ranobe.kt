@@ -50,4 +50,7 @@ data class Ranobe(
 
     val isOngoing: Boolean
         get() = status != null && status == ContentStatus.ONGOING
+
+    val chaptersOrUnknown : String
+        get() = chapters.let { if (it == 0) "?" else "$it" }
 }
