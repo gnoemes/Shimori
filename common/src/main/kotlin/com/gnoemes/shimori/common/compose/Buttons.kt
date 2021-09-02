@@ -51,7 +51,7 @@ fun ShimoriButton(
     buttonColors: ButtonColors,
     textStyle: TextStyle = MaterialTheme.typography.subInfoStyle,
     painter: Painter? = null,
-    iconSize : Dp = 24.dp
+    iconSize: Dp = 24.dp
 ) {
 
     val contentPadding =
@@ -157,7 +157,7 @@ fun ShimoriIconButton(
     painter: Painter,
     modifier: Modifier,
     contentDescription: String? = null,
-    enabled : Boolean = true,
+    enabled: Boolean = true,
 ) {
     Button(onClick = onClick,
             modifier = modifier.border(1.dp, MaterialTheme.colors.alpha, shape = CircleShape),
@@ -175,6 +175,54 @@ fun ShimoriIconButton(
                 tint = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
                 modifier = Modifier.size(16.dp)
         )
+    }
+}
+
+@Composable
+fun ShimoriConfirmationButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    type: ConfirmationButtonType = ConfirmationButtonType.Primary,
+    enabled: Boolean = true,
+    textStyle: TextStyle = MaterialTheme.typography.keyInfoStyle,
+) {
+
+    val truePrimary = type == ConfirmationButtonType.Primary && enabled
+
+    val buttonModifier = modifier then
+            if (!truePrimary) Modifier.border(1.dp, MaterialTheme.colors.alpha, shape = CircleShape)
+            else Modifier
+
+    Button(
+            onClick = onClick,
+            modifier = buttonModifier,
+            shape = RoundedCornerShape(32.dp),
+            colors = ButtonDefaults.buttonColors(
+                    backgroundColor = if (truePrimary) MaterialTheme.colors.secondary else MaterialTheme.colors.button
+            ),
+            elevation = null,
+            contentPadding = PaddingValues(16.dp),
+            enabled = enabled
+    ) {
+        Text(
+                text = text,
+                style = textStyle,
+                color = when {
+                    truePrimary -> MaterialTheme.colors.onSecondary
+                    enabled -> MaterialTheme.colors.onPrimary
+                    else -> MaterialTheme.colors.disabled
+                }
+        )
+    }
+}
+
+
+@JvmInline
+value class ConfirmationButtonType private constructor(val type: Int) {
+    companion object {
+        val Primary = ConfirmationButtonType(0)
+        val Secondary = ConfirmationButtonType(1)
     }
 }
 
@@ -274,6 +322,20 @@ fun PreviewShimoriIconButtonDark() {
                     .padding(12.dp)
                     .size(32.dp),
                 contentDescription = null
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewShimoriConfirmationButton() {
+    ShimoriTheme(useDarkColors = true) {
+        ShimoriConfirmationButton(
+                onClick = { },
+                text = "Accept",
+                modifier = Modifier
+                    .width(158.dp)
+                    .height(IntrinsicSize.Min)
         )
     }
 }
