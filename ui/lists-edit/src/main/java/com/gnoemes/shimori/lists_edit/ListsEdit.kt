@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,7 +23,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -255,7 +259,10 @@ private fun Progress(
     size: Int?,
     onProgressChanged: (Int) -> Unit
 ) {
-    OutlineBox {
+
+    val focusRequester = FocusRequester()
+
+    OutlineBox(focusRequester) {
 
         val leftText =
             if (progress == size) null
@@ -271,6 +278,7 @@ private fun Progress(
                 onDecrementClick = onProgressChanged,
                 onIncrementClick = onProgressChanged,
                 onValueChanged = onProgressChanged,
+                focusRequester = focusRequester,
         )
     }
 }
@@ -280,7 +288,9 @@ private fun Rewatches(
     rewatches: Int,
     onRewatchesChanged: (Int) -> Unit
 ) {
-    OutlineBox {
+    val focusRequester = FocusRequester()
+
+    OutlineBox(focusRequester) {
         ValueWithIncrementDecrementButtons(
                 valueTitle = stringResource(id = R.string.re_watches),
                 leftText = null,
@@ -291,6 +301,7 @@ private fun Rewatches(
                 onDecrementClick = onRewatchesChanged,
                 onIncrementClick = onRewatchesChanged,
                 onValueChanged = onRewatchesChanged,
+                focusRequester = focusRequester,
         )
     }
 }
@@ -328,15 +339,30 @@ private fun Rating(
 
 @Composable
 private fun OutlineBox(
+    focusRequester: FocusRequester,
     content: @Composable RowScope.() -> Unit
 ) {
+    var boxSize by remember { mutableStateOf(0) }
+
     Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .height(56.dp)
                 .fillMaxWidth()
                 .border(1.dp, MaterialTheme.colors.onSurface, RoundedCornerShape(12.dp))
-                .padding(vertical = 12.dp, horizontal = 16.dp),
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .pointerInput(focusRequester) {
+                    detectTapGestures(
+                            onPress = {
+                                if (it.x <= boxSize / 2) {
+                                    focusRequester.requestFocus()
+                                }
+                            }
+                    )
+                }
+                .onGloballyPositioned {
+                    boxSize = it.size.width
+                },
             contentAlignment = Alignment.CenterStart
     ) {
 
@@ -360,11 +386,13 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
     onDecrementClick: (newValue: Int) -> Unit,
     onIncrementClick: (newValue: Int) -> Unit,
     onValueChanged: (newValue: Int) -> Unit,
+    focusRequester: FocusRequester,
 ) {
+
     Text(
             text = valueTitle,
             style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.caption
+            color = MaterialTheme.colors.caption,
     )
 
     Spacer(modifier = Modifier.width(8.dp))
@@ -392,7 +420,8 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
 
                 },
                 modifier = Modifier
-                    .width(43.dp),
+                    .width(43.dp)
+                    .focusRequester(focusRequester),
                 cursorBrush = SolidColor(MaterialTheme.colors.secondary),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
