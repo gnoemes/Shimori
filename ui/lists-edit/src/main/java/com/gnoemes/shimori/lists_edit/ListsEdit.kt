@@ -39,6 +39,7 @@ import com.gnoemes.shimori.common.compose.theme.subHeadStyle
 import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
+import com.google.accompanist.insets.imePadding
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -90,7 +91,9 @@ private fun ListsEdit(
     onTogglePin: () -> Unit,
 ) {
 
-    Column {
+    Column(
+            modifier = Modifier.imePadding()
+    ) {
         BottomSheetThumb()
         Title(image = viewState.image, text = viewState.name)
 
