@@ -26,8 +26,8 @@ val darkCaption = Color(0xFF888888)
 val darkDisabled = Color(0xFFCCCCCC)
 val darkAlpha = Color(0x02ffffff)
 
-val secondary = Color(0xF51CA722)
-val secondaryAlpha = Color(0x141CA722)
+val secondary = Color(0xFF1EB125)
+val secondaryAlpha = Color(0x141EB125)
 val onSecondary = Color(0xF5FFFFFF)
 
 val titleAnnounced = Color(0xFFFF2D58)
