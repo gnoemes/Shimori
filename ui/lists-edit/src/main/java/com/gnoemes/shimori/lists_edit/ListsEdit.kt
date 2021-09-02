@@ -14,6 +14,8 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -367,27 +369,34 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
 
     Spacer(modifier = Modifier.width(8.dp))
 
-    BasicTextField(
-            value = "$value",
-            textStyle = MaterialTheme.typography.subHeadStyle.copy(color = MaterialTheme.colors.secondary),
-            singleLine = true,
-            onValueChange = { text ->
-                val nums = text.replace(numberRegex, "")
-                val intValue = nums.toIntOrNull()
-                if (nums.isNotEmpty() && nums.length <= 4 && intValue != null && intValue <= valueLimit) {
-                    onValueChanged(intValue)
-                } else if (nums.isEmpty()) {
-                    onValueChanged(0)
-                } else if (intValue != null && intValue > valueLimit) {
-                    onValueChanged(valueLimit)
-                }
-
-            },
-            modifier = Modifier
-                .width(43.dp),
-            cursorBrush = SolidColor(MaterialTheme.colors.secondary),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    val customTextSelectionColors = TextSelectionColors(
+            handleColor = MaterialTheme.colors.secondary,
+            backgroundColor = MaterialTheme.colors.secondaryVariant
     )
+
+    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+        BasicTextField(
+                value = "$value",
+                textStyle = MaterialTheme.typography.subHeadStyle.copy(color = MaterialTheme.colors.secondary),
+                singleLine = true,
+                onValueChange = { text ->
+                    val nums = text.replace(numberRegex, "")
+                    val intValue = nums.toIntOrNull()
+                    if (nums.isNotEmpty() && nums.length <= 4 && intValue != null && intValue <= valueLimit) {
+                        onValueChanged(intValue)
+                    } else if (nums.isEmpty()) {
+                        onValueChanged(0)
+                    } else if (intValue != null && intValue > valueLimit) {
+                        onValueChanged(valueLimit)
+                    }
+
+                },
+                modifier = Modifier
+                    .width(43.dp),
+                cursorBrush = SolidColor(MaterialTheme.colors.secondary),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+    }
 
     Spacer(modifier = Modifier.weight(1f))
 
