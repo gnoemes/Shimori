@@ -51,10 +51,7 @@ internal fun Main(
         navigatorProvider += bottomSheetNavigator
     }
 
-
     val viewState by viewModel.state.collectAsState()
-
-    bottomSheetNavigator.popBackStack()
 
     ModalBottomSheetLayout(
             bottomSheetNavigator = bottomSheetNavigator,
@@ -71,7 +68,6 @@ internal fun Main(
                 }
         ) {
             AppNavigation(navController = navController)
-
         }
     }
 }
@@ -109,7 +105,8 @@ internal fun MainBottomBar(
                     if (canShowBottomSheet) {
                         onListsChange()
                     } else {
-                        navController.popBackStack(selected.getStartDestination().createRoute(RootScreen.Lists), false)
+                        navController.popBackStack(selected.getStartDestination()
+                            .createRoute(RootScreen.Lists), false)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
