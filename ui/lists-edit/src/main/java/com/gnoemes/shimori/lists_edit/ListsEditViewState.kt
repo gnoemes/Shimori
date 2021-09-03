@@ -18,6 +18,7 @@ internal data class ListsEditViewState(
     val type: RateTargetType = RateTargetType.ANIME,
     val pinned: Boolean = false,
     val commentEdit : Boolean = false,
+    val newRate : Boolean = false,
 ) {
 
     companion object {

@@ -25,6 +25,7 @@ import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
 import com.gnoemes.shimori.common.compose.EndContentBadgedBox
+import com.gnoemes.shimori.common.compose.LocalBottomSheetOffset
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.toolbar
 import com.gnoemes.shimori.model.rate.ListType
@@ -53,21 +54,23 @@ internal fun Main(
 
     val viewState by viewModel.state.collectAsState()
 
-    ModalBottomSheetLayout(
-            bottomSheetNavigator = bottomSheetNavigator,
-            scrimColor = MaterialTheme.colors.toolbar,
-            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-    ) {
-        com.google.accompanist.insets.ui.Scaffold(
-                bottomBar = {
-                    MainBottomBar(
-                            viewState = viewState,
-                            navController = navController,
-                            onListsChange = { navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists)) }
-                    )
-                }
+    CompositionLocalProvider(LocalBottomSheetOffset provides bottomSheetNavigator.navigatorSheetState.offset) {
+        ModalBottomSheetLayout(
+                bottomSheetNavigator = bottomSheetNavigator,
+                scrimColor = MaterialTheme.colors.toolbar,
+                sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ) {
-            AppNavigation(navController = navController)
+            com.google.accompanist.insets.ui.Scaffold(
+                    bottomBar = {
+                        MainBottomBar(
+                                viewState = viewState,
+                                navController = navController,
+                                onListsChange = { navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists)) }
+                        )
+                    }
+            ) {
+                AppNavigation(navController = navController)
+            }
         }
     }
 }
