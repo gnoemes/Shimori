@@ -45,6 +45,7 @@ internal class ListsEditViewModel @Inject constructor(
                     is ListsEditAction.RewatchesChanged -> onRewatchesChanged(action.newValue)
                     is ListsEditAction.ScoreChanged -> onScoreChanged(action.newValue)
                     is ListsEditAction.CommentChanged -> onCommentChanged(action.newComment)
+                    is ListsEditAction.CommentEdit -> onCommentEdit(action.editing)
                     ListsEditAction.TogglePin -> togglePin()
                     ListsEditAction.Delete -> delete()
                     ListsEditAction.Save -> createOrUpdate()
@@ -120,6 +121,13 @@ internal class ListsEditViewModel @Inject constructor(
             _state.value = _state.value.copy(comment = newComment)
         }
     }
+
+    private fun onCommentEdit(editing: Boolean) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(commentEdit = editing)
+        }
+    }
+
 
     private fun togglePin() {
         viewModelScope.launch {
