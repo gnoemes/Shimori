@@ -71,7 +71,6 @@
     <string name="re_watches">Rewatches</string>
 
     <string name="add_note">Add a note</string>
-    <string name="note">Note</string>
 
     <string name="anons_date_format">Airing in %d %s</string>
     <string name="ongoing_episode_format">%d ep in %d %s</string>

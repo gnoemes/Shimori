@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -43,12 +44,13 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.caption
+import com.gnoemes.shimori.common.compose.theme.disabled
 import com.gnoemes.shimori.common.compose.theme.subHeadStyle
 import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -103,6 +105,7 @@ private fun ListsEdit(
     val offset = remember { mutableStateOf(0) }
 
     SheetLayout(
+            modifier = Modifier.navigationBarsWithImePadding(),
             offset = offset,
             bottomBar = {
                 if (!viewState.commentEdit) {
@@ -128,7 +131,29 @@ private fun ListsEdit(
 
             AnimatedContent(viewState.commentEdit) { editing ->
                 if (editing) {
-                    Spacer(modifier = Modifier.height(96.dp))
+                    Column(
+                            Modifier.padding(horizontal = 16.dp)
+                    ) {
+
+                        var comment by remember(viewState.comment) { mutableStateOf(viewState.comment) }
+
+                        CommentInput(
+                                comment,
+                                onCommentChangedLocal = { comment = it },
+                                onCommentCommit = { onCommentChanged(comment) }
+                        )
+
+
+                        CommentButtons(
+                                onCommentEdit = onCommentEdit,
+                                onCommentChanged = {
+                                    onCommentChanged(comment)
+                                    onCommentEdit(false)
+                                },
+                        )
+
+//                        Spacer(modifier = Modifier.navigationBarsHeight())
+                    }
                 } else {
                     Column(
                             verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -159,7 +184,7 @@ private fun ListsEdit(
                                 onCommentEdit = onCommentEdit
                         )
 
-                        Spacer(modifier = Modifier.navigationBarsHeight(additional = 80.dp))
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
             }
@@ -600,6 +625,70 @@ private fun Note(
 }
 
 @Composable
+private fun CommentInput(
+    comment: String?,
+    onCommentChangedLocal: (String) -> Unit,
+    onCommentCommit: () -> Unit
+) {
+    val customTextSelectionColors = TextSelectionColors(
+            handleColor = MaterialTheme.colors.secondary,
+            backgroundColor = MaterialTheme.colors.secondaryVariant
+    )
+
+    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+        BasicTextField(
+                value = comment.orEmpty(),
+                textStyle = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onPrimary),
+                onValueChange = onCommentChangedLocal,
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 10.dp, max = 150.dp),
+                cursorBrush = SolidColor(MaterialTheme.colors.secondary),
+                keyboardActions = KeyboardActions(onDone = { onCommentCommit() }),
+                decorationBox = {
+                    if (comment.isNullOrEmpty()) {
+                        Text(
+                                text = stringResource(id = R.string.add_note),
+                                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.disabled),
+                                color = MaterialTheme.colors.disabled
+                        )
+                    } else {
+                        it()
+                    }
+                }
+        )
+    }
+}
+
+@Composable
+private fun CommentButtons(
+    onCommentEdit: (Boolean) -> Unit,
+    onCommentChanged: () -> Unit
+) {
+    Row(
+            modifier = Modifier.padding(vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+    ) {
+        ShimoriIconButton(
+                onClick = { onCommentEdit(false) },
+                selected = false,
+                painter = painterResource(id = R.drawable.ic_back),
+                modifier = Modifier.size(32.dp),
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        ShimoriIconButton(
+                onClick = onCommentChanged,
+                selected = false,
+                painter = painterResource(id = R.drawable.ic_completed),
+                modifier = Modifier.size(32.dp),
+        )
+    }
+}
+
+@Composable
 private fun SheetLayout(
     modifier: Modifier = Modifier,
     offset: MutableState<Int>,
@@ -618,7 +707,7 @@ private fun SheetLayout(
 
         content()
 
-        val screenHeight = constraints.maxHeight
+        val screenHeight = constraints.maxHeight + navigationBarHeight
         val bottomSheetOffset = LocalBottomSheetOffset.current.value.roundToInt()
 
         offset.value = if (screenHeight / 2 <= bottomSheetOffset) {
