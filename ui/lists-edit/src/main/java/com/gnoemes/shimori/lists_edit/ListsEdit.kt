@@ -335,24 +335,44 @@ private fun Rating(
 
     Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 16.dp)
     ) {
 
+        Spacer(modifier = Modifier.weight(1f))
 
-//        RatingBar(
-//                rating = (score ?: 0) / 2f,
-//                modifier = Modifier.height(40.dp)
-//        )
+        RatingBar(
+                rating = (score ?: 0) / 2f,
+                modifier = Modifier
+                    .height(48.dp),
+                onRatingChanged = { rating -> onScoreChanged((rating * 2f).roundToInt()) }
+        )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         val text = score?.let { "$score" } ?: "-"
 
-        Text(
-                text = text,
-                style = MaterialTheme.typography.h2,
-                color = MaterialTheme.colors.secondary
-        )
+        Box(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .noRippleClickable {
+                        val newScore = when (score) {
+                            10 -> 0
+                            else -> (score ?: 0) + 1
+                        }
+                        onScoreChanged(newScore)
+                    },
+                contentAlignment = Alignment.Center
+        ) {
+            Text(
+                    text = text,
+                    style = MaterialTheme.typography.h2,
+                    color = MaterialTheme.colors.secondary,
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
 
     }
 }
@@ -536,7 +556,7 @@ private fun BottomBar(
 @Composable
 private fun SheetLayout(
     modifier: Modifier = Modifier,
-    offset : MutableState<Int>,
+    offset: MutableState<Int>,
     bottomBar: @Composable BoxWithConstraintsScope.() -> Unit,
     content: @Composable () -> Unit,
 ) {
