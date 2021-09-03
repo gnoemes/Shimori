@@ -48,6 +48,7 @@ import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -104,17 +105,19 @@ private fun ListsEdit(
     SheetLayout(
             offset = offset,
             bottomBar = {
-                BottomBar(
-                        modifier = Modifier
-                            .height(96.dp)
-                            .align(Alignment.BottomCenter)
-                            .offset { IntOffset(0, offset.value) },
-                        newRate = viewState.newRate,
-                        pinned = viewState.pinned,
-                        onDelete = onDelete,
-                        onSave = onSave,
-                        onTogglePin = onTogglePin
-                )
+                if (!viewState.commentEdit) {
+                    BottomBar(
+                            modifier = Modifier
+                                .height(96.dp)
+                                .align(Alignment.BottomCenter)
+                                .offset { IntOffset(0, offset.value) },
+                            newRate = viewState.newRate,
+                            pinned = viewState.pinned,
+                            onDelete = onDelete,
+                            onSave = onSave,
+                            onTogglePin = onTogglePin
+                    )
+                }
             }
     ) {
         Column {
@@ -125,7 +128,7 @@ private fun ListsEdit(
 
             AnimatedContent(viewState.commentEdit) { editing ->
                 if (editing) {
-
+                    Spacer(modifier = Modifier.height(96.dp))
                 } else {
                     Column {
                         StatusSelector(
@@ -157,7 +160,14 @@ private fun ListsEdit(
                                 onScoreChanged = onScoreChanged
                         )
 
-                        Spacer(modifier = Modifier.height(250.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Note(
+                                comment = viewState.comment,
+                                onCommentEdit = onCommentEdit
+                        )
+
+                        Spacer(modifier = Modifier.navigationBarsHeight(additional = 104.dp))
                     }
                 }
             }
@@ -165,6 +175,7 @@ private fun ListsEdit(
     }
 
 }
+
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -551,6 +562,26 @@ private fun BottomBar(
 
         }
     }
+}
+
+@Composable
+private fun Note(
+    comment: String?,
+    onCommentEdit: (Boolean) -> Unit
+) {
+
+    val text = comment ?: stringResource(id = R.string.add_note)
+
+    EnlargedButton(
+            painter = painterResource(id = R.drawable.ic_note),
+            selected = false,
+            onClick = { onCommentEdit(true) },
+            text = text,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .height(48.dp)
+                .fillMaxWidth(),
+    )
 }
 
 @Composable
