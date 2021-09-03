@@ -130,7 +130,9 @@ private fun ListsEdit(
                 if (editing) {
                     Spacer(modifier = Modifier.height(96.dp))
                 } else {
-                    Column {
+                    Column(
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
                         StatusSelector(
                                 initialized = viewState.name.isNotEmpty(),
                                 type = viewState.type,
@@ -138,36 +140,26 @@ private fun ListsEdit(
                                 onStatusChanged = onStatusChanged
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        Progress(
+                        ProgressBoxes(
                                 progress = viewState.progress,
                                 size = viewState.size,
-                                onProgressChanged = onProgressChanged
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Rewatches(
+                                onProgressChanged = onProgressChanged,
                                 rewatches = viewState.rewatches,
                                 onRewatchesChanged = onRewatchesChanged
                         )
-
-                        Spacer(modifier = Modifier.height(24.dp))
 
                         Rating(
                                 score = viewState.score,
                                 onScoreChanged = onScoreChanged
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
 
                         Note(
                                 comment = viewState.comment,
                                 onCommentEdit = onCommentEdit
                         )
 
-                        Spacer(modifier = Modifier.navigationBarsHeight(additional = 104.dp))
+                        Spacer(modifier = Modifier.navigationBarsHeight(additional = 80.dp))
                     }
                 }
             }
@@ -175,7 +167,6 @@ private fun ListsEdit(
     }
 
 }
-
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -283,6 +274,30 @@ private fun StatusChip(
             painter = painterResource(iconResId),
             iconSize = 16.dp
     )
+}
+
+@Composable
+private fun ProgressBoxes(
+    progress: Int,
+    size: Int?,
+    onProgressChanged: (Int) -> Unit,
+    rewatches: Int,
+    onRewatchesChanged: (Int) -> Unit
+) {
+    Column {
+        Progress(
+                progress = progress,
+                size = size,
+                onProgressChanged = onProgressChanged
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Rewatches(
+                rewatches = rewatches,
+                onRewatchesChanged = onRewatchesChanged
+        )
+    }
 }
 
 @Composable
