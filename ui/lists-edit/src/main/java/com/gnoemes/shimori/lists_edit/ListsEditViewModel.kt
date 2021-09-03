@@ -73,7 +73,8 @@ internal class ListsEditViewModel @Inject constructor(
                         score = rate?.score,
                         comment = rate?.comment,
                         type = targetType,
-                        pinned = pinned
+                        pinned = pinned,
+                        newRate = rate == null
                 )
             }.collect { _state.value = it }
 

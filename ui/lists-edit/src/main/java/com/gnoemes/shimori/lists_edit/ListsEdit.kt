@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
@@ -45,7 +47,7 @@ import com.gnoemes.shimori.common.compose.theme.subHeadStyle
 import com.gnoemes.shimori.model.common.ShimoriImage
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
-import com.google.accompanist.insets.imePadding
+import com.google.accompanist.insets.LocalWindowInsets
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -97,47 +99,66 @@ private fun ListsEdit(
     onTogglePin: () -> Unit,
 ) {
 
-    Column(
-            modifier = Modifier.imePadding()
+    val offset = remember { mutableStateOf(0) }
+
+    SheetLayout(
+            offset = offset,
+            bottomBar = {
+                BottomBar(
+                        modifier = Modifier
+                            .height(96.dp)
+                            .align(Alignment.BottomCenter)
+                            .offset { IntOffset(0, offset.value) },
+                        newRate = viewState.newRate,
+                        pinned = viewState.pinned,
+                        onDelete = onDelete,
+                        onSave = onSave,
+                        onTogglePin = onTogglePin
+                )
+            }
     ) {
-        BottomSheetThumb()
-        Title(image = viewState.image, text = viewState.name)
+        Column {
+            BottomSheetThumb()
+            Title(image = viewState.image, text = viewState.name)
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        AnimatedContent(viewState.commentEdit) { editing ->
-            if (editing) {
+            AnimatedContent(viewState.commentEdit) { editing ->
+                if (editing) {
 
-            } else {
-                Column {
-                    StatusSelector(
-                            initialized = viewState.name.isNotEmpty(),
-                            type = viewState.type,
-                            selectedStatus = viewState.status,
-                            onStatusChanged = onStatusChanged
-                    )
+                } else {
+                    Column {
+                        StatusSelector(
+                                initialized = viewState.name.isNotEmpty(),
+                                type = viewState.type,
+                                selectedStatus = viewState.status,
+                                onStatusChanged = onStatusChanged
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    Progress(
-                            progress = viewState.progress,
-                            size = viewState.size,
-                            onProgressChanged = onProgressChanged
-                    )
+                        Progress(
+                                progress = viewState.progress,
+                                size = viewState.size,
+                                onProgressChanged = onProgressChanged
+                        )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    Rewatches(
-                            rewatches = viewState.rewatches,
-                            onRewatchesChanged = onRewatchesChanged
-                    )
+                        Rewatches(
+                                rewatches = viewState.rewatches,
+                                onRewatchesChanged = onRewatchesChanged
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    Rating(
-                            score = viewState.score,
-                            onScoreChanged = onScoreChanged
-                    )
+                        Rating(
+                                score = viewState.score,
+                                onScoreChanged = onScoreChanged
+                        )
+
+                        Spacer(modifier = Modifier.height(250.dp))
+                    }
                 }
             }
         }
@@ -463,3 +484,86 @@ private fun RowScope.ValueWithIncrementDecrementButtons(
 }
 
 private val numberRegex = "(?![0-9]{1,4})".toRegex()
+
+@Composable
+private fun BottomBar(
+    modifier: Modifier,
+    newRate: Boolean,
+    pinned: Boolean,
+    onDelete: () -> Unit,
+    onSave: () -> Unit,
+    onTogglePin: () -> Unit
+) {
+    Surface(
+            modifier = modifier,
+            elevation = 0.dp
+    ) {
+        Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            ShimoriIconButton(
+                    onClick = onDelete,
+                    selected = false,
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    modifier = Modifier.size(32.dp),
+                    enabled = !newRate
+            )
+
+            ShimoriConfirmationButton(
+                    onClick = onSave,
+                    text = stringResource(id = if (newRate) R.string.add else R.string.save),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(IntrinsicSize.Min)
+            )
+
+            ShimoriIconButton(
+                    onClick = onTogglePin,
+                    selected = pinned,
+                    painter = painterResource(id = R.drawable.ic_pin),
+                    modifier = Modifier.size(32.dp),
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun SheetLayout(
+    modifier: Modifier = Modifier,
+    offset : MutableState<Int>,
+    bottomBar: @Composable BoxWithConstraintsScope.() -> Unit,
+    content: @Composable () -> Unit,
+) {
+    var parentHeight by remember { mutableStateOf(0) }
+    val navigationBarHeight = LocalWindowInsets.current.navigationBars.bottom
+
+    BoxWithConstraints(
+            modifier = modifier then Modifier
+                .onGloballyPositioned {
+                    parentHeight = it.size.height
+                }
+    ) {
+
+        content()
+
+        val screenHeight = constraints.maxHeight
+        val bottomSheetOffset = LocalBottomSheetOffset.current.value.roundToInt()
+
+        offset.value = if (screenHeight / 2 <= bottomSheetOffset) {
+            //snap to parent
+            -parentHeight + screenHeight / 2 - navigationBarHeight
+        } else {
+            val visiblePart = screenHeight - bottomSheetOffset
+            //fixed offset at bottom screen
+            -parentHeight + visiblePart - navigationBarHeight
+        }
+
+        bottomBar()
+    }
+}
