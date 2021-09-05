@@ -181,7 +181,7 @@ abstract class MangaDao : EntityDao<Manga> {
         """
 
         private const val QUERY_PINNED_DATE_UPDATED_SORT = """
-            SELECT * FROM mangas AS m
+            SELECT m.* FROM mangas AS m
             INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
             INNER JOIN pinned AS pin ON m.id = pin.target_id
             WHERE pin.target_type = "manga"
