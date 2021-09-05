@@ -13,4 +13,5 @@ class ListPinRepository @Inject constructor(
     fun observeHasPins() = store.observeHasPins()
 
     suspend fun togglePin(type : RateTargetType, shikimoriId : Long) = store.togglePin(type, shikimoriId)
+    suspend fun pin(type: RateTargetType, shikimoriId: Long, pin: Boolean) = store.pin(type, shikimoriId, pin)
 }

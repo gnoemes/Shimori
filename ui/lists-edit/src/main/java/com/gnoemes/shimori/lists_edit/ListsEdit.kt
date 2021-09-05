@@ -47,6 +47,7 @@ import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -67,9 +68,16 @@ private fun ListsEdit(
 
     val submit = { action: ListsEditAction -> viewModel.submitAction(action) }
 
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvents.collect {
+            when (it) {
+                UiEvents.NavigateUp -> navigateUp()
+            }
+        }
+    }
+
     ListsEdit(
             viewState = viewState,
-            navigateUp = navigateUp,
             onStatusChanged = { submit(ListsEditAction.StatusChanged(it)) },
             onProgressChanged = { submit(ListsEditAction.ProgressChanged(it)) },
             onRewatchesChanged = { submit(ListsEditAction.RewatchesChanged(it)) },
@@ -89,7 +97,6 @@ private fun ListsEdit(
 @Composable
 private fun ListsEdit(
     viewState: ListsEditViewState,
-    navigateUp: () -> Unit,
     onStatusChanged: (RateStatus) -> Unit,
     onProgressChanged: (Int) -> Unit,
     onRewatchesChanged: (Int) -> Unit,
