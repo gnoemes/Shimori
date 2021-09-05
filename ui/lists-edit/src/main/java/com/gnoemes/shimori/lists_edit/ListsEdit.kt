@@ -110,7 +110,7 @@ private fun ListsEdit(
             modifier = Modifier.navigationBarsWithImePadding(),
             offset = offset,
             bottomBar = {
-                if (viewState.inputState == InputState.None) {
+                if (viewState.inputState == ListEditInputState.None) {
                     BottomBar(
                             modifier = Modifier
                                 .height(96.dp)
@@ -129,8 +129,8 @@ private fun ListsEdit(
             BottomSheetThumb()
 
             val title = when (viewState.inputState) {
-                InputState.Progress -> stringResource(id = R.string.progress)
-                InputState.Rewatching -> stringResource(id = R.string.re_watches)
+                ListEditInputState.Progress -> stringResource(id = R.string.progress)
+                ListEditInputState.Rewatching -> stringResource(id = R.string.re_watches)
                 else -> viewState.name
             }
 
@@ -138,7 +138,7 @@ private fun ListsEdit(
 
             val progressText =
                 when {
-                    viewState.inputState != InputState.Progress -> null
+                    viewState.inputState != ListEditInputState.Progress -> null
                     progress == viewState.size -> null
                     else -> stringResource(
                             id = R.string.left_format,
@@ -156,7 +156,7 @@ private fun ListsEdit(
 
             AnimatedContent(viewState.inputState) { state ->
                 when (state) {
-                    InputState.Progress -> {
+                    ListEditInputState.Progress -> {
                         Column(
                                 Modifier.padding(horizontal = 16.dp)
                         ) {
@@ -179,7 +179,7 @@ private fun ListsEdit(
                             )
                         }
                     }
-                    InputState.Rewatching -> {
+                    ListEditInputState.Rewatching -> {
                         Column(
                                 Modifier.padding(horizontal = 16.dp)
                         ) {
@@ -200,7 +200,7 @@ private fun ListsEdit(
                             )
                         }
                     }
-                    InputState.Comment -> {
+                    ListEditInputState.Comment -> {
                         Column(
                                 Modifier.padding(horizontal = 16.dp)
                         ) {
