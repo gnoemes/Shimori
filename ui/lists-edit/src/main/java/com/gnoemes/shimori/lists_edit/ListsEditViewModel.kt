@@ -45,7 +45,10 @@ internal class ListsEditViewModel @Inject constructor(
                     is ListsEditAction.RewatchesChanged -> onRewatchesChanged(action.newValue)
                     is ListsEditAction.ScoreChanged -> onScoreChanged(action.newValue)
                     is ListsEditAction.CommentChanged -> onCommentChanged(action.newComment)
-                    is ListsEditAction.CommentEdit -> onCommentEdit(action.editing)
+                    ListsEditAction.ProgressInput -> onProgressInput()
+                    ListsEditAction.RewatchingInput -> onRewatchingInput()
+                    ListsEditAction.CommentInput -> onCommentInput()
+                    ListsEditAction.NoneInput -> onNoneInput()
                     ListsEditAction.TogglePin -> togglePin()
                     ListsEditAction.Delete -> delete()
                     ListsEditAction.Save -> createOrUpdate()
@@ -122,12 +125,29 @@ internal class ListsEditViewModel @Inject constructor(
         }
     }
 
-    private fun onCommentEdit(editing: Boolean) {
+    private fun onProgressInput() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(commentEdit = editing)
+            _state.value = _state.value.copy(inputState = InputState.Progress)
         }
     }
 
+    private fun onRewatchingInput() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(inputState = InputState.Rewatching)
+        }
+    }
+
+    private fun onCommentInput() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(inputState = InputState.Comment)
+        }
+    }
+
+    private fun onNoneInput() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(inputState = InputState.None)
+        }
+    }
 
     private fun togglePin() {
         viewModelScope.launch {

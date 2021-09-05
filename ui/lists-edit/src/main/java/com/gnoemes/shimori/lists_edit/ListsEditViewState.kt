@@ -16,8 +16,8 @@ internal data class ListsEditViewState(
     val score: Int? = null,
     val comment: String? = null,
     val type: RateTargetType = RateTargetType.ANIME,
+    val inputState : InputState = InputState.None,
     val pinned: Boolean = false,
-    val commentEdit : Boolean = false,
     val newRate : Boolean = false,
 ) {
 
