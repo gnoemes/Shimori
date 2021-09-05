@@ -181,7 +181,7 @@ abstract class RanobeDao : EntityDao<Ranobe> {
         """
 
         private const val QUERY_PINNED_DATE_UPDATED_SORT = """
-            SELECT * FROM ranobe AS t
+            SELECT t.* FROM ranobe AS t
             INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id
             INNER JOIN pinned AS pin ON t.id = pin.target_id
             WHERE pin.target_type = "ranobe"
