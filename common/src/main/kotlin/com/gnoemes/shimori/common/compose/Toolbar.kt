@@ -22,7 +22,6 @@ fun RootScreenToolbar(
     title: String,
     showSearchButton: Boolean,
     user: UserShort? = null,
-    authorized: Boolean = false,
     searchButtonClick: () -> Unit = {},
     avatarClick: () -> Unit = {}
 ) {
@@ -58,7 +57,6 @@ fun RootScreenToolbar(
 
                 UserProfileButton(
                         user = user,
-                        authorized = authorized,
                         avatarClick = avatarClick
                 )
             }
