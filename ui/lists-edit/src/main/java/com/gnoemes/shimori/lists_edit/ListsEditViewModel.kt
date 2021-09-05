@@ -9,11 +9,13 @@ import com.gnoemes.shimori.domain.interactors.ToggleListPin
 import com.gnoemes.shimori.domain.observers.ObserveEntityWithRate
 import com.gnoemes.shimori.domain.observers.ObserveHasPin
 import com.gnoemes.shimori.model.ShikimoriContentEntity
+import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateStatus
 import com.gnoemes.shimori.model.rate.RateTargetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,10 +32,13 @@ internal class ListsEditViewModel @Inject constructor(
 
     private val pendingActions = MutableSharedFlow<ListsEditAction>()
 
+    private val _uiEvents = MutableSharedFlow<UiEvents>()
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
 
-    private var rateId: Long? = null
+    private var rate: Rate? = null
+    private var targetShikimoriId: Long? = null
 
+    val uiEvents : SharedFlow<UiEvents> get() = _uiEvents
     val state: StateFlow<ListsEditViewState> get() = _state
 
     init {
@@ -61,10 +66,10 @@ internal class ListsEditViewModel @Inject constructor(
                     observeEntityWithRate.flow,
                     observeHasPin.flow
             ) { entity, pinned ->
-                val rate = entity?.rate
+                rate = entity?.rate
                 val shikimoriEntity = entity?.entity as? ShikimoriContentEntity
 
-                rateId = rate?.id
+                targetShikimoriId = shikimoriEntity?.shikimoriId
 
                 ListsEditViewState(
                         image = shikimoriEntity?.image,
@@ -157,13 +162,42 @@ internal class ListsEditViewModel @Inject constructor(
 
     private fun delete() {
         viewModelScope.launch {
-            rateId?.let { deleteRate(DeleteRate.Params(it)) }
+            rate?.id?.let {
+                deleteRate(DeleteRate.Params(it)).collect {
+                    _uiEvents.emit(UiEvents.NavigateUp)
+                }
+            }
         }
     }
 
     private fun createOrUpdate() {
         viewModelScope.launch {
+            val state = state.value
+            val rate = Rate(
+                    id = rate?.id ?: 0,
+                    shikimoriId = rate?.shikimoriId,
+                    animeId = if (targetType.anime) targetShikimoriId else null,
+                    mangaId = if (targetType.manga) targetShikimoriId else null,
+                    ranobeId = if (targetType.ranobe) targetShikimoriId else null,
+                    targetType = targetType,
+                    status = state.status,
+                    score = state.score,
+                    comment = state.comment,
+                    episodes = if (targetType.anime) state.progress else null,
+                    chapters = if (!targetType.anime) state.progress else null,
+                    volumes = rate?.volumes,
+                    reCounter = state.rewatches,
+                    dateCreated = rate?.dateCreated,
+                    dateUpdated = OffsetDateTime.now()
+            )
 
+            targetShikimoriId?.let {
+                toggleListPin(ToggleListPin.Params(type = targetType, shikimoriId = it, pin = state.pinned)).collect()
+            }
+
+            createOrUpdateRate(params = CreateOrUpdateRate.Params(rate)).collect {
+                _uiEvents.emit(UiEvents.NavigateUp)
+            }
         }
     }
 

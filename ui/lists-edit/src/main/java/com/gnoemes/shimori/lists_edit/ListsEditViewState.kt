@@ -25,3 +25,7 @@ internal data class ListsEditViewState(
         val Empty = ListsEditViewState()
     }
 }
+
+internal sealed class UiEvents {
+    object NavigateUp : UiEvents()
+}

@@ -6,6 +6,8 @@ enum class RateTargetType(val type: String) {
     RANOBE("ranobe"), ;
 
     val anime get() = this == ANIME
+    val manga get() = this == MANGA
+    val ranobe get() = this == RANOBE
 
     companion object {
         fun findOrDefault(otherType: String?): RateTargetType {

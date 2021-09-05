@@ -15,12 +15,17 @@ class ToggleListPin @Inject constructor(
 
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
-            pinRepository.togglePin(params.type, params.shikimoriId)
+            if (params.pin != null) {
+                pinRepository.pin(params.type, params.shikimoriId, params.pin)
+            } else {
+                pinRepository.togglePin(params.type, params.shikimoriId)
+            }
         }
     }
 
     data class Params(
         val type : RateTargetType,
-        val shikimoriId : Long
+        val shikimoriId : Long,
+        val pin : Boolean? = null
     )
 }
