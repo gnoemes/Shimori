@@ -3,7 +3,6 @@ package com.gnoemes.shimori.lists
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shikimori.ShikimoriAuthManager
 import com.gnoemes.shimori.base.extensions.combine
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectInto
@@ -35,9 +34,8 @@ internal class ListsViewModel @Inject constructor(
     private val updateAnimeRates: UpdateAnimeRates,
     private val updateMangaRates: UpdateMangaRates,
     private val updateRanobeRates: UpdateRanobeRates,
-    shikimoriAuthManager: ShikimoriAuthManager,
     private val stateManager: ListsStateManager
-) : ViewModel(), ShikimoriAuthManager by shikimoriAuthManager {
+) : ViewModel() {
     private val ratesUpdateState = ObservableLoadingCounter()
     private val pendingActions = MutableSharedFlow<ListsAction>()
 
