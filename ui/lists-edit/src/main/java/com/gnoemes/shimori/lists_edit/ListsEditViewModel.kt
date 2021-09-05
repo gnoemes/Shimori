@@ -127,25 +127,25 @@ internal class ListsEditViewModel @Inject constructor(
 
     private fun onProgressInput() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = InputState.Progress)
+            _state.value = _state.value.copy(inputState = ListEditInputState.Progress)
         }
     }
 
     private fun onRewatchingInput() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = InputState.Rewatching)
+            _state.value = _state.value.copy(inputState = ListEditInputState.Rewatching)
         }
     }
 
     private fun onCommentInput() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = InputState.Comment)
+            _state.value = _state.value.copy(inputState = ListEditInputState.Comment)
         }
     }
 
     private fun onNoneInput() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = InputState.None)
+            _state.value = _state.value.copy(inputState = ListEditInputState.None)
         }
     }
 
