@@ -12,20 +12,19 @@ class ToggleListPin @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<ToggleListPin.Params>() {
 
-
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.pin != null) {
-                pinRepository.pin(params.type, params.shikimoriId, params.pin)
+                pinRepository.pin(params.type, params.id, params.pin)
             } else {
-                pinRepository.togglePin(params.type, params.shikimoriId)
+                pinRepository.togglePin(params.type, params.id)
             }
         }
     }
 
     data class Params(
         val type : RateTargetType,
-        val shikimoriId : Long,
+        val id : Long,
         val pin : Boolean? = null
     )
 }

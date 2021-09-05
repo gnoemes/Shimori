@@ -38,7 +38,7 @@ internal class ListsEditViewModel @Inject constructor(
     private var rate: Rate? = null
     private var targetShikimoriId: Long? = null
 
-    val uiEvents : SharedFlow<UiEvents> get() = _uiEvents
+    val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
     val state: StateFlow<ListsEditViewState> get() = _state
 
     init {
@@ -191,9 +191,7 @@ internal class ListsEditViewModel @Inject constructor(
                     dateUpdated = OffsetDateTime.now()
             )
 
-            targetShikimoriId?.let {
-                toggleListPin(ToggleListPin.Params(type = targetType, shikimoriId = it, pin = state.pinned)).collect()
-            }
+            toggleListPin(ToggleListPin.Params(type = targetType, id = targetId, pin = state.pinned)).collect()
 
             createOrUpdateRate(params = CreateOrUpdateRate.Params(rate)).collect {
                 _uiEvents.emit(UiEvents.NavigateUp)

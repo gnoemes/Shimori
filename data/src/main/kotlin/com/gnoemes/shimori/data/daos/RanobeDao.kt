@@ -168,7 +168,7 @@ abstract class RanobeDao : EntityDao<Ranobe> {
         private const val QUERY_RANDOM_PINNED = """
             SELECT t.*, r.* FROM ranobe AS t
             INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id
-            INNER JOIN pinned AS pin ON t.ranobe_shikimori_id = pin.target_id
+            INNER JOIN pinned AS pin ON t.id = pin.target_id
             WHERE pin.target_type = "ranobe"
             ORDER BY RANDOM() LIMIT 1
         """
@@ -183,7 +183,7 @@ abstract class RanobeDao : EntityDao<Ranobe> {
         private const val QUERY_PINNED_DATE_UPDATED_SORT = """
             SELECT * FROM ranobe AS t
             INNER JOIN rates AS r ON r.ranobe_id = t.ranobe_shikimori_id
-            INNER JOIN pinned AS pin ON t.ranobe_shikimori_id = pin.target_id
+            INNER JOIN pinned AS pin ON t.id = pin.target_id
             WHERE pin.target_type = "ranobe"
             ORDER BY  
             (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
