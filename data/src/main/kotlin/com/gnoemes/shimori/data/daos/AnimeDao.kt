@@ -206,7 +206,7 @@ abstract class AnimeDao : EntityDao<Anime> {
         private const val QUERY_RANDOM_PINNED = """
             SELECT a.*, r.* FROM animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            INNER JOIN pinned AS pin ON a.id = pin.target_id
             WHERE pin.target_type = "anime"
             ORDER BY RANDOM() LIMIT 1
         """
@@ -221,7 +221,7 @@ abstract class AnimeDao : EntityDao<Anime> {
         private const val QUERY_PINNED_DATE_UPDATED_SORT = """
             SELECT * from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
-            INNER JOIN pinned AS pin ON a.anime_shikimori_id = pin.target_id
+            INNER JOIN pinned AS pin ON a.id = pin.target_id
             WHERE pin.target_type = "anime"
             ORDER BY  
             (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,

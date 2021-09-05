@@ -54,9 +54,9 @@ internal abstract class BaseListPageViewModel(
         }
     }
 
-    private fun togglePin(shikimoriId: Long, targetType: RateTargetType) {
+    private fun togglePin(id: Long, targetType: RateTargetType) {
         viewModelScope.launch {
-            togglePin(ToggleListPin.Params(targetType, shikimoriId)).collect()
+            togglePin(ToggleListPin.Params(targetType, id)).collect()
         }
     }
 

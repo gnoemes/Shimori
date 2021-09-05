@@ -15,8 +15,8 @@ abstract class ListPinDao : EntityDao<ListPin> {
     abstract suspend fun queryAll(): List<ListPin>
 
     @Transaction
-    @Query("SELECT * FROM pinned WHERE target_id = :id")
-    abstract suspend fun queryById(id: Long): ListPin?
+    @Query("SELECT * FROM pinned WHERE target_id = :id AND target_type = :type")
+    abstract suspend fun queryByTarget(id: Long, type: RateTargetType): ListPin?
 
     @Transaction
     @Query("SELECT COUNT(*) FROM pinned")
