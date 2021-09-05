@@ -14,7 +14,7 @@ ktlint = "0.40.0"
 okhttp = "4.9.1"
 paging = "3.1.0-alpha03"
 retrofit = "2.9.0"
-room = "2.4.0-alpha02"
+room = "2.4.0-alpha04"
 gradleDependencyUpdate = "0.39.0"
 
 [plugins]
@@ -60,6 +60,7 @@ androidx-paging-compose = "androidx.paging:paging-compose:1.0.0-alpha12"
 androidx-palette = "androidx.palette:palette:1.0.0"
 
 androidx-room-common = { module = "androidx.room:room-common", version.ref = "room" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
