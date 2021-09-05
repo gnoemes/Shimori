@@ -28,9 +28,9 @@ class MangaRepository @Inject constructor(
     suspend fun queryRandomByStatus(status: RateStatus?) = mangaStore.queryRandomByStatus(status)
 
     suspend fun updateMyMangaWithStatus(status: RateStatus?) {
-        val userId = userRepository.getMyUserId() ?: return
+        val user = userRepository.getMyUserShort() ?: return
 
-        val results = mangaDataSource.getMangaWithStatus(userId, status)
+        val results = mangaDataSource.getMangaWithStatus(user, status)
         if (results is Success && results.data.isNotEmpty()) {
             val mangas = results.data.filterNot { it.type == null }
             mangaStore.update(mangas)

@@ -3,8 +3,9 @@ package com.gnoemes.shimori.data_base.sources
 import com.gnoemes.shimori.base.entities.Result
 import com.gnoemes.shimori.model.manga.Manga
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.user.UserShort
 
 interface MangaDataSource {
 
-    suspend fun getMangaWithStatus(userId : Long, status : RateStatus?) : Result<List<Manga>>
+    suspend fun getMangaWithStatus(user: UserShort, status: RateStatus?) : Result<List<Manga>>
 }

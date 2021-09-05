@@ -23,12 +23,12 @@ abstract class UserDao : EntityDao<User> {
     abstract suspend fun queryMe(): User?
 
     @Transaction
-    @Query(DELETE_ME)
-    abstract suspend fun deleteMe()
+    @Query(QUERY_ME)
+    abstract suspend fun queryMeShort(): UserShort?
 
     @Transaction
-    @Query(QUERY_MY_ID)
-    abstract suspend fun queryMyId(): Long?
+    @Query(DELETE_ME)
+    abstract suspend fun deleteMe()
 
     @Transaction
     @Query(QUERY_USER_BY_ID)
@@ -42,12 +42,6 @@ abstract class UserDao : EntityDao<User> {
 
         private const val QUERY_ME_SHORT = """
            SELECT id, shikimori_id, nickname, image_original, image_preview, image_x96, image_x48 FROM users
-           WHERE is_me = 1
-        """
-
-
-        private const val QUERY_MY_ID = """
-           SELECT shikimori_id FROM users
            WHERE is_me = 1
         """
 

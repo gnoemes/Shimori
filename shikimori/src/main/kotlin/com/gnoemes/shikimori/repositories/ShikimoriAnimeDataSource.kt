@@ -11,6 +11,7 @@ import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
 import com.gnoemes.shimori.model.anime.Anime
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.user.UserShort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,7 +42,7 @@ internal class ShikimoriAnimeDataSource @Inject constructor(
         service.getCalendar()
             .toResult(calendarMapper.toListMapper())
 
-    override suspend fun getAnimeWithStatus(userId: Long, status: RateStatus?): Result<List<Anime>> =
-        service.getUserAnimeRates(userId, status?.shikimoriValue)
+    override suspend fun getAnimeWithStatus(user: UserShort, status: RateStatus?): Result<List<Anime>> =
+        service.getUserAnimeRates(user.shikimoriId!!, status?.shikimoriValue)
             .toResult(rateToAnimeMapper.toListMapper())
 }

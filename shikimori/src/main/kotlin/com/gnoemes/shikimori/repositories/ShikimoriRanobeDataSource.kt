@@ -9,6 +9,7 @@ import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.RanobeDataSource
 import com.gnoemes.shimori.model.ranobe.Ranobe
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.user.UserShort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +20,7 @@ internal class ShikimoriRanobeDataSource @Inject constructor(
     private val rateToRanobeMapper: RateResponseToRanobeMapper
 ) : RanobeDataSource {
 
-    override suspend fun getRanobeWithStatus(userId: Long, status: RateStatus?): Result<List<Ranobe>> =
-        service.getUserMangaRates(userId, status?.shikimoriValue)
+    override suspend fun getRanobeWithStatus(user: UserShort, status: RateStatus?): Result<List<Ranobe>> =
+        service.getUserMangaRates(user.shikimoriId!!, status?.shikimoriValue)
             .toResult(rateToRanobeMapper.toListMapper())
 }

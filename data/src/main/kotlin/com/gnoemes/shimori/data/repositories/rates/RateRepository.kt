@@ -9,6 +9,7 @@ import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.Rate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateTargetType
+import com.gnoemes.shimori.model.user.UserShort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,29 +55,21 @@ class RateRepository @Inject constructor(
         }
     }
 
-    suspend fun getRates(userId: Long) {
-        val results = rateSource.getRates(userId)
-        if (results is Success && results.data.isNotEmpty()) {
-            rateStore.updateRates(results.data)
-            return
-        }
-    }
-
     suspend fun syncRates() {
-        val userId = userRepository.getMyUserId()
+        val user = userRepository.getMyUserShort()
 
         //TODO pending rates
 
-        if (userId != null) {
-            diffAndUpdateRates(userId)
+        if (user != null) {
+            diffAndUpdateRates(user)
         }
     }
 
     suspend fun updateRateSort(sort: RateSort) = rateSortStore.updateSort(sort)
 
 
-    private suspend fun diffAndUpdateRates(userId: Long) {
-        val remote = rateSource.getRates(userId)
+    private suspend fun diffAndUpdateRates(user: UserShort) {
+        val remote = rateSource.getRates(user)
         if (remote is Success && remote.data.isNotEmpty()) {
             rateStore.syncAll(remote.data)
         }

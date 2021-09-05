@@ -10,6 +10,7 @@ import com.gnoemes.shimori.data_base.mappers.toLambda
 import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.RateDataSource
 import com.gnoemes.shimori.model.rate.Rate
+import com.gnoemes.shimori.model.user.UserShort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,8 +20,8 @@ internal class ShikimoriRateDataSource @Inject constructor(
     private val mapper: RateMapper
 ) : RateDataSource {
 
-    override suspend fun getRates(userId: Long): Result<List<Rate>> {
-        return service.getUserRates(userId = userId)
+    override suspend fun getRates(user: UserShort): Result<List<Rate>> {
+        return service.getUserRates(userId = user.shikimoriId!!)
             .toResult(mapper.toListMapper())
     }
 

@@ -2,10 +2,11 @@ package com.gnoemes.shimori.data_base.sources
 
 import com.gnoemes.shimori.base.entities.Result
 import com.gnoemes.shimori.model.rate.Rate
+import com.gnoemes.shimori.model.user.UserShort
 
 interface RateDataSource {
 
-    suspend fun getRates(userId: Long): Result<List<Rate>>
+    suspend fun getRates(userId: UserShort): Result<List<Rate>>
 
     suspend fun createRate(rate: Rate): Result<Rate>
 

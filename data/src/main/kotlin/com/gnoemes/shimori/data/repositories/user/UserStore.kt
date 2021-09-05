@@ -33,7 +33,7 @@ class UserStore @Inject constructor(
 
     suspend fun queryMe(): User? = dao.queryMe()
 
-    suspend fun queryMyId(): Long? = dao.queryMyId()
+    suspend fun queryMeShort() = dao.queryMeShort()
 
     suspend fun save(user: User) = runner {
         val currentValues = user.shikimoriId?.let {
