@@ -73,7 +73,6 @@ internal fun Lists(
     if (viewState.loading) {
         ListsLoading(
                 title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
-                authorized = viewState.authStatus.isAuthorized,
                 user = viewState.user,
                 openUser = openUser,
                 openSearch = openSearch
@@ -129,7 +128,6 @@ internal fun Lists(
                 title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
                 showSearchButton = true,
                 user = viewState.user,
-                authorized = viewState.authStatus.isAuthorized,
                 searchButtonClick = openSearch,
                 avatarClick = openUser
         )
@@ -238,7 +236,6 @@ internal fun NeedAuthLists(
 private fun ListsLoading(
     title: String,
     user: UserShort?,
-    authorized: Boolean,
     openSearch: () -> Unit,
     openUser: () -> Unit
 ) {
@@ -247,7 +244,6 @@ private fun ListsLoading(
                 title = title,
                 showSearchButton = true,
                 user = user,
-                authorized = authorized,
                 searchButtonClick = openSearch,
                 avatarClick = openUser
         )

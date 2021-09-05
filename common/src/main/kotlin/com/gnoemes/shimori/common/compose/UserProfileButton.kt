@@ -10,21 +10,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.user.UserShort
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun UserProfileButton(
     modifier: Modifier = Modifier,
     user: UserShort? = null,
-    authorized: Boolean = false,
     avatarClick: () -> Unit = {},
 ) {
     IconButton(onClick = avatarClick, modifier = modifier) {
         val avatar = user?.image?.preview
         when {
-            authorized && avatar != null -> {
+            user != null && avatar != null -> {
                 Image(
                         painter = rememberImagePainter(avatar) {
                             crossfade(true)
