@@ -138,6 +138,7 @@ private fun ListsEdit(
             val title = when (viewState.inputState) {
                 ListEditInputState.Progress -> stringResource(id = R.string.progress)
                 ListEditInputState.Rewatching -> stringResource(id = R.string.re_watches)
+                ListEditInputState.Comment -> stringResource(id = R.string.note)
                 else -> viewState.name
             }
 
