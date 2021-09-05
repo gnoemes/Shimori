@@ -630,35 +630,32 @@ private fun CommentInput(
     onCommentChangedLocal: (String) -> Unit,
     onCommentCommit: () -> Unit
 ) {
-    val customTextSelectionColors = TextSelectionColors(
-            handleColor = MaterialTheme.colors.secondary,
-            backgroundColor = MaterialTheme.colors.secondaryVariant
-    )
 
-    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-        BasicTextField(
-                value = comment.orEmpty(),
-                textStyle = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onPrimary),
-                onValueChange = onCommentChangedLocal,
+    val focusRequester = remember { FocusRequester() }
 
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 10.dp, max = 150.dp),
-                cursorBrush = SolidColor(MaterialTheme.colors.secondary),
-                keyboardActions = KeyboardActions(onDone = { onCommentCommit() }),
-                decorationBox = {
-                    if (comment.isNullOrEmpty()) {
-                        Text(
-                                text = stringResource(id = R.string.add_note),
-                                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.disabled),
-                                color = MaterialTheme.colors.disabled
-                        )
-                    } else {
-                        it()
-                    }
-                }
-        )
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
     }
+
+    ShimoriTextField(
+            value = comment.orEmpty(),
+            textStyle = MaterialTheme.typography.caption,
+            textColor = MaterialTheme.colors.onPrimary,
+            onValueChange = onCommentChangedLocal,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 10.dp, max = 150.dp)
+                .focusRequester(focusRequester),
+            cursorColor = MaterialTheme.colors.secondary,
+            keyboardActions = KeyboardActions(onDone = { onCommentCommit() }),
+            hint = {
+                Text(
+                        text = stringResource(id = R.string.add_note),
+                        style = MaterialTheme.typography.caption,
+                        color = MaterialTheme.colors.disabled
+                )
+            }
+    )
 }
 
 @Composable
