@@ -74,14 +74,14 @@ fun ShimoriTextField(
                 }
         ) { measurables, constraints ->
             val inputFieldPlace = measurables[0].measure(constraints)
-            val hintEditPlace = measurables[1].measure(constraints)
+            val hintEditPlace = measurables.getOrNull(1)?.measure(constraints)
 
             layout(
                     inputFieldPlace.width,
                     inputFieldPlace.height
             ) {
                 inputFieldPlace.placeRelative(0, 0)
-                if (value.isEmpty()) hintEditPlace.place(0, 0)
+                if (value.isEmpty()) hintEditPlace?.place(0, 0)
             }
         }
 
