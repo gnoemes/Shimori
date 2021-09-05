@@ -19,9 +19,7 @@ class ShikimoriUserRepository @Inject constructor(
         return userStore.queryMe()
     }
 
-    suspend fun getMyUserId(): Long? {
-        return userStore.queryMyId()
-    }
+    suspend fun getMyUserShort(): UserShort? = userStore.queryMeShort()
 
     suspend fun updateMyUser() {
         val response = userSource.getMyUser()
@@ -36,8 +34,8 @@ class ShikimoriUserRepository @Inject constructor(
         if (response is Success) {
             val user = response.data
 
-            val myUserId = userStore.queryMyId()
-            if (myUserId != null && user.shikimoriId == myUserId) {
+            val localUser = userStore.queryMe()
+            if (localUser != null && localUser.isSameShikimoriUser(user)) {
                 userStore.save(user.copy(isMe = true))
                 return
             }

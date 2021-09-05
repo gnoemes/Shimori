@@ -31,4 +31,6 @@ data class User(
     val banned: Boolean = false,
     @ColumnInfo(name = "last_online") val lastOnlineAt: OffsetDateTime? = null,
     @ColumnInfo(name = "is_me") val isMe: Boolean = false
-) : ShimoriEntity, ShikimoriEntity
+) : ShimoriEntity, ShikimoriEntity {
+    fun isSameShikimoriUser(other : User) = this.shikimoriId != null && this.shikimoriId == other.shikimoriId
+}

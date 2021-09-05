@@ -30,9 +30,9 @@ class RanobeRepository @Inject constructor(
     suspend fun queryRandomByStatus(status: RateStatus?) = ranobeStore.queryRandomByStatus(status)
 
     suspend fun updateMyRanobeWithStatus(status: RateStatus?) {
-        val userId = userRepository.getMyUserId() ?: return
+        val user = userRepository.getMyUserShort() ?: return
 
-        val results = ranobeDataSource.getRanobeWithStatus(userId, status)
+        val results = ranobeDataSource.getRanobeWithStatus(user, status)
         if (results is Success && results.data.isNotEmpty()) {
             val ranobe = results.data.filterNot { it.type == null }
             ranobeStore.update(ranobe)

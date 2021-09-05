@@ -9,6 +9,7 @@ import com.gnoemes.shimori.data_base.mappers.toListMapper
 import com.gnoemes.shimori.data_base.sources.MangaDataSource
 import com.gnoemes.shimori.model.manga.Manga
 import com.gnoemes.shimori.model.rate.RateStatus
+import com.gnoemes.shimori.model.user.UserShort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +21,7 @@ internal class ShikimoriMangaDataSource @Inject constructor(
 ) : MangaDataSource {
 
 
-    override suspend fun getMangaWithStatus(userId: Long, status: RateStatus?): Result<List<Manga>> =
-        service.getUserMangaRates(userId, status?.shikimoriValue)
+    override suspend fun getMangaWithStatus(user: UserShort, status: RateStatus?): Result<List<Manga>> =
+        service.getUserMangaRates(user.shikimoriId!!, status?.shikimoriValue)
             .toResult(rateToMangaMapper.toListMapper())
 }

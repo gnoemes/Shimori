@@ -27,9 +27,9 @@ class AnimeRepository @Inject constructor(
     suspend fun queryRandomByStatus(status: RateStatus?) = animeStore.queryRandomByStatus(status)
 
     suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
-        val userId = userRepository.getMyUserId() ?: return
+        val user = userRepository.getMyUserShort() ?: return
 
-        val results = animeDataSource.getAnimeWithStatus(userId, status)
+        val results = animeDataSource.getAnimeWithStatus(user, status)
         if (results is Success && results.data.isNotEmpty()) {
             animeStore.update(results.data)
             ratesLastRequestStore.updateLastRequest()
