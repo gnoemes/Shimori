@@ -23,6 +23,8 @@ object Modules {
     const val model = ":model"
 
     //ui
+    const val uiAuth = ":ui:auth"
+
     const val uiLists = ":ui:lists"
     const val uiListsChange = ":ui:lists-change"
     const val uiListsEdit = ":ui:lists-edit"

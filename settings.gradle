@@ -11,6 +11,8 @@ include ':shikimori-auth'
 include ':domain'
 include ':model'
 
+include ':ui:auth'
+
 include ':ui:lists'
 include ':ui:lists-change'
 include ':ui:lists-edit'

@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.lists
 
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -18,8 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gnoemes.shimori.auth.Auth
 import com.gnoemes.shimori.common.R
-import com.gnoemes.shimori.common.compose.*
+import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
+import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.compose.RootScreenToolbar
+import com.gnoemes.shimori.common.compose.ShimoriButton
 import com.gnoemes.shimori.common.compose.theme.alpha
 import com.gnoemes.shimori.common.compose.theme.caption
 import com.gnoemes.shimori.common.compose.theme.toolbar
@@ -54,44 +57,32 @@ internal fun Lists(
     openSearch: () -> Unit,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
 ) {
-
     val viewState by viewModel.state.collectAsState()
-    val signInLauncher =
-        rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
-            if (result != null) {
-                viewModel.onLoginResult(result)
-            }
-        }
 
-    val signUpLauncher =
-        rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
-            if (result != null) {
-                viewModel.onLoginResult(result)
-            }
-        }
-
-    if (viewState.loading) {
-        ListsLoading(
-                title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
-                user = viewState.user,
-                openUser = openUser,
-                openSearch = openSearch
-        )
+    if (!viewState.authStatus.isAuthorized) {
+        Auth()
     } else {
-        val submit = { action: ListsAction -> viewModel.submitAction(action) }
+        if (viewState.loading) {
+            ListsLoading(
+                    title = LocalShimoriRateUtil.current.listTypeName(viewState.type),
+                    user = viewState.user,
+                    openUser = openUser,
+                    openSearch = openSearch
+            )
+        } else {
+            val submit = { action: ListsAction -> viewModel.submitAction(action) }
 
-        Lists(
-                viewState,
-                openUser,
-                openSearch,
-                openListsEdit,
-                signIn = { signInLauncher.launch(Unit) },
-                signUp = { signUpLauncher.launch(Unit) },
-                onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) },
-                onEmptyAnimeClick = { submit(ListsAction.ListTypeChanged(ListType.Anime)) },
-                onEmptyMangaClick = { submit(ListsAction.ListTypeChanged(ListType.Manga)) },
-                onEmptyRanobeClick = { submit(ListsAction.ListTypeChanged(ListType.Ranobe)) },
-        )
+            Lists(
+                    viewState,
+                    openUser,
+                    openSearch,
+                    openListsEdit,
+                    onSortClick = { option, isDescending -> submit(ListsAction.UpdateListSort(option, isDescending)) },
+                    onEmptyAnimeClick = { submit(ListsAction.ListTypeChanged(ListType.Anime)) },
+                    onEmptyMangaClick = { submit(ListsAction.ListTypeChanged(ListType.Manga)) },
+                    onEmptyRanobeClick = { submit(ListsAction.ListTypeChanged(ListType.Ranobe)) },
+            )
+        }
     }
 }
 
@@ -102,8 +93,6 @@ internal fun Lists(
     openUser: () -> Unit,
     openSearch: () -> Unit,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
-    signIn: () -> Unit,
-    signUp: () -> Unit,
     onSortClick: (RateSortOption, Boolean) -> Unit,
     onEmptyAnimeClick: () -> Unit,
     onEmptyMangaClick: () -> Unit,
@@ -135,7 +124,6 @@ internal fun Lists(
 
 
     when {
-        !viewState.authStatus.isAuthorized -> NeedAuthLists(signIn, signUp)
         viewState.type == ListType.Pinned -> {
             ListsPinned(
                     noPinnedTitles = viewState.noPinnedTitles,
@@ -153,82 +141,6 @@ internal fun Lists(
                     openListsEdit = openListsEdit,
             )
         }
-    }
-}
-
-@Composable
-internal fun NeedAuthLists(
-    signIn: () -> Unit,
-    signUp: () -> Unit
-) {
-
-    Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-    ) {
-
-        Spacer(modifier = Modifier.height(152.dp))
-
-        Icon(
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = stringResource(id = R.string.profile),
-                modifier = Modifier
-                    .size(96.dp)
-                    .background(color = MaterialTheme.colors.alpha, shape = CircleShape)
-                    .padding(24.dp)
-                    .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-                text = stringResource(id = R.string.sign_in_title),
-                color = MaterialTheme.colors.onPrimary,
-                style = MaterialTheme.typography.h2,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-                text = stringResource(id = R.string.sign_in_message),
-                color = MaterialTheme.colors.caption,
-                style = MaterialTheme.typography.caption,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(64.dp))
-
-        EnlargedButton(
-                selected = false,
-                onClick = signIn,
-                painter = painterResource(id = R.drawable.ic_sign_in),
-                text = stringResource(id = R.string.sign_in),
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxWidth()
-        ) {
-            ChevronIcon()
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        EnlargedButton(
-                selected = false,
-                onClick = signUp,
-                painter = painterResource(id = R.drawable.ic_create_account),
-                text = stringResource(id = R.string.sign_up),
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxWidth()
-        ) {
-            ChevronIcon()
-        }
-
-
     }
 }
 
