@@ -70,6 +70,7 @@
     <string name="progress">Progress</string>
     <string name="re_watches">Rewatches</string>
 
+    <string name="note">Note</string>
     <string name="add_note">Add a note</string>
 
     <string name="anons_date_format">Airing in %d %s</string>
