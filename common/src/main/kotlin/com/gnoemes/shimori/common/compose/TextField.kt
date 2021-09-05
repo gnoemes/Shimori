@@ -7,21 +7,75 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun ShimoriTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = MaterialTheme.typography.caption,
+    textColor: Color = MaterialTheme.colors.onPrimary,
+    handleColor: Color = MaterialTheme.colors.secondary,
+    selectionBackgroundColor: Color = MaterialTheme.colors.secondaryVariant,
+    cursorColor: Color = MaterialTheme.colors.secondary,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    hint: @Composable () -> Unit = {},
+    decorationBox: @Composable (innerTextField: @Composable () -> Unit) -> Unit =
+        @Composable { innerTextField -> innerTextField() }
+) {
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length))) }
+    val textFieldValue = textFieldValueState.copy(text = value)
+
+    ShimoriTextField(
+            value = textFieldValue,
+            onValueChange = {
+                textFieldValueState = it
+                if (value != it.text) {
+                    onValueChange(it.text)
+                }
+            },
+            modifier = modifier,
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            textColor = textColor,
+            handleColor = handleColor,
+            selectionBackgroundColor = selectionBackgroundColor,
+            cursorColor = cursorColor,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            visualTransformation = visualTransformation,
+            onTextLayout = onTextLayout,
+            interactionSource = interactionSource,
+            hint = hint,
+            decorationBox = decorationBox
+    )
+}
+
+@Composable
+fun ShimoriTextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -81,7 +135,7 @@ fun ShimoriTextField(
                     inputFieldPlace.height
             ) {
                 inputFieldPlace.placeRelative(0, 0)
-                if (value.isEmpty()) hintEditPlace?.place(0, 0)
+                if (value.text.isEmpty()) hintEditPlace?.place(0, 0)
             }
         }
 
