@@ -85,7 +85,7 @@ private fun ListTabs(
     toolbar: @Composable () -> Unit,
     sorts: @Composable () -> Unit,
 ) {
-    val pagerState = rememberPagerState(initialPage = pages.size)
+    val pagerState = rememberPagerState()
 
     LaunchedEffect(pagerState) {
         pagerState.pageChanges.collect { page ->
@@ -138,6 +138,7 @@ private fun ListTabs(
         HorizontalPager(
                 state = pagerState,
                 count = pages.size,
+                key = { page -> pages[page].name},
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .nestedScroll(nestedScrollConnection)
