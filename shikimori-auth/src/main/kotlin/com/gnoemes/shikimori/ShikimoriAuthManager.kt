@@ -17,7 +17,8 @@ interface ShikimoriAuthManager {
 class LoginShikimori internal constructor(
     private val loginIntent: Intent,
 ) : ActivityResultContract<Unit, LoginShikimori.Result?>() {
-    override fun createIntent(context: Context, input: Unit?): Intent = loginIntent
+
+    override fun createIntent(context: Context, input: Unit): Intent = loginIntent
 
     override fun parseResult(
         resultCode: Int,

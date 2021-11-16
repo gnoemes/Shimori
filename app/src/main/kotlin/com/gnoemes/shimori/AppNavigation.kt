@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists_change.ListsChangeSheet
 import com.gnoemes.shimori.lists_edit.ListsEdit
