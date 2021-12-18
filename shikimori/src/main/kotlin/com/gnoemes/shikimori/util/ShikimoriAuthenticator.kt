@@ -12,6 +12,7 @@ import okhttp3.Route
 import javax.inject.Inject
 
 
+@DelicateCoroutinesApi
 class ShikimoriAuthenticator @Inject constructor(
     private val shikimori: Shikimori,
     private val dispatchers: AppCoroutineDispatchers
@@ -21,7 +22,6 @@ class ShikimoriAuthenticator @Inject constructor(
         private const val ACCESS_TOKEN_HEADER = "Authorization"
     }
 
-    @DelicateCoroutinesApi
     override fun authenticate(route: Route?, response: Response): Request? {
         if (Shikimori.BASE_HOST != response.request.url.host) {
             return null
