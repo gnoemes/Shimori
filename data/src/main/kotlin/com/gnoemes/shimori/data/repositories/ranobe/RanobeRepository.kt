@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.ranobe
 
 import com.gnoemes.shimori.base.di.Shikimori
-import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.instantInPast
 import com.gnoemes.shimori.data.repositories.rates.RateStore
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
@@ -21,7 +20,7 @@ class RanobeRepository @Inject constructor(
     private val ratesLastRequestStore: RanobeWithStatusLastRequestStore
 ) {
 
-    fun observeById(id : Long) = ranobeStore.observeById(id)
+    fun observeById(id: Long) = ranobeStore.observeById(id)
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         ranobeStore.observeByStatusForPaging(status, sort)
 
@@ -32,15 +31,13 @@ class RanobeRepository @Inject constructor(
     suspend fun updateMyRanobeWithStatus(status: RateStatus?) {
         val user = userRepository.getMyUserShort() ?: return
 
-        val results = ranobeDataSource.getRanobeWithStatus(user, status)
-        if (results is Success && results.data.isNotEmpty()) {
-            val ranobe = results.data.filterNot { it.type == null }
-            ranobeStore.update(ranobe)
-            //Shikimori have only 2 rate target types Anime And Manga
-            rateStore.fixRanobeRates(ranobe)
-            ratesLastRequestStore.updateLastRequest()
-            return
-        }
+        val result = ranobeDataSource.getRanobeWithStatus(user, status)
+        val ranobe = result.filterNot { it.type == null }
+        ranobeStore.update(ranobe)
+        //Shikimori have only 2 rate target types Anime And Manga
+        rateStore.fixRanobeRates(ranobe)
+        ratesLastRequestStore.updateLastRequest()
+        return
     }
 
     suspend fun needUpdateRanobeWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {

@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.anime
 
 import com.gnoemes.shimori.base.di.Shikimori
-import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.base.extensions.instantInPast
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.data_base.sources.AnimeDataSource
@@ -19,7 +18,9 @@ class AnimeRepository @Inject constructor(
     private val ratesLastRequestStore: AnimeWithStatusLastRequestStore
 ) {
     fun observeById(id: Long) = animeStore.observeById(id)
-    fun observeByStatusForPaging(status: RateStatus, sort: RateSort) = animeStore.observeByStatusForPaging(status, sort)
+    fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
+        animeStore.observeByStatusForPaging(status, sort)
+
     fun observePinned() = animeStore.observePinned()
 
     suspend fun queryByStatus(status: RateStatus?) = animeStore.queryByStatus(status)
@@ -29,12 +30,10 @@ class AnimeRepository @Inject constructor(
     suspend fun updateMyAnimeWithStatus(status: RateStatus?) {
         val user = userRepository.getMyUserShort() ?: return
 
-        val results = animeDataSource.getAnimeWithStatus(user, status)
-        if (results is Success && results.data.isNotEmpty()) {
-            animeStore.update(results.data)
-            ratesLastRequestStore.updateLastRequest()
-            return
-        }
+        val result = animeDataSource.getAnimeWithStatus(user, status)
+        animeStore.update(result)
+        ratesLastRequestStore.updateLastRequest()
+        return
     }
 
     suspend fun needUpdateAnimeWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {
