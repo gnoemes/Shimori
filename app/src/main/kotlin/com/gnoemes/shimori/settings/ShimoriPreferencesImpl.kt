@@ -21,6 +21,7 @@ class ShimoriPreferencesImpl @Inject constructor(
 
     companion object {
         private const val THEME_KEY = "pref_theme"
+        private const val USE_DYNAMIC_COLORS = "USE_DYNAMIC_COLORS"
         private const val IS_ROMADZI_NAMING = "IS_ROMADZI_NAMING"
         private const val PREFERRED_LIST_TYPE = "PREFERRED_LIST_TYPE"
     }
@@ -47,6 +48,10 @@ class ShimoriPreferencesImpl @Inject constructor(
             .map { theme }
             .distinctUntilChanged()
     }
+
+    override var useDynamicColors: Boolean
+        get() = prefs.getBoolean(USE_DYNAMIC_COLORS, true)
+        set(value) = prefs.edit { putBoolean(USE_DYNAMIC_COLORS, value) }
 
     override var isRomadziNaming: Boolean
         get() = prefs.getBoolean(IS_ROMADZI_NAMING, false)

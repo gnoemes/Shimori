@@ -2,8 +2,7 @@ package com.gnoemes.shimori.main
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.material.LocalElevationOverlay
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalConfiguration
@@ -55,28 +54,29 @@ class MainActivity : BaseActivity() {
                 else sw360Dimensions
 
             CompositionLocalProvider(
-                    LocalElevationOverlay provides null,
-                    LocalShimoriRateUtil provides rateUtil,
-                    LocalShimoriTextCreator provides textCreator,
-                    LocalShimoriSettings provides prefs,
-                    LocalShimoriDimensions provides dimensions
+                LocalShimoriRateUtil provides rateUtil,
+                LocalShimoriTextCreator provides textCreator,
+                LocalShimoriSettings provides prefs,
+                LocalShimoriDimensions provides dimensions
             ) {
 
-                ShimoriTheme(useDarkColors = prefs.shouldUseDarkColors()) {
+                val useDarkColors = prefs.shouldUseDarkColors()
+
+                ShimoriTheme(useDarkColors = useDarkColors) {
 
                     val systemUiController = rememberSystemUiController()
-                    val isLightTheme = MaterialTheme.colors.isLight
-                    val navigationColor = MaterialTheme.colors.surface
-                    val statusBarColor = MaterialTheme.colors.primary
+                    val isLightTheme = !useDarkColors
+                    val navigationColor = MaterialTheme.colorScheme.background
+                    val statusBarColor = MaterialTheme.colorScheme.background
 
                     SideEffect {
                         systemUiController.setStatusBarColor(
-                                color = statusBarColor,
-                                darkIcons = isLightTheme
+                            color = statusBarColor,
+                            darkIcons = isLightTheme
                         )
                         systemUiController.setNavigationBarColor(
-                                color = navigationColor,
-                                darkIcons = isLightTheme
+                            color = navigationColor,
+                            darkIcons = isLightTheme
                         )
                     }
 

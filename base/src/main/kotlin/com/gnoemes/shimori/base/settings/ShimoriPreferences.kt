@@ -8,6 +8,8 @@ interface ShimoriPreferences {
     var theme: Theme
     fun observeTheme() : Flow<Theme>
 
+    var useDynamicColors : Boolean
+
     var isRomadziNaming : Boolean
 
     var preferredListType : Int

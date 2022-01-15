@@ -1,39 +1,62 @@
 package com.gnoemes.shimori.common.compose.theme
 
-import androidx.compose.material.Colors
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 
-val ShimoriLightColors = lightColors(
-        primary = lightPrimary,
-        primaryVariant = lightPrimary,
-        secondary = secondary,
-        secondaryVariant = secondaryAlpha,
-        background = lightPrimary,
-        surface = lightSurface,
-        onPrimary = lightOnPrimary,
-        onSecondary = onSecondary,
-        onBackground = lightOnPrimary,
-        onSurface = lightOnSurface
+val ShimoriLightColors = lightColorScheme(
+    primary = PaletteLight.primary,
+    onPrimary = PaletteLight.onPrimary,
+    primaryContainer = PaletteLight.primaryContainer,
+    onPrimaryContainer = PaletteLight.onPrimaryContainer,
+    inversePrimary = PaletteLight.inversePrimary,
+    secondary = PaletteLight.secondary,
+    onSecondary = PaletteLight.onSecondary,
+    secondaryContainer = PaletteLight.secondaryContainer,
+    onSecondaryContainer = PaletteLight.onSecondaryContainer,
+    tertiary = PaletteLight.tertiary,
+    onTertiary = PaletteLight.onTertiary,
+    tertiaryContainer = PaletteLight.tertiaryContainer,
+    onTertiaryContainer = PaletteLight.onTertiaryContainer,
+    background = PaletteLight.background,
+    onBackground = PaletteLight.onBackground,
+    surface = PaletteLight.surface,
+    onSurface = PaletteLight.onSurface,
+    surfaceVariant = PaletteLight.surfaceVariant,
+    onSurfaceVariant = PaletteLight.onSurfaceVariant,
+    inverseSurface = PaletteLight.inverseSurface,
+    inverseOnSurface = PaletteLight.inverseOnSurface,
+    error = PaletteLight.error,
+    onError = PaletteLight.onError,
+    errorContainer = PaletteLight.errorContainer,
+    onErrorContainer = PaletteLight.onErrorContainer,
+    outline = PaletteLight.outline,
 )
 
-val ShimoriDarkColors = darkColors(
-        primary = darkPrimary,
-        primaryVariant = darkPrimary,
-        secondary = secondary,
-        secondaryVariant = secondaryAlpha,
-        background = darkPrimary,
-        surface = darkSurface,
-        onPrimary = darkOnPrimary,
-        onSecondary = onSecondary,
-        onBackground = darkOnPrimary,
-        onSurface = darkOnSurface
+val ShimoriDarkColors = darkColorScheme(
+    primary = PaletteDark.primary,
+    onPrimary = PaletteDark.onPrimary,
+    primaryContainer = PaletteDark.primaryContainer,
+    onPrimaryContainer = PaletteDark.onPrimaryContainer,
+    inversePrimary = PaletteDark.inversePrimary,
+    secondary = PaletteDark.secondary,
+    onSecondary = PaletteDark.onSecondary,
+    secondaryContainer = PaletteDark.secondaryContainer,
+    onSecondaryContainer = PaletteDark.onSecondaryContainer,
+    tertiary = PaletteDark.tertiary,
+    onTertiary = PaletteDark.onTertiary,
+    tertiaryContainer = PaletteDark.tertiaryContainer,
+    onTertiaryContainer = PaletteDark.onTertiaryContainer,
+    background = PaletteDark.background,
+    onBackground = PaletteDark.onBackground,
+    surface = PaletteDark.surface,
+    onSurface = PaletteDark.onSurface,
+    surfaceVariant = PaletteDark.surfaceVariant,
+    onSurfaceVariant = PaletteDark.onSurfaceVariant,
+    inverseSurface = PaletteDark.inverseSurface,
+    inverseOnSurface = PaletteDark.inverseOnSurface,
+    error = PaletteDark.error,
+    onError = PaletteDark.onError,
+    errorContainer = PaletteDark.errorContainer,
+    onErrorContainer = PaletteDark.onErrorContainer,
+    outline = PaletteDark.outline,
 )
-
-
-val Colors.toolbar get() = if (isLight) lightToolbar else darkToolbar
-val Colors.tabsSurface get() = if (isLight) lightTabsSurface else darkTabsSurface
-val Colors.button get() = if (isLight) lightButton else darkButton
-val Colors.caption get() = if (isLight) lightCaption else darkCaption
-val Colors.disabled get() = if (isLight) lightDisabled else darkDisabled
-val Colors.alpha get() = if (isLight) lightAlpha else darkAlpha
