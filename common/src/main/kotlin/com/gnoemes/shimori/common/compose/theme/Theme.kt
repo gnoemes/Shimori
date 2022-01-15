@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.common.compose.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -15,7 +14,8 @@ fun ShimoriTheme(
     content: @Composable () -> Unit
 ) {
 
-    val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dynamicColorAvailable = false
+//    val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val dynamicColor = dynamicColorAvailable && LocalShimoriSettings.current.useDynamicColors
     val colorScheme = when {
         dynamicColor && useDarkColors -> dynamicDarkColorScheme(LocalContext.current)

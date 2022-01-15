@@ -1,7 +1,13 @@
 package com.gnoemes.shimori.common.compose.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import kotlin.math.ln
 
 val ShimoriLightColors = lightColorScheme(
     primary = PaletteLight.primary,
@@ -60,3 +66,11 @@ val ShimoriDarkColors = darkColorScheme(
     onErrorContainer = PaletteDark.onErrorContainer,
     outline = PaletteDark.outline,
 )
+
+fun ColorScheme.surfaceColorAtElevation(
+    elevation: Dp,
+): Color {
+    if (elevation == 0.dp) return surface
+    val alpha = ((4.5f * ln(elevation.value + 1)) + 2f) / 100f
+    return primary.copy(alpha = alpha).compositeOver(surface)
+}
