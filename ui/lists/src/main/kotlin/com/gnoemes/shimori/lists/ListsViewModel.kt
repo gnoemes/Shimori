@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.extensions.combine
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
-import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.common.utils.collectStatus
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.UpdateAnimeRates
 import com.gnoemes.shimori.domain.interactors.UpdateMangaRates
@@ -129,19 +129,19 @@ internal class ListsViewModel @Inject constructor(
 
     private fun updateAnimeRates() {
         viewModelScope.launch {
-            updateAnimeRates(UpdateAnimeRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
+            updateAnimeRates(UpdateAnimeRates.Params.OptionalUpdate).collectStatus(ratesUpdateState)
         }
     }
 
     private fun updateMangaRates() {
         viewModelScope.launch {
-            updateMangaRates(UpdateMangaRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
+            updateMangaRates(UpdateMangaRates.Params.OptionalUpdate).collectStatus(ratesUpdateState)
         }
     }
 
     private fun updateRanobeRates() {
         viewModelScope.launch {
-            updateRanobeRates(UpdateRanobeRates.Params.OptionalUpdate).collectInto(ratesUpdateState)
+            updateRanobeRates(UpdateRanobeRates.Params.OptionalUpdate).collectStatus(ratesUpdateState)
         }
     }
 
