@@ -2,9 +2,8 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.entities.InvokeSuccess
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
-import com.gnoemes.shimori.common.utils.collectInto
+import com.gnoemes.shimori.common.utils.collectStatus
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.interactors.UpdateUser
@@ -26,7 +25,6 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(MainViewState.Empty)
 
     val state: StateFlow<MainViewState> get() = _state
-
     init {
 
         viewModelScope.launch {
@@ -60,15 +58,13 @@ class MainViewModel @Inject constructor(
     private fun updateUserAndRates() {
         viewModelScope.launch {
             updateUser(UpdateUser.Params(null, isMe = true))
-                .collectInto(updatingUserDataState) { status ->
-                    if (status is InvokeSuccess) updateRates()
-                }
+                .collectStatus(updatingUserDataState)
         }
     }
 
     private fun updateRates() {
         viewModelScope.launch {
-            updateRates(Unit).collectInto(updatingUserDataState)
+            updateRates(Unit).collectStatus(updatingUserDataState)
         }
     }
 }
