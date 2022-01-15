@@ -81,7 +81,7 @@ class MainActivity : BaseActivity() {
                     }
 
                     ProvideWindowInsets(consumeWindowInsets = false) {
-                        Main()
+//                        Main()
                     }
                 }
             }
