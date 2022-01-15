@@ -2,6 +2,7 @@ package com.gnoemes.shikimori.services
 
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -14,19 +15,19 @@ internal interface RateService {
                              @Query("status") status: String? = null,
                              @Query("page") page: Int? = null,
                              @Query("limit") limit: Int? = null
-    ): Response<MutableList<UserRateResponse>>
+    ): Call<MutableList<UserRateResponse>>
 
     @GET("/api/v2/user_rates/{id}")
-    suspend fun getRate(@Path("id") id: Long): Response<UserRateResponse>
+    suspend fun getRate(@Path("id") id: Long): Call<UserRateResponse>
 
     @DELETE("/api/v2/user_rates/{id}")
-    suspend fun deleteRate(@Path("id") id: Long): Response<Unit>
+    suspend fun deleteRate(@Path("id") id: Long): Call<Unit>
 
     @POST("/api/v2/user_rates")
-    suspend fun createRate(@Body request: UserRateCreateOrUpdateRequest): Response<UserRateResponse>
+    suspend fun createRate(@Body request: UserRateCreateOrUpdateRequest): Call<UserRateResponse>
 
     @PATCH("/api/v2/user_rates/{id}")
-    suspend fun updateRate(@Path("id") id: Long, @Body request: UserRateCreateOrUpdateRequest): Response<UserRateResponse>
+    suspend fun updateRate(@Path("id") id: Long, @Body request: UserRateCreateOrUpdateRequest): Call<UserRateResponse>
 
     @POST("/api/v2/user_rates/{id}/increment")
     suspend fun increment(@Path("id") id: Long)

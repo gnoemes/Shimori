@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.rates
 
 import com.gnoemes.shimori.base.di.Shikimori
-import com.gnoemes.shimori.base.entities.Success
 import com.gnoemes.shimori.data.repositories.ratesort.RateSortStore
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.data_base.sources.RateDataSource
@@ -24,7 +23,9 @@ class RateRepository @Inject constructor(
 
     fun observeById(id: Long) = rateStore.observeById(id)
     fun observeByShikimoriId(shikimoriId: Long) = rateStore.observeByShikimoriId(shikimoriId)
-    fun observeByTarget(targetId: Long, targetType: RateTargetType) = rateStore.observeByTarget(targetId, targetType)
+    fun observeByTarget(targetId: Long, targetType: RateTargetType) =
+        rateStore.observeByTarget(targetId, targetType)
+
     fun observeRateSort(type: ListType) = rateSortStore.observeSort(type)
     fun observeListsPages(type: RateTargetType) = rateStore.observeListsPages(type)
 
@@ -37,9 +38,7 @@ class RateRepository @Inject constructor(
                 if (localRate.shikimoriId == null) rateSource.createRate(localRate)
                 else rateSource.updateRate(localRate)
 
-            if (result is Success) {
-                rateStore.createOrUpdate(result.data)
-            }
+            rateStore.createOrUpdate(result)
         }
     }
 
@@ -49,9 +48,7 @@ class RateRepository @Inject constructor(
         localRate?.shikimoriId?.let {
             val result = rateSource.deleteRate(it)
 
-            if (result is Success) {
-                rateStore.dao.deleteWithId(localRate.id)
-            }
+            rateStore.dao.deleteWithId(localRate.id)
         }
     }
 
@@ -70,9 +67,7 @@ class RateRepository @Inject constructor(
 
     private suspend fun diffAndUpdateRates(user: UserShort) {
         val remote = rateSource.getRates(user)
-        if (remote is Success && remote.data.isNotEmpty()) {
-            rateStore.syncAll(remote.data)
-        }
+        rateStore.syncAll(remote)
     }
 
 }
