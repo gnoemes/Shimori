@@ -2,34 +2,6 @@ package com.gnoemes.shimori.common.compose.theme
 
 import androidx.compose.ui.graphics.Color
 
-val lightPrimary = Color(0xFFF8F8F8)
-val lightToolbar = Color(0xF5F8F8F8)
-val lightSurface = Color(0xF5FFFFFF)
-val lightTabsSurface = Color(0xFFFFFFFF)
-val lightButton = Color(0xCCFFFFFF)
-
-val lightOnPrimary = Color(0xFF090909)
-val lightOnSurface = Color(0xFFF5F5F5)
-val lightCaption = Color(0xFF444444)
-val lightDisabled = Color(0xFFDDDDDD)
-val lightAlpha = Color(0x0A000000)
-
-val darkPrimary = Color(0xFF090909)
-val darkToolbar = Color(0xf5090909)
-val darkSurface = Color(0xf5161616)
-val darkTabsSurface = Color(0xf5181818)
-val darkButton = Color(0xf5212121)
-
-val darkOnPrimary = Color(0xFFaaaaaa)
-val darkOnSurface = Color(0xFF191919)
-val darkCaption = Color(0xFF888888)
-val darkDisabled = Color(0xFF333333)
-val darkAlpha = Color(0x02ffffff)
-
-val secondary = Color(0xFF1EB125)
-val secondaryAlpha = Color(0x141EB125)
-val onSecondary = Color(0xF5FFFFFF)
-
 val titleAnnounced = Color(0xFFFF2D58)
 val titleOngoing = Color(0xFF0088FF)
 
@@ -42,3 +14,71 @@ val statsYellow = Color(0xFFfae442)
 val statsPurple = Color(0xFF9c4f96)
 val statsOrange = Color(0xFFfba949)
 val statsRed = Color(0xFFff6355)
+
+object PaletteLight {
+    val primary = Color(0xFF755B00)
+    val onPrimary = Color(0xFFFFFFFF)
+    val primaryContainer = Color(0xFFFFE084)
+    val onPrimaryContainer = Color(0xFF241A00)
+    val inversePrimary = Color(0xFFeec234)
+
+    val secondary = Color(0xFF695D3F)
+    val onSecondary = Color(0xFFFFFFFF)
+    val secondaryContainer = Color(0xFFF2E1BB)
+    val onSecondaryContainer = Color(0xFF231B04)
+
+    val tertiary = Color(0xFF47654A)
+    val onTertiary = Color(0xFFFFFFFF)
+    val tertiaryContainer = Color(0xFFC9ECC9)
+    val onTertiaryContainer = Color(0xFF03210B)
+
+    val error = Color(0xFFBA1B1B)
+    val onError = Color(0xFFFFFFFF)
+    val errorContainer = Color(0xFFFFDAD4)
+    val onErrorContainer = Color(0xFF410001)
+
+    val background = Color(0xFFFFFBF7)
+    val onBackground = Color(0xFF1E1B16)
+    val surface = Color(0xFFFFFBF7)
+    val onSurface = Color(0xFF1E1B16)
+    val inverseSurface = Color(0xFF33302a)
+    val inverseOnSurface = Color(0xFFf7f0e7)
+
+    val surfaceVariant = Color(0xFFEBE1CF)
+    val onSurfaceVariant = Color(0xFF4C4638)
+    val outline = Color(0xFF7D7667)
+}
+
+object PaletteDark {
+    val primary = Color(0xFFEEC234)
+    val onPrimary = Color(0xFF3D2E00)
+    val primaryContainer = Color(0xFF584400)
+    val onPrimaryContainer = Color(0xFFFFE084)
+    val inversePrimary = Color(0xFF755B00)
+
+    val secondary = Color(0xFFD5C5A1)
+    val onSecondary = Color(0xFF393015)
+    val secondaryContainer = Color(0xFF50462A)
+    val onSecondaryContainer = Color(0xFFF2E1BB)
+
+    val tertiary = Color(0xFFADCFAE)
+    val onTertiary = Color(0xFF19371F)
+    val tertiaryContainer = Color(0xFF304D34)
+    val onTertiaryContainer = Color(0xFFC9ECC9)
+
+    val error = Color(0xFFFFB4A9)
+    val onError = Color(0xFF680003)
+    val errorContainer = Color(0xFF930006)
+    val onErrorContainer = Color(0xFFFFDAD4)
+
+    val background = Color(0xFF1E1B16)
+    val onBackground = Color(0xFFE9E2D9)
+    val surface = Color(0xFF1E1B16)
+    val onSurface = Color(0xFFE9E2D9)
+    val inverseSurface = Color(0xFFE9E2D9)
+    val inverseOnSurface = Color(0xFF1e1b16)
+
+    val surfaceVariant = Color(0xFF4C4638)
+    val onSurfaceVariant = Color(0xFFCEC5B4)
+    val outline = Color(0xFF989080)
+}
