@@ -13,6 +13,7 @@ interface ShimoriPreferences {
     var isRomadziNaming : Boolean
 
     var preferredListType : Int
+    var preferredListStatus : String
 
     enum class Theme {
         LIGHT,

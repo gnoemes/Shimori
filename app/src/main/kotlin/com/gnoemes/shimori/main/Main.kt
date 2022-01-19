@@ -55,7 +55,7 @@ internal fun Main(
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
         Scaffold(
             bottomBar = {

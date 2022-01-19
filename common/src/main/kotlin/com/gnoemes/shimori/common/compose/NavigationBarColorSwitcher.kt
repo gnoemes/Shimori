@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.common.compose
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
@@ -8,10 +8,11 @@ import androidx.compose.ui.platform.LocalContext
 import com.gnoemes.shimori.base.extensions.findWindow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+//TODO CHANGE COLOR WITH BOTTOM SHEET PROGRESS
 @Composable
 fun NavigationBarColorSwitcher(
     newColor: Color,
-    isLightTheme: Boolean = MaterialTheme.colors.isLight
+    isLightTheme: Boolean = !isSystemInDarkTheme()
 ) {
     val systemUiController = rememberSystemUiController()
 
