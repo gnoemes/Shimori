@@ -2,7 +2,6 @@ package com.gnoemes.shimori.common.compose
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.LocalAbsoluteElevation
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +12,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
-import com.gnoemes.shimori.common.compose.theme.*
+import com.gnoemes.shimori.common.compose.theme.ShimoriBigRoundedCornerShape
+import com.gnoemes.shimori.common.compose.theme.ShimoriDefaultRoundedCornerShape
+import com.gnoemes.shimori.common.compose.theme.ShimoriSmallRoundedCornerShape
+import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 
 @Composable
 fun EnlargedButton(
@@ -23,7 +25,7 @@ fun EnlargedButton(
     enabled: Boolean = true,
     selected: Boolean = false,
     buttonColors: ButtonColors = ButtonDefaults.textButtonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariantColorAtElevation(LocalAbsoluteElevation.current),
+        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
         contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
         disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
         disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.16f),
@@ -64,7 +66,7 @@ fun ShimoriChip(
     enabled: Boolean = true,
     selected: Boolean = false,
     buttonColors: ButtonColors = ButtonDefaults.outlinedButtonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceColorAtElevation(LocalAbsoluteElevation.current),
+        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surface,
         contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurface,
         disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.12f),
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f)
@@ -109,7 +111,7 @@ fun ShimoriButton(
     enabled: Boolean = true,
     selected: Boolean = false,
     buttonColors: ButtonColors = ButtonDefaults.buttonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariantColorAtElevation(LocalAbsoluteElevation.current),
+        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
         contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
         disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
         disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.16f),

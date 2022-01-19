@@ -24,7 +24,6 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
-import com.gnoemes.shimori.common.compose.theme.surfaceColorAtElevation
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -126,7 +125,9 @@ internal fun MainNavigationBar(
     onNavigationReselected: (RootScreen) -> Unit,
 ) {
 
-    NavigationBar {
+    NavigationBar(
+        tonalElevation = 0.dp
+    ) {
         MainNavigationItems.fastForEach { item ->
             val selected = selectedNavigation == item.screen
             NavigationBarItem(
@@ -136,9 +137,7 @@ internal fun MainNavigationBar(
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                    indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        LocalAbsoluteTonalElevation.current
-                    )
+                    indicatorColor = MaterialTheme.colorScheme.surface
                 ),
                 icon = {
                     NavigationItemIcon(item = item, selected = selected, listType = listType)

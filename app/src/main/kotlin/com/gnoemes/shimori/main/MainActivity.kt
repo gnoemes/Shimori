@@ -6,7 +6,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +17,6 @@ import com.gnoemes.shimori.common.compose.LocalShimoriSettings
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.compose.theme.defaultDimensions
-import com.gnoemes.shimori.common.compose.theme.surfaceColorAtElevation
 import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
 import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
 import com.gnoemes.shimori.common.utils.ShimoriRateUtil
@@ -68,7 +66,7 @@ class MainActivity : BaseActivity() {
 
                     val systemUiController = rememberSystemUiController()
                     val isLightTheme = !useDarkColors
-                    val navigationColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+                    val navigationColor = MaterialTheme.colorScheme.surface
                     val statusBarColor = MaterialTheme.colorScheme.background
 
                     SideEffect {
