@@ -7,6 +7,7 @@ import com.gnoemes.shimori.R
 import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.base.settings.ShimoriPreferences.Theme
 import com.gnoemes.shimori.model.rate.ListType
+import com.gnoemes.shimori.model.rate.RateStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -24,6 +25,7 @@ class ShimoriPreferencesImpl @Inject constructor(
         private const val USE_DYNAMIC_COLORS = "USE_DYNAMIC_COLORS"
         private const val IS_ROMADZI_NAMING = "IS_ROMADZI_NAMING"
         private const val PREFERRED_LIST_TYPE = "PREFERRED_LIST_TYPE"
+        private const val PREFERRED_LIST_STATUS = "PREFERRED_LIST_STATUS"
     }
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -60,6 +62,10 @@ class ShimoriPreferencesImpl @Inject constructor(
     override var preferredListType: Int
         get() = prefs.getInt(PREFERRED_LIST_TYPE, ListType.Anime.type)
         set(value) = prefs.edit { putInt(PREFERRED_LIST_TYPE, value) }
+
+    override var preferredListStatus: String
+        get() = prefs.getString(PREFERRED_LIST_STATUS, RateStatus.listPagesOrder.first().shikimoriValue)!!
+        set(value) = prefs.edit { putString(PREFERRED_LIST_STATUS, value) }
 
     private fun getStorageKeyForTheme(theme: Theme) = when (theme) {
         Theme.LIGHT -> context.getString(R.string.pref_theme_light_value)

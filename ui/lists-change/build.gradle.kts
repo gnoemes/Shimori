@@ -6,3 +6,7 @@ plugins {
 }
 
 apply(from = "../../android_feature_dependencies.gradle")
+
+dependencies {
+    implementation(libs.accompanist.flowlayout)
+}

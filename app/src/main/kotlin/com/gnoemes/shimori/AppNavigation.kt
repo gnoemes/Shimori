@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.gnoemes.shimori.lists_change.ListsChangeSheet
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -167,9 +168,9 @@ private fun NavGraphBuilder.addListChangeBottomSheet(
     root: RootScreen
 ) {
     bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
-//        ListsChangeSheet(
-//                navigateUp = { navController.navigateUp() }
-//        )
+        ListsChangeSheet(
+                navigateUp = { navController.navigateUp() }
+        )
     }
 }
 
