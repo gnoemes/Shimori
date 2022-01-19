@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.gnoemes.shimori.auth.Auth
 import com.gnoemes.shimori.lists_change.ListsChangeSheet
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -125,7 +126,8 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
     composable(
             Screen.Lists.createRoute(root),
     ) {
-        MockScreen(Screen.Explore.createRoute(root))
+        Auth({})
+//        MockScreen(Screen.Explore.createRoute(root))
 //        Lists(
 //                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
 //                openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
