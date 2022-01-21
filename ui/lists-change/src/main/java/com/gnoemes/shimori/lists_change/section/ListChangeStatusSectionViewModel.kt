@@ -3,7 +3,6 @@ package com.gnoemes.shimori.lists_change.section
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.model.rate.ListType
@@ -22,8 +21,7 @@ import kotlinx.coroutines.launch
 internal class ListChangeStatusSectionViewModel @AssistedInject constructor(
     @Assisted internal val rawType: Int,
     private val listsStateManager: ListsStateManager,
-    private val prefs: ShimoriPreferences,
-    observeStatuses : ObserveListsPages
+    observeStatuses: ObserveListsPages
 ) : ViewModel() {
     private val sectionType = ListType.findOrDefault(rawType)
 
@@ -43,13 +41,10 @@ internal class ListChangeStatusSectionViewModel @AssistedInject constructor(
         observeStatuses(ObserveListsPages.Params(sectionType.rateType!!))
     }
 
-    fun onStatusChanged(newStatus : RateStatus) {
+    fun onStatusChanged(newStatus: RateStatus) {
         viewModelScope.launch {
             listsStateManager.type.update(sectionType)
-            prefs.preferredListType = sectionType.type
-
             listsStateManager.page.update(newStatus)
-            prefs.preferredListStatus = newStatus.shikimoriValue
         }
     }
 

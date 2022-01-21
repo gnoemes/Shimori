@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
+import com.gnoemes.shimori.base.settings.ShimoriSettings
 import com.gnoemes.shimori.common.BaseActivity
 import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainViewModel
 
     @Inject
-    internal lateinit var prefs: ShimoriPreferences
+    internal lateinit var settings: ShimoriSettings
 
     @Inject
     internal lateinit var rateUtil: ShimoriRateUtil
@@ -56,11 +56,11 @@ class MainActivity : BaseActivity() {
             CompositionLocalProvider(
                 LocalShimoriRateUtil provides rateUtil,
                 LocalShimoriTextCreator provides textCreator,
-                LocalShimoriSettings provides prefs,
+                LocalShimoriSettings provides settings,
                 LocalShimoriDimensions provides dimensions
             ) {
 
-                val useDarkColors = prefs.shouldUseDarkColors()
+                val useDarkColors = settings.shouldUseDarkColors()
 
                 ShimoriTheme(useDarkColors = useDarkColors) {
 

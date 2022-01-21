@@ -3,14 +3,14 @@ package com.gnoemes.shimori.common.extensions
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
+import com.gnoemes.shimori.base.settings.ShimoriSettings
 
 @Composable
-fun ShimoriPreferences.shouldUseDarkColors(): Boolean {
-    val themePreference = observeTheme().collectAsState(initial = ShimoriPreferences.Theme.SYSTEM)
+fun ShimoriSettings.shouldUseDarkColors() : Boolean {
+    val themePreference = theme.observe.collectAsState(initial = ShimoriSettings.Theme.SYSTEM)
     return when (themePreference.value) {
-        ShimoriPreferences.Theme.LIGHT -> false
-        ShimoriPreferences.Theme.DARK -> true
+        ShimoriSettings.Theme.LIGHT -> false
+        ShimoriSettings.Theme.DARK -> true
         else -> isSystemInDarkTheme()
     }
 }

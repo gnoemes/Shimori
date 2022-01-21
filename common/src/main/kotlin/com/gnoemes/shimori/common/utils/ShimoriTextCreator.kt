@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.common.utils
 
 import android.content.Context
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.base.util.ShimoriDateTimeFormatter
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.anime.Anime
@@ -23,26 +22,28 @@ import javax.inject.Inject
 
 class ShimoriTextCreator @Inject constructor(
     @ActivityContext private val context: Context,
-    private val prefs: ShimoriPreferences,
     private val formatter: ShimoriDateTimeFormatter
 ) {
 
-    //TODO check locale
+    //TODO check locale, restore romadzi
     fun name(anime: Anime): String {
-        return if (prefs.isRomadziNaming) anime.name
-        else anime.nameRu ?: anime.name
+//        return if (prefs.isRomadziNaming) anime.name
+//        else
+           return anime.nameRu ?: anime.name
     }
 
-    //TODO check locale
+    //TODO check locale, restore romadzi
     fun name(manga: Manga): String {
-        return if (prefs.isRomadziNaming) manga.name
-        else manga.nameRu ?: manga.name
+//        return if (prefs.isRomadziNaming) manga.name
+//        else manga.nameRu ?: manga.name
+        return manga.nameRu ?: manga.name
     }
 
-    //TODO check locale
+    //TODO check locale, restore romadzi
     fun name(ranobe: Ranobe): String {
-        return if (prefs.isRomadziNaming) ranobe.name
-        else ranobe.nameRu ?: ranobe.name
+//        return if (prefs.isRomadziNaming) ranobe.name
+//        else ranobe.nameRu ?: ranobe.name
+        return ranobe.nameRu ?: ranobe.name
     }
 
     fun statusDescription(anime: Anime): String? {

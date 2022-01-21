@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.ranobe
 
 import androidx.paging.PagingSource
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.daos.RanobeDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
@@ -15,12 +14,11 @@ import javax.inject.Inject
 class RanobeStore @Inject constructor(
     private val runner: DatabaseTransactionRunner,
     private val ranobeDao: RanobeDao,
-    private val settings: ShimoriPreferences
 ) {
     private val syncer = syncerForEntity(
-            ranobeDao,
-            { it.shikimoriId },
-            { remote, local -> remote.copy(id = local?.id ?: 0) }
+        ranobeDao,
+        { it.shikimoriId },
+        { remote, local -> remote.copy(id = local?.id ?: 0) }
     )
 
     suspend fun update(ranobe: List<Ranobe>) = runner {
@@ -37,8 +35,10 @@ class RanobeStore @Inject constructor(
     ): PagingSource<Int, RanobeWithRate> {
         return when (sort.sortOption) {
             RateSortOption.NAME -> {
-                if (!settings.isRomadziNaming) ranobeDao.pagingNameRu(status, sort.isDescending)
-                else ranobeDao.pagingName(status, sort.isDescending)
+                //TODO restore romadzi or make cross language search
+//                if (!settings.isRomadziNaming) ranobeDao.pagingNameRu(status, sort.isDescending)
+//                else
+                ranobeDao.pagingName(status, sort.isDescending)
             }
             RateSortOption.PROGRESS -> ranobeDao.pagingProgress(status, sort.isDescending)
             RateSortOption.DATE_CREATED -> ranobeDao.pagingDateCreated(status, sort.isDescending)
@@ -52,5 +52,5 @@ class RanobeStore @Inject constructor(
     }
 
     fun observePinned() = ranobeDao.pinnedDateUpdated(true)
-    fun observeById(id : Long) = ranobeDao.observeById(id)
+    fun observeById(id: Long) = ranobeDao.observeById(id)
 }

@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.manga
 
 import androidx.paging.PagingSource
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.daos.MangaDao
 import com.gnoemes.shimori.data.sync.syncerForEntity
 import com.gnoemes.shimori.data.util.DatabaseTransactionRunner
@@ -15,7 +14,6 @@ import javax.inject.Inject
 class MangaStore @Inject constructor(
     private val runner: DatabaseTransactionRunner,
     private val mangaDao: MangaDao,
-    private val settings: ShimoriPreferences
 ) {
     private val syncer = syncerForEntity(
             mangaDao,
@@ -37,8 +35,10 @@ class MangaStore @Inject constructor(
     ): PagingSource<Int, MangaWithRate> {
         return when (sort.sortOption) {
             RateSortOption.NAME -> {
-                if (!settings.isRomadziNaming) mangaDao.pagingNameRu(status, sort.isDescending)
-                else mangaDao.pagingName(status, sort.isDescending)
+                //TODO restore romadzi or make cross language search
+//                if (!settings.isRomadziNaming) mangaDao.pagingNameRu(status, sort.isDescending)
+//                else
+                    mangaDao.pagingName(status, sort.isDescending)
             }
             RateSortOption.PROGRESS -> mangaDao.pagingProgress(status, sort.isDescending)
             RateSortOption.DATE_CREATED -> mangaDao.pagingDateCreated(status, sort.isDescending)

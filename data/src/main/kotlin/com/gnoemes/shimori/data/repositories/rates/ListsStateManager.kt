@@ -1,40 +1,40 @@
 package com.gnoemes.shimori.data.repositories.rates
 
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
+import com.gnoemes.shimori.base.settings.ShimoriSettings
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ListsStateManager @Inject constructor(
-    prefs: ShimoriPreferences
-) {
+    settings: ShimoriSettings,
+
+    ) {
 
     /**
      * Represents selected [ListType]
      */
     val type = object : State<ListType> {
-        private val currentType = MutableStateFlow(ListType.findOrDefault(prefs.preferredListType))
-        override fun update(newState: ListType) =
-            kotlin.run { currentType.value = newState }
+        override suspend fun update(newState: ListType) {
+            settings.preferredListType(newState.type)
+        }
 
-        override val observe: StateFlow<ListType> get() = currentType
+        override val observe: Flow<ListType>
+            get() = settings.preferredListType.observe.map { ListType.findOrDefault(it) }
     }
 
     /**
      * Represents current active list page by [RateStatus]
      */
     val page = object : State<RateStatus> {
-        private val currentPage = MutableStateFlow(RateStatus.WATCHING)
-        override fun update(newState: RateStatus) =
-            kotlin.run { currentPage.value = newState }
+        override suspend fun update(newState: RateStatus) {
+            settings.preferredListStatus(newState.shikimoriValue)
+        }
 
-        override val observe: StateFlow<RateStatus> get() = currentPage
+        override val observe: Flow<RateStatus>
+            get() = settings.preferredListStatus.observe.map { RateStatus.find(it)!! }
     }
 
     /**
@@ -42,7 +42,7 @@ class ListsStateManager @Inject constructor(
      */
     val ratesLoading = object : State<Boolean> {
         private val ratesLoading = MutableStateFlow(false)
-        override fun update(newState: Boolean) =
+        override suspend fun update(newState: Boolean) =
             kotlin.run { ratesLoading.value = newState }
 
         override val observe: StateFlow<Boolean> get() = ratesLoading
@@ -63,11 +63,10 @@ class ListsStateManager @Inject constructor(
      * Interface for common used state features
      */
     interface State<T> {
-        fun update(newState: T)
-        val observe: StateFlow<T>
-        val value: T get() = observe.value
+        suspend fun update(newState: T)
+        val observe: Flow<T>
 
-        operator fun invoke(newState: T) = update(newState = newState)
+        suspend operator fun invoke(newState: T) = update(newState = newState)
     }
 
     /**

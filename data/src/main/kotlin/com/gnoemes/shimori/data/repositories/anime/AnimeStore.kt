@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.repositories.anime
 
 import androidx.paging.PagingSource
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
 import com.gnoemes.shimori.data.daos.AnimeDao
 import com.gnoemes.shimori.data.daos.EntityInserter
 import com.gnoemes.shimori.data.sync.syncerForEntity
@@ -18,7 +17,6 @@ class AnimeStore @Inject constructor(
     private val inserter: EntityInserter,
     private val runner: DatabaseTransactionRunner,
     private val animeDao: AnimeDao,
-    private val settings: ShimoriPreferences,
 ) {
 
     private val syncer = syncerForEntity(
@@ -50,9 +48,10 @@ class AnimeStore @Inject constructor(
     ): PagingSource<Int, AnimeWithRate> {
         return when (sort.sortOption) {
             RateSortOption.NAME -> {
-                //TODO paging eng
-                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
-                else animeDao.pagingName(status, sort.isDescending)
+                //TODO paging eng, restore romadzi or make cross results
+//                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
+//                else
+                    animeDao.pagingName(status, sort.isDescending)
             }
             RateSortOption.PROGRESS -> animeDao.pagingProgress(status, sort.isDescending)
             RateSortOption.DATE_CREATED -> animeDao.pagingDateCreated(status, sort.isDescending)

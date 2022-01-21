@@ -85,6 +85,7 @@ dependencies {
     implementation libs.google.analytics
 
     implementation libs.androidx.splashscreen
+    implementation libs.androidx.datastore
     implementation libs.accompanist.navigationmaterial
 
     implementation libs.gson
