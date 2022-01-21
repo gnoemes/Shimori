@@ -34,7 +34,7 @@ private fun ListsChange(
 ) {
     NavigationBarColorSwitcher(MaterialTheme.colorScheme.surface)
     ListsChange(
-        onOpenPinedClick = { viewModel.changeListType(ListType.Pinned); navigateUp() },
+        onOpenPinedClick = { viewModel.openPinned(); navigateUp() },
         onOpenRandomTitleClick = { viewModel.openRandomTitle(); navigateUp() },
         navigateUp = navigateUp,
     )

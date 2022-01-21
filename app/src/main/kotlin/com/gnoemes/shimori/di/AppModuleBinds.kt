@@ -1,10 +1,9 @@
 package com.gnoemes.shimori.di
 
-import com.gnoemes.shimori.appinitializers.PreferencesInitializer
 import com.gnoemes.shimori.appinitializers.ThreeTenBpInitializer
 import com.gnoemes.shimori.base.appinitializers.AppInitializer
-import com.gnoemes.shimori.base.settings.ShimoriPreferences
-import com.gnoemes.shimori.settings.ShimoriPreferencesImpl
+import com.gnoemes.shimori.base.settings.ShimoriSettings
+import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,16 +15,12 @@ import javax.inject.Singleton
 @Module
 abstract class AppModuleBinds {
 
-    @Singleton
     @Binds
-    abstract fun bindPreferences(prefs: ShimoriPreferencesImpl): ShimoriPreferences
+    @Singleton
+    abstract fun bindSettings(settings: ShimoriSettingsImpl): ShimoriSettings
 
     @Binds
     @IntoSet
     abstract fun bindThreeTenBpInitializer(threeTenBp: ThreeTenBpInitializer): AppInitializer
-
-    @Binds
-    @IntoSet
-    abstract fun bindPreferencesInitializer(prefs: PreferencesInitializer): AppInitializer
 
 }
