@@ -5,10 +5,7 @@ import android.os.Build
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.gnoemes.shimori.base.settings.Setting
-import com.gnoemes.shimori.base.settings.ShimoriSettings
-import com.gnoemes.shimori.common.compose.theme.PaletteDark
-import com.gnoemes.shimori.common.compose.theme.PaletteLight
+import com.gnoemes.shimori.base.settings.*
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,98 +22,108 @@ class ShimoriSettingsImpl @Inject constructor(
     companion object {
         private val Context.store: DataStore<Preferences> by preferencesDataStore("shimori_settings")
 
+        private val TITlES_LOCALE = intPreferencesKey("titles_locale")
+        private val LOCALE = intPreferencesKey("locale")
+        private val SPOILERS = booleanPreferencesKey("spoilers")
         private val APP_THEME = stringPreferencesKey("app_theme")
-        private val ROMADZI_NAMING = booleanPreferencesKey("romadzi_naming")
-        private val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
-        private val SECONDARY_COLOR = stringPreferencesKey("secondary_color")
-        private val LOCALE = stringPreferencesKey("locale")
+        private val ACCENT_COLOR = intPreferencesKey("accent_color")
+
         private val PREFERRED_LIST = intPreferencesKey("list")
         private val PREFERRED_STATUS = stringPreferencesKey("status")
     }
 
-    override val theme = object : Setting<ShimoriSettings.Theme> {
-        override suspend fun update(newState: ShimoriSettings.Theme) {
+    override val titlesLocale = object : Setting<AppTitlesLocale> {
+        override suspend fun update(newState: AppTitlesLocale) {
+            context.store.edit { prefs ->
+                prefs[TITlES_LOCALE] = newState.value
+            }
+        }
+
+        override val observe: Flow<AppTitlesLocale>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences ->
+
+                    val default = when (preferences[LOCALE]?.let { AppLocale.from(it) }) {
+                        AppLocale.Russian -> AppTitlesLocale.Russian
+                        else -> AppTitlesLocale.English
+                    }
+
+                    preferences[TITlES_LOCALE]?.let {
+                        AppTitlesLocale.from(it)
+                    } ?: default
+                }
+    }
+
+    override val locale = object : Setting<AppLocale> {
+        override suspend fun update(newState: AppLocale) {
+            context.store.edit { prefs ->
+                prefs[LOCALE] = newState.value
+            }
+        }
+
+        override val observe: Flow<AppLocale>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences ->
+                    val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        context.resources.configuration.locales[0].language
+                    } else {
+                        context.resources.configuration.locale.language
+                    }
+
+                    preferences[LOCALE]?.let { AppLocale.from(it) } ?: AppLocale.from(language)
+                }
+    }
+
+    override val showSpoilers = object : Setting<Boolean> {
+        override suspend fun update(newState: Boolean) {
+            context.store.edit { prefs ->
+                prefs[SPOILERS] = newState
+            }
+        }
+
+        override val observe: Flow<Boolean>
+            get() = context.store.data
+                .catchIO()
+                .map { preferences ->
+                    preferences[SPOILERS] ?: false
+                }
+    }
+
+    override val theme = object : Setting<AppTheme> {
+        override suspend fun update(newState: AppTheme) {
             context.store.edit { prefs ->
                 prefs[APP_THEME] = newState.name
             }
         }
 
-        override val observe: Flow<ShimoriSettings.Theme>
+        override val observe: Flow<AppTheme>
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
-                    ShimoriSettings.Theme.valueOf(
-                        preferences[APP_THEME] ?: ShimoriSettings.Theme.SYSTEM.name
+                    AppTheme.valueOf(
+                        preferences[APP_THEME] ?: AppTheme.SYSTEM.name
                     )
                 }
     }
 
-    override val dynamicColors = object : Setting<Boolean> {
-        override suspend fun update(newState: Boolean) {
+    override val accentColor = object : Setting<AppAccentColor> {
+        override suspend fun update(newState: AppAccentColor) {
             context.store.edit { prefs ->
-                prefs[DYNAMIC_COLORS] = newState
+                prefs[ACCENT_COLOR] = newState.value
             }
         }
 
-        override val observe: Flow<Boolean>
-            get() = context.store.data
-                .catchIO()
-                .map { preferences ->
-                    preferences[DYNAMIC_COLORS] ?: true
-                }
-    }
-
-    override val secondaryColor = object : Setting<String> {
-        override suspend fun update(newState: String) {
-            context.store.edit { prefs ->
-                prefs[SECONDARY_COLOR] = newState
-            }
-        }
-
-        override val observe: Flow<String>
+        override val observe: Flow<AppAccentColor>
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
                     val defaultColor = when (preferences[APP_THEME]) {
-                        ShimoriSettings.Theme.LIGHT.name -> PaletteLight.primary.value.toString()
-                        else -> PaletteDark.primary.value.toString()
+                        AppTheme.LIGHT.name -> AppAccentColor.Orange
+                        else -> AppAccentColor.Yellow
                     }
-                    preferences[SECONDARY_COLOR] ?: defaultColor
-                }
-    }
-
-    override val locale = object : Setting<String> {
-        override suspend fun update(newState: String) {
-            context.store.edit { prefs ->
-                prefs[LOCALE] = newState
-            }
-        }
-
-        override val observe: Flow<String>
-            get() = context.store.data
-                .catchIO()
-                .map { preferences ->
-                    val defaultLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        context.resources.configuration.locales[0].language
-                    } else {
-                        context.resources.configuration.locale.language
-                    }
-                    preferences[LOCALE] ?: defaultLocale
-                }
-    }
-
-    override val isRomadziNaming = object : Setting<Boolean> {
-        override suspend fun update(newState: Boolean) {
-            context.store.edit { prefs ->
-                prefs[ROMADZI_NAMING] = newState
-            }
-        }
-
-        override val observe: Flow<Boolean>
-            get() = context.store.data
-                .catchIO()
-                .map { preferences ->
-                    preferences[ROMADZI_NAMING] ?: false
+                    preferences[ACCENT_COLOR]?.let { AppAccentColor.from(it) } ?: defaultColor
                 }
     }
 

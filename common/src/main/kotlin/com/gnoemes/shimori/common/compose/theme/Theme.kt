@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.common.compose.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -7,6 +8,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import com.gnoemes.shimori.base.settings.AppAccentColor
 import com.gnoemes.shimori.common.compose.LocalShimoriSettings
 
 @Composable
@@ -15,21 +17,27 @@ fun ShimoriTheme(
     content: @Composable () -> Unit
 ) {
 
-    val dynamicColorAvailable = false
-//    val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val dynamicColorSettingEnabled = LocalShimoriSettings
+    val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val accentColorType = LocalShimoriSettings
         .current
-        .dynamicColors
+        .accentColor
         .observe
-        .collectAsState(initial = dynamicColorAvailable)
+        .collectAsState(
+            initial = if (dynamicColorAvailable) AppAccentColor.System
+            else AppAccentColor.Yellow
+        )
+        .value
 
-    val dynamicColor = dynamicColorAvailable && dynamicColorSettingEnabled.value
+    val dynamicColor = dynamicColorAvailable
+            && accentColorType == AppAccentColor.System
+
+    val accentColor = secondaryColorFromType(accentColorType)
 
     val colorScheme = when {
         dynamicColor && useDarkColors -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !useDarkColors -> dynamicLightColorScheme(LocalContext.current)
-        useDarkColors -> ShimoriDarkColors
-        else -> ShimoriLightColors
+        useDarkColors -> ShimoriDarkColors.copy(primary = accentColor)
+        else -> ShimoriLightColors.copy(primary = accentColor)
     }
 
     MaterialTheme(

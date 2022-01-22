@@ -15,6 +15,13 @@ val statsPurple = Color(0xFF9c4f96)
 val statsOrange = Color(0xFFfba949)
 val statsRed = Color(0xFFff6355)
 
+val accentRed = Color(0xFFef5350)
+val accentOrange = Color(0xFFff9800)
+val accentYellow = Color(0xFFeec234)
+val accentGreen = Color(0xFF43a047)
+val accentBlue = Color(0xFF1e88e5)
+val accentPurple = Color(0xFF5e35b1)
+
 object PaletteLight {
     val primary = Color(0xFF755B00)
     val onPrimary = Color(0xFFFFFFFF)

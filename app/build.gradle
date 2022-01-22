@@ -81,6 +81,8 @@ dependencies {
     implementation project(Modules.uiListsChange)
     implementation project(Modules.uiListsEdit)
 
+    implementation project(Modules.uiSettings)
+
     implementation libs.google.crashlytics
     implementation libs.google.analytics
 
