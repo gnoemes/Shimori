@@ -119,10 +119,13 @@ class ShimoriSettingsImpl @Inject constructor(
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
-                    val defaultColor = when (preferences[APP_THEME]) {
+                    val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        AppAccentColor.System
+                    } else when (preferences[APP_THEME]) {
                         AppTheme.LIGHT.name -> AppAccentColor.Orange
                         else -> AppAccentColor.Yellow
                     }
+
                     preferences[ACCENT_COLOR]?.let { AppAccentColor.from(it) } ?: defaultColor
                 }
     }
