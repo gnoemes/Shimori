@@ -7,6 +7,7 @@ import com.gnoemes.shimori.common.utils.collectStatus
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.interactors.UpdateRates
 import com.gnoemes.shimori.domain.interactors.UpdateUser
+import com.gnoemes.shimori.domain.observers.ObserveHasRates
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -19,22 +20,26 @@ class MainViewModel @Inject constructor(
     private val updateUser: UpdateUser,
     private val updateRates: UpdateRates,
     private val listsStateManager: ListsStateManager,
+    observeHasRates: ObserveHasRates
 ) : ViewModel() {
 
     private val updatingUserDataState = ObservableLoadingCounter()
     private val _state = MutableStateFlow(MainViewState.Empty)
 
     val state: StateFlow<MainViewState> get() = _state
+
     init {
 
         viewModelScope.launch {
             combine(
-                    listsStateManager.type.observe,
-                    observeShikimoriAuth.flow
-            ) { listType, authState ->
+                listsStateManager.type.observe,
+                observeHasRates.flow,
+                observeShikimoriAuth.flow
+            ) { listType, hasRates, authState ->
                 MainViewState(
-                        listType = listType,
-                        authState = authState
+                    listType = listType,
+                    hasRates = hasRates,
+                    authState = authState
                 )
             }.collect { _state.emit(it) }
         }
@@ -53,6 +58,7 @@ class MainViewModel @Inject constructor(
         }
 
         observeShikimoriAuth(Unit)
+        observeHasRates(Unit)
     }
 
     private fun updateUserAndRates() {

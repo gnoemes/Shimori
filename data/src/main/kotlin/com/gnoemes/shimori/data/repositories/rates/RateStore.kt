@@ -44,6 +44,8 @@ class RateStore @Inject constructor(
         RateTargetType.RANOBE -> dao.observeByRanobeId(targetId)
     }
 
+    fun observeHasRates() = dao.observeRateCount().map { it > 0 }
+
     fun observeListsPages(target: RateTargetType): Flow<List<RateStatus>> {
         return combine(
                 *RateStatus.listPagesOrder.map { status ->

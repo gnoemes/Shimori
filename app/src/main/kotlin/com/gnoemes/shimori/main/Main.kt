@@ -38,7 +38,7 @@ internal fun Main() {
 
 @OptIn(
     ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class,
-    androidx.compose.material3.ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class
 )
 @Composable
 internal fun Main(
@@ -101,7 +101,7 @@ internal fun MainBottomBar(
             onNavigationReselected = { selected ->
 
                 //show list type select bottom sheet if lists tab was reselected twice
-                if (canShowBottomSheet) {
+                if (canShowBottomSheet && viewState.hasRates) {
                     onListsChange()
                 } else {
                     navController.popBackStack(
