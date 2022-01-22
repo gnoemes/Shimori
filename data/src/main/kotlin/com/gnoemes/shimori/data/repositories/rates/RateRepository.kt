@@ -28,6 +28,7 @@ class RateRepository @Inject constructor(
 
     fun observeRateSort(type: ListType) = rateSortStore.observeSort(type)
     fun observeListsPages(type: RateTargetType) = rateStore.observeListsPages(type)
+    fun observeHasRates() = rateStore.observeHasRates()
 
     suspend fun createOrUpdate(rate: Rate) {
         val id = rateStore.createOrUpdate(rate)

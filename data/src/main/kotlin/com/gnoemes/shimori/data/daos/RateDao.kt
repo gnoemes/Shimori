@@ -72,6 +72,10 @@ abstract class RateDao : EntityDao<Rate> {
     abstract fun observeByRanobeId(shikimoriId: Long): Flow<Rate?>
 
     @Transaction
+    @Query("SELECT COUNT(*) FROM rates ")
+    abstract fun observeRateCount() : Flow<Int>
+
+    @Transaction
     @Query(QUERY_PAGE_EXIST)
     abstract fun observePageExist(target: RateTargetType, status: RateStatus): Flow<Int>
 
