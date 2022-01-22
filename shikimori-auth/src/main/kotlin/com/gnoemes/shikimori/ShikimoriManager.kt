@@ -3,14 +3,13 @@ package com.gnoemes.shikimori
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.content.edit
-import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
+import com.gnoemes.shimori.base.entities.ShikimoriAuthState
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import dagger.Lazy
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.openid.appauth.AuthState
@@ -66,7 +65,7 @@ class ShikimoriManager @Inject constructor(
         }
     }
 
-    fun onNewAuthState(newState: AuthState) {
+    internal fun onNewAuthState(newState: AuthState) {
         GlobalScope.launch(dispatchers.main) {
             authState.value = newState
         }

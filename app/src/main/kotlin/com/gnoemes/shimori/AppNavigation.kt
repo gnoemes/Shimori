@@ -15,6 +15,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gnoemes.shimori.auth.Auth
+import com.gnoemes.shimori.common.compose.LocalShikimoriAuth
 import com.gnoemes.shimori.lists_change.ListsChangeSheet
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.settings.Settings
@@ -132,10 +133,14 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
     composable(
         Screen.Lists.createRoute(root),
     ) {
-        Auth(
-            openSettings = { navController.navigate(Screen.Settings.createRoute(root)) }
-        )
-//        MockScreen(Screen.Explore.createRoute(root))
+
+        if (!LocalShikimoriAuth.current.isAuthorized) {
+            Auth(
+                openSettings = { navController.navigate(Screen.Settings.createRoute(root)) }
+            )
+        } else {
+            MockScreen(Screen.Explore.createRoute(root))
+        }
 //        Lists(
 //                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
 //                openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
