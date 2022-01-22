@@ -17,6 +17,8 @@ include ':ui:lists'
 include ':ui:lists-change'
 include ':ui:lists-edit'
 
+include ':ui:settings'
+
 include ':app'
 
 rootProject.name='Shimori'

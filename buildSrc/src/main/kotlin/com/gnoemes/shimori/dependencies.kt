@@ -29,4 +29,6 @@ object Modules {
     const val uiListsChange = ":ui:lists-change"
     const val uiListsEdit = ":ui:lists-edit"
 
+    const val uiSettings = ":ui:settings"
+
 }

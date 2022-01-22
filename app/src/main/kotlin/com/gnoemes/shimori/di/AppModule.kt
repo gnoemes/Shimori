@@ -67,6 +67,10 @@ object AppModule {
     @Named("shikimori-secret-key")
     fun provideShimoriSecretKey(): String = BuildConfig.ShikimoriClientSecret
 
+    @Provides
+    @Named("app_version")
+    fun provideAppVersion() : String = BuildConfig.VERSION_NAME
+
     @Singleton
     @Provides
     @ShortDate

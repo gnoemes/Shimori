@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Shimori</string>
+
     <string name="anime">Anime</string>
     <string name="manga">Manga</string>
     <string name="ranobe">Ranobe</string>
@@ -98,5 +100,27 @@
     <string name="type_light_novel">Light Novel</string>
 
     <string name="today">Today</string>
+    
+    
+    <string name="settings_titles">Titles and names language</string>
+    <string name="settings_language_russian">Russian</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_romaji">Romaji</string>
+    <string name="settings_app_language">App language</string>
+    <string name="settings_spoilers">Spoilers</string>
+    <string name="settings_spoilers_hide">Ask before showing</string>
+    <string name="settings_spoilers_show">Show</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_accent_color">Accent color</string>
+    <string name="settings_accent_color_system">System</string>
+    <string name="settings_feedback_and_updates">Feedback &amp; updates</string>
+    <string name="settings_feedback_and_updates_email">E-mail</string>
+    <string name="settings_feedback_and_updates_github">Github</string>
+    <string name="settings_feedback_and_updates_telegram">Telegram</string>
+    <string name="settings_special_thanks">Special thanks</string>
+    <string name="settings_special_thanks_shikimori">Shikimori</string>
 
 </resources>

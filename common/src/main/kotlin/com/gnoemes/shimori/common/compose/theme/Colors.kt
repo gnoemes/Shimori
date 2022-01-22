@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.gnoemes.shimori.base.settings.AppAccentColor
 import kotlin.math.ln
 
 val ShimoriLightColors = lightColorScheme(
@@ -108,4 +109,14 @@ internal fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: 
     } else {
         return backgroundColor
     }
+}
+
+fun secondaryColorFromType(type: AppAccentColor) = when (type) {
+    AppAccentColor.Red -> accentRed
+    AppAccentColor.Orange -> accentOrange
+    AppAccentColor.Yellow -> accentYellow
+    AppAccentColor.Green -> accentGreen
+    AppAccentColor.Blue -> accentBlue
+    AppAccentColor.Purple -> accentPurple
+    else -> accentYellow
 }
