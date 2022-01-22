@@ -1,8 +1,6 @@
 package com.gnoemes.shimori.common.compose.theme
 
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
@@ -10,63 +8,36 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.settings.AppAccentColor
 import kotlin.math.ln
 
-val ShimoriLightColors = lightColorScheme(
-    primary = PaletteLight.primary,
-    onPrimary = PaletteLight.onPrimary,
-    primaryContainer = PaletteLight.primaryContainer,
-    onPrimaryContainer = PaletteLight.onPrimaryContainer,
-    inversePrimary = PaletteLight.inversePrimary,
-    secondary = PaletteLight.secondary,
-    onSecondary = PaletteLight.onSecondary,
-    secondaryContainer = PaletteLight.secondaryContainer,
-    onSecondaryContainer = PaletteLight.onSecondaryContainer,
-    tertiary = PaletteLight.tertiary,
-    onTertiary = PaletteLight.onTertiary,
-    tertiaryContainer = PaletteLight.tertiaryContainer,
-    onTertiaryContainer = PaletteLight.onTertiaryContainer,
-    background = PaletteLight.background,
-    onBackground = PaletteLight.onBackground,
-    surface = PaletteLight.surface,
-    onSurface = PaletteLight.onSurface,
-    surfaceVariant = PaletteLight.surfaceVariant,
-    onSurfaceVariant = PaletteLight.onSurfaceVariant,
-    inverseSurface = PaletteLight.inverseSurface,
-    inverseOnSurface = PaletteLight.inverseOnSurface,
-    error = PaletteLight.error,
-    onError = PaletteLight.onError,
-    errorContainer = PaletteLight.errorContainer,
-    onErrorContainer = PaletteLight.onErrorContainer,
-    outline = PaletteLight.outline,
-)
-
-val ShimoriDarkColors = darkColorScheme(
-    primary = PaletteDark.primary,
-    onPrimary = PaletteDark.onPrimary,
-    primaryContainer = PaletteDark.primaryContainer,
-    onPrimaryContainer = PaletteDark.onPrimaryContainer,
-    inversePrimary = PaletteDark.inversePrimary,
-    secondary = PaletteDark.secondary,
-    onSecondary = PaletteDark.onSecondary,
-    secondaryContainer = PaletteDark.secondaryContainer,
-    onSecondaryContainer = PaletteDark.onSecondaryContainer,
-    tertiary = PaletteDark.tertiary,
-    onTertiary = PaletteDark.onTertiary,
-    tertiaryContainer = PaletteDark.tertiaryContainer,
-    onTertiaryContainer = PaletteDark.onTertiaryContainer,
-    background = PaletteDark.background,
-    onBackground = PaletteDark.onBackground,
-    surface = PaletteDark.surface,
-    onSurface = PaletteDark.onSurface,
-    surfaceVariant = PaletteDark.surfaceVariant,
-    onSurfaceVariant = PaletteDark.onSurfaceVariant,
-    inverseSurface = PaletteDark.inverseSurface,
-    inverseOnSurface = PaletteDark.inverseOnSurface,
-    error = PaletteDark.error,
-    onError = PaletteDark.onError,
-    errorContainer = PaletteDark.errorContainer,
-    onErrorContainer = PaletteDark.onErrorContainer,
-    outline = PaletteDark.outline,
-)
+fun AppPalette.toColorScheme() : ColorScheme {
+    return ColorScheme(
+        primary = primary,
+        onPrimary = onPrimary,
+        primaryContainer = primaryContainer,
+        onPrimaryContainer = onPrimaryContainer,
+        inversePrimary = inversePrimary,
+        secondary = secondary,
+        onSecondary = onSecondary,
+        secondaryContainer = secondaryContainer,
+        onSecondaryContainer = onSecondaryContainer,
+        tertiary = tertiary,
+        onTertiary = onTertiary,
+        tertiaryContainer = tertiaryContainer,
+        onTertiaryContainer = onTertiaryContainer,
+        background = background,
+        onBackground = onBackground,
+        surface = surface,
+        onSurface = onSurface,
+        surfaceVariant = surfaceVariant,
+        onSurfaceVariant = onSurfaceVariant,
+        inverseSurface = inverseSurface,
+        inverseOnSurface = inverseOnSurface,
+        error = error,
+        onError = onError,
+        errorContainer = errorContainer,
+        onErrorContainer = onErrorContainer,
+        outline = outline,
+    )
+}
 
 /**
  * Returns the [ColorScheme.surface] color with an alpha of the [ColorScheme.primary] color overlaid

@@ -22,70 +22,12 @@ val accentGreen = Color(0xFF43a047)
 val accentBlue = Color(0xFF1e88e5)
 val accentPurple = Color(0xFF5e35b1)
 
-object PaletteLight {
-    val primary = Color(0xFF755B00)
-    val onPrimary = Color(0xFFFFFFFF)
-    val primaryContainer = Color(0xFFFFE084)
-    val onPrimaryContainer = Color(0xFF241A00)
-    val inversePrimary = Color(0xFFeec234)
+val lightError = Color(0xFFBA1B1B)
+val lightOnError = Color(0xFFFFFFFF)
+val lightErrorContainer = Color(0xFFFFDAD4)
+val lightOnErrorContainer = Color(0xFF410001)
 
-    val secondary = Color(0xFF695D3F)
-    val onSecondary = Color(0xFFFFFFFF)
-    val secondaryContainer = Color(0xFFF2E1BB)
-    val onSecondaryContainer = Color(0xFF231B04)
-
-    val tertiary = Color(0xFF47654A)
-    val onTertiary = Color(0xFFFFFFFF)
-    val tertiaryContainer = Color(0xFFC9ECC9)
-    val onTertiaryContainer = Color(0xFF03210B)
-
-    val error = Color(0xFFBA1B1B)
-    val onError = Color(0xFFFFFFFF)
-    val errorContainer = Color(0xFFFFDAD4)
-    val onErrorContainer = Color(0xFF410001)
-
-    val background = Color(0xFFFFFBF7)
-    val onBackground = Color(0xFF1E1B16)
-    val surface = Color(0xFFFFFBF7)
-    val onSurface = Color(0xFF1E1B16)
-    val inverseSurface = Color(0xFF33302a)
-    val inverseOnSurface = Color(0xFFf7f0e7)
-
-    val surfaceVariant = Color(0xFFEBE1CF)
-    val onSurfaceVariant = Color(0xFF4C4638)
-    val outline = Color(0xFF7D7667)
-}
-
-object PaletteDark {
-    val primary = Color(0xFFEEC234)
-    val onPrimary = Color(0xFF3D2E00)
-    val primaryContainer = Color(0xFF584400)
-    val onPrimaryContainer = Color(0xFFFFE084)
-    val inversePrimary = Color(0xFF755B00)
-
-    val secondary = Color(0xFFD5C5A1)
-    val onSecondary = Color(0xFF393015)
-    val secondaryContainer = Color(0xFF50462A)
-    val onSecondaryContainer = Color(0xFFF2E1BB)
-
-    val tertiary = Color(0xFFADCFAE)
-    val onTertiary = Color(0xFF19371F)
-    val tertiaryContainer = Color(0xFF304D34)
-    val onTertiaryContainer = Color(0xFFC9ECC9)
-
-    val error = Color(0xFFFFB4A9)
-    val onError = Color(0xFF680003)
-    val errorContainer = Color(0xFF930006)
-    val onErrorContainer = Color(0xFFFFDAD4)
-
-    val background = Color(0xFF1E1B16)
-    val onBackground = Color(0xFFE9E2D9)
-    val surface = Color(0xFF1E1B16)
-    val onSurface = Color(0xFFE9E2D9)
-    val inverseSurface = Color(0xFFE9E2D9)
-    val inverseOnSurface = Color(0xFF1e1b16)
-
-    val surfaceVariant = Color(0xFF4C4638)
-    val onSurfaceVariant = Color(0xFFCEC5B4)
-    val outline = Color(0xFF989080)
-}
+val darkError = Color(0xFFFFB4A9)
+val darkOnError = Color(0xFF680003)
+val darkErrorContainer = Color(0xFF930006)
+val darkOnErrorContainer = Color(0xFFFFDAD4)

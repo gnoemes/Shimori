@@ -10,6 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import com.gnoemes.shimori.base.settings.AppAccentColor
 import com.gnoemes.shimori.common.compose.LocalShimoriSettings
+import com.gnoemes.shimori.common.utils.theme.generateDarkPaletteForPrimary
+import com.gnoemes.shimori.common.utils.theme.generateLightPaletteForPrimary
 
 @Composable
 fun ShimoriTheme(
@@ -36,8 +38,8 @@ fun ShimoriTheme(
     val colorScheme = when {
         dynamicColor && useDarkColors -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !useDarkColors -> dynamicLightColorScheme(LocalContext.current)
-        useDarkColors -> ShimoriDarkColors.copy(primary = accentColor)
-        else -> ShimoriLightColors.copy(primary = accentColor)
+        useDarkColors -> generateDarkPaletteForPrimary(accentColor).toColorScheme()
+        else -> generateLightPaletteForPrimary(accentColor).toColorScheme()
     }
 
     MaterialTheme(
