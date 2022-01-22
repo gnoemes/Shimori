@@ -5,16 +5,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import com.gnoemes.shikimori.ShikimoriManager
 import com.gnoemes.shimori.base.settings.ShimoriSettings
 import com.gnoemes.shimori.common.BaseActivity
-import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
-import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
-import com.gnoemes.shimori.common.compose.LocalShimoriSettings
-import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.compose.theme.defaultDimensions
 import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
@@ -39,6 +38,9 @@ class MainActivity : BaseActivity() {
     @Inject
     internal lateinit var textCreator: ShimoriTextCreator
 
+    @Inject
+    internal lateinit var shikimori : ShikimoriManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -53,11 +55,14 @@ class MainActivity : BaseActivity() {
                 if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
                 else sw360Dimensions
 
+            val shikimoriAuth = shikimori.state.collectAsState().value
+
             CompositionLocalProvider(
                 LocalShimoriRateUtil provides rateUtil,
                 LocalShimoriTextCreator provides textCreator,
                 LocalShimoriSettings provides settings,
-                LocalShimoriDimensions provides dimensions
+                LocalShimoriDimensions provides dimensions,
+                LocalShikimoriAuth provides shikimoriAuth
             ) {
 
                 val useDarkColors = settings.shouldUseDarkColors()

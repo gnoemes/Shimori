@@ -1,4 +1,4 @@
-package com.gnoemes.shikimori.entities.user
+package com.gnoemes.shimori.base.entities
 
 enum class ShikimoriAuthState {
     LOGGED_IN,

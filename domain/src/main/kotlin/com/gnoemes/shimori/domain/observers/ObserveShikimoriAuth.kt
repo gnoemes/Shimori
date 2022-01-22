@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.observers
 
 import com.gnoemes.shikimori.ShikimoriManager
-import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
+import com.gnoemes.shimori.base.entities.ShikimoriAuthState
 import com.gnoemes.shimori.domain.SubjectInteractor
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

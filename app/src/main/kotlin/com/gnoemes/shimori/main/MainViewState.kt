@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.main
 
 import androidx.compose.runtime.Immutable
-import com.gnoemes.shikimori.entities.user.ShikimoriAuthState
+import com.gnoemes.shimori.base.entities.ShikimoriAuthState
 import com.gnoemes.shimori.model.rate.ListType
 
 @Immutable

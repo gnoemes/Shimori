@@ -16,5 +16,5 @@ dependencies {
     implementation libs.androidx.core
     implementation libs.androidx.activity.compose
 
-    api libs.appauth
+    implementation libs.appauth
 }
