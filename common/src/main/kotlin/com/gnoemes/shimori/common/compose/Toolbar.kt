@@ -1,12 +1,75 @@
 package com.gnoemes.shimori.common.compose
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.gnoemes.shimori.common.R
+import com.gnoemes.shimori.model.user.UserShort
+
+
+@Composable
+fun ShimoriMainToolbar(
+    modifier: Modifier = Modifier,
+    title: String,
+    onSearchClick: () -> Unit,
+    onUserClick: () -> Unit,
+    user: UserShort? = null,
+    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.background,
+        scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+        titleContentColor = MaterialTheme.colorScheme.onSurface,
+        actionIconContentColor = MaterialTheme.colorScheme.onSurface
+    ),
+) {
+    SmallTopAppBar(
+        title = { Text(text = title) },
+        modifier = modifier,
+        actions = {
+            IconButton(onClick = onSearchClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = stringResource(id = R.string.search),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            IconButton(onClick = onUserClick) {
+                val avatar = user?.image?.preview
+                if (avatar != null) {
+                    Image(
+                        painter = rememberImagePainter(avatar) {
+                            crossfade(true)
+                        },
+                        contentDescription = stringResource(R.string.profile),
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape),
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_profile),
+                        contentDescription = stringResource(id = R.string.profile),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+        },
+        colors = colors
+    )
+}
 
 @Composable
 fun ShimoriSecondaryToolbar(
@@ -17,7 +80,7 @@ fun ShimoriSecondaryToolbar(
     subTitle: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = MaterialTheme.colorScheme.background,
-        scrolledContainerColor = MaterialTheme.colorScheme.background,
+        scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
         navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
         titleContentColor = MaterialTheme.colorScheme.onSurface,
         actionIconContentColor = MaterialTheme.colorScheme.onSurface
@@ -44,8 +107,7 @@ fun ShimoriSecondaryToolbar(
                 }
             }
         },
-        modifier = Modifier
-            .then(modifier),
+        modifier = modifier,
         navigationIcon = {
             BackIcon(navigateUp)
         },
