@@ -123,4 +123,6 @@
     <string name="settings_special_thanks">Special thanks</string>
     <string name="settings_special_thanks_shikimori">Shikimori</string>
 
+    <string name="error_disabled_due_empty_rates">Add a title to use this feature.</string>
+
 </resources>
