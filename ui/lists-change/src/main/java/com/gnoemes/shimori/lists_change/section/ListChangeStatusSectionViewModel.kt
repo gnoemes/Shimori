@@ -3,6 +3,7 @@ package com.gnoemes.shimori.lists_change.section
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.ViewModelInitializer
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
 import com.gnoemes.shimori.domain.observers.ObserveListsPages
 import com.gnoemes.shimori.model.rate.ListType
@@ -52,11 +53,12 @@ internal class ListChangeStatusSectionViewModel @AssistedInject constructor(
         fun provideFactory(
             assistedFactory: Factory,
             sectionType: Int
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(sectionType) as T
-            }
-        }
+        ) =
+            ViewModelProvider.Factory.from(
+                ViewModelInitializer(ListChangeStatusSectionViewModel::class.java) {
+                    assistedFactory.create(sectionType)
+                }
+            )
     }
 
     @Module
