@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -25,6 +26,9 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
+import com.gnoemes.shimori.common.compose.ShimoriSnackbar
+import com.gnoemes.shimori.common.compose.rememberSnackbarHostState
+import com.gnoemes.shimori.common.utils.MessageID
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -53,6 +57,16 @@ internal fun Main(
 
     val viewState by viewModel.state.collectAsState()
 
+    val snackbarHostState = rememberSnackbarHostState()
+
+    viewState.message?.let { message ->
+        LaunchedEffect(message) {
+            snackbarHostState.showSnackbar(message.message)
+
+            viewModel.onMessageShown(message.id)
+        }
+    }
+
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -64,7 +78,17 @@ internal fun Main(
                     navController = navController,
                     onListsChange = {
                         navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists))
+                    },
+                    onNoRatesClick = {
+                        viewModel.showMessage(MessageID.DisabledDueEmptyRates)
                     }
+                )
+            },
+            snackbarHost = {
+                ShimoriSnackbar(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
             }
         ) {
@@ -77,10 +101,10 @@ internal fun Main(
 internal fun MainBottomBar(
     viewState: MainViewState,
     navController: NavController,
-    onListsChange: () -> Unit
+    onListsChange: () -> Unit,
+    onNoRatesClick: () -> Unit,
 ) {
     val currentSelectedItem by navController.currentScreenAsState()
-
     val canShowBottomSheet by navController.canShowListTypeBottomSheetAsState()
 
     Column {
@@ -102,8 +126,9 @@ internal fun MainBottomBar(
             onNavigationReselected = { selected ->
 
                 //show list type select bottom sheet if lists tab was reselected twice
-                if (canShowBottomSheet && viewState.hasRates) {
-                    onListsChange()
+                if (canShowBottomSheet) {
+                    if (viewState.hasRates) onListsChange()
+                    else onNoRatesClick()
                 } else {
                     navController.popBackStack(
                         selected.getStartDestination()

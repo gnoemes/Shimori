@@ -2,13 +2,15 @@ package com.gnoemes.shimori.main
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shimori.base.entities.ShikimoriAuthState
+import com.gnoemes.shimori.common.api.UiMessage
 import com.gnoemes.shimori.model.rate.ListType
 
 @Immutable
 data class MainViewState(
     val listType: ListType = ListType.Anime,
     val hasRates : Boolean = false,
-    val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT
+    val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
+    val message : UiMessage? = null,
 ) {
 
     companion object {
