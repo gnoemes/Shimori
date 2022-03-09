@@ -16,6 +16,7 @@
 
 package com.gnoemes.shimori.common.utils
 
+import android.util.Log
 import com.gnoemes.shimori.base.entities.InvokeError
 import com.gnoemes.shimori.base.entities.InvokeStarted
 import com.gnoemes.shimori.base.entities.InvokeStatus
@@ -52,8 +53,29 @@ suspend fun Flow<InvokeStatus>.collectStatus(
         InvokeStarted -> counter.addLoader()
         InvokeSuccess -> counter.removeLoader()
         is InvokeError -> {
+            Log.i("DEVE", "err ${status.throwable}")
             uiMessageManager?.emitMessage(UiMessage(status.throwable))
             counter.removeLoader()
         }
+        else -> {}
     }
+}
+
+suspend fun Flow<InvokeStatus>.collectStatus(
+    counter: ObservableLoadingCounter,
+    uiMessageManager: UiMessageManager? = null,
+    onCollect : (status : InvokeStatus) -> Unit,
+) = collect { status ->
+    when (status) {
+        InvokeStarted -> counter.addLoader()
+        InvokeSuccess -> counter.removeLoader()
+        is InvokeError -> {
+            Log.i("DEVE", "err ${status.throwable}")
+            uiMessageManager?.emitMessage(UiMessage(status.throwable))
+            counter.removeLoader()
+        }
+        else -> {}
+    }
+
+    onCollect(status)
 }
