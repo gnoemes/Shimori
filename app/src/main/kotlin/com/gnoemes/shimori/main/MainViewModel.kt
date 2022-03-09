@@ -2,6 +2,7 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.base.entities.InvokeSuccess
 import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.utils.collectStatus
 import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
@@ -54,7 +55,9 @@ class MainViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            updatingUserDataState.observable.collect { listsStateManager.ratesLoading.update(it) }
+            updatingUserDataState
+                .observable
+                .collect { listsStateManager.ratesLoading.update(it) }
         }
 
         observeShikimoriAuth(Unit)
@@ -64,7 +67,9 @@ class MainViewModel @Inject constructor(
     private fun updateUserAndRates() {
         viewModelScope.launch {
             updateUser(UpdateUser.Params(null, isMe = true))
-                .collectStatus(updatingUserDataState)
+                .collectStatus(updatingUserDataState) { status ->
+                    if (status is InvokeSuccess) updateRates()
+                }
         }
     }
 
