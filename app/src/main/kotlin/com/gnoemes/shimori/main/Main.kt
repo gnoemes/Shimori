@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
@@ -124,12 +125,13 @@ internal fun MainNavigationBar(
     onNavigationSelected: (RootScreen) -> Unit,
     onNavigationReselected: (RootScreen) -> Unit,
 ) {
-
-    NavigationBar(
-        tonalElevation = 0.dp
+    BottomAppBar(
+        tonalElevation = 0.dp,
+        modifier = Modifier.height(80.dp)
     ) {
         MainNavigationItems.fastForEach { item ->
             val selected = selectedNavigation == item.screen
+            //TODO Custom navigation items
             NavigationBarItem(
                 selected = selected,
                 colors = NavigationBarItemDefaults.colors(
