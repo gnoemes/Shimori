@@ -1,9 +1,7 @@
 package com.gnoemes.shimori.lists
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -16,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
+import com.gnoemes.shimori.lists.sort.ListSort
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.google.accompanist.insets.statusBarsHeight
@@ -43,6 +42,7 @@ fun Lists(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Lists(
     viewModel: ListsViewModel,
@@ -56,26 +56,33 @@ private fun Lists(
 ) {
     val state by rememberStateWithLifecycle(viewModel.state)
 
-    ShimoriMainToolbar(
-        modifier = Modifier.statusBarsPadding(),
-        title = LocalShimoriRateUtil.current.listTypeName(state.type),
-        user = state.user,
-        onSearchClick = openSearch,
-        onUserClick = openUser
-    )
+    Scaffold(
+         topBar = {
+             ShimoriMainToolbar(
+                 modifier = Modifier.statusBarsPadding(),
+                 title = LocalShimoriRateUtil.current.listTypeName(state.type),
+                 user = state.user,
+                 onSearchClick = openSearch,
+                 onUserClick = openUser
+             )
+         }
+    ) {
+        when {
+            //TODO add loading screen
+            state.isLoading -> {}
+            state.isEmpty -> ListsEmpty(
+                type = state.type,
+                hasRates = state.hasRates,
+                onAnimeExplore = onAnimeExplore,
+                onMangaExplore = onMangaExplore,
+                onRanobeExplore = onRanobeExplore,
+                onChangeList = onChangeList
+            )
+            else -> {
 
-    when {
-        //TODO add loading screen
-        state.isLoading -> {}
-        state.isEmpty -> ListsEmpty(
-            type = state.type,
-            hasRates = state.hasRates,
-            onAnimeExplore = onAnimeExplore,
-            onMangaExplore = onMangaExplore,
-            onRanobeExplore = onRanobeExplore,
-            onChangeList = onChangeList
-        )
-        else -> {}
+                ListSort()
+            }
+        }
     }
 }
 
