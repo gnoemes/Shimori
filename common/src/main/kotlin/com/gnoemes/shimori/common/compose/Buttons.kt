@@ -97,7 +97,6 @@ fun ShimoriChip(
 
         Text(
             text = text,
-            modifier = Modifier.weight(1f, fill = false),
             maxLines = 1
         )
     }
