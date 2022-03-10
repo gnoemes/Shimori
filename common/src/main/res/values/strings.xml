@@ -44,6 +44,11 @@
     <string name="no_pinned_titles">No pinned titles</string>
     <string name="no_pinned_titles_description">Hold cover or edit any titles to pin</string>
 
+    <string name="no_titles">This list is empty</string>
+    <string name="no_titles_description">Add a title to start your history</string>
+
+    <string name="change_list">Change list</string>
+
     <string name="list_sort_progress">Progress</string>
     <string name="list_sort_size_anime">Episodes</string>
     <string name="list_sort_size_manga">Chapters</string>
