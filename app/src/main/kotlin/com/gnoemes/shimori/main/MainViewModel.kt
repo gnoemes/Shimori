@@ -2,6 +2,7 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.base.entities.InvokeSuccess
 import com.gnoemes.shimori.common.api.UiMessage
 import com.gnoemes.shimori.common.api.UiMessageManager
 import com.gnoemes.shimori.common.utils.MessageID
@@ -68,7 +69,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             updateUser(UpdateUser.Params(null, isMe = true))
                 .collectStatus(updatingUserDataState) { status ->
-//                    if (status is InvokeSuccess) updateRates()
+                    if (status is InvokeSuccess) updateRates()
                 }
         }
     }

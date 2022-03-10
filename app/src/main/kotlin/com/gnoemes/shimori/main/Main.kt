@@ -285,7 +285,7 @@ private sealed class NavigationItem(
 
         @DrawableRes
         fun iconResId(selected: Boolean, type: ListType): Int =
-            if (selected) R.drawable.ic_change_list
+            if (selected) R.drawable.ic_menu
             else when (type) {
                 ListType.Anime -> R.drawable.ic_anime
                 ListType.Manga -> R.drawable.ic_manga

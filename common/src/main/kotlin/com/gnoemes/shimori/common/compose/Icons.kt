@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
+import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
 
 @Composable
@@ -45,5 +46,14 @@ fun BackIcon(
                 .size(24.dp)
         )
     }
+}
 
+@Composable
+fun ListTypeIcon(
+    type: ListType
+) {
+    Icon(
+        painter = painterResource(id = LocalShimoriRateUtil.current.listTypeIcon(type)),
+        contentDescription = null
+    )
 }
