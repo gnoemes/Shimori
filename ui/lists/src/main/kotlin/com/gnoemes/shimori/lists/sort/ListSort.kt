@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.compose.ShimoriChip
+import com.gnoemes.shimori.common.compose.ui.ShimoriChip
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.model.rate.ListType

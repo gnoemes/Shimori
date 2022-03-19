@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ListsViewModel @Inject constructor(
+internal class ListsViewModel @Inject constructor(
     stateManager: ListsStateManager,
     observeMyUserShort: ObserveMyUserShort,
     observePinned: ObserveHasPinnedTitles,

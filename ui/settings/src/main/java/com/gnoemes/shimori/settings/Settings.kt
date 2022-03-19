@@ -18,11 +18,11 @@ import com.gnoemes.shimori.base.settings.AppAccentColor
 import com.gnoemes.shimori.base.settings.AppLocale
 import com.gnoemes.shimori.base.settings.AppTheme
 import com.gnoemes.shimori.base.settings.AppTitlesLocale
-import com.gnoemes.shimori.common.compose.ShimoriChip
-import com.gnoemes.shimori.common.compose.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.compose.noRippleClickable
 import com.gnoemes.shimori.common.compose.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.compose.theme.secondaryColorFromType
+import com.gnoemes.shimori.common.compose.ui.ShimoriChip
+import com.gnoemes.shimori.common.compose.ui.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 
 @Composable

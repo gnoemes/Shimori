@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.compose.RateIcon
-import com.gnoemes.shimori.common.compose.ShimoriChip
+import com.gnoemes.shimori.common.compose.ui.RateIcon
+import com.gnoemes.shimori.common.compose.ui.ShimoriChip
 import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus

@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common.compose
+package com.gnoemes.shimori.common.compose.ui
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
+import com.gnoemes.shimori.common.compose.LocalShimoriRateUtil
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateStatus
 

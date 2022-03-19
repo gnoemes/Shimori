@@ -23,9 +23,9 @@ import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
 import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
-import com.gnoemes.shimori.common.compose.ShimoriBottomBarItem
-import com.gnoemes.shimori.common.compose.ShimoriSnackbar
-import com.gnoemes.shimori.common.compose.rememberSnackbarHostState
+import com.gnoemes.shimori.common.compose.ui.ShimoriBottomBarItem
+import com.gnoemes.shimori.common.compose.ui.ShimoriSnackbar
+import com.gnoemes.shimori.common.compose.ui.rememberSnackbarHostState
 import com.gnoemes.shimori.common.utils.MessageID
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
