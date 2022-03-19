@@ -25,16 +25,23 @@ open class GroupLastRequestStore(
     private val request: Request,
     private val dao: LastRequestDao
 ) {
-    suspend fun getRequestInstant(): Instant? {
-        return dao.lastRequest(request, DEFAULT_ID)?.timestamp
+    suspend fun getRequestInstant(id: Long): Instant? {
+        return dao.lastRequest(request, id)?.timestamp
     }
 
     suspend fun isRequestBefore(instant: Instant): Boolean {
-        return getRequestInstant()?.isBefore(instant) ?: true
+        return getRequestInstant(DEFAULT_ID)?.isBefore(instant) ?: true
     }
 
-    suspend fun updateLastRequest(timestamp: Instant = Instant.now()) {
-        dao.insert(LastRequest(request = request, entityId = DEFAULT_ID, timestamp = timestamp))
+    suspend fun isRequestBefore(instant: Instant, id: Long): Boolean {
+        return getRequestInstant(id)?.isBefore(instant) ?: true
+    }
+
+    suspend fun updateLastRequest(
+        timestamp: Instant = Instant.now(),
+        id : Long = DEFAULT_ID
+    ) {
+        dao.insert(LastRequest(request = request, entityId = id, timestamp = timestamp))
     }
 
     companion object {

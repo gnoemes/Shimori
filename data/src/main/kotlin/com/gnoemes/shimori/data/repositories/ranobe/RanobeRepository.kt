@@ -36,12 +36,14 @@ class RanobeRepository @Inject constructor(
         ranobeStore.update(ranobe)
         //Shikimori have only 2 rate target types Anime And Manga
         rateStore.fixRanobeRates(ranobe)
-        ratesLastRequestStore.updateLastRequest()
+        ratesLastRequestStore.updateLastRequest(id = status?.priority?.toLong() ?: 0)
         return
     }
 
-    suspend fun needUpdateRanobeWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {
-        return ratesLastRequestStore.isRequestBefore(expiry)
-    }
+    suspend fun needUpdateRanobeWithStatus(
+        status: RateStatus?,
+        expiry: Instant = instantInPast(minutes = 5)
+    ) = ratesLastRequestStore.isRequestBefore(expiry, status?.priority?.toLong() ?: 0)
+
 
 }

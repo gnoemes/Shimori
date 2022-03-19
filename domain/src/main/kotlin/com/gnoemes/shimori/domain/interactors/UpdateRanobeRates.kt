@@ -16,7 +16,7 @@ class UpdateRanobeRates @Inject constructor(
         withContext(dispatchers.io) {
             if (params.force) {
                 repository.updateMyRanobeWithStatus(params.status)
-            } else if (params.optionalUpdate && repository.needUpdateRanobeWithStatus()) {
+            } else if (params.optionalUpdate && repository.needUpdateRanobeWithStatus(params.status)) {
                 repository.updateMyRanobeWithStatus(params.status)
             }
         }

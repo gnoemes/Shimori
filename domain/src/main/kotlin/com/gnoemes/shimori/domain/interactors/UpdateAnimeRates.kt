@@ -16,7 +16,7 @@ class UpdateAnimeRates @Inject constructor(
         withContext(dispatchers.io) {
             if (params.force) {
                 repository.updateMyAnimeWithStatus(params.status)
-            } else if (params.optionalUpdate && repository.needUpdateAnimeWithStatus()) {
+            } else if (params.optionalUpdate && repository.needUpdateAnimeWithStatus(params.status)) {
                 repository.updateMyAnimeWithStatus(params.status)
             } else if (params.categorySize != null) {
                 val animes = repository.queryByStatus(params.status)

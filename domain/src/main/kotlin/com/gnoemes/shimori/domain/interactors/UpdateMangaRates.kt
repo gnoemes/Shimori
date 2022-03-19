@@ -16,7 +16,7 @@ class UpdateMangaRates @Inject constructor(
         withContext(dispatchers.io) {
             if (params.force) {
                 repository.updateMyMangaWithStatus(params.status)
-            } else if (params.optionalUpdate && repository.needUpdateMangaWithStatus()) {
+            } else if (params.optionalUpdate && repository.needUpdateMangaWithStatus(params.status)) {
                 repository.updateMyMangaWithStatus(params.status)
             }
         }
