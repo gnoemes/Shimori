@@ -1,4 +1,4 @@
-//package com.gnoemes.shimori.common.compose
+package com.gnoemes.shimori.common.compose.ui//package com.gnoemes.shimori.common.compose
 //
 //import androidx.compose.foundation.interaction.MutableInteractionSource
 //import androidx.compose.foundation.text.BasicTextField

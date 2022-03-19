@@ -1,3 +1,5 @@
+package com.gnoemes.shimori.common.compose.ui
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,7 +14,6 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.compose.ShimoriCircleButton
 import com.gnoemes.shimori.common.compose.theme.dimens
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.common.ShimoriImage
@@ -64,7 +65,7 @@ fun MangaListCard(
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
     onIncrementHold: () -> Unit,
-    padding: PaddingValues = PaddingValues(horizontal = 16.dp)
+    padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
 ) {
     Box(
         modifier = Modifier.padding(padding)
@@ -101,7 +102,7 @@ fun RanobeListCard(
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
     onIncrementHold: () -> Unit,
-    padding: PaddingValues = PaddingValues(horizontal = 16.dp)
+    padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
 ) {
     Box(
         modifier = Modifier.padding(padding)

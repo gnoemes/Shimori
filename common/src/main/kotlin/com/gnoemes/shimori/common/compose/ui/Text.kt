@@ -1,3 +1,5 @@
+package com.gnoemes.shimori.common.compose.ui
+
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon

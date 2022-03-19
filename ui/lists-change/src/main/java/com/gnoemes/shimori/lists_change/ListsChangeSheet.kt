@@ -12,10 +12,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gnoemes.shimori.common.compose.BottomSheetTitle
-import com.gnoemes.shimori.common.compose.ChevronIcon
-import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.NavigationBarColorSwitcher
+import com.gnoemes.shimori.common.compose.ui.BottomSheetTitle
+import com.gnoemes.shimori.common.compose.ui.ChevronIcon
+import com.gnoemes.shimori.common.compose.ui.EnlargedButton
 import com.gnoemes.shimori.lists_change.section.StatusSection
 import com.gnoemes.shimori.model.rate.ListType
 

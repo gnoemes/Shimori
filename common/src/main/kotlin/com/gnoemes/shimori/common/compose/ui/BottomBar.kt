@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common.compose
+package com.gnoemes.shimori.common.compose.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState

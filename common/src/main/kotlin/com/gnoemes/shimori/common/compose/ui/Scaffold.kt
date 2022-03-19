@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common.compose
+package com.gnoemes.shimori.common.compose.ui
 
 /*
  * Copyright 2021 The Android Open Source Project

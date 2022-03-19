@@ -5,7 +5,7 @@ import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.user.UserShort
 
 @Immutable
-data class ListsViewState(
+internal data class ListsViewState(
     val type: ListType = ListType.Anime,
     val user: UserShort? = null,
     val isEmpty: Boolean = false,

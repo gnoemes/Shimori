@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.R
-import com.gnoemes.shimori.common.compose.ChevronIcon
-import com.gnoemes.shimori.common.compose.EnlargedButton
+import com.gnoemes.shimori.common.compose.ui.ChevronIcon
+import com.gnoemes.shimori.common.compose.ui.EnlargedButton
 
 @Composable
 fun Auth(
