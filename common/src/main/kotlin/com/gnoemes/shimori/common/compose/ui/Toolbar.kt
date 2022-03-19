@@ -24,7 +24,7 @@ fun ShimoriMainToolbar(
     onUserClick: () -> Unit,
     user: UserShort? = null,
     colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
         scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
         navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
         titleContentColor = MaterialTheme.colorScheme.onSurface,

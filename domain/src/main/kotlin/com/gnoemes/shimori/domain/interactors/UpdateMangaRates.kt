@@ -28,6 +28,7 @@ class UpdateMangaRates @Inject constructor(
         val status: RateStatus?
     ) {
         companion object {
+            val FullUpdate = Params(force = true, optionalUpdate = false, status = null)
             val OptionalUpdate = Params(force = false, optionalUpdate = true, status = null)
         }
     }
