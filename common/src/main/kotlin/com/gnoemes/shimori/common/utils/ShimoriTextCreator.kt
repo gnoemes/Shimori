@@ -18,6 +18,7 @@ import dagger.hilt.android.qualifiers.ActivityContext
 import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 class ShimoriTextCreator @Inject constructor(
@@ -25,11 +26,13 @@ class ShimoriTextCreator @Inject constructor(
     private val formatter: ShimoriDateTimeFormatter
 ) {
 
+    private val scoreFormat = DecimalFormat("#0.##")
+
     //TODO check locale, restore romadzi
     fun name(anime: Anime): String {
 //        return if (prefs.isRomadziNaming) anime.name
 //        else
-           return anime.nameRu ?: anime.name
+        return anime.nameRu ?: anime.name
     }
 
     //TODO check locale, restore romadzi
@@ -81,15 +84,30 @@ class ShimoriTextCreator @Inject constructor(
 
                         if (hours < 1) {
                             val minutes = ChronoUnit.MINUTES.between(now, date)
-                            return context.getString(formatRes, episode, minutes, context.getString(R.string.minute_short))
+                            return context.getString(
+                                formatRes,
+                                episode,
+                                minutes,
+                                context.getString(R.string.minute_short)
+                            )
                         }
 
                         val days = ChronoUnit.DAYS.between(now, date)
                         if (days < 1) {
-                            return context.getString(formatRes, episode, hours, context.getString(R.string.hour_short))
+                            return context.getString(
+                                formatRes,
+                                episode,
+                                hours,
+                                context.getString(R.string.hour_short)
+                            )
                         }
 
-                        return context.getString(formatRes, episode, days, context.getString(R.string.day_short))
+                        return context.getString(
+                            formatRes,
+                            episode,
+                            days,
+                            context.getString(R.string.day_short)
+                        )
                     }
                 }
 
@@ -147,6 +165,12 @@ class ShimoriTextCreator @Inject constructor(
             RanobeType.Novel -> context.getString(R.string.type_novel)
             RanobeType.LightNovel -> context.getString(R.string.type_light_novel)
             else -> null
+        }
+    }
+
+    fun scoreDescription(score: Double?): String? {
+        return score?.let { value ->
+            scoreFormat.format(value)
         }
     }
 
