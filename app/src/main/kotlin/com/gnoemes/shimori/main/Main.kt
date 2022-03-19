@@ -22,6 +22,7 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
+import com.gnoemes.shimori.common.compose.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.compose.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.rememberSnackbarHostState
 import com.gnoemes.shimori.common.utils.MessageID
@@ -151,16 +152,8 @@ internal fun MainNavigationBar(
     ) {
         MainNavigationItems.fastForEach { item ->
             val selected = selectedNavigation == item.screen
-            //TODO Custom navigation items
-            NavigationBarItem(
+            ShimoriBottomBarItem(
                 selected = selected,
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurface,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                    indicatorColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
-                ),
                 icon = {
                     NavigationItemIcon(item = item, selected = selected, listType = listType)
                 },
