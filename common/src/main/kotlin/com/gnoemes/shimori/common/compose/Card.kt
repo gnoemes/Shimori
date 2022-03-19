@@ -27,7 +27,7 @@ fun AnimeListCard(
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
     onIncrementHold: () -> Unit,
-    padding: PaddingValues = PaddingValues(horizontal = 16.dp)
+    padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
 ) {
     Box(
         modifier = Modifier.padding(padding)
