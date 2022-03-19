@@ -106,7 +106,7 @@ fun ShimoriChip(
 fun ShimoriButton(
     onClick: () -> Unit,
     modifier: Modifier,
-    text : String,
+    text: String,
     enabled: Boolean = true,
     selected: Boolean = false,
     buttonColors: ButtonColors = ButtonDefaults.buttonColors(
@@ -175,6 +175,31 @@ fun ShimoriConformationButton(
             textAlign = TextAlign.Center
         )
     }
+}
+
+@Composable
+fun ShimoriCircleButton(
+    onClick: () -> Unit,
+    modifier: Modifier,
+    icon: @Composable () -> Unit,
+    enabled: Boolean = true,
+    selected: Boolean = false,
+    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
+        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f),
+    ),
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        shape = ShimoriBigRoundedCornerShape,
+        colors = buttonColors,
+        contentPadding = PaddingValues(8.dp),
+        content = { icon() }
+    )
 }
 
 @JvmInline
