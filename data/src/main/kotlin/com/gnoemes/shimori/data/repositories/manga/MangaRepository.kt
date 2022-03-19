@@ -32,12 +32,14 @@ class MangaRepository @Inject constructor(
         val result = mangaDataSource.getMangaWithStatus(user, status)
         val mangas = result.filterNot { it.type == null }
         mangaStore.update(mangas)
-        ratesLastRequestStore.updateLastRequest()
+        ratesLastRequestStore.updateLastRequest(id = status?.priority?.toLong() ?: 0)
         return
     }
 
-    suspend fun needUpdateMangaWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {
-        return ratesLastRequestStore.isRequestBefore(expiry)
-    }
+    suspend fun needUpdateMangaWithStatus(
+        status: RateStatus?,
+        expiry: Instant = instantInPast(minutes = 5)
+    ) = ratesLastRequestStore.isRequestBefore(expiry, status?.priority?.toLong() ?: 0)
+
 
 }

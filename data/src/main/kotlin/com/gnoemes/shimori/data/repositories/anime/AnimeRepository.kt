@@ -32,12 +32,13 @@ class AnimeRepository @Inject constructor(
 
         val result = animeDataSource.getAnimeWithStatus(user, status)
         animeStore.update(result)
-        ratesLastRequestStore.updateLastRequest()
+        ratesLastRequestStore.updateLastRequest(id = status?.priority?.toLong() ?: 0)
         return
     }
 
-    suspend fun needUpdateAnimeWithStatus(expiry: Instant = instantInPast(minutes = 5)): Boolean {
-        return ratesLastRequestStore.isRequestBefore(expiry)
-    }
+    suspend fun needUpdateAnimeWithStatus(
+        status: RateStatus?,
+        expiry: Instant = instantInPast(minutes = 5)
+    ) = ratesLastRequestStore.isRequestBefore(expiry, status?.priority?.toLong() ?: 0)
 
 }
