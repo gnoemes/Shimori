@@ -24,7 +24,6 @@ import com.gnoemes.shimori.common.compose.noRippleClickable
 import com.gnoemes.shimori.common.compose.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.compose.theme.secondaryColorFromType
 import com.gnoemes.shimori.common.extensions.collectAsStateWithLifecycle
-import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun Settings(

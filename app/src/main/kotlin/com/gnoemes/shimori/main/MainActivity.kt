@@ -20,7 +20,6 @@ import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
 import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
 import com.gnoemes.shimori.common.utils.ShimoriRateUtil
 import com.gnoemes.shimori.common.utils.ShimoriTextCreator
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -39,7 +38,7 @@ class MainActivity : BaseActivity() {
     internal lateinit var textCreator: ShimoriTextCreator
 
     @Inject
-    internal lateinit var shikimori : ShikimoriManager
+    internal lateinit var shikimori: ShikimoriManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,9 +84,7 @@ class MainActivity : BaseActivity() {
                         )
                     }
 
-                    ProvideWindowInsets(consumeWindowInsets = false) {
-                        Main()
-                    }
+                    Main()
                 }
             }
         }

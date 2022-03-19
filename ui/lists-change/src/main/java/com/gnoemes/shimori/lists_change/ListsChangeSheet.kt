@@ -18,7 +18,6 @@ import com.gnoemes.shimori.common.compose.EnlargedButton
 import com.gnoemes.shimori.common.compose.NavigationBarColorSwitcher
 import com.gnoemes.shimori.lists_change.section.StatusSection
 import com.gnoemes.shimori.model.rate.ListType
-import com.google.accompanist.insets.navigationBarsHeight
 
 @Composable
 fun ListsChangeSheet(
@@ -93,7 +92,11 @@ private fun ListsChange(
             }
 
 
-            Spacer(modifier = Modifier.navigationBarsHeight(additional = 24.dp))
+            Spacer(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .height(24.dp)
+            )
         }
     }
 

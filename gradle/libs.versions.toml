@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.24.3-alpha"
+accompanist = "0.24.4-alpha"
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.0-alpha03"
 androidxtest = "1.4.0"
@@ -23,8 +23,6 @@ gradleDependencyUpdate = { id = "com.github.ben-manes.versions", version.ref="gr
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
-accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
-accompanist-insetsui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
