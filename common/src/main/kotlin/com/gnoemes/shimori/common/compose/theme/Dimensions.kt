@@ -9,18 +9,21 @@ import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 
 class Dimensions(
     val listPosterHeight: Dp,
-    val listPosterWidth: Dp
+    val listPosterWidth: Dp,
+    val bottomBarHeight: Dp,
 )
 
 
 val defaultDimensions = Dimensions(
-        listPosterHeight = 128.dp,
-        listPosterWidth = 96.dp
+    listPosterHeight = 128.dp,
+    listPosterWidth = 96.dp,
+    bottomBarHeight = 80.dp
 )
 
 val sw360Dimensions = Dimensions(
-        listPosterHeight = 144.dp,
-        listPosterWidth = 108.dp
+    listPosterHeight = 144.dp,
+    listPosterWidth = 108.dp,
+    bottomBarHeight = 80.dp
 )
 
 val MaterialTheme.dimens

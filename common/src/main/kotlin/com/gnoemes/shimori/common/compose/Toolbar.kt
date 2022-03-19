@@ -1,10 +1,7 @@
 package com.gnoemes.shimori.common.compose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,6 +15,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.model.user.UserShort
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShimoriMainToolbar(
     modifier: Modifier = Modifier,
@@ -32,10 +30,12 @@ fun ShimoriMainToolbar(
         titleContentColor = MaterialTheme.colorScheme.onSurface,
         actionIconContentColor = MaterialTheme.colorScheme.onSurface
     ),
+    scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     SmallTopAppBar(
         title = { Text(text = title) },
-        modifier = modifier,
+        modifier = modifier.statusBarsPadding(),
+        scrollBehavior = scrollBehavior,
         actions = {
             IconButton(onClick = onSearchClick) {
                 Icon(

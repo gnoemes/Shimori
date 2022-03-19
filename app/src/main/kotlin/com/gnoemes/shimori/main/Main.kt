@@ -22,6 +22,7 @@ import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.Screen
+import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.compose.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.compose.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.rememberSnackbarHostState
@@ -148,7 +149,7 @@ internal fun MainNavigationBar(
     BottomAppBar(
         tonalElevation = 0.dp,
         containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-        modifier = Modifier.height(80.dp)
+        modifier = Modifier.height(LocalShimoriDimensions.current.bottomBarHeight)
     ) {
         MainNavigationItems.fastForEach { item ->
             val selected = selectedNavigation == item.screen
