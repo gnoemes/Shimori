@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
+import androidx.compose.ui.text.style.TextOverflow
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.theme.titleAnnounced
@@ -70,6 +71,7 @@ private fun Description(
         modifier = modifier,
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.secondary,
+        overflow = TextOverflow.Ellipsis,
         inlineContent = mapOf(
             "score_image" to InlineTextContent(
                 Placeholder(
