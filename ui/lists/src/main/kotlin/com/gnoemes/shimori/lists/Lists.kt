@@ -14,11 +14,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
-import com.gnoemes.shimori.lists.sort.ListSort
+import com.gnoemes.shimori.lists.page.ListPage
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateTargetType
-import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun Lists(
@@ -52,20 +50,23 @@ private fun Lists(
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
-    onChangeList : () -> Unit,
+    onChangeList: () -> Unit,
 ) {
     val state by rememberStateWithLifecycle(viewModel.state)
 
-    Scaffold(
-         topBar = {
-             ShimoriMainToolbar(
-                 modifier = Modifier.statusBarsPadding(),
-                 title = LocalShimoriRateUtil.current.listTypeName(state.type),
-                 user = state.user,
-                 onSearchClick = openSearch,
-                 onUserClick = openUser
-             )
-         }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    ScaffoldExtended(
+        topBar = {
+            ShimoriMainToolbar(
+                modifier = Modifier,
+                title = LocalShimoriRateUtil.current.listTypeName(state.type),
+                user = state.user,
+                onSearchClick = openSearch,
+                onUserClick = openUser,
+                scrollBehavior = scrollBehavior
+            )
+        }
     ) {
         when {
             //TODO add loading screen
@@ -79,8 +80,11 @@ private fun Lists(
                 onChangeList = onChangeList
             )
             else -> {
-
-                ListSort()
+                ListPage(
+                    paddingValues = it,
+                    scrollBehavior = scrollBehavior,
+                    openListsEdit = openListsEdit,
+                )
             }
         }
     }
@@ -103,7 +107,9 @@ private fun ListsEmpty(
     ) {
 
         Spacer(
-            modifier = Modifier.statusBarsHeight(additional = 128.dp)
+            modifier = Modifier
+                .statusBarsPadding()
+                .height(128.dp)
         )
 
         Icon(
