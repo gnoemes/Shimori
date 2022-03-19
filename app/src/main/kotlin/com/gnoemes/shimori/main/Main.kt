@@ -3,12 +3,8 @@ package com.gnoemes.shimori.main
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -30,7 +26,6 @@ import com.gnoemes.shimori.common.compose.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.rememberSnackbarHostState
 import com.gnoemes.shimori.common.utils.MessageID
 import com.gnoemes.shimori.model.rate.ListType
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
@@ -42,7 +37,7 @@ internal fun Main() {
 }
 
 @OptIn(
-    ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class,
+    ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
@@ -138,11 +133,10 @@ internal fun MainBottomBar(
             },
         )
 
-        Spacer(modifier = Modifier.navigationBarsHeight())
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MainNavigationBar(
     listType: ListType,
@@ -152,6 +146,7 @@ internal fun MainNavigationBar(
 ) {
     BottomAppBar(
         tonalElevation = 0.dp,
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
         modifier = Modifier.height(80.dp)
     ) {
         MainNavigationItems.fastForEach { item ->
@@ -164,7 +159,7 @@ internal fun MainNavigationBar(
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                    indicatorColor = MaterialTheme.colorScheme.surface
+                    indicatorColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
                 ),
                 icon = {
                     NavigationItemIcon(item = item, selected = selected, listType = listType)
