@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.plusAssign
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
@@ -26,6 +25,7 @@ import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.compose.ui.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.compose.ui.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.ui.rememberSnackbarHostState
+import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.utils.MessageID
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -48,11 +48,11 @@ internal fun Main(
 ) {
 
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    val navController = rememberNavController().apply {
-        navigatorProvider += bottomSheetNavigator
-    }
+    val navController = rememberNavController(bottomSheetNavigator)
 
-    val viewState by viewModel.state.collectAsState()
+    bottomSheetNavigator.navigatorSheetState.offset
+
+    val viewState by rememberStateWithLifecycle(viewModel.state)
 
     val snackbarHostState = rememberSnackbarHostState()
 
@@ -67,6 +67,8 @@ internal fun Main(
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetBackgroundColor = MaterialTheme.colorScheme.surface,
+        sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface)
     ) {
         Scaffold(
             bottomBar = {
