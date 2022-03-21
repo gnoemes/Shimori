@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.rate.Rate
+import com.gnoemes.shimori.model.rate.RateTargetType
 
 class AnimeWithRate : EntityWithRate<Anime> {
     @Embedded
@@ -23,5 +24,6 @@ class AnimeWithRate : EntityWithRate<Anime> {
 
     override fun hashCode(): Int = arrayOf(entity, rate).contentHashCode()
 
-    val id get() = entity.id
+    override val id get() = entity.id
+    override val type get() = RateTargetType.ANIME
 }
