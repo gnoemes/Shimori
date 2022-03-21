@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -45,59 +44,55 @@ private fun ListsChange(
     onOpenRandomTitleClick: () -> Unit,
     navigateUp: () -> Unit,
 ) {
+    Column {
+        BottomSheetTitle(text = stringResource(id = R.string.lists_title))
 
-    Surface {
-        Column {
-            BottomSheetTitle(text = stringResource(id = R.string.lists_title))
-
-            EnlargedButton(
-                onClick = onOpenPinedClick,
-                modifier = Modifier
-                    .padding(start = 16.dp, top = 16.dp, end = 12.dp)
-                    .height(48.dp)
-                    .fillMaxWidth(),
-                text = stringResource(id = R.string.pinned),
-                leftIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_pin),
-                        contentDescription = stringResource(id = R.string.pinned)
-                    )
-                }
-            )
-
-            EnlargedButton(
-                onClick = onOpenRandomTitleClick,
-                modifier = Modifier
-                    .padding(start = 16.dp, top = 12.dp, end = 12.dp)
-                    .height(48.dp)
-                    .fillMaxWidth(),
-                text = stringResource(R.string.open_random_title_from_list),
-                leftIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_random),
-                        contentDescription = stringResource(R.string.open_random_title_from_list)
-                    )
-                },
-                rightIcon = {
-                    ChevronIcon()
-                }
-            )
-
-            CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colorScheme.onSurface,
-            ) {
-                StatusSection(type = ListType.Anime, navigateUp = navigateUp)
-                StatusSection(type = ListType.Manga, navigateUp = navigateUp)
-                StatusSection(type = ListType.Ranobe, navigateUp = navigateUp)
+        EnlargedButton(
+            onClick = onOpenPinedClick,
+            modifier = Modifier
+                .padding(start = 16.dp, top = 16.dp, end = 12.dp)
+                .height(48.dp)
+                .fillMaxWidth(),
+            text = stringResource(id = R.string.pinned),
+            leftIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_pin),
+                    contentDescription = stringResource(id = R.string.pinned)
+                )
             }
+        )
 
+        EnlargedButton(
+            onClick = onOpenRandomTitleClick,
+            modifier = Modifier
+                .padding(start = 16.dp, top = 12.dp, end = 12.dp)
+                .height(48.dp)
+                .fillMaxWidth(),
+            text = stringResource(R.string.open_random_title_from_list),
+            leftIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_random),
+                    contentDescription = stringResource(R.string.open_random_title_from_list)
+                )
+            },
+            rightIcon = {
+                ChevronIcon()
+            }
+        )
 
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .height(24.dp)
-            )
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onSurface,
+        ) {
+            StatusSection(type = ListType.Anime, navigateUp = navigateUp)
+            StatusSection(type = ListType.Manga, navigateUp = navigateUp)
+            StatusSection(type = ListType.Ranobe, navigateUp = navigateUp)
         }
-    }
 
+
+        Spacer(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .height(24.dp)
+        )
+    }
 }
