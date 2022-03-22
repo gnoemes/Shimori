@@ -11,7 +11,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gnoemes.shimori.common.compose.NavigationBarColorSwitcher
 import com.gnoemes.shimori.common.compose.ui.BottomSheetTitle
 import com.gnoemes.shimori.common.compose.ui.ChevronIcon
 import com.gnoemes.shimori.common.compose.ui.EnlargedButton
@@ -30,7 +29,6 @@ private fun ListsChange(
     viewModel: ListsChangeViewModel,
     navigateUp: () -> Unit
 ) {
-    NavigationBarColorSwitcher(MaterialTheme.colorScheme.surface)
     ListsChange(
         onOpenPinedClick = { viewModel.openPinned(); navigateUp() },
         onOpenRandomTitleClick = { viewModel.openRandomTitle(); navigateUp() },

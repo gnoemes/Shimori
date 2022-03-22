@@ -27,10 +27,8 @@ internal class ListsEditViewModel @Inject constructor(
     private val deleteRate: DeleteRate,
     private val toggleListPin: ToggleListPin,
 ) : ViewModel() {
-    private val targetId: Long = savedStateHandle.get("id")!!
-    private val targetType: RateTargetType = savedStateHandle.get("type")!!
-
-    private val pendingActions = MutableSharedFlow<ListsEditAction>()
+    private val targetId: Long = savedStateHandle["id"]!!
+    private val targetType: RateTargetType = savedStateHandle["type"]!!
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
@@ -42,25 +40,6 @@ internal class ListsEditViewModel @Inject constructor(
     val state: StateFlow<ListsEditViewState> get() = _state
 
     init {
-        viewModelScope.launch {
-            pendingActions.collect { action ->
-                when (action) {
-                    is ListsEditAction.StatusChanged -> onStatusChanged(action.newStatus)
-                    is ListsEditAction.ProgressChanged -> onProgressChanged(action.newValue)
-                    is ListsEditAction.RewatchesChanged -> onRewatchesChanged(action.newValue)
-                    is ListsEditAction.ScoreChanged -> onScoreChanged(action.newValue)
-                    is ListsEditAction.CommentChanged -> onCommentChanged(action.newComment)
-                    ListsEditAction.ProgressInput -> onProgressInput()
-                    ListsEditAction.RewatchingInput -> onRewatchingInput()
-                    ListsEditAction.CommentInput -> onCommentInput()
-                    ListsEditAction.NoneInput -> onNoneInput()
-                    ListsEditAction.TogglePin -> togglePin()
-                    ListsEditAction.Delete -> delete()
-                    ListsEditAction.Save -> createOrUpdate()
-                }
-            }
-        }
-
         viewModelScope.launch {
             combine(
                     observeEntityWithRate.flow,
@@ -75,7 +54,7 @@ internal class ListsEditViewModel @Inject constructor(
                         image = shikimoriEntity?.image,
                         //TODO romadzi
                         name = shikimoriEntity?.name.orEmpty(),
-                        status = rate?.status ?: RateStatus.PLANNED,
+                        status = rate?.status ?: RateStatus.WATCHING,
                         progress = rate?.progress ?: 0,
                         size = shikimoriEntity?.size,
                         rewatches = rate?.reCounter ?: 0,
@@ -86,81 +65,73 @@ internal class ListsEditViewModel @Inject constructor(
                         newRate = rate == null
                 )
             }.collect { _state.value = it }
-
-
         }
 
         observeEntityWithRate(ObserveEntityWithRate.Params(targetId, targetType))
         observeHasPin(ObserveHasPin.Params(targetId, targetType))
     }
 
-    fun submitAction(action: ListsEditAction) {
-        viewModelScope.launch {
-            pendingActions.emit(action)
-        }
-    }
-
-    private fun onStatusChanged(newStatus: RateStatus) {
+    fun onStatusChanged(newStatus: RateStatus) {
         viewModelScope.launch {
             _state.value = _state.value.copy(status = newStatus)
         }
     }
 
-    private fun onProgressChanged(newValue: Int) {
+    fun onProgressChanged(newValue: Int) {
         viewModelScope.launch {
             _state.value = _state.value.copy(progress = newValue)
         }
     }
 
-    private fun onRewatchesChanged(newValue: Int) {
+    fun onRewatchesChanged(newValue: Int) {
         viewModelScope.launch {
             _state.value = _state.value.copy(rewatches = newValue)
         }
     }
 
-    private fun onScoreChanged(newValue: Int?) {
+    fun onScoreChanged(newValue: Int?) {
         viewModelScope.launch {
             _state.value = _state.value.copy(score = newValue)
         }
     }
 
-    private fun onCommentChanged(newComment: String?) {
+    fun onCommentChanged(newComment: String?) {
         viewModelScope.launch {
             _state.value = _state.value.copy(comment = newComment)
         }
     }
 
-    private fun onProgressInput() {
+    fun onProgressInput() {
         viewModelScope.launch {
             _state.value = _state.value.copy(inputState = ListEditInputState.Progress)
         }
     }
 
-    private fun onRewatchingInput() {
+    fun onRewatchingInput() {
         viewModelScope.launch {
             _state.value = _state.value.copy(inputState = ListEditInputState.Rewatching)
         }
     }
 
-    private fun onCommentInput() {
+    fun onCommentInput() {
         viewModelScope.launch {
             _state.value = _state.value.copy(inputState = ListEditInputState.Comment)
         }
     }
 
-    private fun onNoneInput() {
+    fun onNoneInput() {
         viewModelScope.launch {
             _state.value = _state.value.copy(inputState = ListEditInputState.None)
         }
     }
 
-    private fun togglePin() {
+    fun togglePin() {
         viewModelScope.launch {
             _state.value = _state.value.copy(pinned = !_state.value.pinned)
         }
     }
 
-    private fun delete() {
+    fun delete() {
         viewModelScope.launch {
             rate?.id?.let {
                 deleteRate(DeleteRate.Params(it)).collect {
@@ -170,7 +141,7 @@ internal class ListsEditViewModel @Inject constructor(
         }
     }
 
-    private fun createOrUpdate() {
+     fun createOrUpdate() {
         viewModelScope.launch {
             val state = state.value
             val rate = Rate(
