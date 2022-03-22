@@ -16,6 +16,7 @@
 
 package com.gnoemes.shimori.common.api
 
+import com.gnoemes.shimori.model.common.ShimoriImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,6 +27,9 @@ import java.util.*
 
 data class UiMessage(
     val message: String,
+    val shimoriImage: ShimoriImage? = null,
+    val action : String? = null,
+    val payload : Any? = null,
     val id: Long = UUID.randomUUID().mostSignificantBits,
 )
 
