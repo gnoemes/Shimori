@@ -2,12 +2,15 @@
 
 package com.gnoemes.shimori
 
+import ListsEdit
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +23,7 @@ import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists_change.ListsChangeSheet
 import com.gnoemes.shimori.model.rate.RateTargetType
 import com.gnoemes.shimori.settings.Settings
+import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 
@@ -214,9 +218,21 @@ private fun NavGraphBuilder.addListEditBottomSheet(
             },
         )
     ) {
-//        ListsEdit(
-//                navigateUp = { navController.navigateUp() }
-//        )
+        val bottomSheetNavigator = try {
+            navController
+                .navigatorProvider
+                .getNavigator(BottomSheetNavigator::class.java)
+        } catch (e: Exception) {
+            null
+        }
+        //used to snap bottom bar
+        val offset = remember {
+            bottomSheetNavigator?.navigatorSheetState?.offset ?: mutableStateOf(0f)
+        }
+        ListsEdit(
+            bottomSheetOffset = offset,
+            navigateUp = { navController.navigateUp() }
+        )
     }
 }
 

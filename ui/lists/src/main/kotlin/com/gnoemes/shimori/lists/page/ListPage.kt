@@ -26,6 +26,8 @@ import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.ui.*
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.lists.sort.ListSort
+import com.gnoemes.shimori.model.EntityWithRate
+import com.gnoemes.shimori.model.ShimoriEntity
 import com.gnoemes.shimori.model.anime.AnimeWithRate
 import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.ranobe.RanobeWithRate
@@ -75,6 +77,9 @@ private fun ListPage(
         is RanobePageViewModel -> viewModel.pagedList.collectAsLazyPagingItems()
         else -> throw IllegalStateException("$viewModel doesn't support pagination")
     })
+
+    val onEditClick =
+        { entity: EntityWithRate<out ShimoriEntity> -> openListsEdit(entity.id, entity.type) }
 
     state.message?.let { message ->
         LaunchedEffect(message) {
@@ -143,7 +148,7 @@ private fun ListPage(
                         AnimeListCard(
                             anime = entity,
                             onCoverLongClick = { /*TODO*/ },
-                            onEditClick = { },
+                            onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}
                         )
@@ -152,7 +157,7 @@ private fun ListPage(
                         MangaListCard(
                             manga = entity,
                             onCoverLongClick = { /*TODO*/ },
-                            onEditClick = { },
+                            onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}
                         )
@@ -161,7 +166,7 @@ private fun ListPage(
                         RanobeListCard(
                             ranobe = entity,
                             onCoverLongClick = { /*TODO*/ },
-                            onEditClick = { },
+                            onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}
                         )

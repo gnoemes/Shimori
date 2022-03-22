@@ -29,3 +29,10 @@ internal data class ListsEditViewState(
 internal sealed class UiEvents {
     object NavigateUp : UiEvents()
 }
+
+internal sealed class ListEditInputState {
+    object None : ListEditInputState()
+    object Progress : ListEditInputState()
+    object Rewatching : ListEditInputState()
+    object Comment : ListEditInputState()
+}
