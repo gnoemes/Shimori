@@ -107,9 +107,17 @@ private fun ListPage(
 
     ScaffoldExtended(
         topBar = {
+
+            val title = when (val type = state.type) {
+                ListType.Pinned -> null
+                else -> type.rateType
+            }?.let { type ->
+                LocalShimoriTextCreator.current.rateStatusText(type, state.status)
+            } ?: LocalShimoriRateUtil.current.listTypeName(state.type)
+
             ShimoriMainToolbar(
                 modifier = Modifier,
-                title = LocalShimoriRateUtil.current.listTypeName(state.type),
+                title = title,
                 user = state.user,
                 onSearchClick = openSearch,
                 onUserClick = openUser,
