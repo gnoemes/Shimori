@@ -1,19 +1,23 @@
 package com.gnoemes.shimori.lists.page
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -22,7 +26,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.compose.*
+import com.gnoemes.shimori.common.compose.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.compose.ui.*
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.lists.sort.ListSort
@@ -33,6 +39,7 @@ import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 import com.gnoemes.shimori.model.rate.ListType
 import com.gnoemes.shimori.model.rate.RateTargetType
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun ListPage(
@@ -81,10 +88,19 @@ private fun ListPage(
     val onEditClick =
         { entity: EntityWithRate<out ShimoriEntity> -> openListsEdit(entity.id, entity.type) }
 
+    val onTogglePin =
+        { entity: EntityWithRate<out ShimoriEntity> -> viewModel.togglePin(entity) }
+
     state.message?.let { message ->
         LaunchedEffect(message) {
-            snackbarHostState.showSnackbar(message.message)
+            val result =
+                snackbarHostState.showSnackbar(message.message, actionLabel = message.action)
 
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.onMessageAction(message.id)
+            }
+
+            delay(100L)
             viewModel.onMessageShown(message.id)
         }
     }
@@ -107,7 +123,6 @@ private fun ListPage(
 
     ScaffoldExtended(
         topBar = {
-
             val title = when (val type = state.type) {
                 ListType.Pinned -> null
                 else -> type.rateType
@@ -129,6 +144,28 @@ private fun ListPage(
                 hostState = snackbarHostState,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 88.dp),
+                icon = {
+                    val image = state.message?.shimoriImage
+                    if (image != null) {
+                        Image(
+                            painter = rememberImagePainter(image),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
+                                    ShimoriSmallestRoundedCornerShape
+                                )
+                                .clip(ShimoriSmallestRoundedCornerShape)
+                        )
+
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -155,7 +192,7 @@ private fun ListPage(
                     is AnimeWithRate -> {
                         AnimeListCard(
                             anime = entity,
-                            onCoverLongClick = { /*TODO*/ },
+                            onCoverLongClick = { onTogglePin(entity) },
                             onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}
@@ -164,7 +201,7 @@ private fun ListPage(
                     is MangaWithRate -> {
                         MangaListCard(
                             manga = entity,
-                            onCoverLongClick = { /*TODO*/ },
+                            onCoverLongClick = { onTogglePin(entity) },
                             onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}
@@ -173,7 +210,7 @@ private fun ListPage(
                     is RanobeWithRate -> {
                         RanobeListCard(
                             ranobe = entity,
-                            onCoverLongClick = { /*TODO*/ },
+                            onCoverLongClick = { onTogglePin(entity) },
                             onEditClick = { onEditClick(entity) },
                             onIncrementClick = { /*TODO*/ },
                             onIncrementHold = {}

@@ -31,6 +31,8 @@
     <string name="save">Save</string>
     <string name="edit">Edit</string>
 
+    <string name="action_undo">Undo</string>
+
     <string name="rate_status_anime_watching">Watching</string>
     <string name="rate_status_anime_re_watching">Rewatching</string>
 
@@ -106,8 +108,7 @@
     <string name="type_light_novel">Light Novel</string>
 
     <string name="today">Today</string>
-    
-    
+
     <string name="settings_titles">Titles and names language</string>
     <string name="settings_language_russian">Russian</string>
     <string name="settings_language_english">English</string>
@@ -129,6 +130,8 @@
     <string name="settings_special_thanks">Special thanks</string>
     <string name="settings_special_thanks_shikimori">Shikimori</string>
 
-    <string name="error_disabled_due_empty_rates">Add a title to use this feature.</string>
+    <string name="notification_error_disabled_due_empty_rates">Add a title to use this feature.</string>
+    <string name="notification_title_pinned">Title pinned.</string>
+    <string name="notification_title_unpinned">Title unpinned.</string>
 
 </resources>

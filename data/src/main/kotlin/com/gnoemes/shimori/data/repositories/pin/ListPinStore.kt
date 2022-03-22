@@ -17,23 +17,27 @@ class ListPinStore @Inject constructor(
 
     fun observeHasPins() = dao.observeSize().map { it > 0 }
 
-    suspend fun pin(type: RateTargetType, id: Long, pin : Boolean) {
+    suspend fun pin(type: RateTargetType, id: Long, pin: Boolean): Boolean {
         val local = dao.queryByTarget(id, type)
         if (pin) {
-            if (local != null) return
+            if (local != null) return true
             dao.insert(ListPin(targetId = id, targetType = type))
         } else {
-            if (local == null) return
+            if (local == null) return false
             dao.delete(local)
         }
+
+        return pin
     }
 
-    suspend fun togglePin(type: RateTargetType, id: Long) {
+    suspend fun togglePin(type: RateTargetType, id: Long): Boolean {
         val local = dao.queryByTarget(id, type)
-        if (local != null) {
+        return if (local != null) {
             dao.delete(local)
+            false
         } else {
             dao.insert(ListPin(targetId = id, targetType = type))
+            true
         }
     }
 }
