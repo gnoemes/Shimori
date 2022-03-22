@@ -14,7 +14,6 @@ import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -31,6 +30,7 @@ internal abstract class BasePageViewModel(
 
     val state = combine(
         listManager.type.observe,
+        listManager.page.observe,
         observeMy.flow,
         uiMessageManager.message,
         ::ListPageViewState
@@ -50,12 +50,7 @@ internal abstract class BasePageViewModel(
             }.collect { loadPage(it.first, it.second ?: RateSort.defaultForType(listType)) }
         }
 
-        viewModelScope.launch {
-            listManager.type.observe
-                .map(ObserveRateSort::Params)
-                .collect(observeRateSort::invoke)
-        }
-
+        observeRateSort(ObserveRateSort.Params(listType))
         observeMy(Unit)
     }
 
