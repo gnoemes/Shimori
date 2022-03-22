@@ -5,6 +5,9 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.SwipeableDefaults
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -28,9 +31,9 @@ import com.gnoemes.shimori.common.compose.ui.rememberSnackbarHostState
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.utils.MessageID
 import com.gnoemes.shimori.model.rate.ListType
+import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
-import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 
 
 @Composable
@@ -40,17 +43,23 @@ internal fun Main() {
 
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class,
+    androidx.compose.material.ExperimentalMaterialApi::class
 )
 @Composable
 internal fun Main(
     viewModel: MainViewModel
 ) {
 
-    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        SwipeableDefaults.AnimationSpec,
+        skipHalfExpanded = true
+    )
+    val bottomSheetNavigator = remember(sheetState) {
+        BottomSheetNavigator(sheetState = sheetState)
+    }
     val navController = rememberNavController(bottomSheetNavigator)
-
-    bottomSheetNavigator.navigatorSheetState.offset
 
     val viewState by rememberStateWithLifecycle(viewModel.state)
 
