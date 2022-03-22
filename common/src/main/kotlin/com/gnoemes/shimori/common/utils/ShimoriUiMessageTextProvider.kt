@@ -12,7 +12,10 @@ class ShimoriUiMessageTextProvider @Inject constructor(
 ) {
     fun text(id: MessageID): String {
         return when (id) {
-            MessageID.DisabledDueEmptyRates -> context.getString(R.string.error_disabled_due_empty_rates)
+            MessageID.DisabledDueEmptyRates -> context.getString(R.string.notification_error_disabled_due_empty_rates)
+            MessageID.TitlePinned -> context.getString(R.string.notification_title_pinned)
+            MessageID.TitleUnPinned -> context.getString(R.string.notification_title_unpinned)
+            MessageID.Undo -> context.getString(R.string.action_undo)
             else -> "#id:$id replace me#"
         }
     }
@@ -22,5 +25,8 @@ class ShimoriUiMessageTextProvider @Inject constructor(
 value class MessageID private constructor(val id: Int) {
     companion object {
         val DisabledDueEmptyRates = MessageID(0)
+        val TitlePinned = MessageID(1)
+        val TitleUnPinned = MessageID(2)
+        val Undo = MessageID(3)
     }
 }
