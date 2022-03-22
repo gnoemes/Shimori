@@ -90,6 +90,8 @@ dependencies {
     implementation libs.androidx.datastore
     implementation libs.accompanist.navigationmaterial
 
+    implementation libs.compose.material.material
+
     implementation libs.gson
 
     testImplementation libs.junit
