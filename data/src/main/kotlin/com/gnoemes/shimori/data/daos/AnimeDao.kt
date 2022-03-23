@@ -42,43 +42,98 @@ abstract class AnimeDao : EntityDao<Anime> {
 
     @Transaction
     @Query(QUERY_BY_STATUS_NAME_SORT)
-    abstract fun pagingName(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingName(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_NAME_RU_SORT)
-    abstract fun pagingNameRu(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingNameRu(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_PROGRESS_SORT)
-    abstract fun pagingProgress(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingProgress(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_DATE_CREATED_SORT)
-    abstract fun pagingDateCreated(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingDateCreated(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_DATE_UPDATED_SORT)
-    abstract fun pagingDateUpdated(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingDateUpdated(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_DATE_AIRED_SORT)
-    abstract fun pagingDateAired(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingDateAired(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_SCORE_SORT)
-    abstract fun pagingScore(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingScore(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_SIZE_SORT)
-    abstract fun pagingSize(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingSize(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
 
     @Transaction
     @Query(QUERY_BY_STATUS_RATING_SORT)
-    abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, AnimeWithRate>
+    abstract fun pagingRating(
+        status: RateStatus,
+        descending: Boolean
+    ): PagingSource<Int, AnimeWithRate>
+
+    @Transaction
+    @Query(QUERY_PINNED_PROGRESS_SORT)
+    abstract fun pinnedProgress(descending: Boolean): Flow<List<AnimeWithRate>>
 
     @Transaction
     @Query(QUERY_PINNED_DATE_UPDATED_SORT)
     abstract fun pinnedDateUpdated(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_DATE_CREATED_SORT)
+    abstract fun pinnedDateCreated(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_DATE_AIRED_SORT)
+    abstract fun pinnedDateAired(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_NAME_SORT)
+    abstract fun pinnedName(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_NAME_RU_SORT)
+    abstract fun pinnedNameRu(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_SCORE_SORT)
+    abstract fun pinnedScore(descending: Boolean): Flow<List<AnimeWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_RATING_SORT)
+    abstract fun pinnedRating(descending: Boolean): Flow<List<AnimeWithRate>>
 
     @Transaction
     @Query(QUERY_RANDOM_PINNED)
@@ -218,6 +273,16 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY RANDOM() LIMIT 1
         """
 
+        private const val QUERY_PINNED_PROGRESS_SORT = """
+            SELECT * from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN episodes END) DESC,
+            (CASE :descending WHEN 0 THEN episodes END) ASC
+        """
+
         private const val QUERY_PINNED_DATE_UPDATED_SORT = """
             SELECT a.* from animes AS a
             INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
@@ -226,6 +291,66 @@ abstract class AnimeDao : EntityDao<Anime> {
             ORDER BY  
             (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
             (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+        """
+
+        private const val QUERY_PINNED_DATE_CREATED_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
+        """
+
+        private const val QUERY_PINNED_DATE_AIRED_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+        """
+
+        private const val QUERY_PINNED_NAME_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name END) DESC,
+            (CASE :descending WHEN 0 THEN name END) ASC
+        """
+
+        private const val QUERY_PINNED_NAME_RU_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name_ru_lower_case END) DESC,
+            (CASE :descending WHEN 0 THEN name_ru_lower_case END) ASC
+        """
+
+        private const val QUERY_PINNED_SCORE_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN score END) DESC,
+            (CASE :descending WHEN 0 THEN score END) ASC
+        """
+
+        private const val QUERY_PINNED_RATING_SORT = """
+            SELECT a.* from animes AS a
+            INNER JOIN rates AS r ON r.anime_id = a.anime_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = a.id 
+            WHERE pin.target_type = "anime"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN rating END) DESC,
+            (CASE :descending WHEN 0 THEN rating END) ASC
         """
     }
 }

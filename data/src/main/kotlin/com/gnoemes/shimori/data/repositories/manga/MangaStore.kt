@@ -9,6 +9,7 @@ import com.gnoemes.shimori.model.manga.MangaWithRate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MangaStore @Inject constructor(
@@ -51,7 +52,24 @@ class MangaStore @Inject constructor(
         }
     }
 
-    fun observePinned() = mangaDao.pinnedDateUpdated(true)
+    fun observePinned(sort: RateSort): Flow<List<MangaWithRate>> {
+        return when (sort.sortOption) {
+            RateSortOption.PROGRESS -> mangaDao.pinnedProgress(sort.isDescending)
+            RateSortOption.DATE_CREATED -> mangaDao.pinnedDateCreated(sort.isDescending)
+            RateSortOption.DATE_UPDATED -> mangaDao.pinnedDateUpdated(sort.isDescending)
+            RateSortOption.DATE_AIRED -> mangaDao.pinnedDateAired(sort.isDescending)
+            RateSortOption.MY_SCORE -> mangaDao.pinnedScore(sort.isDescending)
+            RateSortOption.RATING -> mangaDao.pinnedRating(sort.isDescending)
+            RateSortOption.NAME -> {
+                //TODO paging eng, restore romadzi or make cross results
+//                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
+//                else
+                mangaDao.pinnedName(sort.isDescending)
+            }
+            else -> throw IllegalArgumentException("$sort sort is not supported")
+        }
+    }
+
     fun observeById(id : Long) = mangaDao.observeById(id)
 
 }

@@ -20,9 +20,9 @@ class AnimeStore @Inject constructor(
 ) {
 
     private val syncer = syncerForEntity(
-            animeDao,
-            { it.shikimoriId },
-            { remote, local -> remote.copy(id = local?.id ?: 0) }
+        animeDao,
+        { it.shikimoriId },
+        { remote, local -> remote.copy(id = local?.id ?: 0) }
     )
 
     suspend fun update(animes: List<Anime>) = runner {
@@ -51,7 +51,7 @@ class AnimeStore @Inject constructor(
                 //TODO paging eng, restore romadzi or make cross results
 //                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
 //                else
-                    animeDao.pagingName(status, sort.isDescending)
+                animeDao.pagingName(status, sort.isDescending)
             }
             RateSortOption.PROGRESS -> animeDao.pagingProgress(status, sort.isDescending)
             RateSortOption.DATE_CREATED -> animeDao.pagingDateCreated(status, sort.isDescending)
@@ -64,7 +64,24 @@ class AnimeStore @Inject constructor(
         }
     }
 
-    fun observePinned() = animeDao.pinnedDateUpdated(true)
+    fun observePinned(sort: RateSort): Flow<List<AnimeWithRate>> {
+        return when (sort.sortOption) {
+            RateSortOption.PROGRESS -> animeDao.pinnedProgress(sort.isDescending)
+            RateSortOption.DATE_CREATED -> animeDao.pinnedDateCreated(sort.isDescending)
+            RateSortOption.DATE_UPDATED -> animeDao.pinnedDateUpdated(sort.isDescending)
+            RateSortOption.DATE_AIRED -> animeDao.pinnedDateAired(sort.isDescending)
+            RateSortOption.MY_SCORE -> animeDao.pinnedScore(sort.isDescending)
+            RateSortOption.RATING -> animeDao.pinnedRating(sort.isDescending)
+            RateSortOption.NAME -> {
+                //TODO paging eng, restore romadzi or make cross results
+//                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
+//                else
+                animeDao.pinnedName(sort.isDescending)
+            }
+            else -> throw IllegalArgumentException("$sort sort is not supported")
+        }
+    }
+
     fun observeById(id: Long) = animeDao.observeById(id)
 }
 

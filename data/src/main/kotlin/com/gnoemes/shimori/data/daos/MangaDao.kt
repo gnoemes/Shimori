@@ -61,8 +61,36 @@ abstract class MangaDao : EntityDao<Manga> {
     abstract fun pagingRating(status: RateStatus, descending: Boolean): PagingSource<Int, MangaWithRate>
 
     @Transaction
+    @Query(QUERY_PINNED_PROGRESS_SORT)
+    abstract fun pinnedProgress(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
     @Query(QUERY_PINNED_DATE_UPDATED_SORT)
     abstract fun pinnedDateUpdated(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_DATE_CREATED_SORT)
+    abstract fun pinnedDateCreated(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_DATE_AIRED_SORT)
+    abstract fun pinnedDateAired(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_NAME_SORT)
+    abstract fun pinnedName(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_NAME_RU_SORT)
+    abstract fun pinnedNameRu(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_SCORE_SORT)
+    abstract fun pinnedScore(descending: Boolean): Flow<List<MangaWithRate>>
+
+    @Transaction
+    @Query(QUERY_PINNED_RATING_SORT)
+    abstract fun pinnedRating(descending: Boolean): Flow<List<MangaWithRate>>
 
     @Transaction
     @Query(QUERY_RANDOM_PINNED)
@@ -180,14 +208,84 @@ abstract class MangaDao : EntityDao<Manga> {
             ORDER BY RANDOM() LIMIT 1
         """
 
-        private const val QUERY_PINNED_DATE_UPDATED_SORT = """
-            SELECT m.* FROM mangas AS m
+        private const val QUERY_PINNED_PROGRESS_SORT = """
+            SELECT * from mangas AS m
             INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
-            INNER JOIN pinned AS pin ON m.id = pin.target_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN chapters END) DESC,
+            (CASE :descending WHEN 0 THEN chapters END) ASC
+        """
+
+        private const val QUERY_PINNED_DATE_UPDATED_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
             WHERE pin.target_type = "manga"
             ORDER BY  
             (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
             (CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+        """
+
+        private const val QUERY_PINNED_DATE_CREATED_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
+        """
+
+        private const val QUERY_PINNED_DATE_AIRED_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+            (CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+        """
+
+        private const val QUERY_PINNED_NAME_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name END) DESC,
+            (CASE :descending WHEN 0 THEN name END) ASC
+        """
+
+        private const val QUERY_PINNED_NAME_RU_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN name_ru_lower_case END) DESC,
+            (CASE :descending WHEN 0 THEN name_ru_lower_case END) ASC
+        """
+
+        private const val QUERY_PINNED_SCORE_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN score END) DESC,
+            (CASE :descending WHEN 0 THEN score END) ASC
+        """
+
+        private const val QUERY_PINNED_RATING_SORT = """
+            SELECT m.* from mangas AS m
+            INNER JOIN rates AS r ON r.manga_id = m.manga_shikimori_id
+            INNER JOIN pinned AS pin ON pin.target_id = m.id 
+            WHERE pin.target_type = "manga"
+            ORDER BY  
+            (CASE :descending WHEN 1 THEN rating END) DESC,
+            (CASE :descending WHEN 0 THEN rating END) ASC
         """
     }
 }

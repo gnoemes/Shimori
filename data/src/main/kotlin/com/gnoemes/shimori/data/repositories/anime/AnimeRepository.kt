@@ -21,7 +21,7 @@ class AnimeRepository @Inject constructor(
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         animeStore.observeByStatusForPaging(status, sort)
 
-    fun observePinned() = animeStore.observePinned()
+    fun observePinned(sort: RateSort) = animeStore.observePinned(sort)
 
     suspend fun queryByStatus(status: RateStatus?) = animeStore.queryByStatus(status)
 
