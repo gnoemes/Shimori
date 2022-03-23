@@ -24,7 +24,7 @@ class RanobeRepository @Inject constructor(
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         ranobeStore.observeByStatusForPaging(status, sort)
 
-    fun observePinned() = ranobeStore.observePinned()
+    fun observePinned(sort: RateSort) = ranobeStore.observePinned(sort)
 
     suspend fun queryRandomByStatus(status: RateStatus?) = ranobeStore.queryRandomByStatus(status)
 

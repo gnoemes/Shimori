@@ -9,6 +9,7 @@ import com.gnoemes.shimori.model.ranobe.RanobeWithRate
 import com.gnoemes.shimori.model.rate.RateSort
 import com.gnoemes.shimori.model.rate.RateSortOption
 import com.gnoemes.shimori.model.rate.RateStatus
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RanobeStore @Inject constructor(
@@ -51,6 +52,23 @@ class RanobeStore @Inject constructor(
         }
     }
 
-    fun observePinned() = ranobeDao.pinnedDateUpdated(true)
+    fun observePinned(sort: RateSort): Flow<List<RanobeWithRate>> {
+        return when (sort.sortOption) {
+            RateSortOption.PROGRESS -> ranobeDao.pinnedProgress(sort.isDescending)
+            RateSortOption.DATE_CREATED -> ranobeDao.pinnedDateCreated(sort.isDescending)
+            RateSortOption.DATE_UPDATED -> ranobeDao.pinnedDateUpdated(sort.isDescending)
+            RateSortOption.DATE_AIRED -> ranobeDao.pinnedDateAired(sort.isDescending)
+            RateSortOption.MY_SCORE -> ranobeDao.pinnedScore(sort.isDescending)
+            RateSortOption.RATING -> ranobeDao.pinnedRating(sort.isDescending)
+            RateSortOption.NAME -> {
+                //TODO paging eng, restore romadzi or make cross results
+//                if (!settings.isRomadziNaming) animeDao.pagingNameRu(status, sort.isDescending)
+//                else
+                ranobeDao.pinnedName(sort.isDescending)
+            }
+            else -> throw IllegalArgumentException("$sort sort is not supported")
+        }
+    }
+    
     fun observeById(id: Long) = ranobeDao.observeById(id)
 }

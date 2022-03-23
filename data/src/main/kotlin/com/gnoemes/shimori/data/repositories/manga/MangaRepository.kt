@@ -22,7 +22,7 @@ class MangaRepository @Inject constructor(
     fun observeByStatusForPaging(status: RateStatus, sort: RateSort) =
         mangaStore.observeByStatusForPaging(status, sort)
 
-    fun observePinned() = mangaStore.observePinned()
+    fun observePinned(sort: RateSort) = mangaStore.observePinned(sort)
 
     suspend fun queryRandomByStatus(status: RateStatus?) = mangaStore.queryRandomByStatus(status)
 
