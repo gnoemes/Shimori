@@ -38,8 +38,8 @@ android {
         versionName appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField 'String', 'ShikimoriClientId', "\"" + propOrDef("ShikimoriClientId", "") + "\""
-        buildConfigField 'String', 'ShikimoriClientSecret', "\"" + propOrDef("ShikimoriClientSecret", "") + "\""
+        buildConfigField 'String', 'ShikimoriClientId', "\"" + propOrDef("ShikimoriClientId", "default") + "\""
+        buildConfigField 'String', 'ShikimoriClientSecret', "\"" + propOrDef("ShikimoriClientSecret", "default") + "\""
         buildConfigField 'String', 'ShikimoriBaseUrl', ShikimoriBaseUrl
     }
 
