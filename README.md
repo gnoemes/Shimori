@@ -15,8 +15,8 @@ Once you obtain the keys, set them in `~/.gradle/gradle.properties`:
 
 ```
 # Get these from https://shikimori.one/oauth
-ShikimoriClientId = <your key>
-ShikimoriClientSecret = <your key>
+# ShikimoriClientId = <your key>
+# ShikimoriClientSecret = <your key>
 ```
 
 Inspired by [Tivi](https://github.com/chrisbanes/tivi)
