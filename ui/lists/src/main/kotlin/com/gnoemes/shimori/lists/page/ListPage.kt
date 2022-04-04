@@ -321,7 +321,7 @@ private fun ranobeViewModel(): RanobePageViewModel {
 private fun pinViewModel(): PinPageViewModel {
     return viewModel(
         modelClass = PinPageViewModel::class.java,
-        key = "ranobe-page",
+        key = "pin-page",
         factory = createFactory()
     )
 }
