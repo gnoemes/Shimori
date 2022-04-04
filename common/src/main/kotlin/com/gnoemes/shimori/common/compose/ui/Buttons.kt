@@ -15,7 +15,7 @@ import com.gnoemes.shimori.common.R
 import com.gnoemes.shimori.common.compose.theme.ShimoriBigRoundedCornerShape
 import com.gnoemes.shimori.common.compose.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.compose.theme.ShimoriSmallRoundedCornerShape
-import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
+import com.gnoemes.shimori.common.compose.theme.ShimoriThemePreview
 
 @Composable
 fun EnlargedButton(
@@ -212,7 +212,7 @@ value class ConfirmationButtonType private constructor(val type: Int) {
 @Preview
 @Composable
 fun PreviewEnlargedDark() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         EnlargedButton(
             onClick = {},
             modifier = Modifier
@@ -238,7 +238,7 @@ fun PreviewEnlargedDark() {
 @Preview
 @Composable
 fun PreviewEnlargedDarkSelected() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         EnlargedButton(
             onClick = {},
             modifier = Modifier
@@ -259,7 +259,7 @@ fun PreviewEnlargedDarkSelected() {
 @Preview
 @Composable
 fun PreviewShimoriChipDark() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         ShimoriChip(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -279,7 +279,7 @@ fun PreviewShimoriChipDark() {
 @Preview
 @Composable
 fun PreviewShimoriChipSelected() {
-    ShimoriTheme(useDarkColors = false) {
+    ShimoriThemePreview(useDarkColors = false) {
         ShimoriChip(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -300,7 +300,7 @@ fun PreviewShimoriChipSelected() {
 @Preview
 @Composable
 fun PreviewShimoriButtonDark() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         ShimoriButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -320,7 +320,7 @@ fun PreviewShimoriButtonDark() {
 @Preview
 @Composable
 fun PreviewShimoriButtonSelected() {
-    ShimoriTheme(useDarkColors = false) {
+    ShimoriThemePreview(useDarkColors = false) {
         ShimoriButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -341,7 +341,7 @@ fun PreviewShimoriButtonSelected() {
 @Preview
 @Composable
 fun PreviewShimoriConfirmationButtonDarkPrimary() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         ShimoriConformationButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -356,7 +356,7 @@ fun PreviewShimoriConfirmationButtonDarkPrimary() {
 @Preview
 @Composable
 fun PreviewShimoriConfirmationButtonDarkSecondary() {
-    ShimoriTheme(useDarkColors = true) {
+    ShimoriThemePreview(useDarkColors = true) {
         ShimoriConformationButton(
             onClick = { /*TODO*/ },
             modifier = Modifier

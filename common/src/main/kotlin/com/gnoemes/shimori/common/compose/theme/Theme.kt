@@ -56,3 +56,23 @@ fun ShimoriTheme(
         content = content
     )
 }
+
+@Composable
+fun ShimoriThemePreview(
+    useDarkColors: Boolean = isSystemInDarkTheme(),
+    accentColorType : AppAccentColor = AppAccentColor.System,
+    content: @Composable () -> Unit
+) {
+    val accentColor = secondaryColorFromType(accentColorType)
+
+    val colorScheme = when {
+        useDarkColors -> generateDarkPaletteForPrimary(accentColor).toColorScheme()
+        else -> generateLightPaletteForPrimary(accentColor).toColorScheme()
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = ShimoriTypography,
+        content = content
+    )
+}
