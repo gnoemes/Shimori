@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -12,10 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.R
-import com.gnoemes.shimori.common.compose.theme.ShimoriBigRoundedCornerShape
-import com.gnoemes.shimori.common.compose.theme.ShimoriDefaultRoundedCornerShape
-import com.gnoemes.shimori.common.compose.theme.ShimoriSmallRoundedCornerShape
-import com.gnoemes.shimori.common.compose.theme.ShimoriThemePreview
+import com.gnoemes.shimori.common.compose.theme.*
 
 @Composable
 fun EnlargedButton(
@@ -201,6 +199,32 @@ fun ShimoriCircleButton(
     )
 }
 
+@Composable
+fun ShimoriFAB(
+    onClick: () -> Unit,
+    expanded: Boolean,
+    icon: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String? = null
+) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        expanded = expanded,
+        shape = ShimoriBiggestRoundedCornerShape,
+        icon = icon,
+        modifier = modifier,
+        text = {
+            if (!text.isNullOrBlank()) {
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.labelLarge,
+                ) {
+                    Text(text = text)
+                }
+            }
+        },
+    )
+}
+
 @JvmInline
 value class ConfirmationButtonType private constructor(val type: Int) {
     companion object {
@@ -364,6 +388,37 @@ fun PreviewShimoriConfirmationButtonDarkSecondary() {
                 .height(52.dp),
             text = "Cancel",
             type = ConfirmationButtonType.Secondary
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewShimoriShimoriFABExpandedDark() {
+    ShimoriThemePreview(useDarkColors = true) {
+        ShimoriFAB(
+            onClick = { /*TODO*/ },
+            expanded = true,
+            text = "Lists",
+            modifier = Modifier.height(40.dp),
+            icon = {
+                Icon(painter = painterResource(id = R.drawable.ic_menu), contentDescription = null)
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewShimoriShimoriFABDark() {
+    ShimoriThemePreview(useDarkColors = true) {
+        ShimoriFAB(
+            onClick = { /*TODO*/ },
+            expanded = false,
+            text = "Lists",
+            icon = {
+                Icon(painter = painterResource(id = R.drawable.ic_menu), contentDescription = null)
+            }
         )
     }
 }
