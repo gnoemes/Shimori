@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +30,11 @@ import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.api.UiMessage
 import com.gnoemes.shimori.common.compose.*
 import com.gnoemes.shimori.common.compose.theme.ShimoriSmallestRoundedCornerShape
+import com.gnoemes.shimori.common.compose.theme.dimens
 import com.gnoemes.shimori.common.compose.ui.*
+import com.gnoemes.shimori.common.compose.ui.FabPosition
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
+import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
 import com.gnoemes.shimori.model.EntityWithRate
 import com.gnoemes.shimori.model.ShimoriEntity
@@ -45,6 +50,7 @@ import kotlinx.coroutines.delay
 @Composable
 internal fun ListPage(
     type: ListType,
+    onChangeList: () -> Unit,
     openSearch: () -> Unit,
     openUser: () -> Unit,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
@@ -60,6 +66,7 @@ internal fun ListPage(
 
     ListPage(
         viewModel = viewModel,
+        onChangeList = onChangeList,
         openSearch = openSearch,
         openUser = openUser,
         openListsEdit = openListsEdit,
@@ -71,6 +78,7 @@ internal fun ListPage(
 @Composable
 private fun ListPage(
     viewModel: BasePageViewModel,
+    onChangeList: () -> Unit,
     openSearch: () -> Unit,
     openUser: () -> Unit,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
@@ -83,8 +91,7 @@ private fun ListPage(
     val onEditClick =
         { entity: EntityWithRate<out ShimoriEntity> -> openListsEdit(entity.id, entity.type) }
 
-    val onTogglePin =
-        { entity: EntityWithRate<out ShimoriEntity> -> viewModel.togglePin(entity) }
+    val onTogglePin = { entity: EntityWithRate<out ShimoriEntity> -> viewModel.togglePin(entity) }
 
     state.message?.let { message ->
         LaunchedEffect(message) {
@@ -105,31 +112,25 @@ private fun ListPage(
     val itemCard = @Composable { entity: EntityWithRate<out ShimoriEntity> ->
         when (entity) {
             is AnimeWithRate -> {
-                AnimeListCard(
-                    anime = entity,
+                AnimeListCard(anime = entity,
                     onCoverLongClick = { onTogglePin(entity) },
                     onEditClick = { onEditClick(entity) },
                     onIncrementClick = { /*TODO*/ },
-                    onIncrementHold = {}
-                )
+                    onIncrementHold = {})
             }
             is MangaWithRate -> {
-                MangaListCard(
-                    manga = entity,
+                MangaListCard(manga = entity,
                     onCoverLongClick = { onTogglePin(entity) },
                     onEditClick = { onEditClick(entity) },
                     onIncrementClick = { /*TODO*/ },
-                    onIncrementHold = {}
-                )
+                    onIncrementHold = {})
             }
             is RanobeWithRate -> {
-                RanobeListCard(
-                    ranobe = entity,
+                RanobeListCard(ranobe = entity,
                     onCoverLongClick = { onTogglePin(entity) },
                     onEditClick = { onEditClick(entity) },
                     onIncrementClick = { /*TODO*/ },
-                    onIncrementHold = {}
-                )
+                    onIncrementHold = {})
             }
             else -> Unit
         }
@@ -145,6 +146,7 @@ private fun ListPage(
             snackbarHostState = snackbarHostState,
             scrollBehavior = scrollBehavior,
             message = state.message,
+            onChangeList = onChangeList,
             openSearch = openSearch,
             openUser = openUser
         ) { paddingValues ->
@@ -196,6 +198,7 @@ private fun ListPage(
             snackbarHostState = snackbarHostState,
             scrollBehavior = scrollBehavior,
             message = state.message,
+            onChangeList = onChangeList,
             openSearch = openSearch,
             openUser = openUser
         ) { paddingValues ->
@@ -235,6 +238,7 @@ private fun ScreenLayout(
     message: UiMessage?,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
+    onChangeList: () -> Unit,
     openSearch: () -> Unit,
     openUser: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
@@ -258,12 +262,9 @@ private fun ScreenLayout(
             )
         },
         snackbarHost = {
-            ShimoriSnackbar(
-                hostState = snackbarHostState,
+            ShimoriSnackbar(hostState = snackbarHostState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .padding(bottom = 88.dp),
+                    .fillMaxWidth(),
                 icon = {
                     val image = message?.shimoriImage
                     if (image != null) {
@@ -283,7 +284,29 @@ private fun ScreenLayout(
 
                         Spacer(modifier = Modifier.width(12.dp))
                     }
+                })
+        },
+        floatingActionButton = {
+            ShimoriFAB(
+                onClick = onChangeList,
+                expanded = true,
+                modifier = Modifier
+                    .height(40.dp),
+                text = stringResource(id = R.string.lists_title),
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        contentDescription = stringResource(id = R.string.lists_title)
+                    )
                 }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        bottomBar = {
+            Spacer(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .height(MaterialTheme.dimens.bottomBarHeight)
             )
         },
         content = content
@@ -293,36 +316,28 @@ private fun ScreenLayout(
 @Composable
 private fun animeViewModel(): AnimePageViewModel {
     return viewModel(
-        modelClass = AnimePageViewModel::class.java,
-        key = "anime-page",
-        factory = createFactory()
+        modelClass = AnimePageViewModel::class.java, key = "anime-page", factory = createFactory()
     )
 }
 
 @Composable
 private fun mangaViewModel(): MangaPageViewModel {
     return viewModel(
-        modelClass = MangaPageViewModel::class.java,
-        key = "manga-page",
-        factory = createFactory()
+        modelClass = MangaPageViewModel::class.java, key = "manga-page", factory = createFactory()
     )
 }
 
 @Composable
 private fun ranobeViewModel(): RanobePageViewModel {
     return viewModel(
-        modelClass = RanobePageViewModel::class.java,
-        key = "ranobe-page",
-        factory = createFactory()
+        modelClass = RanobePageViewModel::class.java, key = "ranobe-page", factory = createFactory()
     )
 }
 
 @Composable
 private fun pinViewModel(): PinPageViewModel {
     return viewModel(
-        modelClass = PinPageViewModel::class.java,
-        key = "pin-page",
-        factory = createFactory()
+        modelClass = PinPageViewModel::class.java, key = "pin-page", factory = createFactory()
     )
 }
 
@@ -331,8 +346,7 @@ private fun createFactory(): ViewModelProvider.Factory? {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
     return if (viewModelStoreOwner is NavBackStackEntry) {
         HiltViewModelFactory(
-            context = LocalContext.current,
-            navBackStackEntry = viewModelStoreOwner
+            context = LocalContext.current, navBackStackEntry = viewModelStoreOwner
         )
     } else {
         // Use the default factory provided by the ViewModelStoreOwner
