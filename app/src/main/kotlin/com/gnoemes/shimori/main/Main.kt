@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.main
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -14,6 +16,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,12 +31,12 @@ import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.common.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.compose.ui.ShimoriBottomBarItem
-import com.gnoemes.shimori.common.compose.ui.rememberSnackbarHostState
 import com.gnoemes.shimori.common.extensions.rememberStateWithLifecycle
 import com.gnoemes.shimori.model.rate.ListType
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -50,20 +53,48 @@ internal fun Main() {
 internal fun Main(
     viewModel: MainViewModel
 ) {
-
+    //Create custom sheet state with skip half behavior
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
         SwipeableDefaults.AnimationSpec,
         skipHalfExpanded = true
     )
+
+    //Create bottom sheet navigator & nav controller
     val bottomSheetNavigator = remember(sheetState) {
         BottomSheetNavigator(sheetState = sheetState)
     }
     val navController = rememberNavController(bottomSheetNavigator)
 
-    val viewState by rememberStateWithLifecycle(viewModel.state)
+    //Close bottom sheets smoothly with state.hide() instead of navController.navigateUp()
+    val scope = rememberCoroutineScope()
+    val bottomSheetNavigateUp: () -> Unit = { scope.launch { sheetState.hide() } }
+    val bottomSheetBackPressedCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (sheetState.isVisible) {
+                    bottomSheetNavigateUp()
+                }
+            }
+        }
+    }
 
-    val snackbarHostState = rememberSnackbarHostState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    navController.setLifecycleOwner(lifecycleOwner)
+
+    //Set bottom sheet callback to current back dispatcher (Activity)
+    backDispatcher?.apply {
+        addCallback(lifecycleOwner, bottomSheetBackPressedCallback)
+    }?.let(navController::setOnBackPressedDispatcher)
+
+    DisposableEffect(lifecycleOwner) {
+        onDispose {
+            bottomSheetBackPressedCallback.remove()
+        }
+    }
+
+    val viewState by rememberStateWithLifecycle(viewModel.state)
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
@@ -79,7 +110,10 @@ internal fun Main(
                 )
             }
         ) {
-            AppNavigation(navController = navController)
+            AppNavigation(
+                navController = navController,
+                bottomSheetNavigateUp = bottomSheetNavigateUp
+            )
         }
     }
 }

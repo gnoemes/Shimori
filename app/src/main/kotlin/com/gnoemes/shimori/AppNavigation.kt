@@ -71,13 +71,14 @@ internal sealed class Screen(private val route: String) {
 
 @Composable
 internal fun AppNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    bottomSheetNavigateUp: () -> Unit
 ) {
     NavHost(
         navController = navController,
         startDestination = RootScreen.Lists.route
     ) {
-        addListsRoot(navController)
+        addListsRoot(navController, bottomSheetNavigateUp)
         addExploreRoot(navController)
         addFeedRoot(navController)
         addTalksRoot(navController)
@@ -85,7 +86,8 @@ internal fun AppNavigation(
 }
 
 private fun NavGraphBuilder.addListsRoot(
-    navController: NavController
+    navController: NavController,
+    bottomSheetNavigateUp: () -> Unit
 ) {
     navigation(
         route = RootScreen.Lists.route,
@@ -94,8 +96,8 @@ private fun NavGraphBuilder.addListsRoot(
         val root = RootScreen.Lists
 
         addLists(navController, root)
-        addListChangeBottomSheet(navController, root)
-        addListEditBottomSheet(navController, root)
+        addListChangeBottomSheet(navController, root, bottomSheetNavigateUp)
+        addListEditBottomSheet(navController, root, bottomSheetNavigateUp)
 
         addSettings(navController, root)
     }
@@ -196,18 +198,20 @@ private fun NavGraphBuilder.addTalks(
 
 private fun NavGraphBuilder.addListChangeBottomSheet(
     navController: NavController,
-    root: RootScreen
+    root: RootScreen,
+    bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
         ListsChangeSheet(
-            navigateUp = { navController.navigateUp() }
+            navigateUp = bottomSheetNavigateUp
         )
     }
 }
 
 private fun NavGraphBuilder.addListEditBottomSheet(
     navController: NavController,
-    root: RootScreen
+    root: RootScreen,
+    bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(
         route = Screen.ListsEditSheet.createRoute(root),
@@ -231,7 +235,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         }
         ListsEdit(
             bottomSheetOffset = offset,
-            navigateUp = { navController.navigateUp() }
+            navigateUp = bottomSheetNavigateUp
         )
     }
 }
