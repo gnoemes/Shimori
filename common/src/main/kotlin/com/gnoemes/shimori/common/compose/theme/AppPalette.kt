@@ -28,6 +28,7 @@ interface AppPalette {
     val onBackground: Color
     val surface: Color
     val onSurface: Color
+    val surfaceTint : Color
     val inverseSurface: Color
     val inverseOnSurface: Color
 

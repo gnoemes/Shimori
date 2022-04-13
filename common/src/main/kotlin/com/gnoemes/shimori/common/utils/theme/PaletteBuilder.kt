@@ -68,6 +68,7 @@ private fun createPalette(
         override val onBackground = onBackground(palette.neutral, light)
         override val surface = surface(palette.neutral, light)
         override val onSurface = onSurface(palette.neutral, light)
+        override val surfaceTint = primary(palette.primary, light).copy(alpha = 0.05f)
         override val inverseSurface = inverseSurface(palette.neutral, light)
         override val inverseOnSurface = inverseOnSurface(palette.neutral, light)
         override val surfaceVariant = surfaceVariant(palette.neutralVariant, light)
