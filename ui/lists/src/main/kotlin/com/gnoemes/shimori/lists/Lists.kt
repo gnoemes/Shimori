@@ -45,7 +45,6 @@ fun Lists(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Lists(
     viewModel: ListsViewModel,
@@ -75,9 +74,10 @@ private fun Lists(
         else -> {
             ListPage(
                 type = state.type,
+                onChangeList = onChangeList,
                 openListsEdit = openListsEdit,
                 openSearch = openSearch,
-                openUser = openUser,
+                openUser = openUser
             )
         }
     }
