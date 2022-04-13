@@ -29,7 +29,7 @@ fun AppPalette.toColorScheme() : ColorScheme {
         onSurface = onSurface,
         surfaceVariant = surfaceVariant,
         onSurfaceVariant = onSurfaceVariant,
-        surfaceTint = surface,
+        surfaceTint = surfaceTint,
         inverseSurface = inverseSurface,
         inverseOnSurface = inverseOnSurface,
         error = error,
