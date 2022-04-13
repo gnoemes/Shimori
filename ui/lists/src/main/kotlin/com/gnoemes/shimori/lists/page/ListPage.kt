@@ -163,7 +163,8 @@ private fun ListPage(
                 itemSpacer(
                     modifier = Modifier
                         .navigationBarsPadding()
-                        .height(bottomBarHeight)
+                        //bottomBar + FAB
+                        .height(bottomBarHeight + 52.dp)
                 )
             }
         }
@@ -221,7 +222,8 @@ private fun ListPage(
                 itemSpacer(
                     modifier = Modifier
                         .navigationBarsPadding()
-                        .height(bottomBarHeight)
+                        //bottomBar + FAB
+                        .height(bottomBarHeight + 52.dp)
                 )
             }
         }
