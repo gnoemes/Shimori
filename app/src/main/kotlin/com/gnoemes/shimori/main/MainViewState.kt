@@ -10,7 +10,6 @@ data class MainViewState(
     val listType: ListType = ListType.Anime,
     val hasRates : Boolean = false,
     val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
-    val message : UiMessage? = null,
 ) {
 
     companion object {

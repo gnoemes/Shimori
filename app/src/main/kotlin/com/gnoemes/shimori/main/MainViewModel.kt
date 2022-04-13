@@ -25,19 +25,16 @@ class MainViewModel @Inject constructor(
     private val updateUser: UpdateUser,
     private val updateRates: UpdateRates,
     private val listsStateManager: ListsStateManager,
-    private val uiMessageTextProvider: ShimoriUiMessageTextProvider,
     observeHasRates: ObserveHasRates
 ) : ViewModel() {
 
     private val updatingUserDataState = ObservableLoadingCounter()
-    private val uiMessageManager = UiMessageManager()
 
     val state: StateFlow<MainViewState> =
         combine(
             listsStateManager.type.observe,
             observeHasRates.flow,
             observeShikimoriAuth.flow,
-            uiMessageManager.message,
             ::MainViewState
         ).stateIn(
             scope = viewModelScope,
@@ -77,20 +74,6 @@ class MainViewModel @Inject constructor(
     private fun updateRates() {
         viewModelScope.launch {
             updateRates(Unit).collectStatus(updatingUserDataState)
-        }
-    }
-
-    fun showMessage(id: MessageID) {
-        viewModelScope.launch {
-            uiMessageManager.emitMessage(
-                UiMessage(uiMessageTextProvider.text(id))
-            )
-        }
-    }
-
-    fun onMessageShown(id: Long) {
-        viewModelScope.launch {
-            uiMessageManager.clearMessage(id)
         }
     }
 }

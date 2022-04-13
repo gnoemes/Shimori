@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
 
         installSplashScreen()
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         setContent {
 
