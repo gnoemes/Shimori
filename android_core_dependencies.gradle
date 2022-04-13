@@ -38,6 +38,5 @@ dependencies {
     implementation libs.androidx.hilt.compose
     kapt libs.hilt.compiler
 
-    implementation libs.androidx.hilt.work
     kapt libs.androidx.hilt.compiler
 }
