@@ -9,8 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath(libs.kotlin.serializationGradle)
-        classpath(libs.hilt.pluginGradle)
+        classpath(libs.kotlin.serialization.gradle)
         //android & kotlin gradle plugins in buildSrc/build.gradle.kts
     }
 }
