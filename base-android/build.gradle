@@ -1,7 +1,7 @@
 import com.gnoemes.shimori.Modules
 
 apply plugin: 'com.android.library'
-apply from: '../android_commons.gradle'
+apply from: '../com.gnoemes.shimori.android_commons.gradle'
 
 dependencies {
     api project(Modules.base)
