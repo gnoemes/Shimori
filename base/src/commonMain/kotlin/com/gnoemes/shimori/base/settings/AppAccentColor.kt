@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.base.settings
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 value class AppAccentColor private constructor(val value: Int) {
     companion object {

@@ -1,6 +1,7 @@
 import com.gnoemes.shimori.initConfigField
 
 plugins {
+    id("com.android.application")
     id("android-app")
 }
 

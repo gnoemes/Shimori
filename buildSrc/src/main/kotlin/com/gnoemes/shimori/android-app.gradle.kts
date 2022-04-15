@@ -1,10 +1,10 @@
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+
 plugins {
-    id("base-module")
-    id("com.android.application")
     id("android-base")
 }
 
-android {
+configure<BaseAppModuleExtension> {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
