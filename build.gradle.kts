@@ -10,6 +10,7 @@ buildscript {
 
     dependencies {
         classpath(libs.kotlin.serialization.gradle)
+        classpath(libs.moko.resources.generator)
         //android & kotlin gradle plugins in buildSrc/build.gradle.kts
     }
 }
