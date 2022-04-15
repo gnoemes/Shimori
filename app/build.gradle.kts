@@ -2,8 +2,6 @@ import com.gnoemes.shimori.initConfigField
 
 plugins {
     id("android-app")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -39,7 +37,4 @@ dependencies {
     implementation(libs.compose.foundation.foundation)
     implementation(libs.compose.material.material3)
     implementation(libs.compose.animation.animation)
-
-    implementation(libs.hilt.library)
-    kapt(libs.hilt.compiler)
 }
