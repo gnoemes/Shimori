@@ -5,5 +5,5 @@ object Application {
 }
 
 object Modules {
-
+    const val base = ":base"
 }

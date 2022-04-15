@@ -1,5 +1,4 @@
 plugins {
-    id("base-module")
     id("com.android.library")
     kotlin("android")
     id("android-base")
