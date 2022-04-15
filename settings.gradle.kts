@@ -21,3 +21,4 @@ rootProject.name = "Shimori"
 
 include(":app")
 include(":base")
+include(":common-ui-resources")
