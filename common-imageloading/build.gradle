@@ -4,7 +4,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
-apply from: '../android_commons.gradle'
+apply from: '../com.gnoemes.shimori.android_commons.gradle'
 
 
 dependencies {

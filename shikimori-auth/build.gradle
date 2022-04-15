@@ -3,7 +3,7 @@ import com.gnoemes.shimori.Modules
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply from: '../android_commons.gradle'
+apply from: '../com.gnoemes.shimori.android_commons.gradle'
 
 dependencies {
     implementation project(Modules.baseAndroid)
