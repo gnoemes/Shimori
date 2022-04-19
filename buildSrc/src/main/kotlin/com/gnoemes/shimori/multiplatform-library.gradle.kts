@@ -1,25 +1,21 @@
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-
 plugins {
     id("base-module")
-    kotlin("multiplatform")
     id("com.android.library")
+    kotlin("multiplatform")
+    id("dev.icerock.mobile.multiplatform.android-manifest")
+    id("dev.icerock.mobile.multiplatform.android-sources")
 }
 
-if (extensions.findByType(BaseAppModuleExtension::class.java) != null) {
-    configure<BaseAppModuleExtension> {
-        compileSdk = 31
+kotlin {
+    android()
+    jvm()
+}
 
-        defaultConfig {
-            minSdk = 21
-            targetSdk = 31
-        }
+android {
+    compileSdk = com.gnoemes.shimori.Application.compileSdk
 
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-
-        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdk = com.gnoemes.shimori.Application.minSdk
+        targetSdk = com.gnoemes.shimori.Application.targetSdk
     }
 }

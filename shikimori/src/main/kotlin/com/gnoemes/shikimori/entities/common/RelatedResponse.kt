@@ -2,11 +2,12 @@ package com.gnoemes.shikimori.entities.common
 
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.entities.manga.MangaResponse
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class RelatedResponse(
-    @field:SerializedName("relation") val relation: String,
-    @field:SerializedName("relation_russian") val relationRu: String?,
-    @field:SerializedName("anime") val anime: AnimeResponse?,
-    @field:SerializedName("manga") val manga: MangaResponse?
+    @SerialName("relation") val relation: String,
+    @SerialName("relation_russian") val relationRu: String?,
+    @SerialName("anime") val anime: AnimeResponse?,
+    @SerialName("manga") val manga: MangaResponse?
 )

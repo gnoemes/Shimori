@@ -1,14 +1,11 @@
 package com.gnoemes.shikimori.mappers.manga
 
 import com.gnoemes.shikimori.entities.manga.ShikimoriMangaType
-import com.gnoemes.shimori.data_base.mappers.Mapper
-import com.gnoemes.shimori.model.manga.MangaType
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.gnoemes.shimori.data.base.entities.titles.manga.MangaType
+import com.gnoemes.shimori.data.base.mappers.Mapper
 
 
-@Singleton
-internal class MangaTypeMapper @Inject constructor() : Mapper<ShikimoriMangaType?, MangaType?> {
+internal class MangaTypeMapper : Mapper<ShikimoriMangaType?, MangaType?> {
 
     override suspend fun map(from: ShikimoriMangaType?) = when (from) {
         ShikimoriMangaType.MANGA -> MangaType.Manga

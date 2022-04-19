@@ -1,13 +1,10 @@
 package com.gnoemes.shikimori.mappers.manga
 
 import com.gnoemes.shikimori.entities.rates.RateResponse
-import com.gnoemes.shimori.data_base.mappers.Mapper
-import com.gnoemes.shimori.model.manga.Manga
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
+import com.gnoemes.shimori.data.base.mappers.Mapper
 
-@Singleton
-internal class RateResponseToMangaMapper @Inject constructor(
+internal class RateResponseToMangaMapper constructor(
     private val mangaResponseMapper: MangaResponseMapper
 ) : Mapper<RateResponse, Manga> {
 

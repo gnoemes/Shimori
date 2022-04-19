@@ -1,11 +1,12 @@
 package com.gnoemes.shikimori.entities.user
 
-import com.google.gson.annotations.SerializedName
-import org.threeten.bp.OffsetDateTime
+import kotlinx.datetime.DateTimePeriod
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class UserHistoryResponse(
-        @field:SerializedName("id") val id : Long,
-        @field:SerializedName("created_at") val dateCreated : OffsetDateTime,
-        @field:SerializedName("description") val description : String
-//        @field:SerializedName("target") val target : LinkedContentResponse?
+    @SerialName("id") val id: Long,
+    @SerialName("created_at") val dateCreated: DateTimePeriod,
+    @SerialName("description") val description: String
+//        @SerialName("target") val target : LinkedContentResponse?
 )

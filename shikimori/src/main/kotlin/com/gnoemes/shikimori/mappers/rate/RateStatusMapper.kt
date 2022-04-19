@@ -1,15 +1,12 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
-import com.gnoemes.shimori.data_base.mappers.TwoWayMapper
-import com.gnoemes.shimori.model.rate.RateStatus
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.gnoemes.shimori.data.base.entities.rate.RateStatus
+import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
 
-@Singleton
-internal class RateStatusMapper @Inject constructor() : TwoWayMapper<ShikimoriRateStatus?, RateStatus?> {
+internal class RateStatusMapper : TwoWayMapper<ShikimoriRateStatus?, RateStatus?> {
 
-    override suspend fun map(from: ShikimoriRateStatus?): RateStatus? = when(from) {
+    override suspend fun map(from: ShikimoriRateStatus?): RateStatus? = when (from) {
         ShikimoriRateStatus.PLANNED -> RateStatus.PLANNED
         ShikimoriRateStatus.WATCHING -> RateStatus.WATCHING
         ShikimoriRateStatus.REWATCHING -> RateStatus.REWATCHING
@@ -19,7 +16,7 @@ internal class RateStatusMapper @Inject constructor() : TwoWayMapper<ShikimoriRa
         else -> null
     }
 
-    override suspend fun mapInverse(from: RateStatus?): ShikimoriRateStatus? = when(from) {
+    override suspend fun mapInverse(from: RateStatus?): ShikimoriRateStatus? = when (from) {
         RateStatus.PLANNED -> ShikimoriRateStatus.PLANNED
         RateStatus.WATCHING -> ShikimoriRateStatus.WATCHING
         RateStatus.REWATCHING -> ShikimoriRateStatus.REWATCHING

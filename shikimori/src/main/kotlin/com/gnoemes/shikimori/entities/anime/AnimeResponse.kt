@@ -1,21 +1,23 @@
 package com.gnoemes.shikimori.entities.anime
 
+import com.gnoemes.shikimori.entities.common.ContentStatus
 import com.gnoemes.shikimori.entities.common.ImageResponse
-import com.gnoemes.shimori.model.common.ContentStatus
-import com.google.gson.annotations.SerializedName
-import org.threeten.bp.LocalDate
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.serializers.DatePeriodIso8601Serializer
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class AnimeResponse(
-    @field:SerializedName("id") val id: Long,
-    @field:SerializedName("name") val name: String,
-    @field:SerializedName("russian") val nameRu: String?,
-    @field:SerializedName("image") val image: ImageResponse,
-    @field:SerializedName("url") val url: String,
-    @field:SerializedName("kind") val type: ShikimoriAnimeType?,
-    @field:SerializedName("score") val score: Double?,
-    @field:SerializedName("status") val status: ContentStatus?,
-    @field:SerializedName("episodes") val episodes: Int,
-    @field:SerializedName("episodes_aired") val episodesAired: Int,
-    @field:SerializedName("aired_on") val dateAired: LocalDate?,
-    @field:SerializedName("released_on") val dateReleased: LocalDate?
+    @SerialName("id") val id: Long,
+    @SerialName("name") val name: String,
+    @SerialName("russian") val nameRu: String?,
+    @SerialName("image") val image: ImageResponse,
+    @SerialName("url") val url: String,
+    @SerialName("kind") val type: ShikimoriAnimeType?,
+    @SerialName("score") val score: Double?,
+    @SerialName("status") val status: ContentStatus?,
+    @SerialName("episodes") val episodes: Int,
+    @SerialName("episodes_aired") val episodesAired: Int,
+    @SerialName("aired_on") val dateAired: DatePeriod?,
+    @SerialName("released_on") val dateReleased: DatePeriod?
 )

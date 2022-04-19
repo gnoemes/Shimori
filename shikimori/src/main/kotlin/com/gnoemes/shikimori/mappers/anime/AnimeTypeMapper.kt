@@ -1,15 +1,12 @@
 package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.ShikimoriAnimeType
-import com.gnoemes.shimori.data_base.mappers.Mapper
-import com.gnoemes.shimori.model.anime.AnimeType
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeType
+import com.gnoemes.shimori.data.base.mappers.Mapper
 
-@Singleton
-internal class AnimeTypeMapper @Inject constructor(): Mapper<ShikimoriAnimeType?, AnimeType?> {
+internal class AnimeTypeMapper : Mapper<ShikimoriAnimeType?, AnimeType?> {
 
-    override suspend fun map(from: ShikimoriAnimeType?) = when(from) {
+    override suspend fun map(from: ShikimoriAnimeType?) = when (from) {
         ShikimoriAnimeType.TV -> AnimeType.Tv
         ShikimoriAnimeType.MOVIE -> AnimeType.Movie
         ShikimoriAnimeType.SPECIAL -> AnimeType.Special

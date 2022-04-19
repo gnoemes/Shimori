@@ -1,0 +1,21 @@
+package com.gnoemes.shimori.data.base.entities.rate
+
+import com.gnoemes.shimori.data.base.entities.ShikimoriEntity
+import com.gnoemes.shimori.data.base.entities.ShimoriEntity
+import kotlinx.datetime.DateTimePeriod
+
+@kotlinx.serialization.Serializable
+data class Rate(
+    override val id: Long = 0,
+    override val shikimoriId: Long = 0,
+    val targetId: Long,
+    val targetType: RateTargetType,
+    val status: RateStatus,
+    val score: Int? = null,
+    val comment: String? = null,
+    val progress : Int = 0,
+    val reCounter: Int = 0,
+    val dateCreated: DateTimePeriod? = null,
+    val dateUpdated: DateTimePeriod? = null
+) : ShimoriEntity, ShikimoriEntity
+

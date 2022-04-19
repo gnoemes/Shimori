@@ -2,8 +2,8 @@ package com.gnoemes.shimori
 
 object Application {
     const val id = "com.gnoemes.shimori"
-}
 
-object Modules {
-    const val base = ":base"
+    const val compileSdk = 32
+    const val targetSdk = compileSdk
+    const val minSdk = 21
 }

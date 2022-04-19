@@ -5,18 +5,18 @@ import android.os.Build
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.gnoemes.shimori.base.settings.*
-import com.gnoemes.shimori.model.rate.ListType
-import com.gnoemes.shimori.model.rate.RateStatus
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.gnoemes.shimori.base.core.settings.*
+import com.gnoemes.shimori.base.core.settings.AppAccentColor
+import com.gnoemes.shimori.base.core.settings.AppLocale
+import com.gnoemes.shimori.base.core.settings.AppTheme
+import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
-import javax.inject.Inject
 
-class ShimoriSettingsImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+class ShimoriSettingsImpl constructor(
+    private val context: Context
 ) : ShimoriSettings {
 
     companion object {
@@ -141,7 +141,7 @@ class ShimoriSettingsImpl @Inject constructor(
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
-                    preferences[PREFERRED_LIST] ?: ListType.Anime.type
+                    TODO("preferences[PREFERRED_LIST] ?: ListType.Anime.type")
                 }
     }
 
@@ -157,8 +157,7 @@ class ShimoriSettingsImpl @Inject constructor(
                 .catchIO()
                 .map { preferences ->
                     //anime is default
-                    preferences[PREFERRED_STATUS]
-                        ?: RateStatus.listPagesOrder.first().shikimoriValue
+                    TODO("preferences[PREFERRED_STATUS] ?: RateStatus.listPagesOrder.first().shikimoriValue")
                 }
     }
 

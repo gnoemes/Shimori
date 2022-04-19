@@ -1,24 +1,25 @@
 package com.gnoemes.shikimori.entities.anime
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal enum class ShikimoriAnimeType {
-    @SerializedName("tv")
+    @SerialName("tv")
     TV,
-    @SerializedName("movie")
+    @SerialName("movie")
     MOVIE,
-    @SerializedName("special")
+    @SerialName("special")
     SPECIAL,
-    @SerializedName("music")
+    @SerialName("music")
     MUSIC,
-    @SerializedName("ova")
+    @SerialName("ova")
     OVA,
-    @SerializedName("ona")
+    @SerialName("ona")
     ONA,
-    @SerializedName("tv_13")
+    @SerialName("tv_13")
     TV_13,
-    @SerializedName("tv_24")
+    @SerialName("tv_24")
     TV_24,
-    @SerializedName("tv_48")
+    @SerialName("tv_48")
     TV_48
 }

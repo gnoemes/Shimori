@@ -1,10 +1,12 @@
 package com.gnoemes.shikimori.entities.common
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+
+@kotlinx.serialization.Serializable
 internal data class ImageResponse(
-    @field:SerializedName("original") val original: String?,
-    @field:SerializedName("preview") val preview: String?,
-    @field:SerializedName("x96") val x96: String?,
-    @field:SerializedName("x48") val x48: String?
+    @SerialName("original") val original: String?,
+    @SerialName("preview") val preview: String?,
+    @SerialName("x96") val x96: String?,
+    @SerialName("x48") val x48: String?
 )

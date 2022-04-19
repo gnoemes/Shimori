@@ -13,6 +13,12 @@ pluginManagement {
             if (requested.id.id == "kotlin-multiplatform") {
                 useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
             }
+            if (requested.id.id == "com.android.library") {
+                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+            }
+            if (requested.id.id == "kotlinx-serialization") {
+                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
+            }
         }
     }
 }
@@ -20,5 +26,11 @@ pluginManagement {
 rootProject.name = "Shimori"
 
 include(":app")
-include(":base")
-include(":common-ui-resources")
+
+include(":base:core", ":base:shared")
+include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
+include(":common-ui-compose:jetpack")
+
+include(":data", ":data:base", ":data:db")
+
+include(":shikimori")

@@ -1,8 +1,9 @@
 package com.gnoemes.shikimori.entities.common
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class StatisticResponse(
-        @field:SerializedName("name") val name : String,
-        @field:SerializedName("value") val value : Int
+        @SerialName("name") val name : String,
+        @SerialName("value") val value : Int
 )
