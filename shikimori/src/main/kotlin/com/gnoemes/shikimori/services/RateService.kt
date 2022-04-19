@@ -1,34 +1,39 @@
 package com.gnoemes.shikimori.services
 
+import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import retrofit2.Call
-import retrofit2.http.*
+import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 
 internal interface RateService {
 
-    @GET("/api/v2/user_rates")
-    fun getUserRates(@Query("user_id") userId: Long,
-                             @Query("target_id") targetId: Long? = null,
-                             @Query("target_type") targetType: String? = null,
-                             @Query("status") status: String? = null,
-                             @Query("page") page: Int? = null,
-                             @Query("limit") limit: Int? = null
-    ): Call<MutableList<UserRateResponse>>
+    suspend fun userRates(
+        userId: Long,
+        targetId: Long? = null,
+        targetType: RateTargetType? = null,
+        status: ShikimoriRateStatus? = null,
+        page: Int? = null,
+        limit: Int? = null
+    ): List<UserRateResponse>
 
-    @GET("/api/v2/user_rates/{id}")
-    fun getRate(@Path("id") id: Long): Call<UserRateResponse>
+    suspend fun get(
+        id: Long
+    ): UserRateResponse
 
-    @DELETE("/api/v2/user_rates/{id}")
-    fun deleteRate(@Path("id") id: Long): Call<Unit>
+    suspend fun delete(
+        id: Long
+    )
 
-    @POST("/api/v2/user_rates")
-    fun createRate(@Body request: UserRateCreateOrUpdateRequest): Call<UserRateResponse>
+    suspend fun create(
+        request: UserRateCreateOrUpdateRequest
+    ): UserRateResponse
 
-    @PATCH("/api/v2/user_rates/{id}")
-    fun updateRate(@Path("id") id: Long, @Body request: UserRateCreateOrUpdateRequest): Call<UserRateResponse>
+    suspend fun update(
+        id: Long,
+        request: UserRateCreateOrUpdateRequest,
+    ): UserRateResponse
 
-    @POST("/api/v2/user_rates/{id}/increment")
-    fun increment(@Path("id") id: Long)
-
+    suspend fun increment(
+        id: Long
+    )
 }

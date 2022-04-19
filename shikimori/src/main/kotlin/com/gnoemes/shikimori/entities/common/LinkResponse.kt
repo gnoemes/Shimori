@@ -1,9 +1,10 @@
 package com.gnoemes.shikimori.entities.common
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class LinkResponse(
-        @field:SerializedName("id") val id: Long,
-        @field:SerializedName("kind") val name: String?,
-        @field:SerializedName("url") val url: String
+        @SerialName("id") val id: Long,
+        @SerialName("kind") val name: String?,
+        @SerialName("url") val url: String
 )

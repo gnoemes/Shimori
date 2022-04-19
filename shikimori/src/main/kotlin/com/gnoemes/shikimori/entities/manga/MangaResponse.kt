@@ -1,21 +1,22 @@
 package com.gnoemes.shikimori.entities.manga
 
+import com.gnoemes.shikimori.entities.common.ContentStatus
 import com.gnoemes.shikimori.entities.common.ImageResponse
-import com.gnoemes.shimori.model.common.ContentStatus
-import com.google.gson.annotations.SerializedName
-import org.threeten.bp.LocalDate
+import kotlinx.datetime.DatePeriod
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class MangaResponse(
-    @field:SerializedName("id") val id: Long,
-    @field:SerializedName("name") val name: String,
-    @field:SerializedName("russian") val nameRu: String?,
-    @field:SerializedName("image") val image: ImageResponse,
-    @field:SerializedName("url") val url: String,
-    @field:SerializedName("kind") val type: ShikimoriMangaType?,
-    @field:SerializedName("score") val score: Double?,
-    @field:SerializedName("status") val status: ContentStatus?,
-    @field:SerializedName("volumes") val volumes: Int,
-    @field:SerializedName("chapters") val chapters: Int,
-    @field:SerializedName("aired_on") val dateAired: LocalDate?,
-    @field:SerializedName("released_on") val dateReleased: LocalDate?
+    @SerialName("id") val id: Long,
+    @SerialName("name") val name: String,
+    @SerialName("russian") val nameRu: String?,
+    @SerialName("image") val image: ImageResponse,
+    @SerialName("url") val url: String,
+    @SerialName("kind") val type: ShikimoriMangaType?,
+    @SerialName("score") val score: Double?,
+    @SerialName("status") val status: ContentStatus?,
+    @SerialName("volumes") val volumes: Int,
+    @SerialName("chapters") val chapters: Int,
+    @SerialName("aired_on") val dateAired: DatePeriod?,
+    @SerialName("released_on") val dateReleased: DatePeriod?
 ) 

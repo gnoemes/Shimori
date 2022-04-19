@@ -1,13 +1,10 @@
 package com.gnoemes.shikimori.mappers.ranobe
 
 import com.gnoemes.shikimori.entities.rates.RateResponse
-import com.gnoemes.shimori.data_base.mappers.Mapper
-import com.gnoemes.shimori.model.ranobe.Ranobe
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.gnoemes.shimori.data.base.entities.titles.ranobe.Ranobe
+import com.gnoemes.shimori.data.base.mappers.Mapper
 
-@Singleton
-internal class RateResponseToRanobeMapper @Inject constructor(
+internal class RateResponseToRanobeMapper constructor(
     private val ranobeResponseMapper: RanobeResponseMapper
 ) : Mapper<RateResponse, Ranobe> {
 

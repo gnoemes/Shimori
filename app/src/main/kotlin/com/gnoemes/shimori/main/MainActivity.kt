@@ -1,44 +1,32 @@
 package com.gnoemes.shimori.main
 
+import Main
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
-import com.gnoemes.shikimori.ShikimoriManager
-import com.gnoemes.shimori.base.settings.ShimoriSettings
-import com.gnoemes.shimori.common.BaseActivity
-import com.gnoemes.shimori.common.compose.*
-import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
-import com.gnoemes.shimori.common.compose.theme.defaultDimensions
-import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
-import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
-import com.gnoemes.shimori.common.utils.ShimoriRateUtil
-import com.gnoemes.shimori.common.utils.ShimoriTextCreator
+import com.gnoemes.shimori.base.core.settings.ShimoriSettings
+import com.gnoemes.shimori.common.ui.BaseActivity
+import com.gnoemes.shimori.common.ui.compose.LocalShimoriDimensions
+import com.gnoemes.shimori.common.ui.compose.LocalShimoriSettings
+import com.gnoemes.shimori.common.ui.compose.theme.ShimoriTheme
+import com.gnoemes.shimori.common.ui.compose.theme.defaultDimensions
+import com.gnoemes.shimori.common.ui.compose.theme.sw360Dimensions
+import com.gnoemes.shimori.common.ui.compose.utils.shouldUseDarkColors
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
-@AndroidEntryPoint
-class MainActivity : BaseActivity() {
-    private lateinit var viewModel: MainViewModel
+class MainActivity : BaseActivity(), DIAware {
+    override val di: DI by closestDI()
 
-    @Inject
-    internal lateinit var settings: ShimoriSettings
-
-    @Inject
-    internal lateinit var rateUtil: ShimoriRateUtil
-
-    @Inject
-    internal lateinit var textCreator: ShimoriTextCreator
-
-    @Inject
-    internal lateinit var shikimori: ShikimoriManager
+    private val settings: ShimoriSettings by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,22 +34,18 @@ class MainActivity : BaseActivity() {
 
         installSplashScreen()
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
         setContent {
 
             val dimensions =
                 if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
                 else sw360Dimensions
 
-            val shikimoriAuth = shikimori.state.collectAsState().value
-
             CompositionLocalProvider(
-                LocalShimoriRateUtil provides rateUtil,
-                LocalShimoriTextCreator provides textCreator,
+//                LocalShimoriRateUtil provides rateUtil,
+//                LocalShimoriTextCreator provides textCreator,
                 LocalShimoriSettings provides settings,
                 LocalShimoriDimensions provides dimensions,
-                LocalShikimoriAuth provides shikimoriAuth
+//                LocalShikimoriAuth provides shikimoriAuth
             ) {
 
                 val useDarkColors = settings.shouldUseDarkColors()

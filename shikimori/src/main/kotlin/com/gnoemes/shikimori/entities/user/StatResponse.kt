@@ -1,9 +1,10 @@
 package com.gnoemes.shikimori.entities.user
 
 import com.gnoemes.shikimori.entities.common.StatisticResponse
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class StatResponse(
-    @field:SerializedName("anime") val anime : List<StatisticResponse>,
-    @field:SerializedName("manga") val manga : List<StatisticResponse>?
+    @SerialName("anime") val anime : List<StatisticResponse>,
+    @SerialName("manga") val manga : List<StatisticResponse>?
 )

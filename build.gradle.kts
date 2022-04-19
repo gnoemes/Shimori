@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.properties.Properties
 
 buildscript {
     repositories {
@@ -10,7 +9,7 @@ buildscript {
 
     dependencies {
         classpath(libs.kotlin.serialization.gradle)
-        classpath(libs.moko.resources.generator)
+        classpath(libs.sqldelight.gradle)
         //android & kotlin gradle plugins in buildSrc/build.gradle.kts
     }
 }
@@ -25,10 +24,12 @@ allprojects {
 subprojects {
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
-            // Enable experimental coroutines APIs, including Flow
-            freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-            freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
-            freeCompilerArgs += "-Xopt-in=kotlin.Experimental"
+            freeCompilerArgs += arrayOf(
+                // Enable experimental coroutines APIs, including Flow
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-Xopt-in=kotlin.Experimental",
+            )
 
             // Set JVM target to 1.8
             jvmTarget = "1.8"
