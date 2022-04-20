@@ -16,6 +16,7 @@ import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
+import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
@@ -30,6 +31,7 @@ val appModule = DI.Module("app") {
     importOnce(initializers)
     importOnce(imageLoadingModule)
     importOnce(databaseModule)
+    importOnce(dataModule)
 
     importOnce(shikimoriModule)
 

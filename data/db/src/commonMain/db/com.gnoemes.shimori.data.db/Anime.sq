@@ -1,0 +1,143 @@
+import com.gnoemes.shimori.data.base.entities.common.AgeRating;
+import com.gnoemes.shimori.data.base.entities.common.Genre;
+import com.gnoemes.shimori.data.base.entities.common.TitleStatus;
+import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeType;
+import kotlin.collections.List;
+import kotlinx.datetime.DatePeriod;
+import kotlinx.datetime.DateTimePeriod;
+
+CREATE TABLE anime (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    shikimori_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    anime_type TEXT,
+    rating REAL AS Double,
+    status TEXT AS TitleStatus,
+    episodes INTEGER AS Int NOT NULL,
+    episodes_aired INTEGER AS Int NOT NULL,
+    date_aired TEXT AS DatePeriod,
+    date_released TEXT AS DatePeriod,
+    next_episode INTEGER AS Int,
+    next_episode_date TEXT AS DateTimePeriod,
+    next_episode_end_date TEXT AS DateTimePeriod,
+    age_rating TEXT AS AgeRating NOT NULL,
+    duration TEXT AS DateTimePeriod,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER,
+    genres TEXT AS List<Genre>
+);
+
+CREATE UNIQUE INDEX anime_shikimori_id ON anime(shikimori_id);
+CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
+
+insert:
+INSERT OR REPLACE INTO anime(
+id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
+date_aired, date_released, next_episode, next_episode_date, next_episode_end_date,
+age_rating, duration, description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES ?;
+
+deleteAll:
+DELETE FROM anime;
+
+deleteById:
+DELETE FROM anime WHERE id = :id;
+
+queryById:
+SELECT * FROM anime WHERE id = :id;
+
+queryByShikimoriId:
+SELECT * FROM anime WHERE shikimori_id = :shikimoriId;
+
+queryAllWithStatus:
+SELECT * FROM anime AS a
+INNER JOIN rate AS r ON r.target_id = a.shikimori_id;
+
+queryByStatus:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status;
+
+queryByStatusSortName:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name END) DESC,
+(CASE :descending WHEN 0 THEN name END) ASC;
+
+queryByStatusSortNameRu:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name_ru END) DESC,
+(CASE :descending WHEN 0 THEN name_ru END) ASC;
+
+queryByStatusSortProgress:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN progress END) DESC,
+(CASE :descending WHEN 0 THEN progress END) ASC;
+
+queryByStatusSortDateCreated:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_created) END) ASC;
+
+queryByStatusSortDateUpdated:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC;
+
+queryByStatusSortDateAired:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC;
+
+queryByStatusSortScore:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN score END) DESC,
+(CASE :descending WHEN 0 THEN score END) ASC;
+
+queryByStatusSortSize:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN episodes END) DESC,
+(CASE :descending WHEN 0 THEN episodes END) ASC;
+
+queryByStatusSortRating:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN rating END) DESC,
+(CASE :descending WHEN 0 THEN rating END) ASC;

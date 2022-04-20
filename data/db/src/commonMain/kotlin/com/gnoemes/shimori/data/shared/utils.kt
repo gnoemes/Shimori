@@ -1,44 +1,26 @@
 package com.gnoemes.shimori.data.shared
 
-import com.gnoemes.shimori.data.base.entities.rate.Rate
-import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
+import com.squareup.sqldelight.Query
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-typealias RateDAO = comgnoemesshimoridatadb.Rate
+internal typealias RateDAO = comgnoemesshimoridatadb.Rate
+internal typealias UserDAO = comgnoemesshimoridatadb.User
+internal typealias RateSortDAO = comgnoemesshimoridatadb.Rate_sort
+internal typealias LastRequestDAO = comgnoemesshimoridatadb.Last_request
+internal typealias AnimeDAO = comgnoemesshimoridatadb.Anime
+internal typealias MangaDAO = comgnoemesshimoridatadb.Manga
+internal typealias RanobeDAO = comgnoemesshimoridatadb.Ranobe
 
-internal object RateMapper : TwoWayMapper<RateDAO?, Rate?> {
-    override suspend fun map(from: RateDAO?): Rate? {
-        if (from == null) return null
 
-        return Rate(
-            id = from.id,
-            shikimoriId = from.shikimori_id ?: 0,
-            targetId = from.target_id,
-            targetType = from.target_type,
-            status = from.status,
-            score = from.score,
-            comment = from.comment,
-            progress = from.progress,
-            reCounter = from.re_counter,
-            dateCreated = from.date_created,
-            dateUpdated = from.date_updated,
-        )
-    }
+internal inline fun <T : Any, R> Flow<Query<T>>.singleResult(
+    crossinline mapper: suspend (value: T?) -> R?
+): Flow<R?> =
+    this.map { it.executeAsOneOrNull() }
+        .map(mapper)
 
-    override suspend fun mapInverse(from: Rate?): RateDAO? {
-        if (from == null) return null
+internal inline fun <T : Any, R> Flow<Query<T>>.listResult(
+    crossinline mapper: suspend (value: T?) -> R
+): Flow<List<R>> =
+    this.map { it.executeAsList().map { item -> mapper.invoke(item) } }
 
-        return RateDAO(
-            id = from.id,
-            shikimori_id = from.shikimoriId,
-            target_id = from.targetId,
-            target_type = from.targetType,
-            status = from.status,
-            score = from.score,
-            comment = from.comment,
-            progress = from.progress,
-            re_counter = from.reCounter,
-            date_created = from.dateCreated,
-            date_updated = from.dateUpdated,
-        )
-    }
-}

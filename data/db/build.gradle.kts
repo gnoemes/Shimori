@@ -7,7 +7,6 @@ dependencies {
     commonMainImplementation(projects.base.shared)
     commonMainImplementation(projects.data.base)
     commonMainImplementation(libs.sqldelight.coroutines)
-    commonMainImplementation(libs.kotlin.dateTime)
 
     androidMainImplementation(libs.sqldelight.driver.android)
     jvmMainImplementation(libs.sqldelight.driver.jvm)

@@ -19,7 +19,7 @@ data class Manga(
     override val image: ShimoriImage? = null,
     override val type: RateTargetType = RateTargetType.MANGA,
     override val url: String? = null,
-    private val manga_type: String? = null,
+    val mangaType: MangaType? = null,
     override val rating: Double? = null,
     override val status: TitleStatus? = null,
     val volumes: Int = 0,
@@ -34,7 +34,6 @@ data class Manga(
     override val topicId: Long? = null,
     override val genres: List<Genre>? = null
 ) : ShimoriTitleEntity, ShikimoriEntity {
-    val mangaType = MangaType.find(manga_type)
     val chaptersOrUnknown: String get() = chapters.let { if (it == 0) "?" else "$it" }
     override val size: Int? get() = chaptersOrUnknown.toIntOrNull()
 }

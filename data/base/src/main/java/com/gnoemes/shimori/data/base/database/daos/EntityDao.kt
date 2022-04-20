@@ -4,9 +4,10 @@ import com.gnoemes.shimori.data.base.entities.ShimoriEntity
 
 abstract class EntityDao<in E : ShimoriEntity> {
     abstract suspend fun insert(entity: E)
-    abstract suspend fun insertAll(entities: List<E>)
-    abstract suspend fun update(entity: E)
+    open suspend fun update(entity: E) = insert(entity)
     abstract suspend fun deleteEntity(entity: E)
+
+    open suspend fun insertAll(entities: List<E>) = entities.forEach { insert(it) }
 
     suspend fun insertOrUpdate(entity: E) {
         return if (entity.id == 0L) {

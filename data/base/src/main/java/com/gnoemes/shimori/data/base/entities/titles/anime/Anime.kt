@@ -20,7 +20,7 @@ data class Anime(
     override val image: ShimoriImage? = null,
     override val type: RateTargetType = RateTargetType.ANIME,
     override val url: String? = null,
-    private val anime_type: String? = null,
+    val animeType: AnimeType? = null,
     override val rating: Double? = null,
     override val status: TitleStatus? = null,
     val episodes: Int = 0,
@@ -39,7 +39,6 @@ data class Anime(
     override val topicId: Long? = null,
     override val genres: List<Genre>? = null
 ) : ShimoriEntity, ShimoriTitleEntity {
-    val animeType = AnimeType.find(anime_type)
     val episodesOrUnknown: String get() = episodes.let { if (it == 0) "?" else "$it" }
     val isMovie: Boolean get() = animeType == AnimeType.Movie
     override val size: Int? get() = episodesOrUnknown.toIntOrNull()

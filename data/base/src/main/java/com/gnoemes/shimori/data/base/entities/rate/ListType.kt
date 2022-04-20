@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.data.base.entities.rate
 
 @JvmInline
+@kotlinx.serialization.Serializable
 value class ListType private constructor(val type: Int) {
     companion object {
         /**

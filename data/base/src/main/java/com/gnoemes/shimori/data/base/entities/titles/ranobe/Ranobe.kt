@@ -20,7 +20,7 @@ data class Ranobe(
     override val image: ShimoriImage? = null,
     override val type: RateTargetType = RateTargetType.RANOBE,
     override val url: String? = null,
-    private val ranobe_type: String? = null,
+    val ranobeType: RanobeType? = null,
     override val rating: Double? = null,
     override val status: TitleStatus? = null,
     val volumes: Int = 0,
@@ -35,7 +35,6 @@ data class Ranobe(
     override val topicId: Long? = null,
     override val genres: List<Genre>? = null
 ) : ShimoriTitleEntity, ShikimoriEntity {
-    val ranobeType = RanobeType.find(ranobe_type)
     val chaptersOrUnknown: String get() = chapters.let { if (it == 0) "?" else "$it" }
     override val size: Int? get() = chaptersOrUnknown.toIntOrNull()
 }

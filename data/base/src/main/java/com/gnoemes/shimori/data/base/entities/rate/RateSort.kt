@@ -5,34 +5,32 @@ import com.gnoemes.shimori.data.base.entities.ShimoriEntity
 @kotlinx.serialization.Serializable
 data class RateSort(
     override val id: Long = 0,
-    val type: Int? = null,
+    val type: ListType = ListType.Anime,
     val sortOption: RateSortOption = RateSortOption.NAME,
     val isDescending: Boolean = false
 ) : ShimoriEntity {
 
-    val listType get() = type?.let { ListType.findOrDefault(it) }
-
     companion object {
         val AnimeDefault = RateSort(
-            type = ListType.Anime.type,
+            type = ListType.Anime,
             sortOption = RateSortOption.PROGRESS,
             isDescending = false
         )
 
         val MangaDefault = RateSort(
-            type = ListType.Manga.type,
+            type = ListType.Manga,
             sortOption = RateSortOption.PROGRESS,
             isDescending = false
         )
 
         val RanobeDefault = RateSort(
-            type = ListType.Ranobe.type,
+            type = ListType.Ranobe,
             sortOption = RateSortOption.PROGRESS,
             isDescending = false
         )
 
         val PinDefault = RateSort(
-            type = ListType.Pinned.type,
+            type = ListType.Pinned,
             sortOption = RateSortOption.PROGRESS,
             isDescending = false
         )
