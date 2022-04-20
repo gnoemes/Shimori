@@ -52,6 +52,11 @@ DELETE FROM ranobe WHERE id = :id;
 queryById:
 SELECT * FROM ranobe WHERE id = :id;
 
+queryByIdWithRate:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE title.id = :id;
+
 queryByShikimoriId:
 SELECT * FROM ranobe WHERE shikimori_id = :shikimoriId;
 

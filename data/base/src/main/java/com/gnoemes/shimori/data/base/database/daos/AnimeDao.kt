@@ -12,6 +12,7 @@ abstract class AnimeDao : EntityDao<Anime>() {
     abstract suspend fun queryAllWithStatus(): List<AnimeWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate>
 
+    abstract fun observeById(id: Long) : Flow<AnimeWithRate?>
     abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
     abstract fun observeByStatus(status: RateStatus): Flow<List<AnimeWithRate>>
 

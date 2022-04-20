@@ -51,6 +51,11 @@ DELETE FROM manga WHERE id = :id;
 queryById:
 SELECT * FROM manga WHERE id = :id;
 
+queryByIdWithRate:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE title.id = :id;
+
 queryByShikimoriId:
 SELECT * FROM manga WHERE shikimori_id = :shikimoriId;
 

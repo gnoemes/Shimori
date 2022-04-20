@@ -44,6 +44,7 @@ multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", vers
 kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
 kodein-jvm = { module = "org.kodein.di:kodein-di-generic-jvm", version.ref = "kodein" }
 kodein-android-core = { module = "org.kodein.di:kodein-di-framework-android-core", version.ref = "kodein" }
+kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
 #ktor
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }

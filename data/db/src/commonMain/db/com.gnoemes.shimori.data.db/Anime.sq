@@ -1,7 +1,6 @@
 import com.gnoemes.shimori.data.base.entities.common.AgeRating;
 import com.gnoemes.shimori.data.base.entities.common.Genre;
 import com.gnoemes.shimori.data.base.entities.common.TitleStatus;
-import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeType;
 import kotlin.collections.List;
 import kotlinx.datetime.DatePeriod;
 import kotlinx.datetime.DateTimePeriod;
@@ -57,6 +56,11 @@ DELETE FROM anime WHERE id = :id;
 
 queryById:
 SELECT * FROM anime WHERE id = :id;
+
+queryByIdWithRate:
+SELECT * FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE title.id = :id;
 
 queryByShikimoriId:
 SELECT * FROM anime WHERE shikimori_id = :shikimoriId;

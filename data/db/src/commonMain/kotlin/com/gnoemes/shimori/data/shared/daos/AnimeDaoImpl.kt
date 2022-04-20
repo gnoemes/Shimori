@@ -46,6 +46,12 @@ internal class AnimeDaoImpl(
             .executeAsList()
     }
 
+    override fun observeById(id: Long): Flow<AnimeWithRate?> {
+        return db.animeQueries.queryByIdWithRate(id, ::animeWithRate)
+            .asFlow()
+            .map { it.executeAsOneOrNull() }
+    }
+
     override fun observeCalendar(): Flow<List<AnimeWithRate>> {
         TODO("Not yet implemented")
     }
