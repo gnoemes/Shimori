@@ -10,6 +10,8 @@ import com.gnoemes.shimori.base.core.settings.AppAccentColor
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTheme
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.data.base.entities.rate.ListType
+import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -141,7 +143,7 @@ class ShimoriSettingsImpl constructor(
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
-                    TODO("preferences[PREFERRED_LIST] ?: ListType.Anime.type")
+                    preferences[PREFERRED_LIST] ?: ListType.Anime.type
                 }
     }
 
@@ -157,7 +159,7 @@ class ShimoriSettingsImpl constructor(
                 .catchIO()
                 .map { preferences ->
                     //anime is default
-                    TODO("preferences[PREFERRED_STATUS] ?: RateStatus.listPagesOrder.first().shikimoriValue")
+                    preferences[PREFERRED_STATUS] ?: RateStatus.listPagesOrder.first().name
                 }
     }
 

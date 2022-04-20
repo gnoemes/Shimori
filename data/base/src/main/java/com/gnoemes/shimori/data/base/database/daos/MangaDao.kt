@@ -12,6 +12,7 @@ abstract class MangaDao : EntityDao<Manga>() {
     abstract suspend fun queryAllWithStatus(): List<MangaWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<MangaWithRate>
 
+    abstract fun observeById(id: Long): Flow<MangaWithRate?>
     abstract fun observeByStatus(status: RateStatus): Flow<List<MangaWithRate>>
 
     abstract fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption)

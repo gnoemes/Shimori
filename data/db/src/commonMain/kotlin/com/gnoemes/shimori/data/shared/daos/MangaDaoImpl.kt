@@ -41,6 +41,12 @@ internal class MangaDaoImpl(
             .executeAsList()
     }
 
+    override fun observeById(id: Long): Flow<MangaWithRate?> {
+        return db.mangaQueries.queryByIdWithRate(id, ::mangaWithRate)
+            .asFlow()
+            .map { it.executeAsOneOrNull() }
+    }
+
     override suspend fun queryByStatus(status: RateStatus): List<MangaWithRate> {
         return db.mangaQueries.queryByStatus(status, ::mangaWithRate)
             .executeAsList()

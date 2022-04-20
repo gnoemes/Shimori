@@ -1,17 +1,15 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.MangaDao
 import com.gnoemes.shimori.data.base.database.daos.RanobeDao
 import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
-import com.gnoemes.shimori.data.base.entities.titles.manga.MangaWithRate
 import com.gnoemes.shimori.data.base.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.base.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
-import com.gnoemes.shimori.data.shared.*
+import com.gnoemes.shimori.data.shared.ranobe
 import com.gnoemes.shimori.data.shared.ranobeDao
+import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -46,6 +44,12 @@ internal class RanobeDaoImpl(
     override suspend fun queryByStatus(status: RateStatus): List<RanobeWithRate> {
         return db.ranobeQueries.queryByStatus(status, ::ranobeWithRate)
             .executeAsList()
+    }
+
+    override fun observeById(id: Long): Flow<RanobeWithRate?> {
+        return db.mangaQueries.queryByIdWithRate(id, ::ranobeWithRate)
+            .asFlow()
+            .map { it.executeAsOneOrNull() }
     }
 
     override fun observeByStatus(status: RateStatus): Flow<List<RanobeWithRate>> {

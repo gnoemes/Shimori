@@ -12,6 +12,7 @@ abstract class RanobeDao : EntityDao<Ranobe>() {
     abstract suspend fun queryAllWithStatus(): List<RanobeWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<RanobeWithRate>
 
+    abstract fun observeById(id: Long): Flow<RanobeWithRate?>
     abstract fun observeByStatus(status: RateStatus): Flow<List<RanobeWithRate>>
 
     abstract fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption)
