@@ -1,6 +1,5 @@
 package com.gnoemes.shikimori.mappers.anime
 
-import com.gnoemes.shikimori.SHIKIMORI_BASE_URL
 import com.gnoemes.shikimori.appendHostIfNeed
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
@@ -20,7 +19,7 @@ internal class AnimeResponseMapper constructor(
         nameRu = from.nameRu?.trim()?.ifEmpty { null },
         image = imageMapper.map(from.image),
         url = from.url.appendHostIfNeed(),
-        anime_type = typeMapper.map(from.type)?.type,
+        animeType = typeMapper.map(from.type),
         rating = from.score,
         status = titleStatusMapper.map(from.status),
         episodes = from.episodes,

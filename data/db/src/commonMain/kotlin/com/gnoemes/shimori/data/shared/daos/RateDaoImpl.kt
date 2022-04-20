@@ -5,10 +5,9 @@ import com.gnoemes.shimori.data.base.database.daos.RateDao
 import com.gnoemes.shimori.data.base.entities.rate.Rate
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
-import com.gnoemes.shimori.data.shared.RateDAO
 import com.gnoemes.shimori.data.shared.RateMapper
+import com.gnoemes.shimori.data.shared.singleResult
 import com.gnoemes.shimori.data.shared.syncerForEntity
-import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,13 +28,6 @@ internal class RateDaoImpl(
         RateMapper.mapInverse(entity)?.let(db.rateQueries::insert)
     }
 
-    override suspend fun insertAll(entities: List<Rate>) {
-        val rates = entities.mapNotNull { RateMapper.mapInverse(it) }
-        rates.forEach { db.rateQueries.insert(it) }
-    }
-
-    override suspend fun update(entity: Rate) = insert(entity)
-
     override suspend fun deleteEntity(entity: Rate) {
         db.rateQueries.deleteById(entity.id)
     }
@@ -55,21 +47,21 @@ internal class RateDaoImpl(
         return db.rateQueries
             .queryById(id)
             .asFlow()
-            .singleResult()
+            .singleResult(RateMapper::map)
     }
 
     override fun observeByShikimoriId(id: Long): Flow<Rate?> {
         return db.rateQueries
             .queryByShikimoriId(id)
             .asFlow()
-            .singleResult()
+            .singleResult(RateMapper::map)
     }
 
     override fun observeByTarget(targetId: Long, targetType: RateTargetType): Flow<Rate?> {
         return db.rateQueries
             .queryByTarget(targetId, targetType)
             .asFlow()
-            .singleResult()
+            .singleResult(RateMapper::map)
     }
 
     override fun observeHasRates(): Flow<Boolean> {
@@ -79,8 +71,4 @@ internal class RateDaoImpl(
             .map { it.executeAsOne() }
             .map { it > 0 }
     }
-
-    private fun Flow<Query<RateDAO>>.singleResult(): Flow<Rate?> =
-        this.map { it.executeAsOneOrNull() }
-            .map(RateMapper::map)
 }

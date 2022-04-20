@@ -10,5 +10,5 @@ dependencies {
     api(libs.kodein)
     api(libs.ktor.core)
 
-    implementation(libs.kotlin.dateTime)
+    api(libs.kotlin.dateTime)
 }

@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.repositories.rate
 
+import com.gnoemes.shimori.data.base.database.ShimoriDatabase
 import com.gnoemes.shimori.data.base.database.daos.RateDao
 import com.gnoemes.shimori.data.base.entities.rate.Rate
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
@@ -7,32 +8,33 @@ import com.gnoemes.shimori.data.base.sources.RateDataSource
 import com.gnoemes.shimori.data.base.utils.Shikimori
 
 class RateRepository(
-    private val rateDao: RateDao, @Shikimori private val rateSource: RateDataSource
+    private val dao: RateDao,
+    @Shikimori private val source: RateDataSource
 ) {
-    fun observeById(id: Long) = rateDao.observeById(id)
-    fun observeByShikimoriId(shikimoriId: Long) = rateDao.observeByShikimoriId(shikimoriId)
+    fun observeById(id: Long) = dao.observeById(id)
+    fun observeByShikimoriId(shikimoriId: Long) = dao.observeByShikimoriId(shikimoriId)
     fun observeByTarget(targetId: Long, targetType: RateTargetType) =
-        rateDao.observeByTarget(targetId, targetType)
+        dao.observeByTarget(targetId, targetType)
 
     suspend fun createOrUpdate(rate: Rate) {
-        rateDao.insertOrUpdate(rate)
+        dao.insertOrUpdate(rate)
 
-        val local = rateDao.queryById(rate.id)
+        val local = dao.queryById(rate.id)
         if (local != null) {
             val result =
-                if (!local.hasShikimoriId) rateSource.createRate(local)
-                else rateSource.updateRate(local)
+                if (!local.hasShikimoriId) source.createRate(local)
+                else source.updateRate(local)
 
-            rateDao.insertOrUpdate(result)
+            dao.insertOrUpdate(result)
         }
     }
 
     suspend fun delete(id: Long) {
-        val local = rateDao.queryById(id)
+        val local = dao.queryById(id)
 
         local?.let {
-            rateSource.deleteRate(it.shikimoriId)
-            rateDao.deleteEntity(it)
+            source.deleteRate(it.shikimoriId)
+            dao.deleteEntity(it)
         }
     }
 

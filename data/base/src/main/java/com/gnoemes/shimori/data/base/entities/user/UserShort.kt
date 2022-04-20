@@ -8,11 +8,6 @@ data class UserShort(
     override val id: Long = 0,
     override val shikimoriId: Long = 0,
     val nickname: String = "",
-    private val imageOriginal: String? = null,
-    private val imagePreview: String? = null
-) : ShimoriEntity, ShikimoriEntity {
-    val image = ShimoriImage(
-        original = imageOriginal,
-        preview = imagePreview
-    )
-}
+    val image : ShimoriImage? = null,
+    val isMe : Boolean = false,
+) : ShimoriEntity, ShikimoriEntity

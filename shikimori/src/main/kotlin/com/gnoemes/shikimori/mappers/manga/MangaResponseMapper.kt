@@ -19,7 +19,7 @@ internal class MangaResponseMapper constructor(
         nameRu = from.nameRu?.trim()?.ifEmpty { null },
         image = imageMapper.map(from.image),
         url = from.url.appendHostIfNeed(),
-        manga_type = typeMapper.map(from.type)?.type,
+        mangaType = typeMapper.map(from.type),
         rating = from.score,
         status = titleStatusMapper.map(from.status),
         volumes = from.volumes,

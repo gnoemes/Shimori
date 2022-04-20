@@ -6,6 +6,4 @@ plugins {
 
 dependencies {
     implementation(projects.base.core)
-
-    implementation(libs.kotlin.dateTime)
 }

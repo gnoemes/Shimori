@@ -1,14 +1,26 @@
 package com.gnoemes.shimori.data.shared
 
+import com.gnoemes.shimori.data.base.entities.app.Request
+import com.gnoemes.shimori.data.base.entities.common.AgeRating
+import com.gnoemes.shimori.data.base.entities.common.Genre
+import com.gnoemes.shimori.data.base.entities.common.TitleStatus
+import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.squareup.sqldelight.ColumnAdapter
-import comgnoemesshimoridatadb.Rate
+import comgnoemesshimoridatadb.*
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
 
 internal object DateTimePeriodAdapter : ColumnAdapter<DateTimePeriod, String> {
     override fun decode(databaseValue: String) = DateTimePeriod.parse(databaseValue)
     override fun encode(value: DateTimePeriod) = value.toString()
+}
+
+internal object DatePeriodAdapter : ColumnAdapter<DatePeriod, String> {
+    override fun decode(databaseValue: String) = DatePeriod.parse(databaseValue)
+    override fun encode(value: DatePeriod) = value.toString()
 }
 
 internal object RateTargetPeriodAdapter : ColumnAdapter<RateTargetType, String> {
@@ -21,10 +33,82 @@ internal object RateStatusPeriodAdapter : ColumnAdapter<RateStatus, String> {
     override fun encode(value: RateStatus): String = value.name
 }
 
+internal object RateSortOptionAdapter : ColumnAdapter<RateSortOption, String> {
+    override fun decode(databaseValue: String) = RateSortOption.valueOf(databaseValue)
+    override fun encode(value: RateSortOption): String = value.name
+}
+
+internal object RequestAdapter : ColumnAdapter<Request, String> {
+    override fun decode(databaseValue: String) = Request.valueOf(databaseValue)
+    override fun encode(value: Request): String = value.name
+}
+
+internal object InstantAdapter : ColumnAdapter<Instant, Long> {
+    override fun decode(databaseValue: Long) = Instant.fromEpochMilliseconds(databaseValue)
+    override fun encode(value: Instant): Long = value.toEpochMilliseconds()
+}
+
+internal object TitleStatusAdapter : ColumnAdapter<TitleStatus, String> {
+    override fun decode(databaseValue: String) = TitleStatus.valueOf(databaseValue)
+    override fun encode(value: TitleStatus): String = value.name
+}
+
+internal object AgeRatingAdapter : ColumnAdapter<AgeRating, String> {
+    override fun decode(databaseValue: String) = AgeRating.valueOf(databaseValue)
+    override fun encode(value: AgeRating): String = value.name
+}
+
+internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
+    private const val SEPARATOR = ","
+    override fun decode(databaseValue: String) = databaseValue.split(SEPARATOR).map(Genre::valueOf)
+    override fun encode(value: List<Genre>): String =
+        value.joinToString(separator = SEPARATOR) { it.name }
+}
+
 
 internal val RateAdapter = Rate.Adapter(
     target_typeAdapter = RateTargetPeriodAdapter,
     statusAdapter = RateStatusPeriodAdapter,
     date_createdAdapter = DateTimePeriodAdapter,
     date_updatedAdapter = DateTimePeriodAdapter
+)
+
+internal val UserAdapter = User.Adapter(
+    last_onlineAdapter = DateTimePeriodAdapter
+)
+
+internal val RateSortAdapter = Rate_sort.Adapter(
+    sortAdapter = RateSortOptionAdapter
+)
+
+internal val LastRequestAdapter = Last_request.Adapter(
+    requestAdapter = RequestAdapter,
+    timestampAdapter = InstantAdapter
+)
+
+internal val AnimeAdapter = Anime.Adapter(
+    statusAdapter = TitleStatusAdapter,
+    date_airedAdapter = DatePeriodAdapter,
+    date_releasedAdapter = DatePeriodAdapter,
+    next_episode_dateAdapter = DateTimePeriodAdapter,
+    next_episode_end_dateAdapter = DateTimePeriodAdapter,
+    age_ratingAdapter = AgeRatingAdapter,
+    durationAdapter = DateTimePeriodAdapter,
+    genresAdapter = GenresAdapter
+)
+
+internal val MangaAdapter = Manga.Adapter(
+    statusAdapter = TitleStatusAdapter,
+    date_airedAdapter = DatePeriodAdapter,
+    date_releasedAdapter = DatePeriodAdapter,
+    age_ratingAdapter = AgeRatingAdapter,
+    genresAdapter = GenresAdapter
+)
+
+internal val RanobeAdapter = Ranobe.Adapter(
+    statusAdapter = TitleStatusAdapter,
+    date_airedAdapter = DatePeriodAdapter,
+    date_releasedAdapter = DatePeriodAdapter,
+    age_ratingAdapter = AgeRatingAdapter,
+    genresAdapter = GenresAdapter
 )

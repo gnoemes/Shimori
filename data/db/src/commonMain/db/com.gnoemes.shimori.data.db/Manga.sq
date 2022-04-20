@@ -1,0 +1,136 @@
+import com.gnoemes.shimori.data.base.entities.common.AgeRating;
+import com.gnoemes.shimori.data.base.entities.common.Genre;
+import com.gnoemes.shimori.data.base.entities.common.TitleStatus;
+import com.gnoemes.shimori.data.base.entities.titles.manga.MangaType;
+import kotlin.collections.List;
+import kotlinx.datetime.DatePeriod;
+
+CREATE TABLE manga (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    shikimori_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    manga_type TEXT,
+    rating REAL AS Double,
+    status TEXT AS TitleStatus,
+    chapters INTEGER AS Int NOT NULL,
+    volumes INTEGER AS Int NOT NULL,
+    date_aired TEXT AS DatePeriod,
+    date_released TEXT AS DatePeriod,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER,
+    genres TEXT AS List<Genre>
+);
+
+CREATE UNIQUE INDEX manga_shikimori_id ON manga(shikimori_id);
+
+insert:
+INSERT OR REPLACE INTO manga(
+id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, manga_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES ?;
+
+deleteAll:
+DELETE FROM manga;
+
+deleteById:
+DELETE FROM manga WHERE id = :id;
+
+queryById:
+SELECT * FROM manga WHERE id = :id;
+
+queryByShikimoriId:
+SELECT * FROM manga WHERE shikimori_id = :shikimoriId;
+
+queryAllWithStatus:
+SELECT * FROM manga AS a
+INNER JOIN rate AS r ON r.target_id = a.shikimori_id;
+
+queryByStatus:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status;
+
+queryByStatusSortName:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name END) DESC,
+(CASE :descending WHEN 0 THEN name END) ASC;
+
+queryByStatusSortNameRu:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name_ru END) DESC,
+(CASE :descending WHEN 0 THEN name_ru END) ASC;
+
+queryByStatusSortProgress:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN progress END) DESC,
+(CASE :descending WHEN 0 THEN progress END) ASC;
+
+queryByStatusSortDateCreated:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_created) END) ASC;
+
+queryByStatusSortDateUpdated:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC;
+
+queryByStatusSortDateAired:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC;
+
+queryByStatusSortScore:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN score END) DESC,
+(CASE :descending WHEN 0 THEN score END) ASC;
+
+queryByStatusSortSize:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN chapters END) DESC,
+(CASE :descending WHEN 0 THEN chapters END) ASC;
+
+queryByStatusSortRating:
+SELECT * FROM manga AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN rating END) DESC,
+(CASE :descending WHEN 0 THEN rating END) ASC;

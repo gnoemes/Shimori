@@ -13,6 +13,5 @@ dependencies {
     implementation(libs.ktor.contentNegotiation)
     implementation(libs.ktor.serialization.json)
 
-    implementation(libs.kotlin.dateTime)
     implementation(libs.ktor.serialization.json)
 }
