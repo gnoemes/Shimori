@@ -34,10 +34,11 @@ dependencies {
     implementation(projects.commonUiImageloading)
     implementation(projects.commonUiCompose.jetpack)
 
-    implementation(projects.shikimori)
-
     implementation(projects.data)
     implementation(projects.data.db)
+    implementation(projects.domain)
+
+    implementation(projects.shikimori)
 
     implementation(libs.kotlin.coroutines.android)
 
@@ -61,6 +62,7 @@ dependencies {
     implementation(libs.compose.ui.ui)
 
     implementation(libs.coil.compose)
+    implementation(libs.kodein.compose)
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.navigationanimation)

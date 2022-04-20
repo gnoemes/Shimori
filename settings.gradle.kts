@@ -33,4 +33,6 @@ include(":common-ui-compose:jetpack")
 
 include(":data", ":data:base", ":data:db")
 
+include(":domain")
+
 include(":shikimori")
