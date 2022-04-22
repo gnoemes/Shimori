@@ -25,4 +25,8 @@ dependencies {
     implementation(libs.compose.ui.util)
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.ui.ui)
+
+    implementation(libs.accompanist.navigationmaterial)
+
+    implementation(libs.kodein.compose)
 }
