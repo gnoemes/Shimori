@@ -15,9 +15,11 @@ import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.compose.utils.bindViewModel
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
+import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
 import io.ktor.client.engine.okhttp.*
@@ -34,6 +36,8 @@ val appModule = DI.Module("app") {
     importOnce(dataModule)
 
     importOnce(shikimoriModule)
+
+    importOnce(viewModels)
 
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
     bindSingleton { createLogger() }
@@ -82,4 +86,8 @@ private val imageClient by lazy {
     OkHttpClient.Builder()
         .defaultConfig()
         .build()
+}
+
+private val viewModels = DI.Module(name = "viewModels") {
+    bindViewModel { MainViewModel(instance()) }
 }

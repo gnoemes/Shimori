@@ -21,6 +21,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
+import org.kodein.di.compose.withDI
 import org.kodein.di.instance
 
 class MainActivity : BaseActivity(), DIAware {
@@ -35,40 +36,43 @@ class MainActivity : BaseActivity(), DIAware {
         installSplashScreen()
 
         setContent {
+            withDI(di = di) {
+                val dimensions =
+                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
+                    else sw360Dimensions
 
-            val dimensions =
-                if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
-                else sw360Dimensions
-
-            CompositionLocalProvider(
+                CompositionLocalProvider(
 //                LocalShimoriRateUtil provides rateUtil,
 //                LocalShimoriTextCreator provides textCreator,
-                LocalShimoriSettings provides settings,
-                LocalShimoriDimensions provides dimensions,
+                    LocalShimoriSettings provides settings,
+                    LocalShimoriDimensions provides dimensions,
 //                LocalShikimoriAuth provides shikimoriAuth
-            ) {
+                ) {
 
-                val useDarkColors = settings.shouldUseDarkColors()
+                    val useDarkColors = settings.shouldUseDarkColors()
 
-                ShimoriTheme(useDarkColors = useDarkColors) {
+                    ShimoriTheme(useDarkColors = useDarkColors) {
 
-                    val systemUiController = rememberSystemUiController()
-                    val isLightTheme = !useDarkColors
-                    val navigationColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
-                    val statusBarColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
+                        val systemUiController = rememberSystemUiController()
+                        val isLightTheme = !useDarkColors
+                        val navigationColor =
+                            MaterialTheme.colorScheme.background
+                        val statusBarColor =
+                            MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
 
-                    SideEffect {
-                        systemUiController.setStatusBarColor(
-                            color = statusBarColor,
-                            darkIcons = isLightTheme
-                        )
-                        systemUiController.setNavigationBarColor(
-                            color = navigationColor,
-                            darkIcons = isLightTheme
-                        )
+                        SideEffect {
+                            systemUiController.setStatusBarColor(
+                                color = statusBarColor,
+                                darkIcons = isLightTheme
+                            )
+                            systemUiController.setNavigationBarColor(
+                                color = navigationColor,
+                                darkIcons = isLightTheme
+                            )
+                        }
+
+                        Main()
                     }
-
-                    Main()
                 }
             }
         }
