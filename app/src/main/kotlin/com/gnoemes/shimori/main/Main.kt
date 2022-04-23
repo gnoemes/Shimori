@@ -191,10 +191,10 @@ private fun MainNavigationBar(
                 ShimoriBottomBarItem(
                     selected = selected,
                     icon = {
-                        NavigationItemIcon(item = item, selected = selected, listType = listType)
+                        NavigationItemIcon(item = item, listType = listType)
                     },
                     label = {
-                        NavigationItemLabel(item = item, selected = selected, listType = listType)
+                        NavigationItemLabel(item = item, listType = listType)
                     },
                     onClick = {
                         if (selected) onNavigationReselected(item.screen)
@@ -207,14 +207,14 @@ private fun MainNavigationBar(
 }
 
 @Composable
-private fun NavigationItemIcon(item: NavigationItem, selected: Boolean, listType: ListType) {
+private fun NavigationItemIcon(item: NavigationItem, listType: ListType) {
     val painter = when (item) {
-        is NavigationItem.ListTypeItem -> painterResource(id = item.iconResId(selected, listType))
+        is NavigationItem.ListTypeItem -> painterResource(id = item.iconResId(listType))
         is NavigationItem.StaticItem -> painterResource(id = item.iconResId)
     }
 
     val contentDescription = when (item) {
-        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(selected, listType))
+        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
         is NavigationItem.StaticItem -> stringResource(id = item.contentDescriptionResId)
     }
 
@@ -225,9 +225,9 @@ private fun NavigationItemIcon(item: NavigationItem, selected: Boolean, listType
 }
 
 @Composable
-private fun NavigationItemLabel(item: NavigationItem, selected: Boolean, listType: ListType) {
+private fun NavigationItemLabel(item: NavigationItem, listType: ListType) {
     val text = when (item) {
-        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(selected, listType))
+        is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
         is NavigationItem.StaticItem -> stringResource(id = item.labelResId)
     }
 
@@ -279,24 +279,20 @@ private sealed class NavigationItem(
 ) {
     class ListTypeItem : NavigationItem(RootScreen.Lists) {
         @StringRes
-        fun labelResId(selected: Boolean, type: ListType): Int =
-            if (selected) R.string.lists_title
-            else when (type) {
-                ListType.Anime -> R.string.anime
-                ListType.Manga -> R.string.manga
-                ListType.Ranobe -> R.string.ranobe
-                else -> R.string.pinned
-            }
+        fun labelResId(type: ListType): Int = when (type) {
+            ListType.Anime -> R.string.anime
+            ListType.Manga -> R.string.manga
+            ListType.Ranobe -> R.string.ranobe
+            else -> R.string.pinned
+        }
 
         @DrawableRes
-        fun iconResId(selected: Boolean, type: ListType): Int =
-            if (selected) R.drawable.ic_menu
-            else when (type) {
-                ListType.Anime -> R.drawable.ic_anime
-                ListType.Manga -> R.drawable.ic_manga
-                ListType.Ranobe -> R.drawable.ic_ranobe
-                else -> R.drawable.ic_pin
-            }
+        fun iconResId(type: ListType): Int = when (type) {
+            ListType.Anime -> R.drawable.ic_anime
+            ListType.Manga -> R.drawable.ic_manga
+            ListType.Ranobe -> R.drawable.ic_ranobe
+            else -> R.drawable.ic_pin
+        }
     }
 
     class StaticItem(
