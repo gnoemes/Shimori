@@ -27,10 +27,10 @@ import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
-import com.gnoemes.shimori.common.ui.compose.components.ShimoriBottomBarItem
-import com.gnoemes.shimori.common.ui.compose.theme.dimens
-import com.gnoemes.shimori.common.ui.compose.utils.rememberStateWithLifecycle
-import com.gnoemes.shimori.common.ui.compose.utils.shimoriViewModel
+import com.gnoemes.shimori.common.ui.components.ShimoriBottomBarItem
+import com.gnoemes.shimori.common.ui.theme.dimens
+import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
+import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.base.entities.rate.ListType
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.main.MainViewState

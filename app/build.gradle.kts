@@ -9,13 +9,8 @@ plugins {
 }
 
 android {
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
-    }
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
 
     val version = readVersion("${project.projectDir}/version.properties")
 
@@ -84,13 +79,14 @@ dependencies {
     implementation(projects.commonUi)
     implementation(projects.commonUiResources)
     implementation(projects.commonUiImageloading)
-    implementation(projects.commonUiCompose.jetpack)
 
     implementation(projects.data)
     implementation(projects.data.db)
     implementation(projects.domain)
 
     implementation(projects.shikimori)
+
+    implementation(projects.ui.auth)
 
     implementation(libs.kotlin.coroutines.android)
 

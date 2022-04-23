@@ -29,9 +29,9 @@ subprojects {
         kotlinOptions {
             freeCompilerArgs += arrayOf(
                 // Enable experimental coroutines APIs, including Flow
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xopt-in=kotlinx.coroutines.FlowPreview",
-                "-Xopt-in=kotlin.Experimental",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=kotlin.Experimental",
             )
 
             // Set JVM target to 1.11

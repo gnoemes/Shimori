@@ -1,6 +1,6 @@
 [versions]
 #Kotlin
-kotlin = "1.6.10"
+kotlin = "1.6.20"
 kotlinDateTime = "0.3.2"
 coroutines = "1.6.0"
 
@@ -16,9 +16,9 @@ sqlDelight = "1.5.3"
 accompanist = "0.24.6-alpha"
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.0-alpha03"
-compose = "1.2.0-alpha07"
+compose = "1.2.0-alpha08"
 composesnapshot = "-" # a single character = no snapshot
-material3 = "1.0.0-alpha09"
+material3 = "1.0.0-alpha10"
 coil = "1.4.0"
 
 #Android Tests

@@ -29,10 +29,11 @@ include(":app")
 
 include(":base:core", ":base:shared")
 include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
-include(":common-ui-compose:jetpack")
 
 include(":data", ":data:base", ":data:db")
 
 include(":domain")
 
 include(":shikimori")
+
+include(":ui:auth")
