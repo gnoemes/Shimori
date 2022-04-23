@@ -6,7 +6,7 @@ import com.gnoemes.shikimori.shikimoriModule
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.appinitializers.AppInitializers
-import com.gnoemes.shimori.auth.AuthViewModel
+import com.gnoemes.shimori.auth.authModule
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.core.di.KodeinTag
 import com.gnoemes.shimori.base.core.entities.Platform
@@ -24,6 +24,8 @@ import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
+import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
+import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import io.ktor.client.engine.okhttp.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -39,7 +41,7 @@ val appModule = DI.Module("app") {
 
     importOnce(shikimoriModule)
 
-    importOnce(viewModels)
+    importOnce(features)
 
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
     bindSingleton { createLogger() }
@@ -52,7 +54,14 @@ val appModule = DI.Module("app") {
             shikimoriURL = BuildConfig.ShikimoriBaseUrl,
             shikimoriClientId = BuildConfig.ShikimoriClientId,
             shikimoriSecretKey = BuildConfig.ShikimoriClientSecret,
-            shikimoriUserAgent = instance(KodeinTag.appName)
+            shikimoriUserAgent = instance(KodeinTag.appName),
+            shikimoriRedirect = instance<Context>().let { context ->
+                val scheme = context.getString(R.string.shikimori_redirect_scheme)
+                val host = context.getString(R.string.shikimori_redirect_host)
+                val path = context.getString(R.string.shikimori_redirect_path)
+
+                "$scheme://$host$path"
+            }
         )
     }
 
@@ -80,6 +89,7 @@ val appModule = DI.Module("app") {
 private val binds = DI.Module(name = "appBinds") {
     bindSingleton<ShimoriSettings> { ShimoriSettingsImpl(instance()) }
     bindSingleton<ShimoriStorage> { ShimoriStorageImpl(instance()) }
+    bindSingleton<ShikimoriAuthManager> { new(::ActivityShikimoriAuthManager) }
 }
 
 private val initializers = DI.Module(name = "initializers") {
@@ -92,7 +102,9 @@ private val imageClient by lazy {
         .build()
 }
 
-private val viewModels = DI.Module(name = "viewModels") {
-    bindViewModel { MainViewModel(instance()) }
-    bindViewModel { AuthViewModel() }
+private val features = DI.Module(name = "features") {
+    bindViewModel { new(::MainViewModel) }
+
+    importOnce(authModule)
+
 }

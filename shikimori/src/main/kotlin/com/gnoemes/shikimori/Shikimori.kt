@@ -4,6 +4,7 @@ import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
 import com.gnoemes.shikimori.entities.anime.ScreenshotResponse
+import com.gnoemes.shikimori.entities.auth.ShikimoriAuthState
 import com.gnoemes.shikimori.entities.auth.TokenResponse
 import com.gnoemes.shikimori.entities.club.ClubResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
@@ -44,8 +45,12 @@ class Shikimori constructor(
     private val storage: ShimoriStorage,
     private val logger: Logger,
 ) {
-    private var _authErrorState = MutableStateFlow<Boolean?>(null)
-    val authErrorState: StateFlow<Boolean?> = _authErrorState
+    private val _state = MutableStateFlow(
+        if (storage.shikimoriAccessToken.isNullOrBlank()) ShikimoriAuthState.LOGGED_OUT
+        else ShikimoriAuthState.LOGGED_IN
+    )
+
+    val authState: StateFlow<ShikimoriAuthState> get() = _state
 
     private val client = createClient(engine)
     private val API_URL = "${platform.shikimoriURL}$API_PATH"
@@ -73,25 +78,34 @@ class Shikimori constructor(
                 val accessToken = storage.shikimoriAccessToken
                 val refreshToken = storage.shikimoriRefreshToken
                 if (accessToken != null && refreshToken != null) {
-                    loadTokens { BearerTokens(accessToken, refreshToken) }
+                    loadTokens {
+                        _state.emit(ShikimoriAuthState.LOGGED_IN)
+                        BearerTokens(accessToken, refreshToken)
+                    }
                 }
 
                 refreshTokens {
                     val rfToken =
                         storage.shikimoriRefreshToken ?: return@refreshTokens null
-                    val tokens = auth.refreshToken(rfToken)
-                    if (tokens != null) {
-                        storage.shikimoriAccessToken = tokens.accessToken
-                        storage.shikimoriRefreshToken = tokens.refreshToken
+                    auth.refreshToken(rfToken)?.let {
+                        onAuthSuccess(it.accessToken, it.refreshToken)
+                        BearerTokens(it.accessToken, it.refreshToken)
                     }
-                    tokens?.let { BearerTokens(it.accessToken, it.refreshToken) }
                 }
             }
         }
     }
 
-    private suspend fun onAuthExpired() {
-        _authErrorState.emit(true)
+    suspend fun onAuthExpired() {
+        storage.shikimoriAccessToken = null
+        storage.shikimoriRefreshToken = null
+        _state.emit(ShikimoriAuthState.LOGGED_OUT)
+    }
+
+    suspend fun onAuthSuccess(accessToken: String, refreshToken: String) {
+        storage.shikimoriAccessToken = accessToken
+        storage.shikimoriRefreshToken = refreshToken
+        _state.emit(ShikimoriAuthState.LOGGED_IN)
     }
 
     ///////////////////////////////////////////////////////

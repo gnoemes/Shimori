@@ -14,6 +14,7 @@ dependencies {
     commonMainImplementation(projects.commonUi)
     commonMainImplementation(projects.commonUiResources)
     commonMainImplementation(projects.commonUiImageloading)
+    commonMainImplementation(projects.shikimoriAuth)
 
     androidMainImplementation(libs.androidx.core)
     androidMainImplementation(libs.androidx.lifecycle.runtime)

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,11 +18,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.auth.Auth
+import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import org.kodein.di.compose.localDI
+import org.kodein.di.instance
 
 internal sealed class RootScreen(val route: String) {
     abstract fun getStartDestination(): Screen
@@ -136,10 +141,14 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
     composable(
         Screen.Lists.createRoute(root),
     ) {
-//        if (!LocalShikimoriAuth.current.isAuthorized) {
+        val shikimori: Shikimori by localDI().instance()
+        val state by rememberStateWithLifecycle(shikimori.authState)
+
+        if (!state.isAuthorized) {
             Auth(
                 openSettings = { navController.navigate(Screen.Settings.createRoute(root)) }
             )
+        }
 //        } else {
 //            Lists(
 //                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },

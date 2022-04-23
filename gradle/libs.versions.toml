@@ -122,3 +122,4 @@ mockK = "io.mockk:mockk:1.12.2"
 
 #Other
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+appauth = "net.openid:appauth:0.8.1"
