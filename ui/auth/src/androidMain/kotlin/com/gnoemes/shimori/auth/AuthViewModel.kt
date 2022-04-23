@@ -1,5 +1,8 @@
 package com.gnoemes.shimori.auth
 
 import androidx.lifecycle.ViewModel
+import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 
-class AuthViewModel : ViewModel()
+internal class AuthViewModel(
+    authManager: ShikimoriAuthManager
+) : ViewModel(), ShikimoriAuthManager by authManager

@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.auth
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,16 +14,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
+import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+
 
 @Composable
 fun Auth(
     openSettings: () -> Unit
 ) {
     Auth(
-        viewModel = viewModel(),
+        viewModel = shimoriViewModel(),
         openSettings = openSettings
     )
 }
@@ -32,25 +34,23 @@ private fun Auth(
     viewModel: AuthViewModel,
     openSettings: () -> Unit
 ) {
-    val signInLauncher = {}
-//        rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
-//            if (result != null) {
-//                viewModel.onLoginResult(result)
-//            }
-//        }
+    val signInLauncher =
+        rememberLauncherForActivityResult(viewModel.buildLoginActivityResult()) { result ->
+            if (result != null) {
+                viewModel.onLoginResult(result)
+            }
+        }
 
-    val signUpLauncher = {}
-//        rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
-//            if (result != null) {
-//                viewModel.onLoginResult(result)
-//            }
-//        }
+    val signUpLauncher =
+        rememberLauncherForActivityResult(viewModel.buildRegisterActivityResult()) { result ->
+            if (result != null) {
+                viewModel.onLoginResult(result)
+            }
+        }
 
     Auth(
-//        signIn = { signInLauncher.launch(Unit) },
-//        signUp = { signUpLauncher.launch(Unit) },
-        signIn = {  },
-        signUp = {  },
+        signIn = { signInLauncher.launch(Unit) },
+        signUp = { signUpLauncher.launch(Unit) },
         openSettings = openSettings
     )
 }

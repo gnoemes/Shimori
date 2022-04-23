@@ -3,9 +3,10 @@ package com.gnoemes.shimori.common.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.fragment.app.FragmentActivity
 
-abstract class BaseActivity : FragmentActivity() {
+abstract class BaseActivity : ComponentActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)

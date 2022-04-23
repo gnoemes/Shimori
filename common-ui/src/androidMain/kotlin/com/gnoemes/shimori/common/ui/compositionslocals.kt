@@ -9,4 +9,3 @@ val LocalShimoriRateUtil = staticCompositionLocalOf<ShimoriRateUtil> { error("em
 //val LocalShimoriTextCreator = staticCompositionLocalOf<ShimoriTextCreator> { error("empty") }
 val LocalShimoriSettings = staticCompositionLocalOf<ShimoriSettings> { error("empty") }
 val LocalShimoriDimensions = staticCompositionLocalOf<Dimensions> { error("empty") }
-//val LocalShikimoriAuth = staticCompositionLocalOf<ShikimoriAuthState> { error("empty") }

@@ -85,6 +85,7 @@ dependencies {
     implementation(projects.domain)
 
     implementation(projects.shikimori)
+    implementation(projects.shikimoriAuth)
 
     implementation(projects.ui.auth)
 
@@ -123,6 +124,8 @@ dependencies {
 
     implementation(libs.google.analytics)
     implementation(libs.google.crashlytics)
+
+    implementation(libs.appauth)
 }
 
 val firebaseAppId = project.propOrDef("firebaseAppId", "").toString()

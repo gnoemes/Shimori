@@ -34,6 +34,6 @@ include(":data", ":data:base", ":data:db")
 
 include(":domain")
 
-include(":shikimori")
+include(":shikimori", ":shikimori-auth")
 
 include(":ui:auth")
