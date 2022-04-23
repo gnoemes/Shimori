@@ -27,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
-import com.gnoemes.shimori.common.ui.compose.LocalShimoriDimensions
 import com.gnoemes.shimori.common.ui.compose.components.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.ui.compose.theme.dimens
 import com.gnoemes.shimori.common.ui.compose.utils.rememberStateWithLifecycle
@@ -165,7 +164,8 @@ private fun MainNavigationBar(
     onNavigationReselected: (RootScreen) -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .height(MaterialTheme.dimens.bottomBarContainerHeight)
             .background(
                 brush = Brush.verticalGradient(
@@ -183,7 +183,8 @@ private fun MainNavigationBar(
             containerColor = Color.Transparent,
             modifier = Modifier
                 .height(MaterialTheme.dimens.bottomBarHeight)
-                .align(Alignment.BottomStart)
+                .align(Alignment.BottomStart),
+            contentPadding = PaddingValues(top = 4.dp)
         ) {
             MainNavigationItems.fastForEach { item ->
                 val selected = selectedNavigation == item.screen
