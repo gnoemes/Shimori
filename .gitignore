@@ -9,3 +9,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+
+# Do not commit firebase config
+google-services.json
+
+# Do not commit plain-text release keys
+app-release.jks

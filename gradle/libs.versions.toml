@@ -113,7 +113,8 @@ coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 google-analytics = "com.google.firebase:firebase-analytics-ktx:20.1.1"
 google-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.9"
 google-crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
-google-gmsGoogleServices = "com.google.gms:google-services:4.3.10"
+google-gmsGoogleServices = "com.google.gms:google-services:4.3.5"
+google-appDistribution = "com.google.firebase:firebase-appdistribution-gradle:3.0.1"
 
 #Tests
 junit = "junit:junit:4.13.2"
