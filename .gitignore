@@ -6,6 +6,7 @@
 /build
 */build
 /captures
+/ui/*/build
 .externalNativeBuild
 .cxx
 local.properties

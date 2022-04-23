@@ -18,4 +18,9 @@ android {
         minSdk = com.gnoemes.shimori.Application.minSdk
         targetSdk = com.gnoemes.shimori.Application.targetSdk
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 }
