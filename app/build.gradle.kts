@@ -1,6 +1,7 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.gnoemes.shimori.initConfigField
 import com.gnoemes.shimori.propOrDef
+import com.gnoemes.shimori.readVersion
 
 plugins {
     id("com.android.application")
@@ -16,10 +17,22 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
 
+    val version = readVersion("${project.projectDir}/version.properties")
+
+    val versionMajor = version["major"].toString().toInt()
+    val versionMinor = version["minor"].toString().toInt()
+    val versionPatch = version["patch"].toString().toInt()
+
+    val appVersionName = "$versionMajor.$versionMinor.$versionPatch"
+    val appVersionCode = version["VERSION_CODE"].toString().toIntOrNull()
+
+    println("config code: $appVersionCode, name: $appVersionName")
+
     defaultConfig {
         applicationId = com.gnoemes.shimori.Application.id
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
+        setProperty("archivesBaseName", "Shimori-v$appVersionName($appVersionCode)")
 
         with(project) {
             initConfigField(this@defaultConfig, "ShikimoriClientId", "none")
@@ -50,11 +63,9 @@ android {
 
     buildTypes {
         getByName("release") {
-            signingConfig = if (useReleaseKeystore) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig =
+                if (useReleaseKeystore) signingConfigs.getByName("release")
+                else signingConfigs.getByName("debug")
 
             isMinifyEnabled = true
             isShrinkResources = true
@@ -66,7 +77,6 @@ android {
             versionNameSuffix = "-dev"
         }
     }
-
 }
 
 dependencies {

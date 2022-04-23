@@ -2,9 +2,9 @@ package com.gnoemes.shimori
 
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.LibraryDefaultConfig
-import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.jetbrains.kotlin.konan.properties.Properties
+import org.jetbrains.kotlin.konan.properties.loadProperties
 
 fun Project.propOrDef(propertyName: String, defaultValue: Any): Any {
     var propertyValue = properties[propertyName]
@@ -48,4 +48,14 @@ fun Project.initConfigField(
             else it
         }
     )
+}
+
+fun readVersion(path: String): Properties {
+    val version = loadProperties(path)
+    // safety defaults in case file is missing
+    if (version["major"] == null) version["major"] = 1
+    if (version["minor"] == null) version["minor"] = 0
+    if (version["patch"] == null) version["patch"] = 0
+
+    return version
 }
