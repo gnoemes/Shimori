@@ -10,6 +10,9 @@ buildscript {
     dependencies {
         classpath(libs.kotlin.serialization.gradle)
         classpath(libs.sqldelight.gradle)
+        classpath(libs.google.gmsGoogleServices)
+        classpath(libs.google.crashlyticsGradle)
+        classpath(libs.google.appDistribution)
         //android & kotlin gradle plugins in buildSrc/build.gradle.kts
     }
 }
@@ -31,8 +34,8 @@ subprojects {
                 "-Xopt-in=kotlin.Experimental",
             )
 
-            // Set JVM target to 1.8
-            jvmTarget = "1.8"
+            // Set JVM target to 1.11
+            jvmTarget = JavaVersion.VERSION_11.toString()
         }
     }
 

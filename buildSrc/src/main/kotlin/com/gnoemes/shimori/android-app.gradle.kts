@@ -5,18 +5,6 @@ plugins {
 }
 
 configure<BaseAppModuleExtension> {
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-dev"
-        }
-    }
-
     packagingOptions.resources.excludes.addAll(
         arrayOf(
             // Exclude AndroidX version files

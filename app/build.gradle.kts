@@ -1,4 +1,6 @@
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.gnoemes.shimori.initConfigField
+import com.gnoemes.shimori.propOrDef
 
 plugins {
     id("com.android.application")
@@ -25,6 +27,45 @@ android {
             initConfigField(this@defaultConfig, "ShikimoriBaseUrl")
         }
     }
+
+    val useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("release/app-debug.jks")
+            storePassword = "password"
+            keyAlias = "debugkey"
+            keyPassword = "password"
+        }
+
+        create("release") {
+            if (useReleaseKeystore) {
+                storeFile = rootProject.file("release/app-release.jks")
+                storePassword = propOrDef("ReleaseStorePassword", "").toString()
+                keyAlias = "shimori"
+                keyPassword = propOrDef("ReleaseKeyPassword", "").toString()
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = if (useReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-dev"
+        }
+    }
+
 }
 
 dependencies {
@@ -72,4 +113,29 @@ dependencies {
     implementation(libs.ktor.contentNegotiation)
     implementation(libs.ktor.serialization.json)
     implementation(libs.ktor.okhttp)
+
+    implementation(libs.google.analytics)
+    implementation(libs.google.crashlytics)
+}
+
+val firebaseAppId = project.propOrDef("firebaseAppId", "").toString()
+if (firebaseAppId.isNotEmpty()) {
+    apply(plugin = "com.google.firebase.appdistribution")
+
+    configure<BaseAppModuleExtension> {
+        buildTypes {
+            getByName("release") {
+                configure<com.google.firebase.appdistribution.gradle.AppDistributionExtension> {
+                    appId = firebaseAppId
+                    groups = "qa"
+                    artifactType = "APK"
+                }
+            }
+        }
+    }
+}
+
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
 }
