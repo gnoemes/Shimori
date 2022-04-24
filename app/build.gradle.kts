@@ -6,6 +6,7 @@ import com.gnoemes.shimori.readVersion
 plugins {
     id("com.android.application")
     id("android-app")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -88,6 +89,7 @@ dependencies {
     implementation(projects.shikimoriAuth)
 
     implementation(projects.ui.auth)
+    implementation(projects.ui.lists)
 
     implementation(libs.kotlin.coroutines.android)
 
@@ -126,6 +128,7 @@ dependencies {
     implementation(libs.google.crashlytics)
 
     implementation(libs.appauth)
+    implementation(libs.slf4j)
 }
 
 val firebaseAppId = project.propOrDef("firebaseAppId", "").toString()

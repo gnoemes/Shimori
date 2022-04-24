@@ -123,3 +123,5 @@ mockK = "io.mockk:mockk:1.12.2"
 #Other
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
 appauth = "net.openid:appauth:0.8.1"
+#for ktor logs
+slf4j = "org.slf4j:slf4j-simple:1.7.30"
