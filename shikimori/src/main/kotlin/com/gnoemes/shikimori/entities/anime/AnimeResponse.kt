@@ -2,8 +2,7 @@ package com.gnoemes.shikimori.entities.anime
 
 import com.gnoemes.shikimori.entities.common.ContentStatus
 import com.gnoemes.shikimori.entities.common.ImageResponse
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.serializers.DatePeriodIso8601Serializer
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
@@ -18,6 +17,6 @@ internal data class AnimeResponse(
     @SerialName("status") val status: ContentStatus?,
     @SerialName("episodes") val episodes: Int,
     @SerialName("episodes_aired") val episodesAired: Int,
-    @SerialName("aired_on") val dateAired: DatePeriod?,
-    @SerialName("released_on") val dateReleased: DatePeriod?
+    @SerialName("aired_on") val dateAired: LocalDate?,
+    @SerialName("released_on") val dateReleased: LocalDate?
 )

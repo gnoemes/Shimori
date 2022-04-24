@@ -9,18 +9,12 @@ import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.squareup.sqldelight.ColumnAdapter
 import comgnoemesshimoridatadb.*
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 
-internal object DateTimePeriodAdapter : ColumnAdapter<DateTimePeriod, String> {
-    override fun decode(databaseValue: String) = DateTimePeriod.parse(databaseValue)
-    override fun encode(value: DateTimePeriod) = value.toString()
-}
-
-internal object DatePeriodAdapter : ColumnAdapter<DatePeriod, String> {
-    override fun decode(databaseValue: String) = DatePeriod.parse(databaseValue)
-    override fun encode(value: DatePeriod) = value.toString()
+internal object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
+    override fun decode(databaseValue: String) = LocalDate.parse(databaseValue)
+    override fun encode(value: LocalDate) = value.toString()
 }
 
 internal object RateTargetPeriodAdapter : ColumnAdapter<RateTargetType, String> {
@@ -69,12 +63,12 @@ internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
 internal val RateAdapter = Rate.Adapter(
     target_typeAdapter = RateTargetPeriodAdapter,
     statusAdapter = RateStatusPeriodAdapter,
-    date_createdAdapter = DateTimePeriodAdapter,
-    date_updatedAdapter = DateTimePeriodAdapter
+    date_createdAdapter = InstantAdapter,
+    date_updatedAdapter = InstantAdapter
 )
 
 internal val UserAdapter = User.Adapter(
-    last_onlineAdapter = DateTimePeriodAdapter
+    last_onlineAdapter = InstantAdapter
 )
 
 internal val RateSortAdapter = Rate_sort.Adapter(
@@ -88,27 +82,26 @@ internal val LastRequestAdapter = Last_request.Adapter(
 
 internal val AnimeAdapter = Anime.Adapter(
     statusAdapter = TitleStatusAdapter,
-    date_airedAdapter = DatePeriodAdapter,
-    date_releasedAdapter = DatePeriodAdapter,
-    next_episode_dateAdapter = DateTimePeriodAdapter,
-    next_episode_end_dateAdapter = DateTimePeriodAdapter,
+    date_airedAdapter = LocalDateAdapter,
+    date_releasedAdapter = LocalDateAdapter,
+    next_episode_dateAdapter = InstantAdapter,
+    next_episode_end_dateAdapter = InstantAdapter,
     age_ratingAdapter = AgeRatingAdapter,
-    durationAdapter = DateTimePeriodAdapter,
     genresAdapter = GenresAdapter
 )
 
 internal val MangaAdapter = Manga.Adapter(
     statusAdapter = TitleStatusAdapter,
-    date_airedAdapter = DatePeriodAdapter,
-    date_releasedAdapter = DatePeriodAdapter,
+    date_airedAdapter = LocalDateAdapter,
+    date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = AgeRatingAdapter,
     genresAdapter = GenresAdapter
 )
 
 internal val RanobeAdapter = Ranobe.Adapter(
     statusAdapter = TitleStatusAdapter,
-    date_airedAdapter = DatePeriodAdapter,
-    date_releasedAdapter = DatePeriodAdapter,
+    date_airedAdapter = LocalDateAdapter,
+    date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = AgeRatingAdapter,
     genresAdapter = GenresAdapter
 )

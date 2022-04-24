@@ -21,13 +21,20 @@ import com.gnoemes.shimori.common.ui.utils.bindViewModel
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
+import com.gnoemes.shimori.domain.domainModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
+import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import org.kodein.di.*
 
@@ -35,9 +42,11 @@ import org.kodein.di.*
 val appModule = DI.Module("app") {
     importOnce(binds)
     importOnce(initializers)
+    importOnce(networkModule)
     importOnce(imageLoadingModule)
     importOnce(databaseModule)
     importOnce(dataModule)
+    importOnce(domainModule)
 
     importOnce(shikimoriModule)
 
@@ -73,15 +82,6 @@ val appModule = DI.Module("app") {
         )
     }
 
-    bindProvider(KodeinTag.imageClient) { imageClient }
-    bindSingleton(KodeinTag.shikimori) {
-        OkHttp.create {
-            config {
-                defaultConfig()
-            }
-        }
-    }
-
     bindProvider { new(::ShimoriRateUtil) }
 }
 
@@ -96,10 +96,44 @@ private val initializers = DI.Module(name = "initializers") {
     bindSet<AppInitializer<Application>>()
     bindProvider { new(::AppInitializers) }
 }
-private val imageClient by lazy {
-    OkHttpClient.Builder()
-        .defaultConfig()
-        .build()
+
+private val networkModule = DI.Module(name = "network") {
+
+    bindSingleton(KodeinTag.imageClient) { OkHttpClient.Builder().defaultConfig().build() }
+    bindSingleton(KodeinTag.shikimori) {
+        val platform = instance<Platform>()
+
+        HttpClient(OkHttp) {
+            engine {
+                config {
+                    defaultConfig(maxRequestPerHost = 5)
+                }
+            }
+
+            install(Logging) {
+                logger = Logger.ANDROID
+                level = if (platform.debug) LogLevel.BODY else LogLevel.NONE
+            }
+
+            install(UserAgent) {
+                agent = platform.shikimoriUserAgent
+            }
+
+            install(ContentNegotiation) {
+                json(
+                    json = Json {
+                        encodeDefaults = true
+                        isLenient = true
+                        allowStructuredMapKeys = true
+                        prettyPrint = false
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
+    }
+
+
 }
 
 private val features = DI.Module(name = "features") {

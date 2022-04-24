@@ -4,7 +4,6 @@ import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
 import com.gnoemes.shikimori.entities.anime.ScreenshotResponse
-import com.gnoemes.shikimori.entities.auth.ShikimoriAuthState
 import com.gnoemes.shikimori.entities.auth.TokenResponse
 import com.gnoemes.shikimori.entities.club.ClubResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
@@ -22,25 +21,20 @@ import com.gnoemes.shikimori.services.*
 import com.gnoemes.shimori.base.core.entities.Platform
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.data.base.entities.auth.ShikimoriAuthState
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.json.Json
-
-internal typealias LoggingType = io.ktor.client.plugins.logging.Logger
+import kotlinx.coroutines.runBlocking
 
 @com.gnoemes.shimori.data.base.utils.Shikimori
-class Shikimori constructor(
-    engine: HttpClientEngine,
+class Shikimori(
+    private val nonAuthClient: HttpClient,
     private val platform: Platform,
     private val storage: ShimoriStorage,
     private val logger: Logger,
@@ -52,41 +46,33 @@ class Shikimori constructor(
 
     val authState: StateFlow<ShikimoriAuthState> get() = _state
 
-    private val client = createClient(engine)
     private val API_URL = "${platform.shikimoriURL}$API_PATH"
 
     companion object {
         const val API_PATH = "/api"
     }
 
-    private fun createClient(engine: HttpClientEngine) = HttpClient(engine) {
-        install(Logging) {
-            logger =
-                if (platform.type == Platform.Type.Android) LoggingType.ANDROID else LoggingType.DEFAULT
-            level = if (platform.debug) LogLevel.BODY else LogLevel.NONE
-        }
+    private val client: HttpClient
 
-        install(ContentNegotiation) {
-            json(json = Json {
-                prettyPrint = true
-                isLenient = true
-            })
-        }
 
+    init {
+        client = runBlocking { configClient() }
+    }
+
+    private suspend fun configClient() = nonAuthClient.config {
         install(Auth) {
             bearer {
                 val accessToken = storage.shikimoriAccessToken
                 val refreshToken = storage.shikimoriRefreshToken
                 if (accessToken != null && refreshToken != null) {
                     loadTokens {
-                        _state.emit(ShikimoriAuthState.LOGGED_IN)
+                        onAuthSuccess(accessToken, refreshToken)
                         BearerTokens(accessToken, refreshToken)
                     }
                 }
 
                 refreshTokens {
-                    val rfToken =
-                        storage.shikimoriRefreshToken ?: return@refreshTokens null
+                    val rfToken = storage.shikimoriRefreshToken ?: return@refreshTokens null
                     auth.refreshToken(rfToken)?.let {
                         onAuthSuccess(it.accessToken, it.refreshToken)
                         BearerTokens(it.accessToken, it.refreshToken)
@@ -161,22 +147,18 @@ class Shikimori constructor(
                 status?.let { parameter("status", it.status) }
                 page?.let { parameter("page", it) }
                 limit?.let { parameter("limit", it) }
-
-                clientHeader()
             }.body()
         }
 
         override suspend fun get(id: Long): UserRateResponse {
             return client.get {
                 url("$serviceUrl/$id")
-                clientHeader()
             }.body()
         }
 
         override suspend fun delete(id: Long) {
             return client.delete {
                 url("$serviceUrl/$id")
-                clientHeader()
             }.body()
         }
 
@@ -184,7 +166,6 @@ class Shikimori constructor(
             return client.post {
                 url(serviceUrl)
                 setBody(request)
-                clientHeader()
             }.body()
         }
 
@@ -195,14 +176,12 @@ class Shikimori constructor(
             return client.patch {
                 url("$serviceUrl/$id")
                 setBody(request)
-                clientHeader()
             }.body()
         }
 
         override suspend fun increment(id: Long) {
             return client.post {
                 url("$serviceUrl/$id/increment")
-                clientHeader()
             }.body()
         }
     }
@@ -213,28 +192,24 @@ class Shikimori constructor(
         override suspend fun getMeShort(): UserBriefResponse {
             return client.get {
                 url("$serviceUrl/whoami")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getShort(id: Long): UserBriefResponse {
             return client.get {
                 url("$serviceUrl/$id/info")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getFull(id: Long): UserDetailsResponse {
             return client.get {
                 url("$serviceUrl/$id")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getFriends(id: Long): List<UserBriefResponse> {
             return client.get {
                 url("$serviceUrl/$id/friends")
-                clientHeader()
             }.body()
         }
 
@@ -243,60 +218,50 @@ class Shikimori constructor(
                 url(serviceUrl)
                 parameter("page", page)
                 parameter("limit", limit)
-                clientHeader()
             }.body()
         }
 
         override suspend fun getFavorites(id: Long): FavoriteListResponse {
             return client.get {
                 url("$serviceUrl/$id/favourites")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getUserHistory(
-            id: Long,
-            page: Int,
-            limit: Int
+            id: Long, page: Int, limit: Int
         ): List<UserHistoryResponse> {
             return client.get {
                 url("$serviceUrl/$id/history")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getClubs(id: Long): List<ClubResponse> {
             return client.get {
                 url("$serviceUrl/$id/clubs")
-                clientHeader()
             }.body()
         }
 
         override suspend fun addToFriends(id: Long) {
             return client.post {
                 url("$API_URL/friends/$id")
-                clientHeader()
             }.body()
         }
 
         override suspend fun deleteFriend(id: Long) {
             return client.delete {
                 url("$serviceUrl/friends/$id")
-                clientHeader()
             }.body()
         }
 
         override suspend fun ignore(id: Long) {
             return client.post {
                 url("$serviceUrl/v2/users/$id/ignore")
-                clientHeader()
             }.body()
         }
 
         override suspend fun unignore(id: Long) {
             return client.delete {
                 url("$serviceUrl/v2/users/$id/ignore")
-                clientHeader()
             }.body()
         }
     }
@@ -310,65 +275,54 @@ class Shikimori constructor(
                 with(url.parameters) {
                     filters.forEach { (key, value) -> append(key, value) }
                 }
-                clientHeader()
             }.body()
         }
 
         override suspend fun getDetails(id: Long): AnimeDetailsResponse {
             return client.get {
                 url("$serviceUrl/$id")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getLinks(id: Long): List<LinkResponse> {
             return client.get {
                 url("$serviceUrl/$id/external_links")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getSimilar(id: Long): List<AnimeResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
-                clientHeader()
+
             }.body()
         }
 
         override suspend fun getRelated(id: Long): List<AnimeResponse> {
             return client.get {
                 url("$serviceUrl/$id/related")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getRoles(id: Long): List<RolesResponse> {
             return client.get {
                 url("$serviceUrl/$id/roles")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getScreenshots(id: Long): List<ScreenshotResponse> {
             return client.get {
                 url("$serviceUrl/$id/screenshots")
-                clientHeader()
             }.body()
         }
 
         override suspend fun calendar(): List<CalendarResponse> {
             return client.get {
                 url("$API_URL/calendar")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getUserRates(
-            id: Long,
-            status: ShikimoriRateStatus?,
-            page: Int,
-            limit: Int,
-            censored: Boolean
+            id: Long, status: ShikimoriRateStatus?, page: Int, limit: Int, censored: Boolean
         ): List<RateResponse> {
             return client.get {
                 url("$API_URL/users/$id/anime_rates")
@@ -376,7 +330,6 @@ class Shikimori constructor(
                 parameter("page", page)
                 parameter("limit", limit)
                 parameter("censored", censored)
-                clientHeader()
             }.body()
         }
     }
@@ -390,44 +343,35 @@ class Shikimori constructor(
                 with(url.parameters) {
                     filters.forEach { (key, value) -> append(key, value) }
                 }
-                clientHeader()
             }.body()
         }
 
         override suspend fun getLinks(id: Long): List<LinkResponse> {
             return client.get {
                 url("$serviceUrl/$id/external_links")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getSimilar(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getRelated(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/related")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getRoles(id: Long): List<RolesResponse> {
             return client.get {
                 url("$serviceUrl/$id/roles")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getUserRates(
-            id: Long,
-            status: ShikimoriRateStatus?,
-            page: Int,
-            limit: Int,
-            censored: Boolean
+            id: Long, status: ShikimoriRateStatus?, page: Int, limit: Int, censored: Boolean
         ): List<RateResponse> {
             return client.get {
                 url("$API_URL/users/$id/manga_rates")
@@ -435,7 +379,6 @@ class Shikimori constructor(
                 parameter("page", page)
                 parameter("limit", limit)
                 parameter("censored", censored)
-                clientHeader()
             }.body()
         }
     }
@@ -449,44 +392,35 @@ class Shikimori constructor(
                 with(url.parameters) {
                     filters.forEach { (key, value) -> append(key, value) }
                 }
-                clientHeader()
             }.body()
         }
 
         override suspend fun getLinks(id: Long): List<LinkResponse> {
             return client.get {
                 url("$serviceUrl/$id/external_links")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getSimilar(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getRelated(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/related")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getRoles(id: Long): List<RolesResponse> {
             return client.get {
                 url("$serviceUrl/$id/roles")
-                clientHeader()
             }.body()
         }
 
         override suspend fun getUserRates(
-            id: Long,
-            status: ShikimoriRateStatus?,
-            page: Int,
-            limit: Int,
-            censored: Boolean
+            id: Long, status: ShikimoriRateStatus?, page: Int, limit: Int, censored: Boolean
         ): List<RateResponse> {
             return client.get {
                 url("$API_URL/users/$id/manga_rates")
@@ -494,13 +428,7 @@ class Shikimori constructor(
                 parameter("page", page)
                 parameter("limit", limit)
                 parameter("censored", censored)
-                clientHeader()
             }.body()
         }
     }
-
-
-    private fun HttpRequestBuilder.clientHeader() =
-        header("User-Agent", platform.shikimoriUserAgent)
-
 }

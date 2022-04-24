@@ -1,11 +1,8 @@
 package com.gnoemes.shikimori.entities.anime
 
 import com.gnoemes.shikimori.entities.common.*
-import com.gnoemes.shikimori.entities.common.GenreResponse
-import com.gnoemes.shikimori.entities.common.ImageResponse
-import com.gnoemes.shikimori.entities.common.StatisticResponse
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 
 
@@ -20,9 +17,9 @@ internal data class AnimeDetailsResponse(
     @SerialName("status") val status: ContentStatus?,
     @SerialName("episodes") val episodes: Int,
     @SerialName("episodes_aired") val episodesAired: Int,
-    @SerialName("aired_on") val dateAired: DateTimePeriod?,
-    @SerialName("next_episode_at") val nextEpisodeDate: DateTimePeriod?,
-    @SerialName("released_on") val dateReleased: DateTimePeriod?,
+    @SerialName("aired_on") val dateAired: Instant?,
+    @SerialName("next_episode_at") val nextEpisodeDate: Instant?,
+    @SerialName("released_on") val dateReleased: Instant?,
     @SerialName("english") val namesEnglish: List<String?>?,
     @SerialName("japanese") val namesJapanese: List<String?>?,
     @SerialName("rating") val ageRating: AgeRating,

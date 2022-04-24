@@ -2,8 +2,8 @@ import com.gnoemes.shimori.data.base.entities.common.AgeRating;
 import com.gnoemes.shimori.data.base.entities.common.Genre;
 import com.gnoemes.shimori.data.base.entities.common.TitleStatus;
 import kotlin.collections.List;
-import kotlinx.datetime.DatePeriod;
-import kotlinx.datetime.DateTimePeriod;
+import kotlinx.datetime.Instant;
+import kotlinx.datetime.LocalDate;
 
 CREATE TABLE anime (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -21,13 +21,13 @@ CREATE TABLE anime (
     status TEXT AS TitleStatus,
     episodes INTEGER AS Int NOT NULL,
     episodes_aired INTEGER AS Int NOT NULL,
-    date_aired TEXT AS DatePeriod,
-    date_released TEXT AS DatePeriod,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
     next_episode INTEGER AS Int,
-    next_episode_date TEXT AS DateTimePeriod,
-    next_episode_end_date TEXT AS DateTimePeriod,
+    next_episode_date INTEGER AS Instant,
+    next_episode_end_date INTEGER AS Instant,
     age_rating TEXT AS AgeRating NOT NULL,
-    duration TEXT AS DateTimePeriod,
+    duration INTEGER AS Int,
     description TEXT,
     description_html TEXT,
     franchise TEXT,

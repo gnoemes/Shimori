@@ -1,4 +1,4 @@
-import kotlinx.datetime.DateTimePeriod;
+import kotlinx.datetime.Instant;
 
 CREATE TABLE user (
      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE user (
      ignored INTEGER AS Boolean NOT NULL,
      banned INTEGER AS Boolean NOT NULL,
      is_me INTEGER AS Boolean NOT NULL,
-     last_online Text AS DateTimePeriod
+     last_online INTEGER AS Instant
 );
 
 CREATE UNIQUE INDEX user_shikimori_id ON user(shikimori_id);

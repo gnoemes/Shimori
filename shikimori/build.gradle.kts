@@ -9,9 +9,6 @@ dependencies {
     implementation(projects.data.base)
 
     implementation(libs.ktor.auth)
-    implementation(libs.ktor.logging)
     implementation(libs.ktor.contentNegotiation)
-    implementation(libs.ktor.serialization.json)
-
     implementation(libs.ktor.serialization.json)
 }
