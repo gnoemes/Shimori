@@ -8,7 +8,6 @@ import com.gnoemes.shimori.data.base.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.base.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.ranobe
-import com.gnoemes.shimori.data.shared.ranobeDao
 import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +19,33 @@ internal class RanobeDaoImpl(
 ) : RanobeDao() {
 
     override suspend fun insert(entity: Ranobe) {
-        db.ranobeQueries.insert(ranobeDao(entity))
+        entity.let {
+            db.ranobeQueries.insert(
+                it.shikimoriId,
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.ranobeType?.type,
+                it.rating,
+                it.status,
+                it.chapters,
+                it.volumes,
+                it.dateAired,
+                it.dateReleased,
+                it.ageRating,
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres
+            )
+        }
     }
 
     override suspend fun deleteEntity(entity: Ranobe) {

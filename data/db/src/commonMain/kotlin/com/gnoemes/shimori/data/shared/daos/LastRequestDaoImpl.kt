@@ -12,7 +12,13 @@ class LastRequestDaoImpl(
     private val logger: Logger,
 ) : LastRequestDao() {
     override suspend fun insert(entity: LastRequest) {
-        LastRequestMapper.mapInverse(entity)?.let { db.lastRequestQueries.insert(it) }
+        entity.let {
+            db.lastRequestQueries.insert(
+                it.request,
+                it.entityId,
+                it.timeStamp
+            )
+        }
     }
 
     override suspend fun deleteEntity(entity: LastRequest) {

@@ -16,8 +16,12 @@ internal class RateSortDaoImpl(
 ) : RateSortDao() {
 
     override suspend fun insert(entity: RateSort) {
-        RateSortMapper.mapInverse(entity)?.let {
-            db.rateSortQueries.insert(it)
+        entity.let {
+            db.rateSortQueries.insert(
+                it.type.type,
+                it.sortOption,
+                it.isDescending
+            )
         }
     }
 

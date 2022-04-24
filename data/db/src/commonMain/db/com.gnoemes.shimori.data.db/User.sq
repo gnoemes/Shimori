@@ -30,10 +30,10 @@ CREATE INDEX user_is_me ON user(is_me);
 
 insert:
 INSERT OR REPLACE INTO user(
-id, shikimori_id, nickname, image_original, image_preview, image_x96, image_x48,
-name, about, common_info, sex, website, date_birth, locale, full_years, locale, show_comments,
+shikimori_id, nickname, image_original, image_preview, image_x96, image_x48,
+name, about, common_info, sex, website, date_birth, locale, full_years, location, show_comments,
 friend, ignored, banned, is_me, last_online)
-VALUES ?;
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 deleteById:
 DELETE FROM user WHERE id = ?;

@@ -8,7 +8,6 @@ import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.anime
-import com.gnoemes.shimori.data.shared.animeDao
 import com.gnoemes.shimori.data.shared.animeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +19,37 @@ internal class AnimeDaoImpl(
 ) : AnimeDao() {
 
     override suspend fun insert(entity: Anime) {
-        db.animeQueries.insert(animeDao(entity))
+        entity.let {
+            db.animeQueries.insert(
+                it.shikimoriId,
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.animeType?.type,
+                it.rating,
+                it.status,
+                it.episodes,
+                it.episodesAired,
+                it.dateAired,
+                it.dateReleased,
+                it.nextEpisode,
+                it.nextEpisodeDate,
+                it.nextEpisodeEndDate,
+                it.ageRating,
+                it.duration,
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres
+            )
+        }
     }
 
     override suspend fun deleteEntity(entity: Anime) {

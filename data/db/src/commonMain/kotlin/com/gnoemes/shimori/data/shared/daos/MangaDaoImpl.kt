@@ -8,7 +8,6 @@ import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.base.entities.titles.manga.MangaWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.manga
-import com.gnoemes.shimori.data.shared.mangaDao
 import com.gnoemes.shimori.data.shared.mangaWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +19,33 @@ internal class MangaDaoImpl(
 ) : MangaDao() {
 
     override suspend fun insert(entity: Manga) {
-        db.mangaQueries.insert(mangaDao(entity))
+        entity.let {
+            db.mangaQueries.insert(
+                it.shikimoriId,
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.mangaType?.type,
+                it.rating,
+                it.status,
+                it.chapters,
+                it.volumes,
+                it.dateAired,
+                it.dateReleased,
+                it.ageRating,
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres
+            )
+        }
     }
 
     override suspend fun deleteEntity(entity: Manga) {

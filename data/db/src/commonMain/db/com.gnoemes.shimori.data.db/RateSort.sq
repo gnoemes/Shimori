@@ -10,8 +10,8 @@ CREATE TABLE rate_sort (
 CREATE UNIQUE INDEX rate_sort_type ON rate_sort(type);
 
 insert:
-INSERT OR REPLACE INTO rate_sort(id, type, sort, descending)
-VALUES ?;
+INSERT OR REPLACE INTO rate_sort(type, sort, descending)
+VALUES (?,?,?);
 
 deleteById:
 DELETE FROM rate_sort WHERE id = :id;

@@ -11,8 +11,8 @@ CREATE TABLE last_request (
 CREATE UNIQUE INDEX last_request_request_id ON last_request(request, entity_id);
 
 insert:
-INSERT OR REPLACE INTO last_request(id, request, entity_id, timestamp)
-VALUES ?;
+INSERT OR REPLACE INTO last_request(request, entity_id, timestamp)
+VALUES (?,?,?);
 
 deleteById:
 DELETE FROM user WHERE id = ?;
