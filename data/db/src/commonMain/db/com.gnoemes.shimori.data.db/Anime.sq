@@ -40,13 +40,12 @@ CREATE UNIQUE INDEX anime_shikimori_id ON anime(shikimori_id);
 CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
 
 insert:
-INSERT OR REPLACE INTO anime(
-id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+INSERT OR REPLACE INTO anime(shikimori_id, name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
 date_aired, date_released, next_episode, next_episode_date, next_episode_end_date,
 age_rating, duration, description, description_html, franchise, favorite,
 topic_id, genres)
-VALUES ?;
+VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteAll:
 DELETE FROM anime;

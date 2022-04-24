@@ -12,6 +12,9 @@ internal typealias AnimeDAO = comgnoemesshimoridatadb.Anime
 internal typealias MangaDAO = comgnoemesshimoridatadb.Manga
 internal typealias RanobeDAO = comgnoemesshimoridatadb.Ranobe
 
+internal fun <T : Any> Flow<Query<T>>.singleResult(): Flow<T?> =
+    this.map { it.executeAsOneOrNull() }
+
 
 internal inline fun <T : Any, R> Flow<Query<T>>.singleResult(
     crossinline mapper: suspend (value: T?) -> R?

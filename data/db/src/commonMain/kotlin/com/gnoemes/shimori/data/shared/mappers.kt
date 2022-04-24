@@ -18,7 +18,6 @@ import com.gnoemes.shimori.data.base.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.base.entities.user.User
 import com.gnoemes.shimori.data.base.entities.user.UserShort
 import com.gnoemes.shimori.data.base.mappers.Mapper
-import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
 import comgnoemesshimoridatadb.QueryMeShort
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -50,45 +49,7 @@ internal val userToUserShortMapper = Mapper<UserDAO?, UserShort?> { from ->
     )
 }
 
-internal object RateMapper : TwoWayMapper<RateDAO?, Rate?> {
-    override suspend fun map(from: RateDAO?): Rate? {
-        if (from == null) return null
-
-        return Rate(
-            id = from.id,
-            shikimoriId = from.shikimori_id ?: 0,
-            targetId = from.target_id,
-            targetType = from.target_type,
-            status = from.status,
-            score = from.score,
-            comment = from.comment,
-            progress = from.progress,
-            reCounter = from.re_counter,
-            dateCreated = from.date_created,
-            dateUpdated = from.date_updated,
-        )
-    }
-
-    override suspend fun mapInverse(from: Rate?): RateDAO? {
-        if (from == null) return null
-
-        return RateDAO(
-            id = from.id,
-            shikimori_id = from.shikimoriId,
-            target_id = from.targetId,
-            target_type = from.targetType,
-            status = from.status,
-            score = from.score,
-            comment = from.comment,
-            progress = from.progress,
-            re_counter = from.reCounter,
-            date_created = from.dateCreated,
-            date_updated = from.dateUpdated,
-        )
-    }
-}
-
-internal object UserMapper : TwoWayMapper<UserDAO?, User?> {
+internal object UserMapper : Mapper<UserDAO?, User?> {
     override suspend fun map(from: UserDAO?): User? {
         if (from == null) return null
 
@@ -119,38 +80,9 @@ internal object UserMapper : TwoWayMapper<UserDAO?, User?> {
             isMe = from.is_me
         )
     }
-
-    override suspend fun mapInverse(from: User?): UserDAO? {
-        if (from == null) return null
-
-        return UserDAO(
-            id = from.id,
-            shikimori_id = from.shikimoriId,
-            nickname = from.nickname,
-            image_original = from.image?.original,
-            image_preview = from.image?.preview,
-            image_x96 = from.image?.x96,
-            image_x48 = from.image?.x48,
-            name = from.name,
-            about = from.about,
-            common_info = from.commonInfo,
-            sex = from.sex,
-            website = from.website,
-            date_birth = from.dateBirth,
-            locale = from.locale,
-            full_years = from.fullYears,
-            location = from.location,
-            show_comments = from.showComments,
-            friend = from.friend,
-            ignored = from.ignored,
-            banned = from.banned,
-            last_online = from.lastOnlineAt,
-            is_me = from.isMe
-        )
-    }
 }
 
-internal object RateSortMapper : TwoWayMapper<RateSortDAO?, RateSort?> {
+internal object RateSortMapper : Mapper<RateSortDAO?, RateSort?> {
     override suspend fun map(from: RateSortDAO?): RateSort? {
         if (from == null) return null
 
@@ -161,20 +93,9 @@ internal object RateSortMapper : TwoWayMapper<RateSortDAO?, RateSort?> {
             isDescending = from.descending
         )
     }
-
-    override suspend fun mapInverse(from: RateSort?): RateSortDAO? {
-        if (from == null) return null
-
-        return RateSortDAO(
-            id = from.id,
-            type = from.type.type,
-            sort = from.sortOption,
-            descending = from.isDescending
-        )
-    }
 }
 
-internal object LastRequestMapper : TwoWayMapper<LastRequestDAO?, LastRequest?> {
+internal object LastRequestMapper : Mapper<LastRequestDAO?, LastRequest?> {
     override suspend fun map(from: LastRequestDAO?): LastRequest? {
         if (from == null) return null
 
@@ -183,17 +104,6 @@ internal object LastRequestMapper : TwoWayMapper<LastRequestDAO?, LastRequest?> 
             request = from.request,
             entityId = from.entity_id,
             timeStamp = from.timestamp
-        )
-    }
-
-    override suspend fun mapInverse(from: LastRequest?): LastRequestDAO? {
-        if (from == null) return null
-
-        return LastRequestDAO(
-            id = from.id,
-            request = from.request,
-            entity_id = from.entityId,
-            timestamp = from.timeStamp
         )
     }
 }
@@ -315,37 +225,6 @@ internal fun anime(
     genres = genres
 )
 
-internal fun animeDao(from: Anime) = AnimeDAO(
-    id = from.id,
-    shikimori_id = from.shikimoriId,
-    name = from.name,
-    name_ru = from.nameRu,
-    name_eng = from.nameEn,
-    image_original = from.image?.original,
-    image_preview = from.image?.preview,
-    image_x96 = from.image?.x96,
-    image_x48 = from.image?.x48,
-    url = from.url,
-    anime_type = from.animeType?.type,
-    rating = from.rating,
-    status = from.status,
-    episodes = from.episodes,
-    episodes_aired = from.episodesAired,
-    date_aired = from.dateAired,
-    date_released = from.dateReleased,
-    next_episode = from.nextEpisode,
-    next_episode_date = from.nextEpisodeDate,
-    next_episode_end_date = from.nextEpisodeEndDate,
-    age_rating = from.ageRating,
-    duration = from.duration,
-    description = from.description,
-    description_html = from.descriptionHtml,
-    franchise = from.franchise,
-    favorite = from.favorite,
-    topic_id = from.topicId,
-    genres = from.genres
-)
-
 internal fun mangaWithRate(
     id: Long,
     shikimori_id: Long,
@@ -450,33 +329,6 @@ internal fun manga(
     genres = genres
 )
 
-internal fun mangaDao(from: Manga) = MangaDAO(
-    id = from.id,
-    shikimori_id = from.shikimoriId,
-    name = from.name,
-    name_ru = from.nameRu,
-    name_eng = from.nameEn,
-    image_original = from.image?.original,
-    image_preview = from.image?.preview,
-    image_x96 = from.image?.x96,
-    image_x48 = from.image?.x48,
-    url = from.url,
-    manga_type = from.mangaType?.type,
-    rating = from.rating,
-    status = from.status,
-    chapters = from.chapters,
-    volumes = from.volumes,
-    date_aired = from.dateAired,
-    date_released = from.dateReleased,
-    age_rating = from.ageRating,
-    description = from.description,
-    description_html = from.descriptionHtml,
-    franchise = from.franchise,
-    favorite = from.favorite,
-    topic_id = from.topicId,
-    genres = from.genres
-)
-
 internal fun ranobeWithRate(
     id: Long,
     shikimori_id: Long,
@@ -579,33 +431,6 @@ internal fun ranobe(
     favorite = favorite,
     topicId = topic_id,
     genres = genres
-)
-
-internal fun ranobeDao(from: Ranobe) = RanobeDAO(
-    id = from.id,
-    shikimori_id = from.shikimoriId,
-    name = from.name,
-    name_ru = from.nameRu,
-    name_eng = from.nameEn,
-    image_original = from.image?.original,
-    image_preview = from.image?.preview,
-    image_x96 = from.image?.x96,
-    image_x48 = from.image?.x48,
-    url = from.url,
-    ranobe_type = from.ranobeType?.type,
-    rating = from.rating,
-    status = from.status,
-    chapters = from.chapters,
-    volumes = from.volumes,
-    date_aired = from.dateAired,
-    date_released = from.dateReleased,
-    age_rating = from.ageRating,
-    description = from.description,
-    description_html = from.descriptionHtml,
-    franchise = from.franchise,
-    favorite = from.favorite,
-    topic_id = from.topicId,
-    genres = from.genres
 )
 
 internal fun rate(

@@ -29,6 +29,8 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         val added = ArrayList<LocalType>()
         val updated = ArrayList<LocalType>()
 
+        logger.v("Current DB values size: ${currentDbEntities.size}")
+
         for (networkEntity in networkValues) {
             logger.v("Syncing item from network: $networkEntity")
 

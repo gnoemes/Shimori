@@ -35,11 +35,11 @@ CREATE UNIQUE INDEX ranobe_shikimori_id ON ranobe(shikimori_id);
 
 insert:
 INSERT OR REPLACE INTO ranobe(
-id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+shikimori_id, name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, ranobe_type, rating, status, chapters, volumes,
 date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
 topic_id, genres)
-VALUES ?;
+VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteAll:
 DELETE FROM ranobe;
