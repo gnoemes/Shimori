@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.base.entities.rate.Rate
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.RateMapper
+import com.gnoemes.shimori.data.shared.rate
 import com.gnoemes.shimori.data.shared.singleResult
 import com.gnoemes.shimori.data.shared.syncerForEntity
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -33,7 +34,11 @@ internal class RateDaoImpl(
     }
 
     override suspend fun syncAll(data: List<Rate>) {
-        TODO("Implement me")
+        syncer.sync(
+            currentValues = db.rateQueries.queryAll(::rate).executeAsList(),
+            networkValues = data,
+            removeNotMatched = true
+        )
     }
 
     override suspend fun queryById(id: Long): Rate? {

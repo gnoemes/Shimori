@@ -2,7 +2,7 @@ package com.gnoemes.shimori.data.base.entities.rate
 
 import com.gnoemes.shimori.data.base.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.base.entities.ShimoriEntity
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
 
 @kotlinx.serialization.Serializable
 data class Rate(
@@ -15,7 +15,7 @@ data class Rate(
     val comment: String? = null,
     val progress : Int = 0,
     val reCounter: Int = 0,
-    val dateCreated: DateTimePeriod? = null,
-    val dateUpdated: DateTimePeriod? = null
+    val dateCreated: Instant? = null,
+    val dateUpdated: Instant? = null
 ) : ShimoriEntity, ShikimoriEntity
 

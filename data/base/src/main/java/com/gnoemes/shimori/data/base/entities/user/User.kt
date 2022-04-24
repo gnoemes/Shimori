@@ -3,7 +3,7 @@ package com.gnoemes.shimori.data.base.entities.user
 import com.gnoemes.shimori.data.base.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.base.entities.ShimoriEntity
 import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
 
 data class User(
     override val id: Long = 0,
@@ -23,7 +23,7 @@ data class User(
     val friend: Boolean = false,
     val ignored: Boolean = false,
     val banned: Boolean = false,
-    val lastOnlineAt: DateTimePeriod? = null,
+    val lastOnlineAt: Instant? = null,
     val isMe: Boolean = false
 ) : ShimoriEntity, ShikimoriEntity {
     fun isSameShikimoriUser(other: User) =

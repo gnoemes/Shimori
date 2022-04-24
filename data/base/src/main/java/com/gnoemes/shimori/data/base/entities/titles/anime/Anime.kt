@@ -7,8 +7,8 @@ import com.gnoemes.shimori.data.base.entities.common.Genre
 import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.base.entities.common.TitleStatus
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 
 @kotlinx.serialization.Serializable
 data class Anime(
@@ -25,13 +25,13 @@ data class Anime(
     override val status: TitleStatus? = null,
     val episodes: Int = 0,
     val episodesAired: Int = 0,
-    override val dateAired: DatePeriod? = null,
-    override val dateReleased: DatePeriod? = null,
+    override val dateAired: LocalDate? = null,
+    override val dateReleased: LocalDate? = null,
     val nextEpisode: Int? = null,
-    val nextEpisodeDate: DateTimePeriod? = null,
-    val nextEpisodeEndDate: DateTimePeriod? = null,
+    val nextEpisodeDate: Instant? = null,
+    val nextEpisodeEndDate: Instant? = null,
     override val ageRating: AgeRating = AgeRating.NONE,
-    val duration: DateTimePeriod? = null,
+    val duration: Int? = null,
     override val description: String? = null,
     override val descriptionHtml: String? = null,
     override val franchise: String? = null,

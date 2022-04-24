@@ -6,4 +6,5 @@ plugins {
 dependencies {
     api(projects.base.core)
     api(projects.data)
+    implementation(projects.shikimori)
 }

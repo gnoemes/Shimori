@@ -1,7 +1,7 @@
 package com.gnoemes.shikimori.entities.rates
 
 import com.gnoemes.shikimori.entities.common.ShikimoriContentType
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
@@ -18,6 +18,6 @@ internal data class UserRateResponse(
     @SerialName("chapters") val chapters: Int? = null,
     @SerialName("text") val text: String? = null,
     @SerialName("text_html") val textHtml: String? = null,
-    @SerialName("created_at") val dateCreated: DateTimePeriod? = null,
-    @SerialName("updated_at") val dateUpdated: DateTimePeriod? = null
+    @SerialName("created_at") val dateCreated: Instant? = null,
+    @SerialName("updated_at") val dateUpdated: Instant? = null
 )

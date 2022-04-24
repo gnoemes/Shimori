@@ -7,7 +7,7 @@ import com.gnoemes.shimori.data.base.entities.common.TitleStatus
 import com.gnoemes.shimori.data.base.entities.rate.Rate
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.base.utils.Shikimori
-import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
 
 interface ShimoriEntity {
     val id: Long
@@ -31,8 +31,8 @@ interface ShimoriTitleEntity : ShimoriEntity, ShikimoriEntity {
     val url: String?
     val rating: Double?
     val status: TitleStatus?
-    val dateAired: DatePeriod?
-    val dateReleased: DatePeriod?
+    val dateAired: LocalDate?
+    val dateReleased: LocalDate?
     val ageRating: AgeRating
     val description: String?
     val descriptionHtml: String?

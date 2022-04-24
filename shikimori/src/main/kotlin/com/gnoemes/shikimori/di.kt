@@ -29,11 +29,9 @@ val shikimoriModule = DI.Module("shikimori") {
             instance(KodeinTag.shikimori),
             instance(),
             instance(),
-            instance()
+            instance(),
         )
     }
-
-
 
     bindSingleton<RateDataSource> { new(::ShikimoriRateDataSource) }
     bindSingleton<UserDataSource> { new(::ShikimoriUserDataSource) }

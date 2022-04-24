@@ -20,8 +20,8 @@ import com.gnoemes.shimori.data.base.entities.user.UserShort
 import com.gnoemes.shimori.data.base.mappers.Mapper
 import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
 import comgnoemesshimoridatadb.QueryMeShort
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 
 internal val queryMeShortToUserShortMapper = Mapper<QueryMeShort, UserShort> { from ->
     UserShort(
@@ -214,13 +214,13 @@ internal fun animeWithRate(
     status: TitleStatus?,
     episodes: Int,
     episodes_aired: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     next_episode: Int?,
-    next_episode_date: DateTimePeriod?,
-    next_episode_end_date: DateTimePeriod?,
+    next_episode_date: Instant?,
+    next_episode_end_date: Instant?,
     age_rating: AgeRating,
-    duration: DateTimePeriod?,
+    duration: Int?,
     description: String?,
     description_html: String?,
     franchise: String?,
@@ -236,8 +236,8 @@ internal fun animeWithRate(
     comment: String?,
     progress: Int,
     re_counter: Int,
-    date_created: DateTimePeriod?,
-    date_updated: DateTimePeriod?
+    date_created: Instant?,
+    date_updated: Instant?
 ) = AnimeWithRate(
     anime(
         id, shikimori_id, name, name_ru, name_eng,
@@ -269,13 +269,13 @@ internal fun anime(
     status: TitleStatus?,
     episodes: Int,
     episodes_aired: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     next_episode: Int?,
-    next_episode_date: DateTimePeriod?,
-    next_episode_end_date: DateTimePeriod?,
+    next_episode_date: Instant?,
+    next_episode_end_date: Instant?,
     age_rating: AgeRating,
-    duration: DateTimePeriod?,
+    duration: Int?,
     description: String?,
     description_html: String?,
     franchise: String?,
@@ -362,8 +362,8 @@ internal fun mangaWithRate(
     status: TitleStatus?,
     chapters: Int,
     volumes: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     age_rating: AgeRating,
     description: String?,
     description_html: String?,
@@ -380,8 +380,8 @@ internal fun mangaWithRate(
     comment: String?,
     progress: Int,
     re_counter: Int,
-    date_created: DateTimePeriod?,
-    date_updated: DateTimePeriod?
+    date_created: Instant?,
+    date_updated: Instant?
 ) = MangaWithRate(
     manga(
         id, shikimori_id, name, name_ru, name_eng,
@@ -412,8 +412,8 @@ internal fun manga(
     status: TitleStatus?,
     chapters: Int,
     volumes: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     age_rating: AgeRating,
     description: String?,
     description_html: String?,
@@ -493,8 +493,8 @@ internal fun ranobeWithRate(
     status: TitleStatus?,
     chapters: Int,
     volumes: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     age_rating: AgeRating,
     description: String?,
     description_html: String?,
@@ -511,8 +511,8 @@ internal fun ranobeWithRate(
     comment: String?,
     progress: Int,
     re_counter: Int,
-    date_created: DateTimePeriod?,
-    date_updated: DateTimePeriod?
+    date_created: Instant?,
+    date_updated: Instant?
 ) = RanobeWithRate(
     ranobe(
         id, shikimori_id, name, name_ru, name_eng,
@@ -543,8 +543,8 @@ internal fun ranobe(
     status: TitleStatus?,
     chapters: Int,
     volumes: Int,
-    date_aired: DatePeriod?,
-    date_released: DatePeriod?,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
     age_rating: AgeRating,
     description: String?,
     description_html: String?,
@@ -618,8 +618,8 @@ internal fun rate(
     comment: String?,
     progress: Int,
     re_counter: Int,
-    date_created: DateTimePeriod?,
-    date_updated: DateTimePeriod?
+    date_created: Instant?,
+    date_updated: Instant?
 ) = Rate(
     id = id,
     shikimoriId = shikimori_id ?: 0,

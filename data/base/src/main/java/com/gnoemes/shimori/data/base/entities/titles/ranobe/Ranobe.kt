@@ -7,8 +7,7 @@ import com.gnoemes.shimori.data.base.entities.common.Genre
 import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.base.entities.common.TitleStatus
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.base.entities.titles.manga.MangaType
-import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
 
 @kotlinx.serialization.Serializable
 data class Ranobe(
@@ -25,8 +24,8 @@ data class Ranobe(
     override val status: TitleStatus? = null,
     val volumes: Int = 0,
     val chapters: Int = 0,
-    override val dateAired: DatePeriod? = null,
-    override val dateReleased: DatePeriod? = null,
+    override val dateAired: LocalDate? = null,
+    override val dateReleased: LocalDate? = null,
     override val ageRating: AgeRating = AgeRating.NONE,
     override val description: String? = null,
     override val descriptionHtml: String? = null,
