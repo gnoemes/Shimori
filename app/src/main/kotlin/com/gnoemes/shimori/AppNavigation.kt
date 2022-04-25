@@ -22,6 +22,7 @@ import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.auth.Auth
 import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.lists.Lists
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -148,28 +149,27 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
             Auth(
                 openSettings = { navController.navigate(Screen.Settings.createRoute(root)) }
             )
+        } else {
+            Lists(
+                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
+                openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
+                openListsEdit = { id, type ->
+                    navController.navigate(Screen.ListsEditSheet.createRoute(root, id, type))
+                },
+                onAnimeExplore = {
+                    //TODO navigation
+                },
+                onMangaExplore = {
+                    //TODO navigation
+                },
+                onRanobeExplore = {
+                    //TODO navigation
+                },
+                onChangeList = {
+                    navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists))
+                }
+            )
         }
-//        } else {
-//            Lists(
-//                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
-//                openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
-//                openListsEdit = { id, type ->
-//                    navController.navigate(Screen.ListsEditSheet.createRoute(root, id, type))
-//                },
-//                onAnimeExplore = {
-//                    //TODO navigation
-//                },
-//                onMangaExplore = {
-//                    //TODO navigation
-//                },
-//                onRanobeExplore = {
-//                    //TODO navigation
-//                },
-//                onChangeList = {
-//                    navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists))
-//                }
-//            )
-//        }
     }
 }
 

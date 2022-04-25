@@ -17,12 +17,12 @@ internal object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
     override fun encode(value: LocalDate) = value.toString()
 }
 
-internal object RateTargetPeriodAdapter : ColumnAdapter<RateTargetType, String> {
+internal object RateTargetAdapter : ColumnAdapter<RateTargetType, String> {
     override fun decode(databaseValue: String) = RateTargetType.valueOf(databaseValue)
     override fun encode(value: RateTargetType) = value.name
 }
 
-internal object RateStatusPeriodAdapter : ColumnAdapter<RateStatus, String> {
+internal object RateStatusAdapter : ColumnAdapter<RateStatus, String> {
     override fun decode(databaseValue: String) = RateStatus.valueOf(databaseValue)
     override fun encode(value: RateStatus): String = value.name
 }
@@ -61,8 +61,8 @@ internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
 
 
 internal val RateAdapter = Rate.Adapter(
-    target_typeAdapter = RateTargetPeriodAdapter,
-    statusAdapter = RateStatusPeriodAdapter,
+    target_typeAdapter = RateTargetAdapter,
+    statusAdapter = RateStatusAdapter,
     date_createdAdapter = InstantAdapter,
     date_updatedAdapter = InstantAdapter
 )
@@ -104,4 +104,8 @@ internal val RanobeAdapter = Ranobe.Adapter(
     date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = AgeRatingAdapter,
     genresAdapter = GenresAdapter
+)
+
+internal val PinnedAdapter = Pinned.Adapter(
+    target_typeAdapter = RateTargetAdapter
 )
