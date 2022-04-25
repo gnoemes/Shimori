@@ -17,6 +17,7 @@ class RateRepository(
     fun observeByShikimoriId(shikimoriId: Long) = dao.observeByShikimoriId(shikimoriId)
     fun observeByTarget(targetId: Long, targetType: RateTargetType) =
         dao.observeByTarget(targetId, targetType)
+    fun observeRatesExist() = dao.observeHasRates()
 
     suspend fun createOrUpdate(rate: Rate) {
         dao.insertOrUpdate(rate)
