@@ -1,0 +1,21 @@
+import com.gnoemes.shimori.data.base.entities.rate.RateTargetType;
+
+CREATE TABLE pinned (
+     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+     target_id INTEGER NOT NULL,
+     target_type TEXT AS RateTargetType NOT NULL
+);
+
+insert:
+INSERT OR REPLACE INTO pinned (target_id, target_type)
+VALUES (?,?);
+
+queryByTarget:
+SELECT * FROM pinned WHERE target_id = :id AND target_type = :type;
+
+queryCount:
+SELECT COUNT(id) FROM pinned;
+
+deleteById:
+DELETE FROM pinned WHERE id = :id;
+

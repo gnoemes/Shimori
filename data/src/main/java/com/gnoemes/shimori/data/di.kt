@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.anime.AnimeWithStatusLastRequestStore
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaWithStatusLastRequestStore
+import com.gnoemes.shimori.data.repositories.pin.ListPinRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeWithStatusLastRequestStore
 import com.gnoemes.shimori.data.repositories.rate.RateRepository
@@ -19,9 +20,11 @@ val dataModule = DI.Module("data") {
 
     bindProvider { new(::ListsStateManager) }
 
+
     bindProvider { new(::AnimeRepository) }
     bindProvider { new(::MangaRepository) }
     bindProvider { new(::RanobeRepository) }
+    bindProvider { new(::ListPinRepository) }
     bindProvider { new(::AnimeWithStatusLastRequestStore) }
     bindProvider { new(::MangaWithStatusLastRequestStore) }
     bindProvider { new(::RanobeWithStatusLastRequestStore) }
