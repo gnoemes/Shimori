@@ -1,15 +1,20 @@
 package com.gnoemes.shimori.data.repositories.rate
 
 import com.gnoemes.shimori.data.base.database.daos.RateDao
+import com.gnoemes.shimori.data.base.database.daos.RateSortDao
+import com.gnoemes.shimori.data.base.entities.rate.ListType
 import com.gnoemes.shimori.data.base.entities.rate.Rate
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.base.entities.user.UserShort
 import com.gnoemes.shimori.data.base.sources.RateDataSource
 import com.gnoemes.shimori.data.base.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
+import kotlinx.coroutines.flow.Flow
 
 class RateRepository(
     private val dao: RateDao,
+    private val rateSortDao: RateSortDao,
     @Shikimori private val source: RateDataSource,
     private val userRepository: ShikimoriUserRepository
 ) {
@@ -17,7 +22,9 @@ class RateRepository(
     fun observeByShikimoriId(shikimoriId: Long) = dao.observeByShikimoriId(shikimoriId)
     fun observeByTarget(targetId: Long, targetType: RateTargetType) =
         dao.observeByTarget(targetId, targetType)
+
     fun observeRatesExist() = dao.observeHasRates()
+    fun observeRateSort(type: ListType): Flow<RateSort?> = rateSortDao.observe(type)
 
     suspend fun createOrUpdate(rate: Rate) {
         dao.insertOrUpdate(rate)
@@ -30,6 +37,10 @@ class RateRepository(
 
             dao.insertOrUpdate(result)
         }
+    }
+
+    suspend fun createOrUpdate(rateSort: RateSort) {
+        rateSortDao.insertOrUpdate(rateSort)
     }
 
     suspend fun delete(id: Long) {
@@ -53,5 +64,6 @@ class RateRepository(
         val remote = source.getRates(user)
         dao.syncAll(remote)
     }
+
 
 }
