@@ -44,18 +44,20 @@ class UpdateTitleRates(
         val optionalUpdate: Boolean,
         val status: RateStatus?
     ) {
-        fun fullUpdate(type: RateTargetType) = Params(
-            type = type,
-            forceUpdate = true,
-            optionalUpdate = false,
-            status = null
-        )
+        companion object {
+            fun fullUpdate(type: RateTargetType, status: RateStatus? = null) = Params(
+                type = type,
+                forceUpdate = true,
+                optionalUpdate = false,
+                status = null
+            )
 
-        fun optionalUpdate(type: RateTargetType) = Params(
-            type = type,
-            forceUpdate = false,
-            optionalUpdate = true,
-            status = null
-        )
+            fun optionalUpdate(type: RateTargetType, status: RateStatus? = null) = Params(
+                type = type,
+                forceUpdate = false,
+                optionalUpdate = true,
+                status = null
+            )
+        }
     }
 }
