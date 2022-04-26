@@ -9,9 +9,9 @@ android {
 
 dependencies {
     commonMainApi(projects.base.shared)
-    commonMainImplementation(projects.base.shared)
     commonMainImplementation(projects.data.base)
     commonMainImplementation(projects.commonUiResources)
+    commonMainImplementation(projects.commonUiImageloading)
 
     androidMainImplementation(libs.androidx.fragment)
     androidMainImplementation(libs.androidx.core)

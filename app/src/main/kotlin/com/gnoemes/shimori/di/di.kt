@@ -16,8 +16,7 @@ import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.common.ui.utils.ShimoriRateUtil
-import com.gnoemes.shimori.common.ui.utils.bindViewModel
+import com.gnoemes.shimori.common.ui.utils.*
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
@@ -83,6 +82,7 @@ val appModule = DI.Module("app") {
     }
 
     bindProvider { new(::ShimoriRateUtil) }
+    bindProvider { new(::ShimoriDateTimeFormatter) }
 }
 
 
@@ -90,6 +90,7 @@ private val binds = DI.Module(name = "appBinds") {
     bindSingleton<ShimoriSettings> { ShimoriSettingsImpl(instance()) }
     bindSingleton<ShimoriStorage> { ShimoriStorageImpl(instance()) }
     bindSingleton<ShikimoriAuthManager> { new(::ActivityShikimoriAuthManager) }
+    bindSingleton<ShimoriTextProvider> { new(::ShimoriContextTextProvider) }
 }
 
 private val initializers = DI.Module(name = "initializers") {

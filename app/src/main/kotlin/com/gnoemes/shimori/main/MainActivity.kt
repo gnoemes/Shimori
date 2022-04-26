@@ -6,17 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
-import com.gnoemes.shimori.common.ui.BaseActivity
-import com.gnoemes.shimori.common.ui.LocalShimoriDimensions
-import com.gnoemes.shimori.common.ui.LocalShimoriSettings
+import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
 import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
-import com.gnoemes.shimori.common.ui.utils.shouldUseDarkColors
+import com.gnoemes.shimori.common.ui.utils.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -28,6 +27,9 @@ class MainActivity : BaseActivity(), DIAware {
     override val di: DI by closestDI()
 
     private val settings: ShimoriSettings by instance()
+    private val textProvider: ShimoriTextProvider by instance()
+    private val formatter: ShimoriDateTimeFormatter by instance()
+    private val rateUtil: ShimoriRateUtil by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +43,25 @@ class MainActivity : BaseActivity(), DIAware {
                     if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
                     else sw360Dimensions
 
+                val viewModel: MainViewModel = shimoriViewModel()
+
+                val settingsState by rememberStateWithLifecycle(viewModel.settingsState)
+
+                val textCreator = settingsState.let { state ->
+                    ShimoriTextCreator(
+                        textProvider,
+                        formatter,
+                        state.titlesLocale,
+                        state.appLocale
+                    )
+                }
+
                 CompositionLocalProvider(
-//                LocalShimoriRateUtil provides rateUtil,
-//                LocalShimoriTextCreator provides textCreator,
+                    LocalShimoriRateUtil provides rateUtil,
+                    LocalShimoriTextCreator provides textCreator,
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,
-//                LocalShikimoriAuth provides shikimoriAuth
                 ) {
-
                     val useDarkColors = settings.shouldUseDarkColors()
 
                     ShimoriTheme(useDarkColors = useDarkColors) {
