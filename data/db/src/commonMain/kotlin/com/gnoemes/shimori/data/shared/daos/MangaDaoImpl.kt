@@ -12,8 +12,9 @@ import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.manga
 import com.gnoemes.shimori.data.shared.mangaWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 internal class MangaDaoImpl(
     private val db: ShimoriDB,
@@ -71,7 +72,7 @@ internal class MangaDaoImpl(
     override fun observeById(id: Long): Flow<MangaWithRate?> {
         return db.mangaQueries.queryByIdWithRate(id, ::mangaWithRate)
             .asFlow()
-            .map { it.executeAsOneOrNull() }
+            .mapToOneOrNull()
     }
 
     override suspend fun queryByStatus(status: RateStatus): List<MangaWithRate> {
@@ -123,7 +124,7 @@ internal class MangaDaoImpl(
             )
         })
             .asFlow()
-            .map { it.executeAsList() }
+            .mapToList()
     }
 
     override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {

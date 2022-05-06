@@ -6,9 +6,10 @@ import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.rate
-import com.gnoemes.shimori.data.shared.singleResult
 import com.gnoemes.shimori.data.shared.syncerForEntity
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlin.system.measureTimeMillis
@@ -68,28 +69,28 @@ internal class RateDaoImpl(
         return db.rateQueries
             .queryById(id, ::rate)
             .asFlow()
-            .singleResult()
+            .mapToOneOrNull()
     }
 
     override fun observeByShikimoriId(id: Long): Flow<Rate?> {
         return db.rateQueries
             .queryByShikimoriId(id, ::rate)
             .asFlow()
-            .singleResult()
+            .mapToOneOrNull()
     }
 
     override fun observeByTarget(targetId: Long, targetType: RateTargetType): Flow<Rate?> {
         return db.rateQueries
             .queryByTarget(targetId, targetType, ::rate)
             .asFlow()
-            .singleResult()
+            .mapToOneOrNull()
     }
 
     override fun observeHasRates(): Flow<Boolean> {
         return db.rateQueries
             .queryCount()
             .asFlow()
-            .map { it.executeAsOne() }
+            .mapToOne()
             .map { it > 0 }
     }
 }

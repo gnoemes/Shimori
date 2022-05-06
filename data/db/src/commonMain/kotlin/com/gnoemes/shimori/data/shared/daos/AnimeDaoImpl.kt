@@ -12,8 +12,9 @@ import com.gnoemes.shimori.data.shared.anime
 import com.gnoemes.shimori.data.shared.animeWithRate
 import com.gnoemes.shimori.data.shared.long
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 internal class AnimeDaoImpl(
     private val db: ShimoriDB,
@@ -80,7 +81,7 @@ internal class AnimeDaoImpl(
     override fun observeById(id: Long): Flow<AnimeWithRate?> {
         return db.animeQueries.queryByIdWithRate(id, ::animeWithRate)
             .asFlow()
-            .map { it.executeAsOneOrNull() }
+            .mapToOneOrNull()
     }
 
     override fun observeCalendar(): Flow<List<AnimeWithRate>> {
@@ -131,12 +132,11 @@ internal class AnimeDaoImpl(
             )
         })
             .asFlow()
-            .map { it.executeAsList() }
+            .mapToList()
     }
 
     override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {
         TODO("Not yet implemented")
     }
-
 
 }
