@@ -2,10 +2,10 @@ package com.gnoemes.shimori.data.repositories.ranobe
 
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.base.database.daos.RanobeDao
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.sources.RanobeDataSource
 import com.gnoemes.shimori.data.base.utils.Shikimori
-import com.gnoemes.shimori.data.repositories.manga.MangaWithStatusLastRequestStore
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import kotlinx.datetime.Instant
 
@@ -16,6 +16,7 @@ class RanobeRepository(
     private val ratesLastRequest: RanobeWithStatusLastRequestStore
 ) {
     fun observeById(id: Long) = dao.observeById(id)
+    fun observeByStatus(status: RateStatus, sort: RateSort) = dao.observeByStatus(status, sort)
 
     suspend fun updateMyTitlesByStatus(status: RateStatus?) {
         val user = userRepository.queryMeShort()

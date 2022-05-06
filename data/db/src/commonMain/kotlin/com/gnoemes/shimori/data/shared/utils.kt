@@ -27,3 +27,5 @@ internal inline fun <T : Any, R> Flow<Query<T>>.listResult(
 ): Flow<List<R>> =
     this.map { it.executeAsList().map { item -> mapper.invoke(item) } }
 
+internal val Boolean.long: Long
+    get() = if (this) 1L else 0L

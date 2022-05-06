@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.base.database.daos
 
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
@@ -14,7 +15,7 @@ abstract class AnimeDao : EntityDao<Anime>() {
 
     abstract fun observeById(id: Long) : Flow<AnimeWithRate?>
     abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
-    abstract fun observeByStatus(status: RateStatus): Flow<List<AnimeWithRate>>
+    abstract fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<AnimeWithRate>>
 
     abstract fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption)
 }

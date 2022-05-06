@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.repositories.anime
 
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.base.database.daos.AnimeDao
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.sources.AnimeDataSource
 import com.gnoemes.shimori.data.base.utils.Shikimori
@@ -15,6 +16,7 @@ class AnimeRepository(
     private val ratesLastRequest: AnimeWithStatusLastRequestStore
 ) {
     fun observeById(id: Long) = dao.observeById(id)
+    fun observeByStatus(status: RateStatus, sort: RateSort) = dao.observeByStatus(status, sort)
 
     suspend fun updateMyTitlesByStatus(status: RateStatus?) {
         val user = userRepository.queryMeShort()

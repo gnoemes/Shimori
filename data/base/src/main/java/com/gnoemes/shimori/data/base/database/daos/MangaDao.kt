@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.base.database.daos
 
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
@@ -13,7 +14,7 @@ abstract class MangaDao : EntityDao<Manga>() {
     abstract suspend fun queryByStatus(status: RateStatus): List<MangaWithRate>
 
     abstract fun observeById(id: Long): Flow<MangaWithRate?>
-    abstract fun observeByStatus(status: RateStatus): Flow<List<MangaWithRate>>
+    abstract fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<MangaWithRate>>
 
     abstract fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption)
 }
