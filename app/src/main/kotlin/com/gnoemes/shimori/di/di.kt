@@ -21,6 +21,7 @@ import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.domain.domainModule
+import com.gnoemes.shimori.lists.listsModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
@@ -141,5 +142,5 @@ private val features = DI.Module(name = "features") {
     bindViewModel { new(::MainViewModel) }
 
     importOnce(authModule)
-
+    importOnce(listsModule)
 }

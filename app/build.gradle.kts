@@ -89,6 +89,7 @@ dependencies {
     implementation(projects.shikimoriAuth)
 
     implementation(projects.ui.auth)
+    implementation(projects.ui.lists)
 
     implementation(libs.kotlin.coroutines.android)
 
