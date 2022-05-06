@@ -13,6 +13,7 @@ internal actual class DriverFactory(
         return AndroidSqliteDriver(
             schema = ShimoriDB.Schema,
             context = context,
+            name = "shimori.db",
             callback = object : AndroidSqliteDriver.Callback(ShimoriDB.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)
