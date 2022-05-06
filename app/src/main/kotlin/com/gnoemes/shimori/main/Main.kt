@@ -31,7 +31,7 @@ import com.gnoemes.shimori.common.ui.components.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.base.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.main.MainViewState
 import com.google.accompanist.navigation.material.BottomSheetNavigator

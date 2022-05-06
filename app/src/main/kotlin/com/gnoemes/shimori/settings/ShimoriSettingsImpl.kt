@@ -6,12 +6,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.gnoemes.shimori.base.core.settings.*
-import com.gnoemes.shimori.base.core.settings.AppAccentColor
-import com.gnoemes.shimori.base.core.settings.AppLocale
-import com.gnoemes.shimori.base.core.settings.AppTheme
-import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map

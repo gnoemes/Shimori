@@ -21,8 +21,8 @@ import com.gnoemes.shikimori.services.*
 import com.gnoemes.shimori.base.core.entities.Platform
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.entities.auth.ShikimoriAuthState
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.auth.ShikimoriAuthState
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.auth.*
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 
-@com.gnoemes.shimori.data.base.utils.Shikimori
+@com.gnoemes.shimori.data.core.utils.Shikimori
 class Shikimori(
     private val nonAuthClient: HttpClient,
     private val platform: Platform,

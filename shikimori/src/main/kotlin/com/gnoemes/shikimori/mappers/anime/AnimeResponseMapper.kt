@@ -4,8 +4,8 @@ import com.gnoemes.shikimori.appendHostIfNeed
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
-import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class AnimeResponseMapper constructor(
     private val imageMapper: ImageResponseMapper,

@@ -3,10 +3,10 @@ package com.gnoemes.shikimori.sources
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.mappers.rate.RateMapper
-import com.gnoemes.shimori.data.base.entities.rate.Rate
-import com.gnoemes.shimori.data.base.entities.user.UserShort
-import com.gnoemes.shimori.data.base.mappers.forLists
-import com.gnoemes.shimori.data.base.sources.RateDataSource
+import com.gnoemes.shimori.data.core.entities.rate.Rate
+import com.gnoemes.shimori.data.core.entities.user.UserShort
+import com.gnoemes.shimori.data.core.mappers.forLists
+import com.gnoemes.shimori.data.core.sources.RateDataSource
 
 internal class ShikimoriRateDataSource(
     private val shikimori: Shikimori,

@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.ui.R
 
 @OptIn(ExperimentalFoundationApi::class)

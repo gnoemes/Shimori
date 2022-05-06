@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.data.repositories.user
 
-import com.gnoemes.shimori.data.base.database.daos.UserDao
-import com.gnoemes.shimori.data.base.sources.UserDataSource
-import com.gnoemes.shimori.data.base.utils.Shikimori
+import com.gnoemes.shimori.data.core.database.daos.UserDao
+import com.gnoemes.shimori.data.core.sources.UserDataSource
+import com.gnoemes.shimori.data.core.utils.Shikimori
 
 class ShikimoriUserRepository(
     private val dao: UserDao,

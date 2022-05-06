@@ -11,7 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.gnoemes.shimori.data.base.entities.user.UserShort
+import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.ui.R
 
 

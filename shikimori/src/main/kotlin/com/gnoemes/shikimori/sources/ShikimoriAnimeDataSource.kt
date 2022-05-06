@@ -5,11 +5,11 @@ import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
 import com.gnoemes.shikimori.mappers.anime.CalendarMapper
 import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.base.entities.user.UserShort
-import com.gnoemes.shimori.data.base.mappers.forLists
-import com.gnoemes.shimori.data.base.sources.AnimeDataSource
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.user.UserShort
+import com.gnoemes.shimori.data.core.mappers.forLists
+import com.gnoemes.shimori.data.core.sources.AnimeDataSource
 
 internal class ShikimoriAnimeDataSource(
     private val shikimori: Shikimori,

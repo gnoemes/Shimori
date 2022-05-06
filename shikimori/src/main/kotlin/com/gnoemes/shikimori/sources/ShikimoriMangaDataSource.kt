@@ -4,11 +4,11 @@ import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.mappers.manga.MangaResponseMapper
 import com.gnoemes.shikimori.mappers.manga.RateResponseToMangaMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
-import com.gnoemes.shimori.data.base.entities.user.UserShort
-import com.gnoemes.shimori.data.base.mappers.forLists
-import com.gnoemes.shimori.data.base.sources.MangaDataSource
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
+import com.gnoemes.shimori.data.core.entities.user.UserShort
+import com.gnoemes.shimori.data.core.mappers.forLists
+import com.gnoemes.shimori.data.core.sources.MangaDataSource
 
 internal class ShikimoriMangaDataSource(
     private val shikimori: Shikimori,

@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.EntityDao
-import com.gnoemes.shimori.data.base.entities.ShimoriEntity
+import com.gnoemes.shimori.data.core.database.daos.EntityDao
+import com.gnoemes.shimori.data.core.entities.ShimoriEntity
 
 /**
  * @param NetworkType Network type

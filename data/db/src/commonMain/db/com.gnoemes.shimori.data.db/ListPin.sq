@@ -1,4 +1,4 @@
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType;
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType;
 
 CREATE TABLE pinned (
      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

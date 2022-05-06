@@ -1,9 +1,9 @@
 package com.gnoemes.shikimori.mappers.user
 
 import com.gnoemes.shikimori.entities.user.UserBriefResponse
-import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.base.entities.user.User
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.user.User
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class UserBriefMapper : Mapper<UserBriefResponse, User> {
 

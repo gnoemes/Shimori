@@ -4,7 +4,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.intercept.Interceptor
 import coil.request.ImageResult
 import coil.size.Size
-import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 
 
 @ExperimentalCoilApi

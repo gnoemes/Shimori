@@ -1,14 +1,14 @@
 package com.gnoemes.shimori.data.repositories.rate
 
-import com.gnoemes.shimori.data.base.database.daos.RateDao
-import com.gnoemes.shimori.data.base.database.daos.RateSortDao
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.Rate
-import com.gnoemes.shimori.data.base.entities.rate.RateSort
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.base.entities.user.UserShort
-import com.gnoemes.shimori.data.base.sources.RateDataSource
-import com.gnoemes.shimori.data.base.utils.Shikimori
+import com.gnoemes.shimori.data.core.database.daos.RateDao
+import com.gnoemes.shimori.data.core.database.daos.RateSortDao
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.Rate
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.user.UserShort
+import com.gnoemes.shimori.data.core.sources.RateDataSource
+import com.gnoemes.shimori.data.core.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import kotlinx.coroutines.flow.Flow
 

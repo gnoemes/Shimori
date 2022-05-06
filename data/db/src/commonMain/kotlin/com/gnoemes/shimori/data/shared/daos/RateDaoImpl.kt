@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.RateDao
-import com.gnoemes.shimori.data.base.entities.rate.Rate
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.database.daos.RateDao
+import com.gnoemes.shimori.data.core.entities.rate.Rate
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.rate
 import com.gnoemes.shimori.data.shared.singleResult

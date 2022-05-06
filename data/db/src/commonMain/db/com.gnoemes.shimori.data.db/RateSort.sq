@@ -1,4 +1,4 @@
-import com.gnoemes.shimori.data.base.entities.rate.RateSortOption;
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption;
 
 CREATE TABLE rate_sort (
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.ShikimoriAnimeType
-import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeType
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeType
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class AnimeTypeMapper : Mapper<ShikimoriAnimeType?, AnimeType?> {
 

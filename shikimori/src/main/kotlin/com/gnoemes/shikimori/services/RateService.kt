@@ -3,7 +3,7 @@ package com.gnoemes.shikimori.services
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 
 internal interface RateService {
 

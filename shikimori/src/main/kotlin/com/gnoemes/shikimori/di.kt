@@ -21,7 +21,7 @@ import com.gnoemes.shikimori.mappers.user.UserResponseMapper
 import com.gnoemes.shikimori.sources.*
 import com.gnoemes.shimori.base.core.di.KodeinTag
 import com.gnoemes.shimori.base.core.extensions.new
-import com.gnoemes.shimori.data.base.sources.*
+import com.gnoemes.shimori.data.core.sources.*
 import org.kodein.di.*
 
 val shikimoriModule = DI.Module("shikimori") {

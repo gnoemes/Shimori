@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.LastRequestDao
-import com.gnoemes.shimori.data.base.entities.app.LastRequest
-import com.gnoemes.shimori.data.base.entities.app.Request
+import com.gnoemes.shimori.data.core.database.daos.LastRequestDao
+import com.gnoemes.shimori.data.core.entities.app.LastRequest
+import com.gnoemes.shimori.data.core.entities.app.Request
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.LastRequestMapper
 

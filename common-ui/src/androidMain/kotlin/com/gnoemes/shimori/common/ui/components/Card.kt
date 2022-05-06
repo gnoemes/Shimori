@@ -15,12 +15,12 @@ import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common_ui.compose.components.Cover
-import com.gnoemes.shimori.data.base.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.base.entities.TitleWithRate
-import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.base.entities.titles.manga.Manga
-import com.gnoemes.shimori.data.base.entities.titles.ranobe.Ranobe
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithRate
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.ui.R
 
 @Composable

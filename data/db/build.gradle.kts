@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     commonMainImplementation(projects.base.shared)
-    commonMainImplementation(projects.data.base)
+    commonMainImplementation(projects.data.core)
     commonMainImplementation(libs.sqldelight.coroutines)
 
     androidMainImplementation(libs.sqldelight.driver.android)

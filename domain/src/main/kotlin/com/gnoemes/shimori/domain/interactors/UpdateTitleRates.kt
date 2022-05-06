@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository

@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.common.ShikimoriContentType
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 
 internal class RateTargetTypeMapper : TwoWayMapper<ShikimoriContentType?, RateTargetType?> {
 
