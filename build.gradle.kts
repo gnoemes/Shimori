@@ -28,10 +28,11 @@ subprojects {
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
             freeCompilerArgs += arrayOf(
-                // Enable experimental coroutines APIs, including Flow
+                // Enable experimental coroutines APIs, including Flow, context receivers
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlin.Experimental",
+                "-Xcontext-receivers",
             )
 
             // Set JVM target to 1.11
