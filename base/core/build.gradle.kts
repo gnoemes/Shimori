@@ -1,4 +1,5 @@
 plugins {
+    id("base-module")
     id("kotlin")
 }
 
