@@ -7,10 +7,11 @@ import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.UserMapper
 import com.gnoemes.shimori.data.shared.queryMeShortToUserShortMapper
-import com.gnoemes.shimori.data.shared.singleResult
 import com.gnoemes.shimori.data.shared.userToUserShortMapper
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class UserDaoImpl(
     private val db: ShimoriDB,
@@ -56,7 +57,8 @@ internal class UserDaoImpl(
     override fun observeMeShort(): Flow<UserShort?> {
         return db.userQueries.queryMe()
             .asFlow()
-            .singleResult(userToUserShortMapper::map)
+            .mapToOneOrNull()
+            .map(userToUserShortMapper::map)
     }
 
     override suspend fun queryMe(): User? {

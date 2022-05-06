@@ -6,9 +6,10 @@ import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.RateSortMapper
-import com.gnoemes.shimori.data.shared.singleResult
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class RateSortDaoImpl(
     private val db: ShimoriDB,
@@ -38,6 +39,7 @@ internal class RateSortDaoImpl(
     override fun observe(type: ListType): Flow<RateSort?> {
         return db.rateSortQueries.queryByType(type.type)
             .asFlow()
-            .singleResult { RateSortMapper.map(it) }
+            .mapToOneOrNull()
+            .map(RateSortMapper::map)
     }
 }
