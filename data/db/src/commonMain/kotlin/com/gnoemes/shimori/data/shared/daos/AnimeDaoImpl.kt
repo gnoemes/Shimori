@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.base.database.daos.AnimeDao
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
@@ -9,6 +10,7 @@ import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.anime
 import com.gnoemes.shimori.data.shared.animeWithRate
+import com.gnoemes.shimori.data.shared.long
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -85,8 +87,49 @@ internal class AnimeDaoImpl(
         TODO("Not yet implemented")
     }
 
-    override fun observeByStatus(status: RateStatus): Flow<List<AnimeWithRate>> {
-        return db.animeQueries.queryByStatus(status, ::animeWithRate)
+    override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<AnimeWithRate>> {
+        return (when (sort.sortOption) {
+            RateSortOption.NAME -> db.animeQueries.queryByStatusSortName(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.PROGRESS -> db.animeQueries.queryByStatusSortProgress(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.DATE_CREATED -> db.animeQueries.queryByStatusSortDateCreated(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.DATE_UPDATED -> db.animeQueries.queryByStatusSortDateUpdated(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.DATE_AIRED -> db.animeQueries.queryByStatusSortDateAired(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.MY_SCORE -> db.animeQueries.queryByStatusSortScore(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.SIZE -> db.animeQueries.queryByStatusSortSize(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+            RateSortOption.RATING -> db.animeQueries.queryByStatusSortRating(
+                status,
+                sort.isDescending.long,
+                ::animeWithRate
+            )
+        })
             .asFlow()
             .map { it.executeAsList() }
     }

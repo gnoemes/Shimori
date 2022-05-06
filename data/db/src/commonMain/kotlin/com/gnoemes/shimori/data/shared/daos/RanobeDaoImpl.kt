@@ -2,11 +2,13 @@ package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.base.database.daos.RanobeDao
+import com.gnoemes.shimori.data.base.entities.rate.RateSort
 import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.base.entities.rate.RateStatus
 import com.gnoemes.shimori.data.base.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.base.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.ranobe
 import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -77,8 +79,49 @@ internal class RanobeDaoImpl(
             .map { it.executeAsOneOrNull() }
     }
 
-    override fun observeByStatus(status: RateStatus): Flow<List<RanobeWithRate>> {
-        return db.ranobeQueries.queryByStatus(status, ::ranobeWithRate)
+    override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<RanobeWithRate>> {
+        return (when (sort.sortOption) {
+            RateSortOption.NAME -> db.ranobeQueries.queryByStatusSortName(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.PROGRESS -> db.ranobeQueries.queryByStatusSortProgress(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.DATE_CREATED -> db.ranobeQueries.queryByStatusSortDateCreated(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.DATE_UPDATED -> db.ranobeQueries.queryByStatusSortDateUpdated(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.DATE_AIRED -> db.ranobeQueries.queryByStatusSortDateAired(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.MY_SCORE -> db.ranobeQueries.queryByStatusSortScore(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.SIZE -> db.ranobeQueries.queryByStatusSortSize(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+            RateSortOption.RATING -> db.ranobeQueries.queryByStatusSortRating(
+                status,
+                sort.isDescending.long,
+                ::ranobeWithRate
+            )
+        })
             .asFlow()
             .map { it.executeAsList() }
     }
