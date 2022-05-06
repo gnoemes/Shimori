@@ -12,8 +12,9 @@ import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.ranobe
 import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 internal class RanobeDaoImpl(
     private val db: ShimoriDB,
@@ -76,7 +77,7 @@ internal class RanobeDaoImpl(
     override fun observeById(id: Long): Flow<RanobeWithRate?> {
         return db.mangaQueries.queryByIdWithRate(id, ::ranobeWithRate)
             .asFlow()
-            .map { it.executeAsOneOrNull() }
+            .mapToOneOrNull()
     }
 
     override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<RanobeWithRate>> {
@@ -123,7 +124,7 @@ internal class RanobeDaoImpl(
             )
         })
             .asFlow()
-            .map { it.executeAsList() }
+            .mapToList()
     }
 
     override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {
