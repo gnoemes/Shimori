@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 
 internal class RateStatusMapper : TwoWayMapper<ShikimoriRateStatus?, RateStatus?> {
 

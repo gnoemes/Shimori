@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.RateSort
-import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.repositories.rate.RateRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext

@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.manga
 
 import com.gnoemes.shikimori.entities.manga.ShikimoriMangaType
-import com.gnoemes.shimori.data.base.entities.titles.manga.MangaType
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaType
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 
 internal class MangaTypeMapper : Mapper<ShikimoriMangaType?, MangaType?> {

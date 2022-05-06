@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.ShimoriDatabase
-import com.gnoemes.shimori.data.base.database.daos.*
+import com.gnoemes.shimori.data.core.database.ShimoriDatabase
+import com.gnoemes.shimori.data.core.database.daos.*
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.daos.*
 import com.squareup.sqldelight.db.SqlDriver

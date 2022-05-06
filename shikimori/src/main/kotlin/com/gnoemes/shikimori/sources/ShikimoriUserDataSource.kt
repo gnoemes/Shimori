@@ -3,8 +3,8 @@ package com.gnoemes.shikimori.sources
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.mappers.user.UserBriefMapper
 import com.gnoemes.shikimori.mappers.user.UserResponseMapper
-import com.gnoemes.shimori.data.base.entities.user.User
-import com.gnoemes.shimori.data.base.sources.UserDataSource
+import com.gnoemes.shimori.data.core.entities.user.User
+import com.gnoemes.shimori.data.core.sources.UserDataSource
 
 internal class ShikimoriUserDataSource(
     private val shikimori: Shikimori,

@@ -1,11 +1,11 @@
 package com.gnoemes.shimori.data.repositories.manga
 
 import com.gnoemes.shimori.base.core.extensions.instantInPast
-import com.gnoemes.shimori.data.base.database.daos.MangaDao
-import com.gnoemes.shimori.data.base.entities.rate.RateSort
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.sources.MangaDataSource
-import com.gnoemes.shimori.data.base.utils.Shikimori
+import com.gnoemes.shimori.data.core.database.daos.MangaDao
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.sources.MangaDataSource
+import com.gnoemes.shimori.data.core.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import kotlinx.datetime.Instant
 

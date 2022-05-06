@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.ListPinDao
-import com.gnoemes.shimori.data.base.entities.app.ListPin
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.database.daos.ListPinDao
+import com.gnoemes.shimori.data.core.entities.app.ListPin
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow

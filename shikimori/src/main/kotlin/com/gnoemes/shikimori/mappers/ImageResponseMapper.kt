@@ -2,8 +2,8 @@ package com.gnoemes.shikimori.mappers
 
 import com.gnoemes.shikimori.appendHostIfNeed
 import com.gnoemes.shikimori.entities.common.ImageResponse
-import com.gnoemes.shimori.data.base.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 
 internal class ImageResponseMapper : Mapper<ImageResponse, ShimoriImage> {

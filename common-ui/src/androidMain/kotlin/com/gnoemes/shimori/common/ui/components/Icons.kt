@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.ui.R
 
 @Composable

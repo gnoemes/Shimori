@@ -1,9 +1,9 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.data.base.entities.rate.Rate
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.base.mappers.TwoWayMapper
+import com.gnoemes.shimori.data.core.entities.rate.Rate
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 
 internal class RateMapper constructor(
     private val typeMapper: RateTargetTypeMapper,

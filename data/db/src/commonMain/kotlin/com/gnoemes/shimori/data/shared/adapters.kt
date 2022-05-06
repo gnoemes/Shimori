@@ -1,12 +1,12 @@
 package com.gnoemes.shimori.data.shared
 
-import com.gnoemes.shimori.data.base.entities.app.Request
-import com.gnoemes.shimori.data.base.entities.common.AgeRating
-import com.gnoemes.shimori.data.base.entities.common.Genre
-import com.gnoemes.shimori.data.base.entities.common.TitleStatus
-import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.app.Request
+import com.gnoemes.shimori.data.core.entities.common.AgeRating
+import com.gnoemes.shimori.data.core.entities.common.Genre
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.squareup.sqldelight.ColumnAdapter
 import comgnoemesshimoridatadb.*
 import kotlinx.datetime.Instant

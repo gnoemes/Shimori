@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.UserDao
-import com.gnoemes.shimori.data.base.entities.user.User
-import com.gnoemes.shimori.data.base.entities.user.UserShort
+import com.gnoemes.shimori.data.core.database.daos.UserDao
+import com.gnoemes.shimori.data.core.entities.user.User
+import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.UserMapper
 import com.gnoemes.shimori.data.shared.queryMeShortToUserShortMapper

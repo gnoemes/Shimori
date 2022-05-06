@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.RateSortDao
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.database.daos.RateSortDao
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.RateSortMapper
 import com.gnoemes.shimori.data.shared.singleResult

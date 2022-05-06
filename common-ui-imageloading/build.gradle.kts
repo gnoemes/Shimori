@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     commonMainImplementation(projects.base.core)
-    commonMainImplementation(projects.data.base)
+    commonMainImplementation(projects.data.core)
 
     androidMainImplementation(projects.base.core)
     androidMainApi(libs.coil.coil)

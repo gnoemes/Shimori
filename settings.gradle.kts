@@ -30,7 +30,7 @@ include(":app")
 include(":base:core", ":base:shared")
 include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
 
-include(":data", ":data:base", ":data:db")
+include(":data", ":data:core", ":data:db")
 
 include(":domain")
 

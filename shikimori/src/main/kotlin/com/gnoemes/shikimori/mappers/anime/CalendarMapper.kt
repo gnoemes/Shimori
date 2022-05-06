@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
-import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.mappers.Mapper
 import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds

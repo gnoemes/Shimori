@@ -1,12 +1,12 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.base.database.daos.AnimeDao
-import com.gnoemes.shimori.data.base.entities.rate.RateSort
-import com.gnoemes.shimori.data.base.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
-import com.gnoemes.shimori.data.base.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.base.entities.titles.anime.AnimeWithRate
+import com.gnoemes.shimori.data.core.database.daos.AnimeDao
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.anime
 import com.gnoemes.shimori.data.shared.animeWithRate

@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.repositories.pin
 
-import com.gnoemes.shimori.data.base.database.daos.ListPinDao
-import com.gnoemes.shimori.data.base.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.database.daos.ListPinDao
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 
 
 class ListPinRepository constructor(

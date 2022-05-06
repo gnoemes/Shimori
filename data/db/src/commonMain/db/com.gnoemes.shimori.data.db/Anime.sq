@@ -1,6 +1,6 @@
-import com.gnoemes.shimori.data.base.entities.common.AgeRating;
-import com.gnoemes.shimori.data.base.entities.common.Genre;
-import com.gnoemes.shimori.data.base.entities.common.TitleStatus;
+import com.gnoemes.shimori.data.core.entities.common.AgeRating;
+import com.gnoemes.shimori.data.core.entities.common.Genre;
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus;
 import kotlin.collections.List;
 import kotlinx.datetime.Instant;
 import kotlinx.datetime.LocalDate;

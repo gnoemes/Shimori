@@ -2,8 +2,8 @@ package com.gnoemes.shimori.common.ui.utils
 
 import android.content.Context
 import androidx.annotation.DrawableRes
-import com.gnoemes.shimori.data.base.entities.rate.ListType
-import com.gnoemes.shimori.data.base.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.ui.R
 
 class ShimoriRateUtil constructor(

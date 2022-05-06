@@ -5,6 +5,6 @@ plugins {
 
 dependencies {
     implementation(projects.base.core)
-    api(projects.data.base)
+    api(projects.data.core)
     implementation(projects.data.db)
 }

@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.data.repositories.lastrequest
 
-import com.gnoemes.shimori.data.base.database.daos.LastRequestDao
-import com.gnoemes.shimori.data.base.entities.app.LastRequest
-import com.gnoemes.shimori.data.base.entities.app.Request
+import com.gnoemes.shimori.data.core.database.daos.LastRequestDao
+import com.gnoemes.shimori.data.core.entities.app.LastRequest
+import com.gnoemes.shimori.data.core.entities.app.Request
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 

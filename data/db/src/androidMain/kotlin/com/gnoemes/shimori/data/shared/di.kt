@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.base.core.extensions.new
-import com.gnoemes.shimori.data.base.database.ShimoriDatabase
+import com.gnoemes.shimori.data.core.database.ShimoriDatabase
 import org.kodein.di.*
 
 actual val databaseModule: DI.Module = DI.Module("database") {

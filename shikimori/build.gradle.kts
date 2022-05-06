@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     implementation(projects.base.core)
-    implementation(projects.data.base)
+    implementation(projects.data.core)
 
     implementation(libs.ktor.auth)
     implementation(libs.ktor.contentNegotiation)

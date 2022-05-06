@@ -1,8 +1,8 @@
 package com.gnoemes.shikimori.mappers.ranobe
 
 import com.gnoemes.shikimori.entities.manga.ShikimoriMangaType
-import com.gnoemes.shimori.data.base.entities.titles.ranobe.RanobeType
-import com.gnoemes.shimori.data.base.mappers.Mapper
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeType
+import com.gnoemes.shimori.data.core.mappers.Mapper
 
 
 internal class RanobeTypeMapper : Mapper<ShikimoriMangaType?, RanobeType?> {

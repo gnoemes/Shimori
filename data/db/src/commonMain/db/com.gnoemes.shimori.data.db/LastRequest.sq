@@ -1,4 +1,4 @@
-import com.gnoemes.shimori.data.base.entities.app.Request;
+import com.gnoemes.shimori.data.core.entities.app.Request;
 import kotlinx.datetime.Instant;
 
 CREATE TABLE last_request (

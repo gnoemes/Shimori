@@ -9,7 +9,7 @@ android {
 
 dependencies {
     commonMainApi(projects.base.shared)
-    commonMainImplementation(projects.data.base)
+    commonMainImplementation(projects.data.core)
     commonMainImplementation(projects.commonUiResources)
     commonMainImplementation(projects.commonUiImageloading)
 
