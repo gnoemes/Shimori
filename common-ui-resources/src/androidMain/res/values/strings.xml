@@ -62,14 +62,14 @@
     <string name="list_sort_your_score">Your score</string>
     <string name="list_sort_rating">User\'s score</string>
 
-    <string name="List_page_watching">@string/rate_status_anime_watching</string>
-    <string name="List_page_reading">@string/rate_status_manga_reading</string>
-    <string name="List_page_re_watching">@string/rate_status_anime_re_watching</string>
-    <string name="List_page_re_reading">@string/rate_status_manga_re_reading</string>
-    <string name="List_page_on_hold">@string/rate_status_on_hold</string>
-    <string name="List_page_planned">@string/rate_status_planned</string>
-    <string name="List_page_completed">@string/rate_status_completed</string>
-    <string name="List_page_dropped">@string/rate_status_dropped</string>
+    <string name="list_page_watching">@string/rate_status_anime_watching</string>
+    <string name="list_page_reading">@string/rate_status_manga_reading</string>
+    <string name="list_page_re_watching">@string/rate_status_anime_re_watching</string>
+    <string name="list_page_re_reading">@string/rate_status_manga_re_reading</string>
+    <string name="list_page_on_hold">@string/rate_status_on_hold</string>
+    <string name="list_page_planned">@string/rate_status_planned</string>
+    <string name="list_page_completed">@string/rate_status_completed</string>
+    <string name="list_page_dropped">@string/rate_status_dropped</string>
 
     <string name="status_anons">Anons</string>
     <string name="status_ongoing">Ongoing</string>

@@ -25,18 +25,17 @@ class ShimoriTextCreator(
 
     fun name(title: ShimoriTitleEntity): String {
         return when (titlesLocale) {
-            AppTitlesLocale.English -> title.nameEn ?: defaultForLocale(title)
-            AppTitlesLocale.Russian -> title.nameRu ?: defaultForLocale(title)
+            AppTitlesLocale.English -> title.nameEn ?: defaultNameForLocale(title)
+            AppTitlesLocale.Russian -> title.nameRu ?: defaultNameForLocale(title)
             else -> title.name
         }
     }
 
-    private fun defaultForLocale(title: ShimoriTitleEntity) =
-        when (appLocale) {
-            AppLocale.English -> title.nameEn ?: title.name
-            AppLocale.Russian -> title.nameRu ?: title.name
-            else -> title.name
-        }
+    private fun defaultNameForLocale(title: ShimoriTitleEntity) = when (appLocale) {
+        AppLocale.English -> title.nameEn ?: title.name
+        AppLocale.Russian -> title.nameRu ?: title.name
+        else -> title.name
+    }
 
     fun statusDescription(anime: Anime): String? {
         return when (anime.status) {
@@ -54,9 +53,8 @@ class ShimoriTextCreator(
                         return textProvider[MessageID.Today]
                     }
 
-                    val format = textProvider[MessageID.AnonsDateFormat]
                     val daysShort = textProvider[MessageID.DayShort]
-                    return format.format(days, daysShort)
+                    return textProvider[MessageID.AnonsDateFormat, days, daysShort]
                 }
 
                 return textProvider[MessageID.Anons]
@@ -74,25 +72,19 @@ class ShimoriTextCreator(
                         if (hours < 1) {
                             val minutes = now.until(date, DateTimeUnit.MINUTE)
                             return format.format(
-                                episode,
-                                minutes,
-                                textProvider[MessageID.MinuteShort]
+                                episode, minutes, textProvider[MessageID.MinuteShort]
                             )
                         }
 
                         val days = now.daysUntil(date, TimeZone.currentSystemDefault())
                         if (days < 1) {
                             return format.format(
-                                episode,
-                                hours,
-                                textProvider[MessageID.HourShort]
+                                episode, hours, textProvider[MessageID.HourShort]
                             )
                         }
 
                         return format.format(
-                            episode,
-                            days,
-                            textProvider[MessageID.DayShort]
+                            episode, days, textProvider[MessageID.DayShort]
                         )
                     }
                 }
@@ -175,12 +167,10 @@ class ShimoriTextCreator(
     }
 
     fun rateStatusText(type: RateTargetType, status: RateStatus): String = when (status) {
-        RateStatus.WATCHING ->
-            if (type.anime) textProvider[MessageID.RateWatching]
-            else textProvider[MessageID.RateReading]
-        RateStatus.REWATCHING ->
-            if (type.anime) textProvider[MessageID.RateReWatching]
-            else textProvider[MessageID.RateReReading]
+        RateStatus.WATCHING -> if (type.anime) textProvider[MessageID.RateWatching]
+        else textProvider[MessageID.RateReading]
+        RateStatus.REWATCHING -> if (type.anime) textProvider[MessageID.RateReWatching]
+        else textProvider[MessageID.RateReReading]
         RateStatus.ON_HOLD -> textProvider[MessageID.RateOnHold]
         RateStatus.PLANNED -> textProvider[MessageID.RatePlanned]
         RateStatus.COMPLETED -> textProvider[MessageID.RateCompleted]
