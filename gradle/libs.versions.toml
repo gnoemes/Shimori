@@ -13,7 +13,7 @@ ktor = "2.0.0"
 sqlDelight = "1.5.3"
 
 #Android
-accompanist = "0.24.6-alpha"
+accompanist = "0.24.7-alpha"
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.0-alpha03"
 compose = "1.2.0-alpha08"
@@ -102,6 +102,7 @@ compose-foundation-layout = { module = "androidx.compose.foundation:foundation-l
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-material-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+compose-material-material3-windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
