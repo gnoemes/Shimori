@@ -6,10 +6,13 @@ plugins {
 dependencies {
     commonMainImplementation(projects.base.shared)
     commonMainImplementation(projects.data.core)
+    commonMainImplementation(projects.data.paging)
     commonMainImplementation(libs.sqldelight.coroutines)
 
     androidMainImplementation(libs.sqldelight.driver.android)
+    androidMainImplementation(libs.androidx.paging.common)
     jvmMainImplementation(libs.sqldelight.driver.jvm)
+    jvmMainImplementation(libs.androidx.paging.common)
 }
 
 sqldelight {

@@ -6,4 +6,5 @@ plugins {
 dependencies {
     implementation(projects.base.core)
     api(projects.data.core)
+    api(projects.data.paging)
 }
