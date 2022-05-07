@@ -15,6 +15,7 @@ val domainModule = DI.Module("domain") {
     bindProvider { new(::ObservePinsExist) }
     bindProvider { new(::ObserveRatesExist) }
     bindProvider { new(::ObserveRateSort) }
+    bindProvider { new(::ObserveListPage) }
 
     bindProvider { new(::UpdateUser) }
     bindProvider { new(::UpdateRates) }

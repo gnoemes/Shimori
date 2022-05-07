@@ -53,6 +53,11 @@ DELETE FROM anime;
 deleteById:
 DELETE FROM anime WHERE id = :id;
 
+countWithStatus:
+SELECT COUNT(*) FROM anime AS title
+INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+WHERE r.status = :status;
+
 queryById:
 SELECT * FROM anime WHERE id = :id;
 
@@ -79,7 +84,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN name END) DESC,
-(CASE :descending WHEN 0 THEN name END) ASC;
+(CASE :descending WHEN 0 THEN name END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortNameRu:
 SELECT * FROM anime AS title
@@ -87,7 +93,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN name_ru END) DESC,
-(CASE :descending WHEN 0 THEN name_ru END) ASC;
+(CASE :descending WHEN 0 THEN name_ru END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortProgress:
 SELECT * FROM anime AS title
@@ -95,7 +102,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN progress END) DESC,
-(CASE :descending WHEN 0 THEN progress END) ASC;
+(CASE :descending WHEN 0 THEN progress END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateCreated:
 SELECT * FROM anime AS title
@@ -103,7 +111,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_created) END) ASC;
+(CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateUpdated:
 SELECT * FROM anime AS title
@@ -111,7 +120,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC;
+(CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateAired:
 SELECT * FROM anime AS title
@@ -119,7 +129,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC;
+(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortScore:
 SELECT * FROM anime AS title
@@ -127,7 +138,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN score END) DESC,
-(CASE :descending WHEN 0 THEN score END) ASC;
+(CASE :descending WHEN 0 THEN score END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortSize:
 SELECT * FROM anime AS title
@@ -135,7 +147,8 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN episodes END) DESC,
-(CASE :descending WHEN 0 THEN episodes END) ASC;
+(CASE :descending WHEN 0 THEN episodes END) ASC
+LIMIT :limit OFFSET :offset;
 
 queryByStatusSortRating:
 SELECT * FROM anime AS title
@@ -143,4 +156,5 @@ INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN rating END) DESC,
-(CASE :descending WHEN 0 THEN rating END) ASC;
+(CASE :descending WHEN 0 THEN rating END) ASC
+LIMIT :limit OFFSET :offset;

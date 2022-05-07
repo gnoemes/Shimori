@@ -1,24 +1,28 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.database.daos.AnimeDao
+import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.anime
 import com.gnoemes.shimori.data.shared.animeWithRate
 import com.gnoemes.shimori.data.shared.long
+import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 
 internal class AnimeDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
+    private val dispatchers: AppCoroutineDispatchers,
 ) : AnimeDao() {
 
     override suspend fun insert(entity: Anime) {
@@ -88,55 +92,78 @@ internal class AnimeDaoImpl(
         TODO("Not yet implemented")
     }
 
-    override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<AnimeWithRate>> {
-        return (when (sort.sortOption) {
+    override fun paging(
+        status: RateStatus,
+        sort: RateSort,
+    ): PagingSource<Long, PaginatedEntity> {
+
+        fun query(
+            limit: Long,
+            offset: Long
+        ) = when (sort.sortOption) {
             RateSortOption.NAME -> db.animeQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.PROGRESS -> db.animeQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.DATE_CREATED -> db.animeQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.DATE_UPDATED -> db.animeQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.DATE_AIRED -> db.animeQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.MY_SCORE -> db.animeQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.SIZE -> db.animeQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
             RateSortOption.RATING -> db.animeQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::animeWithRate
             )
-        })
-            .asFlow()
-            .mapToList()
-    }
+        }
 
-    override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {
-        TODO("Not yet implemented")
+        return QueryPaging(
+            countQuery = db.animeQueries.countWithStatus(status),
+            transacter = db.animeQueries,
+            dispatcher = dispatchers.io,
+            queryProvider = ::query
+        )
     }
-
 }

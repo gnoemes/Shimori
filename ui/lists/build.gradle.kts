@@ -14,7 +14,6 @@ dependencies {
     commonMainImplementation(projects.commonUi)
     commonMainImplementation(projects.commonUiResources)
     commonMainImplementation(projects.commonUiImageloading)
-    commonMainImplementation(libs.multiplatform.paging)
 
     androidMainImplementation(libs.androidx.core)
     androidMainImplementation(libs.androidx.lifecycle.runtime)

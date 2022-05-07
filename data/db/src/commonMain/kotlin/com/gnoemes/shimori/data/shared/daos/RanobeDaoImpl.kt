@@ -1,24 +1,28 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.database.daos.RanobeDao
+import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.long
+import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.gnoemes.shimori.data.shared.ranobe
 import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 
 internal class RanobeDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
+    private val dispatchers: AppCoroutineDispatchers
 ) : RanobeDao() {
 
     override suspend fun insert(entity: Ranobe) {
@@ -80,56 +84,75 @@ internal class RanobeDaoImpl(
             .mapToOneOrNull()
     }
 
-    override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<RanobeWithRate>> {
-        return (when (sort.sortOption) {
+    override fun paging(status: RateStatus, sort: RateSort): PagingSource<Long, PaginatedEntity> {
+
+        fun query(
+            limit: Long,
+            offset: Long
+        ) = when (sort.sortOption) {
             RateSortOption.NAME -> db.ranobeQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.PROGRESS -> db.ranobeQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.DATE_CREATED -> db.ranobeQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.DATE_UPDATED -> db.ranobeQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.DATE_AIRED -> db.ranobeQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.MY_SCORE -> db.ranobeQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.SIZE -> db.ranobeQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
             RateSortOption.RATING -> db.ranobeQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::ranobeWithRate
             )
-        })
-            .asFlow()
-            .mapToList()
+        }
+
+        return QueryPaging(
+            countQuery = db.ranobeQueries.countWithStatus(status),
+            transacter = db.ranobeQueries,
+            dispatcher = dispatchers.io,
+            queryProvider = ::query
+        )
     }
-
-    override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {
-        TODO("Not yet implemented")
-    }
-
-
 }

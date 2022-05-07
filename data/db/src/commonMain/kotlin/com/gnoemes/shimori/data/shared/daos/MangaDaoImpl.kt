@@ -1,24 +1,28 @@
 package com.gnoemes.shimori.data.shared.daos
 
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.database.daos.MangaDao
+import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.manga
 import com.gnoemes.shimori.data.shared.mangaWithRate
+import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 
 internal class MangaDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
+    private val dispatchers: AppCoroutineDispatchers
 ) : MangaDao() {
 
     override suspend fun insert(entity: Manga) {
@@ -80,56 +84,75 @@ internal class MangaDaoImpl(
             .executeAsList()
     }
 
-    override fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<MangaWithRate>> {
-        return (when (sort.sortOption) {
+
+    override fun paging(status: RateStatus, sort: RateSort): PagingSource<Long, PaginatedEntity> {
+        fun query(
+            limit: Long,
+            offset: Long
+        ) = when (sort.sortOption) {
             RateSortOption.NAME -> db.mangaQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.PROGRESS -> db.mangaQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.DATE_CREATED -> db.mangaQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.DATE_UPDATED -> db.mangaQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.DATE_AIRED -> db.mangaQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.MY_SCORE -> db.mangaQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.SIZE -> db.mangaQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
             RateSortOption.RATING -> db.mangaQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
+                limit,
+                offset,
                 ::mangaWithRate
             )
-        })
-            .asFlow()
-            .mapToList()
+        }
+
+        return QueryPaging(
+            countQuery = db.mangaQueries.countWithStatus(status),
+            transacter = db.mangaQueries,
+            dispatcher = dispatchers.io,
+            queryProvider = ::query
+        )
     }
-
-    override fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption) {
-        TODO("Not yet implemented")
-    }
-
-
 }
