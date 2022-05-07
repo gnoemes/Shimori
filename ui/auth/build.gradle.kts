@@ -25,6 +25,7 @@ dependencies {
     androidMainImplementation(libs.compose.foundation.foundation)
     androidMainImplementation(libs.compose.foundation.layout)
     androidMainImplementation(libs.compose.material.material3)
+    androidMainImplementation(libs.compose.material.material3.windowsizeclass)
     androidMainImplementation(libs.compose.material.material)
     androidMainImplementation(libs.compose.animation.animation)
     androidMainImplementation(libs.compose.ui.util)

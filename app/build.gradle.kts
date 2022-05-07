@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.compose.foundation.foundation)
     implementation(libs.compose.foundation.layout)
     implementation(libs.compose.material.material3)
+    implementation(libs.compose.material.material3.windowsizeclass)
     implementation(libs.compose.material.material)
     implementation(libs.compose.animation.animation)
     implementation(libs.compose.ui.tooling)
