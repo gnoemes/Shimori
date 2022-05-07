@@ -16,7 +16,11 @@ class MangaRepository(
     private val ratesLastRequest: MangaWithStatusLastRequestStore
 ) {
     fun observeById(id: Long) = dao.observeById(id)
-    fun observeByStatus(status: RateStatus, sort: RateSort) = dao.observeByStatus(status, sort)
+
+    fun paging(
+        status: RateStatus,
+        sort: RateSort
+    ) = dao.paging(status, sort)
 
     suspend fun updateMyTitlesByStatus(status: RateStatus?) {
         val user = userRepository.queryMeShort()

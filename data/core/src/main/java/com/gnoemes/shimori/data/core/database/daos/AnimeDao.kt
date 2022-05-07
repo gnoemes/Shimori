@@ -1,10 +1,11 @@
 package com.gnoemes.shimori.data.core.database.daos
 
+import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
+import com.gnoemes.shimori.data.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 
 abstract class AnimeDao : EntityDao<Anime>() {
@@ -13,9 +14,11 @@ abstract class AnimeDao : EntityDao<Anime>() {
     abstract suspend fun queryAllWithStatus(): List<AnimeWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate>
 
-    abstract fun observeById(id: Long) : Flow<AnimeWithRate?>
+    abstract fun observeById(id: Long): Flow<AnimeWithRate?>
     abstract fun observeCalendar(): Flow<List<AnimeWithRate>>
-    abstract fun observeByStatus(status: RateStatus, sort: RateSort): Flow<List<AnimeWithRate>>
 
-    abstract fun paging(status: RateStatus, descending: Boolean, sortOption: RateSortOption)
+    abstract fun paging(
+        status: RateStatus,
+        sort: RateSort,
+    ): PagingSource<Long, PaginatedEntity>
 }

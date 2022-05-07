@@ -4,6 +4,8 @@ import com.gnoemes.shimori.base.core.entities.InvokeError
 import com.gnoemes.shimori.base.core.entities.InvokeStarted
 import com.gnoemes.shimori.base.core.entities.InvokeStatus
 import com.gnoemes.shimori.base.core.entities.InvokeSuccess
+import com.gnoemes.shimori.data.paging.PagingConfig
+import com.gnoemes.shimori.data.paging.PagingData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withTimeout
@@ -56,6 +58,13 @@ abstract class ResultInteractor<in P, R> {
     suspend fun executeSync(params: P): R = doWork(params)
 
     protected abstract suspend fun doWork(params: P): R
+}
+
+abstract class PagingInteractor<P : PagingInteractor.PagingParams<T>, T : Any> :
+    SubjectInteractor<P, PagingData<T>>() {
+    interface PagingParams<T : Any> {
+        val pagingConfig: PagingConfig
+    }
 }
 
 operator fun Interactor<Unit>.invoke() = invoke(Unit)
