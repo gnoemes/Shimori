@@ -48,6 +48,9 @@ value class MessageID private constructor(val key: String) {
         val RatePlanned = MessageID("list_page_planned")
         val RateCompleted = MessageID("list_page_completed")
         val RateDropped = MessageID("list_page_dropped")
+        val Undo = MessageID("action_undo")
+        val TitlePinned = MessageID("notification_title_pinned")
+        val TitleUnPinned = MessageID("notification_title_unpinned")
     }
 }
 

@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.lists.page
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -8,28 +10,32 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.components.FabPosition
+import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.common_ui.compose.ui.ListCard
-import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.core.entities.TitleWithRate
+import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun ListPage(
@@ -62,9 +68,23 @@ private fun ListPage(
     val snackbarHostState = rememberSnackbarHostState()
 
     val onEditClick =
-        { entity: TitleWithRate<out ShimoriTitleEntity> -> openListsEdit(entity.id, entity.type) }
-    val onTogglePin = { entity: TitleWithRate<out ShimoriTitleEntity> ->
-//        viewModel.togglePin(entity)
+        { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
+    val onTogglePin = { entity: TitleWithRateEntity ->
+        viewModel.togglePin(entity)
+    }
+
+    state.message?.let { message ->
+        LaunchedEffect(message) {
+            val result =
+                snackbarHostState.showSnackbar(message.message, actionLabel = message.action)
+
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.onMessageAction(message.id)
+            }
+
+            delay(100L)
+            viewModel.onMessageShown(message.id)
+        }
     }
 
     val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
@@ -91,6 +111,7 @@ private fun ListPage(
         type = state.type,
         status = state.status,
         user = state.user,
+        message = state.message,
         snackbarHostState = snackbarHostState,
         scrollBehavior = scrollBehavior,
         onChangeList = onChangeList,
@@ -138,6 +159,7 @@ private fun ScreenLayout(
     type: ListType,
     status: RateStatus,
     user: UserShort?,
+    message: UiMessage?,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
     onChangeList: () -> Unit,
@@ -164,29 +186,30 @@ private fun ScreenLayout(
             )
         },
         snackbarHost = {
-//            ShimoriSnackbar(hostState = snackbarHostState,
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                icon = {
-//                    val image = message?.shimoriImage
-//                    if (image != null) {
-//                        Image(
-//                            painter = rememberImagePainter(image),
-//                            contentScale = ContentScale.Crop,
-//                            contentDescription = null,
-//                            modifier = Modifier
-//                                .size(24.dp)
-//                                .border(
-//                                    1.dp,
-//                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
-//                                    ShimoriSmallestRoundedCornerShape
-//                                )
-//                                .clip(ShimoriSmallestRoundedCornerShape)
-//                        )
-//
-//                        Spacer(modifier = Modifier.width(12.dp))
-//                    }
-//                })
+            ShimoriSnackbar(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                icon = {
+                    val image = message?.image
+                    if (image != null) {
+                        Image(
+                            painter = rememberImagePainter(image),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
+                                    ShimoriSmallestRoundedCornerShape
+                                )
+                                .clip(ShimoriSmallestRoundedCornerShape)
+                        )
+
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                })
         },
         floatingActionButton = {
             ShimoriFAB(

@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common_ui.compose.components
+package com.gnoemes.shimori.common.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

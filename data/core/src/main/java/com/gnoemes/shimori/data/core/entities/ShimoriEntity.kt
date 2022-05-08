@@ -52,5 +52,7 @@ interface TitleWithRate<E : ShimoriTitleEntity> {
     val type: RateTargetType
 }
 
+typealias TitleWithRateEntity = TitleWithRate<out ShimoriTitleEntity>
+
 interface PaginatedEntity : ShimoriEntity
 

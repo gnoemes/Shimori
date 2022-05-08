@@ -135,8 +135,6 @@ private val networkModule = DI.Module(name = "network") {
             }
         }
     }
-
-
 }
 
 private val features = DI.Module(name = "features") {
