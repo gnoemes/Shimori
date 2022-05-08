@@ -1,16 +1,18 @@
 package com.gnoemes.shimori.common.ui.api
 
+import com.gnoemes.shimori.base.shared.PlatformUtils
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import com.gnoemes.shimori.base.shared.PlatformUtils
 
 data class UiMessage(
     val message: String,
     val action: String? = null,
+    val image : ShimoriImage? = null,
     val payload: Any? = null,
     val id: Long = PlatformUtils.generateId(),
 )

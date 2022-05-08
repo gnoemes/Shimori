@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common_ui.compose.ui
+package com.gnoemes.shimori.common.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -12,11 +12,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common_ui.compose.components.Cover
-import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.core.entities.TitleWithRate
+import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
@@ -25,7 +22,7 @@ import com.gnoemes.shimori.ui.R
 
 @Composable
 fun ListCard(
-    title: TitleWithRate<out ShimoriTitleEntity>,
+    title: TitleWithRateEntity,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
