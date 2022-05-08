@@ -2,14 +2,15 @@ package com.gnoemes.shimori.common.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,10 +48,23 @@ fun SwipeDismissSnackbar(
     snackbar: @Composable (SnackbarData) -> Unit = {
         Snackbar(
             modifier = Modifier.padding(8.dp),
-            shape = ShimoriSmallRoundedCornerShape
+            shape = ShimoriSmallRoundedCornerShape,
+            action = when (val actionLabel = data.visuals.actionLabel) {
+                null, "" -> null
+                else -> {
+                    @Composable() {
+                        TextButton(
+                            onClick = { data.performAction() }
+                        ) {
+                            Text(text = actionLabel)
+                        }
+                    }
+                }
+            }
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 icon()
 
@@ -58,20 +72,6 @@ fun SwipeDismissSnackbar(
                     text = it.visuals.message,
                     modifier = Modifier.weight(1f)
                 )
-
-                val actionLabel = it.visuals.actionLabel
-                if (!actionLabel.isNullOrBlank()) {
-                    TextButton(onClick = {
-                        data.performAction()
-                    }) {
-                        Text(
-                            text = actionLabel,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.inversePrimary
-                        )
-                    }
-
-                }
             }
         }
     },
