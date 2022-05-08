@@ -29,9 +29,11 @@ fun ShimoriSettings.shouldUseDarkColors(): Boolean {
 @Composable
 inline fun <reified VM : ViewModel> shimoriViewModel(
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current),
+    key: String? = null,
+    vararg args: Pair<String, Any>
 ): VM {
-    val factory = createVMFactory(viewModelStoreOwner = viewModelStoreOwner)
-    return viewModel(viewModelStoreOwner, factory = factory)
+    val factory = createVMFactory(viewModelStoreOwner = viewModelStoreOwner, args = args)
+    return viewModel(viewModelStoreOwner, factory = factory, key = key)
 }
 
 inline fun <reified T : ViewModel> DI.Builder.bindViewModel(noinline creator: DirectDI.(SavedStateHandle) -> T) {
@@ -41,14 +43,16 @@ inline fun <reified T : ViewModel> DI.Builder.bindViewModel(noinline creator: Di
 @Composable
 @PublishedApi
 internal fun createVMFactory(
-    viewModelStoreOwner: ViewModelStoreOwner
+    viewModelStoreOwner: ViewModelStoreOwner,
+    vararg args: Pair<String, Any>
 ): ViewModelProvider.Factory {
     val di = localDI()
 
     return if (viewModelStoreOwner is NavBackStackEntry) {
         kodeinFactory(
             navBackStackEntry = viewModelStoreOwner,
-            di = di
+            di = di,
+            args = args
         )
     } else kodeinFactory(di)
 }

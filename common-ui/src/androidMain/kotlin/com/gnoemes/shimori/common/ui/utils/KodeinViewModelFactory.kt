@@ -1,7 +1,10 @@
 package com.gnoemes.shimori.common.ui.utils
 
 import android.os.Bundle
-import androidx.lifecycle.*
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavBackStackEntry
 import androidx.savedstate.SavedStateRegistryOwner
 import org.kodein.di.DI
@@ -9,11 +12,13 @@ import org.kodein.di.instanceOrNull
 
 fun kodeinFactory(
     di: DI,
-    navBackStackEntry: NavBackStackEntry
+    navBackStackEntry: NavBackStackEntry,
+    vararg args: Pair<String, Any>
 ): ViewModelProvider.Factory {
     return savedStateFactory(
         owner = navBackStackEntry,
-        navBackStackEntry.arguments,
+        navBackStackEntry.arguments
+            ?.apply { args.forEach(::put) },
         di = di
     )
 }
@@ -59,5 +64,15 @@ private fun defaultFactory(
             )
             return vm as T
         }
+    }
+}
+
+private fun Bundle.put(pair: Pair<String, Any>) {
+    when (val value = pair.second) {
+        is Int -> putInt(pair.first, value)
+        is Double -> putDouble(pair.first, value)
+        is String -> putString(pair.first, value)
+        is java.io.Serializable -> putSerializable(pair.first, value)
+        else -> throw IllegalArgumentException("${value::class.simpleName} is not supported")
     }
 }
