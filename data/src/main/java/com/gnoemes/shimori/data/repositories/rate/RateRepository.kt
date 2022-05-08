@@ -25,6 +25,7 @@ class RateRepository(
 
     fun observeRatesExist() = dao.observeHasRates()
     fun observeRateSort(type: ListType): Flow<RateSort?> = rateSortDao.observe(type)
+    fun observeExistedStatuses(type: RateTargetType) = dao.observeExistedStatuses(type)
 
     suspend fun createOrUpdate(rate: Rate) {
         dao.insertOrUpdate(rate)

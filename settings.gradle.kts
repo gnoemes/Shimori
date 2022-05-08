@@ -38,3 +38,4 @@ include(":shikimori", ":shikimori-auth")
 
 include(":ui:auth")
 include(":ui:lists")
+include(":ui:lists-change")
