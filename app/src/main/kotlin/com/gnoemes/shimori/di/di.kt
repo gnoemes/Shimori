@@ -26,6 +26,7 @@ import com.gnoemes.shimori.lists.listsModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
+import com.gnoemes.shimori.settings.settingsModule
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import io.ktor.client.*
@@ -54,13 +55,14 @@ val appModule = DI.Module("app") {
     importOnce(features)
 
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
+    bindSingleton(tag = KodeinTag.appVersion) { BuildConfig.VERSION_NAME }
     bindSingleton { createLogger() }
 
     bindSingleton {
         Platform(
             type = Platform.Type.Android,
             debug = BuildConfig.DEBUG,
-            appVersion = BuildConfig.VERSION_NAME,
+            appVersion = instance(KodeinTag.appVersion),
             shikimoriURL = BuildConfig.ShikimoriBaseUrl,
             shikimoriClientId = BuildConfig.ShikimoriClientId,
             shikimoriSecretKey = BuildConfig.ShikimoriClientSecret,
@@ -143,4 +145,5 @@ private val features = DI.Module(name = "features") {
     importOnce(authModule)
     importOnce(listsModule)
     importOnce(listsChangeModule)
+    importOnce(settingsModule)
 }
