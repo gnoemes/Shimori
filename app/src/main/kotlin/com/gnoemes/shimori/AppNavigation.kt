@@ -24,6 +24,7 @@ import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists.change.ListsChangeSheet
+import com.gnoemes.shimori.settings.Settings
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -152,7 +153,8 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
             )
         } else {
             Lists(
-                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
+//                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
+                openUser = { navController.navigate(Screen.Settings.createRoute(root)) },
                 openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
                 openListsEdit = { id, type ->
                     navController.navigate(Screen.ListsEditSheet.createRoute(root, id, type))
@@ -250,9 +252,9 @@ private fun NavGraphBuilder.addSettings(
     root: RootScreen,
 ) {
     composable(Screen.Settings.createRoute(root)) {
-//        Settings(
-//            navigateUp = { navController.navigateUp() }
-//        )
+        Settings(
+            navigateUp = { navController.navigateUp() }
+        )
     }
 }
 

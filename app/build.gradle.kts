@@ -91,6 +91,7 @@ dependencies {
     implementation(projects.ui.auth)
     implementation(projects.ui.lists)
     implementation(projects.ui.listsChange)
+    implementation(projects.ui.settings)
 
     implementation(libs.kotlin.coroutines.android)
 
