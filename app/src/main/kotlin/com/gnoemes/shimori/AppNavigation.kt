@@ -23,6 +23,7 @@ import com.gnoemes.shimori.auth.Auth
 import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.Lists
+import com.gnoemes.shimori.lists.change.ListsChangeSheet
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -206,9 +207,9 @@ private fun NavGraphBuilder.addListChangeBottomSheet(
     bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
-//        ListsChangeSheet(
-//            navigateUp = bottomSheetNavigateUp
-//        )
+        ListsChangeSheet(
+            navigateUp = bottomSheetNavigateUp
+        )
     }
 }
 

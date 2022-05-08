@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.shared.daos
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.entities.rate.Rate
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.rate
@@ -11,6 +12,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlin.system.measureTimeMillis
 
@@ -92,5 +94,21 @@ internal class RateDaoImpl(
             .asFlow()
             .mapToOne()
             .map { it > 0 }
+    }
+
+    override fun observeExistedStatuses(type: RateTargetType): Flow<List<RateStatus>> {
+        return combine(
+            *RateStatus.listPagesOrder.map { status ->
+                db.rateQueries.statusForTypeExist(type, status)
+                    .asFlow()
+                    .mapToOne()
+                    .map { count -> status to (count > 0) }
+            }
+                .toTypedArray()
+        ) { statuses ->
+            statuses
+                .filter { it.second }
+                .map { it.first }
+        }
     }
 }
