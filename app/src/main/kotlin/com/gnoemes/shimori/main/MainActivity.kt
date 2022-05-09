@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.main
 
 import Main
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
@@ -8,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
@@ -56,20 +58,22 @@ class MainActivity : BaseActivity(), DIAware {
                     )
                 }
 
+                val prefs =
+                    LocalContext.current.getSharedPreferences("defaults", Context.MODE_PRIVATE)
+
                 CompositionLocalProvider(
                     LocalShimoriRateUtil provides rateUtil,
                     LocalShimoriTextCreator provides textCreator,
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,
+                    LocalPreferences provides prefs
                 ) {
                     val useDarkColors = settings.shouldUseDarkColors()
 
                     ShimoriTheme(useDarkColors = useDarkColors) {
-
                         val systemUiController = rememberSystemUiController()
                         val isLightTheme = !useDarkColors
-                        val navigationColor =
-                            MaterialTheme.colorScheme.background
+                        val navigationColor = MaterialTheme.colorScheme.background
                         val statusBarColor =
                             MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
 
@@ -83,7 +87,6 @@ class MainActivity : BaseActivity(), DIAware {
                                 darkIcons = isLightTheme
                             )
                         }
-
                         Main()
                     }
                 }

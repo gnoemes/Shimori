@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.common.ui.theme
 
-import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
 import com.gnoemes.shimori.base.core.settings.AppAccentColor
+import com.gnoemes.shimori.common.ui.LocalPreferences
 import com.gnoemes.shimori.common.ui.LocalShimoriSettings
 import com.gnoemes.shimori.common.ui.utils.generateDarkPaletteForPrimary
 import com.gnoemes.shimori.common.ui.utils.generateLightPaletteForPrimary
@@ -20,7 +20,7 @@ fun ShimoriTheme(
     useDarkColors: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val prefs = LocalContext.current.getSharedPreferences("defaults", Context.MODE_PRIVATE)
+    val prefs = LocalPreferences.current
 
     val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val accentColorType = LocalShimoriSettings

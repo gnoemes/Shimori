@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Shimori</string>
 
-    <string name="shikimori_redirect_scheme">shimori</string>
-    <string name="shikimori_redirect_host">oauth</string>
-    <string name="shikimori_redirect_path">/shikimori</string>
+    <string name="shikimori_redirect_scheme" translatable="false">shimori</string>
+    <string name="shikimori_redirect_host" translatable="false">oauth</string>
+    <string name="shikimori_redirect_path" translatable="false">/shikimori</string>
 </resources>
