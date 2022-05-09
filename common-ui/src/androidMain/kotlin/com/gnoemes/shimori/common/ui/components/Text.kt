@@ -20,6 +20,7 @@ import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.ui.R
 
 const val Divider = " • "
+private const val SCORE_IMAGE = "score_image"
 
 @Composable
 fun AnimeDescription(
@@ -75,7 +76,7 @@ private fun Description(
         color = MaterialTheme.colorScheme.secondary,
         overflow = TextOverflow.Ellipsis,
         inlineContent = mapOf(
-            "score_image" to InlineTextContent(
+            SCORE_IMAGE to InlineTextContent(
                 Placeholder(
                     MaterialTheme.typography.labelMedium.fontSize,
                     MaterialTheme.typography.labelMedium.fontSize,
@@ -158,7 +159,7 @@ private fun buildListText(
     val scorePart = {
         if (!scoreInfo.isNullOrEmpty()) {
             if (length > 0) append(Divider)
-            appendInlineContent(id = "score_image")
+            appendInlineContent(id = SCORE_IMAGE)
             append(" $scoreInfo")
         }
     }

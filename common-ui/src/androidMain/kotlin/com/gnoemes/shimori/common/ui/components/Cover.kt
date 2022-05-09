@@ -11,10 +11,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.ui.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -27,7 +25,7 @@ fun Cover(
     onStatusClick: (() -> Unit)? = null,
     status: RateStatus? = null,
     showAddStatus: Boolean = false,
-    contentDescription: String = stringResource(id = R.string.cover)
+    contentDescription: String? = null
 ) {
     Box(
         modifier = modifier
