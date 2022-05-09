@@ -162,7 +162,7 @@ fun ListCard(
                     icon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_edit),
-                            contentDescription = stringResource(id = R.string.edit)
+                            contentDescription = null
                         )
                     }
                 )

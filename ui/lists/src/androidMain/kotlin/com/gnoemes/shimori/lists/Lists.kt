@@ -208,11 +208,11 @@ private fun ListsEmpty(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    text = stringResource(id = R.string.change_list),
+                    text = stringResource(id = R.string.lists_title),
                     leftIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_menu),
-                            contentDescription = stringResource(id = R.string.change_list)
+                            contentDescription = stringResource(id = R.string.lists_title)
                         )
                     }
                 )
