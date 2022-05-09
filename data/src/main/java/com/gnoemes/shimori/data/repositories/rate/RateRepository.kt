@@ -27,6 +27,7 @@ class RateRepository(
     fun observeRateSort(type: ListType): Flow<RateSort?> = rateSortDao.observe(type)
     fun observeExistedStatuses(type: RateTargetType) = dao.observeExistedStatuses(type)
 
+    //TODO only local update and plan sync with network
     suspend fun createOrUpdate(rate: Rate) {
         dao.insertOrUpdate(rate)
 
@@ -36,7 +37,7 @@ class RateRepository(
                 if (!local.hasShikimoriId) source.createRate(local)
                 else source.updateRate(local)
 
-            dao.insertOrUpdate(result)
+            dao.insertOrUpdate(result.copy(id = local.id))
         }
     }
 
@@ -49,7 +50,7 @@ class RateRepository(
 
         local?.let {
             source.deleteRate(it.shikimoriId)
-            dao.deleteEntity(it)
+            dao.delete(it)
         }
     }
 

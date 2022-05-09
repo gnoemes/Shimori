@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.core.entities.app.ListPin
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import comgnoemesshimoridatadb.Pinned
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,7 +24,19 @@ internal class ListPinDaoImpl(
         }
     }
 
-    override suspend fun deleteEntity(entity: ListPin) {
+    override suspend fun update(entity: ListPin) {
+        entity.let {
+            db.listPinQueries.update(
+                Pinned(
+                    it.id,
+                    it.targetId,
+                    it.targetType
+                )
+            )
+        }
+    }
+
+    override suspend fun delete(entity: ListPin) {
         db.listPinQueries.deleteById(entity.id)
     }
 

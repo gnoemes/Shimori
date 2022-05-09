@@ -28,6 +28,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
@@ -165,6 +166,7 @@ class Shikimori(
         override suspend fun create(request: UserRateCreateOrUpdateRequest): UserRateResponse {
             return client.post {
                 url(serviceUrl)
+                contentType(ContentType.Application.Json)
                 setBody(request)
             }.body()
         }
@@ -175,6 +177,7 @@ class Shikimori(
         ): UserRateResponse {
             return client.patch {
                 url("$serviceUrl/$id")
+                contentType(ContentType.Application.Json)
                 setBody(request)
             }.body()
         }

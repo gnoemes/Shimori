@@ -10,6 +10,10 @@ insert:
 INSERT OR REPLACE INTO pinned (target_id, target_type)
 VALUES (?,?);
 
+update:
+INSERT OR REPLACE INTO pinned (id, target_id, target_type)
+VALUES ?;
+
 queryByTarget:
 SELECT * FROM pinned WHERE target_id = :id AND target_type = :type;
 

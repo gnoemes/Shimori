@@ -41,6 +41,14 @@ date_aired, date_released, age_rating,  description, description_html, franchise
 topic_id, genres)
 VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
+update:
+INSERT OR REPLACE INTO manga(
+id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, manga_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES ?;
+
 deleteAll:
 DELETE FROM manga;
 
@@ -104,8 +112,8 @@ SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
-(CASE :descending WHEN 1 THEN datetime(date_created) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_created) END) ASC
+(CASE :descending WHEN 1 THEN date_created END) DESC,
+(CASE :descending WHEN 0 THEN date_created END) ASC
 LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateUpdated:
@@ -113,8 +121,8 @@ SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
 WHERE r.status = :status
 ORDER BY
-(CASE :descending WHEN 1 THEN datetime(date_updated) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_updated) END) ASC
+(CASE :descending WHEN 1 THEN date_updated END) DESC,
+(CASE :descending WHEN 0 THEN date_updated END) ASC
 LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateAired:

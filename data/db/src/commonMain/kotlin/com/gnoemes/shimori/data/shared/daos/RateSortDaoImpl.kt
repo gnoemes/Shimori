@@ -5,6 +5,7 @@ import com.gnoemes.shimori.data.core.database.daos.RateSortDao
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.shared.RateSortDAO
 import com.gnoemes.shimori.data.shared.RateSortMapper
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -26,7 +27,20 @@ internal class RateSortDaoImpl(
         }
     }
 
-    override suspend fun deleteEntity(entity: RateSort) {
+    override suspend fun update(entity: RateSort) {
+        entity.let {
+            db.rateSortQueries.update(
+                RateSortDAO(
+                    it.id,
+                    it.type.type,
+                    it.sortOption,
+                    it.isDescending
+                )
+            )
+        }
+    }
+
+    override suspend fun delete(entity: RateSort) {
         db.rateSortQueries.deleteById(entity.id)
     }
 

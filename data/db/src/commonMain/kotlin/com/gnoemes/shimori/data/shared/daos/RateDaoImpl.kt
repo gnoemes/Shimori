@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.shared.RateDAO
 import com.gnoemes.shimori.data.shared.rate
 import com.gnoemes.shimori.data.shared.syncerForEntity
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -45,7 +46,27 @@ internal class RateDaoImpl(
         }
     }
 
-    override suspend fun deleteEntity(entity: Rate) {
+    override suspend fun update(entity: Rate) {
+        entity.let {
+            db.rateQueries.update(
+                RateDAO(
+                    it.id,
+                    it.shikimoriId,
+                    it.targetId,
+                    it.targetType,
+                    it.status,
+                    it.score,
+                    it.comment,
+                    it.progress,
+                    it.reCounter,
+                    it.dateCreated,
+                    it.dateUpdated
+                )
+            )
+        }
+    }
+
+    override suspend fun delete(entity: Rate) {
         db.rateQueries.deleteById(entity.id)
     }
 
