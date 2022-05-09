@@ -37,5 +37,5 @@ include(":domain")
 include(":shikimori", ":shikimori-auth")
 
 include(":ui:auth")
-include(":ui:lists", ":ui:lists:change")
+include(":ui:lists", ":ui:lists:change", ":ui:lists:edit")
 include(":ui:settings")

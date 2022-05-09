@@ -2,6 +2,7 @@
 
 package com.gnoemes.shimori
 
+import ListsEdit
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -75,12 +76,10 @@ internal sealed class Screen(private val route: String) {
 
 @Composable
 internal fun AppNavigation(
-    navController: NavHostController,
-    bottomSheetNavigateUp: () -> Unit
+    navController: NavHostController, bottomSheetNavigateUp: () -> Unit
 ) {
     NavHost(
-        navController = navController,
-        startDestination = RootScreen.Lists.route
+        navController = navController, startDestination = RootScreen.Lists.route
     ) {
         addListsRoot(navController, bottomSheetNavigateUp)
         addExploreRoot(navController)
@@ -90,8 +89,7 @@ internal fun AppNavigation(
 }
 
 private fun NavGraphBuilder.addListsRoot(
-    navController: NavController,
-    bottomSheetNavigateUp: () -> Unit
+    navController: NavController, bottomSheetNavigateUp: () -> Unit
 ) {
     navigation(
         route = RootScreen.Lists.route,
@@ -122,8 +120,7 @@ private fun NavGraphBuilder.addFeedRoot(
     navController: NavController
 ) {
     navigation(
-        route = RootScreen.Feed.route,
-        startDestination = Screen.Feed.createRoute(RootScreen.Feed)
+        route = RootScreen.Feed.route, startDestination = Screen.Feed.createRoute(RootScreen.Feed)
     ) {
         addFeed(navController, RootScreen.Feed)
     }
@@ -148,9 +145,7 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
         val state by rememberStateWithLifecycle(shikimori.authState)
 
         if (!state.isAuthorized) {
-            Auth(
-                openSettings = { navController.navigate(Screen.Settings.createRoute(root)) }
-            )
+            Auth(openSettings = { navController.navigate(Screen.Settings.createRoute(root)) })
         } else {
             Lists(
 //                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
@@ -170,15 +165,13 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
                 },
                 onChangeList = {
                     navController.navigate(Screen.ListsChangeSheet.createRoute(RootScreen.Lists))
-                }
-            )
+                })
         }
     }
 }
 
 private fun NavGraphBuilder.addExplore(
-    navController: NavController,
-    root: RootScreen
+    navController: NavController, root: RootScreen
 ) {
     composable(Screen.Explore.createRoute(root)) {
         MockScreen(Screen.Explore.createRoute(root))
@@ -186,8 +179,7 @@ private fun NavGraphBuilder.addExplore(
 }
 
 private fun NavGraphBuilder.addFeed(
-    navController: NavController,
-    root: RootScreen
+    navController: NavController, root: RootScreen
 ) {
     composable(Screen.Feed.createRoute(root)) {
         MockScreen(Screen.Feed.createRoute(root))
@@ -195,8 +187,7 @@ private fun NavGraphBuilder.addFeed(
 }
 
 private fun NavGraphBuilder.addTalks(
-    navController: NavController,
-    root: RootScreen
+    navController: NavController, root: RootScreen
 ) {
     composable(Screen.Talks.createRoute(root)) {
         MockScreen(Screen.Talks.createRoute(root))
@@ -204,9 +195,7 @@ private fun NavGraphBuilder.addTalks(
 }
 
 private fun NavGraphBuilder.addListChangeBottomSheet(
-    navController: NavController,
-    root: RootScreen,
-    bottomSheetNavigateUp: () -> Unit
+    navController: NavController, root: RootScreen, bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
         ListsChangeSheet(
@@ -216,13 +205,10 @@ private fun NavGraphBuilder.addListChangeBottomSheet(
 }
 
 private fun NavGraphBuilder.addListEditBottomSheet(
-    navController: NavController,
-    root: RootScreen,
-    bottomSheetNavigateUp: () -> Unit
+    navController: NavController, root: RootScreen, bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(
-        route = Screen.ListsEditSheet.createRoute(root),
-        arguments = listOf(
+        route = Screen.ListsEditSheet.createRoute(root), arguments = listOf(
             navArgument("id") { type = NavType.LongType },
             navArgument("type") {
                 type = NavType.EnumType(RateTargetType::class.java)
@@ -230,9 +216,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         )
     ) {
         val bottomSheetNavigator = try {
-            navController
-                .navigatorProvider
-                .getNavigator(BottomSheetNavigator::class.java)
+            navController.navigatorProvider.getNavigator(BottomSheetNavigator::class.java)
         } catch (e: Exception) {
             null
         }
@@ -240,10 +224,10 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         val offset = remember {
             bottomSheetNavigator?.navigatorSheetState?.offset ?: mutableStateOf(0f)
         }
-//        ListsEdit(
-//            bottomSheetOffset = offset,
-//            navigateUp = bottomSheetNavigateUp
-//        )
+        ListsEdit(
+            bottomSheetOffset = offset,
+            navigateUp = bottomSheetNavigateUp
+        )
     }
 }
 
@@ -252,9 +236,7 @@ private fun NavGraphBuilder.addSettings(
     root: RootScreen,
 ) {
     composable(Screen.Settings.createRoute(root)) {
-        Settings(
-            navigateUp = { navController.navigateUp() }
-        )
+        Settings(navigateUp = { navController.navigateUp() })
     }
 }
 
@@ -270,8 +252,7 @@ private fun MockScreen(
             .background(MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         val defaultText = "REPLACE ME"
-        Text(text = text?.let { "$defaultText\n#$text" }
-            ?: defaultText,
+        Text(text = text?.let { "$defaultText\n#$text" } ?: defaultText,
             modifier = Modifier.align(Alignment.Center),
             style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Right))
     }
