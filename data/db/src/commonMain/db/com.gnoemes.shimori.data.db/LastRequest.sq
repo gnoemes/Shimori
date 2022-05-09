@@ -14,6 +14,10 @@ insert:
 INSERT OR REPLACE INTO last_request(request, entity_id, timestamp)
 VALUES (?,?,?);
 
+update:
+INSERT OR REPLACE INTO last_request(id, request, entity_id, timestamp)
+VALUES ?;
+
 deleteById:
 DELETE FROM user WHERE id = ?;
 

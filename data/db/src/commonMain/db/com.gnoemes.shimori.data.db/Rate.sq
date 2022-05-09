@@ -24,6 +24,10 @@ insert:
 INSERT OR REPLACE INTO rate (shikimori_id, target_id, target_type, status, score, comment, progress, re_counter, date_created, date_updated)
 VALUES (?,?,?,?,?,?,?,?,?,?);
 
+update:
+INSERT OR REPLACE INTO rate (id, shikimori_id, target_id, target_type, status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES ?;
+
 deleteById:
 DELETE FROM rate WHERE id = ?;
 

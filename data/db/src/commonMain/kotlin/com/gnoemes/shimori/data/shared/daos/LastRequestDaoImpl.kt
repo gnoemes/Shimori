@@ -5,6 +5,7 @@ import com.gnoemes.shimori.data.core.database.daos.LastRequestDao
 import com.gnoemes.shimori.data.core.entities.app.LastRequest
 import com.gnoemes.shimori.data.core.entities.app.Request
 import com.gnoemes.shimori.data.db.ShimoriDB
+import com.gnoemes.shimori.data.shared.LastRequestDAO
 import com.gnoemes.shimori.data.shared.LastRequestMapper
 
 class LastRequestDaoImpl(
@@ -21,7 +22,20 @@ class LastRequestDaoImpl(
         }
     }
 
-    override suspend fun deleteEntity(entity: LastRequest) {
+    override suspend fun update(entity: LastRequest) {
+        entity.let {
+            db.lastRequestQueries.update(
+                LastRequestDAO(
+                    it.id,
+                    it.request,
+                    it.entityId,
+                    it.timeStamp
+                )
+            )
+        }
+    }
+
+    override suspend fun delete(entity: LastRequest) {
         db.lastRequestQueries.deleteById(entity.id)
     }
 

@@ -11,6 +11,7 @@ import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
+import com.gnoemes.shimori.data.shared.AnimeDAO
 import com.gnoemes.shimori.data.shared.anime
 import com.gnoemes.shimori.data.shared.animeWithRate
 import com.gnoemes.shimori.data.shared.long
@@ -59,7 +60,44 @@ internal class AnimeDaoImpl(
         }
     }
 
-    override suspend fun deleteEntity(entity: Anime) {
+    override suspend fun update(entity: Anime) {
+        entity.let {
+            db.animeQueries.update(
+                AnimeDAO(
+                    it.id,
+                    it.shikimoriId,
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.animeType?.type,
+                    it.rating,
+                    it.status,
+                    it.episodes,
+                    it.episodesAired,
+                    it.dateAired,
+                    it.dateReleased,
+                    it.nextEpisode,
+                    it.nextEpisodeDate,
+                    it.nextEpisodeEndDate,
+                    it.ageRating,
+                    it.duration,
+                    it.description,
+                    it.descriptionHtml,
+                    it.franchise,
+                    it.favorite,
+                    it.topicId,
+                    it.genres
+                )
+            )
+        }
+    }
+
+    override suspend fun delete(entity: Anime) {
         db.animeQueries.deleteById(entity.id)
     }
 

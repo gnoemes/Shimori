@@ -95,7 +95,7 @@ internal fun <Type : ShimoriEntity, Key> syncerForEntity(
 ) = ItemSyncer(
     entityDao::insert,
     entityDao::update,
-    entityDao::deleteEntity,
+    entityDao::delete,
     entityToKey,
     entityToKey,
     mapper,
