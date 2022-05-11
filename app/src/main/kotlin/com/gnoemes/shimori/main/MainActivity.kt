@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -74,8 +75,7 @@ class MainActivity : BaseActivity(), DIAware {
                         val systemUiController = rememberSystemUiController()
                         val isLightTheme = !useDarkColors
                         val navigationColor = MaterialTheme.colorScheme.background
-                        val statusBarColor =
-                            MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
+                        val statusBarColor = Color.Transparent
 
                         SideEffect {
                             systemUiController.setStatusBarColor(
