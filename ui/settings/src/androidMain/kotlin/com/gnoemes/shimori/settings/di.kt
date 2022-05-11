@@ -6,5 +6,5 @@ import org.kodein.di.DI
 import org.kodein.di.instance
 
 actual val settingsModule = DI.Module("settings-module") {
-    bindViewModel { SettingsViewModel(instance(tag = KodeinTag.appName), instance()) }
+    bindViewModel { SettingsViewModel(instance(tag = KodeinTag.appVersion), instance()) }
 }
