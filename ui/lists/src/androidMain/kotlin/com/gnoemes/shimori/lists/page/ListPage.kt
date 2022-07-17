@@ -64,7 +64,12 @@ private fun ListPage(
 ) {
     val state by rememberStateWithLifecycle(viewModel.state)
 
-    val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior() }
+    val scrollState = rememberTopAppBarScrollState()
+    val scrollBehavior = remember {
+        TopAppBarDefaults.pinnedScrollBehavior(
+            scrollState,
+        )
+    }
     val snackbarHostState = rememberSnackbarHostState()
 
     val onEditClick =

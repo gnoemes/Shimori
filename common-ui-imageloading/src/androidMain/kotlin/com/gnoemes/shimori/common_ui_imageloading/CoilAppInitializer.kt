@@ -5,7 +5,8 @@ import android.content.Context
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.util.CoilUtils
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import okhttp3.OkHttpClient
 
@@ -18,12 +19,22 @@ class CoilAppInitializer constructor(
 
     override fun init(context: Application) {
         val coilOkHttpClient = okHttpClient.newBuilder()
-            .cache(CoilUtils.createDefaultCache(this.context))
             .build()
 
         Coil.setImageLoader {
             ImageLoader.Builder(context)
-                .componentRegistry { add(imageInterceptor) }
+                .components { add(imageInterceptor) }
+                .memoryCache {
+                    MemoryCache.Builder(context)
+                        .maxSizePercent(0.25)
+                        .build()
+                }
+                .diskCache {
+                    DiskCache.Builder()
+                        .directory(context.cacheDir.resolve("image_cache"))
+                        .maxSizePercent(0.02)
+                        .build()
+                }
                 .okHttpClient(coilOkHttpClient)
                 .build()
         }

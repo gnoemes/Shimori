@@ -13,7 +13,7 @@ configurations {
 }
 
 dependencies {
-    "composeCompiler"("androidx.compose.compiler:compiler:1.2.0-alpha08")
+    "composeCompiler"("androidx.compose.compiler:compiler:1.2.0")
 }
 
 android {

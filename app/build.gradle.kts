@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.gnoemes.shimori.initConfigField
 import com.gnoemes.shimori.propOrDef
@@ -11,7 +13,7 @@ plugins {
 
 android {
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    composeOptions.kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
 
     val version = readVersion("${project.projectDir}/version.properties")
 
