@@ -26,10 +26,10 @@ fun ShimoriMainToolbar(
     onSearchClick: () -> Unit,
     onUserClick: () -> Unit,
     user: UserShort? = null,
-    containerColor : Color = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-    navigationIconContentColor : Color = MaterialTheme.colorScheme.onSurface,
-    titleContentColor : Color = MaterialTheme.colorScheme.onSurface,
-    actionIconContentColor : Color = MaterialTheme.colorScheme.onSurface,
+    containerColor: Color = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+    navigationIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    actionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     Column(
@@ -56,9 +56,9 @@ fun ShimoriMainToolbar(
                     val avatar = user?.image?.preview
                     if (avatar != null) {
                         Image(
-                            painter = rememberImagePainter(avatar) {
+                            painter = rememberImagePainter(avatar, builder = {
                                 crossfade(true)
-                            },
+                            }),
                             contentDescription = stringResource(R.string.profile),
                             modifier = Modifier
                                 .size(24.dp)
