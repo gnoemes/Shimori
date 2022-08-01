@@ -4,6 +4,10 @@ import Main
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.OverscrollConfiguration
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -11,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
@@ -26,6 +31,7 @@ import org.kodein.di.android.closestDI
 import org.kodein.di.compose.withDI
 import org.kodein.di.instance
 
+@OptIn(ExperimentalFoundationApi::class)
 class MainActivity : BaseActivity(), DIAware {
     override val di: DI by closestDI()
 
@@ -62,12 +68,18 @@ class MainActivity : BaseActivity(), DIAware {
                 val prefs =
                     LocalContext.current.getSharedPreferences("defaults", Context.MODE_PRIVATE)
 
+                val overscrollConfiguration =  OverscrollConfiguration(
+                    glowColor = MaterialTheme.colorScheme.onPrimary,
+                    drawPadding = PaddingValues(top = 24.dp, bottom = 24.dp)
+                )
+
                 CompositionLocalProvider(
                     LocalShimoriRateUtil provides rateUtil,
                     LocalShimoriTextCreator provides textCreator,
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,
-                    LocalPreferences provides prefs
+                    LocalPreferences provides prefs,
+                    LocalOverscrollConfiguration provides overscrollConfiguration
                 ) {
                     val useDarkColors = settings.shouldUseDarkColors()
 

@@ -35,4 +35,7 @@ interface AppPalette {
     val surfaceVariant: Color
     val onSurfaceVariant: Color
     val outline: Color
+    val outlineVariant : Color
+
+    val scrim : Color
 }

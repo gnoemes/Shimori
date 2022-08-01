@@ -1,9 +1,11 @@
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.overscroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,19 +66,16 @@ private fun ListPage(
 ) {
     val state by rememberStateWithLifecycle(viewModel.state)
 
-    val scrollState = rememberTopAppBarScrollState()
+    val appBarState = rememberTopAppBarState()
     val scrollBehavior = remember {
         TopAppBarDefaults.pinnedScrollBehavior(
-            scrollState,
+            state = appBarState
         )
     }
     val snackbarHostState = rememberSnackbarHostState()
 
-    val onEditClick =
-        { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
-    val onTogglePin = { entity: TitleWithRateEntity ->
-        viewModel.togglePin(entity)
-    }
+    val onEditClick = { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
+    val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
 
     state.message?.let { message ->
         LaunchedEffect(message) {
@@ -126,7 +125,7 @@ private fun ListPage(
         LazyColumn(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
 //                scroll state can't be restored if we using header/footers with paging data
 //                https://issuetracker.google.com/issues/177245496

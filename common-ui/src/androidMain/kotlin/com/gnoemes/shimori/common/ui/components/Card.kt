@@ -6,11 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
@@ -106,7 +109,14 @@ fun ListCard(
             .height(MaterialTheme.dimens.listPosterHeight),
     ) {
         Cover(
-            painter = rememberImagePainter(image),
+            painter = rememberAsyncImagePainter(
+                ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(image)
+                    .apply {
+                        crossfade(true)
+                    }.build()
+            ),
             onLongClick = onCoverLongClick,
             modifier = Modifier
                 .height(MaterialTheme.dimens.listPosterHeight)

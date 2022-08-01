@@ -23,6 +23,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
@@ -33,7 +34,6 @@ import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.main.MainViewModel
-import com.gnoemes.shimori.main.MainViewState
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
@@ -71,7 +71,9 @@ private fun Main(
 
     //Close bottom sheets smoothly with state.hide() instead of navController.navigateUp()
     val scope = rememberCoroutineScope()
-    val bottomSheetNavigateUp: () -> Unit = { scope.launch { sheetState.hide() } }
+    val bottomSheetNavigateUp: () -> Unit = {
+        scope.launch { sheetState.hide() }
+    }
     val bottomSheetBackPressedCallback = remember {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -99,16 +101,34 @@ private fun Main(
 
     val viewState by rememberStateWithLifecycle(viewModel.state)
 
+    Main(
+        listType = viewState.listType,
+        bottomSheetNavigator = bottomSheetNavigator,
+        navController = navController,
+        bottomSheetNavigateUp = bottomSheetNavigateUp
+    )
+}
+
+@ExperimentalMaterial3Api
+@ExperimentalMaterialNavigationApi
+@Composable
+private fun Main(
+    listType: ListType,
+    bottomSheetNavigator: BottomSheetNavigator,
+    navController: NavHostController,
+    bottomSheetNavigateUp: () -> Unit,
+) {
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetBackgroundColor = MaterialTheme.colorScheme.surface,
-        sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface)
+        sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface),
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = .32f)
     ) {
         Scaffold(
             bottomBar = {
                 MainBottomBar(
-                    viewState = viewState,
+                    listType = listType,
                     navController = navController,
                 )
             }
@@ -123,14 +143,14 @@ private fun Main(
 
 @Composable
 private fun MainBottomBar(
-    viewState: MainViewState,
+    listType: ListType,
     navController: NavController,
 ) {
     val currentSelectedItem by navController.currentScreenAsState()
 
     Column {
         MainNavigationBar(
-            viewState.listType,
+            listType,
             selectedNavigation = currentSelectedItem,
             onNavigationSelected = { selected ->
 
