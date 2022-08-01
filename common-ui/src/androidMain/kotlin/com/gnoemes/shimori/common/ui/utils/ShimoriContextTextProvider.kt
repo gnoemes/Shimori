@@ -11,7 +11,7 @@ class ShimoriContextTextProvider(
                 .resources
                 .getIdentifier(id.key, "string", context.packageName)
                 .also {
-                    if (it < 0) throw IllegalArgumentException("#key:${id.key} not found")
+                    if (it <= 0) throw IllegalArgumentException("#key:${id.key} not found")
                 }
 
             context.getString(resId)

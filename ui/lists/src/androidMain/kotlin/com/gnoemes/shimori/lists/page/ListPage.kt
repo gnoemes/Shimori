@@ -1,11 +1,9 @@
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.overscroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.components.*
@@ -198,7 +196,7 @@ private fun ScreenLayout(
                     val image = message?.image
                     if (image != null) {
                         Image(
-                            painter = rememberImagePainter(image),
+                            painter = rememberAsyncImagePainter(image),
                             contentScale = ContentScale.Crop,
                             contentDescription = null,
                             modifier = Modifier
