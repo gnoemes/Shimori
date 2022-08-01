@@ -3,7 +3,6 @@ package com.gnoemes.shimori.common.ui.utils
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.gnoemes.shimori.common.ui.theme.*
-import com.gnoemes.shimori.ui.utils.Hct
 
 /**
  * Dynamic color-like palette generation but for given primary accent color.
@@ -75,6 +74,8 @@ private fun createPalette(
         override val surfaceVariant = surfaceVariant(palette.neutralVariant, light)
         override val onSurfaceVariant = onSurfaceVariant(palette.neutralVariant, light)
         override val outline = outline(palette.neutralVariant, light)
+        override val outlineVariant = outlineVariant(palette.neutralVariant, light)
+        override val scrim = scrim(palette.neutral, light).copy(alpha = .32f)
     }
 }
 
@@ -175,6 +176,16 @@ private fun onSurfaceVariant(hct: Hct, light: Boolean): Color {
 
 private fun outline(hct: Hct, light: Boolean): Color {
     hct.setTone(if (light) 50f else 60f)
+    return hct.color()
+}
+
+private fun outlineVariant(hct: Hct, light: Boolean) : Color {
+    hct.setTone(if (light) 80f else 30f)
+    return hct.color()
+}
+
+private fun scrim(hct: Hct, light: Boolean) : Color {
+    hct.setTone(0f)
     return hct.color()
 }
 

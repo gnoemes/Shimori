@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.gnoemes.shimori.common.ui.components
 
 import androidx.compose.foundation.Image
@@ -9,10 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.statusBarHeight
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.ui.R
@@ -56,9 +61,14 @@ fun ShimoriMainToolbar(
                     val avatar = user?.image?.preview
                     if (avatar != null) {
                         Image(
-                            painter = rememberImagePainter(avatar, builder = {
-                                crossfade(true)
-                            }),
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(avatar)
+                                    .apply {
+                                        crossfade(true)
+                                    }.build()
+                            ),
                             contentDescription = stringResource(R.string.profile),
                             modifier = Modifier
                                 .size(24.dp)

@@ -1,11 +1,11 @@
-package com.gnoemes.shimori.ui.utils
+package com.gnoemes.shimori.common.ui.utils
 
 
-import com.gnoemes.shimori.ui.utils.ColorUtils.intFromLstar
-import com.gnoemes.shimori.ui.utils.ColorUtils.intFromXyzComponents
-import com.gnoemes.shimori.ui.utils.ColorUtils.linearized
-import com.gnoemes.shimori.ui.utils.ColorUtils.lstarFromInt
-import com.gnoemes.shimori.ui.utils.MathUtils.sanitizeDegrees
+import com.gnoemes.shimori.common.ui.utils.ColorUtils.intFromLstar
+import com.gnoemes.shimori.common.ui.utils.ColorUtils.intFromXyzComponents
+import com.gnoemes.shimori.common.ui.utils.ColorUtils.linearized
+import com.gnoemes.shimori.common.ui.utils.ColorUtils.lstarFromInt
+import com.gnoemes.shimori.common.ui.utils.MathUtils.sanitizeDegrees
 import java.util.*
 
 

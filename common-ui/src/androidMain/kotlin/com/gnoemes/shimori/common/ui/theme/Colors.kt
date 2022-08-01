@@ -37,6 +37,8 @@ fun AppPalette.toColorScheme() : ColorScheme {
         errorContainer = errorContainer,
         onErrorContainer = onErrorContainer,
         outline = outline,
+        outlineVariant = outlineVariant,
+        scrim = scrim
     )
 }
 
