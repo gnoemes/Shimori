@@ -2,11 +2,14 @@ package com.gnoemes.shimori.common.ui.utils
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.core.content.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -18,19 +21,18 @@ import org.kodein.di.DirectDI
 import org.kodein.di.bindFactory
 import org.kodein.di.compose.localDI
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ShimoriSettings.shouldUseDarkColors(): Boolean {
     val prefs = LocalPreferences.current
     val lastTheme = prefs.getString("last_theme", null)
         ?.let(AppTheme::valueOf) ?: AppTheme.SYSTEM
 
-    val themePreference = theme
-        .observe
-        .collectAsStateWithLifecycle(lastTheme)
+    val themePreference by theme.observe.collectAsStateWithLifecycle(lastTheme)
 
-    prefs.edit { putString("last_theme", themePreference.value.name) }
+    prefs.edit { putString("last_theme", themePreference.name) }
 
-    return when (themePreference.value) {
+    return when (themePreference) {
         AppTheme.LIGHT -> false
         AppTheme.DARK -> true
         else -> isSystemInDarkTheme()

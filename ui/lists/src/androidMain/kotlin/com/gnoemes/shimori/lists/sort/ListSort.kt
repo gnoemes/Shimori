@@ -11,9 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
@@ -25,11 +26,12 @@ internal fun ListSort() {
     ListSort(viewModel = shimoriViewModel())
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun ListSort(
     viewModel: ListSortViewModel
 ) {
-    val state by rememberStateWithLifecycle(viewModel.state)
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     ListSort(
         listType = state.listType,

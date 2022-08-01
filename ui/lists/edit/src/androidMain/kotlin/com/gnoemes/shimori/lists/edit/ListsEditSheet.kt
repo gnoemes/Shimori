@@ -25,6 +25,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
@@ -33,7 +35,6 @@ import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
@@ -57,6 +58,7 @@ fun ListsEdit(
     )
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun ListsEdit(
     viewModel: ListsEditViewModel,
@@ -64,7 +66,7 @@ private fun ListsEdit(
     navigateUp: () -> Unit
 ) {
 
-    val state by rememberStateWithLifecycle(viewModel.state)
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect {

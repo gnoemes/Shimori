@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.fragment)

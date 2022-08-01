@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -26,7 +28,6 @@ import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.components.FabPosition
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.rate.ListType
@@ -53,7 +54,7 @@ internal fun ListPage(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun ListPage(
     viewModel: ListPageViewModel,
@@ -62,7 +63,7 @@ private fun ListPage(
     openUser: () -> Unit,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
 ) {
-    val state by rememberStateWithLifecycle(viewModel.state)
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val appBarState = rememberTopAppBarState()
     val scrollBehavior = remember {

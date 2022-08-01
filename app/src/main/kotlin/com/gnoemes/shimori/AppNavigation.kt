@@ -16,12 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.auth.Auth
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists.change.ListsChangeSheet
@@ -137,12 +138,13 @@ private fun NavGraphBuilder.addTalksRoot(
     }
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 private fun NavGraphBuilder.addLists(navController: NavController, root: RootScreen) {
     composable(
         Screen.Lists.createRoute(root),
     ) {
         val shikimori: Shikimori by localDI().instance()
-        val state by rememberStateWithLifecycle(shikimori.authState)
+        val state by shikimori.authState.collectAsStateWithLifecycle()
 
         if (!state.isAuthorized) {
             Auth(openSettings = { navController.navigate(Screen.Settings.createRoute(root)) })
