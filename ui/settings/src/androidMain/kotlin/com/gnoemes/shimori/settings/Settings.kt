@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalLifecycleComposeApi::class)
+
 package com.gnoemes.shimori.settings
 
 import android.os.Build
@@ -7,12 +9,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.base.core.settings.AppAccentColor
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTheme
@@ -22,7 +27,6 @@ import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.secondaryColorFromType
-import com.gnoemes.shimori.common.ui.utils.collectAsStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 
 @Composable
@@ -40,21 +44,22 @@ private fun Settings(
     navigateUp: () -> Unit,
     viewModel: SettingsViewModel
 ) {
-    val viewState = viewModel.state.collectAsStateWithLifecycle(initial = null).value
 
-    viewState?.let {
+    val viewState by viewModel.state.collectAsStateWithLifecycle(initialValue = null)
+
+    viewState?.let { state ->
         Settings(
             navigateUp = navigateUp,
-            appVersion = viewState.appVersion,
-            titlesLocale = viewState.titlesLocale,
+            appVersion = state.appVersion,
+            titlesLocale = state.titlesLocale,
             onChangeTitlesLocale = { viewModel.onChangeTitlesLocale(it) },
-            locale = viewState.locale,
+            locale = state.locale,
             onChangeLocale = { viewModel.onChangeLocale(it) },
-            showSpoilers = viewState.showSpoilers,
+            showSpoilers = state.showSpoilers,
             onChangeSpoilers = { viewModel.onChangeSpoilers(it) },
-            theme = viewState.theme,
+            theme = state.theme,
             onChangeTheme = { viewModel.onChangeTheme(it) },
-            accentColor = viewState.accentColor,
+            accentColor = state.accentColor,
             onChangeAccentColor = { viewModel.onChangeSecondaryColor(it) },
         )
     }

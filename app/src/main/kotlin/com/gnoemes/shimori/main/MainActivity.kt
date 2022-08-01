@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
@@ -40,6 +42,7 @@ class MainActivity : BaseActivity(), DIAware {
     private val formatter: ShimoriDateTimeFormatter by instance()
     private val rateUtil: ShimoriRateUtil by instance()
 
+    @OptIn(ExperimentalLifecycleComposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -54,7 +57,7 @@ class MainActivity : BaseActivity(), DIAware {
 
                 val viewModel: MainViewModel = shimoriViewModel()
 
-                val settingsState by rememberStateWithLifecycle(viewModel.settingsState)
+                val settingsState by viewModel.settingsState.collectAsStateWithLifecycle()
 
                 val textCreator = settingsState.let { state ->
                     ShimoriTextCreator(

@@ -13,9 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.components.*
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -44,6 +45,7 @@ fun Lists(
     )
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun Lists(
     viewModel: ListsViewModel,
@@ -55,7 +57,7 @@ private fun Lists(
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
 ) {
-    val state by rememberStateWithLifecycle(viewModel.state)
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     when {
         state.isLoading -> ListsLoading()

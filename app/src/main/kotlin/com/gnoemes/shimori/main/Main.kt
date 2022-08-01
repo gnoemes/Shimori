@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
@@ -20,6 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -30,7 +33,6 @@ import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
 import com.gnoemes.shimori.common.ui.components.ShimoriBottomBarItem
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common.ui.utils.rememberStateWithLifecycle
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.main.MainViewModel
@@ -50,7 +52,8 @@ internal fun Main() {
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterial3Api::class,
-    androidx.compose.material.ExperimentalMaterialApi::class
+    ExperimentalMaterialApi::class,
+    ExperimentalLifecycleComposeApi::class
 )
 @Composable
 private fun Main(
@@ -99,7 +102,7 @@ private fun Main(
         }
     }
 
-    val viewState by rememberStateWithLifecycle(viewModel.state)
+    val viewState by viewModel.state.collectAsStateWithLifecycle()
 
     Main(
         listType = viewState.listType,
