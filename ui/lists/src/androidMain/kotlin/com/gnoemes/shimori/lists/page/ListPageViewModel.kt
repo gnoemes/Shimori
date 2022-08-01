@@ -114,9 +114,9 @@ internal class ListPageViewModel(
 
     companion object {
         private val PAGING_CONFIG = PagingConfig(
-            pageSize = 20,
-            initialLoadSize = 40,
-            prefetchDistance = 10
+            pageSize = 10,
+            initialLoadSize = 15,
+            prefetchDistance = 5
         )
 
         private const val MESSAGE_TOGGLE_PIN = 1L

@@ -54,6 +54,10 @@ fun SwipeDismissSnackbar(
                 else -> {
                     @Composable() {
                         TextButton(
+                            //override button color to match snackbar component design
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = LocalContentColor.current
+                            ),
                             onClick = { data.performAction() }
                         ) {
                             Text(text = actionLabel)
