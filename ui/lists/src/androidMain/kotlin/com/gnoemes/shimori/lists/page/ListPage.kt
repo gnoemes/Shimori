@@ -135,7 +135,10 @@ private fun ListPage(
             itemSpacer(paddingValues.calculateTopPadding())
             item("sort") { ListSort() }
 
-            items(listItems) { entity ->
+            items(
+                items = listItems,
+                key = { it.id }
+            ) { entity ->
                 if (entity != null) {
                     ListCard(
                         title = entity,
