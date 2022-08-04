@@ -15,7 +15,7 @@ import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.utils.*
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule

@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.base.utils
+package com.gnoemes.shimori.base.core.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 

@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository

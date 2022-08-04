@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.net.toUri
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.base.core.entities.Platform
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.openid.appauth.*

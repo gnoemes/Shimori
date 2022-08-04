@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.database.ShimoriDatabase
 import com.gnoemes.shimori.data.core.database.daos.*
 import com.gnoemes.shimori.data.db.ShimoriDB
