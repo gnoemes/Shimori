@@ -74,6 +74,15 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-dev"
         }
+        create("qa") {
+            matchingFallbacks.add("release")
+            isDebuggable = true
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("debug")
+            versionNameSuffix = "-qa"
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
     }
 }
 
