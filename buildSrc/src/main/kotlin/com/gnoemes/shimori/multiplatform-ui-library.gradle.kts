@@ -4,6 +4,11 @@ plugins {
     id("multiplatform-library")
 }
 
+configure<LibraryExtension> {
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = "1.2.0"
+}
+
 //https://youtrack.jetbrains.com/issue/KT-38694
 //workaround (https://github.com/arunkumar9t2/compose_mpp_workaround/tree/patch-1):
 configurations {

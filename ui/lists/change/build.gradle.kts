@@ -4,11 +4,6 @@ plugins {
     id("multiplatform-ui-library")
 }
 
-configure<LibraryExtension>() {
-    buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
-}
-
 dependencies {
     commonMainImplementation(projects.domain)
     commonMainImplementation(projects.commonUi)
