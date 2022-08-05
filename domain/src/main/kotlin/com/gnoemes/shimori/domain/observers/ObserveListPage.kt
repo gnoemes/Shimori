@@ -9,6 +9,7 @@ import com.gnoemes.shimori.data.paging.PagingConfig
 import com.gnoemes.shimori.data.paging.PagingData
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
+import com.gnoemes.shimori.data.repositories.pin.ListPinRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
 import com.gnoemes.shimori.domain.PagingInteractor
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,7 @@ class ObserveListPage(
     private val animeRepository: AnimeRepository,
     private val mangaRepository: MangaRepository,
     private val ranobeRepository: RanobeRepository,
+    private val listPinRepository: ListPinRepository,
 ) : PagingInteractor<ObserveListPage.Params, PaginatedEntity>() {
 
     override fun create(params: Params): Flow<PagingData<PaginatedEntity>> {
@@ -27,6 +29,7 @@ class ObserveListPage(
                     ListType.Anime -> animeRepository.paging(params.status, params.sort)
                     ListType.Manga -> mangaRepository.paging(params.status, params.sort)
                     ListType.Ranobe -> ranobeRepository.paging(params.status, params.sort)
+                    ListType.Pinned -> listPinRepository.paging(params.sort)
                     else -> throw IllegalArgumentException("List with type $type not supported")
                 }
             }
