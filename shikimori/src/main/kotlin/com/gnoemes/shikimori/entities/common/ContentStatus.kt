@@ -10,5 +10,7 @@ enum class ContentStatus(val status: String) {
     @SerialName("ongoing")
     ONGOING("ongoing"),
     @SerialName("released")
-    RELEASED("released")
+    RELEASED("released"),
+    @SerialName("paused")
+    PAUSED("paused"),
 }

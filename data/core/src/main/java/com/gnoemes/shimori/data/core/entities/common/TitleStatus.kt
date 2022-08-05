@@ -4,5 +4,6 @@ package com.gnoemes.shimori.data.core.entities.common
 enum class TitleStatus(val status: String) {
     ANONS("anons"),
     ONGOING("ongoing"),
-    RELEASED("released")
+    RELEASED("released"),
+    PAUSED("paused"),
 }
