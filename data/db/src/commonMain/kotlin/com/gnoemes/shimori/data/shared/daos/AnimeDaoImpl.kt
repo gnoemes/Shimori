@@ -45,17 +45,17 @@ internal class AnimeDaoImpl(
                 it.episodesAired,
                 it.dateAired,
                 it.dateReleased,
-                it.nextEpisode,
-                it.nextEpisodeDate,
-                it.nextEpisodeEndDate,
                 it.ageRating,
-                it.duration,
                 it.description,
                 it.descriptionHtml,
                 it.franchise,
                 it.favorite,
                 it.topicId,
-                it.genres
+                it.genres,
+                it.duration,
+                it.nextEpisode,
+                it.nextEpisodeDate,
+                it.nextEpisodeEndDate,
             )
         }
     }
@@ -81,17 +81,17 @@ internal class AnimeDaoImpl(
                     it.episodesAired,
                     it.dateAired,
                     it.dateReleased,
-                    it.nextEpisode,
-                    it.nextEpisodeDate,
-                    it.nextEpisodeEndDate,
                     it.ageRating,
-                    it.duration,
                     it.description,
                     it.descriptionHtml,
                     it.franchise,
                     it.favorite,
                     it.topicId,
-                    it.genres
+                    it.genres,
+                    it.duration,
+                    it.nextEpisode,
+                    it.nextEpisodeDate,
+                    it.nextEpisodeEndDate,
                 )
             )
         }

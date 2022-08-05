@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.shared.daos
 
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.entities.rate.Rate
@@ -20,6 +21,7 @@ import kotlin.system.measureTimeMillis
 internal class RateDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
+    private val dispatchers: AppCoroutineDispatchers,
 ) : RateDao() {
 
     val syncer = syncerForEntity(
@@ -113,7 +115,7 @@ internal class RateDaoImpl(
         return db.rateQueries
             .queryCount()
             .asFlow()
-            .mapToOne()
+            .mapToOne(dispatchers.io)
             .map { it > 0 }
     }
 
@@ -122,7 +124,7 @@ internal class RateDaoImpl(
             *RateStatus.listPagesOrder.map { status ->
                 db.rateQueries.statusForTypeExist(type, status)
                     .asFlow()
-                    .mapToOne()
+                    .mapToOne(dispatchers.io)
                     .map { count -> status to (count > 0) }
             }
                 .toTypedArray()

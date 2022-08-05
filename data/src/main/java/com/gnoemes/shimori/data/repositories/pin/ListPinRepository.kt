@@ -1,12 +1,17 @@
 package com.gnoemes.shimori.data.repositories.pin
 
 import com.gnoemes.shimori.data.core.database.daos.ListPinDao
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 
 
 class ListPinRepository constructor(
     private val dao: ListPinDao
 ) {
+
+    fun paging(
+        sort: RateSort
+    ) = dao.paging(sort)
 
     fun observePinExist(targetId: Long, targetType: RateTargetType) =
         dao.observePinExist(targetId, targetType)

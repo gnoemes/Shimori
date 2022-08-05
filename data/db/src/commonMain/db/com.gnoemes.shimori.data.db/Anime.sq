@@ -23,17 +23,17 @@ CREATE TABLE anime (
     episodes_aired INTEGER AS Int NOT NULL,
     date_aired TEXT AS LocalDate,
     date_released TEXT AS LocalDate,
-    next_episode INTEGER AS Int,
-    next_episode_date INTEGER AS Instant,
-    next_episode_end_date INTEGER AS Instant,
     age_rating TEXT AS AgeRating NOT NULL,
-    duration INTEGER AS Int,
     description TEXT,
     description_html TEXT,
     franchise TEXT,
     favorite INTEGER AS Boolean NOT NULL,
     topic_id INTEGER,
-    genres TEXT AS List<Genre>
+    genres TEXT AS List<Genre>,
+    duration INTEGER AS Int,
+    next_episode INTEGER AS Int,
+    next_episode_date INTEGER AS Instant,
+    next_episode_end_date INTEGER AS Instant
 );
 
 CREATE UNIQUE INDEX anime_shikimori_id ON anime(shikimori_id);
@@ -42,17 +42,15 @@ CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
 insert:
 INSERT OR REPLACE INTO anime(shikimori_id, name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
-date_aired, date_released, next_episode, next_episode_date, next_episode_end_date,
-age_rating, duration, description, description_html, franchise, favorite,
-topic_id, genres)
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
 VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
 INSERT OR REPLACE INTO anime(id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
-date_aired, date_released, next_episode, next_episode_date, next_episode_end_date,
-age_rating, duration, description, description_html, franchise, favorite,
-topic_id, genres)
+date_aired, date_released, age_rating, description, description_html, franchise, favorite,
+topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
 VALUES ?;
 
 
