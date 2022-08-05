@@ -2,11 +2,6 @@ plugins {
     id("multiplatform-ui-library")
 }
 
-android {
-    buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
-}
-
 dependencies {
     commonMainApi(projects.base.shared)
     commonMainImplementation(projects.data.core)
