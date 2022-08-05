@@ -19,6 +19,7 @@ import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 
 internal class MangaDaoImpl(
     private val db: ShimoriDB,
@@ -110,7 +111,8 @@ internal class MangaDaoImpl(
     override fun observeById(id: Long): Flow<MangaWithRate?> {
         return db.mangaQueries.queryByIdWithRate(id, ::mangaWithRate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override suspend fun queryByStatus(status: RateStatus): List<MangaWithRate> {

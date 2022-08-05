@@ -19,6 +19,7 @@ import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 
 internal class RanobeDaoImpl(
     private val db: ShimoriDB,
@@ -115,7 +116,8 @@ internal class RanobeDaoImpl(
     override fun observeById(id: Long): Flow<RanobeWithRate?> {
         return db.mangaQueries.queryByIdWithRate(id, ::ranobeWithRate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override fun paging(status: RateStatus, sort: RateSort): PagingSource<Long, PaginatedEntity> {

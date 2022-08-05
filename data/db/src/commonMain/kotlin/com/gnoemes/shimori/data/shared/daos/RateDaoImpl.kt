@@ -15,6 +15,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlin.system.measureTimeMillis
 
@@ -94,21 +95,24 @@ internal class RateDaoImpl(
         return db.rateQueries
             .queryById(id, ::rate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override fun observeByShikimoriId(id: Long): Flow<Rate?> {
         return db.rateQueries
             .queryByShikimoriId(id, ::rate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override fun observeByTarget(targetId: Long, targetType: RateTargetType): Flow<Rate?> {
         return db.rateQueries
             .queryByTarget(targetId, targetType, ::rate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override fun observeHasRates(): Flow<Boolean> {
@@ -117,6 +121,7 @@ internal class RateDaoImpl(
             .asFlow()
             .mapToOne(dispatchers.io)
             .map { it > 0 }
+            .flowOn(dispatchers.io)
     }
 
     override fun observeExistedStatuses(type: RateTargetType): Flow<List<RateStatus>> {
@@ -133,5 +138,6 @@ internal class RateDaoImpl(
                 .filter { it.second }
                 .map { it.first }
         }
+            .flowOn(dispatchers.io)
     }
 }

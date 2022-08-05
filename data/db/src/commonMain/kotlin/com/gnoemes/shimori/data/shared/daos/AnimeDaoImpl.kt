@@ -19,6 +19,7 @@ import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 
 internal class AnimeDaoImpl(
     private val db: ShimoriDB,
@@ -123,7 +124,8 @@ internal class AnimeDaoImpl(
     override fun observeById(id: Long): Flow<AnimeWithRate?> {
         return db.animeQueries.queryByIdWithRate(id, ::animeWithRate)
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
+            .flowOn(dispatchers.io)
     }
 
     override fun observeCalendar(): Flow<List<AnimeWithRate>> {
