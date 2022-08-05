@@ -12,6 +12,7 @@ internal class TitleStatusMapper : Mapper<ContentStatus?, TitleStatus?> {
             ContentStatus.ANONS -> TitleStatus.ANONS
             ContentStatus.ONGOING -> TitleStatus.ONGOING
             ContentStatus.RELEASED -> TitleStatus.RELEASED
+            ContentStatus.PAUSED -> TitleStatus.PAUSED
         }
     }
 }
