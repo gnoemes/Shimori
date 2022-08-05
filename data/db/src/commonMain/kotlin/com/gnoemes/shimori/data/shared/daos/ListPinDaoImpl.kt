@@ -16,6 +16,7 @@ import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import comgnoemesshimoridatadb.Pinned
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 internal class ListPinDaoImpl(
@@ -77,12 +78,14 @@ internal class ListPinDaoImpl(
         return db.listPinQueries.queryByTarget(targetId, targetType)
             .asFlow()
             .map { it.executeAsOneOrNull() != null }
+            .flowOn(dispatchers.io)
     }
 
     override fun observePinsExist(): Flow<Boolean> {
         return db.listPinQueries.queryCount()
             .asFlow()
             .map { it.executeAsOne() > 0 }
+            .flowOn(dispatchers.io)
     }
 
     override fun paging(sort: RateSort): PagingSource<Long, PaginatedEntity> {

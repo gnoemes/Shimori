@@ -21,8 +21,8 @@ internal class ShimoriSQLDelightDatabase(
     dispatchers: AppCoroutineDispatchers,
 ) : ShimoriDatabase {
     override val rateDao: RateDao = RateDaoImpl(db, logger, dispatchers)
-    override val rateSortDao: RateSortDao = RateSortDaoImpl(db, logger)
-    override val userDao: UserDao = UserDaoImpl(db, logger)
+    override val rateSortDao: RateSortDao = RateSortDaoImpl(db, logger, dispatchers)
+    override val userDao: UserDao = UserDaoImpl(db, logger, dispatchers)
     override val lastRequestDao: LastRequestDao = LastRequestDaoImpl(db, logger)
     override val animeDao: AnimeDao = AnimeDaoImpl(db, logger, dispatchers)
     override val mangaDao: MangaDao = MangaDaoImpl(db, logger, dispatchers)

@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.shared.daos
 
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.UserDao
 import com.gnoemes.shimori.data.core.entities.user.User
@@ -12,11 +13,13 @@ import com.gnoemes.shimori.data.shared.userToUserShortMapper
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 internal class UserDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
+    private val dispatchers: AppCoroutineDispatchers,
 ) : UserDao() {
 
     override suspend fun insert(entity: User) {
@@ -89,8 +92,9 @@ internal class UserDaoImpl(
     override fun observeMeShort(): Flow<UserShort?> {
         return db.userQueries.queryMe()
             .asFlow()
-            .mapToOneOrNull()
+            .mapToOneOrNull(dispatchers.io)
             .map(userToUserShortMapper::map)
+            .flowOn(dispatchers.io)
     }
 
     override suspend fun queryMe(): User? {
