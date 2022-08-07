@@ -134,16 +134,17 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.navigationanimation)
     implementation(libs.accompanist.navigationmaterial)
+    implementation(libs.accompanist.webview)
 
     implementation(libs.ktor.logging)
     implementation(libs.ktor.contentNegotiation)
     implementation(libs.ktor.serialization.json)
     implementation(libs.ktor.okhttp)
+    implementation(libs.ktor.auth)
 
     implementation(libs.google.analytics)
     implementation(libs.google.crashlytics)
 
-    implementation(libs.appauth)
     implementation(libs.slf4j)
 }
 

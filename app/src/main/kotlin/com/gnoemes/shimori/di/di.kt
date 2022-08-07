@@ -14,9 +14,9 @@ import com.gnoemes.shimori.base.core.entities.ShikimoriPlatformValues
 import com.gnoemes.shimori.base.core.extensions.new
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
-import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.utils.*
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
@@ -34,6 +34,7 @@ import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
@@ -111,6 +112,7 @@ private val networkModule = DI.Module(name = "network") {
     bindSingleton(KodeinTag.imageClient) { OkHttpClient.Builder().defaultConfig().build() }
     bindSingleton(KodeinTag.shikimori) {
         val platform = instance<Platform>()
+        val storage = instance<ShimoriStorage>()
 
         HttpClient(OkHttp) {
             engine {
@@ -118,10 +120,11 @@ private val networkModule = DI.Module(name = "network") {
                     defaultConfig(maxRequestPerHost = 5)
                 }
             }
+            install(Auth)
 
             install(Logging) {
                 logger = Logger.ANDROID
-                level = if (platform.debug) LogLevel.BODY else LogLevel.NONE
+                level = if (platform.debug) LogLevel.HEADERS else LogLevel.NONE
             }
 
             install(UserAgent) {

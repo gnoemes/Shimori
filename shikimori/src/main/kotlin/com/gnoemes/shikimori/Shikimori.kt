@@ -25,17 +25,19 @@ import com.gnoemes.shimori.data.core.entities.auth.ShikimoriAuthState
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.runBlocking
 
 @com.gnoemes.shimori.data.core.utils.Shikimori
 class Shikimori(
-    private val nonAuthClient: HttpClient,
+    private val client: HttpClient,
     private val platform: Platform,
     private val storage: ShimoriStorage,
     private val logger: Logger,
@@ -44,8 +46,10 @@ class Shikimori(
         if (storage.shikimoriAccessToken.isNullOrBlank()) ShikimoriAuthState.LOGGED_OUT
         else ShikimoriAuthState.LOGGED_IN
     )
+    private val _errorState = MutableSharedFlow<String>()
 
     val authState: StateFlow<ShikimoriAuthState> get() = _state
+    val authError: SharedFlow<String> get() = _errorState
 
     private val API_URL = "${platform.shikimori.url}$API_PATH"
 
@@ -53,31 +57,26 @@ class Shikimori(
         const val API_PATH = "/api"
     }
 
-    private val client: HttpClient
-
-
     init {
-        client = runBlocking { configClient() }
+        configureTokens()
     }
 
-    private suspend fun configClient() = nonAuthClient.config {
-        install(Auth) {
-            bearer {
+    private fun configureTokens() {
+        client.plugin(Auth).bearer {
+            loadTokens {
                 val accessToken = storage.shikimoriAccessToken
                 val refreshToken = storage.shikimoriRefreshToken
                 if (accessToken != null && refreshToken != null) {
-                    loadTokens {
-                        onAuthSuccess(accessToken, refreshToken)
-                        BearerTokens(accessToken, refreshToken)
-                    }
-                }
+                    onAuthSuccess(accessToken, refreshToken)
+                    BearerTokens(accessToken, refreshToken)
+                } else null
+            }
 
-                refreshTokens {
-                    val rfToken = storage.shikimoriRefreshToken ?: return@refreshTokens null
-                    auth.refreshToken(rfToken)?.let {
-                        onAuthSuccess(it.accessToken, it.refreshToken)
-                        BearerTokens(it.accessToken, it.refreshToken)
-                    }
+            refreshTokens {
+                val rfToken = storage.shikimoriRefreshToken ?: return@refreshTokens null
+                auth.refreshToken(rfToken)?.let {
+                    onAuthSuccess(it.accessToken, it.refreshToken)
+                    BearerTokens(it.accessToken, it.refreshToken)
                 }
             }
         }
@@ -92,7 +91,17 @@ class Shikimori(
     suspend fun onAuthSuccess(accessToken: String, refreshToken: String) {
         storage.shikimoriAccessToken = accessToken
         storage.shikimoriRefreshToken = refreshToken
+        configureTokens()
         _state.emit(ShikimoriAuthState.LOGGED_IN)
+    }
+
+    suspend fun performTokenAuthorization(authCode: String): TokenResponse? {
+        return auth.accessToken(authCode)
+    }
+
+    suspend fun onAuthError(error: String) {
+        onAuthExpired()
+        _errorState.emit(error)
     }
 
     ///////////////////////////////////////////////////////
@@ -111,13 +120,30 @@ class Shikimori(
     ///////////////////////////////////////////////////////
 
     private inner class AuthServiceImpl : AuthService {
-        override suspend fun refreshToken(refreshToken: String): TokenResponse? {
+        private val tokenEndpoint = "${platform.shikimori.url}/oauth/token"
+        override suspend fun accessToken(authCode: String): TokenResponse? {
             return try {
                 client.post {
-                    url("$API_URL/oauth/token")
+                    url(tokenEndpoint)
+                    parameter("grant_type", "authorization_code")
                     parameter("client_id", platform.shikimori.clientId)
                     parameter("client_secret", platform.shikimori.secretKey)
                     parameter("redirect_uri", platform.shikimori.oauthRedirect)
+                    parameter("code", authCode)
+                }.body<TokenResponse>()
+            } catch (e: Exception) {
+                logger.e("Failed get access token", t = e, tag = "Shikimori")
+                onAuthError(e.localizedMessage)
+                null
+            }
+        }
+
+        override suspend fun refreshToken(refreshToken: String): TokenResponse? {
+            return try {
+                client.post {
+                    url(tokenEndpoint)
+                    parameter("client_id", platform.shikimori.clientId)
+                    parameter("client_secret", platform.shikimori.secretKey)
                     parameter("refresh_token", refreshToken)
                     parameter("grant_type", "refresh_token")
                 }.body<TokenResponse>()

@@ -12,5 +12,4 @@ dependencies {
     androidMainImplementation(libs.androidx.browser)
     androidMainImplementation(libs.androidx.core)
     androidMainImplementation(libs.androidx.activity.compose)
-    androidMainImplementation(libs.appauth)
 }
