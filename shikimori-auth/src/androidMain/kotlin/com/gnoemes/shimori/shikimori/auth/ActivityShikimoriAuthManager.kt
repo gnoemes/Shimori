@@ -28,9 +28,9 @@ class ActivityShikimoriAuthManager constructor(
                     ShikimoriConstants.AUTHORIZATION_ENDPOINT.toUri(),
                     ShikimoriConstants.TOKEN_ENDPOINT.toUri(),
                 ),
-                platform.shikimoriClientId,
+                platform.shikimori.clientId,
                 ResponseTypeValues.CODE,
-                platform.shikimoriRedirect.toUri()
+                platform.shikimori.oauthRedirect.toUri()
             ).defaultConfig().build()
         )
     }
@@ -42,9 +42,9 @@ class ActivityShikimoriAuthManager constructor(
                     ShikimoriConstants.REGISTRATION_ENDPOINT.toUri(),
                     ShikimoriConstants.TOKEN_ENDPOINT.toUri(),
                 ),
-                platform.shikimoriClientId,
+                platform.shikimori.clientId,
                 ResponseTypeValues.CODE,
-                platform.shikimoriRedirect.toUri()
+                platform.shikimori.oauthRedirect.toUri()
             ).defaultConfig().build()
         )
     }
@@ -55,7 +55,7 @@ class ActivityShikimoriAuthManager constructor(
             response != null -> {
                 authService.performTokenRequest(
                     response.createTokenExchangeRequest(),
-                    ClientSecretPost(platform.shikimoriSecretKey)
+                    ClientSecretPost(platform.shikimori.secretKey)
                 ) { tokenResponse, ex ->
                     val state = AuthState().apply {
                         update(tokenResponse, ex)

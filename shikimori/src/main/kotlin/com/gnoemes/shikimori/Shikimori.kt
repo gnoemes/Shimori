@@ -47,7 +47,7 @@ class Shikimori(
 
     val authState: StateFlow<ShikimoriAuthState> get() = _state
 
-    private val API_URL = "${platform.shikimoriURL}$API_PATH"
+    private val API_URL = "${platform.shikimori.url}$API_PATH"
 
     companion object {
         const val API_PATH = "/api"
@@ -115,9 +115,9 @@ class Shikimori(
             return try {
                 client.post {
                     url("$API_URL/oauth/token")
-                    parameter("client_id", platform.shikimoriClientId)
-                    parameter("client_secret", platform.shikimoriSecretKey)
-                    parameter("redirect_uri", platform.shikimoriRedirect)
+                    parameter("client_id", platform.shikimori.clientId)
+                    parameter("client_secret", platform.shikimori.secretKey)
+                    parameter("redirect_uri", platform.shikimori.oauthRedirect)
                     parameter("refresh_token", refreshToken)
                     parameter("grant_type", "refresh_token")
                 }.body<TokenResponse>()

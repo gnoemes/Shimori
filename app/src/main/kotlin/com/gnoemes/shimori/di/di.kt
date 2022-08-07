@@ -10,6 +10,7 @@ import com.gnoemes.shimori.auth.authModule
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.core.di.KodeinTag
 import com.gnoemes.shimori.base.core.entities.Platform
+import com.gnoemes.shimori.base.core.entities.ShikimoriPlatformValues
 import com.gnoemes.shimori.base.core.extensions.new
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
@@ -64,17 +65,19 @@ val appModule = DI.Module("app") {
             type = Platform.Type.Android,
             debug = BuildConfig.DEBUG,
             appVersion = instance(KodeinTag.appVersion),
-            shikimoriURL = BuildConfig.ShikimoriBaseUrl,
-            shikimoriClientId = BuildConfig.ShikimoriClientId,
-            shikimoriSecretKey = BuildConfig.ShikimoriClientSecret,
-            shikimoriUserAgent = instance(KodeinTag.appName),
-            shikimoriRedirect = instance<Context>().let { context ->
-                val scheme = context.getString(R.string.shikimori_redirect_scheme)
-                val host = context.getString(R.string.shikimori_redirect_host)
-                val path = context.getString(R.string.shikimori_redirect_path)
+            shikimori = ShikimoriPlatformValues(
+                url = BuildConfig.ShikimoriBaseUrl,
+                clientId = BuildConfig.ShikimoriClientId,
+                secretKey = BuildConfig.ShikimoriClientSecret,
+                userAgent = instance(KodeinTag.appName),
+                oauthRedirect = instance<Context>().let { context ->
+                    val scheme = context.getString(R.string.shikimori_redirect_scheme)
+                    val host = context.getString(R.string.shikimori_redirect_host)
+                    val path = context.getString(R.string.shikimori_redirect_path)
 
-                "$scheme://$host$path"
-            }
+                    "$scheme://$host$path"
+                }
+            )
         )
     }
 
@@ -122,7 +125,7 @@ private val networkModule = DI.Module(name = "network") {
             }
 
             install(UserAgent) {
-                agent = platform.shikimoriUserAgent
+                agent = platform.shikimori.userAgent
             }
 
             install(ContentNegotiation) {
