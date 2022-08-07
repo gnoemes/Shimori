@@ -27,9 +27,11 @@
         </activity>
 
         <activity
-            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:name=".auth.AuthActivity"
             android:exported="true"
-            tools:node="replace">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Shimori"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

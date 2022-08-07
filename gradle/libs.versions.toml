@@ -69,6 +69,7 @@ accompanist-pager = { module = "com.google.accompanist:accompanist-pager", versi
 accompanist-pagerindicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-navigationanimation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-navigationmaterial = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 
 #AndroidX
 androidx-activity-compose = "androidx.activity:activity-compose:1.6.0-alpha05"
@@ -129,6 +130,5 @@ mockK = "io.mockk:mockk:1.12.2"
 
 #Other
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
-appauth = "net.openid:appauth:0.8.1"
 #for ktor logs
 slf4j = "org.slf4j:slf4j-simple:1.7.30"
