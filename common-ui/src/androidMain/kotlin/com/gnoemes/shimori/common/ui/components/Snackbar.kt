@@ -1,16 +1,12 @@
 package com.gnoemes.shimori.common.ui.components
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,7 +19,7 @@ fun ShimoriSnackbar(
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = { hostState.currentSnackbarData?.dismiss() },
-    icon: @Composable RowScope.() -> Unit = {},
+    icon: @Composable (RowScope.() -> Unit)? = null,
     snackbar: @Composable (SnackbarData) -> Unit = { data ->
         SwipeDismissSnackbar(
             data = data,
@@ -44,7 +40,7 @@ fun ShimoriSnackbar(
 fun SwipeDismissSnackbar(
     data: SnackbarData,
     onDismiss: (() -> Unit)? = null,
-    icon: @Composable RowScope.() -> Unit,
+    icon: @Composable (RowScope.() -> Unit)?,
     snackbar: @Composable (SnackbarData) -> Unit = {
         Snackbar(
             modifier = Modifier.padding(8.dp),
@@ -70,7 +66,10 @@ fun SwipeDismissSnackbar(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                icon()
+                if (icon != null) {
+                    icon()
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
 
                 Text(
                     text = it.visuals.message,

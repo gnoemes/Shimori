@@ -212,8 +212,6 @@ private fun ScreenLayout(
                                 )
                                 .clip(ShimoriSmallestRoundedCornerShape)
                         )
-
-                        Spacer(modifier = Modifier.width(12.dp))
                     }
                 })
         },
