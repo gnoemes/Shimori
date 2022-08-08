@@ -19,14 +19,14 @@ val defaultDimensions = Dimensions(
     listPosterHeight = 128.dp,
     listPosterWidth = 96.dp,
     bottomBarHeight = 80.dp,
-    bottomBarContainerHeight = 128.dp
+    bottomBarContainerHeight = 88.dp
 )
 
 val sw360Dimensions = Dimensions(
     listPosterHeight = 144.dp,
     listPosterWidth = 108.dp,
     bottomBarHeight = 80.dp,
-    bottomBarContainerHeight = 128.dp
+    bottomBarContainerHeight = 88.dp
 )
 
 val MaterialTheme.dimens
