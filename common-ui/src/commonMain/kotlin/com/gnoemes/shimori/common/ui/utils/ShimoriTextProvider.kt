@@ -51,6 +51,7 @@ value class MessageID private constructor(val key: String) {
         val Undo = MessageID("undo")
         val TitlePinned = MessageID("notification_title_pinned")
         val TitleUnPinned = MessageID("notification_title_unpinned")
+        val OAuthAccessDenied = MessageID("auth_revoke")
     }
 }
 

@@ -43,7 +43,7 @@ fun SwipeDismissSnackbar(
     icon: @Composable (RowScope.() -> Unit)?,
     snackbar: @Composable (SnackbarData) -> Unit = {
         Snackbar(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(horizontal = 8.dp),
             shape = ShimoriSmallRoundedCornerShape,
             action = when (val actionLabel = data.visuals.actionLabel) {
                 null, "" -> null
@@ -63,7 +63,7 @@ fun SwipeDismissSnackbar(
             }
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (icon != null) {

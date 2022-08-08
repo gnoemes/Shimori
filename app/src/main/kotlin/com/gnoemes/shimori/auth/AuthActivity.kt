@@ -131,13 +131,14 @@ class AuthActivity : BaseActivity(), DIAware {
             },
             client = client,
             onDispose = {
-                with(CookieManager.getInstance()) {
-                    removeAllCookies(null)
-                    removeSessionCookies(null)
-                    flush()
-                }
-                it.clearCache(true)
-                it.clearHistory()
+                        //TODO move to use case and use only after logout
+//                with(CookieManager.getInstance()) {
+//                    removeAllCookies(null)
+//                    removeSessionCookies(null)
+//                    flush()
+//                }
+//                it.clearCache(true)
+//                it.clearHistory()
             },
             modifier = Modifier.fillMaxSize()
         )
