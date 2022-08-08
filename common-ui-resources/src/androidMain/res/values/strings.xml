@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Shimori</string>
     <string name="anime">Anime</string>
@@ -117,7 +117,7 @@
     <string name="title_related_chronology_side_stories">Side stories</string>
     <string name="title_menu_share">Share</string>
     <string name="title_menu_web">In browser</string>
-    <string name="title_menu_names">Copy name</string>
+    <string name="title_menu_names">All names</string>
     <string name="title_menu_names_copy">The name copied.</string>
     <string name="title_character_seiyu">Seiyu</string>
     <string name="title_trailers_frames_t">Trailers</string>
@@ -137,7 +137,7 @@
     <string name="calendar_lists">In your list</string>
     <string name="title_type">Type</string>
     <string name="title_ep">Episodes</string>
-    <string name="title_ep_duration">Episode duration</string>
+    <string name="title_ep_duration">Duration</string>
     <string name="title_ep_duration_format" translatable="false">%d %s</string>
     <string name="inc_close">Drop to cancel</string>
     <string name="inc_hint">Hold +1 and slide up to add progress.</string>
@@ -149,4 +149,37 @@
     <string name="manga_rec_cat">Manga recommendations</string>
     <string name="ranobe_rec_cat">Ranobe that may interest</string>
     <string name="title_release">Release date</string>
+    <string name="search_no_results">No results</string>
+    <string name="search_no_results_desc" comment="search_no_results_desc">Try other category or edit search query.</string>
+    <string name="search_no_results_action">Edit search query</string>
+    <string name="filter_status">Status</string>
+    <string name="filter_list">List</string>
+    <string name="filter_season">Season</string>
+    <string name="filter_genre">Genre</string>
+    <string name="filter_type">Type</string>
+    <string name="filter_season_duration">Season duration</string>
+    <string name="filter_age_rating">Age rating</string>
+    <string name="filter_duration">Duration</string>
+    <string name="profile_history">History</string>
+    <string name="profile_favourites">Favourites</string>
+    <string name="profile_friends">Friends</string>
+    <string name="profile_add_to_friends">Add to friends</string>
+    <string name="profile_remove_from_friends">Remove from friends</string>
+    <string name="profile_ignore">Ignore</string>
+    <string name="profile_unblock">Unblock</string>
+    <string name="profile_friends_add">Add</string>
+    <string name="profile_friends_remove">Remove</string>
+    <string name="dialog_yes">OK</string>
+    <string name="dialog_no">Cancel</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Some of the features will become unavailable.</string>
+    <string name="title_characters_main">Main</string>
+    <string name="title_characters_supporting" comment="title_characters_supporting">Supporting</string>
+    <string name="auth_revoke">The app can\'t access your account sufficiently. Log in and allow access.</string>
+    <string name="part_access_title">Some of the features are unavailable</string>
+    <string name="part_access_hint">Open shikimori.one settings → Tap \"Revoke access\" on the app page → Re-login to the app and check all items.</string>
+    <string name="part_access_listname">The app isn’t able to</string>
+    <string name="title_menu_names_selected">Selected in settings</string>
+    <string name="title_translators_dub_and_sub">Dubbing and subtitles</string>
+    <string name="title_menu_names_other">Other</string>
 </resources>
