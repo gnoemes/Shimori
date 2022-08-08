@@ -194,7 +194,7 @@ private fun MainNavigationBar(
                 brush = Brush.verticalGradient(
                     colorStops = arrayOf(
                         0f to MaterialTheme.colorScheme.background.copy(alpha = 0f),
-                        0.52f to MaterialTheme.colorScheme.background.copy(alpha = 0.65f),
+                        0.52f to MaterialTheme.colorScheme.background.copy(alpha = 0.60f),
                         1f to MaterialTheme.colorScheme.background,
                     ),
                     tileMode = TileMode.Clamp
