@@ -8,7 +8,8 @@ import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 @kotlinx.serialization.Serializable
 data class RanobeWithRate(
     override val entity: Ranobe,
-    override val rate: Rate?
+    override val rate: Rate?,
+    override val pinned: Boolean
 ) : TitleWithRate<Ranobe>, PaginatedEntity {
     override val id: Long = entity.id
     override val type: RateTargetType = entity.type

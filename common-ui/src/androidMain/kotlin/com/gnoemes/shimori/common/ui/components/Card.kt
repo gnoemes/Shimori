@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.theme.dimens
@@ -82,6 +81,7 @@ fun ListCard(
                 )
                 else -> throw IllegalArgumentException("Entity $entity does not support")
             },
+            isPinned = title.pinned,
             onCoverLongClick = onCoverLongClick,
             onEditClick = onEditClick,
             onIncrementClick = onIncrementClick,
@@ -97,6 +97,7 @@ fun ListCard(
     description: @Composable () -> Unit,
     score: Int?,
     progress: String,
+    isPinned: Boolean,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
@@ -117,6 +118,7 @@ fun ListCard(
                         crossfade(true)
                     }.build()
             ),
+            isPinned = isPinned,
             onLongClick = onCoverLongClick,
             modifier = Modifier
                 .height(MaterialTheme.dimens.listPosterHeight)

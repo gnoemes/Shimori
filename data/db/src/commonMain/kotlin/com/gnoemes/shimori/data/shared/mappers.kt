@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.shared
 
+import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.app.LastRequest
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
@@ -147,9 +148,13 @@ internal fun animeWithRate(
     progress: Int,
     re_counter: Int,
     date_created: Instant?,
-    date_updated: Instant?
+    date_updated: Instant?,
+    pinId: Long?,
+    target_id_: Long?,
+    target_type_: RateTargetType?,
 ) = AnimeWithRate(
-    anime(id, shikimori_id, name, name_ru, name_eng,
+    anime(
+        id, shikimori_id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
         url, anime_type, rating, status, episodes, episodes_aired,
         date_aired, date_released, age_rating, description, description_html,
@@ -159,7 +164,8 @@ internal fun animeWithRate(
     rate(
         id_, shikimori_id_, target_id, target_type, status_, score,
         comment, progress, re_counter, date_created, date_updated
-    )
+    ),
+    pinId != null
 )
 
 internal fun anime(
@@ -259,7 +265,10 @@ internal fun mangaWithRate(
     progress: Int,
     re_counter: Int,
     date_created: Instant?,
-    date_updated: Instant?
+    date_updated: Instant?,
+    pinId: Long?,
+    target_id_: Long?,
+    target_type_: RateTargetType?
 ) = MangaWithRate(
     manga(
         id, shikimori_id, name, name_ru, name_eng,
@@ -271,7 +280,8 @@ internal fun mangaWithRate(
     rate(
         id_, shikimori_id_, target_id, target_type, status_,
         score, comment, progress, re_counter, date_created, date_updated
-    )
+    ),
+    pinId != null,
 )
 
 internal fun manga(
@@ -363,7 +373,10 @@ internal fun ranobeWithRate(
     progress: Int,
     re_counter: Int,
     date_created: Instant?,
-    date_updated: Instant?
+    date_updated: Instant?,
+    pinId: Long?,
+    target_id_: Long?,
+    target_type_: RateTargetType?,
 ) = RanobeWithRate(
     ranobe(
         id, shikimori_id, name, name_ru, name_eng,
@@ -375,7 +388,8 @@ internal fun ranobeWithRate(
     rate(
         id_, shikimori_id_, target_id, target_type, status_,
         score, comment, progress, re_counter, date_created, date_updated
-    )
+    ),
+    pinId != null
 )
 
 internal fun ranobe(
@@ -457,3 +471,75 @@ internal fun rate(
     dateCreated = date_created,
     dateUpdated = date_updated,
 )
+
+
+internal fun pinPaginated(
+    id: Long,
+    shikimori_id: Long,
+    name: String,
+    name_ru: String?,
+    name_eng: String?,
+    image_original: String?,
+    image_preview: String?,
+    image_x96: String?,
+    image_x48: String?,
+    url: String?,
+    anime_type: String?,
+    rating: Double?,
+    status: TitleStatus?,
+    episodes: Int,
+    episodes_aired: Int,
+    date_aired: LocalDate?,
+    date_released: LocalDate?,
+    age_rating: AgeRating,
+    description: String?,
+    description_html: String?,
+    franchise: String?,
+    favorite: Boolean,
+    topic_id: Long?,
+    genres: List<Genre>?,
+    duration: Int?,
+    next_episode: Int?,
+    next_episode_date: Instant?,
+    next_episode_end_date: Instant?,
+    id_: Long,
+    shikimori_id_: Long?,
+    target_id: Long,
+    target_type: RateTargetType,
+    status_: RateStatus,
+    score: Int?,
+    comment: String?,
+    progress: Int,
+    re_counter: Int,
+    date_created: Instant?,
+    date_updated: Instant?,
+    id__: Long,
+    target_id_: Long,
+    target_type_: RateTargetType
+): PaginatedEntity {
+    return when (target_type) {
+        RateTargetType.ANIME -> animeWithRate(
+            id, shikimori_id, name, name_ru, name_eng, image_original,
+            image_preview, image_x96, image_x48, url, anime_type, rating, status,
+            episodes, episodes_aired, date_aired, date_released, age_rating, description,
+            description_html, franchise, favorite, topic_id, genres, duration, next_episode,
+            next_episode_date, next_episode_end_date, id_, shikimori_id_, target_id, target_type,
+            status_, score, comment, progress, re_counter, date_created, date_updated, id__,
+            target_id_, target_type_
+        )
+        RateTargetType.MANGA -> mangaWithRate(
+            id, shikimori_id, name, name_ru, name_eng, image_original, image_preview, image_x96,
+            image_x48, url, anime_type, rating, status, episodes, episodes_aired, date_aired,
+            date_released, age_rating, description, description_html, franchise, favorite, topic_id,
+            genres, id_, shikimori_id_, target_id, target_type, status_, score, comment, progress,
+            re_counter, date_created, date_updated, id__, target_id_, target_type_
+        )
+        RateTargetType.RANOBE -> ranobeWithRate(
+            id, shikimori_id, name, name_ru, name_eng, image_original, image_preview, image_x96,
+            image_x48, url, anime_type, rating, status, episodes, episodes_aired, date_aired,
+            date_released, age_rating, description, description_html, franchise, favorite, topic_id,
+            genres, id_, shikimori_id_, target_id, target_type, status_, score, comment, progress,
+            re_counter, date_created, date_updated, id__, target_id_, target_type_
+        )
+    }
+}
