@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.*
@@ -388,7 +388,7 @@ private fun Title(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(ShimoriSmallestRoundedCornerShape),
-                painter = rememberImagePainter(image),
+                painter = rememberAsyncImagePainter(image),
                 contentDescription = text,
                 contentScale = ContentScale.Crop
             )
