@@ -66,23 +66,22 @@ SELECT * FROM manga WHERE id = :id;
 queryByIdWithRate:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
 queryByShikimoriId:
 SELECT * FROM manga WHERE shikimori_id = :shikimoriId;
 
-queryAllWithStatus:
-SELECT * FROM manga AS a
-INNER JOIN rate AS r ON r.target_id = a.shikimori_id;
-
 queryByStatus:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;
 
 queryByStatusSortName:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN name END) DESC,
@@ -92,6 +91,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortNameRu:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN name_ru END) DESC,
@@ -101,6 +101,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortProgress:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN progress END) DESC,
@@ -110,6 +111,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortDateCreated:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN date_created END) DESC,
@@ -119,6 +121,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortDateUpdated:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN date_updated END) DESC,
@@ -128,6 +131,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortDateAired:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
@@ -137,6 +141,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortScore:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN score END) DESC,
@@ -146,6 +151,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortSize:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN chapters END) DESC,
@@ -155,6 +161,7 @@ LIMIT :limit OFFSET :offset;
 queryByStatusSortRating:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN rating END) DESC,

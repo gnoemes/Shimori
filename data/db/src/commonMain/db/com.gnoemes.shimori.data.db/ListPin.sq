@@ -26,19 +26,19 @@ DELETE FROM pinned WHERE id = :id;
 
 querySortName:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.* FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -49,19 +49,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortNameRu:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -72,19 +72,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortProgress:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -95,19 +95,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortDateCreated:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -118,19 +118,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortDateUpdated:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -141,19 +141,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortDateAired:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -164,19 +164,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortScore:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )
@@ -187,19 +187,19 @@ LIMIT :limit OFFSET :offset;
 
 querySortRating:
 SELECT * FROM (
-SELECT anime.*, rate.*  FROM pinned
+SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = anime.shikimori_id
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = manga.shikimori_id
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
 )

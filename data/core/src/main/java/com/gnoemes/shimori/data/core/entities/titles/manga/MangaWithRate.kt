@@ -8,7 +8,8 @@ import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 @kotlinx.serialization.Serializable
 data class MangaWithRate(
     override val entity: Manga,
-    override val rate: Rate?
+    override val rate: Rate?,
+    override val pinned : Boolean
 ) : TitleWithRate<Manga>, PaginatedEntity {
     override val id: Long = entity.id
     override val type: RateTargetType = entity.type

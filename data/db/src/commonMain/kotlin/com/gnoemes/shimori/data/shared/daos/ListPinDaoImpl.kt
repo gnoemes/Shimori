@@ -10,9 +10,9 @@ import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
-import com.gnoemes.shimori.data.shared.animeWithRate
 import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.paging.QueryPaging
+import com.gnoemes.shimori.data.shared.pinPaginated
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import comgnoemesshimoridatadb.Pinned
 import kotlinx.coroutines.flow.Flow
@@ -97,46 +97,47 @@ internal class ListPinDaoImpl(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.PROGRESS -> db.listPinQueries.querySortProgress(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.DATE_CREATED -> db.listPinQueries.querySortDateCreated(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.DATE_UPDATED -> db.listPinQueries.querySortDateUpdated(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.DATE_AIRED -> db.listPinQueries.querySortDateAired(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.MY_SCORE -> db.listPinQueries.querySortScore(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             RateSortOption.RATING -> db.listPinQueries.querySortRating(
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                ::pinPaginated
             )
             else -> throw java.lang.IllegalArgumentException("$sort is not supported yet")
         }
+
 
         return QueryPaging(
             countQuery = db.listPinQueries.queryCount(),

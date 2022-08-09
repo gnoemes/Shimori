@@ -47,6 +47,7 @@ interface ShimoriTitleEntity : ShimoriEntity, ShikimoriEntity {
 interface TitleWithRate<E : ShimoriTitleEntity> {
     val entity: E
     val rate: Rate?
+    val pinned: Boolean
 
     val id: Long
     val type: RateTargetType
