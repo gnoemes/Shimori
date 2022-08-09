@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared.daos
 
-import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.AnimeDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
@@ -11,21 +11,26 @@ import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
-import com.gnoemes.shimori.data.shared.AnimeDAO
-import com.gnoemes.shimori.data.shared.anime
-import com.gnoemes.shimori.data.shared.animeWithRate
-import com.gnoemes.shimori.data.shared.long
+import com.gnoemes.shimori.data.shared.*
 import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlin.system.measureTimeMillis
 
 internal class AnimeDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
     private val dispatchers: AppCoroutineDispatchers,
 ) : AnimeDao() {
+
+    private val syncer = syncerForEntity(
+        this,
+        { it.shikimoriId },
+        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        logger
+    )
 
     override suspend fun insert(entity: Anime) {
         entity.let {
@@ -102,6 +107,22 @@ internal class AnimeDaoImpl(
         db.animeQueries.deleteById(entity.id)
     }
 
+    override suspend fun insertOrUpdate(entities: List<Anime>) {
+        val result: ItemSyncerResult<Anime>
+        val time = measureTimeMillis {
+            result = syncer.sync(
+                currentValues = db.animeQueries.queryAll(::anime).executeAsList(),
+                networkValues = entities,
+                removeNotMatched = false
+            )
+        }
+
+        logger.i(
+            "Anime sync results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
+            tag = SYNCER_RESULT_TAG
+        )
+    }
+
     override suspend fun queryById(id: Long): Anime? {
         return db.animeQueries.queryById(id, ::anime)
             .executeAsOneOrNull()
@@ -109,11 +130,6 @@ internal class AnimeDaoImpl(
 
     override suspend fun queryAll(): List<Anime> {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun queryAllWithStatus(): List<AnimeWithRate> {
-        return db.animeQueries.queryAllWithStatus(::animeWithRate)
-            .executeAsList()
     }
 
     override suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate> {

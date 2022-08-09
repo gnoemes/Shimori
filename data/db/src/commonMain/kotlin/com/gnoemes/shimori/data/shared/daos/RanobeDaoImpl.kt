@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared.daos
 
-import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.RanobeDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
@@ -11,21 +11,26 @@ import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
-import com.gnoemes.shimori.data.shared.RanobeDAO
-import com.gnoemes.shimori.data.shared.long
+import com.gnoemes.shimori.data.shared.*
 import com.gnoemes.shimori.data.shared.paging.QueryPaging
-import com.gnoemes.shimori.data.shared.ranobe
-import com.gnoemes.shimori.data.shared.ranobeWithRate
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlin.system.measureTimeMillis
 
 internal class RanobeDaoImpl(
     private val db: ShimoriDB,
     private val logger: Logger,
     private val dispatchers: AppCoroutineDispatchers
 ) : RanobeDao() {
+
+    private val syncer = syncerForEntity(
+        this,
+        { it.shikimoriId },
+        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        logger
+    )
 
     override suspend fun insert(entity: Ranobe) {
         entity.let {
@@ -94,6 +99,22 @@ internal class RanobeDaoImpl(
         db.ranobeQueries.deleteById(entity.id)
     }
 
+    override suspend fun insertOrUpdate(entities: List<Ranobe>) {
+        val result: ItemSyncerResult<Ranobe>
+        val time = measureTimeMillis {
+            result = syncer.sync(
+                currentValues = db.ranobeQueries.queryAll(::ranobe).executeAsList(),
+                networkValues = entities,
+                removeNotMatched = false
+            )
+        }
+
+        logger.i(
+            "Ranobe sync results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
+            tag = SYNCER_RESULT_TAG
+        )
+    }
+
     override suspend fun queryById(id: Long): Ranobe? {
         return db.ranobeQueries.queryById(id, ::ranobe)
             .executeAsOneOrNull()
@@ -101,11 +122,6 @@ internal class RanobeDaoImpl(
 
     override suspend fun queryAll(): List<Ranobe> {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun queryAllWithStatus(): List<RanobeWithRate> {
-        return db.ranobeQueries.queryAllWithStatus(::ranobeWithRate)
-            .executeAsList()
     }
 
     override suspend fun queryByStatus(status: RateStatus): List<RanobeWithRate> {
