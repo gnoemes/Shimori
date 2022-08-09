@@ -18,6 +18,11 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
     private val networkEntityToLocalEntity: suspend (NetworkType, LocalType?) -> LocalType,
     private val logger: Logger
 ) {
+
+    private companion object {
+        const val TAG = "ItemSyncer"
+    }
+
     suspend fun sync(
         currentValues: Collection<LocalType>,
         networkValues: Collection<NetworkType>,
@@ -29,13 +34,13 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         val added = ArrayList<LocalType>()
         val updated = ArrayList<LocalType>()
 
-        logger.v("Current DB values size: ${currentDbEntities.size}")
+        logger.v("Current DB values size: ${currentDbEntities.size}", tag = TAG)
 
         for (networkEntity in networkValues) {
-            logger.v("Syncing item from network: $networkEntity")
+            logger.v("Syncing item from network: $networkEntity", tag = TAG)
 
             val remoteId = networkEntityToKey(networkEntity)
-            logger.v("Mapped to remote ID: $remoteId")
+            logger.v("Mapped to remote ID: $remoteId", tag = TAG)
             if (remoteId == null) {
                 break
             }
@@ -43,16 +48,16 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
             val dbEntityForId = currentDbEntities.find {
                 localEntityToKey(it) == remoteId
             }
-            logger.v("Matched database entity for remote ID $remoteId : $dbEntityForId")
+            logger.v("Matched database entity for remote ID $remoteId : $dbEntityForId", tag = TAG)
 
             if (dbEntityForId != null) {
                 val entity = networkEntityToLocalEntity(networkEntity, dbEntityForId)
-                logger.v("Mapped network entity to local entity: $entity")
+                logger.v("Mapped network entity to local entity: $entity", tag = TAG)
                 if (dbEntityForId != entity) {
                     // This is currently in the DB, so lets merge it with the saved version
                     // and update it
                     updateEntity(entity)
-                    logger.v("Updated entry with remote id: $remoteId")
+                    logger.v("Updated entry with remote id: $remoteId", tag = TAG)
                 }
                 // Remove it from the list so that it is not deleted
                 currentDbEntities.remove(dbEntityForId)
@@ -67,7 +72,7 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
             // Anything left in the set needs to be deleted from the database
             currentDbEntities.forEach {
                 deleteEntity(it)
-                logger.v("Deleted entry: $it")
+                logger.v("Deleted entry: $it", tag = TAG)
                 removed += it
             }
         }
