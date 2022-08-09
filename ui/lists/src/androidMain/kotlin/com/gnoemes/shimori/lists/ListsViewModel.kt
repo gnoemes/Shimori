@@ -45,16 +45,6 @@ internal class ListsViewModel(
 
     init {
         viewModelScope.launch {
-            observeRatesExist.flow.collect { exist -> if (exist) observeCurrentPageUpdate() }
-        }
-
-        observeMyUser(Unit)
-        observePinsExist(Unit)
-        observeRatesExist(Unit)
-    }
-
-    private fun observeCurrentPageUpdate() {
-        viewModelScope.launch {
             combine(
                 stateManager.type.observe,
                 stateManager.page.observe,
@@ -66,6 +56,10 @@ internal class ListsViewModel(
                 .distinctUntilChanged()
                 .collect(::updatePage)
         }
+
+        observeMyUser(Unit)
+        observePinsExist(Unit)
+        observeRatesExist(Unit)
     }
 
     private fun updatePage(pair: Pair<RateTargetType, RateStatus>) {
