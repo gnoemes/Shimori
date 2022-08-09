@@ -58,10 +58,10 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
                     // and update it
                     updateEntity(entity)
                     logger.v("Updated entry with remote id: $remoteId", tag = TAG)
+                    updated += entity
                 }
                 // Remove it from the list so that it is not deleted
                 currentDbEntities.remove(dbEntityForId)
-                updated += entity
             } else {
                 // Not currently in the DB, so lets insert
                 added += networkEntityToLocalEntity(networkEntity, null)
@@ -106,3 +106,5 @@ internal fun <Type : ShimoriEntity, Key> syncerForEntity(
     mapper,
     logger
 )
+
+const val SYNCER_RESULT_TAG = "Sync Result"

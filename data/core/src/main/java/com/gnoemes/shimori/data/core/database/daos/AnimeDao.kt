@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 abstract class AnimeDao : EntityDao<Anime>() {
     abstract suspend fun queryById(id: Long): Anime?
     abstract suspend fun queryAll(): List<Anime>
-    abstract suspend fun queryAllWithStatus(): List<AnimeWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate>
 
     abstract fun observeById(id: Long): Flow<AnimeWithRate?>

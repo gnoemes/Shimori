@@ -63,6 +63,9 @@ WHERE r.status = :status;
 queryById:
 SELECT * FROM manga WHERE id = :id;
 
+queryAll:
+SELECT * FROM manga;
+
 queryByIdWithRate:
 SELECT * FROM manga AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id

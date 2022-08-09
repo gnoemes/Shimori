@@ -63,6 +63,9 @@ WHERE r.status = :status;
 queryById:
 SELECT * FROM ranobe WHERE id = :id;
 
+queryAll:
+SELECT * FROM ranobe;
+
 queryByIdWithRate:
 SELECT * FROM ranobe AS title
 INNER JOIN rate AS r ON r.target_id = title.shikimori_id

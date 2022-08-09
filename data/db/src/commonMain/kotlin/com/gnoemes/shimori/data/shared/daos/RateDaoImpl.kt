@@ -7,9 +7,7 @@ import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
-import com.gnoemes.shimori.data.shared.RateDAO
-import com.gnoemes.shimori.data.shared.rate
-import com.gnoemes.shimori.data.shared.syncerForEntity
+import com.gnoemes.shimori.data.shared.*
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -25,7 +23,7 @@ internal class RateDaoImpl(
     private val dispatchers: AppCoroutineDispatchers,
 ) : RateDao() {
 
-    val syncer = syncerForEntity(
+    private val syncer = syncerForEntity(
         this,
         { it.shikimoriId },
         { remote, local -> remote.copy(id = local?.id ?: 0) },
@@ -74,15 +72,19 @@ internal class RateDaoImpl(
     }
 
     override suspend fun syncAll(data: List<Rate>) {
+        val result: ItemSyncerResult<Rate>
         val time = measureTimeMillis {
-            syncer.sync(
+            result = syncer.sync(
                 currentValues = db.rateQueries.queryAll(::rate).executeAsList(),
                 networkValues = data,
                 removeNotMatched = true
             )
         }
 
-        logger.i("Rate sync time $time mills")
+        logger.i(
+            "Rate sync results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
+            tag = SYNCER_RESULT_TAG
+        )
     }
 
     override suspend fun queryById(id: Long): Rate? {

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 abstract class RanobeDao : EntityDao<Ranobe>() {
     abstract suspend fun queryById(id: Long): Ranobe?
     abstract suspend fun queryAll(): List<Ranobe>
-    abstract suspend fun queryAllWithStatus(): List<RanobeWithRate>
     abstract suspend fun queryByStatus(status: RateStatus): List<RanobeWithRate>
 
     abstract fun observeById(id: Long): Flow<RanobeWithRate?>
