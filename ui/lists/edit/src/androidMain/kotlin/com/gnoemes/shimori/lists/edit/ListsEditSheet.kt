@@ -1,6 +1,4 @@
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -27,7 +25,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
@@ -169,12 +166,14 @@ private fun ListEdit(
                 else -> titleName
             }
 
+            var progressState by remember(progress) { mutableStateOf(progress) }
+
             val progressText = when {
                 inputState != ListEditInputState.Progress -> null
-                progress == size -> null
+                progressState == size -> null
                 else -> stringResource(
                     id = R.string.left_format,
-                    size?.let { it - progress } ?: "?"
+                    size?.let { it - progressState } ?: "?"
                 )
             }
 
@@ -189,10 +188,12 @@ private fun ListEdit(
 //            AnimatedContent(inputState) { state ->
             when (inputState) {
                 ListEditInputState.Progress -> ProgressInputState(
-                    progress = progress,
+                    progress = progressState,
+                    progressDefault = progress,
                     size = size,
                     onProgressChanged = onProgressChanged,
-                    onDefaultInputState = onDefaultInputState
+                    onDefaultInputState = onDefaultInputState,
+                    onChangedLocal = { progressState = it }
                 )
                 ListEditInputState.Rewatching -> RewatchingInputState(
                     rewatches = rewatches,
@@ -286,30 +287,29 @@ private fun DefaultInputState(
 @Composable
 private fun ProgressInputState(
     progress: Int,
+    progressDefault: Int,
     size: Int?,
     onProgressChanged: (Int) -> Unit,
-    onDefaultInputState: () -> Unit
+    onDefaultInputState: () -> Unit,
+    onChangedLocal: (Int) -> Unit,
 ) {
     Column(
         Modifier.padding(horizontal = 16.dp)
     ) {
-
-        var progressState by remember(progress) { mutableStateOf(progress) }
-
         ProgressInput(
-            progress = progressState,
+            progress = progress,
             size = size,
-            onChangedLocal = { progressState = it },
-            onCommit = { onProgressChanged(progressState) }
+            onChangedLocal = onChangedLocal,
+            onCommit = { onProgressChanged(progress) }
         )
 
         EditButtons(
             onDefaultInputState = {
                 onDefaultInputState()
-                progressState = progress
+                onChangedLocal(progressDefault)
             },
             onChangeAccept = {
-                onProgressChanged(progressState)
+                onProgressChanged(progress)
                 onDefaultInputState()
             },
         )
@@ -320,7 +320,7 @@ private fun ProgressInputState(
 private fun RewatchingInputState(
     rewatches: Int,
     onRewatchesChanged: (Int) -> Unit,
-    onDefaultInputState: () -> Unit
+    onDefaultInputState: () -> Unit,
 ) {
     Column(
         Modifier.padding(horizontal = 16.dp)
@@ -370,7 +370,6 @@ private fun CommentInputState(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Title(
     image: ShimoriImage?,
@@ -408,7 +407,9 @@ private fun Title(
             overflow = TextOverflow.Ellipsis
         )
 
-        AnimatedVisibility(visible = !progressText.isNullOrEmpty()) {
+        AnimatedVisibility(
+            visible = !progressText.isNullOrEmpty(),
+        ) {
             Text(
                 text = progressText.orEmpty(),
                 style = MaterialTheme.typography.titleMedium,
