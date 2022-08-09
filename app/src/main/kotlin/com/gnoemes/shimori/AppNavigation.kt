@@ -3,18 +3,19 @@
 package com.gnoemes.shimori
 
 import ListsEdit
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,7 +30,6 @@ import com.gnoemes.shimori.lists.change.ListsChangeSheet
 import com.gnoemes.shimori.settings.Settings
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.bottomSheet
 import org.kodein.di.compose.localDI
 import org.kodein.di.instance
 
@@ -197,9 +197,14 @@ private fun NavGraphBuilder.addTalks(
 }
 
 private fun NavGraphBuilder.addListChangeBottomSheet(
-    navController: NavController, root: RootScreen, bottomSheetNavigateUp: () -> Unit
+    navController: NavController,
+    root: RootScreen,
+    bottomSheetNavigateUp: () -> Unit
 ) {
-    bottomSheet(Screen.ListsChangeSheet.createRoute(root)) {
+    bottomSheet(
+        Screen.ListsChangeSheet.createRoute(root),
+        bottomSheetNavigateUp,
+    ) {
         ListsChangeSheet(
             navigateUp = bottomSheetNavigateUp
         )
@@ -207,15 +212,17 @@ private fun NavGraphBuilder.addListChangeBottomSheet(
 }
 
 private fun NavGraphBuilder.addListEditBottomSheet(
-    navController: NavController, root: RootScreen, bottomSheetNavigateUp: () -> Unit
+    navController: NavController,
+    root: RootScreen,
+    bottomSheetNavigateUp: () -> Unit
 ) {
     bottomSheet(
-        route = Screen.ListsEditSheet.createRoute(root), arguments = listOf(
+        Screen.ListsEditSheet.createRoute(root),
+        bottomSheetNavigateUp,
+        arguments = listOf(
             navArgument("id") { type = NavType.LongType },
-            navArgument("type") {
-                type = NavType.EnumType(RateTargetType::class.java)
-            },
-        )
+            navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
+        ),
     ) {
         val bottomSheetNavigator = try {
             navController.navigatorProvider.getNavigator(BottomSheetNavigator::class.java)
@@ -226,6 +233,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         val offset = remember {
             bottomSheetNavigator?.navigatorSheetState?.offset ?: mutableStateOf(0f)
         }
+
         ListsEdit(
             bottomSheetOffset = offset,
             navigateUp = bottomSheetNavigateUp
@@ -242,6 +250,55 @@ private fun NavGraphBuilder.addSettings(
     }
 }
 
+
+private fun NavGraphBuilder.bottomSheet(
+    route: String,
+    bottomSheetNavigateUp: () -> Unit,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    content: @Composable ColumnScope.(backstackEntry: NavBackStackEntry) -> Unit
+) {
+    addDestination(
+        BottomSheetNavigator.Destination(
+            provider[BottomSheetNavigator::class],
+            content = {
+                val bottomSheetBackPressedCallback = remember {
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            bottomSheetNavigateUp()
+                        }
+                    }
+                }
+
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val backDispatcher =
+                    LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+                DisposableEffect(lifecycleOwner) {
+                    //Set bottom sheet callback to current back dispatcher (Activity)
+                    backDispatcher?.apply {
+                        addCallback(lifecycleOwner, bottomSheetBackPressedCallback)
+                    }
+
+                    onDispose {
+                        bottomSheetBackPressedCallback.remove()
+                    }
+                }
+
+
+                content(it)
+            }
+        ).apply {
+            this.route = route
+            arguments.forEach { (argumentName, argument) ->
+                addArgument(argumentName, argument)
+            }
+            deepLinks.forEach { deepLink ->
+                addDeepLink(deepLink)
+            }
+        }
+    )
+}
 
 @Composable
 private fun MockScreen(

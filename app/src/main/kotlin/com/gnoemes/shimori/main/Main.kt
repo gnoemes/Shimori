@@ -1,5 +1,3 @@
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -16,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -75,30 +72,8 @@ private fun Main(
     //Close bottom sheets smoothly with state.hide() instead of navController.navigateUp()
     val scope = rememberCoroutineScope()
     val bottomSheetNavigateUp: () -> Unit = {
-        scope.launch { sheetState.hide() }
-    }
-    val bottomSheetBackPressedCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (sheetState.isVisible) {
-                    bottomSheetNavigateUp()
-                }
-            }
-        }
-    }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    navController.setLifecycleOwner(lifecycleOwner)
-
-    //Set bottom sheet callback to current back dispatcher (Activity)
-    backDispatcher?.apply {
-        addCallback(lifecycleOwner, bottomSheetBackPressedCallback)
-    }?.let(navController::setOnBackPressedDispatcher)
-
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            bottomSheetBackPressedCallback.remove()
+        scope.launch {
+            sheetState.hide()
         }
     }
 
