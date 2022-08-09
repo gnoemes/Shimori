@@ -10,8 +10,7 @@ import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.common.ui.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.ui.utils.collectStatus
 import com.gnoemes.shimori.data.list.ListsStateManager
-import com.gnoemes.shimori.domain.interactors.UpdateRates
-import com.gnoemes.shimori.domain.interactors.UpdateUser
+import com.gnoemes.shimori.domain.interactors.UpdateUserAndRates
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,8 +18,7 @@ import kotlinx.coroutines.launch
 class MainViewModel constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
     private val listsStateManager: ListsStateManager,
-    private val updateUser: UpdateUser,
-    private val updateRates: UpdateRates,
+    private val updateUserAndRates: UpdateUserAndRates,
     private val logger: Logger,
     settings: ShimoriSettings
 ) : ViewModel() {
@@ -69,16 +67,8 @@ class MainViewModel constructor(
 
     private fun updateUserAndRates() {
         viewModelScope.launch {
-            updateUser(UpdateUser.Params(null, isMe = true))
-                .collectStatus(updatingUserDataState, logger = logger) { status ->
-                    if (status is InvokeSuccess) updateRates()
-                }
-        }
-    }
-
-    private fun updateRates() {
-        viewModelScope.launch {
-            updateRates(Unit).collectStatus(updatingUserDataState)
+            updateUserAndRates.invoke(Unit)
+                .collectStatus(updatingUserDataState, logger = logger)
         }
     }
 }

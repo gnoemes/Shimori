@@ -24,4 +24,5 @@ val domainModule = DI.Module("domain") {
     bindProvider { new(::ToggleTitlePin) }
     bindProvider { new(::DeleteRate) }
     bindProvider { new(::CreateOrUpdateRate) }
+    bindProvider { new(::UpdateUserAndRates) }
 }
