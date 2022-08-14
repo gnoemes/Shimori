@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.api.UiMessageManager
+import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
@@ -112,6 +113,18 @@ internal class ListPageViewModel(
         }
     }
 
+    fun onIncrementClick() {
+        viewModelScope.launch {
+            uiMessageManager.emitMessage(
+                UiMessage(
+                    id = MESSAGE_INCREMENTOR_HINT,
+                    message = textProvider[MessageID.IncrementorHint],
+                    imageRes = ImageID.Tip,
+                )
+            )
+        }
+    }
+
     companion object {
         private val PAGING_CONFIG = PagingConfig(
             pageSize = 10,
@@ -120,5 +133,6 @@ internal class ListPageViewModel(
         )
 
         private const val MESSAGE_TOGGLE_PIN = 1L
+        private const val MESSAGE_INCREMENTOR_HINT = 2L
     }
 }
