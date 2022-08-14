@@ -37,4 +37,20 @@ private class LoggerImpl : Logger {
     override fun e(t: Throwable) {
         Napier.e(throwable = t, message = "")
     }
+
+    override fun d(message: String, tag: String?, t: Throwable?) {
+        Napier.d(message, t, tag)
+    }
+
+    override fun d(t: Throwable) {
+        Napier.d(throwable = t, message = "")
+    }
+
+    override fun w(message: String, tag: String?, t: Throwable?) {
+        Napier.w(throwable = t, message = "")
+    }
+
+    override fun w(t: Throwable) {
+        Napier.w(throwable = t, message = "")
+    }
 }

@@ -7,4 +7,8 @@ interface Logger {
     fun i(t: Throwable)
     fun e(message: String, tag: String? = null, t: Throwable? = null)
     fun e(t: Throwable)
+    fun d(message: String, tag: String? = null, t: Throwable? = null)
+    fun d(t: Throwable)
+    fun w(message: String, tag: String? = null, t: Throwable? = null)
+    fun w(t: Throwable)
 }
