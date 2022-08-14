@@ -107,4 +107,4 @@ internal fun <Type : ShimoriEntity, Key> syncerForEntity(
     logger
 )
 
-const val SYNCER_RESULT_TAG = "Sync Result"
+const val SYNCER_RESULT_TAG = "SyncResult"
