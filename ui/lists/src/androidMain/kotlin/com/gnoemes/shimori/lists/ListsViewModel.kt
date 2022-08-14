@@ -11,6 +11,7 @@ import com.gnoemes.shimori.domain.interactors.UpdateTitleRates
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObservePinsExist
 import com.gnoemes.shimori.domain.observers.ObserveRatesExist
+import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,7 @@ internal class ListsViewModel(
     observeRatesExist: ObserveRatesExist,
     observePinsExist: ObservePinsExist,
     observeMyUser: ObserveMyUserShort,
+    observeShikimoriAuth: ObserveShikimoriAuth,
 ) : ViewModel() {
 
     val state = combine(
@@ -48,15 +50,20 @@ internal class ListsViewModel(
             combine(
                 stateManager.type.observe,
                 stateManager.page.observe,
-            ) { type, page ->
+                observeShikimoriAuth.flow
+            ) { type, page, auth ->
                 val rateType = type.rateType ?: return@combine null
-                rateType to page
+                Triple(rateType, page, auth.isAuthorized)
             }
                 .filterNotNull()
                 .distinctUntilChanged()
+                .filter { it.third }
+                .map { it.first to it.second }
                 .collect(::updatePage)
         }
 
+
+        observeShikimoriAuth(Unit)
         observeMyUser(Unit)
         observePinsExist(Unit)
         observeRatesExist(Unit)
