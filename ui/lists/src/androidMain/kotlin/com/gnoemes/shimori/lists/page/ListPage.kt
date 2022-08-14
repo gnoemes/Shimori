@@ -28,6 +28,7 @@ import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.components.FabPosition
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
+import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.rate.ListType
@@ -75,6 +76,7 @@ private fun ListPage(
 
     val onEditClick = { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
     val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
+    val onIncrementClick = { viewModel.onIncrementClick() }
 
     state.message?.let { message ->
         LaunchedEffect(message) {
@@ -144,7 +146,7 @@ private fun ListPage(
                         title = entity,
                         onCoverLongClick = { onTogglePin(entity) },
                         onEditClick = { onEditClick(entity) },
-                        onIncrementClick = { /*TODO*/ },
+                        onIncrementClick = { onIncrementClick() },
                         onIncrementHold = { /*TODO*/ })
                 }
             }
@@ -198,6 +200,7 @@ private fun ScreenLayout(
                     .fillMaxWidth(),
                 icon = {
                     val image = message?.image
+                    val imageRes = message?.imageRes
                     if (image != null) {
                         Image(
                             painter = rememberAsyncImagePainter(image),
@@ -212,6 +215,13 @@ private fun ScreenLayout(
                                 )
                                 .clip(ShimoriSmallestRoundedCornerShape)
                         )
+                    } else if (imageRes != null) {
+                        if (imageRes == ImageID.Tip) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_tip),
+                                contentDescription = null
+                            )
+                        }
                     }
                 })
         },

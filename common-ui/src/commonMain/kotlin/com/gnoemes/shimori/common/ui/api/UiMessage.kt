@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.common.ui.api
 
 import com.gnoemes.shimori.base.shared.PlatformUtils
+import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,10 @@ import kotlinx.coroutines.sync.withLock
 data class UiMessage(
     val message: String,
     val action: String? = null,
+    //remote image
     val image : ShimoriImage? = null,
+    //image for resources
+    val imageRes : ImageID? = null,
     val payload: Any? = null,
     val id: Long = PlatformUtils.generateId(),
 )
