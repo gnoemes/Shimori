@@ -67,17 +67,25 @@ class Shikimori(
                 val accessToken = storage.shikimoriAccessToken
                 val refreshToken = storage.shikimoriRefreshToken
                 if (accessToken != null && refreshToken != null) {
-                    onAuthSuccess(accessToken, refreshToken)
                     BearerTokens(accessToken, refreshToken)
                 } else null
             }
 
             refreshTokens {
-                val rfToken = storage.shikimoriRefreshToken ?: return@refreshTokens null
-                auth.refreshToken(rfToken)?.let {
-                    onAuthSuccess(it.accessToken, it.refreshToken)
-                    BearerTokens(it.accessToken, it.refreshToken)
+                val rfToken = storage.shikimoriRefreshToken
+
+                if (rfToken == null) {
+                    onAuthExpired()
+                    return@refreshTokens null
                 }
+
+                val tokenResponse = auth.refreshToken(rfToken)
+                if (tokenResponse == null || tokenResponse.isEmpty) {
+                    onAuthExpired()
+                    return@refreshTokens null
+                }
+                _state.emit(ShikimoriAuthState.LOGGED_IN)
+                BearerTokens(tokenResponse.accessToken!!, tokenResponse.refreshToken!!)
             }
         }
     }
@@ -130,7 +138,7 @@ class Shikimori(
                     parameter("client_secret", platform.shikimori.secretKey)
                     parameter("redirect_uri", platform.shikimori.oauthRedirect)
                     parameter("code", authCode)
-                }.body<TokenResponse>()
+                }.body()
             } catch (e: Exception) {
                 logger.e("Failed get access token", t = e, tag = "Shikimori")
                 onAuthError(e.localizedMessage)
@@ -146,7 +154,7 @@ class Shikimori(
                     parameter("client_secret", platform.shikimori.secretKey)
                     parameter("refresh_token", refreshToken)
                     parameter("grant_type", "refresh_token")
-                }.body<TokenResponse>()
+                }.body()
             } catch (e: Exception) {
                 logger.e("Failed refresh token update", t = e, tag = "Shikimori")
                 onAuthExpired()
