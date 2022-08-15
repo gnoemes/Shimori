@@ -10,6 +10,7 @@ internal data class ListsEditViewState(
     val image: ShimoriImage? = null,
     val name: String = "",
     val status: RateStatus = RateStatus.PLANNED,
+    val anons : Boolean = false,
     val progress: Int = 0,
     val size: Int? = null,
     val rewatches: Int = 0,

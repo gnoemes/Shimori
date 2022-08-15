@@ -17,6 +17,7 @@ import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
@@ -85,6 +86,7 @@ fun ListCard(
             showIncrementer = title.rate?.progress != null
                     && title.entity.size != null
                     && title.rate?.progress != title.entity.size
+                    && title.entity.status != TitleStatus.ANONS
                     || title.entity.isOngoing
             ,
             onCoverLongClick = onCoverLongClick,

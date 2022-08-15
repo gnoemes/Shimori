@@ -79,6 +79,7 @@ private fun ListsEdit(
         titleName = state.name,
         image = state.image,
         status = state.status,
+        anons = state.anons,
         progress = state.progress,
         size = state.size,
         rewatches = state.rewatches,
@@ -110,6 +111,7 @@ private fun ListEdit(
     titleName: String,
     image: ShimoriImage?,
     status: RateStatus,
+    anons: Boolean,
     progress: Int,
     size: Int?,
     rewatches: Int,
@@ -209,6 +211,7 @@ private fun ListEdit(
                     titleName = titleName,
                     type = type,
                     status = status,
+                    anons = anons,
                     progress = progress,
                     size = size,
                     rewatches = rewatches,
@@ -233,6 +236,7 @@ private fun DefaultInputState(
     titleName: String,
     type: RateTargetType,
     status: RateStatus,
+    anons : Boolean,
     progress: Int,
     size: Int?,
     rewatches: Int,
@@ -257,6 +261,7 @@ private fun DefaultInputState(
         )
 
         ProgressBoxes(
+            anons = anons,
             progress = progress,
             size = size,
             onProgressChanged = onProgressChanged,
@@ -482,6 +487,7 @@ private fun StatusSelector(
 
 @Composable
 private fun ProgressBoxes(
+    anons: Boolean,
     progress: Int,
     size: Int?,
     onProgressChanged: (Int) -> Unit,
@@ -500,6 +506,7 @@ private fun ProgressBoxes(
         Spacer(modifier = Modifier.width(4.dp))
 
         Progress(
+            anons = anons,
             progress = progress,
             size = size,
             onProgressChanged = onProgressChanged,
@@ -518,6 +525,7 @@ private fun ProgressBoxes(
 
 @Composable
 private fun Progress(
+    anons : Boolean,
     progress: Int,
     size: Int?,
     onProgressChanged: (Int) -> Unit,
@@ -551,7 +559,7 @@ private fun Progress(
                         progressText = progressText,
                         value = progress,
                         decrementEnabled = progress - 1 >= 0,
-                        incrementEnabled = progress + 1 <= size ?: Integer.MAX_VALUE,
+                        incrementEnabled = progress + 1 <= (size ?: Integer.MAX_VALUE) && !anons,
                         onDecrementClick = onProgressChanged,
                         onIncrementClick = onProgressChanged,
                     )
