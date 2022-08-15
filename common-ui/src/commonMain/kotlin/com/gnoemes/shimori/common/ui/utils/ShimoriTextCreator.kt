@@ -146,8 +146,9 @@ class ShimoriTextCreator(
     }
 
     fun scoreDescription(score: Double?): String? {
+        if (score == null || score == 0.0) return null
         //TODO score format
-        return score?.toString()
+        return score.toString()
     }
 
     fun listSortText(type: ListType, option: RateSortOption): String = when (option) {
