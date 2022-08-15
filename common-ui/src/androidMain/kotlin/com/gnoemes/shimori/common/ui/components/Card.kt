@@ -82,6 +82,11 @@ fun ListCard(
                 else -> throw IllegalArgumentException("Entity $entity does not support")
             },
             isPinned = title.pinned,
+            showIncrementer = title.rate?.progress != null
+                    && title.entity.size != null
+                    && title.rate?.progress != title.entity.size
+                    || title.entity.isOngoing
+            ,
             onCoverLongClick = onCoverLongClick,
             onEditClick = onEditClick,
             onIncrementClick = onIncrementClick,
@@ -98,6 +103,7 @@ fun ListCard(
     score: Int?,
     progress: String,
     isPinned: Boolean,
+    showIncrementer: Boolean,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
@@ -179,18 +185,20 @@ fun ListCard(
                     }
                 )
 
-                ShimoriCircleButton(
-                    onClick = onIncrementClick,
-                    onLongClick = onIncrementHold,
-                    modifier = Modifier
-                        .size(32.dp),
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_add_one),
-                            contentDescription = stringResource(id = R.string.add)
-                        )
-                    }
-                )
+                if (showIncrementer) {
+                    ShimoriCircleButton(
+                        onClick = onIncrementClick,
+                        onLongClick = onIncrementHold,
+                        modifier = Modifier
+                            .size(32.dp),
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_add_one),
+                                contentDescription = stringResource(id = R.string.add)
+                            )
+                        }
+                    )
+                }
             }
         }
     }
