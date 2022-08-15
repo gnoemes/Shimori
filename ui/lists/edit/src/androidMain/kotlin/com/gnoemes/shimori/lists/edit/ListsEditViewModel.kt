@@ -3,8 +3,8 @@ package com.gnoemes.shimori.lists.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.core.entities.InvokeSuccess
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -54,6 +54,7 @@ internal class ListsEditViewModel(
                     //TODO romadzi
                     name = shikimoriEntity?.name.orEmpty(),
                     status = rate?.status ?: RateStatus.WATCHING,
+                    anons = shikimoriEntity?.status == TitleStatus.ANONS,
                     progress = rate?.progress ?: 0,
                     size = shikimoriEntity?.size,
                     rewatches = rate?.reCounter ?: 0,
