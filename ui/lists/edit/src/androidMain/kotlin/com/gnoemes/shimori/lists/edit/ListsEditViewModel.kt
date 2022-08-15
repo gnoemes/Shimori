@@ -134,7 +134,9 @@ internal class ListsEditViewModel(
         viewModelScope.launch {
             rate?.id?.let {
                 deleteRate(DeleteRate.Params(it)).collect {
-                    _uiEvents.emit(UiEvents.NavigateUp)
+                    if (it.isSuccess) {
+                        _uiEvents.emit(UiEvents.NavigateUp)
+                    }
                 }
             }
         }
@@ -167,7 +169,7 @@ internal class ListsEditViewModel(
 
             createOrUpdateRate(params = CreateOrUpdateRate.Params(rate))
                 .collect {
-                    if (it is InvokeSuccess) {
+                    if (it.isSuccess) {
                         _uiEvents.emit(UiEvents.NavigateUp)
                     }
                 }
