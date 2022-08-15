@@ -16,3 +16,5 @@ internal data class ListsViewState(
         val Empty = ListsViewState()
     }
 }
+
+internal const val INCREMENTATOR_MAX_PROGRESS = 50

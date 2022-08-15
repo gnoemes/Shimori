@@ -175,11 +175,12 @@
     <string name="logout_message">Some of the features will become unavailable.</string>
     <string name="title_characters_main">Main</string>
     <string name="title_characters_supporting" comment="title_characters_supporting">Supporting</string>
-    <string name="auth_revoke">The app can\'t access your account sufficiently. Log in and allow access.</string>
+    <string name="auth_revoke">The app can\'t access your account sufficiently.</string>
     <string name="part_access_title">Some of the features are unavailable</string>
     <string name="part_access_hint">Open shikimori.one settings → Tap \"Revoke access\" on the app page → Re-login to the app and check all items.</string>
     <string name="part_access_listname">The app isn’t able to</string>
     <string name="title_menu_names_selected">Selected in settings</string>
     <string name="title_translators_dub_and_sub">Dubbing and subtitles</string>
     <string name="title_menu_names_other">Other</string>
+    <string name="inc_added_progress" translatable="false">%d → %d.</string>
 </resources>

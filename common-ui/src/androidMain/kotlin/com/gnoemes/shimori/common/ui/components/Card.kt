@@ -181,6 +181,7 @@ fun ListCard(
 
                 ShimoriCircleButton(
                     onClick = onIncrementClick,
+                    onLongClick = onIncrementHold,
                     modifier = Modifier
                         .size(32.dp),
                     icon = {
