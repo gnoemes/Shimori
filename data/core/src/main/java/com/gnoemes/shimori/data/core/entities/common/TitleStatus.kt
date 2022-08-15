@@ -6,4 +6,5 @@ enum class TitleStatus(val status: String) {
     ONGOING("ongoing"),
     RELEASED("released"),
     PAUSED("paused"),
+    DISCONTINUED("discontinued"),
 }

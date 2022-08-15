@@ -13,4 +13,6 @@ enum class ContentStatus(val status: String) {
     RELEASED("released"),
     @SerialName("paused")
     PAUSED("paused"),
+    @SerialName("discontinued")
+    DISCONTINUED("discontinued"),
 }
