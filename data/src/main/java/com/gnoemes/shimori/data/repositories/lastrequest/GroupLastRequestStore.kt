@@ -32,6 +32,7 @@ open class GroupLastRequestStore(
 
     companion object {
         private const val DEFAULT_ID = 0L
+        const val ALL_RATE_STATUSES_ID = 6L
     }
 
 }

@@ -57,7 +57,7 @@ DELETE FROM manga WHERE id = :id;
 
 countWithStatus:
 SELECT COUNT(*) FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 WHERE r.status = :status;
 
 queryById:
@@ -68,22 +68,22 @@ SELECT * FROM manga;
 
 queryByIdWithRate:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
-queryByShikimoriId:
-SELECT * FROM manga WHERE shikimori_id = :shikimoriId;
+queryIdByShikimoriId:
+SELECT id FROM manga WHERE shikimori_id = :shikimoriId;
 
 queryByStatus:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;
 
 queryByStatusSortName:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -93,7 +93,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortNameRu:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -103,7 +103,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortProgress:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -113,7 +113,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateCreated:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -123,7 +123,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateUpdated:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -133,7 +133,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateAired:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -143,7 +143,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortScore:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -153,7 +153,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortSize:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY
@@ -163,7 +163,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortRating:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.shikimori_id
+INNER JOIN rate AS r ON r.target_id = title.id
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status
 ORDER BY

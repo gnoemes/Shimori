@@ -10,10 +10,11 @@ data class Rate(
     override val shikimoriId: Long = 0,
     val targetId: Long,
     val targetType: RateTargetType,
+    val targetShikimoriId: Long? = null,
     val status: RateStatus,
     val score: Int? = null,
     val comment: String? = null,
-    val progress : Int = 0,
+    val progress: Int = 0,
     val reCounter: Int = 0,
     val dateCreated: Instant? = null,
     val dateUpdated: Instant? = null

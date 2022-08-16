@@ -6,14 +6,15 @@ import com.gnoemes.shikimori.mappers.TitleStatusMapper
 import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
 import com.gnoemes.shikimori.mappers.anime.AnimeTypeMapper
 import com.gnoemes.shikimori.mappers.anime.CalendarMapper
-import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeMapper
+import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeWithRateMapper
 import com.gnoemes.shikimori.mappers.manga.MangaResponseMapper
 import com.gnoemes.shikimori.mappers.manga.MangaTypeMapper
-import com.gnoemes.shikimori.mappers.manga.RateResponseToMangaMapper
+import com.gnoemes.shikimori.mappers.manga.RateResponseToMangaWithRateMapper
 import com.gnoemes.shikimori.mappers.ranobe.RanobeResponseMapper
 import com.gnoemes.shikimori.mappers.ranobe.RanobeTypeMapper
-import com.gnoemes.shikimori.mappers.ranobe.RateResponseToRanobeMapper
+import com.gnoemes.shikimori.mappers.ranobe.RateResponseToRanobeWithRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateMapper
+import com.gnoemes.shikimori.mappers.rate.RateResponseToRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
 import com.gnoemes.shikimori.mappers.rate.RateTargetTypeMapper
 import com.gnoemes.shikimori.mappers.user.UserBriefMapper
@@ -55,13 +56,13 @@ private val mappers = DI.Module("shikimori-mappers") {
     bindProvider { AnimeTypeMapper() }
     bindProvider { RanobeTypeMapper() }
 
-
     bindProvider { new(::RateMapper) }
+    bindProvider { new(::RateResponseToRateMapper) }
     bindProvider { new(::CalendarMapper) }
     bindProvider { new(::AnimeResponseMapper) }
-    bindProvider { new(::RateResponseToAnimeMapper) }
+    bindProvider { new(::RateResponseToAnimeWithRateMapper) }
     bindProvider { new(::MangaResponseMapper) }
-    bindProvider { new(::RateResponseToMangaMapper) }
+    bindProvider { new(::RateResponseToMangaWithRateMapper) }
     bindProvider { new(::RanobeResponseMapper) }
-    bindProvider { new(::RateResponseToRanobeMapper) }
+    bindProvider { new(::RateResponseToRanobeWithRateMapper) }
 }

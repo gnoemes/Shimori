@@ -16,12 +16,8 @@ class RateRepository(
     private val dao: RateDao,
     private val rateSortDao: RateSortDao,
     @Shikimori private val source: RateDataSource,
-    private val userRepository: ShikimoriUserRepository
+    private val userRepository: ShikimoriUserRepository,
 ) {
-    fun observeById(id: Long) = dao.observeById(id)
-    fun observeByShikimoriId(shikimoriId: Long) = dao.observeByShikimoriId(shikimoriId)
-    fun observeByTarget(targetId: Long, targetType: RateTargetType) =
-        dao.observeByTarget(targetId, targetType)
 
     fun observeRatesExist() = dao.observeHasRates()
     fun observeRateSort(type: ListType): Flow<RateSort?> = rateSortDao.observe(type)

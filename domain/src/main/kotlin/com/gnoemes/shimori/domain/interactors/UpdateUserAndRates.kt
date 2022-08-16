@@ -17,7 +17,7 @@ class UpdateUserAndRates constructor(
             )
         }
         withContext(dispatchers.io) {
-            updateRates.executeSync(Unit)
+            updateRates.executeSync(UpdateRates.Params(true))
         }
     }
 }
