@@ -3,10 +3,11 @@ package com.gnoemes.shikimori.sources
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
 import com.gnoemes.shikimori.mappers.anime.CalendarMapper
-import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeMapper
+import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeWithRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.data.core.mappers.forLists
 import com.gnoemes.shimori.data.core.sources.AnimeDataSource
@@ -14,7 +15,7 @@ import com.gnoemes.shimori.data.core.sources.AnimeDataSource
 internal class ShikimoriAnimeDataSource(
     private val shikimori: Shikimori,
     private val mapper: AnimeResponseMapper,
-    private val ratedMapper: RateResponseToAnimeMapper,
+    private val ratedMapper: RateResponseToAnimeWithRateMapper,
     private val calendarMapper: CalendarMapper,
     private val statusMapper: RateStatusMapper,
 ) : AnimeDataSource {
@@ -28,7 +29,7 @@ internal class ShikimoriAnimeDataSource(
             .let { calendarMapper.forLists().invoke(it) }
     }
 
-    override suspend fun getWithStatus(user: UserShort, status: RateStatus?): List<Anime> {
+    override suspend fun getWithStatus(user: UserShort, status: RateStatus?): List<AnimeWithRate> {
         return shikimori.anime.getUserRates(user.shikimoriId, statusMapper.mapInverse(status))
             .let { ratedMapper.forLists().invoke(it) }
     }

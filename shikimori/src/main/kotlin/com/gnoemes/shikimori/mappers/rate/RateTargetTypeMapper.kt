@@ -15,8 +15,8 @@ internal class RateTargetTypeMapper : TwoWayMapper<ShikimoriContentType?, RateTa
 
     override suspend fun mapInverse(from: RateTargetType?): ShikimoriContentType? = when (from) {
         RateTargetType.ANIME -> ShikimoriContentType.ANIME
-        RateTargetType.MANGA -> ShikimoriContentType.MANGA
-        RateTargetType.RANOBE -> ShikimoriContentType.RANOBE
+        //shikimori doesn't support ranobe type
+        RateTargetType.MANGA, RateTargetType.RANOBE -> ShikimoriContentType.MANGA
         else -> null
     }
 }

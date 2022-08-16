@@ -7,6 +7,7 @@ CREATE TABLE rate (
     shikimori_id INTEGER,
     target_id INTEGER NOT NULL,
     target_type TEXT AS RateTargetType NOT NULL,
+    target_shikimori_id INTEGER,
     status TEXT AS RateStatus  NOT NULL,
     score INTEGER AS Int,
     comment TEXT,
@@ -21,11 +22,11 @@ CREATE INDEX rate_target_id ON rate(target_id);
 CREATE INDEX rate_target_type ON rate(target_type);
 
 insert:
-INSERT OR REPLACE INTO rate (shikimori_id, target_id, target_type, status, score, comment, progress, re_counter, date_created, date_updated)
-VALUES (?,?,?,?,?,?,?,?,?,?);
+INSERT OR REPLACE INTO rate (shikimori_id, target_id, target_type, target_shikimori_id, status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES (?,?,?,?, ?,?,?,?,?,?,?);
 
 update:
-INSERT OR REPLACE INTO rate (id, shikimori_id, target_id, target_type, status, score, comment, progress, re_counter, date_created, date_updated)
+INSERT OR REPLACE INTO rate (id, shikimori_id, target_id, target_type, target_shikimori_id,  status, score, comment, progress, re_counter, date_created, date_updated)
 VALUES ?;
 
 deleteById:
@@ -36,6 +37,12 @@ DELETE FROM rate;
 
 queryAll:
 SELECT * FROM rate;
+
+queryAllByTarget:
+SELECT * FROM rate WHERE target_type = :type;
+
+queryAllByTargetAndStatus:
+SELECT * FROM rate WHERE target_type = :type AND status = :status;
 
 queryById:
 SELECT * FROM rate WHERE id = ?;
@@ -50,7 +57,7 @@ queryCount:
 SELECT COUNT(*) FROM rate;
 
 statusForTypeExist:
-SELECT COUNT(*) FROM rate WHERE target_type = ? AND status = ? LIMIT 1;
+SELECT COUNT(*) FROM rate WHERE target_type = ? AND status = ?;
 
 
 

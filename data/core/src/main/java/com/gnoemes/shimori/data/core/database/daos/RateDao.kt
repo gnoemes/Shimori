@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 abstract class RateDao : EntityDao<Rate>() {
     abstract suspend fun syncAll(data: List<Rate>)
 
+    abstract suspend fun syncAll(data: List<Rate>, target: RateTargetType, status: RateStatus?)
+
     abstract fun observeById(id: Long): Flow<Rate?>
     abstract fun observeByShikimoriId(id: Long): Flow<Rate?>
     abstract fun observeByTarget(targetId: Long, targetType: RateTargetType): Flow<Rate?>

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import kotlin.system.measureTimeMillis
 
 internal class RateDaoImpl(
@@ -26,9 +27,48 @@ internal class RateDaoImpl(
     private val syncer = syncerForEntity(
         this,
         { it.shikimoriId },
-        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        { remote, local ->
+            remote.copy(
+                id = local?.id ?: 0,
+                //do not override ranobe type
+                targetType = local?.targetType ?: remote.targetType,
+                targetId = getTargetId(remote, local)
+            )
+        },
         logger
     )
+
+    private suspend fun getTargetId(remote: Rate, local: Rate?): Long {
+        val targetType = local?.targetType ?: remote.targetType
+        val targetId = local?.targetId?.takeIf { it > 0 }
+
+        if (remote.targetShikimoriId == null) {
+            return 0
+        }
+
+        if (targetId != null) {
+            return targetId
+        }
+
+        return withContext(dispatchers.io) {
+            (when (targetType) {
+                RateTargetType.ANIME -> db
+                    .animeQueries
+                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
+                    .executeAsOneOrNull()
+                RateTargetType.MANGA -> db
+                    .mangaQueries
+                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
+                    .executeAsOneOrNull()
+                RateTargetType.RANOBE -> db
+                    .ranobeQueries
+                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
+                    .executeAsOneOrNull()
+            })
+            //mark for delete if we can't set target
+                ?: 0
+        }
+    }
 
     override suspend fun insert(entity: Rate) {
         entity.let {
@@ -36,6 +76,7 @@ internal class RateDaoImpl(
                 it.shikimoriId,
                 it.targetId,
                 it.targetType,
+                it.targetShikimoriId,
                 it.status,
                 it.score,
                 it.comment,
@@ -55,6 +96,7 @@ internal class RateDaoImpl(
                     it.shikimoriId,
                     it.targetId,
                     it.targetType,
+                    it.targetShikimoriId,
                     it.status,
                     it.score,
                     it.comment,
@@ -83,6 +125,28 @@ internal class RateDaoImpl(
 
         logger.i(
             "Rate sync results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
+            tag = SYNCER_RESULT_TAG
+        )
+    }
+
+    override suspend fun syncAll(
+        data: List<Rate>,
+        target: RateTargetType,
+        status: RateStatus?
+    ) {
+        val result: ItemSyncerResult<Rate>
+        val time = measureTimeMillis {
+            result = syncer.sync(
+                currentValues =
+                if (status == null) db.rateQueries.queryAllByTarget(target, ::rate).executeAsList()
+                else db.rateQueries.queryAllByTarget(target, ::rate).executeAsList(),
+                networkValues = data,
+                removeNotMatched = true
+            )
+        }
+
+        logger.i(
+            "Rate $target sync with status ${status ?: "All"} by results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
             tag = SYNCER_RESULT_TAG
         )
     }

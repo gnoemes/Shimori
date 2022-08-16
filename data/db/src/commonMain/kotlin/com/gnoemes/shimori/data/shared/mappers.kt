@@ -142,6 +142,7 @@ internal fun animeWithRate(
     shikimori_id_: Long?,
     target_id: Long,
     target_type: RateTargetType,
+    target_shikimori_id: Long?,
     status_: RateStatus,
     score: Int?,
     comment: String?,
@@ -162,7 +163,7 @@ internal fun animeWithRate(
         duration, next_episode, next_episode_date, next_episode_end_date,
     ),
     rate(
-        id_, shikimori_id_, target_id, target_type, status_, score,
+        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinId != null
@@ -259,6 +260,7 @@ internal fun mangaWithRate(
     shikimori_id_: Long?,
     target_id: Long,
     target_type: RateTargetType,
+    target_shikimori_id: Long?,
     status_: RateStatus,
     score: Int?,
     comment: String?,
@@ -278,7 +280,7 @@ internal fun mangaWithRate(
         description_html, franchise, favorite, topic_id, genres
     ),
     rate(
-        id_, shikimori_id_, target_id, target_type, status_,
+        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_,
         score, comment, progress, re_counter, date_created, date_updated
     ),
     pinId != null,
@@ -367,6 +369,7 @@ internal fun ranobeWithRate(
     shikimori_id_: Long?,
     target_id: Long,
     target_type: RateTargetType,
+    target_shikimori_id: Long?,
     status_: RateStatus,
     score: Int?,
     comment: String?,
@@ -386,7 +389,7 @@ internal fun ranobeWithRate(
         description_html, franchise, favorite, topic_id, genres
     ),
     rate(
-        id_, shikimori_id_, target_id, target_type, status_,
+        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_,
         score, comment, progress, re_counter, date_created, date_updated
     ),
     pinId != null
@@ -451,6 +454,7 @@ internal fun rate(
     shikimori_id: Long?,
     target_id: Long,
     target_type: RateTargetType,
+    target_shikimori_id: Long?,
     status: RateStatus,
     score: Int?,
     comment: String?,
@@ -463,6 +467,7 @@ internal fun rate(
     shikimoriId = shikimori_id ?: 0,
     targetId = target_id,
     targetType = target_type,
+    targetShikimoriId = target_shikimori_id,
     status = status,
     score = score,
     comment = comment,
@@ -506,6 +511,7 @@ internal fun pinPaginated(
     shikimori_id_: Long?,
     target_id: Long,
     target_type: RateTargetType,
+    target_shikimori_id: Long?,
     status_: RateStatus,
     score: Int?,
     comment: String?,
@@ -524,22 +530,22 @@ internal fun pinPaginated(
             episodes, episodes_aired, date_aired, date_released, age_rating, description,
             description_html, franchise, favorite, topic_id, genres, duration, next_episode,
             next_episode_date, next_episode_end_date, id_, shikimori_id_, target_id, target_type,
-            status_, score, comment, progress, re_counter, date_created, date_updated, id__,
-            target_id_, target_type_
+            target_shikimori_id, status_, score, comment, progress, re_counter, date_created, date_updated,
+            id__, target_id_, target_type_
         )
         RateTargetType.MANGA -> mangaWithRate(
             id, shikimori_id, name, name_ru, name_eng, image_original, image_preview, image_x96,
             image_x48, url, anime_type, rating, status, episodes, episodes_aired, date_aired,
             date_released, age_rating, description, description_html, franchise, favorite, topic_id,
-            genres, id_, shikimori_id_, target_id, target_type, status_, score, comment, progress,
-            re_counter, date_created, date_updated, id__, target_id_, target_type_
+            genres, id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
+            comment, progress, re_counter, date_created, date_updated, id__, target_id_, target_type_
         )
         RateTargetType.RANOBE -> ranobeWithRate(
             id, shikimori_id, name, name_ru, name_eng, image_original, image_preview, image_x96,
             image_x48, url, anime_type, rating, status, episodes, episodes_aired, date_aired,
             date_released, age_rating, description, description_html, franchise, favorite, topic_id,
-            genres, id_, shikimori_id_, target_id, target_type, status_, score, comment, progress,
-            re_counter, date_created, date_updated, id__, target_id_, target_type_
+            genres, id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_,
+            score, comment, progress, re_counter, date_created, date_updated, id__, target_id_, target_type_
         )
     }
 }

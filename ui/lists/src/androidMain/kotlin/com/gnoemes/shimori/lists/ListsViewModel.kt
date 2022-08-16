@@ -50,9 +50,14 @@ internal class ListsViewModel(
             combine(
                 stateManager.type.observe,
                 stateManager.page.observe,
-                observeShikimoriAuth.flow
-            ) { type, page, auth ->
+                observeShikimoriAuth.flow,
+                stateManager.ratesLoading.observe,
+            ) { type, page, auth, loading ->
                 val rateType = type.rateType ?: return@combine null
+
+                //prevent double sync
+                if (loading) return@combine null
+
                 Triple(rateType, page, auth.isAuthorized)
             }
                 .filterNotNull()

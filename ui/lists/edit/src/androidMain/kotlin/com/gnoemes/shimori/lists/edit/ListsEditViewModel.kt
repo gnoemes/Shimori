@@ -149,8 +149,9 @@ internal class ListsEditViewModel(
             val rate = Rate(
                 id = rate?.id ?: 0,
                 shikimoriId = rate?.shikimoriId ?: 0,
-                targetId = targetShikimoriId ?: 0,
+                targetId = targetId,
                 targetType = targetType,
+                targetShikimoriId = targetShikimoriId ?:0,
                 status = state.status,
                 score = state.score,
                 comment = state.comment,

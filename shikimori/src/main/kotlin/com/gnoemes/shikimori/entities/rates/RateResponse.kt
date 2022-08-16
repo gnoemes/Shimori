@@ -16,8 +16,8 @@ internal data class RateResponse(
     @SerialName("chapters") val chapters: Int?,
     @SerialName("volumes") val volumes: Int?,
     @SerialName("rewatches") val rewatches: Int?,
-    @SerialName("created_at") val createdDateTime: Instant?,
-    @SerialName("updated_at") val updatedDateTime: Instant?,
+    @SerialName("created_at") val dateCreated: Instant?,
+    @SerialName("updated_at") val dateUpdated: Instant?,
     @SerialName("anime") val anime: AnimeResponse?,
     @SerialName("manga") val manga: MangaResponse?
 )

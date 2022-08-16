@@ -28,19 +28,19 @@ querySortName:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.* FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN name END) DESC,
@@ -51,19 +51,19 @@ querySortNameRu:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN name_ru END) DESC,
@@ -74,19 +74,19 @@ querySortProgress:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN progress END) DESC,
@@ -97,19 +97,19 @@ querySortDateCreated:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN date_created END) DESC,
@@ -120,19 +120,19 @@ querySortDateUpdated:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN date_updated END) DESC,
@@ -143,19 +143,19 @@ querySortDateAired:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
@@ -166,19 +166,19 @@ querySortScore:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN score END) DESC,
@@ -189,19 +189,19 @@ querySortRating:
 SELECT * FROM (
 SELECT anime.*, rate.*, pinned.*  FROM pinned
 INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = anime.shikimori_id
+INNER JOIN rate ON rate.target_id = anime.id
 
 UNION ALL
 
 SELECT manga.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = manga.shikimori_id
+INNER JOIN rate ON rate.target_id = manga.id
 
 UNION ALL
 
 SELECT ranobe.*, NULL, NULL, NULL, NULL, rate.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN rate ON rate.target_id = ranobe.shikimori_id
+INNER JOIN rate ON rate.target_id = ranobe.id
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN rating END) DESC,
