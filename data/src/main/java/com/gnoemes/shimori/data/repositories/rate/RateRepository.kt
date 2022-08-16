@@ -33,7 +33,13 @@ class RateRepository(
                 if (!local.hasShikimoriId) source.createRate(local)
                 else source.updateRate(local)
 
-            dao.insertOrUpdate(result.copy(id = local.id))
+            dao.insertOrUpdate(
+                result.copy(
+                    id = local.id,
+                    targetId = local.targetId,
+                    targetType = local.targetType
+                )
+            )
         }
     }
 
