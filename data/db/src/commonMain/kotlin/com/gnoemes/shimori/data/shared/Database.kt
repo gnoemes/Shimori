@@ -28,6 +28,7 @@ internal class ShimoriSQLDelightDatabase(
     override val mangaDao: MangaDao = MangaDaoImpl(db, logger, dispatchers)
     override val ranobeDao: RanobeDao = RanobeDaoImpl(db, logger, dispatchers)
     override val listPinDao: ListPinDao = ListPinDaoImpl(db, logger, dispatchers)
+    override val rateToSyncDao: RateToSyncDao = RateToSyncDaoImpl(db, logger, dispatchers)
 }
 
 internal fun createDatabase(
@@ -45,7 +46,8 @@ internal fun createDatabase(
         animeAdapter = AnimeAdapter,
         mangaAdapter = MangaAdapter,
         ranobeAdapter = RanobeAdapter,
-        pinnedAdapter = PinnedAdapter
+        pinnedAdapter = PinnedAdapter,
+        rate_to_syncAdapter = RateToSyncAdapter
     )
     return ShimoriSQLDelightDatabase(db, logger, dispatchers)
 }

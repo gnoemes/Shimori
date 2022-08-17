@@ -11,4 +11,5 @@ interface ShimoriDatabase {
     val mangaDao: MangaDao
     val ranobeDao: RanobeDao
     val listPinDao : ListPinDao
+    val rateToSyncDao : RateToSyncDao
 }
