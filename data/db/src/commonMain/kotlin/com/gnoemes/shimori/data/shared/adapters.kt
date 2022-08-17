@@ -1,6 +1,8 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.data.core.entities.app.Request
+import com.gnoemes.shimori.data.core.entities.app.SyncAction
+import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
@@ -11,6 +13,9 @@ import com.squareup.sqldelight.ColumnAdapter
 import comgnoemesshimoridatadb.*
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
     override fun decode(databaseValue: String) = LocalDate.parse(databaseValue)
@@ -57,6 +62,19 @@ internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
     override fun decode(databaseValue: String) = databaseValue.split(SEPARATOR).map(Genre::valueOf)
     override fun encode(value: List<Genre>): String =
         value.joinToString(separator = SEPARATOR) { it.name }
+}
+
+internal object SyncTargetAdapter : ColumnAdapter<List<SyncTarget>, String> {
+    override fun decode(databaseValue: String): List<SyncTarget> {
+        return Json.decodeFromString(databaseValue)
+    }
+
+    override fun encode(value: List<SyncTarget>): String = Json.encodeToString(value)
+}
+
+internal object SyncActionAdapter : ColumnAdapter<SyncAction, String> {
+    override fun decode(databaseValue: String) = SyncAction.valueOf(databaseValue)
+    override fun encode(value: SyncAction): String = value.name
 }
 
 
@@ -108,4 +126,10 @@ internal val RanobeAdapter = Ranobe.Adapter(
 
 internal val PinnedAdapter = Pinned.Adapter(
     target_typeAdapter = RateTargetAdapter
+)
+
+internal val RateToSyncAdapter = Rate_to_sync.Adapter(
+    sync_targetsAdapter = SyncTargetAdapter,
+    sync_actionAdapter = SyncActionAdapter,
+    last_attemptAdapter = InstantAdapter
 )

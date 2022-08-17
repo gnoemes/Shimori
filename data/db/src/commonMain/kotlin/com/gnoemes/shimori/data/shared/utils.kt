@@ -7,6 +7,7 @@ internal typealias LastRequestDAO = comgnoemesshimoridatadb.Last_request
 internal typealias AnimeDAO = comgnoemesshimoridatadb.Anime
 internal typealias MangaDAO = comgnoemesshimoridatadb.Manga
 internal typealias RanobeDAO = comgnoemesshimoridatadb.Ranobe
+internal typealias RateToSyncDAO = comgnoemesshimoridatadb.Rate_to_sync
 
 
 internal val Boolean.long: Long

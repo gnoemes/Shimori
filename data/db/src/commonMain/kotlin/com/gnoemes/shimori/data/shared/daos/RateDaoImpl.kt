@@ -27,16 +27,30 @@ internal class RateDaoImpl(
     private val syncer = syncerForEntity(
         this,
         { it.shikimoriId },
-        { remote, local ->
-            remote.copy(
-                id = local?.id ?: 0,
-                //do not override ranobe type
-                targetType = local?.targetType ?: remote.targetType,
-                targetId = getTargetId(remote, local)
-            )
-        },
+        ::sync,
         logger
     )
+
+    private suspend fun sync(remote: Rate, local: Rate?): Rate {
+        //if we have pending sync, we won't override local rate
+        if (local != null) {
+            val pendingSync = db
+                .rateToSyncQueries
+                .queryByRateId(local.id)
+                .executeAsOneOrNull()
+                ?.let { rateToSyncMapper.mapInverse(it) }
+            if (pendingSync != null) {
+                return local
+            }
+        }
+
+        return remote.copy(
+            id = local?.id ?: 0,
+            //do not override ranobe type
+            targetType = local?.targetType ?: remote.targetType,
+            targetId = getTargetId(remote, local)
+        )
+    }
 
     private suspend fun getTargetId(remote: Rate, local: Rate?): Long {
         val targetType = local?.targetType ?: remote.targetType

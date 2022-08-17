@@ -19,6 +19,7 @@ import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.core.entities.user.User
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.data.core.mappers.Mapper
+import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 import comgnoemesshimoridatadb.QueryMeShort
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -48,6 +49,30 @@ internal val userToUserShortMapper = Mapper<UserDAO?, UserShort?> { from ->
         ),
         isMe = from.is_me
     )
+}
+
+internal val rateToSyncMapper = object : TwoWayMapper<RateToSync, RateToSyncDAO> {
+    override suspend fun map(from: RateToSync): RateToSyncDAO {
+        return RateToSyncDAO(
+            from.id,
+            from.rateId,
+            from.targets,
+            from.action,
+            from.attempts,
+            from.lastAttempt
+        )
+    }
+
+    override suspend fun mapInverse(from: RateToSyncDAO): RateToSync {
+        return RateToSync(
+            from.id,
+            from.rate_id,
+            from.sync_targets,
+            from.sync_action,
+            from.attempts,
+            from.last_attempt
+        )
+    }
 }
 
 internal object UserMapper : Mapper<UserDAO?, User?> {
