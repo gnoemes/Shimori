@@ -22,6 +22,10 @@ class RateRepository(
     private val userRepository: ShikimoriUserRepository,
 ) {
 
+    suspend fun queryById(id: Long) = dao.queryById(id)
+
+    suspend fun querySyncPendingRates() = syncDao.queryAll()
+
     fun observeRatesExist() = dao.observeHasRates()
     fun observeRateSort(type: ListType): Flow<RateSort?> = rateSortDao.observe(type)
     fun observeExistedStatuses(type: RateTargetType) = dao.observeExistedStatuses(type)
@@ -41,19 +45,28 @@ class RateRepository(
                 else SyncAction.UPDATE
 
             updateSyncPending(local, action)
-
-//        val result =
-//            if (!local.hasShikimoriId) source.createRate(local)
-//            else source.updateRate(local)
-//
-//        dao.insertOrUpdate(
-//            result.copy(
-//                id = local.id,
-//                targetId = local.targetId,
-//                targetType = local.targetType
-//            )
-//        )
         }
+    }
+
+    suspend fun createOrUpdate(rateToSync: RateToSync) {
+        syncDao.insertOrUpdate(rateToSync)
+    }
+
+    suspend fun createOrUpdateOnTarget(local: Rate, target: SyncTarget) {
+        val result = if (target.api == SyncApi.Shikimori) {
+            if (!local.hasShikimoriId) source.createRate(local)
+            else source.updateRate(local)
+        } else throw IllegalArgumentException("${target.api} is not supported yet")
+
+
+        //sync with local
+        dao.insertOrUpdate(
+            result.copy(
+                id = local.id,
+                targetId = local.targetId,
+                targetType = local.targetType
+            )
+        )
     }
 
 
@@ -68,6 +81,14 @@ class RateRepository(
             dao.delete(it)
             updateSyncPending(it, SyncAction.DELETE)
         }
+    }
+
+    suspend fun delete(rateToSync: RateToSync) {
+        syncDao.delete(rateToSync)
+    }
+
+    suspend fun deleteFromTarget(target: SyncTarget) {
+        source.deleteRate(target.id)
     }
 
     suspend fun sync() {
