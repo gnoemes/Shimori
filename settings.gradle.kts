@@ -33,6 +33,7 @@ include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
 include(":data", ":data:core", ":data:db", ":data:paging")
 
 include(":domain")
+include(":tasks")
 
 include(":shikimori", ":shikimori-auth")
 

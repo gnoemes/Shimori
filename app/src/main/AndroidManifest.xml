@@ -46,6 +46,19 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <!-- Disable the WorkManager default initializer since
+                 we are providing our own configuration. -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
     </application>
 
     <queries>

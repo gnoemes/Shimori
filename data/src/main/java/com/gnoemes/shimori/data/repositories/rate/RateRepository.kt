@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.data.repositories.rate
 
+import com.gnoemes.shimori.base.core.extensions.instantInPast
+import com.gnoemes.shimori.base.core.tasks.RateTasks
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.database.daos.RateSortDao
 import com.gnoemes.shimori.data.core.database.daos.RateToSyncDao
@@ -13,6 +15,7 @@ import com.gnoemes.shimori.data.core.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 class RateRepository(
     private val dao: RateDao,
@@ -20,6 +23,8 @@ class RateRepository(
     private val rateSortDao: RateSortDao,
     @Shikimori private val source: RateDataSource,
     private val userRepository: ShikimoriUserRepository,
+    private val rateTasks: RateTasks,
+    private val syncPendingRatesLastRequest: SyncPendingRatesLastRequestStore
 ) {
 
     suspend fun queryById(id: Long) = dao.queryById(id)
@@ -137,5 +142,13 @@ class RateRepository(
         }
 
         syncDao.insertOrUpdate(rateToSync)
+
+        if (needSyncPendingRates()) {
+            rateTasks.syncPendingRates()
+        }
     }
+
+    suspend fun needSyncPendingRates(
+        expiry: Instant = instantInPast(minutes = 5)
+    ) = syncPendingRatesLastRequest.isRequestBefore(expiry)
 }
