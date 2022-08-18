@@ -10,7 +10,7 @@ import androidx.compose.foundation.OverscrollConfiguration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), DIAware {
                 val prefs =
                     LocalContext.current.getSharedPreferences("defaults", Context.MODE_PRIVATE)
 
-                val overscrollConfiguration =  OverscrollConfiguration(
+                val overscrollConfiguration = OverscrollConfiguration(
                     glowColor = MaterialTheme.colorScheme.onPrimary,
                     drawPadding = PaddingValues(top = 24.dp, bottom = 24.dp)
                 )
@@ -88,20 +88,23 @@ class MainActivity : BaseActivity(), DIAware {
 
                     ShimoriTheme(useDarkColors = useDarkColors) {
                         val systemUiController = rememberSystemUiController()
-                        val isLightTheme = !useDarkColors
+                        val useDarkIcons = !useDarkColors
                         val navigationColor = MaterialTheme.colorScheme.background
                         val statusBarColor = Color.Transparent
 
-                        SideEffect {
+                        DisposableEffect(systemUiController, useDarkColors) {
                             systemUiController.setStatusBarColor(
                                 color = statusBarColor,
-                                darkIcons = isLightTheme
+                                darkIcons = useDarkIcons
                             )
                             systemUiController.setNavigationBarColor(
                                 color = navigationColor,
-                                darkIcons = isLightTheme
+                                darkIcons = useDarkIcons
                             )
+
+                            onDispose {}
                         }
+
                         Main()
                     }
                 }
