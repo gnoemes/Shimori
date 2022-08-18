@@ -6,4 +6,5 @@ enum class Request(val tag : String) {
     ANIMES_WITH_STATUS("animes_with_status"),
     MANGAS_WITH_STATUS("mangas_with_status"),
     RANOBE_WITH_STATUS("ranobe_with_status"),
+    SYNC_PENDING_RATES("sync_pending_rates"),
 }

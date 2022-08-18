@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.entities.app.SyncAction
 import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.repositories.rate.RateRepository
+import com.gnoemes.shimori.data.repositories.rate.SyncPendingRatesLastRequestStore
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ import kotlinx.datetime.Clock
 class SyncPendingRates(
     private val rateRepository: RateRepository,
     private val logger: Logger,
+    private val syncPendingRatesLastRequest: SyncPendingRatesLastRequestStore,
     private val dispatchers: AppCoroutineDispatchers,
 ) : Interactor<Unit>() {
 
@@ -88,6 +90,8 @@ class SyncPendingRates(
                     delay(200)
                 }
             }
+
+            syncPendingRatesLastRequest.updateLastRequest()
         }
     }
 }

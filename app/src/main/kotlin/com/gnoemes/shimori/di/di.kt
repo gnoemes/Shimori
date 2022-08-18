@@ -2,6 +2,7 @@ package com.gnoemes.shimori.di
 
 import android.app.Application
 import android.content.Context
+import androidx.work.WorkManager
 import com.gnoemes.shikimori.shikimoriModule
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.R
@@ -31,6 +32,7 @@ import com.gnoemes.shimori.settings.ShimoriStorageImpl
 import com.gnoemes.shimori.settings.settingsModule
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
+import com.gnoemes.shimori.tasks.tasksModule
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
@@ -52,6 +54,7 @@ val appModule = DI.Module("app") {
     importOnce(databaseModule)
     importOnce(dataModule)
     importOnce(domainModule)
+    importOnce(tasksModule)
 
     importOnce(shikimoriModule)
 
@@ -89,6 +92,8 @@ val appModule = DI.Module("app") {
             main = Dispatchers.Main
         )
     }
+
+    bindSingleton { WorkManager.getInstance(instance()) }
 
     bindProvider { new(::ShimoriRateUtil) }
     bindProvider { new(::ShimoriDateTimeFormatter) }

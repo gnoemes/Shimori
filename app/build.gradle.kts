@@ -95,6 +95,7 @@ dependencies {
     implementation(projects.data)
     implementation(projects.data.db)
     implementation(projects.domain)
+    implementation(projects.tasks)
 
     implementation(projects.shikimori)
     implementation(projects.shikimoriAuth)
