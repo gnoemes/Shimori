@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalTextApi::class)
-
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.animation.AnimatedVisibility
@@ -12,7 +10,6 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,7 +26,6 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.rememberAsyncImagePainter
@@ -152,13 +148,8 @@ private fun ListPage(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize(),
+            state = listItems.rememberLazyListState()
         ) {
-//                scroll state can't be restored if we using header/footers with paging data
-//                https://issuetracker.google.com/issues/177245496
-            if (listItems.itemCount == 0 && listItems.loadState.refresh is LoadState.NotLoading) {
-                return@LazyColumn
-            }
-
             itemSpacer(paddingValues.calculateTopPadding())
             item("sort") { ListSort() }
 
@@ -315,7 +306,7 @@ private fun BoxScope.Incrementer(
                     end = 8.dp
                 )
                 .align(Alignment.TopCenter),
-            )
+        )
 
 
         Image(
