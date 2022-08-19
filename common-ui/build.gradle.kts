@@ -15,6 +15,7 @@ dependencies {
     androidMainImplementation(libs.androidx.lifecycle.viewmodel.ktx)
     androidMainImplementation(libs.androidx.lifecycle.viewmodel.compose)
     androidMainImplementation(libs.androidx.paging.common)
+    androidMainImplementation(libs.androidx.paging.compose)
     androidMainImplementation(libs.compose.foundation.foundation)
     androidMainImplementation(libs.compose.foundation.layout)
     androidMainImplementation(libs.compose.material.material3)
@@ -26,4 +27,5 @@ dependencies {
     androidMainImplementation(libs.compose.ui.ui)
     androidMainImplementation(libs.kodein.compose)
     androidMainImplementation(libs.accompanist.navigationmaterial)
+    androidMainImplementation(libs.accompanist.placeholder)
 }

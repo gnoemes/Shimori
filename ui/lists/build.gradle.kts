@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.LibraryExtension
-
 plugins {
     id("multiplatform-ui-library")
 }
@@ -28,4 +26,5 @@ dependencies {
     androidMainImplementation(libs.compose.ui.util)
     androidMainImplementation(libs.compose.ui.tooling)
     androidMainImplementation(libs.compose.ui.ui)
+    androidMainImplementation(libs.accompanist.placeholder)
 }
