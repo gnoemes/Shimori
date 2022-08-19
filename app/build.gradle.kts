@@ -135,6 +135,7 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.navigationanimation)
     implementation(libs.accompanist.navigationmaterial)
+    implementation(libs.accompanist.placeholder)
     implementation(libs.accompanist.webview)
 
     implementation(libs.ktor.logging)
