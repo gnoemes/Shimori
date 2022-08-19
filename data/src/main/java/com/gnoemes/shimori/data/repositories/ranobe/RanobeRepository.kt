@@ -42,7 +42,7 @@ class RanobeRepository(
 
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
-        expiry: Instant = instantInPast(minutes = 5)
+        expiry: Instant = instantInPast(minutes = 15)
     ) = ratesLastRequest.isRequestBefore(expiry, id = status?.priority?.toLong() ?: 0)
 
 }
