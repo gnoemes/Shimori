@@ -78,6 +78,8 @@ class SyncPendingRates(
                         message = "#$index: Fail!",
                         tag = SYNC_TAG
                     )
+
+                    return@forEachIndexed
                 }
 
                 logger.d(
