@@ -1,10 +1,10 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -26,6 +26,7 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.rememberAsyncImagePainter
@@ -38,6 +39,8 @@ import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithRate
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.Rate
@@ -113,7 +116,6 @@ private fun ListPage(
         }
     }
 
-    val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
 
     val listItems = viewModel.items.collectAsLazyPagingItems()
 
@@ -144,64 +146,90 @@ private fun ListPage(
         openSearch = openSearch,
         openUser = openUser
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize(),
-            state = listItems.rememberLazyListState()
-        ) {
-            itemSpacer(paddingValues.calculateTopPadding())
-            item("sort") { ListSort() }
+        PaginatedList(
+            listItems,
+            scrollBehavior,
+            paddingValues,
+            state.incrementerTitle,
+            onEditClick,
+            onTogglePin,
+            onIncrementClick,
+            onIncrementHold,
+            onIncrementerProgress
+        )
+    }
+}
 
-            items(
-                items = listItems,
-                key = { it.id }
-            ) { entity ->
-                if (entity != null) {
-                    ListCard(
-                        title = entity,
-                        onCoverLongClick = { onTogglePin(entity) },
-                        onEditClick = { onEditClick(entity) },
-                        onIncrementClick = { onIncrementClick() },
-                        onIncrementHold = { onIncrementHold(entity) })
-                }
+@Composable
+private fun PaginatedList(
+    listItems: LazyPagingItems<TitleWithRate<out ShimoriTitleEntity>>,
+    scrollBehavior: TopAppBarScrollBehavior,
+    paddingValues: PaddingValues,
+    incrementerTitle: TitleWithRateEntity?,
+    onEditClick: (TitleWithRateEntity) -> Unit,
+    onTogglePin: (TitleWithRateEntity) -> Unit,
+    onIncrementClick: () -> Unit,
+    onIncrementHold: (TitleWithRateEntity) -> Unit,
+    onIncrementerProgress: (Int) -> Unit
+) {
+    val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
+
+    LazyColumn(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize(),
+        state = listItems.rememberLazyListState()
+    ) {
+        itemSpacer(paddingValues.calculateTopPadding())
+        item("sort") { ListSort() }
+
+        items(
+            items = listItems,
+            key = { it.id }
+        ) { entity ->
+            if (entity != null) {
+                ListCard(
+                    title = entity,
+                    onCoverLongClick = { onTogglePin(entity) },
+                    onEditClick = { onEditClick(entity) },
+                    onIncrementClick = { onIncrementClick() },
+                    onIncrementHold = { onIncrementHold(entity) })
             }
-
-            itemSpacer(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    //bottomBar + FAB
-                    .height(bottomBarHeight + 52.dp)
-            )
         }
 
-        val offset = with(LocalDensity.current) { 48.dp.roundToPx() }
-        val incrementerTitle = state.incrementerTitle
+        itemSpacer(
+            modifier = Modifier
+                .navigationBarsPadding()
+                //bottomBar + FAB
+                .height(bottomBarHeight + 52.dp)
+        )
+    }
 
-        AnimatedVisibility(
-            visible = incrementerTitle != null,
-            enter = slideInHorizontally(
-                initialOffsetX = { offset }
-            ),
+    val offset = with(LocalDensity.current) { 48.dp.roundToPx() }
+
+    AnimatedVisibility(
+        visible = incrementerTitle != null,
+        enter = slideInHorizontally(
+            initialOffsetX = { offset }
+        ),
+    ) {
+        val rate = incrementerTitle?.rate
+        if (incrementerTitle == null || rate == null) return@AnimatedVisibility
+
+        var incrementerProgress by remember(incrementerTitle.rate) { mutableStateOf(rate.progress) }
+
+        val localProgressUpdate = { value: Int -> incrementerProgress = value }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .noRippleClickable { onIncrementerProgress(incrementerProgress) }
         ) {
-            val rate = incrementerTitle?.rate
-            if (incrementerTitle == null || rate == null) return@AnimatedVisibility
-
-            var incrementerProgress by remember(incrementerTitle.rate) { mutableStateOf(rate.progress) }
-
-            val localProgressUpdate = { value: Int -> incrementerProgress = value }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .noRippleClickable { onIncrementerProgress(incrementerProgress) }
-            ) {
-                Incrementer(
-                    title = incrementerTitle,
-                    rate = rate,
-                    onProgressUpdated = localProgressUpdate
-                )
-            }
+            Incrementer(
+                title = incrementerTitle,
+                rate = rate,
+                onProgressUpdated = localProgressUpdate
+            )
         }
     }
 }
