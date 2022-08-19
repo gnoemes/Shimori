@@ -14,12 +14,13 @@ import com.gnoemes.shimori.data.repositories.rate.SyncPendingRatesLastRequestSto
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import org.kodein.di.DI
 import org.kodein.di.bindProvider
+import org.kodein.di.bindSingleton
 
 val dataModule = DI.Module("data") {
     bindProvider { new(::ShikimoriUserRepository) }
     bindProvider { new(::RateRepository) }
 
-    bindProvider { new(::ListsStateManager) }
+    bindSingleton { new(::ListsStateManager) }
 
 
     bindProvider { new(::AnimeRepository) }
