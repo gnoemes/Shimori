@@ -92,7 +92,7 @@ class MainActivity : BaseActivity(), DIAware {
                         val navigationColor = MaterialTheme.colorScheme.background
                         val statusBarColor = Color.Transparent
 
-                        DisposableEffect(systemUiController, useDarkColors) {
+                        DisposableEffect(systemUiController, useDarkColors, navigationColor) {
                             systemUiController.setStatusBarColor(
                                 color = statusBarColor,
                                 darkIcons = useDarkIcons
