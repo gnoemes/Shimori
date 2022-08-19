@@ -44,10 +44,9 @@ class MainActivity : BaseActivity(), DIAware {
 
     @OptIn(ExperimentalLifecycleComposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        installSplashScreen()
 
         setContent {
             withDI(di = di) {
