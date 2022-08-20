@@ -2,7 +2,6 @@
 
 package com.gnoemes.shimori.common.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,8 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.statusBarHeight
 import com.gnoemes.shimori.data.core.entities.user.UserShort
@@ -60,15 +58,13 @@ fun ShimoriMainToolbar(
                 IconButton(onClick = onUserClick) {
                     val avatar = user?.image?.preview
                     if (avatar != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(avatar)
-                                    .apply {
-                                        crossfade(true)
-                                    }.build()
-                            ),
+                        AsyncImage(
+                            model = ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(avatar)
+                                .apply {
+                                    crossfade(true)
+                                }.build(),
                             contentDescription = stringResource(R.string.profile),
                             modifier = Modifier
                                 .size(24.dp)

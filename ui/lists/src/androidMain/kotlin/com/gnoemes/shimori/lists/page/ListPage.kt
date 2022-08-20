@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.api.UiMessage
@@ -326,15 +326,13 @@ private fun BoxScope.Incrementer(
         )
 
 
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(title.entity.image)
-                    .apply {
-                        crossfade(true)
-                    }.build()
-            ),
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(title.entity.image)
+                .apply {
+                    crossfade(true)
+                }.build(),
             modifier = Modifier
                 .padding(start = 12.dp, top = 12.dp, end = 12.dp)
                 .size(24.dp)
@@ -363,8 +361,10 @@ private fun ScreenLayout(
                     val image = message?.image
                     val imageRes = message?.imageRes
                     if (image != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(image),
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(image)
+                                .build(),
                             contentScale = ContentScale.Crop,
                             contentDescription = null,
                             modifier = Modifier
