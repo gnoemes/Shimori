@@ -5,9 +5,7 @@ package com.gnoemes.shimori.settings
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -86,7 +84,15 @@ private fun Settings(
             navigateUp = navigateUp,
             modifier = Modifier.statusBarsPadding(),
             title = stringResource(id = R.string.app_name),
-            subTitle = appVersion
+            subTitle = appVersion,
+            // use InterpolatingTopAppBarColors instead AnimatingTopAppBarColors
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
+                actionIconContentColor = MaterialTheme.colorScheme.onSurface
+            )
         )
 
         Column(
