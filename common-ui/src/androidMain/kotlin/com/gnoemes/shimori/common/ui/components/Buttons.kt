@@ -36,12 +36,7 @@ fun EnlargedButton(
     text: String,
     enabled: Boolean = true,
     selected: Boolean = false,
-    buttonColors: ButtonColors = ButtonDefaults.textButtonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
-        disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.16f),
-    ),
+    buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(selected),
     leftIcon: (@Composable RowScope.() -> Unit)? = null,
     rightIcon: (@Composable RowScope.() -> Unit)? = null,
 ) {
@@ -77,7 +72,7 @@ fun ShimoriChip(
     text: String,
     enabled: Boolean = true,
     selected: Boolean = false,
-    buttonColors: ButtonColors = ButtonDefaults.outlinedButtonColors(
+    buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(
         containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surface,
         contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurface,
         disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.12f),
@@ -121,12 +116,7 @@ fun ShimoriButton(
     text: String,
     enabled: Boolean = true,
     selected: Boolean = false,
-    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
-        disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.16f),
-    ),
+    buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(selected),
     icon: (@Composable RowScope.() -> Unit)? = null
 ) {
     Button(
@@ -196,12 +186,7 @@ fun ShimoriCircleButton(
     enabled: Boolean = true,
     selected: Boolean = false,
     onLongClick: () -> Unit = {},
-    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
-        containerColor = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
-        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f),
-    ),
+    buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(selected = selected),
 ) {
     Button(
         onClick = onClick,
@@ -298,6 +283,23 @@ private fun Button(
     }
 }
 
+object ShimoriButtonDefaults {
+    @Composable
+    fun buttonColors(
+        selected: Boolean = false,
+        containerColor: Color = if (selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
+        contentColor: Color = if (selected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant,
+        disabledContainerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.12f),
+        disabledContentColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f),
+    ): ButtonColors =
+        ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = contentColor,
+            disabledContainerColor = disabledContainerColor,
+            disabledContentColor = disabledContentColor
+        )
+}
+
 @ExperimentalMaterial3Api
 @Composable
 @NonRestartableComposable
@@ -352,7 +354,8 @@ private fun Modifier.surface(
     backgroundColor: Color,
     border: BorderStroke?,
     shadowElevation: Dp
-) = this.shadow(shadowElevation, shape, clip = false)
+) = this
+    .shadow(shadowElevation, shape, clip = false)
     .then(if (border != null) Modifier.border(border, shape) else Modifier)
     .background(color = backgroundColor, shape = shape)
     .clip(shape)

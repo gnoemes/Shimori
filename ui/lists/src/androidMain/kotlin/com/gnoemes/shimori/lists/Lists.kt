@@ -95,6 +95,8 @@ private fun Lists(
             )
         },
     ) { paddingValues ->
+        val paddingValuesState = remember { paddingValues }
+
         when {
             state.isLoading -> ListsLoading(paddingValues)
             state.isEmpty -> ListsEmpty(
@@ -107,7 +109,7 @@ private fun Lists(
             )
             else -> {
                 ListPage(
-                    paddingValues = paddingValues,
+                    paddingValues = paddingValuesState,
                     scrollBehavior = scrollBehavior,
                     openListsEdit = openListsEdit,
                     onChangeList = onChangeList

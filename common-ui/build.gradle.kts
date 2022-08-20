@@ -16,6 +16,7 @@ dependencies {
     androidMainImplementation(libs.androidx.lifecycle.viewmodel.compose)
     androidMainImplementation(libs.androidx.paging.common)
     androidMainImplementation(libs.androidx.paging.compose)
+    androidMainImplementation(libs.androidx.palette)
     androidMainImplementation(libs.compose.foundation.foundation)
     androidMainImplementation(libs.compose.foundation.layout)
     androidMainImplementation(libs.compose.material.material3)
