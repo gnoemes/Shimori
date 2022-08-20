@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalLifecycleComposeApi::class)
+
 package com.gnoemes.shimori.lists.change
 
 import androidx.compose.foundation.layout.*
@@ -6,10 +8,13 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.common.ui.components.BottomSheetTitle
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
@@ -29,7 +34,10 @@ private fun ListsChange(
     viewModel: ListsChangeViewModel,
     navigateUp: () -> Unit
 ) {
+    val type by viewModel.type.collectAsStateWithLifecycle()
+
     ListsChange(
+        type = type,
         onOpenPinedClick = { viewModel.openPinned(); navigateUp() },
         onOpenRandomTitleClick = { viewModel.openRandomTitle(); navigateUp() },
         navigateUp = navigateUp,
@@ -38,6 +46,7 @@ private fun ListsChange(
 
 @Composable
 private fun ListsChange(
+    type : ListType,
     onOpenPinedClick: () -> Unit,
     onOpenRandomTitleClick: () -> Unit,
     navigateUp: () -> Unit,
@@ -46,6 +55,7 @@ private fun ListsChange(
         BottomSheetTitle(text = stringResource(id = R.string.lists_title))
 
         EnlargedButton(
+            selected = type == ListType.Pinned,
             onClick = onOpenPinedClick,
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp, end = 12.dp)
