@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.animation.AnimatedVisibility
@@ -42,29 +40,27 @@ import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithRate
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
-import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ListPage(
-    onChangeList: () -> Unit,
-    openSearch: () -> Unit,
-    openUser: () -> Unit,
+    paddingValues: PaddingValues,
+    scrollBehavior: TopAppBarScrollBehavior,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    onChangeList: () -> Unit,
 ) {
     ListPage(
         viewModel = shimoriViewModel(),
-        onChangeList = onChangeList,
-        openSearch = openSearch,
-        openUser = openUser,
+        paddingValues = paddingValues,
+        scrollBehavior = scrollBehavior,
         openListsEdit = openListsEdit,
+        onChangeList = onChangeList
     )
 }
 
@@ -72,19 +68,13 @@ internal fun ListPage(
 @Composable
 private fun ListPage(
     viewModel: ListPageViewModel,
-    onChangeList: () -> Unit,
-    openSearch: () -> Unit,
-    openUser: () -> Unit,
+    paddingValues: PaddingValues,
+    scrollBehavior: TopAppBarScrollBehavior,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    onChangeList: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val appBarState = rememberTopAppBarState()
-    val scrollBehavior = remember {
-        TopAppBarDefaults.pinnedScrollBehavior(
-            state = appBarState
-        )
-    }
     val snackbarHostState = rememberSnackbarHostState()
 
     val onEditClick = { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
@@ -97,7 +87,11 @@ private fun ListPage(
     state.message?.let { message ->
         LaunchedEffect(message) {
             val result =
-                snackbarHostState.showSnackbar(message.message, actionLabel = message.action)
+                snackbarHostState.showSnackbar(
+                    message.message,
+                    actionLabel = message.action,
+                    duration = SnackbarDuration.Short
+                )
 
             if (result == SnackbarResult.ActionPerformed) {
                 viewModel.onMessageAction(message.id)
@@ -136,16 +130,10 @@ private fun ListPage(
     }
 
     ScreenLayout(
-        type = state.type,
-        status = state.status,
-        user = state.user,
-        message = state.message,
-        snackbarHostState = snackbarHostState,
-        scrollBehavior = scrollBehavior,
-        onChangeList = onChangeList,
-        openSearch = openSearch,
-        openUser = openUser
-    ) { paddingValues ->
+        snackbarHostState,
+        state.message,
+        onChangeList,
+    ) {
         PaginatedList(
             listItems,
             scrollBehavior,
@@ -160,6 +148,7 @@ private fun ListPage(
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun PaginatedList(
     listItems: LazyPagingItems<TitleWithRate<out ShimoriTitleEntity>>,
@@ -359,35 +348,12 @@ private fun BoxScope.Incrementer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenLayout(
-    type: ListType,
-    status: RateStatus,
-    user: UserShort?,
-    message: UiMessage?,
     snackbarHostState: SnackbarHostState,
-    scrollBehavior: TopAppBarScrollBehavior,
+    message: UiMessage?,
     onChangeList: () -> Unit,
-    openSearch: () -> Unit,
-    openUser: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     ScaffoldExtended(
-        topBar = {
-            val title = when (type) {
-                ListType.Pinned -> null
-                else -> type.rateType
-            }?.let { type ->
-                LocalShimoriTextCreator.current.rateStatusText(type, status)
-            } ?: LocalShimoriRateUtil.current.listTypeName(type)
-
-            ShimoriMainToolbar(
-                modifier = Modifier,
-                title = title,
-                user = user,
-                onSearchClick = openSearch,
-                onUserClick = openUser,
-                scrollBehavior = scrollBehavior
-            )
-        },
         snackbarHost = {
             ShimoriSnackbar(
                 hostState = snackbarHostState,

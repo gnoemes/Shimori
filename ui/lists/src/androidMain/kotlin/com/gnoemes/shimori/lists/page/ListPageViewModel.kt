@@ -26,10 +26,10 @@ import kotlinx.coroutines.launch
 
 internal class ListPageViewModel(
     private val stateManager: ListsStateManager,
+    private val textProvider: ShimoriTextProvider,
     private val observeListPage: ObserveListPage,
     private val observeRateSort: ObserveRateSort,
     private val togglePin: ToggleTitlePin,
-    private val textProvider: ShimoriTextProvider,
     private val updateRate: CreateOrUpdateRate,
     observeMyUser: ObserveMyUserShort
 ) : ViewModel() {
@@ -41,9 +41,6 @@ internal class ListPageViewModel(
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
 
     val state = combine(
-        stateManager.type.observe,
-        stateManager.page.observe,
-        observeMyUser.flow,
         uiMessageManager.message,
         incrementerEvents,
         ::ListPageViewState
