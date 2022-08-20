@@ -11,18 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.ui.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Cover(
-    painter: Painter,
+    image: ShimoriImage?,
     modifier: Modifier = Modifier,
     shape: Shape = ShimoriSmallRoundedCornerShape,
     onClick: (() -> Unit)? = null,
@@ -37,7 +40,14 @@ fun Cover(
         modifier = modifier
 
     ) {
-        Image(
+
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(image)
+                .apply {
+                    crossfade(true)
+                }.build(),
             modifier = Modifier
                 .combinedClickable(
                     onLongClick = onLongClick,
@@ -45,8 +55,7 @@ fun Cover(
                 )
                 .fillMaxSize()
                 .clip(shape),
-            painter = painter,
-            contentDescription = contentDescription,
+            contentDescription =contentDescription,
             contentScale = ContentScale.Crop
         )
 

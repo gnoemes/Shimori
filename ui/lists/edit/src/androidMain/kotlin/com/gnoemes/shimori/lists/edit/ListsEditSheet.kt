@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,7 +26,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.*
@@ -389,12 +391,17 @@ private fun Title(
         Box(
             modifier = Modifier.size(24.dp)
         ) {
-            Image(
+            AsyncImage(
+                model = ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(image)
+                    .apply {
+                        crossfade(true)
+                    }.build(),
+                contentDescription = text,
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(ShimoriSmallestRoundedCornerShape),
-                painter = rememberAsyncImagePainter(image),
-                contentDescription = text,
                 contentScale = ContentScale.Crop
             )
         }
