@@ -8,6 +8,7 @@ import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 internal data class ListPageViewState(
     val message: UiMessage? = null,
     val incrementerTitle: TitleWithRateEntity? = null,
+    val isLoading : Boolean = false,
 ) {
     companion object {
         val Empty = ListPageViewState()

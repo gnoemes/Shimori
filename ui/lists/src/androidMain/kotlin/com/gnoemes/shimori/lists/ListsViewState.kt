@@ -11,7 +11,7 @@ internal data class ListsViewState(
     val status: RateStatus = RateStatus.WATCHING,
     val user: UserShort? = null,
     val isEmpty: Boolean = false,
-    val hasRates: Boolean = true,
+    val hasRates: Boolean = false,
     val isLoading: Boolean = false
 ) {
     companion object {

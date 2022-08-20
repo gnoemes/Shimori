@@ -43,6 +43,7 @@ internal class ListPageViewModel(
     val state = combine(
         uiMessageManager.message,
         incrementerEvents,
+        stateManager.ratesLoading.observe,
         ::ListPageViewState
     ).stateIn(
         scope = viewModelScope,

@@ -1,7 +1,5 @@
 package com.gnoemes.shimori.lists
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -96,10 +94,8 @@ private fun Lists(
         },
     ) { paddingValues ->
         val paddingValuesState = remember { paddingValues }
-
         when {
-            state.isLoading -> ListsLoading(paddingValues)
-            state.isEmpty -> ListsEmpty(
+            !state.isLoading && state.isEmpty -> ListsEmpty(
                 type = state.type,
                 hasRates = state.hasRates,
                 onAnimeExplore = onAnimeExplore,
@@ -116,34 +112,6 @@ private fun Lists(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun ListsLoading(paddingValues: PaddingValues) {
-
-    val infinityTransition = rememberInfiniteTransition()
-
-    val alpha by infinityTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 0.3f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Spacer(modifier = Modifier.height(paddingValues.calculateTopPadding() + 64.dp))
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_shimori),
-            contentDescription = null,
-            alpha = alpha
-        )
     }
 }
 
