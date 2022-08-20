@@ -26,13 +26,15 @@ internal class ListsViewModel(
 
     val state = combine(
         stateManager.type.observe,
+        stateManager.page.observe,
         observeMyUser.flow,
         observePinsExist.flow,
         observeRatesExist.flow,
         stateManager.ratesLoading.observe
-    ) { type, user, hasPins, hasRates, isLoading ->
+    ) { type, status, user, hasPins, hasRates, isLoading ->
         ListsViewState(
             type = type,
+            status = status,
             user = user,
             isEmpty = if (type == ListType.Pinned) !hasPins else !hasRates,
             hasRates = hasRates,
