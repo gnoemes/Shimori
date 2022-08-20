@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
@@ -32,6 +33,7 @@ import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.components.*
+import com.gnoemes.shimori.common.ui.theme.ShimoriBiggestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
@@ -40,8 +42,7 @@ import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithRate
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.rate.*
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
@@ -139,6 +140,7 @@ private fun ListPage(
             scrollBehavior,
             paddingValues,
             state.incrementerTitle,
+            state.isLoading,
             onEditClick,
             onTogglePin,
             onIncrementClick,
@@ -155,6 +157,7 @@ private fun PaginatedList(
     scrollBehavior: TopAppBarScrollBehavior,
     paddingValues: PaddingValues,
     incrementerTitle: TitleWithRateEntity?,
+    isLoading: Boolean,
     onEditClick: (TitleWithRateEntity) -> Unit,
     onTogglePin: (TitleWithRateEntity) -> Unit,
     onIncrementClick: () -> Unit,
@@ -170,19 +173,27 @@ private fun PaginatedList(
         state = listItems.rememberLazyListState()
     ) {
         itemSpacer(paddingValues.calculateTopPadding())
-        item("sort") { ListSort() }
 
-        items(
-            items = listItems,
-            key = { it.id }
-        ) { entity ->
-            if (entity != null) {
-                ListCard(
-                    title = entity,
-                    onCoverLongClick = { onTogglePin(entity) },
-                    onEditClick = { onEditClick(entity) },
-                    onIncrementClick = { onIncrementClick() },
-                    onIncrementHold = { onIncrementHold(entity) })
+        if (isLoading) {
+            item { LoadingSort() }
+            items(3) { LoadingItem() }
+        } else {
+            item("sort") { ListSort() }
+
+            items(
+                items = listItems,
+                key = { "${it.type}-${it.id}" }
+            ) { entity ->
+                if (entity != null) {
+                    ListCard(
+                        title = entity,
+                        onCoverLongClick = { onTogglePin(entity) },
+                        onEditClick = { onEditClick(entity) },
+                        onIncrementClick = { onIncrementClick() },
+                        onIncrementHold = { onIncrementHold(entity) })
+                } else {
+                    LoadingItem()
+                }
             }
         }
 
@@ -219,6 +230,101 @@ private fun PaginatedList(
                 rate = rate,
                 onProgressUpdated = localProgressUpdate
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalLifecycleComposeApi::class)
+@Composable
+private fun LoadingSort() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.width(8.dp))
+
+        val typeInt = LocalShimoriSettings.current.preferredListType.observe
+            .collectAsStateWithLifecycle(initialValue = ListType.Anime.type)
+
+        val type = ListType.findOrDefault(typeInt.value)
+        val defaultSort = RateSort.defaultForType(type)
+
+        RateSortOption.priorityForType(type).fastForEach { option ->
+            val selected = defaultSort.sortOption == option
+
+            ShimoriChip(
+                onClick = {},
+                modifier = Modifier
+                    .shimoriPlaceholder(true)
+                    .height(32.dp),
+                text = LocalShimoriTextCreator.current.listSortText(type, option),
+                selected = selected,
+                icon = {
+                    if (selected) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_arrow_up),
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+    }
+}
+
+@Composable
+private fun LoadingItem() {
+    Box(
+        modifier = Modifier.padding(PaddingValues(horizontal = 16.dp, vertical = 12.dp))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(MaterialTheme.dimens.listPosterHeight),
+        ) {
+            Box(
+                modifier = Modifier
+                    .shimoriPlaceholder(true)
+                    .height(MaterialTheme.dimens.listPosterHeight)
+                    .width(MaterialTheme.dimens.listPosterWidth)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Column {
+                Box(
+                    modifier = Modifier
+                        .shimoriPlaceholder(
+                            visible = true,
+                            shape = ShimoriSmallestRoundedCornerShape
+                        )
+                        .fillMaxWidth()
+                        .height(66.dp)
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    repeat(2) {
+                        Box(
+                            modifier = Modifier
+                                .shimoriPlaceholder(
+                                    visible = true,
+                                    shape = ShimoriBiggestRoundedCornerShape
+                                )
+                                .clip(ShimoriBiggestRoundedCornerShape)
+                                .size(32.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
