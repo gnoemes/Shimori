@@ -7,6 +7,8 @@ import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.repositories.rate.RateRepository
 import com.gnoemes.shimori.data.repositories.rate.SyncPendingRatesLastRequestStore
 import com.gnoemes.shimori.domain.Interactor
+import io.ktor.client.plugins.*
+import io.ktor.http.*
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,12 +69,19 @@ class SyncPendingRates(
                         message = "#$index: sync error $e \ncause: ${e.cause}",
                         tag = SYNC_TAG
                     )
-                    rateRepository.createOrUpdate(
-                        toSync.copy(
-                            attempts = toSync.attempts + 1,
-                            lastAttempt = Clock.System.now()
+
+                    if (e is ClientRequestException &&
+                        e.response.status == HttpStatusCode.NotFound
+                    ) {
+                        rateRepository.delete(toSync)
+                    } else {
+                        rateRepository.createOrUpdate(
+                            toSync.copy(
+                                attempts = toSync.attempts + 1,
+                                lastAttempt = Clock.System.now()
+                            )
                         )
-                    )
+                    }
 
                     logger.d(
                         message = "#$index: Fail!",
