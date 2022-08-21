@@ -1,12 +1,11 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class UpdateUser @Inject constructor(
+class UpdateUser constructor(
     private val userRepository: ShikimoriUserRepository,
     private val dispatchers: AppCoroutineDispatchers,
 ) : Interactor<UpdateUser.Params>() {
@@ -14,12 +13,12 @@ class UpdateUser @Inject constructor(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.id != null) {
-                userRepository.updateUser(params.id)
+                userRepository.update(params.id)
                 return@withContext
             }
 
             if (params.isMe) {
-                userRepository.updateMyUser()
+                userRepository.updateMe()
             }
         }
     }

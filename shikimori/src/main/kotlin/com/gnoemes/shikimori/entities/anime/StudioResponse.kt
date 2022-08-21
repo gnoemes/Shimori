@@ -1,11 +1,12 @@
 package com.gnoemes.shikimori.entities.anime
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class StudioResponse(
-        @field:SerializedName("id") val id: Long,
-        @field:SerializedName("name") val name: String,
-        @field:SerializedName("filtered_name") val nameFiltered: String,
-        @field:SerializedName("real") val isReal: Boolean,
-        @field:SerializedName("image") val imageUrl: String?
+        @SerialName("id") val id: Long,
+        @SerialName("name") val name: String,
+        @SerialName("filtered_name") val nameFiltered: String,
+        @SerialName("real") val isReal: Boolean,
+        @SerialName("image") val imageUrl: String?
 )

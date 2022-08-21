@@ -1,12 +1,13 @@
 package com.gnoemes.shikimori.entities.club
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal enum class ClubPolicy {
-    @SerializedName("free")
+    @SerialName("free")
     FREE,
-    @SerializedName("admin_invite")
+    @SerialName("admin_invite")
     ADMIN_INVITE,
-    @SerializedName("owner_invite")
+    @SerialName("owner_invite")
     OWNER_INVITE
 }

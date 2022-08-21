@@ -1,14 +1,16 @@
 package com.gnoemes.shikimori.entities.anime
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+
+@kotlinx.serialization.Serializable
 internal enum class ShikimoriAnimeVideoType {
-    @SerializedName("op")
+    @SerialName("op")
     OPENING,
-    @SerializedName("ed")
+    @SerialName("ed")
     ENDING,
-    @SerializedName("pv")
+    @SerialName("pv")
     PROMO,
-    @SerializedName("other")
+    @SerialName("other")
     OTHER;
 }

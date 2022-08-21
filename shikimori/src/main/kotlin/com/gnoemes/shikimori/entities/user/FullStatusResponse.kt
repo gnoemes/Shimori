@@ -1,8 +1,9 @@
 package com.gnoemes.shikimori.entities.user
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class FullStatusResponse(
-        @field:SerializedName("anime") val anime: List<StatusResponse>,
-        @field:SerializedName("manga") val manga: List<StatusResponse>
+        @SerialName("anime") val anime: List<StatusResponse>,
+        @SerialName("manga") val manga: List<StatusResponse>
 )

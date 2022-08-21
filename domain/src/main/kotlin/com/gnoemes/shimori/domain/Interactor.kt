@@ -1,70 +1,53 @@
 package com.gnoemes.shimori.domain
 
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.gnoemes.shimori.base.entities.InvokeError
-import com.gnoemes.shimori.base.entities.InvokeStarted
-import com.gnoemes.shimori.base.entities.InvokeStatus
-import com.gnoemes.shimori.base.entities.InvokeSuccess
+import com.gnoemes.shimori.base.core.entities.InvokeError
+import com.gnoemes.shimori.base.core.entities.InvokeStarted
+import com.gnoemes.shimori.base.core.entities.InvokeStatus
+import com.gnoemes.shimori.base.core.entities.InvokeSuccess
+import com.gnoemes.shimori.data.paging.PagingConfig
+import com.gnoemes.shimori.data.paging.PagingData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withTimeout
-import java.util.concurrent.TimeUnit
 
-abstract class Interactor<in P> {
+abstract class Interactor<in Params> {
+    suspend fun executeSync(params: Params) = doWork(params)
 
-    operator fun invoke(params: P, timeoutMs: Long = defaultTimeoutMs): Flow<InvokeStatus> {
+    protected abstract suspend fun doWork(params: Params)
+
+    operator fun invoke(params: Params, timeout: Long = defaultTimeoutMs): Flow<InvokeStatus> {
         return flow {
-            withTimeout(timeoutMs) {
+            withTimeout(timeout) {
                 emit(InvokeStarted)
                 doWork(params)
                 emit(InvokeSuccess)
             }
-        }.catch { t ->
-            emit(InvokeError(t))
-        }
+        }.catch { emit(InvokeError(it)) }
     }
-
-    suspend fun executeSync(params: P) = doWork(params)
-
-    protected abstract suspend fun doWork(params: P)
 
     companion object {
-        private val defaultTimeoutMs = TimeUnit.MINUTES.toMillis(5)
+        //5 min
+        private const val defaultTimeoutMs = 5 * 60 * 1000L
     }
-}
-
-abstract class PagingInteractor<P : PagingInteractor.Parameters<T>, T : Any> : SubjectInteractor<P, PagingData<T>>() {
-    interface Parameters<T : Any> {
-        val pagingConfig: PagingConfig
-    }
-}
-
-abstract class SuspendingWorkInteractor<P : Any, T : Any> : SubjectInteractor<P, T>() {
-    override fun createObservable(params: P): Flow<T> = flow {
-        emit(doWork(params))
-    }
-
-    abstract suspend fun doWork(params: P): T
 }
 
 abstract class SubjectInteractor<P : Any, T> {
     private val paramState = MutableSharedFlow<P>(
-            replay = 1,
-            extraBufferCapacity = 1,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        replay = 1,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     val flow: Flow<T> = paramState
         .distinctUntilChanged()
-        .flatMapLatest { createObservable(it) }
+        .flatMapLatest { create(it) }
         .distinctUntilChanged()
 
     operator fun invoke(params: P) {
         paramState.tryEmit(params)
     }
 
-    protected abstract fun createObservable(params: P): Flow<T>
+    protected abstract fun create(params: P): Flow<T>
 }
 
 abstract class ResultInteractor<in P, R> {
@@ -75,6 +58,13 @@ abstract class ResultInteractor<in P, R> {
     suspend fun executeSync(params: P): R = doWork(params)
 
     protected abstract suspend fun doWork(params: P): R
+}
+
+abstract class PagingInteractor<P : PagingInteractor.PagingParams<T>, T : Any> :
+    SubjectInteractor<P, PagingData<T>>() {
+    interface PagingParams<T : Any> {
+        val pagingConfig: PagingConfig
+    }
 }
 
 operator fun Interactor<Unit>.invoke() = invoke(Unit)

@@ -1,23 +1,22 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.rates.RateRepository
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.data.repositories.rate.RateRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class DeleteRate @Inject constructor(
+class DeleteRate(
     private val repository: RateRepository,
     private val dispatchers: AppCoroutineDispatchers,
 ) : Interactor<DeleteRate.Params>() {
 
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
-            repository.deleteRate(params.id)
+            repository.delete(params.id)
         }
     }
 
     data class Params(
-        val id : Long
+        val id: Long
     )
 }

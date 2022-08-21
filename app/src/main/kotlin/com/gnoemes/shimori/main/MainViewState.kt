@@ -1,18 +1,22 @@
 package com.gnoemes.shimori.main
 
 import androidx.compose.runtime.Immutable
-import com.gnoemes.shimori.base.entities.ShikimoriAuthState
-import com.gnoemes.shimori.common.api.UiMessage
-import com.gnoemes.shimori.model.rate.ListType
+import com.gnoemes.shimori.base.core.settings.AppLocale
+import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.data.core.entities.rate.ListType
 
 @Immutable
 data class MainViewState(
-    val listType: ListType = ListType.Anime,
-    val hasRates : Boolean = false,
-    val authState: ShikimoriAuthState = ShikimoriAuthState.LOGGED_OUT,
+    val listType: ListType = ListType.Anime
 ) {
 
     companion object {
         val Empty = MainViewState()
     }
 }
+
+@Immutable
+data class MainSettingsViewState(
+    val titlesLocale: AppTitlesLocale,
+    val appLocale: AppLocale,
+)

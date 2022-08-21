@@ -1,90 +1,111 @@
 package com.gnoemes.shimori.main
 
+import Main
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.OverscrollConfiguration
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
-import com.gnoemes.shikimori.ShikimoriManager
-import com.gnoemes.shimori.base.settings.ShimoriSettings
-import com.gnoemes.shimori.common.BaseActivity
-import com.gnoemes.shimori.common.compose.*
-import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
-import com.gnoemes.shimori.common.compose.theme.defaultDimensions
-import com.gnoemes.shimori.common.compose.theme.sw360Dimensions
-import com.gnoemes.shimori.common.extensions.shouldUseDarkColors
-import com.gnoemes.shimori.common.utils.ShimoriRateUtil
-import com.gnoemes.shimori.common.utils.ShimoriTextCreator
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.gnoemes.shimori.base.core.settings.ShimoriSettings
+import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
+import com.gnoemes.shimori.common.ui.theme.defaultDimensions
+import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
+import com.gnoemes.shimori.common.ui.utils.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
+import org.kodein.di.compose.withDI
+import org.kodein.di.instance
 
-@AndroidEntryPoint
-class MainActivity : BaseActivity() {
-    private lateinit var viewModel: MainViewModel
+@OptIn(ExperimentalFoundationApi::class)
+class MainActivity : BaseActivity(), DIAware {
+    override val di: DI by closestDI()
 
-    @Inject
-    internal lateinit var settings: ShimoriSettings
+    private val settings: ShimoriSettings by instance()
+    private val textProvider: ShimoriTextProvider by instance()
+    private val formatter: ShimoriDateTimeFormatter by instance()
+    private val rateUtil: ShimoriRateUtil by instance()
 
-    @Inject
-    internal lateinit var rateUtil: ShimoriRateUtil
-
-    @Inject
-    internal lateinit var textCreator: ShimoriTextCreator
-
-    @Inject
-    internal lateinit var shikimori: ShikimoriManager
-
+    @OptIn(ExperimentalLifecycleComposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        installSplashScreen()
-
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
         setContent {
+            withDI(di = di) {
+                val dimensions =
+                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
+                    else sw360Dimensions
 
-            val dimensions =
-                if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
-                else sw360Dimensions
+                val viewModel: MainViewModel = shimoriViewModel()
 
-            val shikimoriAuth = shikimori.state.collectAsState().value
+                val settingsState by viewModel.settingsState.collectAsStateWithLifecycle()
 
-            CompositionLocalProvider(
-                LocalShimoriRateUtil provides rateUtil,
-                LocalShimoriTextCreator provides textCreator,
-                LocalShimoriSettings provides settings,
-                LocalShimoriDimensions provides dimensions,
-                LocalShikimoriAuth provides shikimoriAuth
-            ) {
+                val textCreator = settingsState.let { state ->
+                    ShimoriTextCreator(
+                        textProvider,
+                        formatter,
+                        state.titlesLocale,
+                        state.appLocale
+                    )
+                }
 
-                val useDarkColors = settings.shouldUseDarkColors()
+                val prefs =
+                    LocalContext.current.getSharedPreferences("defaults", Context.MODE_PRIVATE)
 
-                ShimoriTheme(useDarkColors = useDarkColors) {
+                val overscrollConfiguration = OverscrollConfiguration(
+                    glowColor = MaterialTheme.colorScheme.onPrimary,
+                    drawPadding = PaddingValues(top = 24.dp, bottom = 24.dp)
+                )
 
-                    val systemUiController = rememberSystemUiController()
-                    val isLightTheme = !useDarkColors
-                    val navigationColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
-                    val statusBarColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f)
+                CompositionLocalProvider(
+                    LocalShimoriRateUtil provides rateUtil,
+                    LocalShimoriTextCreator provides textCreator,
+                    LocalShimoriSettings provides settings,
+                    LocalShimoriDimensions provides dimensions,
+                    LocalPreferences provides prefs,
+                    LocalOverscrollConfiguration provides overscrollConfiguration
+                ) {
+                    val useDarkColors = settings.shouldUseDarkColors()
 
-                    SideEffect {
-                        systemUiController.setStatusBarColor(
-                            color = statusBarColor,
-                            darkIcons = isLightTheme
-                        )
-                        systemUiController.setNavigationBarColor(
-                            color = navigationColor,
-                            darkIcons = isLightTheme
-                        )
+                    ShimoriTheme(useDarkColors = useDarkColors) {
+                        val systemUiController = rememberSystemUiController()
+                        val useDarkIcons = !useDarkColors
+                        val navigationColor = MaterialTheme.colorScheme.background
+                        val statusBarColor = Color.Transparent
+
+                        DisposableEffect(systemUiController, useDarkColors, navigationColor) {
+                            systemUiController.setStatusBarColor(
+                                color = statusBarColor,
+                                darkIcons = useDarkIcons
+                            )
+                            systemUiController.setNavigationBarColor(
+                                color = navigationColor,
+                                darkIcons = useDarkIcons
+                            )
+
+                            onDispose {}
+                        }
+
+                        Main()
                     }
-
-                    Main()
                 }
             }
         }

@@ -1,29 +1,33 @@
 package com.gnoemes.shikimori.mappers.anime
 
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
-import com.gnoemes.shimori.data_base.mappers.Mapper
-import com.gnoemes.shimori.model.anime.Anime
-import org.threeten.bp.OffsetDateTime
-import javax.inject.Inject
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.mappers.Mapper
+import kotlinx.datetime.Instant
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 
-internal class CalendarMapper @Inject constructor(
+internal class CalendarMapper constructor(
     private val animeResponseMapper: AnimeResponseMapper
 ) : Mapper<CalendarResponse, Anime> {
     override suspend fun map(from: CalendarResponse): Anime =
-        animeResponseMapper.map(from.anime)
-            .copy(
-                    nextEpisode = from.nextEpisode,
-                    nextEpisodeDate = from.nextEpisodeDate,
-                    duration = convertDuration(from.nextEpisodeDate, from.duration)
-            )
+        animeResponseMapper.map(from.anime).copy(
+            nextEpisode = from.nextEpisode,
+            nextEpisodeDate = from.nextEpisodeDate,
+            nextEpisodeEndDate = convertDuration(from.nextEpisodeDate, from.duration)
+        )
 
-    private fun convertDuration(nextEpisodeDate: OffsetDateTime?, duration: String?): OffsetDateTime? {
+    private fun convertDuration(
+        nextEpisodeDate: Instant?, duration: String?
+    ): Instant? {
         if (nextEpisodeDate == null || duration.isNullOrEmpty()) return null
 
         return when (duration.contains("/")) {
-            true -> nextEpisodeDate.plusMinutes(duration.substring(0, duration.indexOf("/")).toDouble().toLong())
-            else -> nextEpisodeDate.plusSeconds(duration.toDouble().toLong())
+            true -> nextEpisodeDate.plus(
+                duration.substring(0, duration.indexOf("/")).toDouble().toInt().minutes
+            )
+            else -> nextEpisodeDate.plus(duration.toDouble().toInt().seconds)
         }
     }
 }

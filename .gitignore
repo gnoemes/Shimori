@@ -1,11 +1,19 @@
-.gradle
-build/
-
-/local.properties
-
-.idea/*
 *.iml
-
+.gradle
+/local.properties
+.idea
 .DS_Store
+/build
+*/build
+/captures
+/ui/*/build
 .externalNativeBuild
+.cxx
+local.properties
 
+
+# Do not commit firebase config
+google-services.json
+
+# Do not commit plain-text release keys
+app-release.jks

@@ -1,13 +1,14 @@
 package com.gnoemes.shikimori.entities.user
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class FavoriteListResponse(
-        @field:SerializedName("animes") val animes: List<FavoriteResponse>,
-        @field:SerializedName("mangas") val mangas: List<FavoriteResponse>,
-        @field:SerializedName("characters") val characters: List<FavoriteResponse>,
-        @field:SerializedName("people") val people: List<FavoriteResponse>,
-        @field:SerializedName("mangakas") val mangakas: List<FavoriteResponse>,
-        @field:SerializedName("seyu") val seyu: List<FavoriteResponse>,
-        @field:SerializedName("producers") val producers: List<FavoriteResponse>
+        @SerialName("animes") val animes: List<FavoriteResponse>,
+        @SerialName("mangas") val mangas: List<FavoriteResponse>,
+        @SerialName("characters") val characters: List<FavoriteResponse>,
+        @SerialName("people") val people: List<FavoriteResponse>,
+        @SerialName("mangakas") val mangakas: List<FavoriteResponse>,
+        @SerialName("seyu") val seyu: List<FavoriteResponse>,
+        @SerialName("producers") val producers: List<FavoriteResponse>
 )

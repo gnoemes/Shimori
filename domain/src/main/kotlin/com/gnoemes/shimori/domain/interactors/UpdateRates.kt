@@ -1,22 +1,36 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.rates.RateRepository
-import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
+import com.gnoemes.shimori.data.repositories.manga.MangaRepository
+import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
+import com.gnoemes.shimori.data.repositories.rate.RateRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class UpdateRates @Inject constructor(
-    private val userRepository: ShikimoriUserRepository,
+class UpdateRates(
+    private val animeRepository: AnimeRepository,
+    private val mangaRepository: MangaRepository,
+    private val ranobeRepository: RanobeRepository,
     private val rateRepository: RateRepository,
     private val dispatchers: AppCoroutineDispatchers,
-) : Interactor<Unit>() {
+) : Interactor<UpdateRates.Params>() {
 
-    override suspend fun doWork(params: Unit) {
+    override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
-            rateRepository.syncRates()
+            if (params.full) {
+                //sync titles & rates
+                animeRepository.updateMyTitlesByStatus(null)
+                mangaRepository.updateMyTitlesByStatus(null)
+                ranobeRepository.updateMyTitlesByStatus(null)
+            } else {
+                // sync only rates
+                rateRepository.sync()
+            }
         }
     }
 
+    data class Params(
+        val full: Boolean
+    )
 }

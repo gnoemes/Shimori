@@ -1,0 +1,4 @@
+plugins {
+    id("multiplatform-library")
+}
+

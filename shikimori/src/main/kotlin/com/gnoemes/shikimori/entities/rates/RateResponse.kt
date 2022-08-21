@@ -2,21 +2,22 @@ package com.gnoemes.shikimori.entities.rates
 
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
 import com.gnoemes.shikimori.entities.manga.MangaResponse
-import com.google.gson.annotations.SerializedName
-import org.threeten.bp.OffsetDateTime
+import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class RateResponse(
-        @field:SerializedName("id") val id: Long,
-        @field:SerializedName("score") val score: Int,
-        @field:SerializedName("status") val status: ShikimoriRateStatus,
-        @field:SerializedName("text") val text: String?,
-        @field:SerializedName("text_html") val textHtml: String?,
-        @field:SerializedName("episodes") val episodes: Int?,
-        @field:SerializedName("chapters") val chapters: Int?,
-        @field:SerializedName("volumes") val volumes: Int?,
-        @field:SerializedName("rewatches") val rewatches: Int?,
-        @field:SerializedName("created_at") val createdDateTime: OffsetDateTime?,
-        @field:SerializedName("updated_at") val updatedDateTime: OffsetDateTime?,
-        @field:SerializedName("anime") val anime: AnimeResponse?,
-        @field:SerializedName("manga") val manga: MangaResponse?
+    @SerialName("id") val id: Long,
+    @SerialName("score") val score: Int,
+    @SerialName("status") val status: ShikimoriRateStatus,
+    @SerialName("text") val text: String?,
+    @SerialName("text_html") val textHtml: String?,
+    @SerialName("episodes") val episodes: Int?,
+    @SerialName("chapters") val chapters: Int?,
+    @SerialName("volumes") val volumes: Int?,
+    @SerialName("rewatches") val rewatches: Int?,
+    @SerialName("created_at") val dateCreated: Instant?,
+    @SerialName("updated_at") val dateUpdated: Instant?,
+    @SerialName("anime") val anime: AnimeResponse?,
+    @SerialName("manga") val manga: MangaResponse?
 )
