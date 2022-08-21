@@ -46,6 +46,7 @@ import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
 import com.smarttoolfactory.gesture.pointerMotionEvents
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,6 +169,8 @@ private fun PaginatedList(
     val incrementerTitleState by rememberUpdatedState(newValue = incrementerTitle)
     var incrementerProgress by remember { mutableStateOf(0) }
 
+    val closeIncrementer = { onIncrementerProgress(incrementerProgress) }
+
     LazyColumn(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -177,7 +180,7 @@ private fun PaginatedList(
                 //detect any touch on list to close incrementer
                 onDown = {
                     if (incrementerTitleState != null) {
-                        onIncrementerProgress(incrementerProgress)
+                        closeIncrementer()
                     }
                 },
                 requireUnconsumed = false
@@ -224,14 +227,20 @@ private fun PaginatedList(
         enter = slideInHorizontally(initialOffsetX = { offset }) + fadeIn(),
         exit = fadeOut() + slideOutHorizontally(targetOffsetX = { offset })
     ) {
-
         val localIncrementerChange = { value: Int -> incrementerProgress = value }
+        val scope = rememberCoroutineScope()
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-
         ) {
+
+            //close incrementer after 5 sec if progress not changed
+            LaunchedEffect(incrementerProgress) {
+                delay(5000)
+                scope.launch { closeIncrementer() }
+            }
+
             Incrementer(
                 image = incrementerTitle?.entity?.image,
                 titleSize = incrementerTitle?.entity?.size,
