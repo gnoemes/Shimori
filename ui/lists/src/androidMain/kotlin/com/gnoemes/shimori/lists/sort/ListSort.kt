@@ -4,10 +4,12 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -20,6 +22,8 @@ import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.lists.R
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 internal fun ListSort() {
@@ -48,13 +52,23 @@ private fun ListSort(
     options: List<RateSortOption>,
     onSortChange: (RateSortOption, Boolean) -> Unit
 ) {
+
+    val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+
+    val offset = with(LocalDensity.current) {
+        16.dp.roundToPx()
+    }
+
+    var initialScrolled by remember { mutableStateOf(false) }
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .horizontalScroll(rememberScrollState())
+            .horizontalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         options.fastForEach { option ->
@@ -66,7 +80,18 @@ private fun ListSort(
                     else onSortChange(option, false)
                 },
                 modifier = Modifier
-                    .height(32.dp),
+                    .height(32.dp)
+                    .onGloballyPositioned { coordinates ->
+                        if (!initialScrolled && selected) {
+                            scope.launch {
+                                val pixelPosition =
+                                    coordinates.positionInParent().x.roundToInt()
+                                scrollState.scrollTo(pixelPosition - offset)
+                            }
+                            initialScrolled = true
+                        }
+                    }
+                ,
                 text = LocalShimoriTextCreator.current.listSortText(listType, option),
                 selected = selected,
                 icon = {
