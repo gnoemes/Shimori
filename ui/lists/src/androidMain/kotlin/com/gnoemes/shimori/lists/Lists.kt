@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -151,9 +148,10 @@ private fun Lists(
                 })
         },
         floatingActionButton = {
+            val onChangeListState by rememberUpdatedState(newValue = onChangeList)
             if ((!state.isEmpty || state.type == ListType.Pinned) && state.hasRates) {
                 ShimoriFAB(
-                    onClick = onChangeList,
+                    onClick = onChangeListState,
                     expanded = true,
                     modifier = Modifier
                         .height(40.dp),
