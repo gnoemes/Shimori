@@ -1,8 +1,11 @@
 package com.gnoemes.shikimori.entities.auth
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 data class TokenResponse(
-    @field:SerializedName("access_token") val accessToken: String,
-    @field:SerializedName("refresh_token") val refreshToken: String
-)
+    @SerialName("access_token") val accessToken: String?,
+    @SerialName("refresh_token") val refreshToken: String?
+) {
+    val isEmpty get() = accessToken == null || refreshToken == null
+}

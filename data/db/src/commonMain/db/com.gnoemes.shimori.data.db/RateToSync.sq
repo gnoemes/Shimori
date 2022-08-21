@@ -1,0 +1,41 @@
+import com.gnoemes.shimori.data.core.entities.app.SyncAction;
+import com.gnoemes.shimori.data.core.entities.app.SyncTarget;
+import kotlin.collections.List;
+import kotlinx.datetime.Instant;
+
+CREATE TABLE rate_to_sync (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    rate_id INTEGER NOT NULL,
+    sync_targets TEXT AS List<SyncTarget> NOT NULL,
+    sync_action TEXT AS SyncAction NOT NULL,
+    attempts INTEGER AS Int NOT NULL,
+    last_attempt INTEGER AS Instant
+);
+
+CREATE UNIQUE INDEX sync_rate_id ON rate_to_sync(rate_id);
+
+insert:
+INSERT OR REPLACE INTO rate_to_sync (rate_id, sync_targets, sync_action, attempts, last_attempt)
+VALUES (?,?,?,?,?);
+
+update:
+INSERT OR REPLACE INTO rate_to_sync (id, rate_id, sync_targets, sync_action, attempts, last_attempt)
+VALUES ?;
+
+deleteById:
+DELETE FROM rate_to_sync WHERE id = ?;
+
+deleteByRateId:
+DELETE FROM rate_to_sync WHERE rate_id = ?;
+
+queryAll:
+SELECT * FROM rate_to_sync;
+
+queryAllByTarget:
+SELECT * FROM rate_to_sync WHERE sync_targets LIKE "%" + :target + "%";
+
+queryByRateId:
+SELECT * FROM rate_to_sync WHERE rate_id = :id;
+
+
+

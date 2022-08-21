@@ -1,0 +1,172 @@
+import com.gnoemes.shimori.data.core.entities.common.AgeRating;
+import com.gnoemes.shimori.data.core.entities.common.Genre;
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus;
+import kotlin.collections.List;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE ranobe (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    shikimori_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    ranobe_type TEXT,
+    rating REAL AS Double,
+    status TEXT AS TitleStatus,
+    chapters INTEGER AS Int NOT NULL,
+    volumes INTEGER AS Int NOT NULL,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER,
+    genres TEXT AS List<Genre>
+);
+
+CREATE UNIQUE INDEX ranobe_shikimori_id ON ranobe(shikimori_id);
+
+insert:
+INSERT OR REPLACE INTO ranobe(
+shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, ranobe_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+INSERT OR REPLACE INTO ranobe(
+id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, ranobe_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES ?;
+
+deleteAll:
+DELETE FROM ranobe;
+
+deleteById:
+DELETE FROM ranobe WHERE id = :id;
+
+countWithStatus:
+SELECT COUNT(*) FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+WHERE r.status = :status;
+
+queryById:
+SELECT * FROM ranobe WHERE id = :id;
+
+queryAll:
+SELECT * FROM ranobe;
+
+queryByIdWithRate:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE title.id = :id;
+
+queryIdByShikimoriId:
+SELECT id FROM ranobe WHERE shikimori_id = :shikimoriId;
+
+queryByStatus:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status;
+
+queryByStatusSortName:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name END) DESC,
+(CASE :descending WHEN 0 THEN name END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortNameRu:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN name_ru END) DESC,
+(CASE :descending WHEN 0 THEN name_ru END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortProgress:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN progress END) DESC,
+(CASE :descending WHEN 0 THEN progress END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortDateCreated:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN date_created END) DESC,
+(CASE :descending WHEN 0 THEN date_created END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortDateUpdated:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN date_updated END) DESC,
+(CASE :descending WHEN 0 THEN date_updated END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortDateAired:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
+(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortScore:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN score END) DESC,
+(CASE :descending WHEN 0 THEN score END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortSize:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN chapters END) DESC,
+(CASE :descending WHEN 0 THEN chapters END) ASC
+LIMIT :limit OFFSET :offset;
+
+queryByStatusSortRating:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status
+ORDER BY
+(CASE :descending WHEN 1 THEN rating END) DESC,
+(CASE :descending WHEN 0 THEN rating END) ASC
+LIMIT :limit OFFSET :offset;

@@ -1,11 +1,10 @@
 package com.gnoemes.shimori.appinitializers
 
 import android.app.Application
-import com.gnoemes.shimori.base.appinitializers.AppInitializer
-import javax.inject.Inject
+import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 
-class AppInitializers @Inject constructor(
-    private val initializers: Set<@JvmSuppressWildcards AppInitializer>
+class AppInitializers constructor(
+    private val initializers: Set<@JvmSuppressWildcards AppInitializer<Application>>
 ) {
 
     fun init(app: Application) {

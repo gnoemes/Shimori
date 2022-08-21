@@ -1,26 +1,27 @@
 package com.gnoemes.shikimori.entities.user
 
-import com.google.gson.annotations.SerializedName
-import org.threeten.bp.OffsetDateTime
+import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class UserDetailsResponse(
-    @field:SerializedName("id") val id: Long,
-    @field:SerializedName("nickname") val nickname: String,
-    @field:SerializedName("image") val image: UserImageResponse,
-    @field:SerializedName("last_online_at") val dateLastOnline: OffsetDateTime,
-    @field:SerializedName("name") val name: String?,
-    @field:SerializedName("sex") val sex: String?,
-    @field:SerializedName("website") val website: String?,
-    @field:SerializedName("birth_on") val dateBirth: String?,
-    @field:SerializedName("locale") val locale: String?,
-    @field:SerializedName("full_years") val fullYears: Int?,
-    @field:SerializedName("last_online") val lastOnline: String,
-    @field:SerializedName("location") val location: String?,
-    @field:SerializedName("banned") val isBanned: Boolean,
-    @field:SerializedName("about") val about: String?,
-    @field:SerializedName("common_info") val commonInfo: List<String>,
-    @field:SerializedName("show_comments") val isShowComments: Boolean,
-    @field:SerializedName("in_friends") val isFriend: Boolean,
-    @field:SerializedName("is_ignored") val isIgnored: Boolean,
-    @field:SerializedName("stats") val stats: UserStatsResponse
+    @SerialName("id") val id: Long,
+    @SerialName("nickname") val nickname: String,
+    @SerialName("image") val image: UserImageResponse,
+    @SerialName("last_online_at") val dateLastOnline: Instant?,
+    @SerialName("name") val name: String?,
+    @SerialName("sex") val sex: String?,
+    @SerialName("website") val website: String?,
+    @SerialName("birth_on") val dateBirth: String?,
+    @SerialName("locale") val locale: String?,
+    @SerialName("full_years") val fullYears: Int?,
+    @SerialName("last_online") val lastOnline: String,
+    @SerialName("location") val location: String?,
+    @SerialName("banned") val isBanned: Boolean,
+    @SerialName("about") val about: String?,
+    @SerialName("common_info") val commonInfo: List<String>,
+    @SerialName("show_comments") val isShowComments: Boolean,
+    @SerialName("in_friends") val isFriend: Boolean,
+    @SerialName("is_ignored") val isIgnored: Boolean,
+    @SerialName("stats") val stats: UserStatsResponse
 )

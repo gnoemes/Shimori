@@ -1,0 +1,32 @@
+plugins {
+    id("multiplatform-ui-library")
+}
+
+dependencies {
+    commonMainApi(projects.base.shared)
+    commonMainImplementation(projects.data.core)
+    commonMainImplementation(projects.commonUiResources)
+    commonMainImplementation(projects.commonUiImageloading)
+
+    androidMainImplementation(libs.androidx.fragment)
+    androidMainImplementation(libs.androidx.core)
+    androidMainImplementation(libs.androidx.lifecycle.runtime)
+    androidMainImplementation(libs.androidx.lifecycle.compose)
+    androidMainImplementation(libs.androidx.lifecycle.viewmodel.ktx)
+    androidMainImplementation(libs.androidx.lifecycle.viewmodel.compose)
+    androidMainImplementation(libs.androidx.paging.common)
+    androidMainImplementation(libs.androidx.paging.compose)
+    androidMainImplementation(libs.androidx.palette)
+    androidMainImplementation(libs.compose.foundation.foundation)
+    androidMainImplementation(libs.compose.foundation.layout)
+    androidMainImplementation(libs.compose.material.material3)
+    androidMainImplementation(libs.compose.material.material3.windowsizeclass)
+    androidMainImplementation(libs.compose.material.material)
+    androidMainImplementation(libs.compose.animation.animation)
+    androidMainImplementation(libs.compose.ui.util)
+    androidMainImplementation(libs.compose.ui.tooling)
+    androidMainImplementation(libs.compose.ui.ui)
+    androidMainImplementation(libs.kodein.compose)
+    androidMainImplementation(libs.accompanist.navigationmaterial)
+    androidMainImplementation(libs.accompanist.placeholder)
+}

@@ -1,0 +1,75 @@
+import com.gnoemes.shimori.data.core.entities.rate.RateStatus;
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType;
+import kotlinx.datetime.Instant;
+
+CREATE TABLE rate (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    shikimori_id INTEGER,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS RateTargetType NOT NULL,
+    target_shikimori_id INTEGER,
+    status TEXT AS RateStatus  NOT NULL,
+    score INTEGER AS Int,
+    comment TEXT,
+    progress INTEGER AS Int NOT NULL,
+    re_counter INTEGER AS Int NOT NULL,
+    date_created INTEGER AS Instant,
+    date_updated INTEGER AS Instant
+);
+
+CREATE UNIQUE INDEX rate_shikimori_id ON rate(shikimori_id);
+CREATE INDEX rate_target_id ON rate(target_id);
+CREATE INDEX rate_target_type ON rate(target_type);
+
+insert:
+INSERT OR REPLACE INTO rate (shikimori_id, target_id, target_type, target_shikimori_id, status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES (?,?,?,?, ?,?,?,?,?,?,?);
+
+update:
+INSERT OR REPLACE INTO rate (id, shikimori_id, target_id, target_type, target_shikimori_id,  status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES ?;
+
+deleteById:
+DELETE FROM rate WHERE id = ?;
+
+deleteAll:
+DELETE FROM rate;
+
+queryAll:
+SELECT * FROM rate;
+
+queryAllByTarget:
+SELECT * FROM rate WHERE target_type = :type;
+
+queryAllByTargetAndStatus:
+SELECT * FROM rate WHERE target_type = :type AND status = :status;
+
+queryById:
+SELECT * FROM rate WHERE id = ?;
+
+queryByShikimoriId:
+SELECT * FROM rate WHERE shikimori_id = ?;
+
+queryByTarget:
+SELECT * FROM rate WHERE target_id = :id AND target_type = :type;
+
+queryCount:
+SELECT COUNT(*) FROM rate;
+
+statusForTypeExist:
+SELECT COUNT(*) FROM rate WHERE target_type = ? AND status = ?;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

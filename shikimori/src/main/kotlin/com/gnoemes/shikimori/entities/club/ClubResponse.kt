@@ -1,13 +1,14 @@
 package com.gnoemes.shikimori.entities.club
 
 import com.gnoemes.shikimori.entities.common.ImageResponse
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class ClubResponse(
-        @field:SerializedName("id") val id: Long,
-        @field:SerializedName("name") val name: String,
-        @field:SerializedName("logo") val image: ImageResponse,
-        @field:SerializedName("is_censored") val isCensored: Boolean,
-        @field:SerializedName("join_policy") val policyJoin: ClubPolicy?,
-        @field:SerializedName("comment_policy") val policyComment: ClubCommentPolicy?
+    @SerialName("id") val id: Long,
+    @SerialName("name") val name: String,
+    @SerialName("logo") val image: ImageResponse,
+    @SerialName("is_censored") val isCensored: Boolean,
+    @SerialName("join_policy") val policyJoin: ClubPolicy?,
+    @SerialName("comment_policy") val policyComment: ClubCommentPolicy?
 )

@@ -3,7 +3,7 @@
 After: Reincarnation of Shikimori App
 
 ## Setup
-You require the latest [Android Studio Arctic Fox](https://developer.android.com/studio) (or newer) to be able to build the app.
+You require the latest [Android Studio Electric Eel | 2022.1.1 Canary 9](https://developer.android.com/studio/preview/) (or newer) to be able to build the app.
 
 ### API keys
 

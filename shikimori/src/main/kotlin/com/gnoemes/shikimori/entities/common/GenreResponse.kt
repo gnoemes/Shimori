@@ -1,10 +1,11 @@
 package com.gnoemes.shikimori.entities.common
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal data class GenreResponse(
-        @field:SerializedName("id") val id: Long,
-        @field:SerializedName("name") val name: String,
-        @field:SerializedName("russian") val nameRu: String?,
-        @field:SerializedName("kind") val type: String?
+    @SerialName("id") val id: Long,
+    @SerialName("name") val name: String,
+    @SerialName("russian") val nameRu: String?,
+    @SerialName("kind") val type: String?
 )

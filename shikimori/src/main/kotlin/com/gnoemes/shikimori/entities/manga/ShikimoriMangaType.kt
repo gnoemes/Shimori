@@ -1,20 +1,21 @@
 package com.gnoemes.shikimori.entities.manga
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal enum class ShikimoriMangaType(val type: String) {
-    @SerializedName("manga")
+    @SerialName("manga")
     MANGA("manga"),
-    @SerializedName("manhwa")
+    @SerialName("manhwa")
     MANHWA("manhwa"),
-    @SerializedName("manhua")
+    @SerialName("manhua")
     MANHUA("manhua"),
-    @SerializedName("novel")
+    @SerialName("novel")
     NOVEL("novel"),
-    @SerializedName("light_novel")
+    @SerialName("light_novel")
     LIGHT_NOVEL("light_novel"),
-    @SerializedName("one_shot")
+    @SerialName("one_shot")
     ONE_SHOT("one_shot"),
-    @SerializedName("doujin")
+    @SerialName("doujin")
     DOUJIN("doujin")
 }

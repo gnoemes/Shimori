@@ -1,0 +1,28 @@
+import com.gnoemes.shimori.data.core.entities.app.Request;
+import kotlinx.datetime.Instant;
+
+CREATE TABLE last_request (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    request TEXT AS Request NOT NULL,
+    entity_id INTEGER NOT NULL,
+    timestamp INTEGER AS Instant NOT NULL
+);
+
+CREATE UNIQUE INDEX last_request_request_id ON last_request(request, entity_id);
+
+insert:
+INSERT OR REPLACE INTO last_request(request, entity_id, timestamp)
+VALUES (?,?,?);
+
+update:
+INSERT OR REPLACE INTO last_request(id, request, entity_id, timestamp)
+VALUES ?;
+
+deleteById:
+DELETE FROM user WHERE id = ?;
+
+lastRequest:
+SELECT * FROM last_request WHERE request = :request AND entity_id = :entityId;
+
+requestCount:
+SELECT COUNT(*) FROM last_request WHERE request = :request AND entity_id = :entityId;

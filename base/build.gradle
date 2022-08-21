@@ -1,9 +1,0 @@
-apply plugin: 'kotlin'
-
-dependencies {
-    implementation libs.kotlin.stdlib
-    api libs.kotlin.coroutines.core
-    api libs.dagger.dagger
-    api libs.retrofit.retrofit
-    api libs.okhttp.loggingInterceptor
-}

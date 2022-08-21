@@ -1,18 +1,26 @@
 package com.gnoemes.shikimori.entities.rates
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
-internal enum class ShikimoriRateStatus(val status : String) {
-    @SerializedName("planned")
+@kotlinx.serialization.Serializable
+internal enum class ShikimoriRateStatus(val status: String) {
+    @SerialName("planned")
     PLANNED("planned"),
-    @SerializedName("watching")
+
+    @SerialName("watching")
     WATCHING("watching"),
-    @SerializedName("rewatching")
+
+    @SerialName("rewatching")
     REWATCHING("rewatching"),
-    @SerializedName("completed")
+
+    @SerialName("completed")
     COMPLETED("completed"),
-    @SerializedName("on_hold")
+
+    @SerialName("on_hold")
     ON_HOLD("on_hold"),
-    @SerializedName("dropped")
+
+    @SerialName("dropped")
     DROPPED("dropped");
+
+    override fun toString(): String = status
 }

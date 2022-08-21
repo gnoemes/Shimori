@@ -17,9 +17,9 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.Shimori.SplashScreen"
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTask">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,9 +27,11 @@
         </activity>
 
         <activity
-            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:name=".auth.AuthActivity"
             android:exported="true"
-            tools:node="replace">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Shimori"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -44,6 +46,31 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <!-- Disable the WorkManager default initializer since
+                 we are providing our own configuration. -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
 
 </manifest>

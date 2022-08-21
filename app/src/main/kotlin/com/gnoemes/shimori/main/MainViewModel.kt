@@ -2,51 +2,54 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.entities.InvokeSuccess
-import com.gnoemes.shimori.common.api.UiMessage
-import com.gnoemes.shimori.common.api.UiMessageManager
-import com.gnoemes.shimori.common.utils.MessageID
-import com.gnoemes.shimori.common.utils.ObservableLoadingCounter
-import com.gnoemes.shimori.common.utils.ShimoriUiMessageTextProvider
-import com.gnoemes.shimori.common.utils.collectStatus
-import com.gnoemes.shimori.data.repositories.rates.ListsStateManager
-import com.gnoemes.shimori.domain.interactors.UpdateRates
-import com.gnoemes.shimori.domain.interactors.UpdateUser
-import com.gnoemes.shimori.domain.observers.ObserveHasRates
+import com.gnoemes.shimori.base.core.entities.InvokeSuccess
+import com.gnoemes.shimori.base.core.settings.AppLocale
+import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.base.core.settings.ShimoriSettings
+import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.common.ui.utils.ObservableLoadingCounter
+import com.gnoemes.shimori.common.ui.utils.collectStatus
+import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.domain.interactors.UpdateUserAndRates
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
+class MainViewModel constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
-    private val updateUser: UpdateUser,
-    private val updateRates: UpdateRates,
     private val listsStateManager: ListsStateManager,
-    observeHasRates: ObserveHasRates
+    private val updateUserAndRates: UpdateUserAndRates,
+    private val logger: Logger,
+    settings: ShimoriSettings
 ) : ViewModel() {
 
     private val updatingUserDataState = ObservableLoadingCounter()
 
-    val state: StateFlow<MainViewState> =
-        combine(
-            listsStateManager.type.observe,
-            observeHasRates.flow,
-            observeShikimoriAuth.flow,
-            ::MainViewState
-        ).stateIn(
+    val state: StateFlow<MainViewState> = listsStateManager.type.observe
+        .map(::MainViewState)
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = MainViewState.Empty
         )
 
+    val settingsState: StateFlow<MainSettingsViewState> =
+        combine(
+            settings.titlesLocale.observe,
+            settings.locale.observe,
+            ::MainSettingsViewState
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            initialValue = MainSettingsViewState(
+                AppTitlesLocale.English,
+                AppLocale.English
+            )
+        )
+
     init {
         viewModelScope.launch {
-            state
-                .map { it.authState }
-                .distinctUntilChanged()
+            observeShikimoriAuth.flow
                 .collect {
                     if (it.isAuthorized) updateUserAndRates()
                 }
@@ -58,22 +61,14 @@ class MainViewModel @Inject constructor(
                 .collect { listsStateManager.ratesLoading.update(it) }
         }
 
+
         observeShikimoriAuth(Unit)
-        observeHasRates(Unit)
     }
 
     private fun updateUserAndRates() {
         viewModelScope.launch {
-            updateUser(UpdateUser.Params(null, isMe = true))
-                .collectStatus(updatingUserDataState) { status ->
-                    if (status is InvokeSuccess) updateRates()
-                }
-        }
-    }
-
-    private fun updateRates() {
-        viewModelScope.launch {
-            updateRates(Unit).collectStatus(updatingUserDataState)
+            updateUserAndRates.invoke(Unit)
+                .collectStatus(updatingUserDataState, logger = logger)
         }
     }
 }

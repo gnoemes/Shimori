@@ -1,33 +1,32 @@
 package com.gnoemes.shimori.domain.interactors
 
-import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.repositories.rates.RateRepository
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.repositories.rate.RateRepository
 import com.gnoemes.shimori.domain.Interactor
-import com.gnoemes.shimori.model.rate.ListType
-import com.gnoemes.shimori.model.rate.RateSort
-import com.gnoemes.shimori.model.rate.RateSortOption
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class UpdateRateSort @Inject constructor(
-    private val rateRepository: RateRepository,
-    private val dispatchers: AppCoroutineDispatchers,
+class UpdateRateSort(
+    private val repository: RateRepository,
+    private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<UpdateRateSort.Params>() {
 
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
-            val rateSort = RateSort(
-                    type = params.type.type,
-                    sortOption = params.sort,
-                    isDescending = params.isDescending
+            val sort = RateSort(
+                type = params.type,
+                sortOption = params.sort,
+                isDescending = params.descending
             )
-            rateRepository.updateRateSort(rateSort)
+            repository.createOrUpdate(sort)
         }
     }
 
     data class Params(
         val type: ListType,
         val sort: RateSortOption,
-        val isDescending: Boolean
+        val descending: Boolean
     )
 }

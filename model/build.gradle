@@ -1,9 +1,0 @@
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
-
-dependencies {
-    implementation libs.kotlin.stdlib
-    implementation libs.gson
-    implementation libs.androidx.room.common
-    api libs.threeTenAbp
-}

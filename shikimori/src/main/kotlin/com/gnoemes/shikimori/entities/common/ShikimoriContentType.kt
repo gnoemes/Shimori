@@ -1,30 +1,31 @@
 package com.gnoemes.shikimori.entities.common
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
+@kotlinx.serialization.Serializable
 internal enum class ShikimoriContentType {
-    @SerializedName("Anime")
+    @SerialName("Anime")
     ANIME,
-    @SerializedName("Manga")
+    @SerialName("Manga")
     MANGA,
-    @SerializedName("Ranobe")
+    @SerialName("Ranobe")
     RANOBE,
-    @SerializedName("Character")
+    @SerialName("Character")
     CHARACTER,
-    @SerializedName("Person")
+    @SerialName("Person")
     PERSON,
-    @SerializedName("User")
+    @SerialName("User")
     USER,
-    @SerializedName("Club")
+    @SerialName("Club")
     CLUB,
-    @SerializedName("ClubPage")
+    @SerialName("ClubPage")
     CLUB_PAGE,
-    @SerializedName("Collection")
+    @SerialName("Collection")
     COLLECTION,
-    @SerializedName("Review")
+    @SerialName("Review")
     REVIEW,
-    @SerializedName("CosplayGallery")
+    @SerialName("CosplayGallery")
     COSPLAY,
-    @SerializedName("Contest")
+    @SerialName("Contest")
     CONTEST,
 }

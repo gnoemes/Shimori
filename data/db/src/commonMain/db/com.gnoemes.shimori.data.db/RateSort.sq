@@ -1,0 +1,24 @@
+import com.gnoemes.shimori.data.core.entities.rate.RateSortOption;
+
+CREATE TABLE rate_sort (
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      type INTEGER AS Int NOT NULL,
+      sort TEXT AS RateSortOption NOT NULL,
+      descending INTEGER AS Boolean NOT NULL
+);
+
+CREATE UNIQUE INDEX rate_sort_type ON rate_sort(type);
+
+insert:
+INSERT OR REPLACE INTO rate_sort(type, sort, descending)
+VALUES (?,?,?);
+
+update:
+INSERT OR REPLACE INTO rate_sort(id, type, sort, descending)
+VALUES ?;
+
+deleteById:
+DELETE FROM rate_sort WHERE id = :id;
+
+queryByType:
+SELECT * FROM rate_sort WHERE type = :type;
