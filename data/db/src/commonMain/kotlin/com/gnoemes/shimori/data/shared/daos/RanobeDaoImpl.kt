@@ -130,7 +130,7 @@ internal class RanobeDaoImpl(
     }
 
     override fun observeById(id: Long): Flow<RanobeWithRate?> {
-        return db.mangaQueries.queryByIdWithRate(id, ::ranobeWithRate)
+        return db.ranobeQueries.queryByIdWithRate(id, ::ranobeWithRate)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .flowOn(dispatchers.io)
