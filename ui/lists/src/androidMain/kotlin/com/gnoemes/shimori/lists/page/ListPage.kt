@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -29,13 +28,11 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.*
-import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriBiggestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithRate
@@ -55,8 +52,8 @@ import kotlinx.coroutines.launch
 internal fun ListPage(
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
+    snackbarHostState: SnackbarHostState,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
-    onChangeList: () -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
@@ -65,8 +62,8 @@ internal fun ListPage(
         viewModel = shimoriViewModel(),
         paddingValues = paddingValues,
         scrollBehavior = scrollBehavior,
+        snackbarHostState = snackbarHostState,
         openListsEdit = openListsEdit,
-        onChangeList = onChangeList,
         onAnimeExplore = onAnimeExplore,
         onMangaExplore = onMangaExplore,
         onRanobeExplore = onRanobeExplore,
@@ -79,15 +76,13 @@ private fun ListPage(
     viewModel: ListPageViewModel,
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
+    snackbarHostState: SnackbarHostState,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
-    onChangeList: () -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    val snackbarHostState = rememberSnackbarHostState()
 
     val onEditClick = { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
     val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
@@ -96,24 +91,6 @@ private fun ListPage(
     val onIncrementerProgress =
         { progress: Int -> viewModel.updateProgressFromIncrementer(progress) }
 
-    state.message?.let { message ->
-        LaunchedEffect(message) {
-            val result =
-                snackbarHostState.showSnackbar(
-                    message.message,
-                    actionLabel = message.action,
-                    duration = SnackbarDuration.Short
-                )
-
-            if (result == SnackbarResult.ActionPerformed) {
-                viewModel.onMessageAction(message.id)
-            }
-
-            delay(100L)
-            viewModel.onMessageShown(message.id)
-        }
-    }
-
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect {
             when (it) {
@@ -121,7 +98,6 @@ private fun ListPage(
             }
         }
     }
-
 
     val listItems = viewModel.items.collectAsLazyPagingItems()
 
@@ -141,11 +117,7 @@ private fun ListPage(
         }
     }
 
-    ScreenLayout(
-        snackbarHostState,
-        state.message,
-        onChangeList,
-    ) {
+    ScreenLayout {
         PaginatedList(
             listItems,
             scrollBehavior,
@@ -506,69 +478,9 @@ private fun BoxScope.Incrementer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenLayout(
-    snackbarHostState: SnackbarHostState,
-    message: UiMessage?,
-    onChangeList: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     ScaffoldExtended(
-        snackbarHost = {
-            ShimoriSnackbar(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                icon = {
-                    val image = message?.image
-                    val imageRes = message?.imageRes
-                    if (image != null) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(image)
-                                .build(),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .border(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
-                                    ShimoriSmallestRoundedCornerShape
-                                )
-                                .clip(ShimoriSmallestRoundedCornerShape)
-                        )
-                    } else if (imageRes != null) {
-                        if (imageRes == ImageID.Tip) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_tip),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                })
-        },
-        floatingActionButton = {
-            ShimoriFAB(
-                onClick = onChangeList,
-                expanded = true,
-                modifier = Modifier
-                    .height(40.dp),
-                text = stringResource(id = R.string.lists_title),
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_menu),
-                        contentDescription = stringResource(id = R.string.lists_title)
-                    )
-                }
-            )
-        },
-        floatingActionButtonPosition = com.gnoemes.shimori.common.ui.components.FabPosition.Center,
-        bottomBar = {
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .height(MaterialTheme.dimens.bottomBarHeight)
-            )
-        },
         content = content
     )
 }

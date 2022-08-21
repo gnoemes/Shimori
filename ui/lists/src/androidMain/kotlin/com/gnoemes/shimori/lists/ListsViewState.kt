@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.lists
 
 import androidx.compose.runtime.Immutable
+import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.user.UserShort
@@ -12,7 +13,8 @@ internal data class ListsViewState(
     val user: UserShort? = null,
     val isEmpty: Boolean = false,
     val hasRates: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val message: UiMessage? = null,
 ) {
     companion object {
         val Empty = ListsViewState()

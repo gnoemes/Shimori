@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.*
 
 class ListsStateManager constructor(
     settings: ShimoriSettings,
-    ) {
+) {
 
     /**
      * Represents selected [ListType]
@@ -54,6 +54,14 @@ class ListsStateManager constructor(
             kotlin.run { openRandomTitle.emit(newState) }
 
         override val observe: SharedFlow<Unit> get() = openRandomTitle
+    }
+
+    val uiEvents = object : EventState<ListsUiEvents> {
+        private val uiEvents = MutableSharedFlow<ListsUiEvents>()
+        override suspend fun update(newState: ListsUiEvents) =
+            kotlin.run { uiEvents.emit(newState) }
+
+        override val observe: SharedFlow<ListsUiEvents> = uiEvents
     }
 
     /**
