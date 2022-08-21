@@ -178,8 +178,8 @@ private fun PaginatedList(
             ),
         state = listItems.rememberLazyListState()
     ) {
-        if (
-            listItems.loadState.source.append is LoadState.NotLoading
+        if (!isLoading
+            && listItems.loadState.source.append is LoadState.NotLoading
             && listItems.loadState.source.append.endOfPaginationReached
             && listItems.itemCount == 0
         ) {
