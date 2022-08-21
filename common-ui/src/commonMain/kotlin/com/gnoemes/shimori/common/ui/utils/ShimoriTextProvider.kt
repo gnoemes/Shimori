@@ -58,5 +58,3 @@ value class MessageID private constructor(val key: String) {
 }
 
 operator fun ShimoriTextProvider.get(id: MessageID): String = text(id)
-operator fun ShimoriTextProvider.get(id: MessageID, vararg args: Any): String =
-    text(id).format(args)

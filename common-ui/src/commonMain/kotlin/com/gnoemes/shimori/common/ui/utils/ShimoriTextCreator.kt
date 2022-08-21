@@ -54,7 +54,7 @@ class ShimoriTextCreator(
                     }
 
                     val daysShort = textProvider[MessageID.DayShort]
-                    return textProvider[MessageID.AnonsDateFormat, days, daysShort]
+                    return textProvider[MessageID.AnonsDateFormat].format(days, daysShort)
                 }
 
                 return textProvider[MessageID.Anons]
