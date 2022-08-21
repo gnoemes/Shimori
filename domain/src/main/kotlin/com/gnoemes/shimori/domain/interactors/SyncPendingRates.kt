@@ -39,7 +39,7 @@ class SyncPendingRates(
                 //only 1 target now
                 val target = toSync.targets.firstOrNull() ?: return@forEachIndexed
 
-                val rate = rateRepository.queryById(toSync.id)
+                val rate = rateRepository.queryById(toSync.rateId)
 
                 logger.d(
                     message = "#$index: target: ${target.api} action: ${toSync.action}, attempts: ${toSync.attempts}, last attempt: ${toSync.lastAttempt}",
