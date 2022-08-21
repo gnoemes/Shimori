@@ -54,6 +54,7 @@ value class MessageID private constructor(val key: String) {
         val OAuthAccessDenied = MessageID("auth_revoke")
         val IncrementerHint = MessageID("inc_hint")
         val IncrementerFormat = MessageID("inc_added_progress")
+        val RateDeleted = MessageID("rate_del_snack")
     }
 }
 

@@ -8,6 +8,8 @@ import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
 import com.gnoemes.shimori.domain.interactors.DeleteRate
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
@@ -21,6 +23,7 @@ internal class ListsEditViewModel(
     savedStateHandle: SavedStateHandle,
     observeTitle: ObserveTitleWithRateEntity,
     observePinExist: ObservePinExist,
+    private val listsStateManager: ListsStateManager,
     private val toggleListPin: ToggleTitlePin,
     private val createOrUpdateRate: CreateOrUpdateRate,
     private val deleteRate: DeleteRate,
@@ -133,9 +136,18 @@ internal class ListsEditViewModel(
 
     fun delete() {
         viewModelScope.launch {
+            val rate = rate
+            val image = _state.value.image
             rate?.id?.let {
                 deleteRate(DeleteRate.Params(it)).collect {
                     if (it.isSuccess) {
+                        listsStateManager.uiEvents(
+                            ListsUiEvents.RateDeleted(
+                                image,
+                                rate
+                            )
+                        )
+
                         _uiEvents.emit(UiEvents.NavigateUp)
                     }
                 }
@@ -151,7 +163,7 @@ internal class ListsEditViewModel(
                 shikimoriId = rate?.shikimoriId ?: 0,
                 targetId = targetId,
                 targetType = targetType,
-                targetShikimoriId = targetShikimoriId ?:0,
+                targetShikimoriId = targetShikimoriId ?: 0,
                 status = state.status,
                 score = state.score,
                 comment = state.comment,
