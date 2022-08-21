@@ -92,16 +92,32 @@ private fun Lists(
                     .height(MaterialTheme.dimens.bottomBarHeight)
             )
         },
+        floatingActionButton = {
+            if (!state.isLoading && state.isEmpty) {
+                ShimoriFAB(
+                    onClick = onChangeList,
+                    expanded = true,
+                    modifier = Modifier
+                        .height(40.dp),
+                    text = stringResource(id = R.string.lists_title),
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_menu),
+                            contentDescription = stringResource(id = R.string.lists_title)
+                        )
+                    }
+                )
+            }
+        },
+        floatingActionButtonPosition = com.gnoemes.shimori.common.ui.components.FabPosition.Center,
     ) { paddingValues ->
         val paddingValuesState = remember { paddingValues }
         when {
             !state.isLoading && state.isEmpty -> ListsEmpty(
                 type = state.type,
-                hasRates = state.hasRates,
                 onAnimeExplore = onAnimeExplore,
                 onMangaExplore = onMangaExplore,
                 onRanobeExplore = onRanobeExplore,
-                onChangeList = onChangeList
             )
             else -> {
                 ListPage(
@@ -118,11 +134,9 @@ private fun Lists(
 @Composable
 private fun ListsEmpty(
     type: ListType,
-    hasRates: Boolean,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
-    onChangeList: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -210,24 +224,5 @@ private fun ListsEmpty(
                 }
             )
         }
-
-        if (type == ListType.Pinned && hasRates) {
-            Spacer(modifier = Modifier.height(64.dp))
-
-            EnlargedButton(
-                onClick = onChangeList,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                text = stringResource(id = R.string.lists_title),
-                leftIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_menu),
-                        contentDescription = stringResource(id = R.string.lists_title)
-                    )
-                }
-            )
-        }
     }
-
 }
