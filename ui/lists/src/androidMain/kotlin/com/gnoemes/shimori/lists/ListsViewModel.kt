@@ -10,6 +10,7 @@ import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
@@ -105,16 +106,19 @@ internal class ListsViewModel(
 
     fun onMessageAction(id: Long) {
         viewModelScope.launch {
+            val payload = uiMessageManager.message.firstOrNull()?.payload
+
             when (id) {
-                MESSAGE_TOGGLE_PIN -> (uiMessageManager.message.firstOrNull()?.payload as? TitleWithRateEntity)
-                    ?.let {
-                        togglePin(it)
-                    }
-                MESSAGE_INCREMENTER_UPDATE -> (uiMessageManager.message.firstOrNull()?.payload as? Rate)
-                    ?.let {
-                        undoIncrementerProgress(it)
-                    }
+                MESSAGE_TOGGLE_PIN -> (payload as? TitleWithRateEntity)?.let(::togglePin)
+                MESSAGE_INCREMENTER_UPDATE -> (payload as? Rate)?.let(::undoIncrementerProgress)
+                MESSAGE_RATE_DELETED -> (payload as? Rate)?.let(::createRate)
             }
+        }
+    }
+
+    private fun createRate(rate: Rate) {
+        viewModelScope.launch {
+            updateRate(CreateOrUpdateRate.Params(rate)).collect()
         }
     }
 
@@ -126,6 +130,24 @@ internal class ListsViewModel(
                 event.title,
                 event.oldRate,
                 event.newProgress
+            )
+            is ListsUiEvents.RateDeleted -> showRateDeleted(
+                event.image,
+                event.rate
+            )
+        }
+    }
+
+    private fun showRateDeleted(image: ShimoriImage?, rate: Rate) {
+        viewModelScope.launch {
+            uiMessageManager.emitMessage(
+                UiMessage(
+                    id = MESSAGE_RATE_DELETED,
+                    message = textProvider[MessageID.RateDeleted],
+                    action = textProvider[MessageID.Undo],
+                    image = image,
+                    payload = rate
+                )
             )
         }
     }
@@ -212,5 +234,6 @@ internal class ListsViewModel(
         private const val MESSAGE_TOGGLE_PIN = 1L
         private const val MESSAGE_INCREMENTER_HINT = 2L
         private const val MESSAGE_INCREMENTER_UPDATE = 3L
+        private const val MESSAGE_RATE_DELETED = 4L
     }
 }

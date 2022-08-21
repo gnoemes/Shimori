@@ -151,7 +151,7 @@ private fun Lists(
                 })
         },
         floatingActionButton = {
-            if (!state.isEmpty && state.hasRates) {
+            if ((!state.isEmpty || state.type == ListType.Pinned) && state.hasRates) {
                 ShimoriFAB(
                     onClick = onChangeList,
                     expanded = true,

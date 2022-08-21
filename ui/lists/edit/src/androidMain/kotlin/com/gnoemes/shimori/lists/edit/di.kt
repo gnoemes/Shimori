@@ -14,6 +14,7 @@ actual val listsEditModule = DI.Module("lists-edit-module") {
             instance(),
             instance(),
             instance(),
+            instance(),
         )
     }
 }
