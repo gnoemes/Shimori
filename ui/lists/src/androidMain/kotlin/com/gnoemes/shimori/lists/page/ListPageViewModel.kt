@@ -3,17 +3,11 @@ package com.gnoemes.shimori.lists.page
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.gnoemes.shimori.common.ui.api.UiMessage
-import com.gnoemes.shimori.common.ui.api.UiMessageManager
-import com.gnoemes.shimori.common.ui.utils.ImageID
-import com.gnoemes.shimori.common.ui.utils.MessageID
-import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
-import com.gnoemes.shimori.common.ui.utils.get
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.data.paging.PagingConfig
 import com.gnoemes.shimori.data.paging.PagingData
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
@@ -26,14 +20,13 @@ import kotlinx.coroutines.launch
 
 internal class ListPageViewModel(
     private val stateManager: ListsStateManager,
-    private val textProvider: ShimoriTextProvider,
     private val observeListPage: ObserveListPage,
     private val observeRateSort: ObserveRateSort,
     private val togglePin: ToggleTitlePin,
     private val updateRate: CreateOrUpdateRate,
     observeMyUser: ObserveMyUserShort
 ) : ViewModel() {
-    private val uiMessageManager = UiMessageManager()
+
     private val _uiEvents = MutableSharedFlow<UiEvents>()
 
     private val incrementerEvents = MutableStateFlow<TitleWithRateEntity?>(null)
@@ -42,7 +35,6 @@ internal class ListPageViewModel(
 
     val state = combine(
         stateManager.type.observe,
-        uiMessageManager.message,
         incrementerEvents,
         stateManager.ratesLoading.observe,
         ::ListPageViewState
@@ -83,58 +75,17 @@ internal class ListPageViewModel(
         observeMyUser(Unit)
     }
 
-    fun onMessageShown(id: Long) {
-        viewModelScope.launch {
-            uiMessageManager.clearMessage(id)
-        }
-    }
-
-    fun onMessageAction(id: Long) {
-        viewModelScope.launch {
-            when (id) {
-                MESSAGE_TOGGLE_PIN -> (uiMessageManager.message.firstOrNull()?.payload as? TitleWithRateEntity)
-                    ?.let {
-                        togglePin(it, notify = false)
-                    }
-                MESSAGE_INCREMENTER_UPDATE -> (uiMessageManager.message.firstOrNull()?.payload as? Rate)
-                    ?.let {
-                        undoIncrementerProgress(it)
-                    }
-            }
-        }
-    }
-
-    fun togglePin(entity: TitleWithRateEntity, notify: Boolean = true) {
+    fun togglePin(entity: TitleWithRateEntity) {
         viewModelScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect { pinned ->
-                if (notify) {
-                    val message =
-                        if (pinned) MessageID.TitlePinned
-                        else MessageID.TitleUnPinned
-
-                    uiMessageManager.emitMessage(
-                        UiMessage(
-                            id = MESSAGE_TOGGLE_PIN,
-                            message = textProvider[message],
-                            action = textProvider[MessageID.Undo],
-                            image = entity.entity.image,
-                            payload = entity
-                        )
-                    )
-                }
+                stateManager.uiEvents(ListsUiEvents.PinStatusChanged(entity, pinned))
             }
         }
     }
 
     fun showIncrementerHint() {
         viewModelScope.launch {
-            uiMessageManager.emitMessage(
-                UiMessage(
-                    id = MESSAGE_INCREMENTER_HINT,
-                    message = textProvider[MessageID.IncrementerHint],
-                    imageRes = ImageID.Tip,
-                )
-            )
+            stateManager.uiEvents(ListsUiEvents.IncrementerHint)
         }
     }
 
@@ -166,16 +117,11 @@ internal class ListPageViewModel(
                     ) {
                         _uiEvents.emit(UiEvents.EditRate(title))
                     } else {
-                        uiMessageManager.emitMessage(
-                            UiMessage(
-                                id = MESSAGE_INCREMENTER_UPDATE,
-                                message = textProvider[MessageID.IncrementerFormat].format(
-                                    oldRate.progress,
-                                    newProgress
-                                ),
-                                image = title.entity.image,
-                                action = textProvider[MessageID.Undo],
-                                payload = oldRate
+                        stateManager.uiEvents(
+                            ListsUiEvents.IncrementerProgress(
+                                title,
+                                oldRate,
+                                newProgress
                             )
                         )
                     }
@@ -184,11 +130,7 @@ internal class ListPageViewModel(
         }
     }
 
-    private fun undoIncrementerProgress(rate: Rate) {
-        viewModelScope.launch {
-            updateRate.invoke(CreateOrUpdateRate.Params(rate)).collect()
-        }
-    }
+
 
     companion object {
         private val PAGING_CONFIG = PagingConfig(
@@ -196,9 +138,5 @@ internal class ListPageViewModel(
             initialLoadSize = 15,
             prefetchDistance = 5
         )
-
-        private const val MESSAGE_TOGGLE_PIN = 1L
-        private const val MESSAGE_INCREMENTER_HINT = 2L
-        private const val MESSAGE_INCREMENTER_UPDATE = 3L
     }
 }

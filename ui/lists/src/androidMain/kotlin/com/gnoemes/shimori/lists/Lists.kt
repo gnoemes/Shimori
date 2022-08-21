@@ -1,29 +1,36 @@
 package com.gnoemes.shimori.lists
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.ui.components.ScaffoldExtended
-import com.gnoemes.shimori.common.ui.components.ShimoriFAB
-import com.gnoemes.shimori.common.ui.components.ShimoriMainToolbar
+import com.gnoemes.shimori.common.ui.components.*
+import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
+import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.empty.ListsEmpty
 import com.gnoemes.shimori.lists.page.ListPage
+import kotlinx.coroutines.delay
 
 @Composable
 fun Lists(
@@ -68,6 +75,27 @@ private fun Lists(
         )
     }
 
+    val snackbarHostState = rememberSnackbarHostState()
+
+    val message = state.message
+    message?.let {
+        LaunchedEffect(message) {
+            val result =
+                snackbarHostState.showSnackbar(
+                    message.message,
+                    actionLabel = message.action,
+                    duration = SnackbarDuration.Short
+                )
+
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.onMessageAction(message.id)
+            }
+
+            delay(100L)
+            viewModel.onMessageShown(message.id)
+        }
+    }
+
     ScaffoldExtended(
         topBar = {
             val type = state.type
@@ -88,15 +116,42 @@ private fun Lists(
                 scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = {
-            Spacer(
+        snackbarHost = {
+            ShimoriSnackbar(
+                hostState = snackbarHostState,
                 modifier = Modifier
-                    .navigationBarsPadding()
-                    .height(MaterialTheme.dimens.bottomBarHeight)
-            )
+                    .fillMaxWidth(),
+                icon = {
+                    val image = message?.image
+                    val imageRes = message?.imageRes
+                    if (image != null) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(image)
+                                .build(),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
+                                    ShimoriSmallestRoundedCornerShape
+                                )
+                                .clip(ShimoriSmallestRoundedCornerShape)
+                        )
+                    } else if (imageRes != null) {
+                        if (imageRes == ImageID.Tip) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_tip),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                })
         },
         floatingActionButton = {
-            if (!state.isLoading && state.isEmpty) {
+            if (!state.isEmpty && state.hasRates) {
                 ShimoriFAB(
                     onClick = onChangeList,
                     expanded = true,
@@ -113,6 +168,13 @@ private fun Lists(
             }
         },
         floatingActionButtonPosition = com.gnoemes.shimori.common.ui.components.FabPosition.Center,
+        bottomBar = {
+            Spacer(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .height(MaterialTheme.dimens.bottomBarHeight)
+            )
+        },
     ) { paddingValues ->
         val paddingValuesState = remember { paddingValues }
         when {
@@ -126,8 +188,8 @@ private fun Lists(
                 ListPage(
                     paddingValues = paddingValuesState,
                     scrollBehavior = scrollBehavior,
+                    snackbarHostState = snackbarHostState,
                     openListsEdit = openListsEdit,
-                    onChangeList = onChangeList,
                     onAnimeExplore = onAnimeExplore,
                     onMangaExplore = onMangaExplore,
                     onRanobeExplore = onRanobeExplore,
