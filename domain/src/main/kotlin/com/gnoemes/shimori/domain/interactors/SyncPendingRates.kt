@@ -70,9 +70,11 @@ class SyncPendingRates(
                         tag = SYNC_TAG
                     )
 
-                    if (e is ClientRequestException &&
-                        e.response.status == HttpStatusCode.NotFound
-                    ) {
+                    val httpException =
+                        if (e is ClientRequestException) e
+                        else if (e.cause is ClientRequestException) e.cause as ClientRequestException
+                        else null
+                    if (httpException != null && httpException.response.status == HttpStatusCode.NotFound) {
                         rateRepository.delete(toSync)
                     } else {
                         rateRepository.createOrUpdate(
