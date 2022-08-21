@@ -30,7 +30,7 @@
     <string name="no_pinned_titles">No pinned titles</string>
     <string name="no_pinned_titles_description">Hold cover to pin any title.</string>
     <string name="no_titles">This list is empty</string>
-    <string name="no_titles_description">Add a title to start your history.</string>
+    <string name="no_titles_description">Add a title.</string>
     <string name="list_sort_progress">Progress</string>
     <string name="list_sort_size_anime">Episodes</string>
     <string name="list_sort_size_manga">Chapters</string>
@@ -183,4 +183,5 @@
     <string name="title_translators_dub_and_sub">Dubbing and subtitles</string>
     <string name="title_menu_names_other">Other</string>
     <string name="inc_added_progress" translatable="false">%d → %d.</string>
+    <string name="updated_changelog">You\'re up to date</string>
 </resources>

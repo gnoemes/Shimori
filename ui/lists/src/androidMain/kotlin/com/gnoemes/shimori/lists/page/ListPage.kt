@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -43,6 +44,7 @@ import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.*
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
 import com.gnoemes.shimori.lists.R
+import com.gnoemes.shimori.lists.empty.ListsEmpty
 import com.gnoemes.shimori.lists.sort.ListSort
 import com.smarttoolfactory.gesture.pointerMotionEvents
 import kotlinx.coroutines.delay
@@ -55,13 +57,19 @@ internal fun ListPage(
     scrollBehavior: TopAppBarScrollBehavior,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     onChangeList: () -> Unit,
+    onAnimeExplore: () -> Unit,
+    onMangaExplore: () -> Unit,
+    onRanobeExplore: () -> Unit,
 ) {
     ListPage(
         viewModel = shimoriViewModel(),
         paddingValues = paddingValues,
         scrollBehavior = scrollBehavior,
         openListsEdit = openListsEdit,
-        onChangeList = onChangeList
+        onChangeList = onChangeList,
+        onAnimeExplore = onAnimeExplore,
+        onMangaExplore = onMangaExplore,
+        onRanobeExplore = onRanobeExplore,
     )
 }
 
@@ -73,6 +81,9 @@ private fun ListPage(
     scrollBehavior: TopAppBarScrollBehavior,
     openListsEdit: (id: Long, type: RateTargetType) -> Unit,
     onChangeList: () -> Unit,
+    onAnimeExplore: () -> Unit,
+    onMangaExplore: () -> Unit,
+    onRanobeExplore: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -139,6 +150,7 @@ private fun ListPage(
             listItems,
             scrollBehavior,
             paddingValues,
+            state.type,
             state.incrementerTitle,
             state.isLoading,
             onEditClick,
@@ -146,6 +158,9 @@ private fun ListPage(
             onIncrementClick,
             onIncrementHold,
             onIncrementerProgress,
+            onAnimeExplore,
+            onMangaExplore,
+            onRanobeExplore,
         )
     }
 }
@@ -156,6 +171,7 @@ private fun PaginatedList(
     listItems: LazyPagingItems<TitleWithRate<out ShimoriTitleEntity>>,
     scrollBehavior: TopAppBarScrollBehavior,
     paddingValues: PaddingValues,
+    type: ListType,
     incrementerTitle: TitleWithRateEntity?,
     isLoading: Boolean,
     onEditClick: (TitleWithRateEntity) -> Unit,
@@ -163,6 +179,9 @@ private fun PaginatedList(
     onIncrementClick: () -> Unit,
     onIncrementHold: (TitleWithRateEntity) -> Unit,
     onIncrementerProgress: (Int) -> Unit,
+    onAnimeExplore: () -> Unit,
+    onMangaExplore: () -> Unit,
+    onRanobeExplore: () -> Unit,
 ) {
     val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
 
@@ -187,6 +206,23 @@ private fun PaginatedList(
             ),
         state = listItems.rememberLazyListState()
     ) {
+        if (
+            listItems.loadState.source.append is LoadState.NotLoading
+            && listItems.loadState.source.append.endOfPaginationReached
+            && listItems.itemCount == 0
+        ) {
+
+            item {
+                ListsEmpty(
+                    type = type,
+                    onAnimeExplore = onAnimeExplore,
+                    onMangaExplore = onMangaExplore,
+                    onRanobeExplore = onRanobeExplore
+                )
+            }
+            return@LazyColumn
+        }
+
         itemSpacer(paddingValues.calculateTopPadding())
 
         if (isLoading) {
