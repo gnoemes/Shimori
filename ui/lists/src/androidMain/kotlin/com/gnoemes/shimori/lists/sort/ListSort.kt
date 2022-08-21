@@ -60,7 +60,8 @@ private fun ListSort(
         16.dp.roundToPx()
     }
 
-    var initialScrolled by remember { mutableStateOf(false) }
+    val listTypeState by rememberUpdatedState(listType)
+    var initialScrolled = remember(listTypeState) { false }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -86,7 +87,7 @@ private fun ListSort(
                             scope.launch {
                                 val pixelPosition =
                                     coordinates.positionInParent().x.roundToInt()
-                                scrollState.scrollTo(pixelPosition - offset)
+                                scrollState.animateScrollTo(pixelPosition - offset)
                             }
                             initialScrolled = true
                         }
