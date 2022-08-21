@@ -86,12 +86,12 @@ fun Cover(
                     crossfade(true)
                 }.build(),
             modifier = Modifier
+                .fillMaxSize()
+                .clip(shape)
                 .combinedClickable(
                     onLongClick = onLongClick,
                     onClick = { onClick?.invoke() }
-                )
-                .fillMaxSize()
-                .clip(shape),
+                ),
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
