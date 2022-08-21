@@ -1,9 +1,6 @@
 package com.gnoemes.shimori.lists.change.section
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,7 +87,10 @@ private fun StatusSection(
                     ),
                     selected = status == selectedStatus,
                     icon = {
-                        RateIcon(status)
+                        RateIcon(
+                            status,
+                            Modifier.size(16.dp)
+                        )
                     }
                 )
             }

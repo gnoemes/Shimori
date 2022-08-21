@@ -76,7 +76,9 @@ private fun ListSort(
                                 id = if (active.isDescending) R.drawable.ic_arrow_down
                                 else R.drawable.ic_arrow_up
                             ),
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(16.dp)
                         )
                     }
                 }
