@@ -30,7 +30,7 @@
     <string name="no_pinned_titles">Нет закреплённых тайтлов</string>
     <string name="no_pinned_titles_description">Зажми обложку, чтобы закрепить любой тайтл.</string>
     <string name="no_titles">Список пуст</string>
-    <string name="no_titles_description">Добавь тайтл, чтобы начать историю.</string>
+    <string name="no_titles_description">Добавь тайтл.</string>
     <string name="list_sort_progress">Прогресс</string>
     <string name="list_sort_size_anime">Эпизоды</string>
     <string name="list_sort_size_manga">Главы</string>
@@ -163,11 +163,12 @@
     <string name="logout_message">Часть функций станет недоступна.</string>
     <string name="title_characters_main">Главные</string>
     <string name="title_characters_supporting" comment="title_characters_supporting">Второстепенные</string>
-    <string name="auth_revoke">Приложение не может получить полноценный доступ к твоему аккаунту. Авторизуйся и дай права.</string>
+    <string name="auth_revoke">Приложение не может получить полноценный доступ к твоему аккаунту.</string>
     <string name="part_access_title">Часть функций недоступна</string>
-    <string name="part_access_hint">Открой настройки shikimori.one → Нажми «Убрать доступ» на странице приложения → Перезайди в приложение и отметь все пункты.</string>
+    <string name="part_access_hint">Открой настройки shikimori.one → Нажми «Убрать доступ» на странице приложения → Перезайди в приложение и отметь все пункты.</string>
     <string name="part_access_listname">Приложение не может</string>
     <string name="title_menu_names_selected">Указано в настройках</string>
     <string name="title_translators_dub_and_sub">Дубляж и субтитры</string>
     <string name="title_menu_names_other">Другие</string>
+    <string name="updated_changelog">У тебя обновилось приложение</string>
 </resources>

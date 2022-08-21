@@ -41,6 +41,7 @@ internal class ListPageViewModel(
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
 
     val state = combine(
+        stateManager.type.observe,
         uiMessageManager.message,
         incrementerEvents,
         stateManager.ratesLoading.observe,
