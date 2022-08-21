@@ -1,11 +1,8 @@
 package com.gnoemes.shimori.lists.page
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -42,10 +39,12 @@ import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithRate
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.*
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.sort.ListSort
+import com.smarttoolfactory.gesture.pointerMotionEvents
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -145,7 +144,7 @@ private fun ListPage(
             onTogglePin,
             onIncrementClick,
             onIncrementHold,
-            onIncrementerProgress
+            onIncrementerProgress,
         )
     }
 }
@@ -162,14 +161,27 @@ private fun PaginatedList(
     onTogglePin: (TitleWithRateEntity) -> Unit,
     onIncrementClick: () -> Unit,
     onIncrementHold: (TitleWithRateEntity) -> Unit,
-    onIncrementerProgress: (Int) -> Unit
+    onIncrementerProgress: (Int) -> Unit,
 ) {
     val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
+
+    val incrementerTitleState by rememberUpdatedState(newValue = incrementerTitle)
+    var incrementerProgress by remember { mutableStateOf(0) }
 
     LazyColumn(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
+            .fillMaxSize()
+            //non consumable pointer events
+            .pointerMotionEvents(
+                //detect any touch on list to close incrementer
+                onDown = {
+                    if (incrementerTitleState != null) {
+                        onIncrementerProgress(incrementerProgress)
+                    }
+                },
+                requireUnconsumed = false
+            ),
         state = listItems.rememberLazyListState()
     ) {
         itemSpacer(paddingValues.calculateTopPadding())
@@ -208,27 +220,23 @@ private fun PaginatedList(
     val offset = with(LocalDensity.current) { 48.dp.roundToPx() }
 
     AnimatedVisibility(
-        visible = incrementerTitle != null,
-        enter = slideInHorizontally(
-            initialOffsetX = { offset }
-        ),
+        visible = incrementerTitleState != null,
+        enter = slideInHorizontally(initialOffsetX = { offset }) + fadeIn(),
+        exit = fadeOut() + slideOutHorizontally(targetOffsetX = { offset })
     ) {
-        val rate = incrementerTitle?.rate
-        if (incrementerTitle == null || rate == null) return@AnimatedVisibility
 
-        var incrementerProgress by remember(incrementerTitle.rate) { mutableStateOf(rate.progress) }
-
-        val localProgressUpdate = { value: Int -> incrementerProgress = value }
+        val localIncrementerChange = { value: Int -> incrementerProgress = value }
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .noRippleClickable { onIncrementerProgress(incrementerProgress) }
+
         ) {
             Incrementer(
-                title = incrementerTitle,
-                rate = rate,
-                onProgressUpdated = localProgressUpdate
+                image = incrementerTitle?.entity?.image,
+                titleSize = incrementerTitle?.entity?.size,
+                initialProgress = incrementerTitle?.rate?.progress ?: 0,
+                onProgressUpdated = localIncrementerChange
             )
         }
     }
@@ -331,13 +339,18 @@ private fun LoadingItem() {
 
 @Composable
 private fun BoxScope.Incrementer(
-    title: TitleWithRateEntity,
-    rate: Rate,
+    image: ShimoriImage?,
+    titleSize: Int?,
+    initialProgress: Int,
     onProgressUpdated: (Int) -> Unit,
 ) {
     val incrementerHeight = 240.dp
     val incrementerHeightPx: Float
     val colorChangeHeights: ClosedRange<Float>
+
+    val savedImage = remember { image }
+
+    val actualSize = remember { titleSize ?: INCREMENTATOR_MAX_PROGRESS }
 
     with(LocalDensity.current) {
         incrementerHeightPx = incrementerHeight.toPx()
@@ -345,13 +358,11 @@ private fun BoxScope.Incrementer(
     }
 
     //up to 50
-    val maxProgress = remember(rate) {
-        val size = title.entity.size
-        val current = rate.progress
-        size?.let {
-            if (current + INCREMENTATOR_MAX_PROGRESS >= size) size - current
+    val maxProgress = remember {
+        titleSize.let {
+            if (initialProgress + INCREMENTATOR_MAX_PROGRESS >= actualSize) actualSize - initialProgress
             else INCREMENTATOR_MAX_PROGRESS
-        } ?: INCREMENTATOR_MAX_PROGRESS
+        }
     }
 
     //calculate height of single section
@@ -362,14 +373,13 @@ private fun BoxScope.Incrementer(
     val state = rememberDraggableState { delta += it }
     val deltaCoerced = delta.coerceIn(0f, incrementerHeightPx)
 
-    var currentSection by remember(rate) { mutableStateOf(-1) }
+    var currentSection by remember(initialProgress) { mutableStateOf(-1) }
 
     //increment by 1 initially
     currentSection = if (currentSection == -1) 1
     else (deltaCoerced / sectionHeightPx).toInt()
 
-    onProgressUpdated(rate.progress + currentSection)
-
+    onProgressUpdated(initialProgress + currentSection)
     Box(
         modifier = Modifier
             .padding(end = 16.dp)
@@ -431,11 +441,10 @@ private fun BoxScope.Incrementer(
                 .align(Alignment.TopCenter),
         )
 
-
         AsyncImage(
             model = ImageRequest
                 .Builder(LocalContext.current)
-                .data(title.entity.image)
+                .data(savedImage)
                 .apply {
                     crossfade(true)
                 }.build(),

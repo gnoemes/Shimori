@@ -27,4 +27,5 @@ dependencies {
     androidMainImplementation(libs.compose.ui.tooling)
     androidMainImplementation(libs.compose.ui.ui)
     androidMainImplementation(libs.accompanist.placeholder)
+    androidMainImplementation(libs.extendedGestures)
 }
