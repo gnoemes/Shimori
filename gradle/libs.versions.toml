@@ -130,5 +130,7 @@ mockK = "io.mockk:mockk:1.12.2"
 
 #Other
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+extendedGestures = "com.github.SmartToolFactory:Compose-Extended-Gestures:2.0.0"
+
 #for ktor logs
 slf4j = "org.slf4j:slf4j-simple:1.7.30"
