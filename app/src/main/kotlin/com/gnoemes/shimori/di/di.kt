@@ -120,6 +120,8 @@ private val networkModule = DI.Module(name = "network") {
         val storage = instance<ShimoriStorage>()
 
         HttpClient(OkHttp) {
+            expectSuccess = true
+
             engine {
                 config {
                     defaultConfig(maxRequestPerHost = 5)
