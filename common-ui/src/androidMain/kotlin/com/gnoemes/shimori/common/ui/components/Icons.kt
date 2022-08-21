@@ -25,11 +25,13 @@ fun ChevronIcon(
 
 @Composable
 fun RateIcon(
-    rateStatus: RateStatus
+    rateStatus: RateStatus,
+    modifier: Modifier = Modifier
 ) {
     Icon(
         painter = painterResource(id = LocalShimoriRateUtil.current.rateStatusIcon(rateStatus)),
-        contentDescription = null
+        contentDescription = null,
+        modifier = modifier
     )
 }
 
