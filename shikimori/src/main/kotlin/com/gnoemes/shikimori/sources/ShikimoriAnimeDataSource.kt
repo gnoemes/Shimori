@@ -1,6 +1,7 @@
 package com.gnoemes.shikimori.sources
 
 import com.gnoemes.shikimori.Shikimori
+import com.gnoemes.shikimori.mappers.anime.AnimeDetailsMapper
 import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
 import com.gnoemes.shikimori.mappers.anime.CalendarMapper
 import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeWithRateMapper
@@ -15,6 +16,7 @@ import com.gnoemes.shimori.data.core.sources.AnimeDataSource
 internal class ShikimoriAnimeDataSource(
     private val shikimori: Shikimori,
     private val mapper: AnimeResponseMapper,
+    private val detailsMapper: AnimeDetailsMapper,
     private val ratedMapper: RateResponseToAnimeWithRateMapper,
     private val calendarMapper: CalendarMapper,
     private val statusMapper: RateStatusMapper,
@@ -32,5 +34,10 @@ internal class ShikimoriAnimeDataSource(
     override suspend fun getWithStatus(user: UserShort, status: RateStatus?): List<AnimeWithRate> {
         return shikimori.anime.getUserRates(user.shikimoriId, statusMapper.mapInverse(status))
             .let { ratedMapper.forLists().invoke(it) }
+    }
+
+    override suspend fun get(title: Anime): AnimeWithRate {
+        return shikimori.anime.getDetails(title.shikimoriId)
+            .let { detailsMapper.map(it) }
     }
 }

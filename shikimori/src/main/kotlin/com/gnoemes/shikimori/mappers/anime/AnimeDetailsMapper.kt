@@ -1,0 +1,58 @@
+package com.gnoemes.shikimori.mappers.anime
+
+import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
+import com.gnoemes.shikimori.mappers.AgeRatingMapper
+import com.gnoemes.shikimori.mappers.GenreMapper
+import com.gnoemes.shikimori.mappers.ImageResponseMapper
+import com.gnoemes.shikimori.mappers.TitleStatusMapper
+import com.gnoemes.shikimori.mappers.rate.RateMapper
+import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
+import com.gnoemes.shimori.data.core.mappers.Mapper
+
+internal class AnimeDetailsMapper(
+    private val imageMapper: ImageResponseMapper,
+    private val typeMapper: AnimeTypeMapper,
+    private val titleStatusMapper: TitleStatusMapper,
+    private val rateMapper: RateMapper,
+    private val ageRatingMapper : AgeRatingMapper,
+    private val genreMapper : GenreMapper
+) : Mapper<AnimeDetailsResponse, AnimeWithRate> {
+
+    override suspend fun map(from: AnimeDetailsResponse): AnimeWithRate {
+
+        val title = Anime(
+            id = 0,
+            shikimoriId = from.id,
+            name = from.name,
+            nameRu = from.nameRu,
+            nameEn = from.namesEnglish?.firstOrNull(),
+            image = imageMapper.map(from.image),
+            url = from.url,
+            animeType = typeMapper.map(from.type),
+            rating = from.score,
+            status = titleStatusMapper.map(from.status),
+            episodes = from.episodes,
+            episodesAired = from.episodesAired,
+            dateAired = from.dateAired,
+            dateReleased = from.dateReleased,
+            nextEpisodeDate = from.nextEpisodeDate,
+            ageRating = ageRatingMapper.map(from.ageRating),
+            duration = from.duration,
+            description = from.description,
+            descriptionHtml = from.descriptionHtml,
+            franchise = from.franchise,
+            favorite = from.favoured,
+            topicId = from.topicId,
+            genres = from.genres.mapNotNull { genreMapper.map(it) },
+        )
+
+        val rate = from.userRate?.let { rateMapper.map(it) }
+
+        return AnimeWithRate(
+            entity = title,
+            rate = rate,
+            pinned = false
+        )
+    }
+}
