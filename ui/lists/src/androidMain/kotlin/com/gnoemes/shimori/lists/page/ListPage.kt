@@ -199,7 +199,7 @@ private fun PaginatedList(
 
         if (isLoading) {
             item { LoadingSort() }
-            items(3) { LoadingItem() }
+            items(5) { LoadingItem() }
         } else {
             item("sort") { ListSort() }
 
