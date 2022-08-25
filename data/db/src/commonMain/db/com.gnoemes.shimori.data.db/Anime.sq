@@ -143,7 +143,7 @@ LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.targ
 WHERE r.status = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+(CASE :descending WHEN 0 THEN datetime(IFNULL(date_aired, '9999-12-31')) END) ASC
 LIMIT :limit OFFSET :offset;
 
 queryByStatusSortScore:
