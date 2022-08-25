@@ -1,12 +1,11 @@
 package com.gnoemes.shikimori
 
+import com.gnoemes.shikimori.mappers.AgeRatingMapper
 import com.gnoemes.shikimori.mappers.GenreMapper
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
-import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
-import com.gnoemes.shikimori.mappers.anime.AnimeTypeMapper
-import com.gnoemes.shikimori.mappers.anime.CalendarMapper
-import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeWithRateMapper
+import com.gnoemes.shikimori.mappers.anime.*
+import com.gnoemes.shikimori.mappers.manga.MangaDetailsMapper
 import com.gnoemes.shikimori.mappers.manga.MangaResponseMapper
 import com.gnoemes.shikimori.mappers.manga.MangaTypeMapper
 import com.gnoemes.shikimori.mappers.manga.RateResponseToMangaWithRateMapper
@@ -55,6 +54,7 @@ private val mappers = DI.Module("shikimori-mappers") {
     bindProvider { MangaTypeMapper() }
     bindProvider { AnimeTypeMapper() }
     bindProvider { RanobeTypeMapper() }
+    bindProvider { AgeRatingMapper() }
 
     bindProvider { new(::RateMapper) }
     bindProvider { new(::RateResponseToRateMapper) }
@@ -65,4 +65,7 @@ private val mappers = DI.Module("shikimori-mappers") {
     bindProvider { new(::RateResponseToMangaWithRateMapper) }
     bindProvider { new(::RanobeResponseMapper) }
     bindProvider { new(::RateResponseToRanobeWithRateMapper) }
+
+    bindProvider { new(::AnimeDetailsMapper) }
+    bindProvider { new(::MangaDetailsMapper) }
 }
