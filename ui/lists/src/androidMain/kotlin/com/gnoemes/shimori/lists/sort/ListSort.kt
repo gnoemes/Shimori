@@ -60,8 +60,7 @@ private fun ListSort(
         16.dp.roundToPx()
     }
 
-    val listTypeState by rememberUpdatedState(listType)
-    var initialScrolled = remember(listTypeState) { false }
+    var initialScrolled by remember(active.type) { mutableStateOf(false) }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
