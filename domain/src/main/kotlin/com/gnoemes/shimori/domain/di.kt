@@ -26,4 +26,5 @@ val domainModule = DI.Module("domain") {
     bindProvider { new(::CreateOrUpdateRate) }
     bindProvider { new(::UpdateUserAndRates) }
     bindProvider { new(::SyncPendingRates) }
+    bindProvider { new(::UpdateTitle) }
 }

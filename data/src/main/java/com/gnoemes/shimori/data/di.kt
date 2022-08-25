@@ -2,11 +2,14 @@ package com.gnoemes.shimori.data
 
 import com.gnoemes.shimori.base.core.extensions.new
 import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.repositories.anime.AnimeDetailsLastRequestStore
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.anime.AnimeWithStatusLastRequestStore
+import com.gnoemes.shimori.data.repositories.manga.MangaDetailsLastRequestStore
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaWithStatusLastRequestStore
 import com.gnoemes.shimori.data.repositories.pin.ListPinRepository
+import com.gnoemes.shimori.data.repositories.ranobe.RanobeDetailsLastRequestStore
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeWithStatusLastRequestStore
 import com.gnoemes.shimori.data.repositories.rate.RateRepository
@@ -31,4 +34,7 @@ val dataModule = DI.Module("data") {
     bindProvider { new(::MangaWithStatusLastRequestStore) }
     bindProvider { new(::RanobeWithStatusLastRequestStore) }
     bindProvider { new(::SyncPendingRatesLastRequestStore) }
+    bindProvider { new(::AnimeDetailsLastRequestStore) }
+    bindProvider { new(::MangaDetailsLastRequestStore) }
+    bindProvider { new(::RanobeDetailsLastRequestStore) }
 }

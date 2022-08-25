@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.repositories.ranobe
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.core.database.daos.RanobeDao
 import com.gnoemes.shimori.data.core.database.daos.RateDao
+import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -17,7 +18,8 @@ class RanobeRepository(
     private val rateDao: RateDao,
     @Shikimori private val source: RanobeDataSource,
     private val userRepository: ShikimoriUserRepository,
-    private val ratesLastRequest: RanobeWithStatusLastRequestStore
+    private val ratesLastRequest: RanobeWithStatusLastRequestStore,
+    private val titleLastRequest: RanobeDetailsLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
@@ -40,9 +42,31 @@ class RanobeRepository(
         )
     }
 
+    suspend fun update(id : Long) {
+        val local = dao.queryById(id)
+
+        if (local != null) {
+            val result = source.get(local)
+
+            if (result.entity.ranobeType == null) return
+
+            dao.insertOrUpdate(
+                result.entity.copy(
+                    id = local.id
+                )
+            )
+            titleLastRequest.updateLastRequest()
+        }
+    }
+
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
-        expiry: Instant = instantInPast(minutes = 15)
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
     ) = ratesLastRequest.isRequestBefore(expiry, id = status?.priority?.toLong() ?: 0)
 
+    suspend fun needUpdateTitle(
+        id: Long,
+        //update details once per day
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleDetails)
+    ) = titleLastRequest.isRequestBefore(expiry, id = id)
 }

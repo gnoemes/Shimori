@@ -8,4 +8,6 @@ import com.gnoemes.shimori.data.core.entities.user.UserShort
 
 interface RanobeDataSource {
     suspend fun getWithStatus(user: UserShort, status: RateStatus?): List<RanobeWithRate>
+
+    suspend fun get(title: Ranobe): RanobeWithRate
 }
