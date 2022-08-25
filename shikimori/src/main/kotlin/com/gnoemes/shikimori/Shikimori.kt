@@ -79,7 +79,7 @@ class Shikimori(
                     return@refreshTokens null
                 }
 
-                val tokenResponse = auth.refreshToken(rfToken)
+                val tokenResponse = with(auth) { client.refreshToken(rfToken) }
                 if (tokenResponse == null || tokenResponse.isEmpty) {
                     onAuthExpired()
                     return@refreshTokens null
@@ -146,9 +146,9 @@ class Shikimori(
             }
         }
 
-        override suspend fun refreshToken(refreshToken: String): TokenResponse? {
+        override suspend fun HttpClient.refreshToken(refreshToken: String): TokenResponse? {
             return try {
-                client.post {
+                post {
                     url(tokenEndpoint)
                     parameter("client_id", platform.shikimori.clientId)
                     parameter("client_secret", platform.shikimori.secretKey)
