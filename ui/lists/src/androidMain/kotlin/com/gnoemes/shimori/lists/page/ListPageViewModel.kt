@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
-import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.list.ListsStateManager
 import com.gnoemes.shimori.data.list.ListsUiEvents
@@ -107,24 +106,23 @@ internal class ListPageViewModel(
 
             if (oldRate.progress == newProgress) return@launch
 
+            //if progress is max, show edit rate sheet and mark complete instead
+            if (newProgress == title.entity.size) {
+                _uiEvents.emit(UiEvents.EditRate(title, markComplete = true))
+                return@launch
+            }
+
             updateRate.invoke(
                 CreateOrUpdateRate.Params(newRate)
             ).collect {
                 if (it.isSuccess) {
-                    //if title fully released and progress is max, show edit rate sheet
-                    if (title.entity.status == TitleStatus.RELEASED &&
-                        title.entity.size == newProgress
-                    ) {
-                        _uiEvents.emit(UiEvents.EditRate(title))
-                    } else {
-                        stateManager.uiEvents(
-                            ListsUiEvents.IncrementerProgress(
-                                title,
-                                oldRate,
-                                newProgress
-                            )
+                    stateManager.uiEvents(
+                        ListsUiEvents.IncrementerProgress(
+                            title,
+                            oldRate,
+                            newProgress
                         )
-                    }
+                    )
                 }
             }
         }
