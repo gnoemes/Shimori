@@ -9,6 +9,7 @@ import com.gnoemes.shikimori.mappers.manga.MangaDetailsMapper
 import com.gnoemes.shikimori.mappers.manga.MangaResponseMapper
 import com.gnoemes.shikimori.mappers.manga.MangaTypeMapper
 import com.gnoemes.shikimori.mappers.manga.RateResponseToMangaWithRateMapper
+import com.gnoemes.shikimori.mappers.ranobe.RanobeDetailsMapper
 import com.gnoemes.shikimori.mappers.ranobe.RanobeResponseMapper
 import com.gnoemes.shikimori.mappers.ranobe.RanobeTypeMapper
 import com.gnoemes.shikimori.mappers.ranobe.RateResponseToRanobeWithRateMapper
@@ -68,4 +69,5 @@ private val mappers = DI.Module("shikimori-mappers") {
 
     bindProvider { new(::AnimeDetailsMapper) }
     bindProvider { new(::MangaDetailsMapper) }
+    bindProvider { new(::RanobeDetailsMapper) }
 }

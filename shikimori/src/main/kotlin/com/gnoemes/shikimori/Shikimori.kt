@@ -8,6 +8,7 @@ import com.gnoemes.shikimori.entities.auth.TokenResponse
 import com.gnoemes.shikimori.entities.club.ClubResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
 import com.gnoemes.shikimori.entities.common.RolesResponse
+import com.gnoemes.shikimori.entities.manga.MangaDetailsResponse
 import com.gnoemes.shikimori.entities.manga.MangaResponse
 import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
@@ -380,6 +381,12 @@ class Shikimori(
                 with(url.parameters) {
                     filters.forEach { (key, value) -> append(key, value) }
                 }
+            }.body()
+        }
+
+        override suspend fun getDetails(id: Long): MangaDetailsResponse {
+            return client.get {
+                url("$serviceUrl/$id")
             }.body()
         }
 
