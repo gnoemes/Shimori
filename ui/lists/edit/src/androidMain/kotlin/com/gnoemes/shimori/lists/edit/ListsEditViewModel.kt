@@ -31,6 +31,7 @@ internal class ListsEditViewModel(
 ) : ViewModel() {
     private val targetId: Long = savedStateHandle["id"]!!
     private val targetType: RateTargetType = savedStateHandle["type"]!!
+    private val markComplete: Boolean = savedStateHandle["markComplete"] ?: false
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
@@ -56,9 +57,9 @@ internal class ListsEditViewModel(
                     image = shikimoriEntity?.image,
                     //TODO romadzi
                     name = shikimoriEntity?.name.orEmpty(),
-                    status = rate?.status ?: RateStatus.WATCHING,
+                    status = (if (markComplete) RateStatus.COMPLETED else rate?.status) ?: RateStatus.WATCHING,
                     anons = shikimoriEntity?.status == TitleStatus.ANONS,
-                    progress = rate?.progress ?: 0,
+                    progress = (if (markComplete) shikimoriEntity?.size else rate?.progress) ?: 0,
                     size = shikimoriEntity?.size,
                     rewatches = rate?.reCounter ?: 0,
                     score = rate?.score,

@@ -53,7 +53,7 @@ internal fun ListPage(
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
@@ -77,14 +77,20 @@ private fun ListPage(
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val onEditClick = { entity: TitleWithRateEntity -> openListsEdit(entity.id, entity.type) }
+    val onEditClick = { entity: TitleWithRateEntity ->
+        openListsEdit(
+            entity.id,
+            entity.type,
+            false
+        )
+    }
     val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
     val onIncrementClick = { viewModel.showIncrementerHint() }
     val onIncrementHold = { entity: TitleWithRateEntity -> viewModel.showIncrementer(entity) }
@@ -94,7 +100,11 @@ private fun ListPage(
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect {
             when (it) {
-                is UiEvents.EditRate -> onEditClick(it.entity)
+                is UiEvents.EditRate -> openListsEdit(
+                    it.entity.id,
+                    it.entity.type,
+                    it.markComplete
+                )
             }
         }
     }

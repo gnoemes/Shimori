@@ -58,9 +58,14 @@ internal sealed class Screen(private val route: String) {
 
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
-    object ListsEditSheet : Screen("edit?targetId={id}&targetType={type}") {
-        fun createRoute(root: RootScreen, id: Long, type: RateTargetType): String {
-            return "${root.route}/edit?targetId=$id&targetType=$type"
+    object ListsEditSheet : Screen("edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
+        fun createRoute(
+            root: RootScreen,
+            id: Long,
+            type: RateTargetType,
+            markComplete: Boolean
+        ): String {
+            return "${root.route}/edit?targetId=$id&targetType=$type&markComplete=$markComplete"
         }
     }
 
@@ -153,8 +158,15 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
 //                openUser = { navController.navigate(Screen.Explore.createRoute(root)) },
                 openUser = { navController.navigate(Screen.Settings.createRoute(root)) },
                 openSearch = { navController.navigate(Screen.Search.createRoute(root)) },
-                openListsEdit = { id, type ->
-                    navController.navigate(Screen.ListsEditSheet.createRoute(root, id, type))
+                openListsEdit = { id, type, markComplete ->
+                    navController.navigate(
+                        Screen.ListsEditSheet.createRoute(
+                            root,
+                            id,
+                            type,
+                            markComplete
+                        )
+                    )
                 },
                 onAnimeExplore = {
                     //TODO navigation
@@ -222,6 +234,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         arguments = listOf(
             navArgument("id") { type = NavType.LongType },
             navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
+            navArgument("markComplete") { type = NavType.BoolType },
         ),
     ) {
         val bottomSheetNavigator = try {

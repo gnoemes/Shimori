@@ -33,7 +33,7 @@ import kotlinx.coroutines.delay
 fun Lists(
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete : Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
@@ -57,7 +57,7 @@ private fun Lists(
     viewModel: ListsViewModel,
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete : Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
