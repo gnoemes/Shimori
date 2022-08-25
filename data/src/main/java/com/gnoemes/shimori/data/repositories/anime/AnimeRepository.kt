@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.repositories.anime
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.core.database.daos.AnimeDao
 import com.gnoemes.shimori.data.core.database.daos.RateDao
+import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -17,7 +18,8 @@ class AnimeRepository(
     private val rateDao: RateDao,
     @Shikimori private val source: AnimeDataSource,
     private val userRepository: ShikimoriUserRepository,
-    private val ratesLastRequest: AnimeWithStatusLastRequestStore
+    private val ratesLastRequest: AnimeWithStatusLastRequestStore,
+    private val titleLastRequest : AnimeDetailsLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
@@ -40,11 +42,32 @@ class AnimeRepository(
         )
     }
 
+    suspend fun update(id : Long) {
+        val local = dao.queryById(id)
+
+        if (local != null) {
+            val result = source.get(local)
+
+            dao.insertOrUpdate(
+                result.entity.copy(
+                    id = local.id
+                )
+            )
+            titleLastRequest.updateLastRequest()
+        }
+    }
+
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
-        expiry: Instant = instantInPast(minutes = 15)
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
     ) = ratesLastRequest.isRequestBefore(
         expiry,
         id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_RATE_STATUSES_ID
     )
+
+    suspend fun needUpdateTitle(
+        id: Long,
+        //update details once per day
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleDetails)
+    ) = titleLastRequest.isRequestBefore(expiry, id = id)
 }

@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.core.tasks.RateTasks
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.database.daos.RateSortDao
 import com.gnoemes.shimori.data.core.database.daos.RateToSyncDao
+import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
 import com.gnoemes.shimori.data.core.entities.app.SyncAction
 import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.core.entities.app.SyncTarget
@@ -149,6 +150,6 @@ class RateRepository(
     }
 
     suspend fun needSyncPendingRates(
-        expiry: Instant = instantInPast(minutes = 5)
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.SyncPendingRates)
     ) = syncPendingRatesLastRequest.isRequestBefore(expiry)
 }
