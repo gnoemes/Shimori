@@ -256,9 +256,6 @@ private fun NavController.currentScreenAsState(): State<RootScreen> {
                 destination.hierarchy.any { it.route == RootScreen.Feed.route } -> {
                     selectedItem.value = RootScreen.Feed
                 }
-                destination.hierarchy.any { it.route == RootScreen.Talks.route } -> {
-                    selectedItem.value = RootScreen.Talks
-                }
             }
         }
 

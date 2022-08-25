@@ -47,10 +47,6 @@ internal sealed class RootScreen(val route: String) {
     object Feed : RootScreen("feedroot") {
         override fun getStartDestination() = Screen.Feed
     }
-
-    object Talks : RootScreen("talksroot") {
-        override fun getStartDestination() = Screen.Talks
-    }
 }
 
 internal sealed class Screen(private val route: String) {
@@ -71,8 +67,6 @@ internal sealed class Screen(private val route: String) {
 
     object Explore : Screen("explore")
     object Feed : Screen("feed")
-    object Talks : Screen("talks")
-
     object Profile : Screen("profile")
     object Search : Screen("search")
 
@@ -90,7 +84,6 @@ internal fun AppNavigation(
         addListsRoot(navController, bottomSheetNavigateUp)
         addExploreRoot(navController)
         addFeedRoot(navController)
-        addTalksRoot(navController)
     }
 }
 
@@ -129,17 +122,6 @@ private fun NavGraphBuilder.addFeedRoot(
         route = RootScreen.Feed.route, startDestination = Screen.Feed.createRoute(RootScreen.Feed)
     ) {
         addFeed(navController, RootScreen.Feed)
-    }
-}
-
-private fun NavGraphBuilder.addTalksRoot(
-    navController: NavController
-) {
-    navigation(
-        route = RootScreen.Talks.route,
-        startDestination = Screen.Talks.createRoute(RootScreen.Talks)
-    ) {
-        addTalks(navController, RootScreen.Talks)
     }
 }
 
@@ -197,14 +179,6 @@ private fun NavGraphBuilder.addFeed(
 ) {
     composable(Screen.Feed.createRoute(root)) {
         MockScreen(Screen.Feed.createRoute(root))
-    }
-}
-
-private fun NavGraphBuilder.addTalks(
-    navController: NavController, root: RootScreen
-) {
-    composable(Screen.Talks.createRoute(root)) {
-        MockScreen(Screen.Talks.createRoute(root))
     }
 }
 
