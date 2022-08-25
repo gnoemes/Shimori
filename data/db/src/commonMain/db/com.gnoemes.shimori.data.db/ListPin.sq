@@ -90,7 +90,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN progress END) DESC,
-(CASE :descending WHEN 0 THEN progress END) ASC
+(CASE :descending WHEN 0 THEN progress END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 querySortDateCreated:
@@ -113,7 +114,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN date_created END) DESC,
-(CASE :descending WHEN 0 THEN date_created END) ASC
+(CASE :descending WHEN 0 THEN date_created END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 querySortDateUpdated:
@@ -136,7 +138,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN date_updated END) DESC,
-(CASE :descending WHEN 0 THEN date_updated END) ASC
+(CASE :descending WHEN 0 THEN date_updated END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 querySortDateAired:
@@ -159,7 +162,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
-(CASE :descending WHEN 0 THEN datetime(date_aired) END) ASC
+(CASE :descending WHEN 0 THEN datetime(IFNULL(date_aired, '9999-12-31')) END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 querySortScore:
@@ -182,7 +186,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN score END) DESC,
-(CASE :descending WHEN 0 THEN score END) ASC
+(CASE :descending WHEN 0 THEN score END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 querySortRating:
@@ -205,7 +210,8 @@ INNER JOIN rate ON rate.target_id = ranobe.id AND rate.target_type = pinned.targ
 )
 ORDER BY
 (CASE :descending WHEN 1 THEN rating END) DESC,
-(CASE :descending WHEN 0 THEN rating END) ASC
+(CASE :descending WHEN 0 THEN rating END) ASC,
+name ASC
 LIMIT :limit OFFSET :offset;
 
 
