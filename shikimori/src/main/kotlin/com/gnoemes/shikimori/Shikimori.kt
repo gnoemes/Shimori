@@ -73,18 +73,25 @@ class Shikimori(
             }
 
             refreshTokens {
-                val rfToken = storage.shikimoriRefreshToken
-
-                if (rfToken == null) {
+                val oldTokens = this.oldTokens
+                if (oldTokens?.refreshToken == null) {
                     onAuthExpired()
                     return@refreshTokens null
                 }
 
-                val tokenResponse = with(auth) { client.refreshToken(rfToken) }
+
+                val tokenResponse = auth.refreshToken(oldTokens.refreshToken) {
+                    markAsRefreshTokenRequest()
+                }
+
                 if (tokenResponse == null || tokenResponse.isEmpty) {
                     onAuthExpired()
                     return@refreshTokens null
                 }
+
+                storage.shikimoriAccessToken = tokenResponse.accessToken
+                storage.shikimoriRefreshToken = tokenResponse.refreshToken
+
                 _state.emit(ShikimoriAuthState.LOGGED_IN)
                 BearerTokens(tokenResponse.accessToken!!, tokenResponse.refreshToken!!)
             }
@@ -147,14 +154,18 @@ class Shikimori(
             }
         }
 
-        override suspend fun HttpClient.refreshToken(refreshToken: String): TokenResponse? {
+        override suspend fun refreshToken(
+            refreshToken: String,
+            block: HttpRequestBuilder.() -> Unit
+        ): TokenResponse? {
             return try {
-                post {
+                client.post {
                     url(tokenEndpoint)
                     parameter("client_id", platform.shikimori.clientId)
                     parameter("client_secret", platform.shikimori.secretKey)
                     parameter("refresh_token", refreshToken)
                     parameter("grant_type", "refresh_token")
+                    block()
                 }.body()
             } catch (e: Exception) {
                 logger.e("Failed refresh token update", t = e, tag = "Shikimori")
