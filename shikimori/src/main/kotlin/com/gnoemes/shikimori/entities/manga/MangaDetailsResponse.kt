@@ -1,7 +1,7 @@
 package com.gnoemes.shikimori.entities.manga
 
 import com.gnoemes.shikimori.entities.common.*
-import com.gnoemes.shikimori.entities.rates.UserRateResponse
+import com.gnoemes.shikimori.entities.rates.RateResponse
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 
@@ -28,7 +28,7 @@ internal data class MangaDetailsResponse(
     @SerialName("favoured") val favoured: Boolean,
     @SerialName("topic_id") val topicId: Long?,
     @SerialName("genres") val genres: List<GenreResponse>,
-    @SerialName("user_rate") val userRate: UserRateResponse?,
+    @SerialName("user_rate") val userRate: RateResponse?,
     @SerialName("rates_scores_stats") val rateScoresStats: List<StatisticResponse>,
     @SerialName("rates_statuses_stats") val rateStatusesStats: List<StatisticResponse>
 )
