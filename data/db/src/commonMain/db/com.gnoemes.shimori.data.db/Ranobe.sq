@@ -68,7 +68,7 @@ SELECT * FROM ranobe;
 
 queryByIdWithRate:
 SELECT * FROM ranobe AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
