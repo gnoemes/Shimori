@@ -28,6 +28,7 @@ import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists.change.ListsChangeSheet
 import com.gnoemes.shimori.settings.Settings
+import com.gnoemes.shimori.title.TitleDetails
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import org.kodein.di.compose.localDI
@@ -54,7 +55,8 @@ internal sealed class Screen(private val route: String) {
 
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
-    object ListsEditSheet : Screen("edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
+    object ListsEditSheet :
+        Screen("edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
         fun createRoute(
             root: RootScreen,
             id: Long,
@@ -71,6 +73,16 @@ internal sealed class Screen(private val route: String) {
     object Search : Screen("search")
 
     object Settings : Screen("settings")
+
+    object TitleDetails : Screen("title?id={id}&type={type}") {
+        fun createRoute(
+            root: RootScreen,
+            id: Long,
+            type: RateTargetType,
+        ): String {
+            return "${root.route}/title?id=$id&type=$type"
+        }
+    }
 
 }
 
@@ -101,6 +113,7 @@ private fun NavGraphBuilder.addListsRoot(
         addListEditBottomSheet(navController, root, bottomSheetNavigateUp)
 
         addSettings(navController, root)
+        addTitleDetails(navController, root)
     }
 }
 
@@ -147,6 +160,15 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
                             id,
                             type,
                             markComplete
+                        )
+                    )
+                },
+                openTitleDetails = { id, type ->
+                    navController.navigate(
+                        Screen.TitleDetails.createRoute(
+                            root,
+                            id,
+                            type
                         )
                     )
                 },
@@ -237,6 +259,32 @@ private fun NavGraphBuilder.addSettings(
     }
 }
 
+private fun NavGraphBuilder.addTitleDetails(
+    navController: NavController,
+    root: RootScreen,
+) {
+    composable(
+        Screen.TitleDetails.createRoute(root),
+        arguments = listOf(
+            navArgument("id") { type = NavType.LongType },
+            navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
+        ),
+    ) {
+        TitleDetails(
+            navigateUp = { navController.navigateUp() },
+            openListsEdit = { id, type, markComplete ->
+                navController.navigate(
+                    Screen.ListsEditSheet.createRoute(
+                        root,
+                        id,
+                        type,
+                        markComplete
+                    )
+                )
+            }
+        )
+    }
+}
 
 private fun NavGraphBuilder.bottomSheet(
     route: String,

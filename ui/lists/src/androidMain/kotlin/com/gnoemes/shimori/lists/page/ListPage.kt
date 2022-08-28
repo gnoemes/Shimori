@@ -57,6 +57,7 @@ internal fun ListPage(
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
+    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
 ) {
     ListPage(
         viewModel = shimoriViewModel(),
@@ -67,6 +68,7 @@ internal fun ListPage(
         onAnimeExplore = onAnimeExplore,
         onMangaExplore = onMangaExplore,
         onRanobeExplore = onRanobeExplore,
+        openTitleDetails = openTitleDetails,
     )
 }
 
@@ -81,6 +83,7 @@ private fun ListPage(
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
+    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -90,6 +93,9 @@ private fun ListPage(
             entity.type,
             false
         )
+    }
+    val onCardClick = { entity: TitleWithRateEntity ->
+        openTitleDetails(entity.id, entity.type)
     }
     val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
     val onIncrementClick = { viewModel.showIncrementerHint() }
@@ -143,6 +149,7 @@ private fun ListPage(
             onAnimeExplore,
             onMangaExplore,
             onRanobeExplore,
+            onCardClick
         )
     }
 }
@@ -164,6 +171,7 @@ private fun PaginatedList(
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
+    onCardClick: (TitleWithRateEntity) -> Unit,
 ) {
     val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
 
@@ -220,10 +228,12 @@ private fun PaginatedList(
                 if (entity != null) {
                     ListCard(
                         title = entity,
+                        onClick = { onCardClick(entity) },
                         onCoverLongClick = { onTogglePin(entity) },
                         onEditClick = { onEditClick(entity) },
                         onIncrementClick = { onIncrementClick() },
-                        onIncrementHold = { onIncrementHold(entity) })
+                        onIncrementHold = { onIncrementHold(entity) }
+                    )
                 } else {
                     LoadingItem()
                 }

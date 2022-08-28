@@ -105,6 +105,7 @@ dependencies {
     implementation(projects.ui.lists.change)
     implementation(projects.ui.lists.edit)
     implementation(projects.ui.settings)
+    implementation(projects.ui.title)
 
     implementation(libs.kotlin.coroutines.android)
 

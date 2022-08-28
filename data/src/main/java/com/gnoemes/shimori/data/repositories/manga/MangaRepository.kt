@@ -55,7 +55,7 @@ class MangaRepository(
                     id = local.id
                 )
             )
-            titleLastRequest.updateLastRequest()
+            titleLastRequest.updateLastRequest(id = id)
         }
     }
 

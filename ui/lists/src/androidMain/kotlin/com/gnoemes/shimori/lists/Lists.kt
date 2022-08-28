@@ -38,6 +38,7 @@ fun Lists(
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
+    openTitleDetails: (id : Long, type : RateTargetType) -> Unit,
 ) {
     Lists(
         viewModel = shimoriViewModel(),
@@ -47,7 +48,8 @@ fun Lists(
         onAnimeExplore = onAnimeExplore,
         onMangaExplore = onMangaExplore,
         onRanobeExplore = onRanobeExplore,
-        onChangeList = onChangeList
+        onChangeList = onChangeList,
+        openTitleDetails = openTitleDetails,
     )
 }
 
@@ -62,6 +64,7 @@ private fun Lists(
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
+    openTitleDetails: (id : Long, type : RateTargetType) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -191,6 +194,7 @@ private fun Lists(
                     onAnimeExplore = onAnimeExplore,
                     onMangaExplore = onMangaExplore,
                     onRanobeExplore = onRanobeExplore,
+                    openTitleDetails = openTitleDetails,
                 )
             }
         }
