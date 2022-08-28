@@ -28,9 +28,8 @@ class UpdateTitle(
 
     private suspend fun update(id: Long, type: RateTargetType) = when (type) {
         RateTargetType.ANIME -> animeRepository.update(id)
-        else -> throw IllegalStateException("$type is not supported yet")
-//        RateTargetType.MANGA -> mangaRepository.update(id)
-//        RateTargetType.RANOBE -> ranobeRepository.update(id)
+        RateTargetType.MANGA -> mangaRepository.update(id)
+        RateTargetType.RANOBE -> ranobeRepository.update(id)
     }
 
     private suspend fun needUpdate(id: Long, type: RateTargetType) = when (type) {
