@@ -62,7 +62,10 @@ class MangaRepository(
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
-    ) = ratesLastRequest.isRequestBefore(expiry, id = status?.priority?.toLong() ?: 0)
+    ) = ratesLastRequest.isRequestBefore(
+        expiry,
+        id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_RATE_STATUSES_ID
+    )
 
     suspend fun needUpdateTitle(
         id: Long,
