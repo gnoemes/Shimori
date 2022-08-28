@@ -13,7 +13,7 @@ internal class RateResponseToRanobeWithRateMapper constructor(
     override suspend fun map(from: RateResponse): RanobeWithRate {
         return RanobeWithRate(
             entity = ranobeResponseMapper.map(from.manga!!),
-            rate = rateResponseToRateMapper.map(from),
+            rate = rateResponseToRateMapper.map(from to null),
             pinned = false
         )
     }

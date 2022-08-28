@@ -9,16 +9,16 @@ import com.gnoemes.shimori.data.core.mappers.Mapper
 internal class RateResponseToRateMapper(
     private val statusMapper: RateStatusMapper,
     private val ranobeTypeMapper: RanobeTypeMapper,
-) : Mapper<RateResponse?, Rate?> {
+) : Mapper<Pair<RateResponse?, RateTargetType?>, Rate?> {
 
-    override suspend fun map(from: RateResponse?): Rate? {
-        if (from == null) return null
+    override suspend fun map(pair: Pair<RateResponse?, RateTargetType?>): Rate? {
+        val from = pair.first ?: return null
 
         val targetType = when {
             from.anime != null -> RateTargetType.ANIME
             from.manga != null && ranobeTypeMapper.map(from.manga.type) != null -> RateTargetType.RANOBE
             from.manga != null -> RateTargetType.MANGA
-            else -> null
+            else -> pair.second
         }
         val status = statusMapper.map(from.status)
 

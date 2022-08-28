@@ -5,7 +5,8 @@ import com.gnoemes.shikimori.mappers.AgeRatingMapper
 import com.gnoemes.shikimori.mappers.GenreMapper
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
-import com.gnoemes.shikimori.mappers.rate.RateMapper
+import com.gnoemes.shikimori.mappers.rate.RateResponseToRateMapper
+import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.core.mappers.Mapper
@@ -14,7 +15,7 @@ internal class AnimeDetailsMapper(
     private val imageMapper: ImageResponseMapper,
     private val typeMapper: AnimeTypeMapper,
     private val titleStatusMapper: TitleStatusMapper,
-    private val rateMapper: RateMapper,
+    private val rateMapper: RateResponseToRateMapper,
     private val ageRatingMapper : AgeRatingMapper,
     private val genreMapper : GenreMapper
 ) : Mapper<AnimeDetailsResponse, AnimeWithRate> {
@@ -47,7 +48,7 @@ internal class AnimeDetailsMapper(
             genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
-        val rate = from.userRate?.let { rateMapper.map(it) }
+        val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.ANIME) }
 
         return AnimeWithRate(
             entity = title,

@@ -13,7 +13,7 @@ internal class RateResponseToMangaWithRateMapper constructor(
     override suspend fun map(from: RateResponse): MangaWithRate {
         return MangaWithRate(
             entity = mangaResponseMapper.map(from.manga!!),
-            rate = rateResponseToRateMapper.map(from),
+            rate = rateResponseToRateMapper.map(from to null),
             pinned = false
         )
     }
