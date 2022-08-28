@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
@@ -39,6 +40,11 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
 fun Modifier.statusBarHeight(): Modifier = composed {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     height(statusBarHeight)
+}
+
+fun Modifier.statusBarHeight(additional: Dp): Modifier = composed {
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    height(statusBarHeight + additional)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

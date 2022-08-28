@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
@@ -23,6 +24,7 @@ import com.gnoemes.shimori.ui.R
 @Composable
 fun ListCard(
     title: TitleWithRateEntity,
+    onClick: () -> Unit,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
@@ -36,29 +38,11 @@ fun ListCard(
             image = title.entity.image,
             name = LocalShimoriTextCreator.current.name(title.entity),
             description = {
-                when (val entity = title.entity) {
-                    is Anime -> {
-                        AnimeDescription(
-                            anime = entity,
-                            format = DescriptionFormat.List,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    is Manga -> {
-                        MangaDescription(
-                            manga = entity,
-                            format = DescriptionFormat.List,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    is Ranobe -> {
-                        RanobeDescription(
-                            ranobe = entity,
-                            format = DescriptionFormat.List,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
+                TitleDescription(
+                    title = title.entity,
+                    format = DescriptionFormat.List,
+                    modifier = Modifier.fillMaxWidth()
+                )
             },
             score = title.rate?.score,
             progress = when (val entity = title.entity) {
@@ -84,8 +68,8 @@ fun ListCard(
                     && title.entity.size != null
                     && title.rate?.progress != title.entity.size
                     && title.entity.status != TitleStatus.ANONS
-                    || title.entity.isOngoing
-            ,
+                    || title.entity.isOngoing,
+            onClick = onClick,
             onCoverLongClick = onCoverLongClick,
             onEditClick = onEditClick,
             onIncrementClick = onIncrementClick,
@@ -103,6 +87,7 @@ fun ListCard(
     progress: String,
     isPinned: Boolean,
     showIncrementer: Boolean,
+    onClick: () -> Unit,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
@@ -112,12 +97,15 @@ fun ListCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(MaterialTheme.dimens.listPosterHeight),
+            .height(MaterialTheme.dimens.listPosterHeight)
+            .noRippleClickable(onClick = onClick)
+        ,
     ) {
         Cover(
             image = image,
             isPinned = isPinned,
             onLongClick = onCoverLongClick,
+            onClick = onClick,
             modifier = Modifier
                 .height(MaterialTheme.dimens.listPosterHeight)
                 .width(MaterialTheme.dimens.listPosterWidth)

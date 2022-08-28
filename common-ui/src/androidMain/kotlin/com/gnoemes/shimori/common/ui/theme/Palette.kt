@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val titleAnnounced = Color(0xFFFF2D58)
 val titleOngoing = Color(0xFF0088FF)
 val titlePaused = Color(0xFFa063cf)
+val titleDiscontinued = Color(0xFFb19143)
 
 val commentSummary = Color(0xFF4AAA4A)
 val commentOfftop = Color(0xFFF58EBB)

@@ -43,6 +43,7 @@
     <string name="status_anons">Скоро</string>
     <string name="status_ongoing">Выходит</string>
     <string name="status_released">Вышло</string>
+    <string name="status_discontinued">Приостановлено</string>
     <string name="progress_format">%d / %s</string>
     <string name="left_format">Ещё %s</string>
     <string name="progress">Прогресс</string>

@@ -51,6 +51,7 @@
     <string name="status_anons">Soon</string>
     <string name="status_ongoing">Ongoing</string>
     <string name="status_released">Released</string>
+    <string name="status_discontinued">Discontinued</string>
     <string name="progress_format">%d / %s</string>
     <string name="left_format">%s left</string>
     <string name="progress">Progress</string>
