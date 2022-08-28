@@ -19,7 +19,7 @@ class AnimeRepository(
     @Shikimori private val source: AnimeDataSource,
     private val userRepository: ShikimoriUserRepository,
     private val ratesLastRequest: AnimeWithStatusLastRequestStore,
-    private val titleLastRequest : AnimeDetailsLastRequestStore,
+    private val titleLastRequest: AnimeDetailsLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
@@ -42,7 +42,7 @@ class AnimeRepository(
         )
     }
 
-    suspend fun update(id : Long) {
+    suspend fun update(id: Long) {
         val local = dao.queryById(id)
 
         if (local != null) {
@@ -50,10 +50,10 @@ class AnimeRepository(
 
             dao.insertOrUpdate(
                 result.entity.copy(
-                    id = local.id
+                    id = local.id,
                 )
             )
-            titleLastRequest.updateLastRequest()
+            titleLastRequest.updateLastRequest(id = id)
         }
     }
 

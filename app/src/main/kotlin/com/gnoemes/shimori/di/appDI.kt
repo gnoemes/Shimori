@@ -33,6 +33,7 @@ import com.gnoemes.shimori.settings.settingsModule
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import com.gnoemes.shimori.tasks.tasksModule
+import com.gnoemes.shimori.title.titleModule
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
@@ -162,4 +163,5 @@ private val features = DI.Module(name = "features") {
     importOnce(listsChangeModule)
     importOnce(listsEditModule)
     importOnce(settingsModule)
+    importOnce(titleModule)
 }

@@ -33,33 +33,36 @@ import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 fun EnlargedButton(
     onClick: () -> Unit,
     modifier: Modifier,
-    text: String,
+    text: String? = null,
     enabled: Boolean = true,
     selected: Boolean = false,
     buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(selected),
     leftIcon: (@Composable RowScope.() -> Unit)? = null,
     rightIcon: (@Composable RowScope.() -> Unit)? = null,
 ) {
-
     TextButton(
         colors = buttonColors,
         shape = ShimoriDefaultRoundedCornerShape,
         onClick = onClick,
         enabled = enabled,
         modifier = modifier,
-        contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+        contentPadding = if (text.isNullOrEmpty()) PaddingValues(12.dp)
+        else PaddingValues(start = 16.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
     ) {
         if (leftIcon != null) {
             leftIcon()
             Spacer(modifier = Modifier.width(12.dp))
         }
 
-        Text(
-            text = text,
-            modifier = Modifier.weight(1f),
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
+        if (!text.isNullOrEmpty()) {
+            Text(
+                text = text,
+                modifier = Modifier.weight(1f),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+
+        }
 
         rightIcon?.invoke(this)
     }

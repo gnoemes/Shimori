@@ -55,7 +55,7 @@ class RanobeRepository(
                     id = local.id
                 )
             )
-            titleLastRequest.updateLastRequest()
+            titleLastRequest.updateLastRequest(id = id)
         }
     }
 
