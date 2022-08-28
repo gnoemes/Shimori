@@ -3,6 +3,7 @@ package com.gnoemes.shimori.common.ui.utils
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
+import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
@@ -176,5 +177,47 @@ class ShimoriTextCreator(
         RateStatus.PLANNED -> textProvider[MessageID.RatePlanned]
         RateStatus.COMPLETED -> textProvider[MessageID.RateCompleted]
         RateStatus.DROPPED -> textProvider[MessageID.RateDropped]
+    }
+
+    fun releaseDate(title: ShimoriTitleEntity): String? {
+        if (title.status == TitleStatus.DISCONTINUED) {
+            return textProvider[MessageID.Discontinued]
+        }
+
+        val date = title.dateReleased ?: return null
+        return buildString {
+            append(formatter.formatMediumDate(date))
+
+            if (title.isOngoing) {
+                append("-")
+            }
+        }
+    }
+
+    fun duration(anime: Anime): String? {
+        val duration = anime.duration ?: return null
+
+        val format = textProvider[MessageID.EpisodeDurationFormat]
+
+        val hourText = textProvider[MessageID.HourShort]
+        val minuteText = textProvider[MessageID.MinuteShort]
+
+        return if (duration == 60) {
+            format.format(duration / 60, hourText)
+        } else if (duration > 60) {
+            format.format(duration, "${duration / 60} $hourText ${duration % 60} $minuteText")
+        } else {
+            format.format(duration, minuteText)
+        }
+    }
+
+    fun ageRating(ageRating: AgeRating): String? = when (ageRating) {
+        AgeRating.RX -> "Rx"
+        AgeRating.R_PLUS -> "R+"
+        AgeRating.R -> "R-17"
+        AgeRating.PG_13 -> "PG-13"
+        AgeRating.PG -> "PG"
+        AgeRating.G -> "G"
+        else -> null
     }
 }

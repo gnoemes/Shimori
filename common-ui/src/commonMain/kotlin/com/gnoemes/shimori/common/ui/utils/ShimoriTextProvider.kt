@@ -18,6 +18,7 @@ value class MessageID private constructor(val key: String) {
         val Anons = MessageID("status_anons")
         val Ongoing = MessageID("status_ongoing")
         val Released = MessageID("status_released")
+        val Discontinued = MessageID("status_discontinued")
         val TypeTV = MessageID("type_tv")
         val TypeMovie = MessageID("type_movie")
         val TypeSpecial = MessageID("type_special")
@@ -55,6 +56,7 @@ value class MessageID private constructor(val key: String) {
         val IncrementerHint = MessageID("inc_hint")
         val IncrementerFormat = MessageID("inc_added_progress")
         val RateDeleted = MessageID("rate_del_snack")
+        val EpisodeDurationFormat = MessageID("title_ep_duration_format")
     }
 }
 

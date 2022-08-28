@@ -12,8 +12,10 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextOverflow
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.theme.titleAnnounced
+import com.gnoemes.shimori.common.ui.theme.titleDiscontinued
 import com.gnoemes.shimori.common.ui.theme.titleOngoing
 import com.gnoemes.shimori.common.ui.theme.titlePaused
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
@@ -24,6 +26,19 @@ const val Divider = " • "
 private const val SCORE_IMAGE = "score_image"
 
 @Composable
+fun TitleDescription(
+    title: ShimoriTitleEntity,
+    format: DescriptionFormat,
+    modifier: Modifier = Modifier
+) {
+    when (title) {
+        is Anime -> AnimeDescription(anime = title, format = format, modifier = modifier)
+        is Manga -> MangaDescription(manga = title, format = format, modifier = modifier)
+        is Ranobe -> RanobeDescription(ranobe = title, format = format, modifier = modifier)
+    }
+}
+
+@Composable
 fun AnimeDescription(
     anime: Anime,
     format: DescriptionFormat,
@@ -31,6 +46,7 @@ fun AnimeDescription(
 ) {
     val text = when (format) {
         DescriptionFormat.List -> buildListText(anime = anime)
+        DescriptionFormat.Title -> buildTitleText(anime = anime)
         else -> buildAnnotatedString { }
     }
 
@@ -45,6 +61,7 @@ fun MangaDescription(
 ) {
     val text = when (format) {
         DescriptionFormat.List -> buildListText(manga = manga)
+        DescriptionFormat.Title -> buildTitleText(manga = manga)
         else -> buildAnnotatedString { }
     }
 
@@ -59,10 +76,45 @@ fun RanobeDescription(
 ) {
     val text = when (format) {
         DescriptionFormat.List -> buildListText(ranobe = ranobe)
+        DescriptionFormat.Title -> buildTitleText(ranobe = ranobe)
         else -> buildAnnotatedString { }
     }
 
     Description(text = text, modifier = modifier)
+}
+
+@Composable
+fun ReleaseDateDescription(
+    title: ShimoriTitleEntity,
+    modifier: Modifier = Modifier
+) {
+    val text = LocalShimoriTextCreator.current.releaseDate(title)
+
+    if (text != null) {
+        Text(
+            modifier = modifier,
+            text = buildAnnotatedString {
+
+                if (title.status == TitleStatus.DISCONTINUED) {
+                    withStyle(style = SpanStyle(color = titleDiscontinued)) { append(text = text) }
+                } else {
+                    append(text)
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun TitlePropertyInfo(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        color = MaterialTheme.colorScheme.secondary
+    )
 }
 
 @Composable
@@ -95,12 +147,81 @@ private fun Description(
 }
 
 @Composable
+private fun buildTitleText(anime: Anime): AnnotatedString {
+    val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(anime.rating)
+
+    if (anime.isOngoing) {
+        val statusInfo = LocalShimoriTextCreator.current.statusDescription(anime)
+
+        return buildText(
+            anime.status,
+            statusInfo,
+            scoreInfo,
+            typeInfo = null
+        )
+    }
+
+    return buildText(
+        anime.status,
+        statusInfo = null,
+        scoreInfo,
+        typeInfo = null
+    )
+}
+
+@Composable
+private fun buildTitleText(manga: Manga): AnnotatedString {
+    val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(manga.rating)
+
+    if (manga.isOngoing) {
+        val statusInfo = LocalShimoriTextCreator.current.statusDescription(manga)
+
+        return buildText(
+            manga.status,
+            statusInfo,
+            scoreInfo,
+            typeInfo = null
+        )
+    }
+
+    return buildText(
+        manga.status,
+        statusInfo = null,
+        scoreInfo,
+        typeInfo = null
+    )
+}
+
+@Composable
+private fun buildTitleText(ranobe: Ranobe): AnnotatedString {
+    val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(ranobe.rating)
+
+    if (ranobe.isOngoing) {
+        val statusInfo = LocalShimoriTextCreator.current.statusDescription(ranobe)
+
+        return buildText(
+            ranobe.status,
+            statusInfo,
+            scoreInfo,
+            typeInfo = null
+        )
+    }
+
+    return buildText(
+        ranobe.status,
+        statusInfo = null,
+        scoreInfo,
+        typeInfo = null
+    )
+}
+
+@Composable
 private fun buildListText(anime: Anime): AnnotatedString {
     val statusInfo = LocalShimoriTextCreator.current.statusDescription(anime)
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(anime)
     val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(anime.rating)
 
-    return buildListText(
+    return buildText(
         anime.status,
         statusInfo,
         scoreInfo,
@@ -114,7 +235,7 @@ private fun buildListText(manga: Manga) = buildAnnotatedString {
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(manga)
     val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(manga.rating)
 
-    return buildListText(
+    return buildText(
         manga.status,
         statusInfo,
         scoreInfo,
@@ -128,7 +249,7 @@ private fun buildListText(ranobe: Ranobe) = buildAnnotatedString {
     val typeInfo = LocalShimoriTextCreator.current.typeDescription(ranobe)
     val scoreInfo = LocalShimoriTextCreator.current.scoreDescription(ranobe.rating)
 
-    return buildListText(
+    return buildText(
         ranobe.status,
         statusInfo,
         scoreInfo,
@@ -137,7 +258,7 @@ private fun buildListText(ranobe: Ranobe) = buildAnnotatedString {
 }
 
 @Composable
-private fun buildListText(
+private fun buildText(
     status: TitleStatus?,
     statusInfo: String?,
     scoreInfo: String?,
@@ -147,6 +268,7 @@ private fun buildListText(
         TitleStatus.ANONS -> titleAnnounced
         TitleStatus.ONGOING -> titleOngoing
         TitleStatus.PAUSED -> titlePaused
+        TitleStatus.DISCONTINUED -> titleDiscontinued
         else -> null
     }
 
