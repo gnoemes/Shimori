@@ -4,9 +4,6 @@ internal typealias RateDAO = comgnoemesshimoridatadb.Rate
 internal typealias UserDAO = comgnoemesshimoridatadb.User
 internal typealias RateSortDAO = comgnoemesshimoridatadb.Rate_sort
 internal typealias LastRequestDAO = comgnoemesshimoridatadb.Last_request
-internal typealias AnimeDAO = comgnoemesshimoridatadb.Anime
-internal typealias MangaDAO = comgnoemesshimoridatadb.Manga
-internal typealias RanobeDAO = comgnoemesshimoridatadb.Ranobe
 internal typealias RateToSyncDAO = comgnoemesshimoridatadb.Rate_to_sync
 
 

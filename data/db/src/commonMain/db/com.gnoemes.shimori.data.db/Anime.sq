@@ -47,12 +47,37 @@ topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_da
 VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
-INSERT OR REPLACE INTO anime(id, shikimori_id, name, name_ru, name_eng, image_original, image_preview,
-image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
-date_aired, date_released, age_rating, description, description_html, franchise, favorite,
-topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
-VALUES ?;
-
+UPDATE anime
+SET
+ id = :id,
+ shikimori_id = CASE WHEN :shikimori_id = 0 THEN shikimori_id ELSE :shikimori_id END,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ anime_type = coalesce(:anime_type, anime_type),
+ rating = coalesce(:rating, rating),
+ status = coalesce(:status , status),
+ episodes = :episodes,
+ episodes_aired = :episodes_aired,
+ date_aired = coalesce(:date_aired, date_aired),
+ date_released = coalesce(:date_released, date_released),
+ age_rating = CASE WHEN :age_rating = "NONE" THEN age_rating ELSE :age_rating END,
+ description = coalesce(:description, description),
+ description_html = coalesce(:description_html, description_html),
+ franchise = coalesce(:franchise, franchise),
+ favorite = :favorite,
+ topic_id  = coalesce(:topic_id, topic_id),
+ genres = coalesce(:genres, genres),
+ duration = coalesce(:duration, duration),
+ next_episode = coalesce(:next_episode, next_episode),
+ next_episode_date = coalesce(:next_episode_date, next_episode_date),
+ next_episode_end_date = coalesce(:next_episode_end_date, next_episode_end_date)
+ WHERE id = :id;
 
 deleteAll:
 DELETE FROM anime;
