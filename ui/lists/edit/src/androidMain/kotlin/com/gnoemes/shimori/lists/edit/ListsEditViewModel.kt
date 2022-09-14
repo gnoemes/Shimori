@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -49,18 +48,15 @@ internal class ListsEditViewModel(
                 observePinExist.flow
             ) { entity, pinned ->
                 rate = entity?.rate
-                val shikimoriEntity = entity?.entity
+                val title = entity?.entity
 
-                targetShikimoriId = shikimoriEntity?.shikimoriId
+                targetShikimoriId = title?.shikimoriId
 
                 ListsEditViewState(
-                    image = shikimoriEntity?.image,
-                    //TODO romadzi
-                    name = shikimoriEntity?.name.orEmpty(),
-                    status = (if (markComplete) RateStatus.COMPLETED else rate?.status) ?: RateStatus.WATCHING,
-                    anons = shikimoriEntity?.status == TitleStatus.ANONS,
-                    progress = (if (markComplete) shikimoriEntity?.size else rate?.progress) ?: 0,
-                    size = shikimoriEntity?.size,
+                    title = title,
+                    status = (if (markComplete) RateStatus.COMPLETED else rate?.status)
+                        ?: RateStatus.WATCHING,
+                    progress = (if (markComplete) title?.size else rate?.progress) ?: 0,
                     rewatches = rate?.reCounter ?: 0,
                     score = rate?.score,
                     comment = rate?.comment,
@@ -138,7 +134,7 @@ internal class ListsEditViewModel(
     fun delete() {
         viewModelScope.launch {
             val rate = rate
-            val image = _state.value.image
+            val image = _state.value.title?.image
             rate?.id?.let {
                 deleteRate(DeleteRate.Params(it)).collect {
                     if (it.isSuccess) {
