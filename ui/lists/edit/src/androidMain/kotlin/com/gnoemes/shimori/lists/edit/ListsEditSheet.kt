@@ -36,6 +36,7 @@ import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.lists.edit.ListEditInputState
@@ -78,12 +79,14 @@ private fun ListsEdit(
     ListEdit(
         bottomSheetOffset = bottomSheetOffset,
         inputState = state.inputState,
-        titleName = state.name,
-        image = state.image,
+        titleName = with(LocalShimoriTextCreator.current) {
+            state.title?.let(::name).orEmpty()
+        },
+        image = state.title?.image,
         status = state.status,
-        anons = state.anons,
+        anons = state.title?.status == TitleStatus.ANONS,
         progress = state.progress,
-        size = state.size,
+        size = state.title?.size,
         rewatches = state.rewatches,
         score = state.score,
         comment = state.comment,
@@ -238,7 +241,7 @@ private fun DefaultInputState(
     titleName: String,
     type: RateTargetType,
     status: RateStatus,
-    anons : Boolean,
+    anons: Boolean,
     progress: Int,
     size: Int?,
     rewatches: Int,
@@ -532,7 +535,7 @@ private fun ProgressBoxes(
 
 @Composable
 private fun Progress(
-    anons : Boolean,
+    anons: Boolean,
     progress: Int,
     size: Int?,
     onProgressChanged: (Int) -> Unit,

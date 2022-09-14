@@ -1,18 +1,15 @@
 package com.gnoemes.shimori.lists.edit
 
 import androidx.compose.runtime.Immutable
-import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 
 @Immutable
 internal data class ListsEditViewState(
-    val image: ShimoriImage? = null,
-    val name: String = "",
+    val title : ShimoriTitleEntity? = null,
     val status: RateStatus = RateStatus.PLANNED,
-    val anons : Boolean = false,
     val progress: Int = 0,
-    val size: Int? = null,
     val rewatches: Int = 0,
     val score: Int? = null,
     val comment: String? = null,
