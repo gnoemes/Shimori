@@ -43,7 +43,7 @@ internal class MangaDetailsMapper(
             franchise = from.franchise,
             favorite = from.favoured,
             topicId = from.topicId,
-            genres = from.genres.mapNotNull { genreMapper.map(it) },
+//            genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
         val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.MANGA) }
