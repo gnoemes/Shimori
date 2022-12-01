@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -18,8 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -49,8 +48,7 @@ internal fun Main() {
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class,
-    ExperimentalLifecycleComposeApi::class
+    ExperimentalMaterialApi::class
 )
 @Composable
 private fun Main(
@@ -77,7 +75,7 @@ private fun Main(
         }
     }
 
-    val viewState by viewModel.state.collectAsStateWithLifecycle()
+    val viewState by viewModel.state.collectAsState()
 
     Main(
         listType = viewState.listType,
@@ -89,6 +87,7 @@ private fun Main(
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialNavigationApi
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun Main(
     listType: ListType,
@@ -209,11 +208,13 @@ private fun NavigationItemIcon(item: NavigationItem, listType: ListType) {
     val painter = when (item) {
         is NavigationItem.ListTypeItem -> painterResource(id = item.iconResId(listType))
         is NavigationItem.StaticItem -> painterResource(id = item.iconResId)
-    }
+        else -> null
+    } ?: return
 
     val contentDescription = when (item) {
         is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
         is NavigationItem.StaticItem -> stringResource(id = item.contentDescriptionResId)
+        else -> null
     }
 
     Icon(
@@ -227,7 +228,8 @@ private fun NavigationItemLabel(item: NavigationItem, listType: ListType) {
     val text = when (item) {
         is NavigationItem.ListTypeItem -> stringResource(id = item.labelResId(listType))
         is NavigationItem.StaticItem -> stringResource(id = item.labelResId)
-    }
+        else -> null
+    } ?: return
 
     Text(
         text = text,

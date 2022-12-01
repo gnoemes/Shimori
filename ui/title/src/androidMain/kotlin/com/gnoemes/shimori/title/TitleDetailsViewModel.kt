@@ -27,7 +27,7 @@ internal class TitleDetailsViewModel(
         ::TitleDetailsViewState
     ).stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        started = SharingStarted.WhileSubscribed(),
         initialValue = TitleDetailsViewState()
     )
 

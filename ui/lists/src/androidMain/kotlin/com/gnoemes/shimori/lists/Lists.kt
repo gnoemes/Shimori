@@ -12,8 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
@@ -33,12 +31,12 @@ import kotlinx.coroutines.delay
 fun Lists(
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete : Boolean) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
-    openTitleDetails: (id : Long, type : RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
 ) {
     Lists(
         viewModel = shimoriViewModel(),
@@ -53,27 +51,26 @@ fun Lists(
     )
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Lists(
     viewModel: ListsViewModel,
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete : Boolean) -> Unit,
+    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
-    openTitleDetails: (id : Long, type : RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
 
     val appBarState = rememberTopAppBarState()
-    val scrollBehavior = remember {
-        TopAppBarDefaults.pinnedScrollBehavior(
-            state = appBarState
-        )
-    }
+    val pinBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+        state = appBarState,
+    )
+    val scrollBehavior = remember { pinBehavior }
 
     val snackbarHostState = rememberSnackbarHostState()
 

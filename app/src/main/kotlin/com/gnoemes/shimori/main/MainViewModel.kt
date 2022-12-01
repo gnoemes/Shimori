@@ -2,7 +2,6 @@ package com.gnoemes.shimori.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.core.entities.InvokeSuccess
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
@@ -29,7 +28,7 @@ class MainViewModel constructor(
         .map(::MainViewState)
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            started = SharingStarted.WhileSubscribed(),
             initialValue = MainViewState.Empty
         )
 
@@ -40,7 +39,7 @@ class MainViewModel constructor(
             ::MainSettingsViewState
         ).stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            started = SharingStarted.WhileSubscribed(),
             initialValue = MainSettingsViewState(
                 AppTitlesLocale.English,
                 AppLocale.English

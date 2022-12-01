@@ -28,7 +28,7 @@ internal class ListSortViewModel(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        started = SharingStarted.WhileSubscribed(),
         initialValue = ListSortViewState.Empty
     )
 

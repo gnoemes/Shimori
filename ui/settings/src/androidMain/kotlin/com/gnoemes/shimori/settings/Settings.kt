@@ -63,6 +63,7 @@ private fun Settings(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Settings(
     navigateUp: () -> Unit,

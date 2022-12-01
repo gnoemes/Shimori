@@ -39,7 +39,7 @@ internal class ListPageViewModel(
         ::ListPageViewState
     ).stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        started = SharingStarted.WhileSubscribed(),
         initialValue = ListPageViewState.Empty
     )
 

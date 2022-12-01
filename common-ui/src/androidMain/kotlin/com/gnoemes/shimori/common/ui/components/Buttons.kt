@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -251,39 +250,53 @@ private fun Button(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    val containerColor = colors.containerColor(enabled).value
-    val contentColor = colors.contentColor(enabled).value
-    val shadowElevation = elevation?.shadowElevation(enabled, interactionSource)?.value ?: 0.dp
-    val tonalElevation = elevation?.tonalElevation(enabled, interactionSource)?.value ?: 0.dp
-
-    //combinedClickable surface
-    Surface(
+    //TODO restore combined clickable button
+    androidx.compose.material3.Button(
         onClick = onClick,
-        onLongClick = onLongClick,
         modifier = modifier,
+        enabled = enabled,
         shape = shape,
-        color = containerColor,
-        contentColor = contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
+        colors = colors,
+        elevation = elevation,
         border = border,
-    ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor) {
-            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
-                Row(
-                    Modifier
-                        .defaultMinSize(
-                            minWidth = ButtonDefaults.MinWidth,
-                            minHeight = ButtonDefaults.MinHeight
-                        )
-                        .padding(contentPadding),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    content = content
-                )
-            }
-        }
-    }
+        contentPadding = contentPadding,
+        interactionSource = interactionSource,
+        content = content
+    )
+
+//    val containerColor = colors.containerColor(enabled).value
+//    val contentColor = colors.contentColor(enabled).value
+//    val shadowElevation = elevation?.shadowElevation(enabled, interactionSource)?.value ?: 0.dp
+//    val tonalElevation = elevation?.tonalElevation(enabled, interactionSource)?.value ?: 0.dp
+//
+//    //combinedClickable surface
+//    Surface(
+//        onClick = onClick,
+//        onLongClick = onLongClick,
+//        modifier = modifier,
+//        shape = shape,
+//        color = containerColor,
+//        contentColor = contentColor,
+//        tonalElevation = tonalElevation,
+//        shadowElevation = shadowElevation,
+//        border = border,
+//    ) {
+//        CompositionLocalProvider(LocalContentColor provides contentColor) {
+//            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
+//                Row(
+//                    Modifier
+//                        .defaultMinSize(
+//                            minWidth = ButtonDefaults.MinWidth,
+//                            minHeight = ButtonDefaults.MinHeight
+//                        )
+//                        .padding(contentPadding),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    content = content
+//                )
+//            }
+//        }
+//    }
 }
 
 object ShimoriButtonDefaults {

@@ -29,4 +29,5 @@ dependencies {
     androidMainImplementation(libs.kodein.compose)
     androidMainImplementation(libs.accompanist.navigationmaterial)
     androidMainImplementation(libs.accompanist.placeholder)
+    androidMainImplementation(libs.extendedGestures)
 }
