@@ -2,27 +2,20 @@
 
 package com.gnoemes.shimori.common.ui.components
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.gnoemes.shimori.common.ui.minimumTouchTargetSize
 import com.gnoemes.shimori.common.ui.theme.ShimoriBigRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriBiggestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
@@ -187,12 +180,10 @@ fun ShimoriCircleButton(
     icon: @Composable () -> Unit,
     enabled: Boolean = true,
     selected: Boolean = false,
-    onLongClick: () -> Unit = {},
     buttonColors: ButtonColors = ShimoriButtonDefaults.buttonColors(selected = selected),
 ) {
     Button(
         onClick = onClick,
-        onLongClick = onLongClick,
         modifier = modifier,
         enabled = enabled,
         shape = ShimoriBigRoundedCornerShape,
@@ -241,7 +232,6 @@ private fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onLongClick: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     shape: Shape = ButtonDefaults.shape,
@@ -250,7 +240,6 @@ private fun Button(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    //TODO restore combined clickable button
     androidx.compose.material3.Button(
         onClick = onClick,
         modifier = modifier,
@@ -263,40 +252,6 @@ private fun Button(
         interactionSource = interactionSource,
         content = content
     )
-
-//    val containerColor = colors.containerColor(enabled).value
-//    val contentColor = colors.contentColor(enabled).value
-//    val shadowElevation = elevation?.shadowElevation(enabled, interactionSource)?.value ?: 0.dp
-//    val tonalElevation = elevation?.tonalElevation(enabled, interactionSource)?.value ?: 0.dp
-//
-//    //combinedClickable surface
-//    Surface(
-//        onClick = onClick,
-//        onLongClick = onLongClick,
-//        modifier = modifier,
-//        shape = shape,
-//        color = containerColor,
-//        contentColor = contentColor,
-//        tonalElevation = tonalElevation,
-//        shadowElevation = shadowElevation,
-//        border = border,
-//    ) {
-//        CompositionLocalProvider(LocalContentColor provides contentColor) {
-//            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
-//                Row(
-//                    Modifier
-//                        .defaultMinSize(
-//                            minWidth = ButtonDefaults.MinWidth,
-//                            minHeight = ButtonDefaults.MinHeight
-//                        )
-//                        .padding(contentPadding),
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    content = content
-//                )
-//            }
-//        }
-//    }
 }
 
 object ShimoriButtonDefaults {
@@ -314,75 +269,6 @@ object ShimoriButtonDefaults {
             disabledContainerColor = disabledContainerColor,
             disabledContentColor = disabledContentColor
         )
-}
-
-@ExperimentalMaterial3Api
-@Composable
-@NonRestartableComposable
-fun Surface(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    onLongClick: () -> Unit = {},
-    enabled: Boolean = true,
-    shape: Shape = RectangleShape,
-    color: Color = MaterialTheme.colorScheme.surface,
-    contentColor: Color = contentColorFor(color),
-    tonalElevation: Dp = 0.dp,
-    shadowElevation: Dp = 0.dp,
-    border: BorderStroke? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable () -> Unit
-) {
-    val absoluteElevation = LocalAbsoluteTonalElevation.current + tonalElevation
-    CompositionLocalProvider(
-        LocalContentColor provides contentColor,
-        LocalAbsoluteTonalElevation provides absoluteElevation
-    ) {
-        Box(
-            modifier = modifier
-                .minimumTouchTargetSize()
-                .surface(
-                    shape = shape,
-                    backgroundColor = surfaceColorAtElevation(
-                        color = color,
-                        elevation = absoluteElevation
-                    ),
-                    border = border,
-                    shadowElevation = shadowElevation
-                )
-                .combinedClickable(
-                    interactionSource = interactionSource,
-                    indication = rememberRipple(),
-                    enabled = enabled,
-                    role = Role.Button,
-                    onClick = onClick,
-                    onLongClick = onLongClick
-                ),
-            propagateMinConstraints = true
-        ) {
-            content()
-        }
-    }
-}
-
-private fun Modifier.surface(
-    shape: Shape,
-    backgroundColor: Color,
-    border: BorderStroke?,
-    shadowElevation: Dp
-) = this
-    .shadow(shadowElevation, shape, clip = false)
-    .then(if (border != null) Modifier.border(border, shape) else Modifier)
-    .background(color = backgroundColor, shape = shape)
-    .clip(shape)
-
-@Composable
-private fun surfaceColorAtElevation(color: Color, elevation: Dp): Color {
-    return if (color == MaterialTheme.colorScheme.surface) {
-        MaterialTheme.colorScheme.surfaceColorAtElevation(elevation)
-    } else {
-        color
-    }
 }
 
 //

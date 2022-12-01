@@ -98,8 +98,7 @@ private fun ListPage(
         openTitleDetails(entity.id, entity.type)
     }
     val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
-    val onIncrementClick = { viewModel.showIncrementerHint() }
-    val onIncrementHold = { entity: TitleWithRateEntity -> viewModel.showIncrementer(entity) }
+    val onIncrementClick = { entity: TitleWithRateEntity -> viewModel.showIncrementer(entity) }
     val onIncrementerProgress =
         { progress: Int -> viewModel.updateProgressFromIncrementer(progress) }
 
@@ -144,7 +143,6 @@ private fun ListPage(
             onEditClick,
             onTogglePin,
             onIncrementClick,
-            onIncrementHold,
             onIncrementerProgress,
             onAnimeExplore,
             onMangaExplore,
@@ -165,8 +163,7 @@ private fun PaginatedList(
     isLoading: Boolean,
     onEditClick: (TitleWithRateEntity) -> Unit,
     onTogglePin: (TitleWithRateEntity) -> Unit,
-    onIncrementClick: () -> Unit,
-    onIncrementHold: (TitleWithRateEntity) -> Unit,
+    onIncrementClick: (TitleWithRateEntity) -> Unit,
     onIncrementerProgress: (Int) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
@@ -231,8 +228,7 @@ private fun PaginatedList(
                         onClick = { onCardClick(entity) },
                         onCoverLongClick = { onTogglePin(entity) },
                         onEditClick = { onEditClick(entity) },
-                        onIncrementClick = { onIncrementClick() },
-                        onIncrementHold = { onIncrementHold(entity) }
+                        onIncrementClick = { onIncrementClick(entity) },
                     )
                 } else {
                     LoadingItem()
