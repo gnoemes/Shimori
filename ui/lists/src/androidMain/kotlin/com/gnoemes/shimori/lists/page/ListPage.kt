@@ -72,7 +72,7 @@ internal fun ListPage(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ListPage(
     viewModel: ListPageViewModel,
@@ -85,7 +85,7 @@ private fun ListPage(
     onRanobeExplore: () -> Unit,
     openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
 
     val onEditClick = { entity: TitleWithRateEntity ->
         openListsEdit(

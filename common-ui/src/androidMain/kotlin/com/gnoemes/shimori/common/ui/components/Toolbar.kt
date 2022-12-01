@@ -98,7 +98,7 @@ fun ShimoriSecondaryToolbar(
     title: String,
     actions: @Composable RowScope.() -> Unit = {},
     subTitle: String? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.background,
         scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
         navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
@@ -106,26 +106,29 @@ fun ShimoriSecondaryToolbar(
         actionIconContentColor = MaterialTheme.colorScheme.onSurface
     ),
 ) {
-    SmallTopAppBar(title = {
-        if (subTitle == null) {
-            Text(text = title)
-        } else {
-            Column(
-                modifier = Modifier.padding(start = 12.dp)
-            ) {
-                Text(
-                    text = title, style = MaterialTheme.typography.titleMedium
-                )
+    TopAppBar(
+        title = {
+            if (subTitle == null) {
+                Text(text = title)
+            } else {
+                Column(
+                    modifier = Modifier.padding(start = 12.dp)
+                ) {
+                    Text(
+                        text = title, style = MaterialTheme.typography.titleMedium
+                    )
 
-                Text(
-                    text = subTitle,
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.labelMedium
-                )
+                    Text(
+                        text = subTitle,
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
             }
-        }
-    }, modifier = modifier, navigationIcon = {
-        BackIcon(navigateUp)
-    }, actions = actions, colors = colors
+        },
+        modifier = modifier,
+        navigationIcon = { BackIcon(navigateUp) },
+        actions = actions,
+        colors = colors
     )
 }
