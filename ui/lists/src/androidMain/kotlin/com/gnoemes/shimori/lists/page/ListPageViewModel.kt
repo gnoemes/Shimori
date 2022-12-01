@@ -82,12 +82,6 @@ internal class ListPageViewModel(
         }
     }
 
-    fun showIncrementerHint() {
-        viewModelScope.launch {
-            stateManager.uiEvents(ListsUiEvents.IncrementerHint)
-        }
-    }
-
     fun showIncrementer(title: TitleWithRateEntity) {
         viewModelScope.launch {
             incrementerEvents.value = title

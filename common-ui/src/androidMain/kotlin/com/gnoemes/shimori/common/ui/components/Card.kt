@@ -28,7 +28,6 @@ fun ListCard(
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
-    onIncrementHold: () -> Unit,
     padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
 ) {
     Box(
@@ -73,7 +72,6 @@ fun ListCard(
             onCoverLongClick = onCoverLongClick,
             onEditClick = onEditClick,
             onIncrementClick = onIncrementClick,
-            onIncrementHold = onIncrementHold
         )
     }
 }
@@ -91,7 +89,6 @@ fun ListCard(
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
     onIncrementClick: () -> Unit,
-    onIncrementHold: () -> Unit,
 ) {
 
     Row(
@@ -168,7 +165,6 @@ fun ListCard(
                 if (showIncrementer) {
                     ShimoriCircleButton(
                         onClick = onIncrementClick,
-                        onLongClick = onIncrementHold,
                         modifier = Modifier
                             .size(32.dp),
                         icon = {
