@@ -27,7 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
-import com.gnoemes.shimori.common.ui.components.ShimoriBottomBarItem
+import com.gnoemes.shimori.common.ui.components.ShimoriNavigationBarItem
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
@@ -85,9 +85,9 @@ private fun Main(
     )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @ExperimentalMaterialNavigationApi
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun Main(
     listType: ListType,
@@ -108,7 +108,8 @@ private fun Main(
                     listType = listType,
                     navController = navController,
                 )
-            }
+            },
+            contentWindowInsets = WindowInsets(top = 0.dp)
         ) {
             AppNavigation(
                 navController = navController,
@@ -175,17 +176,17 @@ private fun MainNavigationBar(
                 )
             )
     ) {
-        BottomAppBar(
+        NavigationBar(
             tonalElevation = 0.dp,
             containerColor = Color.Transparent,
             modifier = Modifier
                 .height(MaterialTheme.dimens.bottomBarHeight)
                 .align(Alignment.BottomStart),
-            contentPadding = PaddingValues(top = 4.dp)
+            windowInsets = WindowInsets(bottom = 0.dp, top = 0.dp, left = 0.dp, right = 0.dp)
         ) {
             MainNavigationItems.fastForEach { item ->
                 val selected = selectedNavigation == item.screen
-                ShimoriBottomBarItem(
+                ShimoriNavigationBarItem(
                     selected = selected,
                     icon = {
                         NavigationItemIcon(item = item, listType = listType)
