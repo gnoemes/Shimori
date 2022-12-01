@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.gnoemes.shimori.common.ui.empty
 import com.gnoemes.shimori.common.ui.statusBarHeight
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.ui.R
@@ -43,7 +44,7 @@ fun ShimoriMainToolbar(
             modifier = Modifier.statusBarHeight(),
         )
 
-        SmallTopAppBar(
+        TopAppBar(
             title = { Text(text = title) },
             scrollBehavior = scrollBehavior,
             actions = {
@@ -78,15 +79,15 @@ fun ShimoriMainToolbar(
                         )
                     }
                 }
-
             },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent,
                 navigationIconContentColor = navigationIconContentColor,
                 titleContentColor = titleContentColor,
                 actionIconContentColor = actionIconContentColor
-            )
+            ),
+            windowInsets = WindowInsets.empty
         )
     }
 }
@@ -129,6 +130,7 @@ fun ShimoriSecondaryToolbar(
         modifier = modifier,
         navigationIcon = { BackIcon(navigateUp) },
         actions = actions,
-        colors = colors
+        colors = colors,
+        windowInsets = WindowInsets.empty
     )
 }
