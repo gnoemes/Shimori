@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
 @Composable
-fun RowScope.ShimoriBottomBarItem(
+fun RowScope.ShimoriNavigationBarItem(
     onClick: () -> Unit,
     selected: Boolean,
     icon: @Composable () -> Unit,
     label: (@Composable () -> Unit)?,
-    colors: BottomBarItemColors = BottomBarItemDefaults.colors(),
+    colors: BottomBarItemColors = NavigationBarItemDefaults.colors(),
     enabled: Boolean = true,
     alwaysShowLabel: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -67,7 +67,7 @@ fun RowScope.ShimoriBottomBarItem(
             animationSpec = tween(ItemAnimationDurationMillis)
         )
 
-        BottomBarItemBaselineLayout(
+        NavigationBarItemBaselineLayout(
             icon = styledIcon,
             label = styledLabel,
             alwaysShowLabel = alwaysShowLabel,
@@ -77,7 +77,7 @@ fun RowScope.ShimoriBottomBarItem(
 }
 
 /**
- * Base layout for a [BottomBarItem].
+ * Base layout for a [NavigationBarItem].
  *
  * @param icon icon for this item
  * @param label text label for this item
@@ -88,7 +88,7 @@ fun RowScope.ShimoriBottomBarItem(
  * size, icon and label positions, etc.
  */
 @Composable
-private fun BottomBarItemBaselineLayout(
+private fun NavigationBarItemBaselineLayout(
     icon: @Composable () -> Unit,
     label: @Composable (() -> Unit)?,
     alwaysShowLabel: Boolean,
@@ -252,7 +252,7 @@ interface BottomBarItemColors {
     fun textColor(selected: Boolean): State<Color>
 }
 
-object BottomBarItemDefaults {
+object NavigationBarItemDefaults {
     /**
      * Creates a [BottomBarItemColors] with the provided colors according to the Material
      * specification.
@@ -261,7 +261,7 @@ object BottomBarItemDefaults {
      * @param unselectedIconColor the color to use for the icon when the item is unselected.
      * @param selectedTextColor the color to use for the text label when the item is selected.
      * @param unselectedTextColor the color to use for the text label when the item is unselected.
-     * @return the resulting [BottomBarItemColors] used for [ShimoriBottomBarItem]
+     * @return the resulting [BottomBarItemColors] used for [ShimoriNavigationBarItem]
      */
     @Composable
     fun colors(
@@ -275,7 +275,7 @@ object BottomBarItemDefaults {
         selectedTextColor,
         unselectedTextColor,
     ) {
-        DefaultBottomBarItemColors(
+        DefaultNavigationBarItemColors(
             selectedIconColor = selectedIconColor,
             unselectedIconColor = unselectedIconColor,
             selectedTextColor = selectedTextColor,
@@ -284,7 +284,7 @@ object BottomBarItemDefaults {
     }
 }
 
-private class DefaultBottomBarItemColors(
+private class DefaultNavigationBarItemColors(
     private val selectedIconColor: Color,
     private val unselectedIconColor: Color,
     private val selectedTextColor: Color,
