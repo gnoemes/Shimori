@@ -5,8 +5,6 @@ import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 
 sealed class ListsUiEvents {
-    object IncrementerHint : ListsUiEvents()
-
     data class IncrementerProgress(
         val title: TitleWithRateEntity,
         val oldRate: Rate,

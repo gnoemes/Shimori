@@ -31,6 +31,7 @@ internal class ListsEditViewModel(
     private val targetId: Long = savedStateHandle["id"]!!
     private val targetType: RateTargetType = savedStateHandle["type"]!!
     private val markComplete: Boolean = savedStateHandle["markComplete"] ?: false
+    private val deleteNotification: Boolean = savedStateHandle["deleteNotification"] ?: false
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
@@ -136,14 +137,16 @@ internal class ListsEditViewModel(
             val rate = rate
             val image = _state.value.title?.image
             rate?.id?.let {
-                deleteRate(DeleteRate.Params(it)).collect {
-                    if (it.isSuccess) {
-                        listsStateManager.uiEvents(
-                            ListsUiEvents.RateDeleted(
-                                image,
-                                rate
+                deleteRate(DeleteRate.Params(it)).collect { status ->
+                    if (status.isSuccess) {
+                        if (deleteNotification) {
+                            listsStateManager.uiEvents(
+                                ListsUiEvents.RateDeleted(
+                                    image,
+                                    rate
+                                )
                             )
-                        )
+                        }
 
                         _uiEvents.emit(UiEvents.NavigateUp)
                     }

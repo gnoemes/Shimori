@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.extensions.combine
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.api.UiMessageManager
-import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
@@ -63,7 +62,6 @@ internal class ListsViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = ListsViewState.Empty
     )
-
 
     init {
         viewModelScope.launch {
@@ -124,7 +122,6 @@ internal class ListsViewModel(
 
     private fun showUiEvent(event: ListsUiEvents) {
         when (event) {
-            ListsUiEvents.IncrementerHint -> showIncrementerHint()
             is ListsUiEvents.PinStatusChanged -> showPinStatusChanged(event.title, event.pinned)
             is ListsUiEvents.IncrementerProgress -> showIncrementerProgress(
                 event.title,
@@ -194,18 +191,6 @@ internal class ListsViewModel(
         }
     }
 
-    private fun showIncrementerHint() {
-        viewModelScope.launch {
-            uiMessageManager.emitMessage(
-                UiMessage(
-                    id = MESSAGE_INCREMENTER_HINT,
-                    message = textProvider[MessageID.IncrementerHint],
-                    imageRes = ImageID.Tip,
-                )
-            )
-        }
-    }
-
     private fun togglePin(entity: TitleWithRateEntity) {
         viewModelScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect()
@@ -232,8 +217,7 @@ internal class ListsViewModel(
 
     companion object {
         private const val MESSAGE_TOGGLE_PIN = 1L
-        private const val MESSAGE_INCREMENTER_HINT = 2L
-        private const val MESSAGE_INCREMENTER_UPDATE = 3L
-        private const val MESSAGE_RATE_DELETED = 4L
+        private const val MESSAGE_INCREMENTER_UPDATE = 2L
+        private const val MESSAGE_RATE_DELETED = 3L
     }
 }

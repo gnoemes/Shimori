@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.lists
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -19,7 +18,6 @@ import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common.ui.utils.ImageID
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -120,7 +118,6 @@ private fun Lists(
                     .fillMaxWidth(),
                 icon = {
                     val image = message?.image
-                    val imageRes = message?.imageRes
                     if (image != null) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
@@ -137,13 +134,6 @@ private fun Lists(
                                 )
                                 .clip(ShimoriSmallestRoundedCornerShape)
                         )
-                    } else if (imageRes != null) {
-                        if (imageRes == ImageID.Tip) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_tip),
-                                contentDescription = null
-                            )
-                        }
                     }
                 })
         },
