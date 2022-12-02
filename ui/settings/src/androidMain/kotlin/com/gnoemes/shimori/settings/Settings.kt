@@ -79,41 +79,38 @@ private fun Settings(
     accentColor: AppAccentColor,
     onChangeAccentColor: (AppAccentColor) -> Unit
 ) {
-
-    Column {
-        ShimoriSecondaryToolbar(
-            navigateUp = navigateUp,
-            modifier = Modifier.statusBarsPadding(),
-            title = stringResource(id = R.string.app_name),
-            subTitle = appVersion,
-            // use InterpolatingTopAppBarColors instead AnimatingTopAppBarColors
-            colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-                actionIconContentColor = MaterialTheme.colorScheme.onSurface
+    Surface {
+        Column {
+            ShimoriSecondaryToolbar(
+                navigateUp = navigateUp,
+                modifier = Modifier.statusBarsPadding(),
+                title = stringResource(id = R.string.app_name),
+                subTitle = appVersion,
+                // use InterpolatingTopAppBarColors instead AnimatingTopAppBarColors
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
-        )
 
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        ) {
-            TitlesLocale(titlesLocale, onChangeTitlesLocale)
-            Spacer(modifier = Modifier.height(24.dp))
-            Locale(locale, onChangeLocale)
-            Spacer(modifier = Modifier.height(24.dp))
-            Spoilers(showSpoilers, onChangeSpoilers)
-            Spacer(modifier = Modifier.height(24.dp))
-            Theme(theme, onChangeTheme)
-            Spacer(modifier = Modifier.height(24.dp))
-            AccentColor(accentColor, onChangeAccentColor)
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            ) {
+                TitlesLocale(titlesLocale, onChangeTitlesLocale)
+                Spacer(modifier = Modifier.height(24.dp))
+                Locale(locale, onChangeLocale)
+                Spacer(modifier = Modifier.height(24.dp))
+                Spoilers(showSpoilers, onChangeSpoilers)
+                Spacer(modifier = Modifier.height(24.dp))
+                Theme(theme, onChangeTheme)
+                Spacer(modifier = Modifier.height(24.dp))
+                AccentColor(accentColor, onChangeAccentColor)
+            }
         }
-
-
     }
-
-
 }
 
 @Composable

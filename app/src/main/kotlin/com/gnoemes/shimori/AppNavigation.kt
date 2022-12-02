@@ -1,10 +1,14 @@
-@file:OptIn(ExperimentalMaterialNavigationApi::class)
+@file:OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 
 package com.gnoemes.shimori
 
 import ListsEdit
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
@@ -20,8 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.auth.Auth
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -33,6 +35,9 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import org.kodein.di.compose.localDI
 import org.kodein.di.instance
+import soup.compose.material.motion.animation.*
+import soup.compose.material.motion.navigation.MaterialMotionNavHost
+import soup.compose.material.motion.navigation.composable
 
 internal sealed class RootScreen(val route: String) {
     abstract fun getStartDestination(): Screen
@@ -50,13 +55,13 @@ internal sealed class RootScreen(val route: String) {
     }
 }
 
-internal sealed class Screen(private val route: String) {
+internal sealed class Screen(val route: String) {
     fun createRoute(root: RootScreen) = "${root.route}/$route"
 
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
     object ListsEditSheet :
-        Screen("edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
+        Screen("lists_edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
         fun createRoute(
             root: RootScreen,
             id: Long,
@@ -86,12 +91,17 @@ internal sealed class Screen(private val route: String) {
 
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun AppNavigation(
-    navController: NavHostController, bottomSheetNavigateUp: () -> Unit
+    navController: NavHostController,
+    bottomSheetNavigateUp: () -> Unit
 ) {
-    NavHost(
-        navController = navController, startDestination = RootScreen.Lists.route
+    MaterialMotionNavHost(
+        navController = navController,
+        startDestination = RootScreen.Lists.route,
+        enterTransition = { enterTransition() },
+        exitTransition = { exitTransition() },
     ) {
         addListsRoot(navController, bottomSheetNavigateUp)
         addExploreRoot(navController)
@@ -107,7 +117,6 @@ private fun NavGraphBuilder.addListsRoot(
         startDestination = Screen.Lists.createRoute(RootScreen.Lists)
     ) {
         val root = RootScreen.Lists
-
         addLists(navController, root)
         addListChangeBottomSheet(navController, root, bottomSheetNavigateUp)
         addListEditBottomSheet(navController, root, bottomSheetNavigateUp)
@@ -132,7 +141,8 @@ private fun NavGraphBuilder.addFeedRoot(
     navController: NavController
 ) {
     navigation(
-        route = RootScreen.Feed.route, startDestination = Screen.Feed.createRoute(RootScreen.Feed)
+        route = RootScreen.Feed.route,
+        startDestination = Screen.Feed.createRoute(RootScreen.Feed)
     ) {
         addFeed(navController, RootScreen.Feed)
     }
@@ -141,7 +151,7 @@ private fun NavGraphBuilder.addFeedRoot(
 @OptIn(ExperimentalLifecycleComposeApi::class)
 private fun NavGraphBuilder.addLists(navController: NavController, root: RootScreen) {
     composable(
-        Screen.Lists.createRoute(root),
+        route = Screen.Lists.createRoute(root),
     ) {
         val shikimori: Shikimori by localDI().instance()
         val state by shikimori.authState.collectAsStateWithLifecycle()
@@ -191,7 +201,9 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
 private fun NavGraphBuilder.addExplore(
     navController: NavController, root: RootScreen
 ) {
-    composable(Screen.Explore.createRoute(root)) {
+    composable(
+        route = Screen.Explore.createRoute(root),
+    ) {
         MockScreen(Screen.Explore.createRoute(root))
     }
 }
@@ -199,7 +211,9 @@ private fun NavGraphBuilder.addExplore(
 private fun NavGraphBuilder.addFeed(
     navController: NavController, root: RootScreen
 ) {
-    composable(Screen.Feed.createRoute(root)) {
+    composable(
+        route = Screen.Feed.createRoute(root),
+    ) {
         MockScreen(Screen.Feed.createRoute(root))
     }
 }
@@ -254,7 +268,9 @@ private fun NavGraphBuilder.addSettings(
     navController: NavController,
     root: RootScreen,
 ) {
-    composable(Screen.Settings.createRoute(root)) {
+    composable(
+        route = Screen.Settings.createRoute(root),
+    ) {
         Settings(navigateUp = { navController.navigateUp() })
     }
 }
@@ -264,7 +280,7 @@ private fun NavGraphBuilder.addTitleDetails(
     root: RootScreen,
 ) {
     composable(
-        Screen.TitleDetails.createRoute(root),
+        route = Screen.TitleDetails.createRoute(root),
         arguments = listOf(
             navArgument("id") { type = NavType.LongType },
             navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
@@ -349,5 +365,35 @@ private fun MockScreen(
         Text(text = text?.let { "$defaultText\n#$text" } ?: defaultText,
             modifier = Modifier.align(Alignment.Center),
             style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Right))
+    }
+}
+
+private fun AnimatedContentScope<NavBackStackEntry>.enterTransition(): EnterTransition {
+    val isCurrentMainSection = isMainSectionScreen(initialState.destination.route)
+    val isTargetMainSection = isMainSectionScreen(targetState.destination.route)
+    return when {
+        isCurrentMainSection && isTargetMainSection -> materialFadeThroughIn()
+        isCurrentMainSection -> holdIn()
+        else -> materialSharedAxisZIn(true)
+    }
+}
+
+private fun AnimatedContentScope<NavBackStackEntry>.exitTransition(): ExitTransition {
+    val isCurrentMainSection = isMainSectionScreen(initialState.destination.route)
+    val isTargetMainSection = isMainSectionScreen(targetState.destination.route)
+    return when {
+        isCurrentMainSection && isTargetMainSection -> materialFadeThroughOut()
+        isTargetMainSection -> holdOut()
+        else -> materialSharedAxisZOut(false)
+    }
+}
+
+private fun isMainSectionScreen(route: String?): Boolean {
+    return when (route) {
+        Screen.Lists.route,
+        Screen.Explore.route,
+        Screen.Feed.route
+        -> true
+        else -> false
     }
 }

@@ -137,10 +137,11 @@ dependencies {
     implementation(libs.kodein.compose)
 
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.navigationanimation)
     implementation(libs.accompanist.navigationmaterial)
     implementation(libs.accompanist.placeholder)
     implementation(libs.accompanist.webview)
+
+    implementation(libs.material.motion.navigation)
 
     implementation(libs.ktor.logging)
     implementation(libs.ktor.contentNegotiation)
