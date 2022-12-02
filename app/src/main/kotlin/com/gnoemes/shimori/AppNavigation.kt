@@ -61,14 +61,15 @@ internal sealed class Screen(val route: String) {
     object Lists : Screen("lists")
     object ListsChangeSheet : Screen("lists_change_sheet")
     object ListsEditSheet :
-        Screen("lists_edit?targetId={id}&targetType={type}&markComplete={markComplete}") {
+        Screen("lists_edit?targetId={id}&targetType={type}&markComplete={markComplete}&deleteNotification={deleteNotification}") {
         fun createRoute(
             root: RootScreen,
             id: Long,
             type: RateTargetType,
-            markComplete: Boolean
+            markComplete: Boolean,
+            deleteNotification: Boolean,
         ): String {
-            return "${root.route}/lists_edit?targetId=$id&targetType=$type&markComplete=$markComplete"
+            return "${root.route}/lists_edit?targetId=$id&targetType=$type&markComplete=$markComplete&deleteNotification=$deleteNotification"
         }
     }
 
@@ -169,7 +170,8 @@ private fun NavGraphBuilder.addLists(navController: NavController, root: RootScr
                             root,
                             id,
                             type,
-                            markComplete
+                            markComplete,
+                            true
                         )
                     )
                 },
@@ -245,6 +247,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
             navArgument("id") { type = NavType.LongType },
             navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
             navArgument("markComplete") { type = NavType.BoolType },
+            navArgument("deleteNotification") { type = NavType.BoolType },
         ),
     ) {
         val bottomSheetNavigator = try {
@@ -294,7 +297,8 @@ private fun NavGraphBuilder.addTitleDetails(
                         root,
                         id,
                         type,
-                        markComplete
+                        markComplete,
+                        deleteNotification = false
                     )
                 )
             }
