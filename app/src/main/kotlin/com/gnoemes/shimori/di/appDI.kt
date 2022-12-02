@@ -62,6 +62,7 @@ val appModule = DI.Module("app") {
     importOnce(features)
 
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
+    bindSingleton(tag = KodeinTag.userAgent) { instance<Context>().getString(R.string.user_agent) }
     bindSingleton(tag = KodeinTag.appVersion) { BuildConfig.VERSION_NAME }
     bindSingleton { createLogger() }
 
@@ -74,7 +75,7 @@ val appModule = DI.Module("app") {
                 url = BuildConfig.ShikimoriBaseUrl,
                 clientId = BuildConfig.ShikimoriClientId,
                 secretKey = BuildConfig.ShikimoriClientSecret,
-                userAgent = instance(KodeinTag.appName),
+                userAgent = instance(KodeinTag.userAgent),
                 oauthRedirect = instance<Context>().let { context ->
                     val scheme = context.getString(R.string.shikimori_redirect_scheme)
                     val host = context.getString(R.string.shikimori_redirect_host)
