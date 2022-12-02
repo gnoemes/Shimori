@@ -1,6 +1,7 @@
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.gnoemes.shimori.AppNavigation
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.RootScreen
@@ -37,6 +37,7 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import kotlinx.coroutines.launch
+import soup.compose.material.motion.navigation.rememberMaterialMotionNavController
 
 
 @Composable
@@ -49,7 +50,8 @@ internal fun Main() {
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
+    ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class
 )
 @Composable
 private fun Main(
@@ -66,7 +68,7 @@ private fun Main(
     val bottomSheetNavigator = remember(sheetState) {
         BottomSheetNavigator(sheetState = sheetState)
     }
-    val navController = rememberNavController(bottomSheetNavigator)
+    val navController = rememberMaterialMotionNavController(bottomSheetNavigator)
 
     //Close bottom sheets smoothly with state.hide() instead of navController.navigateUp()
     val scope = rememberCoroutineScope()
