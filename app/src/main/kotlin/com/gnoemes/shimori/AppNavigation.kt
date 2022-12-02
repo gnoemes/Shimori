@@ -68,7 +68,7 @@ internal sealed class Screen(val route: String) {
             type: RateTargetType,
             markComplete: Boolean
         ): String {
-            return "${root.route}/edit?targetId=$id&targetType=$type&markComplete=$markComplete"
+            return "${root.route}/lists_edit?targetId=$id&targetType=$type&markComplete=$markComplete"
         }
     }
 
