@@ -6,7 +6,7 @@ plugins {
 
 configure<LibraryExtension> {
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.2.0"
+    composeOptions.kotlinCompilerExtensionVersion = "1.4.0-alpha02"
 }
 
 //https://youtrack.jetbrains.com/issue/KT-38694
@@ -18,7 +18,7 @@ configurations {
 }
 
 dependencies {
-    "composeCompiler"("androidx.compose.compiler:compiler:1.2.0")
+    "composeCompiler"("androidx.compose.compiler:compiler:1.4.0-alpha02")
 }
 
 android {

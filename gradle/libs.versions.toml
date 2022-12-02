@@ -17,7 +17,7 @@ accompanist = "0.28.0"
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.6.0-alpha03"
 compose = "1.4.0-alpha02"
-composeCompiler = "1.2.0"
+composeCompiler = "1.4.0-alpha02"
 composesnapshot = "-" # a single character = no snapshot
 material3 = "1.1.0-alpha02"
 coil = "2.2.0"
