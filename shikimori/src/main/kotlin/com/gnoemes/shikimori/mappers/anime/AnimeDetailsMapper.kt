@@ -1,5 +1,6 @@
 package com.gnoemes.shikimori.mappers.anime
 
+import com.gnoemes.shikimori.appendHostIfNeed
 import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.mappers.AgeRatingMapper
 import com.gnoemes.shikimori.mappers.GenreMapper
@@ -16,8 +17,8 @@ internal class AnimeDetailsMapper(
     private val typeMapper: AnimeTypeMapper,
     private val titleStatusMapper: TitleStatusMapper,
     private val rateMapper: RateResponseToRateMapper,
-    private val ageRatingMapper : AgeRatingMapper,
-    private val genreMapper : GenreMapper
+    private val ageRatingMapper: AgeRatingMapper,
+    private val genreMapper: GenreMapper
 ) : Mapper<AnimeDetailsResponse, AnimeWithRate> {
 
     override suspend fun map(from: AnimeDetailsResponse): AnimeWithRate {
@@ -29,7 +30,7 @@ internal class AnimeDetailsMapper(
             nameRu = from.nameRu,
             nameEn = from.namesEnglish?.firstOrNull(),
             image = imageMapper.map(from.image),
-            url = from.url,
+            url = from.url.appendHostIfNeed(),
             animeType = typeMapper.map(from.type),
             rating = from.score,
             status = titleStatusMapper.map(from.status),
@@ -45,7 +46,7 @@ internal class AnimeDetailsMapper(
             franchise = from.franchise,
             favorite = from.favoured,
             topicId = from.topicId,
-//            genres = from.genres.mapNotNull { genreMapper.map(it) },
+            genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
         val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.ANIME) }

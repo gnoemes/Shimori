@@ -58,10 +58,9 @@ internal object AgeRatingAdapter : ColumnAdapter<AgeRating, String> {
 }
 
 internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
-    private const val SEPARATOR = ","
-    override fun decode(databaseValue: String) = databaseValue.split(SEPARATOR).map(Genre::valueOf)
-    override fun encode(value: List<Genre>): String =
-        value.joinToString(separator = SEPARATOR) { it.name }
+
+    override fun decode(databaseValue: String) = Json.decodeFromString<List<Genre>>(databaseValue)
+    override fun encode(value: List<Genre>): String = Json.encodeToString(value)
 }
 
 internal object SyncTargetAdapter : ColumnAdapter<List<SyncTarget>, String> {
