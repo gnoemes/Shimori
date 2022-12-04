@@ -1,5 +1,6 @@
 package com.gnoemes.shikimori.mappers.manga
 
+import com.gnoemes.shikimori.appendHostIfNeed
 import com.gnoemes.shikimori.entities.manga.MangaDetailsResponse
 import com.gnoemes.shikimori.mappers.AgeRatingMapper
 import com.gnoemes.shikimori.mappers.GenreMapper
@@ -29,7 +30,7 @@ internal class MangaDetailsMapper(
             nameRu = from.nameRu,
             nameEn = from.namesEnglish?.firstOrNull(),
             image = imageMapper.map(from.image),
-            url = from.url,
+            url = from.url.appendHostIfNeed(),
             mangaType = typeMapper.map(from.type),
             rating = from.score,
             status = titleStatusMapper.map(from.status),
@@ -43,7 +44,7 @@ internal class MangaDetailsMapper(
             franchise = from.franchise,
             favorite = from.favoured,
             topicId = from.topicId,
-//            genres = from.genres.mapNotNull { genreMapper.map(it) },
+            genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
         val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.MANGA) }
