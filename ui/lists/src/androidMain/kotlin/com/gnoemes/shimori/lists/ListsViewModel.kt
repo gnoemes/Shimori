@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListsViewModel(
-    private val stateManager: ListsStateBus,
+    private val stateBus: ListsStateBus,
     private val updateTitleRates: UpdateTitleRates,
     private val textProvider: ShimoriTextProvider,
     private val togglePin: ToggleTitlePin,
@@ -40,12 +40,12 @@ internal class ListsViewModel(
     private val uiMessageManager = UiMessageManager()
 
     val state = combine(
-        stateManager.type.observe,
-        stateManager.page.observe,
+        stateBus.type.observe,
+        stateBus.page.observe,
         observeMyUser.flow,
         observePinsExist.flow,
         observeRatesExist.flow,
-        stateManager.ratesLoading.observe,
+        stateBus.ratesLoading.observe,
         uiMessageManager.message,
     ) { type, status, user, hasPins, hasRates, isLoading, message ->
         ListsViewState(
@@ -66,10 +66,10 @@ internal class ListsViewModel(
     init {
         viewModelScope.launch {
             combine(
-                stateManager.type.observe,
-                stateManager.page.observe,
+                stateBus.type.observe,
+                stateBus.page.observe,
                 observeShikimoriAuth.flow,
-                stateManager.ratesLoading.observe,
+                stateBus.ratesLoading.observe,
             ) { type, page, auth, loading ->
                 val rateType = type.rateType ?: return@combine null
 
@@ -86,7 +86,7 @@ internal class ListsViewModel(
         }
 
         viewModelScope.launch {
-            stateManager.uiEvents.observe
+            stateBus.uiEvents.observe
                 .collect(::showUiEvent)
         }
 
