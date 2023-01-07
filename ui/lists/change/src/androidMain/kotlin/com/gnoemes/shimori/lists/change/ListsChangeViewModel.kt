@@ -3,16 +3,16 @@ package com.gnoemes.shimori.lists.change
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 internal class ListsChangeViewModel(
-    private val listsStateManager: ListsStateManager,
+    private val listsStateBus: ListsStateBus,
 ) : ViewModel() {
 
-    val type = listsStateManager.type
+    val type = listsStateBus.type
         .observe
         .stateIn(
             scope = viewModelScope,
@@ -22,13 +22,13 @@ internal class ListsChangeViewModel(
 
     fun openRandomTitle() {
         viewModelScope.launch {
-            listsStateManager.openRandomTitleEvent(Unit)
+            listsStateBus.openRandomTitleEvent(Unit)
         }
     }
 
     fun openPinned() {
         viewModelScope.launch {
-            listsStateManager.type(ListType.Pinned)
+            listsStateBus.type(ListType.Pinned)
         }
     }
 }

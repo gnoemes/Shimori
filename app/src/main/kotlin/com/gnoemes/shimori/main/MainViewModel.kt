@@ -8,7 +8,7 @@ import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.common.ui.utils.ObservableLoadingCounter
 import com.gnoemes.shimori.common.ui.utils.collectStatus
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.domain.interactors.UpdateUserAndRates
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import kotlinx.coroutines.flow.*
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel constructor(
     observeShikimoriAuth: ObserveShikimoriAuth,
-    private val listsStateManager: ListsStateManager,
+    private val listsStateBus: ListsStateBus,
     private val updateUserAndRates: UpdateUserAndRates,
     private val logger: Logger,
     settings: ShimoriSettings
@@ -24,7 +24,7 @@ class MainViewModel constructor(
 
     private val updatingUserDataState = ObservableLoadingCounter()
 
-    val state: StateFlow<MainViewState> = listsStateManager.type.observe
+    val state: StateFlow<MainViewState> = listsStateBus.type.observe
         .map(::MainViewState)
         .stateIn(
             scope = viewModelScope,
@@ -57,7 +57,7 @@ class MainViewModel constructor(
         viewModelScope.launch {
             updatingUserDataState
                 .observable
-                .collect { listsStateManager.ratesLoading.update(it) }
+                .collect { listsStateBus.ratesLoading.update(it) }
         }
 
 

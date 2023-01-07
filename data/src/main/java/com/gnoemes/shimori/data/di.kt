@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data
 
 import com.gnoemes.shimori.base.core.extensions.new
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.repositories.anime.AnimeDetailsLastRequestStore
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.anime.AnimeRolesLastRequestStore
@@ -28,7 +28,7 @@ val dataModule = DI.Module("data") {
     bindProvider { new(::ShikimoriUserRepository) }
     bindProvider { new(::RateRepository) }
 
-    bindSingleton { new(::ListsStateManager) }
+    bindSingleton { new(::ListsStateBus) }
 
     bindProvider { new(::AnimeRepository) }
     bindProvider { new(::MangaRepository) }

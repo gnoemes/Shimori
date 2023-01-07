@@ -8,7 +8,7 @@ import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
 import com.gnoemes.shimori.domain.interactors.DeleteRate
@@ -23,7 +23,7 @@ internal class ListsEditViewModel(
     savedStateHandle: SavedStateHandle,
     observeTitle: ObserveTitleWithRateEntity,
     observePinExist: ObservePinExist,
-    private val listsStateManager: ListsStateManager,
+    private val listsStateBus: ListsStateBus,
     private val toggleListPin: ToggleTitlePin,
     private val createOrUpdateRate: CreateOrUpdateRate,
     private val deleteRate: DeleteRate,
@@ -141,7 +141,7 @@ internal class ListsEditViewModel(
                 deleteRate(DeleteRate.Params(it)).collect { status ->
                     if (status.isSuccess) {
                         if (deleteNotification) {
-                            listsStateManager.uiEvents(
+                            listsStateBus.uiEvents(
                                 ListsUiEvents.RateDeleted(
                                     image,
                                     rate

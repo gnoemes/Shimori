@@ -14,7 +14,7 @@ import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListsViewModel(
-    private val stateManager: ListsStateManager,
+    private val stateManager: ListsStateBus,
     private val updateTitleRates: UpdateTitleRates,
     private val textProvider: ShimoriTextProvider,
     private val togglePin: ToggleTitlePin,
