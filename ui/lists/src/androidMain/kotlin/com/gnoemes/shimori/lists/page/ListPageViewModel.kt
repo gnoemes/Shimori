@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListPageViewModel(
-    private val stateManager: ListsStateBus,
+    private val stateBus: ListsStateBus,
     private val observeListPage: ObserveListPage,
     private val observeRateSort: ObserveRateSort,
     private val togglePin: ToggleTitlePin,
@@ -33,9 +33,9 @@ internal class ListPageViewModel(
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
 
     val state = combine(
-        stateManager.type.observe,
+        stateBus.type.observe,
         incrementerEvents,
-        stateManager.ratesLoading.observe,
+        stateBus.ratesLoading.observe,
         ::ListPageViewState
     ).stateIn(
         scope = viewModelScope,
@@ -50,8 +50,8 @@ internal class ListPageViewModel(
     init {
         viewModelScope.launch {
             combine(
-                stateManager.type.observe,
-                stateManager.page.observe,
+                stateBus.type.observe,
+                stateBus.page.observe,
                 observeRateSort.flow,
             ) { type, status, sort ->
                 ObserveListPage.Params(
@@ -66,7 +66,7 @@ internal class ListPageViewModel(
         }
 
         viewModelScope.launch {
-            stateManager.type.observe
+            stateBus.type.observe
                 .map(ObserveRateSort::Params)
                 .collect(observeRateSort::invoke)
         }
@@ -77,7 +77,7 @@ internal class ListPageViewModel(
     fun togglePin(entity: TitleWithRateEntity) {
         viewModelScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect { pinned ->
-                stateManager.uiEvents(ListsUiEvents.PinStatusChanged(entity, pinned))
+                stateBus.uiEvents(ListsUiEvents.PinStatusChanged(entity, pinned))
             }
         }
     }
@@ -110,7 +110,7 @@ internal class ListPageViewModel(
                 CreateOrUpdateRate.Params(newRate)
             ).collect {
                 if (it.isSuccess) {
-                    stateManager.uiEvents(
+                    stateBus.uiEvents(
                         ListsUiEvents.IncrementerProgress(
                             title,
                             oldRate,
