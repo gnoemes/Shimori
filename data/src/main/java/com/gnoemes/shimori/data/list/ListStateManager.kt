@@ -6,7 +6,7 @@ import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import kotlinx.coroutines.flow.*
 
-class ListsStateManager constructor(
+class ListsStateBus constructor(
     settings: ShimoriSettings,
 ) {
 

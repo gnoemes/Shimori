@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.data.core.entities.rate.ListType
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.domain.observers.ObserveExistedStatuses
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -14,15 +14,15 @@ import kotlinx.coroutines.launch
 
 internal class ListChangeStatusSectionViewModel(
     savedStateHandle: SavedStateHandle,
-    private val listsStateManager: ListsStateManager,
+    private val listsStateBus: ListsStateBus,
     observeStatuses: ObserveExistedStatuses
 ) : ViewModel() {
     private val sectionType = ListType.findOrDefault(savedStateHandle["type"] ?: 0)
 
     val state = combine(
         observeStatuses.flow,
-        listsStateManager.type.observe,
-        listsStateManager.page.observe
+        listsStateBus.type.observe,
+        listsStateBus.page.observe
     ) { statuses, currentType, currentStatus ->
         ListChangeStatusSectionViewState(
             statuses = statuses,
@@ -40,8 +40,8 @@ internal class ListChangeStatusSectionViewModel(
 
     fun onStatusChanged(newStatus: RateStatus) {
         viewModelScope.launch {
-            listsStateManager.type.update(sectionType)
-            listsStateManager.page.update(newStatus)
+            listsStateBus.type.update(sectionType)
+            listsStateBus.page.update(newStatus)
         }
     }
 }

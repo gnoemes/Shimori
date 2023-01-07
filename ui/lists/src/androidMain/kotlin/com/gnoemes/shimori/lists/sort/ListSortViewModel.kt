@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.domain.interactors.UpdateRateSort
 import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListSortViewModel(
-    private val listState: ListsStateManager,
+    private val listState: ListsStateBus,
     private val observeSort: ObserveRateSort,
     private val updateSort: UpdateRateSort,
 ) : ViewModel() {

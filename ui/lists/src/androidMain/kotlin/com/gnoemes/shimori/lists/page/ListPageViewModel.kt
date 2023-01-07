@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.list.ListsStateManager
+import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.data.paging.PagingConfig
 import com.gnoemes.shimori.data.paging.PagingData
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListPageViewModel(
-    private val stateManager: ListsStateManager,
+    private val stateManager: ListsStateBus,
     private val observeListPage: ObserveListPage,
     private val observeRateSort: ObserveRateSort,
     private val togglePin: ToggleTitlePin,
