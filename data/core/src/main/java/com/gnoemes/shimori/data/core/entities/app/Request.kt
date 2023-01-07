@@ -10,4 +10,8 @@ enum class Request(val tag : String) {
     ANIME_DETAILS("anime_details"),
     MANGA_DETAILS("manga_details"),
     RANOBE_DETAILS("ranobe_details"),
+    CHARACTER_DETAILS("character_details"),
+    ANIME_ROLES("anime_roles"),
+    MANGA_ROLES("manga_roles"),
+    RANOBE_ROLES("ranobe_roles"),
 }

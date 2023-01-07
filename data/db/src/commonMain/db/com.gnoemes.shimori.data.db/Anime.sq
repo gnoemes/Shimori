@@ -105,6 +105,9 @@ WHERE title.id = :id;
 queryIdByShikimoriId:
 SELECT id FROM anime WHERE shikimori_id = :shikimoriId;
 
+queryLocalAndShikimoriIdsByShikimoriIds:
+SELECT shikimori_id, id FROM anime WHERE shikimori_id IN :shikimoriIds;
+
 queryByStatus:
 SELECT * FROM anime AS title
 INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "ANIME"

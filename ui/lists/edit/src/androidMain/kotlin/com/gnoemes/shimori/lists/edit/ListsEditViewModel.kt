@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.utils.Logger
+import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.rate.Rate
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
@@ -51,7 +52,7 @@ internal class ListsEditViewModel(
                 rate = entity?.rate
                 val title = entity?.entity
 
-                targetShikimoriId = title?.shikimoriId
+                targetShikimoriId = (title as? ShikimoriEntity)?.shikimoriId
 
                 ListsEditViewState(
                     title = title,

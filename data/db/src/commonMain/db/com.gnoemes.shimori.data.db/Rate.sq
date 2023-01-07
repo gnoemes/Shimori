@@ -18,8 +18,7 @@ CREATE TABLE rate (
 );
 
 CREATE UNIQUE INDEX rate_shikimori_id ON rate(shikimori_id);
-CREATE INDEX rate_target_id ON rate(target_id);
-CREATE INDEX rate_target_type ON rate(target_type);
+CREATE UNIQUE INDEX rate_target ON rate(target_id, target_type);
 
 insert:
 INSERT OR REPLACE INTO rate (shikimori_id, target_id, target_type, target_shikimori_id, status, score, comment, progress, re_counter, date_created, date_updated)

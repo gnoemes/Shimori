@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.repositories.anime
 
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.core.database.daos.AnimeDao
+import com.gnoemes.shimori.data.core.database.daos.CharacterDao
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
@@ -16,10 +17,12 @@ import kotlinx.datetime.Instant
 class AnimeRepository(
     private val dao: AnimeDao,
     private val rateDao: RateDao,
+    private val characterDao: CharacterDao,
     @Shikimori private val source: AnimeDataSource,
     private val userRepository: ShikimoriUserRepository,
     private val ratesLastRequest: AnimeWithStatusLastRequestStore,
     private val titleLastRequest: AnimeDetailsLastRequestStore,
+    private val titleRolesLastRequest: AnimeRolesLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
@@ -57,6 +60,22 @@ class AnimeRepository(
         }
     }
 
+    suspend fun updateRoles(id: Long) {
+        val local = dao.queryById(id)
+
+        if (local != null) {
+            val result = source.roles(local)
+
+            characterDao.sync(
+                id,
+                RateTargetType.ANIME,
+                result.characters
+            )
+
+            titleRolesLastRequest.updateLastRequest(id = id)
+        }
+    }
+
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
@@ -70,4 +89,10 @@ class AnimeRepository(
         //update details once per day
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleDetails)
     ) = titleLastRequest.isRequestBefore(expiry, id = id)
+
+    suspend fun needUpdateTitleRoles(
+        id: Long,
+        //update details once per week
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleRoles)
+    ) = titleRolesLastRequest.isRequestBefore(expiry, id = id)
 }

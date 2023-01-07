@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.data.repositories.manga
 
 import com.gnoemes.shimori.base.core.extensions.instantInPast
+import com.gnoemes.shimori.data.core.database.daos.CharacterDao
 import com.gnoemes.shimori.data.core.database.daos.MangaDao
 import com.gnoemes.shimori.data.core.database.daos.RateDao
 import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
@@ -16,10 +17,12 @@ import kotlinx.datetime.Instant
 class MangaRepository(
     private val dao: MangaDao,
     private val rateDao: RateDao,
+    private val characterDao: CharacterDao,
     @Shikimori private val source: MangaDataSource,
     private val userRepository: ShikimoriUserRepository,
     private val ratesLastRequest: MangaWithStatusLastRequestStore,
     private val titleLastRequest: MangaDetailsLastRequestStore,
+    private val titleRolesLastRequest: MangaRolesLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
@@ -59,6 +62,22 @@ class MangaRepository(
         }
     }
 
+    suspend fun updateRoles(id: Long) {
+        val local = dao.queryById(id)
+
+        if (local != null) {
+            val result = source.roles(local)
+
+            characterDao.sync(
+                id,
+                RateTargetType.MANGA,
+                result.characters
+            )
+
+            titleRolesLastRequest.updateLastRequest(id = id)
+        }
+    }
+
     suspend fun needUpdateTitlesWithStatus(
         status: RateStatus?,
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
@@ -72,4 +91,10 @@ class MangaRepository(
         //update details once per day
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleDetails)
     ) = titleLastRequest.isRequestBefore(expiry, id = id)
+
+    suspend fun needUpdateTitleRoles(
+        id: Long,
+        //update details once per week
+        expiry: Instant = instantInPast(minutes = ExpiryConstants.TitleRoles)
+    ) = titleRolesLastRequest.isRequestBefore(expiry, id = id)
 }

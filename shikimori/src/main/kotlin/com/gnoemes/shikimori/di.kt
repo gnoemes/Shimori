@@ -17,6 +17,9 @@ import com.gnoemes.shikimori.mappers.rate.RateMapper
 import com.gnoemes.shikimori.mappers.rate.RateResponseToRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
 import com.gnoemes.shikimori.mappers.rate.RateTargetTypeMapper
+import com.gnoemes.shikimori.mappers.roles.CharacterDetailsResponseMapper
+import com.gnoemes.shikimori.mappers.roles.CharacterResponseMapper
+import com.gnoemes.shikimori.mappers.roles.RolesMapper
 import com.gnoemes.shikimori.mappers.user.UserBriefMapper
 import com.gnoemes.shikimori.mappers.user.UserResponseMapper
 import com.gnoemes.shikimori.sources.*
@@ -42,6 +45,7 @@ val shikimoriModule = DI.Module("shikimori") {
     bindSingleton<AnimeDataSource> { new(::ShikimoriAnimeDataSource) }
     bindSingleton<MangaDataSource> { new(::ShikimoriMangaDataSource) }
     bindSingleton<RanobeDataSource> { new(::ShikimoriRanobeDataSource) }
+    bindSingleton<CharacterDataSource> { new(::ShikimoriCharacterDataSource) }
 }
 
 private val mappers = DI.Module("shikimori-mappers") {
@@ -70,4 +74,8 @@ private val mappers = DI.Module("shikimori-mappers") {
     bindProvider { new(::AnimeDetailsMapper) }
     bindProvider { new(::MangaDetailsMapper) }
     bindProvider { new(::RanobeDetailsMapper) }
+
+    bindProvider { new(::CharacterResponseMapper) }
+    bindProvider { new(::CharacterDetailsResponseMapper) }
+    bindProvider { new(::RolesMapper) }
 }

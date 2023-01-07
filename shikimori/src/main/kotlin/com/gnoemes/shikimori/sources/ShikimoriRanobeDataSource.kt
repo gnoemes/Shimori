@@ -4,7 +4,9 @@ import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shikimori.mappers.ranobe.RanobeDetailsMapper
 import com.gnoemes.shikimori.mappers.ranobe.RateResponseToRanobeWithRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
+import com.gnoemes.shikimori.mappers.roles.RolesMapper
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.roles.RolesInfo
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
 import com.gnoemes.shimori.data.core.entities.user.UserShort
@@ -16,6 +18,7 @@ internal class ShikimoriRanobeDataSource(
     private val ratedMapper: RateResponseToRanobeWithRateMapper,
     private val statusMapper: RateStatusMapper,
     private val detailsMapper: RanobeDetailsMapper,
+    private val rolesMapper: RolesMapper,
 ) : RanobeDataSource {
 
     override suspend fun getWithStatus(user: UserShort, status: RateStatus?): List<RanobeWithRate> {
@@ -27,5 +30,10 @@ internal class ShikimoriRanobeDataSource(
     override suspend fun get(title: Ranobe): RanobeWithRate {
         return shikimori.manga.getDetails(title.shikimoriId)
             .let { detailsMapper.map(it) }
+    }
+
+    override suspend fun roles(title: Ranobe): RolesInfo {
+        return shikimori.ranobe.getRoles(title.shikimoriId)
+            .let { rolesMapper.map(it) }
     }
 }

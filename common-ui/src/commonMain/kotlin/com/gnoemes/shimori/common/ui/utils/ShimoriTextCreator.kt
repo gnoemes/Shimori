@@ -2,6 +2,7 @@ package com.gnoemes.shimori.common.ui.utils
 
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.data.core.entities.ShimoriContentEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
@@ -24,7 +25,7 @@ class ShimoriTextCreator(
     private val appLocale: AppLocale
 ) {
 
-    fun name(title: ShimoriTitleEntity): String {
+    fun name(title: ShimoriContentEntity): String {
         return when (titlesLocale) {
             AppTitlesLocale.English -> title.nameEn ?: defaultNameForLocale(title)
             AppTitlesLocale.Russian -> title.nameRu ?: defaultNameForLocale(title)
@@ -32,7 +33,7 @@ class ShimoriTextCreator(
         }
     }
 
-    private fun defaultNameForLocale(title: ShimoriTitleEntity) = when (appLocale) {
+    private fun defaultNameForLocale(title: ShimoriContentEntity) = when (appLocale) {
         AppLocale.English -> title.nameEn ?: title.name
         AppLocale.Russian -> title.nameRu ?: title.name
         else -> title.name

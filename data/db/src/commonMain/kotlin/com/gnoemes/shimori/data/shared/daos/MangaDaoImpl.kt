@@ -4,6 +4,8 @@ import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.MangaDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
+import com.gnoemes.shimori.data.core.entities.app.SyncApi
+import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.rate.RateSort
 import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
@@ -104,6 +106,23 @@ internal class MangaDaoImpl(
 
     override suspend fun queryAll(): List<Manga> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun queryIdsBySyncTargets(
+        targets: List<SyncTarget>
+    ): List<Pair<SyncTarget, Long>> {
+        val ids = targets.map { it.id }
+        //TODO switch between apis
+        return when (targets.first().api) {
+            //TODO refactor sync apis interaction
+            SyncApi.Shikimori -> db.mangaQueries.queryLocalAndShikimoriIdsByShikimoriIds(
+                ids,
+                mapper = { shikimori_id: Long, id: Long ->
+                    SyncTarget(SyncApi.Shikimori, shikimori_id) to id
+                }
+            )
+                .executeAsList()
+        }
     }
 
     override suspend fun insertOrUpdate(entities: List<Manga>) {
