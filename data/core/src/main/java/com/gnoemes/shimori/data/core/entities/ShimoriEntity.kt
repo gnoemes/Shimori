@@ -20,15 +20,18 @@ interface ShikimoriEntity {
     val hasShikimoriId get() = shikimoriId != 0L
 }
 
-interface ShimoriTitleEntity : ShimoriEntity, ShikimoriEntity {
+interface ShimoriContentEntity : ShimoriEntity {
     val image: ShimoriImage?
     val name: String
     val nameEn: String?
     val nameRu: String?
+
+    val url: String?
+}
+interface ShimoriTitleEntity : ShimoriContentEntity {
     val size: Int?
     val type: RateTargetType
 
-    val url: String?
     val rating: Double?
     val status: TitleStatus?
     val dateAired: LocalDate?

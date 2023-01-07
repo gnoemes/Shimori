@@ -19,11 +19,13 @@ class UpdateTitle(
         withContext(dispatchers.io) {
             if (params.force) {
                 update(params.id, params.type)
-            } else if (needUpdate(params.id, params.type)) {
-                update(params.id, params.type)
+                updateRoles(params.id, params.type)
+            } else {
+                if (needUpdate(params.id, params.type)) update(params.id, params.type)
+                if (needUpdateRoles(params.id, params.type)) updateRoles(params.id, params.type)
             }
         }
-        //TODO update characters & other related content
+        //TODO other related content
     }
 
     private suspend fun update(id: Long, type: RateTargetType) = when (type) {
@@ -36,6 +38,18 @@ class UpdateTitle(
         RateTargetType.ANIME -> animeRepository.needUpdateTitle(id)
         RateTargetType.MANGA -> mangaRepository.needUpdateTitle(id)
         RateTargetType.RANOBE -> ranobeRepository.needUpdateTitle(id)
+    }
+
+    private suspend fun updateRoles(id: Long, type: RateTargetType) = when (type) {
+        RateTargetType.ANIME -> animeRepository.updateRoles(id)
+        RateTargetType.MANGA -> mangaRepository.updateRoles(id)
+        RateTargetType.RANOBE -> ranobeRepository.updateRoles(id)
+    }
+
+    private suspend fun needUpdateRoles(id: Long, type: RateTargetType) = when (type) {
+        RateTargetType.ANIME -> animeRepository.needUpdateTitleRoles(id)
+        RateTargetType.MANGA -> mangaRepository.needUpdateTitleRoles(id)
+        RateTargetType.RANOBE -> ranobeRepository.needUpdateTitleRoles(id)
     }
 
     data class Params(

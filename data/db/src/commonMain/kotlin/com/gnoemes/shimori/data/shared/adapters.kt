@@ -132,3 +132,7 @@ internal val RateToSyncAdapter = Rate_to_sync.Adapter(
     sync_actionAdapter = SyncActionAdapter,
     last_attemptAdapter = InstantAdapter
 )
+
+internal val CharacterRoleAdapter = Character_role.Adapter(
+    target_typeAdapter = RateTargetAdapter,
+)

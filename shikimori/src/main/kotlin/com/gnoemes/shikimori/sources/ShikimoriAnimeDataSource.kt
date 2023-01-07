@@ -6,7 +6,9 @@ import com.gnoemes.shikimori.mappers.anime.AnimeResponseMapper
 import com.gnoemes.shikimori.mappers.anime.CalendarMapper
 import com.gnoemes.shikimori.mappers.anime.RateResponseToAnimeWithRateMapper
 import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
+import com.gnoemes.shikimori.mappers.roles.RolesMapper
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.roles.RolesInfo
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
 import com.gnoemes.shimori.data.core.entities.user.UserShort
@@ -20,6 +22,7 @@ internal class ShikimoriAnimeDataSource(
     private val ratedMapper: RateResponseToAnimeWithRateMapper,
     private val calendarMapper: CalendarMapper,
     private val statusMapper: RateStatusMapper,
+    private val rolesMapper: RolesMapper,
 ) : AnimeDataSource {
     override suspend fun search(filters: Map<String, String>): List<Anime> {
         return shikimori.anime.search(filters)
@@ -39,5 +42,10 @@ internal class ShikimoriAnimeDataSource(
     override suspend fun get(title: Anime): AnimeWithRate {
         return shikimori.anime.getDetails(title.shikimoriId)
             .let { detailsMapper.map(it) }
+    }
+
+    override suspend fun roles(title: Anime): RolesInfo {
+        return shikimori.anime.getRoles(title.shikimoriId)
+            .let { rolesMapper.map(it) }
     }
 }

@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared
 
-import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.ShimoriDatabase
 import com.gnoemes.shimori.data.core.database.daos.*
 import com.gnoemes.shimori.data.db.ShimoriDB
@@ -29,6 +29,7 @@ internal class ShimoriSQLDelightDatabase(
     override val ranobeDao: RanobeDao = RanobeDaoImpl(db, logger, dispatchers)
     override val listPinDao: ListPinDao = ListPinDaoImpl(db, logger, dispatchers)
     override val rateToSyncDao: RateToSyncDao = RateToSyncDaoImpl(db, logger, dispatchers)
+    override val characterDao: CharacterDao = CharacterDaoImpl(db, logger, dispatchers)
 }
 
 internal fun createDatabase(
@@ -47,7 +48,8 @@ internal fun createDatabase(
         mangaAdapter = MangaAdapter,
         ranobeAdapter = RanobeAdapter,
         pinnedAdapter = PinnedAdapter,
-        rate_to_syncAdapter = RateToSyncAdapter
+        rate_to_syncAdapter = RateToSyncAdapter,
+        character_roleAdapter = CharacterRoleAdapter,
     )
     return ShimoriSQLDelightDatabase(db, logger, dispatchers)
 }

@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.app.LastRequest
+import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
@@ -175,9 +176,9 @@ internal fun animeWithRate(
     re_counter: Int?,
     date_created: Instant?,
     date_updated: Instant?,
-    pinId: Long?,
-    target_id_: Long?,
-    target_type_: RateTargetType?,
+    pinId: Long? = null,
+    target_id_: Long? = null,
+    target_type_: RateTargetType? = null,
 ) = AnimeWithRate(
     entity = anime(
         id, shikimori_id, name, name_ru, name_eng,
@@ -294,9 +295,9 @@ internal fun mangaWithRate(
     re_counter: Int?,
     date_created: Instant?,
     date_updated: Instant?,
-    pinId: Long?,
-    target_id_: Long?,
-    target_type_: RateTargetType?
+    pinId: Long? = null,
+    target_id_: Long? = null,
+    target_type_: RateTargetType? = null
 ) = MangaWithRate(
     entity = manga(
         id, shikimori_id, name, name_ru, name_eng,
@@ -404,9 +405,9 @@ internal fun ranobeWithRate(
     re_counter: Int?,
     date_created: Instant?,
     date_updated: Instant?,
-    pinId: Long?,
-    target_id_: Long?,
-    target_type_: RateTargetType?,
+    pinId: Long? = null,
+    target_id_: Long? = null,
+    target_type_: RateTargetType? = null
 ) = RanobeWithRate(
     entity = ranobe(
         id, shikimori_id, name, name_ru, name_eng,
@@ -680,4 +681,36 @@ internal fun pinPaginated(
             target_type_
         )
     }
+}
+
+internal fun character(
+    id: Long,
+    shikimori_id: Long,
+    name: String,
+    name_ru: String?,
+    name_eng: String?,
+    image_original: String?,
+    image_preview: String?,
+    image_x96: String?,
+    image_x48: String?,
+    url: String?,
+    description: String?,
+    description_source_url: String?
+): Character {
+    return Character(
+        id = id,
+        shikimoriId = shikimori_id,
+        name = name,
+        nameRu = name_ru,
+        nameEn = name_eng,
+        image = ShimoriImage(
+            original = image_original,
+            preview = image_preview,
+            x96 = image_x96,
+            x48 = image_x48
+        ),
+        url = url,
+        description = description,
+        descriptionSourceUrl = description_source_url
+    )
 }

@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.core.entities.titles.anime
 
-import com.gnoemes.shimori.data.core.entities.ShimoriEntity
+import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
@@ -39,7 +39,7 @@ data class Anime(
     override val favorite: Boolean = false,
     override val topicId: Long? = null,
     override val genres: List<Genre>? = null
-) : ShimoriEntity, ShimoriTitleEntity {
+) : ShimoriTitleEntity, ShikimoriEntity {
     val episodesOrUnknown: String get() = episodes.let { if (it == 0) "?" else "$it" }
     val isMovie: Boolean get() = animeType == AnimeType.Movie
     override val size: Int? get() = episodesOrUnknown.toIntOrNull()

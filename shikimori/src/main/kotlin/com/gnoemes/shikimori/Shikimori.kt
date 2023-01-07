@@ -14,6 +14,8 @@ import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
+import com.gnoemes.shikimori.entities.roles.CharacterDetailsResponse
+import com.gnoemes.shikimori.entities.roles.CharacterResponse
 import com.gnoemes.shikimori.entities.user.FavoriteListResponse
 import com.gnoemes.shikimori.entities.user.UserBriefResponse
 import com.gnoemes.shikimori.entities.user.UserDetailsResponse
@@ -130,6 +132,7 @@ class Shikimori(
     internal val anime: AnimeService by lazy { AnimeServiceImpl() }
     internal val manga: MangaService by lazy { MangaServiceImpl() }
     internal val ranobe: RanobeService by lazy { RanobeServiceImpl() }
+    internal val character: CharacterService by lazy { CharacterServiceImpl() }
 
     ///////////////////////////////////////////////////////
     // Implementations
@@ -483,6 +486,25 @@ class Shikimori(
                 parameter("page", page)
                 parameter("limit", limit)
                 parameter("censored", censored)
+            }.body()
+        }
+    }
+
+    private inner class CharacterServiceImpl : CharacterService {
+        private val serviceUrl = "$API_URL/characters"
+
+        override suspend fun search(filters: Map<String, String>): List<CharacterResponse> {
+            return client.get {
+                url("$serviceUrl/search")
+                filters.entries.forEach {
+                    parameter(it.key, it.value)
+                }
+            }.body()
+        }
+
+        override suspend fun getDetails(id: Long): CharacterDetailsResponse {
+            return client.get {
+                url("$serviceUrl/details/$id")
             }.body()
         }
     }
