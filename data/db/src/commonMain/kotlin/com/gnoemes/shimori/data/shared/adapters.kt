@@ -10,7 +10,7 @@ import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
 import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.squareup.sqldelight.ColumnAdapter
-import comgnoemesshimoridatadb.*
+import comgnoemesshimoridatadb.data.*
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.decodeFromString

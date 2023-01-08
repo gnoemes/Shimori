@@ -159,61 +159,61 @@ internal class MangaDaoImpl(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.mangaQueries.queryByStatusSortName(
+            RateSortOption.NAME -> db.mangaListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.PROGRESS -> db.mangaQueries.queryByStatusSortProgress(
+            RateSortOption.PROGRESS -> db.mangaListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.mangaQueries.queryByStatusSortDateCreated(
+            RateSortOption.DATE_CREATED -> db.mangaListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.mangaQueries.queryByStatusSortDateUpdated(
+            RateSortOption.DATE_UPDATED -> db.mangaListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.mangaQueries.queryByStatusSortDateAired(
+            RateSortOption.DATE_AIRED -> db.mangaListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.mangaQueries.queryByStatusSortScore(
+            RateSortOption.MY_SCORE -> db.mangaListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.SIZE -> db.mangaQueries.queryByStatusSortSize(
+            RateSortOption.SIZE -> db.mangaListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
-            RateSortOption.RATING -> db.mangaQueries.queryByStatusSortRating(
+            RateSortOption.RATING -> db.mangaListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::mangaWithRate
+                mangaListViewMapper
             )
         }
 

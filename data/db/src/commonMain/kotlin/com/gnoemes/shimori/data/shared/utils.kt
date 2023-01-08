@@ -1,10 +1,10 @@
 package com.gnoemes.shimori.data.shared
 
-internal typealias RateDAO = comgnoemesshimoridatadb.Rate
-internal typealias UserDAO = comgnoemesshimoridatadb.User
-internal typealias RateSortDAO = comgnoemesshimoridatadb.Rate_sort
-internal typealias LastRequestDAO = comgnoemesshimoridatadb.Last_request
-internal typealias RateToSyncDAO = comgnoemesshimoridatadb.Rate_to_sync
+internal typealias RateDAO = comgnoemesshimoridatadb.data.Rate
+internal typealias UserDAO = comgnoemesshimoridatadb.data.User
+internal typealias RateSortDAO = comgnoemesshimoridatadb.data.Rate_sort
+internal typealias LastRequestDAO = comgnoemesshimoridatadb.data.Last_request
+internal typealias RateToSyncDAO = comgnoemesshimoridatadb.data.Rate_to_sync
 
 
 internal val Boolean.long: Long

@@ -174,61 +174,61 @@ internal class AnimeDaoImpl(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.animeQueries.queryByStatusSortName(
+            RateSortOption.NAME -> db.animeListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.PROGRESS -> db.animeQueries.queryByStatusSortProgress(
+            RateSortOption.PROGRESS -> db.animeListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.animeQueries.queryByStatusSortDateCreated(
+            RateSortOption.DATE_CREATED -> db.animeListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.animeQueries.queryByStatusSortDateUpdated(
+            RateSortOption.DATE_UPDATED -> db.animeListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.animeQueries.queryByStatusSortDateAired(
+            RateSortOption.DATE_AIRED -> db.animeListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.animeQueries.queryByStatusSortScore(
+            RateSortOption.MY_SCORE -> db.animeListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.SIZE -> db.animeQueries.queryByStatusSortSize(
+            RateSortOption.SIZE -> db.animeListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
-            RateSortOption.RATING -> db.animeQueries.queryByStatusSortRating(
+            RateSortOption.RATING -> db.animeListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::animeWithRate
+                animeListViewMapper
             )
         }
 

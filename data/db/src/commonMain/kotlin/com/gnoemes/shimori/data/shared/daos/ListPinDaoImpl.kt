@@ -14,7 +14,7 @@ import com.gnoemes.shimori.data.shared.long
 import com.gnoemes.shimori.data.shared.paging.QueryPaging
 import com.gnoemes.shimori.data.shared.pinPaginated
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import comgnoemesshimoridatadb.Pinned
+import comgnoemesshimoridatadb.data.Pinned
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
