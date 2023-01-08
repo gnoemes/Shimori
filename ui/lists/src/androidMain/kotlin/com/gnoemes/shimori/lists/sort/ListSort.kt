@@ -16,9 +16,9 @@ import androidx.compose.ui.util.fastForEach
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.lists.R
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -45,9 +45,9 @@ private fun ListSort(
 @Composable
 private fun ListSort(
     listType: ListType,
-    active: RateSort,
-    options: List<RateSortOption>,
-    onSortChange: (RateSortOption, Boolean) -> Unit
+    active: ListSort,
+    options: List<ListSortOption>,
+    onSortChange: (ListSortOption, Boolean) -> Unit
 ) {
 
     val scrollState = rememberScrollState()

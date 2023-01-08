@@ -30,17 +30,17 @@ import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 
 @Composable
 fun TitleDetails(
     navigateUp: () -> Unit,
-    openListsEdit: (Long, RateTargetType, Boolean) -> Unit,
+    openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
 ) {
     TitleDetails(
         viewModel = shimoriViewModel(),
@@ -54,7 +54,7 @@ fun TitleDetails(
 private fun TitleDetails(
     viewModel: TitleDetailsViewModel,
     navigateUp: () -> Unit,
-    openListsEdit: (Long, RateTargetType, Boolean) -> Unit,
+    openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -141,8 +141,8 @@ private fun BackDropImage(
 private fun TitleContent(
     modifier: Modifier,
     state: LazyListState,
-    title: TitleWithRateEntity,
-    openListsEdit: (Long, RateTargetType, Boolean) -> Unit,
+    title: TitleWithTrackEntity,
+    openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
 ) {
     val textCreator = LocalShimoriTextCreator.current
 
@@ -200,12 +200,12 @@ private fun TitleContent(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun TitleActions(
-    title: TitleWithRateEntity,
-    openListsEdit: (Long, RateTargetType, Boolean) -> Unit,
+    title: TitleWithTrackEntity,
+    openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
     onFavoriteClick: () -> Unit,
     onShareClicked: () -> Unit
 ) {
-    val status = title.rate?.status
+    val status = title.track?.status
 
     val buttonDefaultColor = MaterialTheme.colorScheme.primaryContainer
     val onButtonDefaultColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -240,7 +240,7 @@ private fun TitleActions(
     ) {
         val statusText =
             if (status == null) stringResource(id = R.string.add)
-            else LocalShimoriTextCreator.current.rateStatusText(status = status, type = title.type)
+            else LocalShimoriTextCreator.current.trackStatusText(status = status, type = title.type)
 
         val buttonColors = ShimoriButtonDefaults.buttonColors(
             containerColor = statusButtonColor,
@@ -263,8 +263,8 @@ private fun TitleActions(
                             modifier = Modifier.size(24.dp)
                         )
                     } else {
-                        RateIcon(
-                            rateStatus = it,
+                        TrackIcon(
+                            trackStatus = it,
                             modifier = Modifier.size(24.dp)
                         )
                     }

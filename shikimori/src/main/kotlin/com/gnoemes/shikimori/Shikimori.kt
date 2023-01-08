@@ -25,7 +25,7 @@ import com.gnoemes.shimori.base.core.entities.Platform
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.entities.auth.ShikimoriAuthState
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -184,7 +184,7 @@ class Shikimori(
         override suspend fun userRates(
             userId: Long,
             targetId: Long?,
-            targetType: RateTargetType?,
+            targetType: TrackTargetType?,
             status: ShikimoriRateStatus?,
             page: Int?,
             limit: Int?

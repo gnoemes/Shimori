@@ -19,7 +19,7 @@ import com.gnoemes.shimori.common.ui.components.BottomSheetTitle
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.lists.change.section.StatusSection
 
 @Composable

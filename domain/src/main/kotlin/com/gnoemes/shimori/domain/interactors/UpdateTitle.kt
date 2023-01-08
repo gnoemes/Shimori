@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
@@ -28,44 +28,44 @@ class UpdateTitle(
         //TODO other related content
     }
 
-    private suspend fun update(id: Long, type: RateTargetType) = when (type) {
-        RateTargetType.ANIME -> animeRepository.update(id)
-        RateTargetType.MANGA -> mangaRepository.update(id)
-        RateTargetType.RANOBE -> ranobeRepository.update(id)
+    private suspend fun update(id: Long, type: TrackTargetType) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.update(id)
+        TrackTargetType.MANGA -> mangaRepository.update(id)
+        TrackTargetType.RANOBE -> ranobeRepository.update(id)
     }
 
-    private suspend fun needUpdate(id: Long, type: RateTargetType) = when (type) {
-        RateTargetType.ANIME -> animeRepository.needUpdateTitle(id)
-        RateTargetType.MANGA -> mangaRepository.needUpdateTitle(id)
-        RateTargetType.RANOBE -> ranobeRepository.needUpdateTitle(id)
+    private suspend fun needUpdate(id: Long, type: TrackTargetType) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.needUpdateTitle(id)
+        TrackTargetType.MANGA -> mangaRepository.needUpdateTitle(id)
+        TrackTargetType.RANOBE -> ranobeRepository.needUpdateTitle(id)
     }
 
-    private suspend fun updateRoles(id: Long, type: RateTargetType) = when (type) {
-        RateTargetType.ANIME -> animeRepository.updateRoles(id)
-        RateTargetType.MANGA -> mangaRepository.updateRoles(id)
-        RateTargetType.RANOBE -> ranobeRepository.updateRoles(id)
+    private suspend fun updateRoles(id: Long, type: TrackTargetType) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.updateRoles(id)
+        TrackTargetType.MANGA -> mangaRepository.updateRoles(id)
+        TrackTargetType.RANOBE -> ranobeRepository.updateRoles(id)
     }
 
-    private suspend fun needUpdateRoles(id: Long, type: RateTargetType) = when (type) {
-        RateTargetType.ANIME -> animeRepository.needUpdateTitleRoles(id)
-        RateTargetType.MANGA -> mangaRepository.needUpdateTitleRoles(id)
-        RateTargetType.RANOBE -> ranobeRepository.needUpdateTitleRoles(id)
+    private suspend fun needUpdateRoles(id: Long, type: TrackTargetType) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.needUpdateTitleRoles(id)
+        TrackTargetType.MANGA -> mangaRepository.needUpdateTitleRoles(id)
+        TrackTargetType.RANOBE -> ranobeRepository.needUpdateTitleRoles(id)
     }
 
     data class Params(
         val id: Long,
-        val type: RateTargetType,
+        val type: TrackTargetType,
         val force: Boolean,
         //TODO add support for external ids (shikimori, mal, ...)
     ) {
         companion object {
-            fun forceUpdate(id: Long, type: RateTargetType) = Params(
+            fun forceUpdate(id: Long, type: TrackTargetType) = Params(
                 id = id,
                 type = type,
                 force = true,
             )
 
-            fun optionalUpdate(id: Long, type: RateTargetType) = Params(
+            fun optionalUpdate(id: Long, type: TrackTargetType) = Params(
                 id = id,
                 type = type,
                 force = false,

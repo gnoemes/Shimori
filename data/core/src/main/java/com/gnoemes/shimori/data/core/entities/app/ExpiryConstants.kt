@@ -9,5 +9,5 @@ object ExpiryConstants {
     const val TitleDetails = DAY
     const val TitleRoles = WEEK
     const val CharacterDetails = DAY
-    const val SyncPendingRates = 5
+    const val SyncPendingTracks = 5
 }

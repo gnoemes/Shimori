@@ -6,11 +6,11 @@ import com.gnoemes.shimori.data.core.database.daos.AnimeDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.core.entities.app.SyncTarget
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.*
@@ -149,81 +149,81 @@ internal class AnimeDaoImpl(
         }
     }
 
-    override suspend fun queryByStatus(status: RateStatus): List<AnimeWithRate> {
-        return db.animeQueries.queryByStatus(status, ::animeWithRate)
+    override suspend fun queryByStatus(status: TrackStatus): List<AnimeWithTrack> {
+        return db.animeQueries.queryByStatus(status, ::animeWithTrack)
             .executeAsList()
     }
 
-    override fun observeById(id: Long): Flow<AnimeWithRate?> {
-        return db.animeQueries.queryByIdWithRate(id, ::animeWithRate)
+    override fun observeById(id: Long): Flow<AnimeWithTrack?> {
+        return db.animeQueries.queryByIdWithTrack(id, ::animeWithTrack)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 
-    override fun observeCalendar(): Flow<List<AnimeWithRate>> {
+    override fun observeCalendar(): Flow<List<AnimeWithTrack>> {
         TODO("Not yet implemented")
     }
 
     override fun paging(
-        status: RateStatus,
-        sort: RateSort,
+        status: TrackStatus,
+        sort: ListSort,
     ): PagingSource<Long, PaginatedEntity> {
 
         fun query(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.animeListViewQueries.queryByStatusSortName(
+            ListSortOption.NAME -> db.animeListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.PROGRESS -> db.animeListViewQueries.queryByStatusSortProgress(
+            ListSortOption.PROGRESS -> db.animeListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.animeListViewQueries.queryByStatusSortDateCreated(
+            ListSortOption.DATE_CREATED -> db.animeListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.animeListViewQueries.queryByStatusSortDateUpdated(
+            ListSortOption.DATE_UPDATED -> db.animeListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.animeListViewQueries.queryByStatusSortDateAired(
+            ListSortOption.DATE_AIRED -> db.animeListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.animeListViewQueries.queryByStatusSortScore(
+            ListSortOption.MY_SCORE -> db.animeListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.SIZE -> db.animeListViewQueries.queryByStatusSortSize(
+            ListSortOption.SIZE -> db.animeListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 animeListViewMapper
             )
-            RateSortOption.RATING -> db.animeListViewQueries.queryByStatusSortRating(
+            ListSortOption.RATING -> db.animeListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,

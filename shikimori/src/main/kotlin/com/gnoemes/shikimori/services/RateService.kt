@@ -3,14 +3,14 @@ package com.gnoemes.shikimori.services
 import com.gnoemes.shikimori.entities.rates.ShikimoriRateStatus
 import com.gnoemes.shikimori.entities.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 
 internal interface RateService {
 
     suspend fun userRates(
         userId: Long,
         targetId: Long? = null,
-        targetType: RateTargetType? = null,
+        targetType: TrackTargetType? = null,
         status: ShikimoriRateStatus? = null,
         page: Int? = null,
         limit: Int? = null

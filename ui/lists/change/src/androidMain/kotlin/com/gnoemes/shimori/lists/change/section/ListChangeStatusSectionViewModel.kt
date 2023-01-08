@@ -3,8 +3,8 @@ package com.gnoemes.shimori.lists.change.section
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.domain.observers.ObserveExistedStatuses
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,10 +35,10 @@ internal class ListChangeStatusSectionViewModel(
     )
 
     init {
-        observeStatuses(ObserveExistedStatuses.Params(sectionType.rateType!!))
+        observeStatuses(ObserveExistedStatuses.Params(sectionType.trackType!!))
     }
 
-    fun onStatusChanged(newStatus: RateStatus) {
+    fun onStatusChanged(newStatus: TrackStatus) {
         viewModelScope.launch {
             listsStateBus.type.update(sectionType)
             listsStateBus.page.update(newStatus)

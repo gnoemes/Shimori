@@ -2,8 +2,8 @@ package com.gnoemes.shimori.data.list
 
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.invoke
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import kotlinx.coroutines.flow.*
 
 class ListsStateBus constructor(
@@ -23,30 +23,30 @@ class ListsStateBus constructor(
     }
 
     /**
-     * Represents current active list page by [RateStatus]
+     * Represents current active list page by [TrackStatus]
      */
-    val page = object : State<RateStatus> {
-        override suspend fun update(newState: RateStatus) {
+    val page = object : State<TrackStatus> {
+        override suspend fun update(newState: TrackStatus) {
             settings.preferredListStatus(newState.name)
         }
 
-        override val observe: Flow<RateStatus>
-            get() = settings.preferredListStatus.observe.map { RateStatus.valueOf(it) }
+        override val observe: Flow<TrackStatus>
+            get() = settings.preferredListStatus.observe.map { TrackStatus.valueOf(it) }
     }
 
     /**
      * Sync loading status across screens
      */
-    val ratesLoading = object : State<Boolean> {
-        private val ratesLoading = MutableStateFlow(false)
+    val tracksLoading = object : State<Boolean> {
+        private val tracksLoading = MutableStateFlow(false)
         override suspend fun update(newState: Boolean) =
-            kotlin.run { ratesLoading.value = newState }
+            kotlin.run { tracksLoading.value = newState }
 
-        override val observe: StateFlow<Boolean> get() = ratesLoading
+        override val observe: StateFlow<Boolean> get() = tracksLoading
     }
 
     /**
-     * Event to notify listeners to open random title from current [RateStatus] or [ListType.Pinned]
+     * Event to notify listeners to open random title from current [TrackStatus] or [ListType.Pinned]
      */
     val openRandomTitleEvent = object : EventState<Unit> {
         private val openRandomTitle = MutableSharedFlow<Unit>()

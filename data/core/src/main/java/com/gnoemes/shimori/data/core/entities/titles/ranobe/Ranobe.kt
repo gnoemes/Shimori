@@ -6,7 +6,7 @@ import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import kotlinx.datetime.LocalDate
 
 @kotlinx.serialization.Serializable
@@ -17,7 +17,7 @@ data class Ranobe(
     override val nameRu: String? = null,
     override val nameEn: String? = null,
     override val image: ShimoriImage? = null,
-    override val type: RateTargetType = RateTargetType.RANOBE,
+    override val type: TrackTargetType = TrackTargetType.RANOBE,
     override val url: String? = null,
     val ranobeType: RanobeType? = null,
     override val rating: Double? = null,

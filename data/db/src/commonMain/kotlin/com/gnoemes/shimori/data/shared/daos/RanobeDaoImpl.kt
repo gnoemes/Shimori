@@ -4,11 +4,11 @@ import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.RanobeDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
-import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.*
@@ -122,74 +122,74 @@ internal class RanobeDaoImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun queryByStatus(status: RateStatus): List<RanobeWithRate> {
-        return db.ranobeQueries.queryByStatus(status, ::ranobeWithRate)
+    override suspend fun queryByStatus(status: TrackStatus): List<RanobeWithTrack> {
+        return db.ranobeQueries.queryByStatus(status, ::ranobeWithTrack)
             .executeAsList()
     }
 
-    override fun observeById(id: Long): Flow<RanobeWithRate?> {
-        return db.ranobeQueries.queryByIdWithRate(id, ::ranobeWithRate)
+    override fun observeById(id: Long): Flow<RanobeWithTrack?> {
+        return db.ranobeQueries.queryByIdWithTrack(id, ::ranobeWithTrack)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 
-    override fun paging(status: RateStatus, sort: RateSort): PagingSource<Long, PaginatedEntity> {
+    override fun paging(status: TrackStatus, sort: ListSort): PagingSource<Long, PaginatedEntity> {
 
         fun query(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.ranobeListViewQueries.queryByStatusSortName(
+            ListSortOption.NAME -> db.ranobeListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.PROGRESS -> db.ranobeListViewQueries.queryByStatusSortProgress(
+            ListSortOption.PROGRESS -> db.ranobeListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.ranobeListViewQueries.queryByStatusSortDateCreated(
+            ListSortOption.DATE_CREATED -> db.ranobeListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.ranobeListViewQueries.queryByStatusSortDateUpdated(
+            ListSortOption.DATE_UPDATED -> db.ranobeListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.ranobeListViewQueries.queryByStatusSortDateAired(
+            ListSortOption.DATE_AIRED -> db.ranobeListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.ranobeListViewQueries.queryByStatusSortScore(
+            ListSortOption.MY_SCORE -> db.ranobeListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.SIZE -> db.ranobeListViewQueries.queryByStatusSortSize(
+            ListSortOption.SIZE -> db.ranobeListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 ranobeListViewMapper
             )
-            RateSortOption.RATING -> db.ranobeListViewQueries.queryByStatusSortRating(
+            ListSortOption.RATING -> db.ranobeListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,

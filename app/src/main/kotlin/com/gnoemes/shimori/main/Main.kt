@@ -31,7 +31,7 @@ import com.gnoemes.shimori.common.ui.components.ShimoriNavigationBarItem
 import com.gnoemes.shimori.common.ui.empty
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.main.MainViewModel
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi

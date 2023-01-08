@@ -15,22 +15,22 @@ SELECT
     title.chapters,
     title.date_aired,
     title.date_released,
-    r.id AS rateId,
-    r.status AS rateStatus,
-    r.score,
-    r.comment,
-    r.progress,
-    r.re_counter,
-    r.date_created,
-    r.date_updated,
+    track.id AS trackId,
+    track.status AS trackStatus,
+    track.score,
+    track.comment,
+    track.progress,
+    track.re_counter,
+    track.date_created,
+    track.date_updated,
     p.id AS pinId
 FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type;
+INNER JOIN track AS track ON track.target_id = title.id AND track.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = track.target_type;
 
 queryByStatusSortName:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN name END) DESC,
 (CASE :descending WHEN 0 THEN name END) ASC
@@ -38,7 +38,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortProgress:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN progress END) DESC,
 (CASE :descending WHEN 0 THEN progress END) ASC,
@@ -47,7 +47,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateCreated:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN date_created END) DESC,
 (CASE :descending WHEN 0 THEN date_created END) ASC,
@@ -56,7 +56,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateUpdated:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN date_updated END) DESC,
 (CASE :descending WHEN 0 THEN date_updated END) ASC,
@@ -65,7 +65,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortDateAired:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN datetime(date_aired) END) DESC,
 (CASE :descending WHEN 0 THEN datetime(IFNULL(date_aired, '9999-12-31')) END) ASC,
@@ -74,7 +74,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortScore:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN score END) DESC,
 (CASE :descending WHEN 0 THEN score END) ASC,
@@ -83,7 +83,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortSize:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN chapters END) DESC,
 (CASE :descending WHEN 0 THEN chapters END) ASC,
@@ -92,7 +92,7 @@ LIMIT :limit OFFSET :offset;
 
 queryByStatusSortRating:
 SELECT * FROM ranobeListView
-WHERE rateStatus = :status
+WHERE trackStatus = :status
 ORDER BY
 (CASE :descending WHEN 1 THEN rating END) DESC,
 (CASE :descending WHEN 0 THEN rating END) ASC,

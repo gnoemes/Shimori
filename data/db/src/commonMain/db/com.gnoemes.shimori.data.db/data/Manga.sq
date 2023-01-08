@@ -78,7 +78,7 @@ DELETE FROM manga WHERE id = :id;
 
 countWithStatus:
 SELECT COUNT(*) FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.id  AND r.target_type = "MANGA"
+INNER JOIN track AS r ON r.target_id = title.id  AND r.target_type = "MANGA"
 WHERE r.status = :status;
 
 queryById:
@@ -87,9 +87,9 @@ SELECT * FROM manga WHERE id = :id;
 queryAll:
 SELECT * FROM manga;
 
-queryByIdWithRate:
+queryByIdWithTrack:
 SELECT * FROM manga AS title
-LEFT OUTER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "MANGA"
+LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
@@ -101,6 +101,6 @@ SELECT shikimori_id, id FROM manga WHERE shikimori_id IN :shikimoriIds;
 
 queryByStatus:
 SELECT * FROM manga AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "MANGA"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;

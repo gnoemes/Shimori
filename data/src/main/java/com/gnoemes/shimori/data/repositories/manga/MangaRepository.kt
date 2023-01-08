@@ -3,11 +3,11 @@ package com.gnoemes.shimori.data.repositories.manga
 import com.gnoemes.shimori.base.core.extensions.instantInPast
 import com.gnoemes.shimori.data.core.database.daos.CharacterDao
 import com.gnoemes.shimori.data.core.database.daos.MangaDao
-import com.gnoemes.shimori.data.core.database.daos.RateDao
+import com.gnoemes.shimori.data.core.database.daos.TrackDao
 import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.sources.MangaDataSource
 import com.gnoemes.shimori.data.core.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.lastrequest.GroupLastRequestStore
@@ -16,32 +16,32 @@ import kotlinx.datetime.Instant
 
 class MangaRepository(
     private val dao: MangaDao,
-    private val rateDao: RateDao,
+    private val trackDao: TrackDao,
     private val characterDao: CharacterDao,
     @Shikimori private val source: MangaDataSource,
     private val userRepository: ShikimoriUserRepository,
-    private val ratesLastRequest: MangaWithStatusLastRequestStore,
+    private val tracksLastRequest: MangaWithStatusLastRequestStore,
     private val titleLastRequest: MangaDetailsLastRequestStore,
     private val titleRolesLastRequest: MangaRolesLastRequestStore,
 ) {
     fun observeById(id: Long) = dao.observeById(id)
 
     fun paging(
-        status: RateStatus,
-        sort: RateSort
+        status: TrackStatus,
+        sort: ListSort
     ) = dao.paging(status, sort)
 
-    suspend fun updateMyTitlesByStatus(status: RateStatus?) {
+    suspend fun updateMyTitlesByStatus(status: TrackStatus?) {
         val user = userRepository.queryMeShort()
             ?: throw IllegalStateException("User doesn't exist")
 
         val result = source.getWithStatus(user, status)
         //insert title first
         dao.insertOrUpdate(result.map { it.entity })
-        //then sync rates & assign local target ids
-        rateDao.syncAll(result.mapNotNull { it.rate }, RateTargetType.MANGA, status)
-        ratesLastRequest.updateLastRequest(
-            id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_RATE_STATUSES_ID
+        //then sync trackss & assign local target ids
+        trackDao.syncAll(result.mapNotNull { it.track }, TrackTargetType.MANGA, status)
+        tracksLastRequest.updateLastRequest(
+            id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_TRACK_STATUSES_ID
         )
     }
 
@@ -70,7 +70,7 @@ class MangaRepository(
 
             characterDao.sync(
                 id,
-                RateTargetType.MANGA,
+                TrackTargetType.MANGA,
                 result.characters
             )
 
@@ -79,11 +79,11 @@ class MangaRepository(
     }
 
     suspend fun needUpdateTitlesWithStatus(
-        status: RateStatus?,
+        status: TrackStatus?,
         expiry: Instant = instantInPast(minutes = ExpiryConstants.TitlesWithStatus)
-    ) = ratesLastRequest.isRequestBefore(
+    ) = tracksLastRequest.isRequestBefore(
         expiry,
-        id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_RATE_STATUSES_ID
+        id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_TRACK_STATUSES_ID
     )
 
     suspend fun needUpdateTitle(

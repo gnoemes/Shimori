@@ -2,10 +2,10 @@ package com.gnoemes.shimori.data.core.database.daos
 
 import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.characters.CharacterRole
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
-import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
-import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import kotlinx.coroutines.flow.Flow
 
 abstract class CharacterDao : EntityDao<Character>() {
@@ -17,7 +17,7 @@ abstract class CharacterDao : EntityDao<Character>() {
     abstract suspend fun sync(data: List<Character>)
     abstract suspend fun sync(
         targetId: Long,
-        targetType: RateTargetType,
+        targetType: TrackTargetType,
         data: List<Character>
     )
 
@@ -27,10 +27,10 @@ abstract class CharacterDao : EntityDao<Character>() {
 
     abstract fun observeByTitle(
         targetId: Long,
-        targetType: RateTargetType,
+        targetType: TrackTargetType,
     ): Flow<List<Character>>
 
-    abstract fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithRate>>
-    abstract fun observeCharacterMangas(id: Long): Flow<List<MangaWithRate>>
-    abstract fun observeCharacterRanobes(id: Long): Flow<List<RanobeWithRate>>
+    abstract fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithTrack>>
+    abstract fun observeCharacterMangas(id: Long): Flow<List<MangaWithTrack>>
+    abstract fun observeCharacterRanobes(id: Long): Flow<List<RanobeWithTrack>>
 }

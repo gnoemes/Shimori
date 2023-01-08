@@ -20,15 +20,15 @@ internal class ShimoriSQLDelightDatabase(
     logger: Logger,
     dispatchers: AppCoroutineDispatchers,
 ) : ShimoriDatabase {
-    override val rateDao: RateDao = RateDaoImpl(db, logger, dispatchers)
-    override val rateSortDao: RateSortDao = RateSortDaoImpl(db, logger, dispatchers)
+    override val trackDao: TrackDao = TrackDaoImpl(db, logger, dispatchers)
+    override val listSortDao: ListSortDao = ListSortDaoImpl(db, logger, dispatchers)
     override val userDao: UserDao = UserDaoImpl(db, logger, dispatchers)
     override val lastRequestDao: LastRequestDao = LastRequestDaoImpl(db, logger)
     override val animeDao: AnimeDao = AnimeDaoImpl(db, logger, dispatchers)
     override val mangaDao: MangaDao = MangaDaoImpl(db, logger, dispatchers)
     override val ranobeDao: RanobeDao = RanobeDaoImpl(db, logger, dispatchers)
     override val listPinDao: ListPinDao = ListPinDaoImpl(db, logger, dispatchers)
-    override val rateToSyncDao: RateToSyncDao = RateToSyncDaoImpl(db, logger, dispatchers)
+    override val trackToSyncDao: TrackToSyncDao = TrackToSyncDaoImpl(db, logger, dispatchers)
     override val characterDao: CharacterDao = CharacterDaoImpl(db, logger, dispatchers)
 }
 
@@ -40,15 +40,15 @@ internal fun createDatabase(
     val driver = driverFactory.createDriver()
     val db = ShimoriDB.invoke(
         driver = driver,
-        rateAdapter = RateAdapter,
+        trackAdapter = TrackAdapter,
         userAdapter = UserAdapter,
-        rate_sortAdapter = RateSortAdapter,
+        list_sortAdapter = ListSortAdapter,
         last_requestAdapter = LastRequestAdapter,
         animeAdapter = AnimeAdapter,
         mangaAdapter = MangaAdapter,
         ranobeAdapter = RanobeAdapter,
         pinnedAdapter = PinnedAdapter,
-        rate_to_syncAdapter = RateToSyncAdapter,
+        track_to_syncAdapter = TrackToSyncAdapter,
         character_roleAdapter = CharacterRoleAdapter,
     )
     return ShimoriSQLDelightDatabase(db, logger, dispatchers)

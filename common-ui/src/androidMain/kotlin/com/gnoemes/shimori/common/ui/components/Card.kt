@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
@@ -23,7 +23,7 @@ import com.gnoemes.shimori.ui.R
 
 @Composable
 fun ListCard(
-    title: TitleWithRateEntity,
+    title: TitleWithTrackEntity,
     onClick: () -> Unit,
     onCoverLongClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -43,29 +43,29 @@ fun ListCard(
                     modifier = Modifier.fillMaxWidth()
                 )
             },
-            score = title.rate?.score,
+            score = title.track?.score,
             progress = when (val entity = title.entity) {
                 is Anime -> stringResource(
                     R.string.progress_format,
-                    title.rate?.progress ?: 0,
+                    title.track?.progress ?: 0,
                     entity.episodesOrUnknown
                 )
                 is Manga -> stringResource(
                     R.string.progress_format,
-                    title.rate?.progress ?: 0,
+                    title.track?.progress ?: 0,
                     entity.chaptersOrUnknown
                 )
                 is Ranobe -> stringResource(
                     R.string.progress_format,
-                    title.rate?.progress ?: 0,
+                    title.track?.progress ?: 0,
                     entity.chaptersOrUnknown
                 )
                 else -> throw IllegalArgumentException("Entity $entity does not support")
             },
             isPinned = title.pinned,
-            showIncrementer = title.rate?.progress != null
+            showIncrementer = title.track?.progress != null
                     && title.entity.size != null
-                    && title.rate?.progress != title.entity.size
+                    && title.track?.progress != title.entity.size
                     && title.entity.status != TitleStatus.ANONS
                     || title.entity.isOngoing,
             onClick = onClick,

@@ -87,7 +87,7 @@ DELETE FROM anime WHERE id = :id;
 
 countWithStatus:
 SELECT COUNT(*) FROM anime AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
 WHERE r.status = :status;
 
 queryAll:
@@ -96,9 +96,9 @@ SELECT * FROM anime;
 queryById:
 SELECT * FROM anime WHERE id = :id;
 
-queryByIdWithRate:
+queryByIdWithTrack:
 SELECT * FROM anime AS title
-LEFT OUTER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
@@ -110,6 +110,6 @@ SELECT shikimori_id, id FROM anime WHERE shikimori_id IN :shikimoriIds;
 
 queryByStatus:
 SELECT * FROM anime AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;

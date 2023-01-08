@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.domain.observers
 
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.repositories.pin.ListPinRepository
 import com.gnoemes.shimori.domain.SubjectInteractor
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +15,6 @@ class ObservePinExist(
 
     data class Params(
         val targetId: Long,
-        val targetType: RateTargetType
+        val targetType: TrackTargetType
     )
 }

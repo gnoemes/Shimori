@@ -10,22 +10,22 @@ val domainModule = DI.Module("domain") {
     bindProvider { new(::ObserveMyUserShort) }
     bindProvider { new(::ObserveShikimoriAuth) }
     bindProvider { new(::ObservePinsExist) }
-    bindProvider { new(::ObserveRatesExist) }
-    bindProvider { new(::ObserveRateSort) }
+    bindProvider { new(::ObserveTracksExist) }
+    bindProvider { new(::ObserveListSort) }
     bindProvider { new(::ObserveListPage) }
     bindProvider { new(::ObserveExistedStatuses) }
     bindProvider { new(::ObservePinExist) }
-    bindProvider { new(::ObserveTitleWithRateEntity) }
+    bindProvider { new(::ObserveTitleWithTrackEntity) }
 
     bindProvider { new(::UpdateUser) }
-    bindProvider { new(::UpdateRates) }
-    bindProvider { new(::UpdateTitleRates) }
-    bindProvider { new(::UpdateRateSort) }
+    bindProvider { new(::UpdateTracks) }
+    bindProvider { new(::UpdateTitleTracks) }
+    bindProvider { new(::UpdateListSort) }
     bindProvider { new(::ToggleTitlePin) }
-    bindProvider { new(::DeleteRate) }
-    bindProvider { new(::CreateOrUpdateRate) }
-    bindProvider { new(::UpdateUserAndRates) }
-    bindProvider { new(::SyncPendingRates) }
+    bindProvider { new(::DeleteTrack) }
+    bindProvider { new(::CreateOrUpdateTrack) }
+    bindProvider { new(::UpdateUserAndTracks) }
+    bindProvider { new(::SyncPendingTracks) }
     bindProvider { new(::UpdateTitle) }
     bindProvider { new(::UpdateCharacter) }
 }

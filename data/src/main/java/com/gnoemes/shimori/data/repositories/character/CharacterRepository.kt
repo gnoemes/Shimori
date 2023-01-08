@@ -8,7 +8,7 @@ import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
 import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.characters.CharacterRole
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.sources.CharacterDataSource
 import com.gnoemes.shimori.data.core.utils.Shikimori
 import kotlinx.datetime.Instant
@@ -21,7 +21,7 @@ class CharacterRepository(
     private val characterLastRequest: CharacterDetailsLastRequestStore,
 ) {
 
-    fun observeByTitle(targetId: Long, targetType: RateTargetType) =
+    fun observeByTitle(targetId: Long, targetType: TrackTargetType) =
         dao.observeByTitle(targetId, targetType)
 
     suspend fun update(id: Long) {
@@ -55,13 +55,13 @@ class CharacterRepository(
                 CharacterRole(
                     characterId = local.id,
                     targetId = it,
-                    targetType = RateTargetType.ANIME,
+                    targetType = TrackTargetType.ANIME,
                 )
             } + mangaIds.map {
                 CharacterRole(
                     characterId = local.id,
                     targetId = it,
-                    targetType = RateTargetType.MANGA,
+                    targetType = TrackTargetType.MANGA,
                 )
             }
 

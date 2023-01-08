@@ -7,9 +7,9 @@ import com.gnoemes.shikimori.mappers.GenreMapper
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
 import com.gnoemes.shikimori.mappers.rate.RateResponseToRateMapper
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
-import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class RanobeDetailsMapper(
@@ -19,9 +19,9 @@ internal class RanobeDetailsMapper(
     private val rateMapper: RateResponseToRateMapper,
     private val ageRatingMapper: AgeRatingMapper,
     private val genreMapper: GenreMapper
-) : Mapper<MangaDetailsResponse, RanobeWithRate> {
+) : Mapper<MangaDetailsResponse, RanobeWithTrack> {
 
-    override suspend fun map(from: MangaDetailsResponse): RanobeWithRate {
+    override suspend fun map(from: MangaDetailsResponse): RanobeWithTrack {
 
         val title = Ranobe(
             id = 0,
@@ -47,11 +47,11 @@ internal class RanobeDetailsMapper(
             genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
-        val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.RANOBE) }
+        val rate = from.userRate?.let { rateMapper.map(it to TrackTargetType.RANOBE) }
 
-        return RanobeWithRate(
+        return RanobeWithTrack(
             entity = title,
-            rate = rate,
+            track = rate,
             pinned = false
         )
     }

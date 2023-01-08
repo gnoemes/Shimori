@@ -35,10 +35,10 @@ import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.core.entities.TitleWithRate
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithTrack
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.core.entities.rate.*
+import com.gnoemes.shimori.data.core.entities.track.*
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
 import com.gnoemes.shimori.lists.R
 import com.gnoemes.shimori.lists.empty.ListsEmpty
@@ -53,11 +53,11 @@ internal fun ListPage(
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
+    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
-    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
     ListPage(
         viewModel = shimoriViewModel(),
@@ -79,33 +79,33 @@ private fun ListPage(
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
+    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
-    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
-    val onEditClick = { entity: TitleWithRateEntity ->
+    val onEditClick = { entity: TitleWithTrackEntity ->
         openListsEdit(
             entity.id,
             entity.type,
             false
         )
     }
-    val onCardClick = { entity: TitleWithRateEntity ->
+    val onCardClick = { entity: TitleWithTrackEntity ->
         openTitleDetails(entity.id, entity.type)
     }
-    val onTogglePin = { entity: TitleWithRateEntity -> viewModel.togglePin(entity) }
-    val onIncrementClick = { entity: TitleWithRateEntity -> viewModel.showIncrementer(entity) }
+    val onTogglePin = { entity: TitleWithTrackEntity -> viewModel.togglePin(entity) }
+    val onIncrementClick = { entity: TitleWithTrackEntity -> viewModel.showIncrementer(entity) }
     val onIncrementerProgress =
         { progress: Int -> viewModel.updateProgressFromIncrementer(progress) }
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect {
             when (it) {
-                is UiEvents.EditRate -> openListsEdit(
+                is UiEvents.EditTrack -> openListsEdit(
                     it.entity.id,
                     it.entity.type,
                     it.markComplete
@@ -155,20 +155,20 @@ private fun ListPage(
 @ExperimentalMaterial3Api
 @Composable
 private fun PaginatedList(
-    listItems: LazyPagingItems<TitleWithRate<out ShimoriTitleEntity>>,
+    listItems: LazyPagingItems<TitleWithTrack<out ShimoriTitleEntity>>,
     scrollBehavior: TopAppBarScrollBehavior,
     paddingValues: PaddingValues,
     type: ListType,
-    incrementerTitle: TitleWithRateEntity?,
+    incrementerTitle: TitleWithTrackEntity?,
     isLoading: Boolean,
-    onEditClick: (TitleWithRateEntity) -> Unit,
-    onTogglePin: (TitleWithRateEntity) -> Unit,
-    onIncrementClick: (TitleWithRateEntity) -> Unit,
+    onEditClick: (TitleWithTrackEntity) -> Unit,
+    onTogglePin: (TitleWithTrackEntity) -> Unit,
+    onIncrementClick: (TitleWithTrackEntity) -> Unit,
     onIncrementerProgress: (Int) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
-    onCardClick: (TitleWithRateEntity) -> Unit,
+    onCardClick: (TitleWithTrackEntity) -> Unit,
 ) {
     val bottomBarHeight = LocalShimoriDimensions.current.bottomBarHeight
 
@@ -268,7 +268,7 @@ private fun PaginatedList(
             Incrementer(
                 image = incrementerTitle?.entity?.image,
                 titleSize = incrementerTitle?.entity?.size,
-                initialProgress = incrementerTitle?.rate?.progress ?: 0,
+                initialProgress = incrementerTitle?.track?.progress ?: 0,
                 onProgressUpdated = localIncrementerChange
             )
         }
@@ -292,9 +292,9 @@ private fun LoadingSort() {
             .collectAsStateWithLifecycle(initialValue = ListType.Anime.type)
 
         val type = ListType.findOrDefault(typeInt.value)
-        val defaultSort = RateSort.defaultForType(type)
+        val defaultSort = ListSort.defaultForType(type)
 
-        RateSortOption.priorityForType(type).fastForEach { option ->
+        ListSortOption.priorityForType(type).fastForEach { option ->
             val selected = defaultSort.sortOption == option
 
             ShimoriChip(

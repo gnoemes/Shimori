@@ -6,11 +6,11 @@ import com.gnoemes.shimori.data.core.database.daos.MangaDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
 import com.gnoemes.shimori.data.core.entities.app.SyncApi
 import com.gnoemes.shimori.data.core.entities.app.SyncTarget
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
-import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.paging.PagingSource
 import com.gnoemes.shimori.data.shared.*
@@ -141,74 +141,74 @@ internal class MangaDaoImpl(
         )
     }
 
-    override fun observeById(id: Long): Flow<MangaWithRate?> {
-        return db.mangaQueries.queryByIdWithRate(id, ::mangaWithRate)
+    override fun observeById(id: Long): Flow<MangaWithTrack?> {
+        return db.mangaQueries.queryByIdWithTrack(id, ::mangaWithTrack)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 
-    override suspend fun queryByStatus(status: RateStatus): List<MangaWithRate> {
-        return db.mangaQueries.queryByStatus(status, ::mangaWithRate)
+    override suspend fun queryByStatus(status: TrackStatus): List<MangaWithTrack> {
+        return db.mangaQueries.queryByStatus(status, ::mangaWithTrack)
             .executeAsList()
     }
 
 
-    override fun paging(status: RateStatus, sort: RateSort): PagingSource<Long, PaginatedEntity> {
+    override fun paging(status: TrackStatus, sort: ListSort): PagingSource<Long, PaginatedEntity> {
         fun query(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.mangaListViewQueries.queryByStatusSortName(
+            ListSortOption.NAME -> db.mangaListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.PROGRESS -> db.mangaListViewQueries.queryByStatusSortProgress(
+            ListSortOption.PROGRESS -> db.mangaListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.mangaListViewQueries.queryByStatusSortDateCreated(
+            ListSortOption.DATE_CREATED -> db.mangaListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.mangaListViewQueries.queryByStatusSortDateUpdated(
+            ListSortOption.DATE_UPDATED -> db.mangaListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.mangaListViewQueries.queryByStatusSortDateAired(
+            ListSortOption.DATE_AIRED -> db.mangaListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.mangaListViewQueries.queryByStatusSortScore(
+            ListSortOption.MY_SCORE -> db.mangaListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.SIZE -> db.mangaListViewQueries.queryByStatusSortSize(
+            ListSortOption.SIZE -> db.mangaListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
                 mangaListViewMapper
             )
-            RateSortOption.RATING -> db.mangaListViewQueries.queryByStatusSortRating(
+            ListSortOption.RATING -> db.mangaListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,

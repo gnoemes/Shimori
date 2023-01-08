@@ -1,13 +1,13 @@
 package com.gnoemes.shimori.lists.page
 
 import androidx.compose.runtime.Immutable
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
-import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
+import com.gnoemes.shimori.data.core.entities.track.ListType
 
 @Immutable
 internal data class ListPageViewState(
     val type: ListType = ListType.Anime,
-    val incrementerTitle: TitleWithRateEntity? = null,
+    val incrementerTitle: TitleWithTrackEntity? = null,
     val isLoading: Boolean = false,
 ) {
     companion object {
@@ -16,5 +16,5 @@ internal data class ListPageViewState(
 }
 
 internal sealed class UiEvents {
-    class EditRate(val entity: TitleWithRateEntity, val markComplete: Boolean) : UiEvents()
+    class EditTrack(val entity: TitleWithTrackEntity, val markComplete: Boolean) : UiEvents()
 }

@@ -28,8 +28,8 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
@@ -37,8 +37,8 @@ import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.lists.edit.ListEditInputState
 import com.gnoemes.shimori.lists.edit.ListsEditViewModel
 import com.gnoemes.shimori.lists.edit.R
@@ -91,7 +91,7 @@ private fun ListsEdit(
         score = state.score,
         comment = state.comment,
         type = state.type,
-        newRate = state.newRate,
+        newTrack = state.newTrack,
         pinned = state.pinned,
         onStatusChanged = viewModel::onStatusChanged,
         onProgressChanged = viewModel::onProgressChanged,
@@ -115,17 +115,17 @@ private fun ListEdit(
     inputState: ListEditInputState,
     titleName: String,
     image: ShimoriImage?,
-    status: RateStatus,
+    status: TrackStatus,
     anons: Boolean,
     progress: Int,
     size: Int?,
     rewatches: Int,
     score: Int?,
     comment: String?,
-    type: RateTargetType,
-    newRate: Boolean,
+    type: TrackTargetType,
+    newTrack: Boolean,
     pinned: Boolean,
-    onStatusChanged: (RateStatus) -> Unit,
+    onStatusChanged: (TrackStatus) -> Unit,
     onProgressChanged: (Int) -> Unit,
     onRewatchesChanged: (Int) -> Unit,
     onScoreChanged: (Int?) -> Unit,
@@ -154,7 +154,7 @@ private fun ListEdit(
                         .height(84.dp)
                         .align(Alignment.BottomCenter)
                         .offset { IntOffset(0, offset.value) },
-                    newRate = newRate,
+                    newTrack = newTrack,
                     pinned = pinned,
                     onDelete = onDelete,
                     onSave = onSave,
@@ -239,15 +239,15 @@ private fun ListEdit(
 @Composable
 private fun DefaultInputState(
     titleName: String,
-    type: RateTargetType,
-    status: RateStatus,
+    type: TrackTargetType,
+    status: TrackStatus,
     anons: Boolean,
     progress: Int,
     size: Int?,
     rewatches: Int,
     score: Int?,
     comment: String?,
-    onStatusChanged: (RateStatus) -> Unit,
+    onStatusChanged: (TrackStatus) -> Unit,
     onProgressEdit: () -> Unit,
     onProgressChanged: (Int) -> Unit,
     onRewatchesEdit: () -> Unit,
@@ -437,12 +437,12 @@ private fun Title(
 @Composable
 private fun StatusSelector(
     initialized: Boolean,
-    type: RateTargetType,
-    selectedStatus: RateStatus,
-    onStatusChanged: (RateStatus) -> Unit
+    type: TrackTargetType,
+    selectedStatus: TrackStatus,
+    onStatusChanged: (TrackStatus) -> Unit
 ) {
 
-    val statuses = RateStatus.listPagesOrder
+    val statuses = TrackStatus.listPagesOrder
     val scrollState = rememberScrollState()
 
     var initialScrolled by remember { mutableStateOf(false) }
@@ -467,7 +467,7 @@ private fun StatusSelector(
         statuses.forEach { status ->
             ShimoriChip(
                 onClick = { onStatusChanged(status) },
-                text = LocalShimoriTextCreator.current.rateStatusText(type, status),
+                text = LocalShimoriTextCreator.current.trackStatusText(type, status),
                 selected = status == selectedStatus,
                 modifier = Modifier
                     .height(32.dp)
@@ -484,7 +484,7 @@ private fun StatusSelector(
                 icon = {
                     Icon(
                         modifier = Modifier.size(16.dp),
-                        painter = painterResource(LocalShimoriRateUtil.current.rateStatusIcon(status)),
+                        painter = painterResource(LocalShimoriTrackUtil.current.trackStatusIcon(status)),
                         contentDescription = null
                     )
                 }
@@ -716,7 +716,7 @@ private val numberRegex = "(?![0-9]{1,4})".toRegex()
 @Composable
 private fun BottomBar(
     modifier: Modifier,
-    newRate: Boolean,
+    newTrack: Boolean,
     pinned: Boolean,
     onDelete: () -> Unit,
     onSave: () -> Unit,
@@ -736,7 +736,7 @@ private fun BottomBar(
             IconButton(
                 onClick = onDelete,
                 modifier = Modifier.size(32.dp),
-                enabled = !newRate
+                enabled = !newTrack
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_delete),
@@ -746,7 +746,7 @@ private fun BottomBar(
 
             ShimoriConformationButton(
                 onClick = onSave,
-                text = stringResource(id = if (newRate) R.string.add else R.string.save),
+                text = stringResource(id = if (newTrack) R.string.add else R.string.save),
                 type = ConfirmationButtonType.Primary,
                 modifier = Modifier
                     .weight(1f)

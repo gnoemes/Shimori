@@ -78,7 +78,7 @@ DELETE FROM ranobe WHERE id = :id;
 
 countWithStatus:
 SELECT COUNT(*) FROM ranobe AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
 WHERE r.status = :status;
 
 queryById:
@@ -87,9 +87,9 @@ SELECT * FROM ranobe WHERE id = :id;
 queryAll:
 SELECT * FROM ranobe;
 
-queryByIdWithRate:
+queryByIdWithTrack:
 SELECT * FROM ranobe AS title
-LEFT OUTER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
@@ -98,6 +98,6 @@ SELECT id FROM ranobe WHERE shikimori_id = :shikimoriId;
 
 queryByStatus:
 SELECT * FROM ranobe AS title
-INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;

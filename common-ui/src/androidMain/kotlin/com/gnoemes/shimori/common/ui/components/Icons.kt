@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.ui.R
 
 @Composable
@@ -24,12 +24,12 @@ fun ChevronIcon(
 }
 
 @Composable
-fun RateIcon(
-    rateStatus: RateStatus,
+fun TrackIcon(
+    trackStatus: TrackStatus,
     modifier: Modifier = Modifier
 ) {
     Icon(
-        painter = painterResource(id = LocalShimoriRateUtil.current.rateStatusIcon(rateStatus)),
+        painter = painterResource(id = LocalShimoriTrackUtil.current.trackStatusIcon(trackStatus)),
         contentDescription = null,
         modifier = modifier
     )
@@ -56,7 +56,7 @@ fun ListTypeIcon(
     type: ListType
 ) {
     Icon(
-        painter = painterResource(id = LocalShimoriRateUtil.current.listTypeIcon(type)),
+        painter = painterResource(id = LocalShimoriTrackUtil.current.listTypeIcon(type)),
         contentDescription = null
     )
 }

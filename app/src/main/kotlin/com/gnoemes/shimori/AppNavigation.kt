@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import com.gnoemes.shikimori.Shikimori
 import com.gnoemes.shimori.auth.Auth
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.lists.Lists
 import com.gnoemes.shimori.lists.change.ListsChangeSheet
 import com.gnoemes.shimori.settings.Settings
@@ -65,7 +65,7 @@ internal sealed class Screen(val route: String) {
         fun createRoute(
             root: RootScreen,
             id: Long,
-            type: RateTargetType,
+            type: TrackTargetType,
             markComplete: Boolean,
             deleteNotification: Boolean,
         ): String {
@@ -84,7 +84,7 @@ internal sealed class Screen(val route: String) {
         fun createRoute(
             root: RootScreen,
             id: Long,
-            type: RateTargetType,
+            type: TrackTargetType,
         ): String {
             return "${root.route}/title?id=$id&type=$type"
         }
@@ -245,7 +245,7 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         bottomSheetNavigateUp,
         arguments = listOf(
             navArgument("id") { type = NavType.LongType },
-            navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
+            navArgument("type") { type = NavType.EnumType(TrackTargetType::class.java) },
             navArgument("markComplete") { type = NavType.BoolType },
             navArgument("deleteNotification") { type = NavType.BoolType },
         ),
@@ -286,7 +286,7 @@ private fun NavGraphBuilder.addTitleDetails(
         route = Screen.TitleDetails.createRoute(root),
         arguments = listOf(
             navArgument("id") { type = NavType.LongType },
-            navArgument("type") { type = NavType.EnumType(RateTargetType::class.java) },
+            navArgument("type") { type = NavType.EnumType(TrackTargetType::class.java) },
         ),
     ) {
         TitleDetails(

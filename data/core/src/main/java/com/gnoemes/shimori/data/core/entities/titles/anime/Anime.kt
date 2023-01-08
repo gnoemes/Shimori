@@ -6,7 +6,7 @@ import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
@@ -18,7 +18,7 @@ data class Anime(
     override val nameRu: String? = null,
     override val nameEn: String? = null,
     override val image: ShimoriImage? = null,
-    override val type: RateTargetType = RateTargetType.ANIME,
+    override val type: TrackTargetType = TrackTargetType.ANIME,
     override val url: String? = null,
     val animeType: AnimeType? = null,
     override val rating: Double? = null,
