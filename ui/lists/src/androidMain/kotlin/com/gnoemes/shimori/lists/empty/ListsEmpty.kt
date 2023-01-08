@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.components.ListTypeIcon
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
-import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.lists.R
 
 

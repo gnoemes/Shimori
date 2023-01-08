@@ -7,9 +7,9 @@ import com.gnoemes.shikimori.mappers.GenreMapper
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
 import com.gnoemes.shikimori.mappers.rate.RateResponseToRateMapper
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
-import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class MangaDetailsMapper(
@@ -19,9 +19,9 @@ internal class MangaDetailsMapper(
     private val rateMapper: RateResponseToRateMapper,
     private val ageRatingMapper: AgeRatingMapper,
     private val genreMapper: GenreMapper
-) : Mapper<MangaDetailsResponse, MangaWithRate> {
+) : Mapper<MangaDetailsResponse, MangaWithTrack> {
 
-    override suspend fun map(from: MangaDetailsResponse): MangaWithRate {
+    override suspend fun map(from: MangaDetailsResponse): MangaWithTrack {
 
         val title = Manga(
             id = 0,
@@ -47,11 +47,11 @@ internal class MangaDetailsMapper(
             genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
-        val rate = from.userRate?.let { rateMapper.map(it to RateTargetType.MANGA) }
+        val rate = from.userRate?.let { rateMapper.map(it to TrackTargetType.MANGA) }
 
-        return MangaWithRate(
+        return MangaWithTrack(
             entity = title,
-            rate = rate,
+            track = rate,
             pinned = false
         )
     }

@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.repositories.pin.ListPinRepository
 import com.gnoemes.shimori.domain.ResultInteractor
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ class ToggleTitlePin(
     }
 
     data class Params(
-        val type: RateTargetType,
+        val type: TrackTargetType,
         val id: Long,
         val pin: Boolean? = null
     )

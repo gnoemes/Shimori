@@ -3,39 +3,39 @@ package com.gnoemes.shimori.lists.page
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
+import com.gnoemes.shimori.data.core.entities.track.ListSort
 import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.data.paging.PagingConfig
 import com.gnoemes.shimori.data.paging.PagingData
-import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
+import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
 import com.gnoemes.shimori.domain.observers.ObserveListPage
+import com.gnoemes.shimori.domain.observers.ObserveListSort
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
-import com.gnoemes.shimori.domain.observers.ObserveRateSort
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListPageViewModel(
     private val stateBus: ListsStateBus,
     private val observeListPage: ObserveListPage,
-    private val observeRateSort: ObserveRateSort,
+    private val observeListSort: ObserveListSort,
     private val togglePin: ToggleTitlePin,
-    private val updateRate: CreateOrUpdateRate,
+    private val updateTrack: CreateOrUpdateTrack,
     observeMyUser: ObserveMyUserShort
 ) : ViewModel() {
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
 
-    private val incrementerEvents = MutableStateFlow<TitleWithRateEntity?>(null)
+    private val incrementerEvents = MutableStateFlow<TitleWithTrackEntity?>(null)
 
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
 
     val state = combine(
         stateBus.type.observe,
         incrementerEvents,
-        stateBus.ratesLoading.observe,
+        stateBus.tracksLoading.observe,
         ::ListPageViewState
     ).stateIn(
         scope = viewModelScope,
@@ -44,7 +44,7 @@ internal class ListPageViewModel(
     )
 
     val items = observeListPage.flow
-        .filterIsInstance<PagingData<TitleWithRateEntity>>()
+        .filterIsInstance<PagingData<TitleWithTrackEntity>>()
         .cachedIn(viewModelScope)
 
     init {
@@ -52,12 +52,12 @@ internal class ListPageViewModel(
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
-                observeRateSort.flow,
+                observeListSort.flow,
             ) { type, status, sort ->
                 ObserveListPage.Params(
                     type,
                     status,
-                    sort ?: RateSort.defaultForType(type),
+                    sort ?: ListSort.defaultForType(type),
                     PAGING_CONFIG
                 )
             }
@@ -67,14 +67,14 @@ internal class ListPageViewModel(
 
         viewModelScope.launch {
             stateBus.type.observe
-                .map(ObserveRateSort::Params)
-                .collect(observeRateSort::invoke)
+                .map(ObserveListSort::Params)
+                .collect(observeListSort::invoke)
         }
 
         observeMyUser(Unit)
     }
 
-    fun togglePin(entity: TitleWithRateEntity) {
+    fun togglePin(entity: TitleWithTrackEntity) {
         viewModelScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect { pinned ->
                 stateBus.uiEvents(ListsUiEvents.PinStatusChanged(entity, pinned))
@@ -82,7 +82,7 @@ internal class ListPageViewModel(
         }
     }
 
-    fun showIncrementer(title: TitleWithRateEntity) {
+    fun showIncrementer(title: TitleWithTrackEntity) {
         viewModelScope.launch {
             incrementerEvents.value = title
         }
@@ -95,25 +95,25 @@ internal class ListPageViewModel(
             //hide incrementer
             incrementerEvents.value = null
 
-            val oldRate = title.rate ?: return@launch
-            val newRate = oldRate.copy(progress = newProgress)
+            val oldTrack = title.track ?: return@launch
+            val newTrack = oldTrack.copy(progress = newProgress)
 
-            if (oldRate.progress == newProgress) return@launch
+            if (oldTrack.progress == newProgress) return@launch
 
-            //if progress is max, show edit rate sheet and mark complete instead
+            //if progress is max, show edit track sheet and mark complete instead
             if (newProgress == title.entity.size) {
-                _uiEvents.emit(UiEvents.EditRate(title, markComplete = true))
+                _uiEvents.emit(UiEvents.EditTrack(title, markComplete = true))
                 return@launch
             }
 
-            updateRate.invoke(
-                CreateOrUpdateRate.Params(newRate)
+            updateTrack.invoke(
+                CreateOrUpdateTrack.Params(newTrack)
             ).collect {
                 if (it.isSuccess) {
                     stateBus.uiEvents(
                         ListsUiEvents.IncrementerProgress(
                             title,
-                            oldRate,
+                            oldTrack,
                             newProgress
                         )
                     )

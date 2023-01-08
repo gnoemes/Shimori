@@ -1,15 +1,15 @@
 package com.gnoemes.shimori.tasks
 
 import androidx.work.ListenableWorker
-import com.gnoemes.shimori.base.core.tasks.RateTasks
+import com.gnoemes.shimori.base.core.tasks.TrackTasks
 import org.kodein.di.*
 
 actual val tasksModule = DI.Module("tasks-module") {
-    bindWorker { payload -> SyncPendingRatesWorker(payload, instance(), instance()) }
+    bindWorker { payload -> SyncPendingTracksWorker(payload, instance(), instance()) }
 
     bindEagerSingleton { KodeinWorkerFactory(di) }
 
-    bindSingleton<RateTasks> { new(::RateTasksImpl) }
+    bindSingleton<TrackTasks> { new(::TrackTasksImpl) }
 }
 
 private inline fun <reified T : ListenableWorker> DI.Builder.bindWorker(

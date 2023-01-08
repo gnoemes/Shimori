@@ -2,22 +2,22 @@ package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.rates.RateResponse
 import com.gnoemes.shikimori.mappers.ranobe.RanobeTypeMapper
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.Track
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class RateResponseToRateMapper(
     private val statusMapper: RateStatusMapper,
     private val ranobeTypeMapper: RanobeTypeMapper,
-) : Mapper<Pair<RateResponse?, RateTargetType?>, Rate?> {
+) : Mapper<Pair<RateResponse?, TrackTargetType?>, Track?> {
 
-    override suspend fun map(pair: Pair<RateResponse?, RateTargetType?>): Rate? {
+    override suspend fun map(pair: Pair<RateResponse?, TrackTargetType?>): Track? {
         val from = pair.first ?: return null
 
         val targetType = when {
-            from.anime != null -> RateTargetType.ANIME
-            from.manga != null && ranobeTypeMapper.map(from.manga.type) != null -> RateTargetType.RANOBE
-            from.manga != null -> RateTargetType.MANGA
+            from.anime != null -> TrackTargetType.ANIME
+            from.manga != null && ranobeTypeMapper.map(from.manga.type) != null -> TrackTargetType.RANOBE
+            from.manga != null -> TrackTargetType.MANGA
             else -> pair.second
         }
         val status = statusMapper.map(from.status)
@@ -26,17 +26,17 @@ internal class RateResponseToRateMapper(
         requireNotNull(status) { "Rate#${from.id} status is null" }
 
         val progress = (when (targetType) {
-            RateTargetType.ANIME -> from.episodes
-            RateTargetType.MANGA, RateTargetType.RANOBE -> from.chapters
+            TrackTargetType.ANIME -> from.episodes
+            TrackTargetType.MANGA, TrackTargetType.RANOBE -> from.chapters
             else -> null
         }) ?: 0
 
         val targetShikimoriId = when(targetType) {
-            RateTargetType.ANIME -> from.anime?.id
+            TrackTargetType.ANIME -> from.anime?.id
             else -> from.manga?.id
         }
 
-        return Rate(
+        return Track(
             shikimoriId = from.id,
             //init later
             targetId = 0,

@@ -13,14 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.lists.empty.ListsEmpty
 import com.gnoemes.shimori.lists.page.ListPage
 import kotlinx.coroutines.delay
@@ -29,12 +29,12 @@ import kotlinx.coroutines.delay
 fun Lists(
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
+    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
-    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
     Lists(
         viewModel = shimoriViewModel(),
@@ -55,12 +55,12 @@ private fun Lists(
     viewModel: ListsViewModel,
     openUser: () -> Unit,
     openSearch: () -> Unit,
-    openListsEdit: (id: Long, type: RateTargetType, markComplete: Boolean) -> Unit,
+    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     onChangeList: () -> Unit,
-    openTitleDetails: (id: Long, type: RateTargetType) -> Unit,
+    openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -97,10 +97,10 @@ private fun Lists(
             val title = when {
                 type == ListType.Pinned -> null
                 state.isEmpty -> null
-                else -> state.type.rateType
+                else -> state.type.trackType
             }?.let {
-                LocalShimoriTextCreator.current.rateStatusText(it, state.status)
-            } ?: LocalShimoriRateUtil.current.listTypeName(type)
+                LocalShimoriTextCreator.current.trackStatusText(it, state.status)
+            } ?: LocalShimoriTrackUtil.current.listTypeName(type)
 
             ShimoriMainToolbar(
                 modifier = Modifier,
@@ -139,7 +139,7 @@ private fun Lists(
         },
         floatingActionButton = {
             val onChangeListState by rememberUpdatedState(newValue = onChangeList)
-            if ((!state.isEmpty || state.type == ListType.Pinned) && state.hasRates) {
+            if ((!state.isEmpty || state.type == ListType.Pinned) && state.hasTracks) {
                 ShimoriFAB(
                     onClick = onChangeListState,
                     expanded = true,

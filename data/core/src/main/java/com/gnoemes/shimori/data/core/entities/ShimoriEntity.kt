@@ -4,8 +4,8 @@ import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.Track
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.utils.Shikimori
 import kotlinx.datetime.LocalDate
 
@@ -30,7 +30,7 @@ interface ShimoriContentEntity : ShimoriEntity {
 }
 interface ShimoriTitleEntity : ShimoriContentEntity {
     val size: Int?
-    val type: RateTargetType
+    val type: TrackTargetType
 
     val rating: Double?
     val status: TitleStatus?
@@ -47,16 +47,16 @@ interface ShimoriTitleEntity : ShimoriContentEntity {
     val isOngoing get() = status != null && status == TitleStatus.ONGOING
 }
 
-interface TitleWithRate<E : ShimoriTitleEntity> {
+interface TitleWithTrack<E : ShimoriTitleEntity> {
     val entity: E
-    val rate: Rate?
+    val track: Track?
     val pinned: Boolean
 
     val id: Long
-    val type: RateTargetType
+    val type: TrackTargetType
 }
 
-typealias TitleWithRateEntity = TitleWithRate<out ShimoriTitleEntity>
+typealias TitleWithTrackEntity = TitleWithTrack<out ShimoriTitleEntity>
 
 interface PaginatedEntity : ShimoriEntity
 

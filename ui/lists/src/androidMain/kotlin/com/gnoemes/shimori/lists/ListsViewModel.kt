@@ -8,31 +8,31 @@ import com.gnoemes.shimori.common.ui.api.UiMessageManager
 import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
-import com.gnoemes.shimori.data.core.entities.TitleWithRateEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.Track
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
-import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
+import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
-import com.gnoemes.shimori.domain.interactors.UpdateTitleRates
+import com.gnoemes.shimori.domain.interactors.UpdateTitleTracks
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObservePinsExist
-import com.gnoemes.shimori.domain.observers.ObserveRatesExist
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.domain.observers.ObserveTracksExist
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class ListsViewModel(
     private val stateBus: ListsStateBus,
-    private val updateTitleRates: UpdateTitleRates,
+    private val updateTitleTracks: UpdateTitleTracks,
     private val textProvider: ShimoriTextProvider,
     private val togglePin: ToggleTitlePin,
-    private val updateRate: CreateOrUpdateRate,
-    observeRatesExist: ObserveRatesExist,
+    private val updateTrack: CreateOrUpdateTrack,
+    observeTracksExist: ObserveTracksExist,
     observePinsExist: ObservePinsExist,
     observeMyUser: ObserveMyUserShort,
     observeShikimoriAuth: ObserveShikimoriAuth,
@@ -44,16 +44,16 @@ internal class ListsViewModel(
         stateBus.page.observe,
         observeMyUser.flow,
         observePinsExist.flow,
-        observeRatesExist.flow,
-        stateBus.ratesLoading.observe,
+        observeTracksExist.flow,
+        stateBus.tracksLoading.observe,
         uiMessageManager.message,
-    ) { type, status, user, hasPins, hasRates, isLoading, message ->
+    ) { type, status, user, hasPins, hasTracks, isLoading, message ->
         ListsViewState(
             type = type,
             status = status,
             user = user,
-            isEmpty = if (type == ListType.Pinned) !hasPins else !hasRates,
-            hasRates = hasRates,
+            isEmpty = if (type == ListType.Pinned) !hasPins else !hasTracks,
+            hasTracks = hasTracks,
             isLoading = isLoading,
             message = message
         )
@@ -69,14 +69,14 @@ internal class ListsViewModel(
                 stateBus.type.observe,
                 stateBus.page.observe,
                 observeShikimoriAuth.flow,
-                stateBus.ratesLoading.observe,
+                stateBus.tracksLoading.observe,
             ) { type, page, auth, loading ->
-                val rateType = type.rateType ?: return@combine null
+                val trackType = type.trackType ?: return@combine null
 
                 //prevent double sync
                 if (loading) return@combine null
 
-                Triple(rateType, page, auth.isAuthorized)
+                Triple(trackType, page, auth.isAuthorized)
             }
                 .filterNotNull()
                 .distinctUntilChanged()
@@ -93,7 +93,7 @@ internal class ListsViewModel(
         observeShikimoriAuth(Unit)
         observeMyUser(Unit)
         observePinsExist(Unit)
-        observeRatesExist(Unit)
+        observeTracksExist(Unit)
     }
 
     fun onMessageShown(id: Long) {
@@ -107,16 +107,16 @@ internal class ListsViewModel(
             val payload = uiMessageManager.message.firstOrNull()?.payload
 
             when (id) {
-                MESSAGE_TOGGLE_PIN -> (payload as? TitleWithRateEntity)?.let(::togglePin)
-                MESSAGE_INCREMENTER_UPDATE -> (payload as? Rate)?.let(::undoIncrementerProgress)
-                MESSAGE_RATE_DELETED -> (payload as? Rate)?.let(::createRate)
+                MESSAGE_TOGGLE_PIN -> (payload as? TitleWithTrackEntity)?.let(::togglePin)
+                MESSAGE_INCREMENTER_UPDATE -> (payload as? Track)?.let(::undoIncrementerProgress)
+                MESSAGE_TRACK_DELETED -> (payload as? Track)?.let(::createTrack)
             }
         }
     }
 
-    private fun createRate(rate: Rate) {
+    private fun createTrack(track: Track) {
         viewModelScope.launch {
-            updateRate(CreateOrUpdateRate.Params(rate)).collect()
+            updateTrack(CreateOrUpdateTrack.Params(track)).collect()
         }
     }
 
@@ -125,33 +125,33 @@ internal class ListsViewModel(
             is ListsUiEvents.PinStatusChanged -> showPinStatusChanged(event.title, event.pinned)
             is ListsUiEvents.IncrementerProgress -> showIncrementerProgress(
                 event.title,
-                event.oldRate,
+                event.oldTrack,
                 event.newProgress
             )
-            is ListsUiEvents.RateDeleted -> showRateDeleted(
+            is ListsUiEvents.TrackDeleted -> showTrackDeleted(
                 event.image,
-                event.rate
+                event.track
             )
         }
     }
 
-    private fun showRateDeleted(image: ShimoriImage?, rate: Rate) {
+    private fun showTrackDeleted(image: ShimoriImage?, track: Track) {
         viewModelScope.launch {
             uiMessageManager.emitMessage(
                 UiMessage(
-                    id = MESSAGE_RATE_DELETED,
-                    message = textProvider[MessageID.RateDeleted],
+                    id = MESSAGE_TRACK_DELETED,
+                    message = textProvider[MessageID.TrackDeleted],
                     action = textProvider[MessageID.Undo],
                     image = image,
-                    payload = rate
+                    payload = track
                 )
             )
         }
     }
 
     private fun showIncrementerProgress(
-        title: TitleWithRateEntity,
-        oldRate: Rate,
+        title: TitleWithTrackEntity,
+        oldTrack: Track,
         newProgress: Int
     ) {
         viewModelScope.launch {
@@ -159,19 +159,19 @@ internal class ListsViewModel(
                 UiMessage(
                     id = MESSAGE_INCREMENTER_UPDATE,
                     message = textProvider[MessageID.IncrementerFormat].format(
-                        oldRate.progress,
+                        oldTrack.progress,
                         newProgress
                     ),
                     image = title.entity.image,
                     action = textProvider[MessageID.Undo],
-                    payload = oldRate
+                    payload = oldTrack
                 )
             )
         }
     }
 
     private fun showPinStatusChanged(
-        title: TitleWithRateEntity,
+        title: TitleWithTrackEntity,
         pinned: Boolean
     ) {
         viewModelScope.launch {
@@ -191,23 +191,23 @@ internal class ListsViewModel(
         }
     }
 
-    private fun togglePin(entity: TitleWithRateEntity) {
+    private fun togglePin(entity: TitleWithTrackEntity) {
         viewModelScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect()
         }
     }
 
-    private fun undoIncrementerProgress(rate: Rate) {
+    private fun undoIncrementerProgress(track: Track) {
         viewModelScope.launch {
-            updateRate.invoke(CreateOrUpdateRate.Params(rate)).collect()
+            updateTrack.invoke(CreateOrUpdateTrack.Params(track)).collect()
         }
     }
 
-    private fun updatePage(pair: Pair<RateTargetType, RateStatus>) {
+    private fun updatePage(pair: Pair<TrackTargetType, TrackStatus>) {
         val (type, status) = pair
         viewModelScope.launch {
-            updateTitleRates(
-                UpdateTitleRates.Params.optionalUpdate(
+            updateTitleTracks(
+                UpdateTitleTracks.Params.optionalUpdate(
                     type = type,
                     status = status
                 )
@@ -218,6 +218,6 @@ internal class ListsViewModel(
     companion object {
         private const val MESSAGE_TOGGLE_PIN = 1L
         private const val MESSAGE_INCREMENTER_UPDATE = 2L
-        private const val MESSAGE_RATE_DELETED = 3L
+        private const val MESSAGE_TRACK_DELETED = 3L
     }
 }

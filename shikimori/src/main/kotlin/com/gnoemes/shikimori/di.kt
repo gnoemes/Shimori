@@ -40,7 +40,7 @@ val shikimoriModule = DI.Module("shikimori") {
         )
     }
 
-    bindSingleton<RateDataSource> { new(::ShikimoriRateDataSource) }
+    bindSingleton<TrackDataSource> { new(::ShikimoriTrackDataSource) }
     bindSingleton<UserDataSource> { new(::ShikimoriUserDataSource) }
     bindSingleton<AnimeDataSource> { new(::ShikimoriAnimeDataSource) }
     bindSingleton<MangaDataSource> { new(::ShikimoriMangaDataSource) }

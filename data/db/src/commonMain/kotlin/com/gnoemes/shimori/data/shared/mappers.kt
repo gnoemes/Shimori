@@ -7,16 +7,16 @@ import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.*
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeType
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaType
-import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeType
-import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.*
 import com.gnoemes.shimori.data.core.entities.user.User
 import com.gnoemes.shimori.data.core.entities.user.UserShort
 import com.gnoemes.shimori.data.core.mappers.Mapper
@@ -52,11 +52,11 @@ internal val userToUserShortMapper = Mapper<UserDAO?, UserShort?> { from ->
     )
 }
 
-internal val rateToSyncMapper = object : TwoWayMapper<RateToSync, RateToSyncDAO> {
-    override suspend fun map(from: RateToSync): RateToSyncDAO {
-        return RateToSyncDAO(
+internal val trackToSyncMapper = object : TwoWayMapper<TrackToSync, TrackToSyncDAO> {
+    override suspend fun map(from: TrackToSync): TrackToSyncDAO {
+        return TrackToSyncDAO(
             from.id,
-            from.rateId,
+            from.trackId,
             from.targets,
             from.action,
             from.attempts,
@@ -64,10 +64,10 @@ internal val rateToSyncMapper = object : TwoWayMapper<RateToSync, RateToSyncDAO>
         )
     }
 
-    override suspend fun mapInverse(from: RateToSyncDAO): RateToSync {
-        return RateToSync(
+    override suspend fun mapInverse(from: TrackToSyncDAO): TrackToSync {
+        return TrackToSync(
             from.id,
-            from.rate_id,
+            from.track_id,
             from.sync_targets,
             from.sync_action,
             from.attempts,
@@ -109,11 +109,11 @@ internal object UserMapper : Mapper<UserDAO?, User?> {
     }
 }
 
-internal object RateSortMapper : Mapper<RateSortDAO?, RateSort?> {
-    override suspend fun map(from: RateSortDAO?): RateSort? {
+internal object ListSortMapper : Mapper<ListSortDAO?, ListSort?> {
+    override suspend fun map(from: ListSortDAO?): ListSort? {
         if (from == null) return null
 
-        return RateSort(
+        return ListSort(
             id = from.id,
             type = ListType.findOrDefault(from.type),
             sortOption = from.sort,
@@ -135,7 +135,7 @@ internal object LastRequestMapper : Mapper<LastRequestDAO?, LastRequest?> {
     }
 }
 
-internal fun animeWithRate(
+internal fun animeWithTrack(
     id: Long,
     shikimori_id: Long,
     name: String,
@@ -167,9 +167,9 @@ internal fun animeWithRate(
     id_: Long?,
     shikimori_id_: Long?,
     target_id: Long?,
-    target_type: RateTargetType?,
+    target_type: TrackTargetType?,
     target_shikimori_id: Long?,
-    status_: RateStatus?,
+    status_: TrackStatus?,
     score: Int?,
     comment: String?,
     progress: Int?,
@@ -178,8 +178,8 @@ internal fun animeWithRate(
     date_updated: Instant?,
     pinId: Long? = null,
     target_id_: Long? = null,
-    target_type_: RateTargetType? = null,
-) = AnimeWithRate(
+    target_type_: TrackTargetType? = null,
+) = AnimeWithTrack(
     entity = anime(
         id, shikimori_id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
@@ -188,8 +188,8 @@ internal fun animeWithRate(
         franchise, favorite, topic_id, genres,
         duration, next_episode, next_episode_date, next_episode_end_date,
     ),
-    rate = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
-    else rate(
+    track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
+    else track(
         id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
@@ -278,8 +278,8 @@ val animeListViewMapper: (
     next_episode: Int?,
     next_episode_date: Instant?,
     next_episode_end_date: Instant?,
-    rateId: Long,
-    rateStatus: RateStatus,
+    trackId: Long,
+    trackStatus: TrackStatus,
     score: Int?,
     comment: String?,
     progress: Int,
@@ -287,12 +287,12 @@ val animeListViewMapper: (
     date_created: Instant?,
     date_updated: Instant?,
     pinId: Long?
-) -> AnimeWithRate = { id, name, nameRu, nameEn,
-                       imageOriginal, imagePreview, imageX96, imageX48,
-                       animeType, rating, status, episodes, episodesAired,
-                       dateAired, dateReleased, duration, nextEpisode, nextEpisodeDate, nextEpisodeEndDate,
-                       rateId, rateStatus, score, comment, progress, reCounter, dateCreated, dateUpdated, pinId ->
-    animeWithRate(
+) -> AnimeWithTrack = { id, name, nameRu, nameEn,
+                        imageOriginal, imagePreview, imageX96, imageX48,
+                        animeType, rating, status, episodes, episodesAired,
+                        dateAired, dateReleased, duration, nextEpisode, nextEpisodeDate, nextEpisodeEndDate,
+                        trackId, trackStatus, score, comment, progress, reCounter, dateCreated, dateUpdated, pinId ->
+    animeWithTrack(
         id = id,
         shikimori_id = 0,
         name = name,
@@ -321,12 +321,12 @@ val animeListViewMapper: (
         next_episode = nextEpisode,
         next_episode_date = nextEpisodeDate,
         next_episode_end_date = nextEpisodeEndDate,
-        id_ = rateId,
+        id_ = trackId,
         shikimori_id_ = null,
         target_id = id,
-        target_type = RateTargetType.ANIME,
+        target_type = TrackTargetType.ANIME,
         target_shikimori_id = null,
-        status_ = rateStatus,
+        status_ = trackStatus,
         score = score,
         comment = comment,
         progress = progress,
@@ -335,11 +335,11 @@ val animeListViewMapper: (
         date_updated = dateUpdated,
         pinId = pinId,
         target_id_ = id,
-        target_type_ = RateTargetType.ANIME
+        target_type_ = TrackTargetType.ANIME
     )
 }
 
-internal fun mangaWithRate(
+internal fun mangaWithTrack(
     id: Long,
     shikimori_id: Long,
     name: String,
@@ -367,9 +367,9 @@ internal fun mangaWithRate(
     id_: Long?,
     shikimori_id_: Long?,
     target_id: Long?,
-    target_type: RateTargetType?,
+    target_type: TrackTargetType?,
     target_shikimori_id: Long?,
-    status_: RateStatus?,
+    status_: TrackStatus?,
     score: Int?,
     comment: String?,
     progress: Int?,
@@ -378,8 +378,8 @@ internal fun mangaWithRate(
     date_updated: Instant?,
     pinId: Long? = null,
     target_id_: Long? = null,
-    target_type_: RateTargetType? = null
-) = MangaWithRate(
+    target_type_: TrackTargetType? = null
+) = MangaWithTrack(
     entity = manga(
         id, shikimori_id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
@@ -387,8 +387,8 @@ internal fun mangaWithRate(
         date_aired, date_released, age_rating, description,
         description_html, franchise, favorite, topic_id, genres
     ),
-    rate = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
-    else rate(
+    track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
+    else track(
         id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
@@ -465,8 +465,8 @@ val mangaListViewMapper: (
     chapters: Int,
     date_aired: LocalDate?,
     date_released: LocalDate?,
-    rateId: Long,
-    rateStatus: RateStatus,
+    trackId: Long,
+    trackStatus: TrackStatus,
     score: Int?,
     comment: String?,
     progress: Int,
@@ -474,12 +474,12 @@ val mangaListViewMapper: (
     date_created: Instant?,
     date_updated: Instant?,
     pinId: Long?
-) -> MangaWithRate = { id, name, nameRu, nameEn,
-                       imageOriginal, imagePreview, imageX96, imageX48,
-                       manga_type, rating, status, volumes, chapters,
-                       dateAired, dateReleased, rateId, rateStatus, score, comment,
-                       progress, reCounter, dateCreated, dateUpdated, pinId ->
-    mangaWithRate(
+) -> MangaWithTrack = { id, name, nameRu, nameEn,
+                        imageOriginal, imagePreview, imageX96, imageX48,
+                        manga_type, rating, status, volumes, chapters,
+                        dateAired, dateReleased, trackId, trackStatus, score, comment,
+                        progress, reCounter, dateCreated, dateUpdated, pinId ->
+    mangaWithTrack(
         id = id,
         shikimori_id = 0,
         name = name,
@@ -504,12 +504,12 @@ val mangaListViewMapper: (
         favorite = false,
         topic_id = null,
         genres = null,
-        id_ = rateId,
+        id_ = trackId,
         shikimori_id_ = null,
         target_id = id,
-        target_type = RateTargetType.MANGA,
+        target_type = TrackTargetType.MANGA,
         target_shikimori_id = null,
-        status_ = rateStatus,
+        status_ = trackStatus,
         score = score,
         comment = comment,
         progress = progress,
@@ -518,11 +518,11 @@ val mangaListViewMapper: (
         date_updated = dateUpdated,
         pinId = pinId,
         target_id_ = id,
-        target_type_ = RateTargetType.MANGA
+        target_type_ = TrackTargetType.MANGA
     )
 }
 
-internal fun ranobeWithRate(
+internal fun ranobeWithTrack(
     id: Long,
     shikimori_id: Long,
     name: String,
@@ -550,9 +550,9 @@ internal fun ranobeWithRate(
     id_: Long?,
     shikimori_id_: Long?,
     target_id: Long?,
-    target_type: RateTargetType?,
+    target_type: TrackTargetType?,
     target_shikimori_id: Long?,
-    status_: RateStatus?,
+    status_: TrackStatus?,
     score: Int?,
     comment: String?,
     progress: Int?,
@@ -561,8 +561,8 @@ internal fun ranobeWithRate(
     date_updated: Instant?,
     pinId: Long? = null,
     target_id_: Long? = null,
-    target_type_: RateTargetType? = null
-) = RanobeWithRate(
+    target_type_: TrackTargetType? = null
+) = RanobeWithTrack(
     entity = ranobe(
         id, shikimori_id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
@@ -570,8 +570,8 @@ internal fun ranobeWithRate(
         date_aired, date_released, age_rating, description,
         description_html, franchise, favorite, topic_id, genres
     ),
-    rate = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
-    else rate(
+    track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
+    else track(
         id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
@@ -648,8 +648,8 @@ val ranobeListViewMapper: (
     chapters: Int,
     date_aired: LocalDate?,
     date_released: LocalDate?,
-    rateId: Long,
-    rateStatus: RateStatus,
+    trackId: Long,
+    trackStatus: TrackStatus,
     score: Int?,
     comment: String?,
     progress: Int,
@@ -657,12 +657,12 @@ val ranobeListViewMapper: (
     date_created: Instant?,
     date_updated: Instant?,
     pinId: Long?
-) -> RanobeWithRate = { id, name, nameRu, nameEn,
-                       imageOriginal, imagePreview, imageX96, imageX48,
-                        ranobe_type, rating, status, volumes, chapters,
-                       dateAired, dateReleased, rateId, rateStatus, score, comment,
-                       progress, reCounter, dateCreated, dateUpdated, pinId ->
-    ranobeWithRate(
+) -> RanobeWithTrack = { id, name, nameRu, nameEn,
+                         imageOriginal, imagePreview, imageX96, imageX48,
+                         ranobe_type, rating, status, volumes, chapters,
+                         dateAired, dateReleased, trackId, trackStatus, score, comment,
+                         progress, reCounter, dateCreated, dateUpdated, pinId ->
+    ranobeWithTrack(
         id = id,
         shikimori_id = 0,
         name = name,
@@ -687,12 +687,12 @@ val ranobeListViewMapper: (
         favorite = false,
         topic_id = null,
         genres = null,
-        id_ = rateId,
+        id_ = trackId,
         shikimori_id_ = null,
         target_id = id,
-        target_type = RateTargetType.MANGA,
+        target_type = TrackTargetType.MANGA,
         target_shikimori_id = null,
-        status_ = rateStatus,
+        status_ = trackStatus,
         score = score,
         comment = comment,
         progress = progress,
@@ -701,24 +701,24 @@ val ranobeListViewMapper: (
         date_updated = dateUpdated,
         pinId = pinId,
         target_id_ = id,
-        target_type_ = RateTargetType.MANGA
+        target_type_ = TrackTargetType.MANGA
     )
 }
 
-internal fun rate(
+internal fun track(
     id: Long,
     shikimori_id: Long?,
     target_id: Long,
-    target_type: RateTargetType,
+    target_type: TrackTargetType,
     target_shikimori_id: Long?,
-    status: RateStatus,
+    status: TrackStatus,
     score: Int?,
     comment: String?,
     progress: Int,
     re_counter: Int,
     date_created: Instant?,
     date_updated: Instant?
-) = Rate(
+) = Track(
     id = id,
     shikimoriId = shikimori_id ?: 0,
     targetId = target_id,
@@ -766,9 +766,9 @@ internal fun pinPaginated(
     id_: Long,
     shikimori_id_: Long?,
     target_id: Long,
-    target_type: RateTargetType,
+    target_type: TrackTargetType,
     target_shikimori_id: Long?,
-    status_: RateStatus,
+    status_: TrackStatus,
     score: Int?,
     comment: String?,
     progress: Int,
@@ -777,10 +777,10 @@ internal fun pinPaginated(
     date_updated: Instant?,
     id__: Long,
     target_id_: Long,
-    target_type_: RateTargetType
+    target_type_: TrackTargetType
 ): PaginatedEntity {
     return when (target_type) {
-        RateTargetType.ANIME -> animeWithRate(
+        TrackTargetType.ANIME -> animeWithTrack(
             id,
             shikimori_id,
             name,
@@ -825,7 +825,7 @@ internal fun pinPaginated(
             target_id_,
             target_type_
         )
-        RateTargetType.MANGA -> mangaWithRate(
+        TrackTargetType.MANGA -> mangaWithTrack(
             id,
             shikimori_id,
             name,
@@ -866,7 +866,7 @@ internal fun pinPaginated(
             target_id_,
             target_type_
         )
-        RateTargetType.RANOBE -> ranobeWithRate(
+        TrackTargetType.RANOBE -> ranobeWithTrack(
             id,
             shikimori_id,
             name,

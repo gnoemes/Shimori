@@ -2,7 +2,7 @@ package com.gnoemes.shimori.lists.change
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.data.core.entities.rate.ListType
+import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.data.list.ListsStateBus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

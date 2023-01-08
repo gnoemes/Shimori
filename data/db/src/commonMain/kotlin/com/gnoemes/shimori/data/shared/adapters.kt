@@ -6,9 +6,9 @@ import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.squareup.sqldelight.ColumnAdapter
 import comgnoemesshimoridatadb.data.*
 import kotlinx.datetime.Instant
@@ -22,19 +22,19 @@ internal object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
     override fun encode(value: LocalDate) = value.toString()
 }
 
-internal object RateTargetAdapter : ColumnAdapter<RateTargetType, String> {
-    override fun decode(databaseValue: String) = RateTargetType.valueOf(databaseValue)
-    override fun encode(value: RateTargetType) = value.name
+internal object TrackTargetAdapter : ColumnAdapter<TrackTargetType, String> {
+    override fun decode(databaseValue: String) = TrackTargetType.valueOf(databaseValue)
+    override fun encode(value: TrackTargetType) = value.name
 }
 
-internal object RateStatusAdapter : ColumnAdapter<RateStatus, String> {
-    override fun decode(databaseValue: String) = RateStatus.valueOf(databaseValue)
-    override fun encode(value: RateStatus): String = value.name
+internal object TrackStatusAdapter : ColumnAdapter<TrackStatus, String> {
+    override fun decode(databaseValue: String) = TrackStatus.valueOf(databaseValue)
+    override fun encode(value: TrackStatus): String = value.name
 }
 
-internal object RateSortOptionAdapter : ColumnAdapter<RateSortOption, String> {
-    override fun decode(databaseValue: String) = RateSortOption.valueOf(databaseValue)
-    override fun encode(value: RateSortOption): String = value.name
+internal object ListSortOptionAdapter : ColumnAdapter<ListSortOption, String> {
+    override fun decode(databaseValue: String) = ListSortOption.valueOf(databaseValue)
+    override fun encode(value: ListSortOption): String = value.name
 }
 
 internal object RequestAdapter : ColumnAdapter<Request, String> {
@@ -77,9 +77,9 @@ internal object SyncActionAdapter : ColumnAdapter<SyncAction, String> {
 }
 
 
-internal val RateAdapter = Rate.Adapter(
-    target_typeAdapter = RateTargetAdapter,
-    statusAdapter = RateStatusAdapter,
+internal val TrackAdapter = Track.Adapter(
+    target_typeAdapter = TrackTargetAdapter,
+    statusAdapter = TrackStatusAdapter,
     date_createdAdapter = InstantAdapter,
     date_updatedAdapter = InstantAdapter
 )
@@ -88,8 +88,8 @@ internal val UserAdapter = User.Adapter(
     last_onlineAdapter = InstantAdapter
 )
 
-internal val RateSortAdapter = Rate_sort.Adapter(
-    sortAdapter = RateSortOptionAdapter
+internal val ListSortAdapter = List_sort.Adapter(
+    sortAdapter = ListSortOptionAdapter
 )
 
 internal val LastRequestAdapter = Last_request.Adapter(
@@ -124,15 +124,15 @@ internal val RanobeAdapter = Ranobe.Adapter(
 )
 
 internal val PinnedAdapter = Pinned.Adapter(
-    target_typeAdapter = RateTargetAdapter
+    target_typeAdapter = TrackTargetAdapter
 )
 
-internal val RateToSyncAdapter = Rate_to_sync.Adapter(
+internal val TrackToSyncAdapter = Track_to_sync.Adapter(
     sync_targetsAdapter = SyncTargetAdapter,
     sync_actionAdapter = SyncActionAdapter,
     last_attemptAdapter = InstantAdapter
 )
 
 internal val CharacterRoleAdapter = Character_role.Adapter(
-    target_typeAdapter = RateTargetAdapter,
+    target_typeAdapter = TrackTargetAdapter,
 )

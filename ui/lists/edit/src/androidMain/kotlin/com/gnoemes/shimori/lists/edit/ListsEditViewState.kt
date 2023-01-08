@@ -2,21 +2,21 @@ package com.gnoemes.shimori.lists.edit
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 
 @Immutable
 internal data class ListsEditViewState(
     val title : ShimoriTitleEntity? = null,
-    val status: RateStatus = RateStatus.PLANNED,
+    val status: TrackStatus = TrackStatus.PLANNED,
     val progress: Int = 0,
     val rewatches: Int = 0,
     val score: Int? = null,
     val comment: String? = null,
-    val type: RateTargetType = RateTargetType.ANIME,
+    val type: TrackTargetType = TrackTargetType.ANIME,
     val inputState: ListEditInputState = ListEditInputState.None,
     val pinned: Boolean = false,
-    val newRate: Boolean = false,
+    val newTrack: Boolean = false,
 ) {
 
     companion object {

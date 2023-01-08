@@ -6,16 +6,16 @@ import com.gnoemes.shimori.data.core.entities.ShimoriContentEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeType
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaType
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeType
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import kotlinx.datetime.*
 
 class ShimoriTextCreator(
@@ -153,15 +153,15 @@ class ShimoriTextCreator(
         return score.toString()
     }
 
-    fun listSortText(type: ListType, option: RateSortOption): String = when (option) {
-        RateSortOption.PROGRESS -> textProvider[MessageID.SortProgress]
-        RateSortOption.DATE_CREATED -> textProvider[MessageID.SortLastAdded]
-        RateSortOption.DATE_UPDATED -> textProvider[MessageID.SortLastChanged]
-        RateSortOption.DATE_AIRED -> textProvider[MessageID.SortLastReleased]
-        RateSortOption.MY_SCORE -> textProvider[MessageID.SortYourScore]
-        RateSortOption.RATING -> textProvider[MessageID.SortUsersScore]
-        RateSortOption.NAME -> textProvider[MessageID.SortName]
-        RateSortOption.SIZE -> {
+    fun listSortText(type: ListType, option: ListSortOption): String = when (option) {
+        ListSortOption.PROGRESS -> textProvider[MessageID.SortProgress]
+        ListSortOption.DATE_CREATED -> textProvider[MessageID.SortLastAdded]
+        ListSortOption.DATE_UPDATED -> textProvider[MessageID.SortLastChanged]
+        ListSortOption.DATE_AIRED -> textProvider[MessageID.SortLastReleased]
+        ListSortOption.MY_SCORE -> textProvider[MessageID.SortYourScore]
+        ListSortOption.RATING -> textProvider[MessageID.SortUsersScore]
+        ListSortOption.NAME -> textProvider[MessageID.SortName]
+        ListSortOption.SIZE -> {
             when (type) {
                 ListType.Anime -> textProvider[MessageID.SortEpisodes]
                 else -> textProvider[MessageID.SortChapters]
@@ -169,15 +169,15 @@ class ShimoriTextCreator(
         }
     }
 
-    fun rateStatusText(type: RateTargetType, status: RateStatus): String = when (status) {
-        RateStatus.WATCHING -> if (type.anime) textProvider[MessageID.RateWatching]
-        else textProvider[MessageID.RateReading]
-        RateStatus.REWATCHING -> if (type.anime) textProvider[MessageID.RateReWatching]
-        else textProvider[MessageID.RateReReading]
-        RateStatus.ON_HOLD -> textProvider[MessageID.RateOnHold]
-        RateStatus.PLANNED -> textProvider[MessageID.RatePlanned]
-        RateStatus.COMPLETED -> textProvider[MessageID.RateCompleted]
-        RateStatus.DROPPED -> textProvider[MessageID.RateDropped]
+    fun trackStatusText(type: TrackTargetType, status: TrackStatus): String = when (status) {
+        TrackStatus.WATCHING -> if (type.anime) textProvider[MessageID.TrackWatching]
+        else textProvider[MessageID.TrackReading]
+        TrackStatus.REWATCHING -> if (type.anime) textProvider[MessageID.TrackReWatching]
+        else textProvider[MessageID.TrackReReading]
+        TrackStatus.ON_HOLD -> textProvider[MessageID.TrackOnHold]
+        TrackStatus.PLANNED -> textProvider[MessageID.TrackPlanned]
+        TrackStatus.COMPLETED -> textProvider[MessageID.TrackCompleted]
+        TrackStatus.DROPPED -> textProvider[MessageID.TrackDropped]
     }
 
     fun releaseDate(title: ShimoriTitleEntity): String? {

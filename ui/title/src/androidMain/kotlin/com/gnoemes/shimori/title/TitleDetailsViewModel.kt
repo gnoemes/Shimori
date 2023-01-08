@@ -5,10 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.extensions.combine
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
+import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
-import com.gnoemes.shimori.domain.observers.ObserveTitleWithRateEntity
+import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 internal class TitleDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val updateTitle: UpdateTitle,
-    private val updateRate: CreateOrUpdateRate,
-    observeTitle: ObserveTitleWithRateEntity,
+    private val updateTrack: CreateOrUpdateTrack,
+    observeTitle: ObserveTitleWithTrackEntity,
 ) : ViewModel() {
     private val id: Long = savedStateHandle["id"]!!
-    private val type: RateTargetType = savedStateHandle["type"]!!
+    private val type: TrackTargetType = savedStateHandle["type"]!!
 
     val state = combine(
         observeTitle.flow,
@@ -38,6 +38,6 @@ internal class TitleDetailsViewModel(
             }
         }
 
-        observeTitle(ObserveTitleWithRateEntity.Params(id, type))
+        observeTitle(ObserveTitleWithTrackEntity.Params(id, type))
     }
 }

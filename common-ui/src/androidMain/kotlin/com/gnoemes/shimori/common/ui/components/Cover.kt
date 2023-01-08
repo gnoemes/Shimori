@@ -26,7 +26,7 @@ import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.ui.R
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -38,7 +38,7 @@ fun Cover(
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     onStatusClick: (() -> Unit)? = null,
-    status: RateStatus? = null,
+    status: TrackStatus? = null,
     showStatusButton: Boolean = false,
     isPinned: Boolean = false,
     contentDescription: String? = null
@@ -131,7 +131,7 @@ fun Cover(
                             contentDescription = null
                         )
                     } else {
-                        RateIcon(status)
+                        TrackIcon(status)
                     }
                 }
             )

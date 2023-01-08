@@ -97,7 +97,7 @@ val appModule = DI.Module("app") {
 
     bindSingleton { WorkManager.getInstance(instance()) }
 
-    bindProvider { new(::ShimoriRateUtil) }
+    bindProvider { new(::ShimoriTrackUtil) }
     bindProvider { new(::ShimoriDateTimeFormatter) }
 }
 

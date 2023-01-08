@@ -9,14 +9,14 @@ actual val databaseModule: DI.Module = DI.Module("database") {
 
     bindEagerSingleton { new(::createDatabase) }
 
-    bindProvider { instance<ShimoriDatabase>().rateDao }
-    bindProvider { instance<ShimoriDatabase>().rateSortDao }
+    bindProvider { instance<ShimoriDatabase>().trackDao }
+    bindProvider { instance<ShimoriDatabase>().listSortDao }
     bindProvider { instance<ShimoriDatabase>().userDao }
     bindProvider { instance<ShimoriDatabase>().lastRequestDao }
     bindProvider { instance<ShimoriDatabase>().animeDao }
     bindProvider { instance<ShimoriDatabase>().mangaDao }
     bindProvider { instance<ShimoriDatabase>().ranobeDao }
     bindProvider { instance<ShimoriDatabase>().listPinDao }
-    bindProvider { instance<ShimoriDatabase>().rateToSyncDao }
+    bindProvider { instance<ShimoriDatabase>().trackToSyncDao }
     bindProvider { instance<ShimoriDatabase>().characterDao }
 }

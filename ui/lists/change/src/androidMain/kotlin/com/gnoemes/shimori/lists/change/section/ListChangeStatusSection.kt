@@ -9,13 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
-import com.gnoemes.shimori.common.ui.LocalShimoriRateUtil
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.ui.components.RateIcon
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
+import com.gnoemes.shimori.common.ui.components.TrackIcon
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -56,16 +56,16 @@ private fun StatusSection(
 
 @Composable
 private fun StatusSection(
-    statuses: List<RateStatus>,
-    selectedStatus: RateStatus?,
+    statuses: List<TrackStatus>,
+    selectedStatus: TrackStatus?,
     sectionType: ListType,
-    onStatusClick: (newStatus: RateStatus) -> Unit,
+    onStatusClick: (newStatus: TrackStatus) -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = LocalShimoriRateUtil.current.listTypeName(sectionType),
+            text = LocalShimoriTrackUtil.current.listTypeName(sectionType),
             style = MaterialTheme.typography.titleMedium,
         )
 
@@ -79,13 +79,13 @@ private fun StatusSection(
                 ShimoriChip(
                     onClick = { onStatusClick(status) },
                     modifier = Modifier.height(32.dp),
-                    text = LocalShimoriTextCreator.current.rateStatusText(
-                        sectionType.rateType!!,
+                    text = LocalShimoriTextCreator.current.trackStatusText(
+                        sectionType.trackType!!,
                         status
                     ),
                     selected = status == selectedStatus,
                     icon = {
-                        RateIcon(
+                        TrackIcon(
                             status,
                             Modifier.size(16.dp)
                         )

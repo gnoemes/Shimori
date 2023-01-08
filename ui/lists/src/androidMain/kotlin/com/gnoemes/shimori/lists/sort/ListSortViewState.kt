@@ -1,15 +1,15 @@
 package com.gnoemes.shimori.lists.sort
 
 import androidx.compose.runtime.Immutable
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateSortOption
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption
+import com.gnoemes.shimori.data.core.entities.track.ListType
 
 @Immutable
 internal data class ListSortViewState(
     val listType: ListType = ListType.Anime,
-    val activeSort: RateSort = RateSort.defaultForType(listType),
-    val options: List<RateSortOption> = emptyList()
+    val activeSort: ListSort = ListSort.defaultForType(listType),
+    val options: List<ListSortOption> = emptyList()
 ) {
     companion object {
         val Empty = ListSortViewState()

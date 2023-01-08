@@ -1,22 +1,22 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.common.ShikimoriContentType
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 
-internal class RateTargetTypeMapper : TwoWayMapper<ShikimoriContentType?, RateTargetType?> {
+internal class RateTargetTypeMapper : TwoWayMapper<ShikimoriContentType?, TrackTargetType?> {
 
-    override suspend fun map(from: ShikimoriContentType?): RateTargetType? = when (from) {
-        ShikimoriContentType.ANIME -> RateTargetType.ANIME
-        ShikimoriContentType.MANGA -> RateTargetType.MANGA
-        ShikimoriContentType.RANOBE -> RateTargetType.RANOBE
+    override suspend fun map(from: ShikimoriContentType?): TrackTargetType? = when (from) {
+        ShikimoriContentType.ANIME -> TrackTargetType.ANIME
+        ShikimoriContentType.MANGA -> TrackTargetType.MANGA
+        ShikimoriContentType.RANOBE -> TrackTargetType.RANOBE
         else -> null
     }
 
-    override suspend fun mapInverse(from: RateTargetType?): ShikimoriContentType? = when (from) {
-        RateTargetType.ANIME -> ShikimoriContentType.ANIME
+    override suspend fun mapInverse(from: TrackTargetType?): ShikimoriContentType? = when (from) {
+        TrackTargetType.ANIME -> ShikimoriContentType.ANIME
         //shikimori doesn't support ranobe type
-        RateTargetType.MANGA, RateTargetType.RANOBE -> ShikimoriContentType.MANGA
+        TrackTargetType.MANGA, TrackTargetType.RANOBE -> ShikimoriContentType.MANGA
         else -> null
     }
 }

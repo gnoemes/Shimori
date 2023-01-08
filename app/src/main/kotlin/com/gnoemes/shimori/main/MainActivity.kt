@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), DIAware {
     private val settings: ShimoriSettings by instance()
     private val textProvider: ShimoriTextProvider by instance()
     private val formatter: ShimoriDateTimeFormatter by instance()
-    private val rateUtil: ShimoriRateUtil by instance()
+    private val trackUtil: ShimoriTrackUtil by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -74,7 +74,7 @@ class MainActivity : BaseActivity(), DIAware {
                 )
 
                 CompositionLocalProvider(
-                    LocalShimoriRateUtil provides rateUtil,
+                    LocalShimoriTrackUtil provides trackUtil,
                     LocalShimoriTextCreator provides textCreator,
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,

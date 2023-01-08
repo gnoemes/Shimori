@@ -1,16 +1,16 @@
 package com.gnoemes.shikimori.mappers.rate
 
 import com.gnoemes.shikimori.entities.rates.UserRateResponse
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.Track
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.core.mappers.TwoWayMapper
 
 internal class RateMapper constructor(
     private val typeMapper: RateTargetTypeMapper,
     private val statusMapper: RateStatusMapper
-) : TwoWayMapper<UserRateResponse, Rate> {
+) : TwoWayMapper<UserRateResponse, Track> {
 
-    override suspend fun map(from: UserRateResponse): Rate {
+    override suspend fun map(from: UserRateResponse): Track {
         val targetType = typeMapper.map(from.targetType)
         val status = statusMapper.map(from.status)
 
@@ -18,12 +18,12 @@ internal class RateMapper constructor(
         requireNotNull(status) { "Rate#${from.id} status is null" }
 
         val progress = (when (targetType) {
-            RateTargetType.ANIME -> from.episodes
-            RateTargetType.MANGA, RateTargetType.RANOBE -> from.chapters
+            TrackTargetType.ANIME -> from.episodes
+            TrackTargetType.MANGA, TrackTargetType.RANOBE -> from.chapters
             else -> null
         }) ?: 0
 
-        return Rate(
+        return Track(
             shikimoriId = from.id,
             targetId = 0,
             targetType = targetType,
@@ -38,7 +38,7 @@ internal class RateMapper constructor(
         )
     }
 
-    override suspend fun mapInverse(from: Rate): UserRateResponse {
+    override suspend fun mapInverse(from: Track): UserRateResponse {
         val targetType = typeMapper.mapInverse(from.targetType)
         val status = statusMapper.mapInverse(from.status)
         val targetShikimoriId = from.targetShikimoriId

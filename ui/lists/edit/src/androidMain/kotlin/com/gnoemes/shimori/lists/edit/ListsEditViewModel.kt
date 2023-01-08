@@ -5,39 +5,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
-import com.gnoemes.shimori.data.core.entities.rate.Rate
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
+import com.gnoemes.shimori.data.core.entities.track.Track
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.data.list.ListsUiEvents
-import com.gnoemes.shimori.domain.interactors.CreateOrUpdateRate
-import com.gnoemes.shimori.domain.interactors.DeleteRate
+import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
+import com.gnoemes.shimori.domain.interactors.DeleteTrack
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
 import com.gnoemes.shimori.domain.observers.ObservePinExist
-import com.gnoemes.shimori.domain.observers.ObserveTitleWithRateEntity
+import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
 internal class ListsEditViewModel(
     savedStateHandle: SavedStateHandle,
-    observeTitle: ObserveTitleWithRateEntity,
+    observeTitle: ObserveTitleWithTrackEntity,
     observePinExist: ObservePinExist,
     private val listsStateBus: ListsStateBus,
     private val toggleListPin: ToggleTitlePin,
-    private val createOrUpdateRate: CreateOrUpdateRate,
-    private val deleteRate: DeleteRate,
+    private val createOrUpdateTrack: CreateOrUpdateTrack,
+    private val deleteTrack: DeleteTrack,
     private val logger: Logger,
 ) : ViewModel() {
     private val targetId: Long = savedStateHandle["id"]!!
-    private val targetType: RateTargetType = savedStateHandle["type"]!!
+    private val targetType: TrackTargetType = savedStateHandle["type"]!!
     private val markComplete: Boolean = savedStateHandle["markComplete"] ?: false
     private val deleteNotification: Boolean = savedStateHandle["deleteNotification"] ?: false
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
 
-    private var rate: Rate? = null
+    private var track: Track? = null
     private var targetShikimoriId: Long? = null
 
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
@@ -49,31 +49,31 @@ internal class ListsEditViewModel(
                 observeTitle.flow,
                 observePinExist.flow
             ) { entity, pinned ->
-                rate = entity?.rate
+                track = entity?.track
                 val title = entity?.entity
 
                 targetShikimoriId = (title as? ShikimoriEntity)?.shikimoriId
 
                 ListsEditViewState(
                     title = title,
-                    status = (if (markComplete) RateStatus.COMPLETED else rate?.status)
-                        ?: RateStatus.WATCHING,
-                    progress = (if (markComplete) title?.size else rate?.progress) ?: 0,
-                    rewatches = rate?.reCounter ?: 0,
-                    score = rate?.score,
-                    comment = rate?.comment,
+                    status = (if (markComplete) TrackStatus.COMPLETED else track?.status)
+                        ?: TrackStatus.WATCHING,
+                    progress = (if (markComplete) title?.size else track?.progress) ?: 0,
+                    rewatches = track?.reCounter ?: 0,
+                    score = track?.score,
+                    comment = track?.comment,
                     type = targetType,
                     pinned = pinned,
-                    newRate = rate == null
+                    newTrack = track == null
                 )
             }.collect { _state.value = it }
         }
 
-        observeTitle(ObserveTitleWithRateEntity.Params(targetId, targetType))
+        observeTitle(ObserveTitleWithTrackEntity.Params(targetId, targetType))
         observePinExist(ObservePinExist.Params(targetId, targetType))
     }
 
-    fun onStatusChanged(newStatus: RateStatus) {
+    fun onStatusChanged(newStatus: TrackStatus) {
         viewModelScope.launch {
             _state.value = _state.value.copy(status = newStatus)
         }
@@ -135,16 +135,16 @@ internal class ListsEditViewModel(
 
     fun delete() {
         viewModelScope.launch {
-            val rate = rate
+            val track = track
             val image = _state.value.title?.image
-            rate?.id?.let {
-                deleteRate(DeleteRate.Params(it)).collect { status ->
+            track?.id?.let {
+                deleteTrack(DeleteTrack.Params(it)).collect { status ->
                     if (status.isSuccess) {
                         if (deleteNotification) {
                             listsStateBus.uiEvents(
-                                ListsUiEvents.RateDeleted(
+                                ListsUiEvents.TrackDeleted(
                                     image,
-                                    rate
+                                    track
                                 )
                             )
                         }
@@ -159,9 +159,9 @@ internal class ListsEditViewModel(
     fun createOrUpdate() {
         viewModelScope.launch {
             val state = state.value
-            val rate = Rate(
-                id = rate?.id ?: 0,
-                shikimoriId = rate?.shikimoriId ?: 0,
+            val track = Track(
+                id = track?.id ?: 0,
+                shikimoriId = track?.shikimoriId ?: 0,
                 targetId = targetId,
                 targetType = targetType,
                 targetShikimoriId = targetShikimoriId ?: 0,
@@ -170,7 +170,7 @@ internal class ListsEditViewModel(
                 comment = state.comment,
                 progress = state.progress,
                 reCounter = state.rewatches,
-                dateCreated = rate?.dateCreated,
+                dateCreated = track?.dateCreated,
                 dateUpdated = Clock.System.now()
             )
 
@@ -182,7 +182,7 @@ internal class ListsEditViewModel(
                 )
             ).collect()
 
-            createOrUpdateRate(params = CreateOrUpdateRate.Params(rate))
+            createOrUpdateTrack(params = CreateOrUpdateTrack.Params(track))
                 .collect {
                     if (it.isSuccess) {
                         _uiEvents.emit(UiEvents.NavigateUp)

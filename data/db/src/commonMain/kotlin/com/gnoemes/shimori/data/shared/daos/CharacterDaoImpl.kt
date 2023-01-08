@@ -5,10 +5,10 @@ import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.CharacterDao
 import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.characters.CharacterRole
-import com.gnoemes.shimori.data.core.entities.rate.RateTargetType
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithRate
-import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithRate
-import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithRate
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
 import com.gnoemes.shimori.data.shared.*
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -65,7 +65,7 @@ internal class CharacterDaoImpl(
 
     override suspend fun sync(
         targetId: Long,
-        targetType: RateTargetType,
+        targetType: TrackTargetType,
         data: List<Character>
     ) {
         val result: ItemSyncerResult<Character>
@@ -157,7 +157,7 @@ internal class CharacterDaoImpl(
 
     override fun observeByTitle(
         targetId: Long,
-        targetType: RateTargetType
+        targetType: TrackTargetType
     ): Flow<List<Character>> {
         return db.characterRoleQueries
             .queryByTitle(targetId, targetType, ::character)
@@ -166,25 +166,25 @@ internal class CharacterDaoImpl(
             .flowOn(dispatchers.io)
     }
 
-    override fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithRate>> {
+    override fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithTrack>> {
         return db.characterRoleQueries
-            .queryAnimesByCharacter(id, ::animeWithRate)
+            .queryAnimesByCharacter(id, ::animeWithTrack)
             .asFlow()
             .mapToList(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 
-    override fun observeCharacterMangas(id: Long): Flow<List<MangaWithRate>> {
+    override fun observeCharacterMangas(id: Long): Flow<List<MangaWithTrack>> {
         return db.characterRoleQueries
-            .queryMangasByCharacter(id, ::mangaWithRate)
+            .queryMangasByCharacter(id, ::mangaWithTrack)
             .asFlow()
             .mapToList(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 
-    override fun observeCharacterRanobes(id: Long): Flow<List<RanobeWithRate>> {
+    override fun observeCharacterRanobes(id: Long): Flow<List<RanobeWithTrack>> {
         return db.characterRoleQueries
-            .queryRanobesByCharacter(id, ::ranobeWithRate)
+            .queryRanobesByCharacter(id, ::ranobeWithTrack)
             .asFlow()
             .mapToList(dispatchers.io)
             .flowOn(dispatchers.io)

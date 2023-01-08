@@ -1,0 +1,24 @@
+import com.gnoemes.shimori.data.core.entities.track.ListSortOption;
+
+CREATE TABLE list_sort (
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      type INTEGER AS Int NOT NULL,
+      sort TEXT AS ListSortOption NOT NULL,
+      descending INTEGER AS Boolean NOT NULL
+);
+
+CREATE UNIQUE INDEX list_sort_type ON list_sort(type);
+
+insert:
+INSERT OR REPLACE INTO list_sort(type, sort, descending)
+VALUES (?,?,?);
+
+update:
+INSERT OR REPLACE INTO list_sort(id, type, sort, descending)
+VALUES ?;
+
+deleteById:
+DELETE FROM list_sort WHERE id = :id;
+
+queryByType:
+SELECT * FROM list_sort WHERE type = :type;

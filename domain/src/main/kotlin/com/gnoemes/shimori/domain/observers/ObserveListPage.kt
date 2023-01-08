@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.domain.observers
 
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateSort
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.ListSort
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.paging.Pager
 import com.gnoemes.shimori.data.paging.PagingConfig
 import com.gnoemes.shimori.data.paging.PagingData
@@ -39,8 +39,8 @@ class ObserveListPage(
 
     data class Params(
         val type: ListType,
-        val status: RateStatus,
-        val sort: RateSort,
+        val status: TrackStatus,
+        val sort: ListSort,
         override val pagingConfig: PagingConfig
     ) : PagingParams<PaginatedEntity>
 }

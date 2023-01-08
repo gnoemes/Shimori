@@ -6,8 +6,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.gnoemes.shimori.base.core.settings.*
-import com.gnoemes.shimori.data.core.entities.rate.ListType
-import com.gnoemes.shimori.data.core.entities.rate.RateStatus
+import com.gnoemes.shimori.data.core.entities.track.ListType
+import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -155,7 +155,7 @@ class ShimoriSettingsImpl constructor(
                 .catchIO()
                 .map { preferences ->
                     //anime is default
-                    preferences[PREFERRED_STATUS] ?: RateStatus.listPagesOrder.first().name
+                    preferences[PREFERRED_STATUS] ?: TrackStatus.listPagesOrder.first().name
                 }
     }
 
