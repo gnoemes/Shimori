@@ -1,0 +1,103 @@
+import com.gnoemes.shimori.data.core.entities.common.AgeRating;
+import com.gnoemes.shimori.data.core.entities.common.Genre;
+import com.gnoemes.shimori.data.core.entities.common.TitleStatus;
+import kotlin.collections.List;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE ranobe (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    shikimori_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    ranobe_type TEXT,
+    rating REAL AS Double,
+    status TEXT AS TitleStatus,
+    chapters INTEGER AS Int NOT NULL,
+    volumes INTEGER AS Int NOT NULL,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER,
+    genres TEXT AS List<Genre>
+);
+
+CREATE UNIQUE INDEX ranobe_shikimori_id ON ranobe(shikimori_id);
+
+insert:
+INSERT OR REPLACE INTO ranobe(
+shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, ranobe_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres)
+VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE ranobe
+SET
+ id = :id,
+ shikimori_id = CASE WHEN :shikimori_id = 0 THEN shikimori_id ELSE :shikimori_id END,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ ranobe_type = coalesce(:manga_type, ranobe_type),
+ rating = coalesce(:rating, rating),
+ status = coalesce(:status , status),
+ chapters = :chapters,
+ volumes = :volumes,
+ date_aired = coalesce(:date_aired, date_aired),
+ date_released = coalesce(:date_released, date_released),
+ age_rating = CASE WHEN :age_rating = "NONE" THEN age_rating ELSE :age_rating END,
+ description = coalesce(:description, description),
+ description_html = coalesce(:description_html, description_html),
+ franchise = coalesce(:franchise, franchise),
+ favorite = :favorite,
+ topic_id  = coalesce(:topic_id, topic_id),
+ genres = coalesce(:genres, genres)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM ranobe;
+
+deleteById:
+DELETE FROM ranobe WHERE id = :id;
+
+countWithStatus:
+SELECT COUNT(*) FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+WHERE r.status = :status;
+
+queryById:
+SELECT * FROM ranobe WHERE id = :id;
+
+queryAll:
+SELECT * FROM ranobe;
+
+queryByIdWithRate:
+SELECT * FROM ranobe AS title
+LEFT OUTER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE title.id = :id;
+
+queryIdByShikimoriId:
+SELECT id FROM ranobe WHERE shikimori_id = :shikimoriId;
+
+queryByStatus:
+SELECT * FROM ranobe AS title
+INNER JOIN rate AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status;

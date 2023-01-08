@@ -140,61 +140,61 @@ internal class RanobeDaoImpl(
             limit: Long,
             offset: Long
         ) = when (sort.sortOption) {
-            RateSortOption.NAME -> db.ranobeQueries.queryByStatusSortName(
+            RateSortOption.NAME -> db.ranobeListViewQueries.queryByStatusSortName(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.PROGRESS -> db.ranobeQueries.queryByStatusSortProgress(
+            RateSortOption.PROGRESS -> db.ranobeListViewQueries.queryByStatusSortProgress(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.DATE_CREATED -> db.ranobeQueries.queryByStatusSortDateCreated(
+            RateSortOption.DATE_CREATED -> db.ranobeListViewQueries.queryByStatusSortDateCreated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.DATE_UPDATED -> db.ranobeQueries.queryByStatusSortDateUpdated(
+            RateSortOption.DATE_UPDATED -> db.ranobeListViewQueries.queryByStatusSortDateUpdated(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.DATE_AIRED -> db.ranobeQueries.queryByStatusSortDateAired(
+            RateSortOption.DATE_AIRED -> db.ranobeListViewQueries.queryByStatusSortDateAired(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.MY_SCORE -> db.ranobeQueries.queryByStatusSortScore(
+            RateSortOption.MY_SCORE -> db.ranobeListViewQueries.queryByStatusSortScore(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.SIZE -> db.ranobeQueries.queryByStatusSortSize(
+            RateSortOption.SIZE -> db.ranobeListViewQueries.queryByStatusSortSize(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
-            RateSortOption.RATING -> db.ranobeQueries.queryByStatusSortRating(
+            RateSortOption.RATING -> db.ranobeListViewQueries.queryByStatusSortRating(
                 status,
                 sort.isDescending.long,
                 limit,
                 offset,
-                ::ranobeWithRate
+                ranobeListViewMapper
             )
         }
 
