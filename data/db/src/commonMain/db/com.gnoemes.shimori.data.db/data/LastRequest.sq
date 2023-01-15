@@ -26,3 +26,6 @@ SELECT * FROM last_request WHERE request = :request AND entity_id = :entityId;
 
 requestCount:
 SELECT COUNT(*) FROM last_request WHERE request = :request AND entity_id = :entityId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

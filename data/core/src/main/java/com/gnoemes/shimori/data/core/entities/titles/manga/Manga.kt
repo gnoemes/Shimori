@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.data.core.entities.titles.manga
 
-import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
@@ -12,7 +11,6 @@ import kotlinx.datetime.LocalDate
 @kotlinx.serialization.Serializable
 data class Manga(
     override val id: Long = 0,
-    override val shikimoriId: Long = 0,
     override val name: String = "",
     override val nameRu: String? = null,
     override val nameEn: String? = null,
@@ -33,7 +31,7 @@ data class Manga(
     override val favorite: Boolean = false,
     override val topicId: Long? = null,
     override val genres: List<Genre>? = null
-) : ShimoriTitleEntity, ShikimoriEntity {
+) : ShimoriTitleEntity {
     val chaptersOrUnknown: String get() = chapters.let { if (it == 0) "?" else "$it" }
     override val size: Int? get() = chaptersOrUnknown.toIntOrNull()
 }

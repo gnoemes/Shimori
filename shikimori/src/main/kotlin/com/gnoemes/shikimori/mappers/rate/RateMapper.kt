@@ -24,10 +24,9 @@ internal class RateMapper constructor(
         }) ?: 0
 
         return Track(
-            shikimoriId = from.id,
-            targetId = 0,
+            id = from.id,
+            targetId = from.targetId,
             targetType = targetType,
-            targetShikimoriId = from.targetId,
             score = from.score?.toInt(),
             status = status,
             dateCreated = from.dateCreated,
@@ -41,18 +40,16 @@ internal class RateMapper constructor(
     override suspend fun mapInverse(from: Track): UserRateResponse {
         val targetType = typeMapper.mapInverse(from.targetType)
         val status = statusMapper.mapInverse(from.status)
-        val targetShikimoriId = from.targetShikimoriId
 
-        requireNotNull(targetType) { "Rate#${from.shikimoriId} targetType is null" }
-        requireNotNull(status) { "Rate#${from.shikimoriId} status is null" }
-        requireNotNull(targetShikimoriId) { "Rate#${from.shikimoriId} target id is null" }
+        requireNotNull(targetType) { "Rate#${from.id} targetType is null" }
+        requireNotNull(status) { "Rate#${from.id} status is null" }
 
         val episodes = if (from.targetType.anime) from.progress else null
         val chapters = if (from.targetType.anime.not()) from.progress else null
 
         return UserRateResponse(
-            id = from.shikimoriId,
-            targetId = targetShikimoriId,
+            id = from.id,
+            targetId = from.targetId,
             targetType = targetType,
             score = from.score?.toDouble(),
             status = status,

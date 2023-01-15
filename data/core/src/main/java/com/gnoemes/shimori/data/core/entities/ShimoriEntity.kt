@@ -6,18 +6,10 @@ import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.track.Track
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
-import com.gnoemes.shimori.data.core.utils.Shikimori
 import kotlinx.datetime.LocalDate
 
 interface ShimoriEntity {
     val id: Long
-}
-
-@Shikimori
-interface ShikimoriEntity {
-    val shikimoriId: Long
-
-    val hasShikimoriId get() = shikimoriId != 0L
 }
 
 interface ShimoriContentEntity : ShimoriEntity {

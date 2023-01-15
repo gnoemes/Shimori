@@ -6,7 +6,6 @@ import kotlinx.datetime.LocalDate;
 
 CREATE TABLE manga (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    shikimori_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     name_ru TEXT,
     name_eng TEXT,
@@ -31,21 +30,18 @@ CREATE TABLE manga (
     genres TEXT AS List<Genre>
 );
 
-CREATE UNIQUE INDEX manga_shikimori_id ON manga(shikimori_id);
-
 insert:
 INSERT OR REPLACE INTO manga(
-shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, manga_type, rating, status, chapters, volumes,
 date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
 topic_id, genres)
-VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
 UPDATE manga
 SET
  id = :id,
- shikimori_id = CASE WHEN :shikimori_id = 0 THEN shikimori_id ELSE :shikimori_id END,
  name = :name,
  name_ru = coalesce(:name_ru, name_ru),
  name_eng = coalesce(:name_eng, name_eng),
@@ -93,14 +89,11 @@ LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
-queryIdByShikimoriId:
-SELECT id FROM manga WHERE shikimori_id = :shikimoriId;
-
-queryLocalAndShikimoriIdsByShikimoriIds:
-SELECT shikimori_id, id FROM manga WHERE shikimori_id IN :shikimoriIds;
-
 queryByStatus:
 SELECT * FROM manga AS title
 INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

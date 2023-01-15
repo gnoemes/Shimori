@@ -16,8 +16,7 @@ internal class CharacterDetailsResponseMapper(
 ) : Mapper<CharacterDetailsResponse, CharacterInfo> {
     override suspend fun map(from: CharacterDetailsResponse): CharacterInfo {
         val character = Character(
-            id = 0,
-            shikimoriId = from.id,
+            id = from.id,
             name = from.name,
             nameRu = from.nameRu,
             nameEn = from.name,

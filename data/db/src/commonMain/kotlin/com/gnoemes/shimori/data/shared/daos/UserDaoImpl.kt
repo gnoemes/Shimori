@@ -25,7 +25,8 @@ internal class UserDaoImpl(
     override suspend fun insert(entity: User) {
         entity.let {
             db.userQueries.insert(
-                shikimori_id = it.shikimoriId,
+                remote_id = it.remoteId,
+                source_id = it.sourceId,
                 nickname = it.nickname,
                 image_original = it.image?.original,
                 image_preview = it.image?.preview,
@@ -55,7 +56,8 @@ internal class UserDaoImpl(
             db.userQueries.update(
                 UserDAO(
                     id = it.id,
-                    shikimori_id = it.shikimoriId,
+                    remote_id = it.remoteId,
+                    source_id = it.sourceId,
                     nickname = it.nickname,
                     image_original = it.image?.original,
                     image_preview = it.image?.preview,
@@ -85,24 +87,24 @@ internal class UserDaoImpl(
         db.userQueries.deleteById(entity.id)
     }
 
-    override suspend fun deleteMe() {
-        db.userQueries.deleteMe()
+    override suspend fun deleteMe(sourceId: Long) {
+        db.userQueries.deleteMe(sourceId)
     }
 
-    override fun observeMeShort(): Flow<UserShort?> {
-        return db.userQueries.queryMe()
+    override fun observeMeShort(sourceId: Long): Flow<UserShort?> {
+        return db.userQueries.queryMe(sourceId)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .map(userToUserShortMapper::map)
             .flowOn(dispatchers.io)
     }
 
-    override suspend fun queryMe(): User? {
-        return db.userQueries.queryMe().executeAsOneOrNull()?.let { UserMapper.map(it) }
+    override suspend fun queryMe(sourceId: Long): User? {
+        return db.userQueries.queryMe(sourceId).executeAsOneOrNull()?.let { UserMapper.map(it) }
     }
 
-    override suspend fun queryMeShort(): UserShort? {
-        return db.userQueries.queryMeShort().executeAsOneOrNull()?.let {
+    override suspend fun queryMeShort(sourceId: Long): UserShort? {
+        return db.userQueries.queryMeShort(sourceId).executeAsOneOrNull()?.let {
             queryMeShortToUserShortMapper.map(it)
         }
     }

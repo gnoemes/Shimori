@@ -36,12 +36,12 @@ internal class RateResponseToRateMapper(
             else -> from.manga?.id
         }
 
+        requireNotNull(targetShikimoriId) { "Rate#${from.id} target id is null" }
+
         return Track(
-            shikimoriId = from.id,
-            //init later
-            targetId = 0,
+            id = from.id,
+            targetId = targetShikimoriId,
             targetType = targetType,
-            targetShikimoriId = targetShikimoriId,
             score = from.score,
             status = status,
             dateCreated = from.dateCreated,

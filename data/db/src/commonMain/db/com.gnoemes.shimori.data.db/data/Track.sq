@@ -4,10 +4,8 @@ import kotlinx.datetime.Instant;
 
 CREATE TABLE track (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    shikimori_id INTEGER,
     target_id INTEGER NOT NULL,
     target_type TEXT AS TrackTargetType NOT NULL,
-    target_shikimori_id INTEGER,
     status TEXT AS TrackStatus  NOT NULL,
     score INTEGER AS Int,
     comment TEXT,
@@ -17,15 +15,14 @@ CREATE TABLE track (
     date_updated INTEGER AS Instant
 );
 
-CREATE UNIQUE INDEX track_shikimori_id ON track(shikimori_id);
 CREATE UNIQUE INDEX track_target ON track(target_id, target_type);
 
 insert:
-INSERT OR REPLACE INTO track (shikimori_id, target_id, target_type, target_shikimori_id, status, score, comment, progress, re_counter, date_created, date_updated)
-VALUES (?,?,?,?, ?,?,?,?,?,?,?);
+INSERT OR REPLACE INTO track ( target_id, target_type,  status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES (?,?,?,?,?,?,?,?,?);
 
 update:
-INSERT OR REPLACE INTO track (id, shikimori_id, target_id, target_type, target_shikimori_id,  status, score, comment, progress, re_counter, date_created, date_updated)
+INSERT OR REPLACE INTO track (id, target_id, target_type,  status, score, comment, progress, re_counter, date_created, date_updated)
 VALUES ?;
 
 deleteById:
@@ -46,9 +43,6 @@ SELECT * FROM track WHERE target_type = :type AND status = :status;
 queryById:
 SELECT * FROM track WHERE id = ?;
 
-queryByShikimoriId:
-SELECT * FROM track WHERE shikimori_id = ?;
-
 queryByTarget:
 SELECT * FROM track WHERE target_id = :id AND target_type = :type;
 
@@ -57,6 +51,9 @@ SELECT COUNT(*) FROM track;
 
 statusForTypeExist:
 SELECT COUNT(*) FROM track WHERE target_type = ? AND status = ?;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
 
 
 

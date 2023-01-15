@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.track.Track
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
@@ -38,7 +37,6 @@ internal class ListsEditViewModel(
     private val _state = MutableStateFlow(ListsEditViewState.Empty)
 
     private var track: Track? = null
-    private var targetShikimoriId: Long? = null
 
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
     val state: StateFlow<ListsEditViewState> get() = _state
@@ -51,8 +49,6 @@ internal class ListsEditViewModel(
             ) { entity, pinned ->
                 track = entity?.track
                 val title = entity?.entity
-
-                targetShikimoriId = (title as? ShikimoriEntity)?.shikimoriId
 
                 ListsEditViewState(
                     title = title,
@@ -161,10 +157,8 @@ internal class ListsEditViewModel(
             val state = state.value
             val track = Track(
                 id = track?.id ?: 0,
-                shikimoriId = track?.shikimoriId ?: 0,
                 targetId = targetId,
                 targetType = targetType,
-                targetShikimoriId = targetShikimoriId ?: 0,
                 status = state.status,
                 score = state.score,
                 comment = state.comment,

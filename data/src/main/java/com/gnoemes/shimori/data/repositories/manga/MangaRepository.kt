@@ -5,25 +5,23 @@ import com.gnoemes.shimori.data.core.database.daos.CharacterDao
 import com.gnoemes.shimori.data.core.database.daos.MangaDao
 import com.gnoemes.shimori.data.core.database.daos.TrackDao
 import com.gnoemes.shimori.data.core.entities.app.ExpiryConstants
+import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.track.ListSort
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
-import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
-import com.gnoemes.shimori.data.core.sources.MangaDataSource
-import com.gnoemes.shimori.data.core.utils.Shikimori
 import com.gnoemes.shimori.data.repositories.lastrequest.GroupLastRequestStore
-import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
+import com.gnoemes.shimori.data.repositories.user.UserRepository
 import kotlinx.datetime.Instant
 
 class MangaRepository(
     private val dao: MangaDao,
     private val trackDao: TrackDao,
     private val characterDao: CharacterDao,
-    @Shikimori private val source: MangaDataSource,
-    private val userRepository: ShikimoriUserRepository,
+    private val userRepository: UserRepository,
     private val tracksLastRequest: MangaWithStatusLastRequestStore,
     private val titleLastRequest: MangaDetailsLastRequestStore,
     private val titleRolesLastRequest: MangaRolesLastRequestStore,
 ) {
+    suspend fun queryById(id: Long) = dao.queryById(id)
     fun observeById(id: Long) = dao.observeById(id)
 
     fun paging(
@@ -31,52 +29,14 @@ class MangaRepository(
         sort: ListSort
     ) = dao.paging(status, sort)
 
-    suspend fun updateMyTitlesByStatus(status: TrackStatus?) {
-        val user = userRepository.queryMeShort()
-            ?: throw IllegalStateException("User doesn't exist")
+    suspend fun sync(sourceId: Long, remote: List<Manga>) = dao.sync(sourceId, remote)
+    suspend fun sync(sourceId: Long, remote: Manga) = dao.sync(sourceId, arrayListOf(remote))
 
-        val result = source.getWithStatus(user, status)
-        //insert title first
-        dao.insertOrUpdate(result.map { it.entity })
-        //then sync trackss & assign local target ids
-        trackDao.syncAll(result.mapNotNull { it.track }, TrackTargetType.MANGA, status)
-        tracksLastRequest.updateLastRequest(
-            id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_TRACK_STATUSES_ID
-        )
-    }
-
-    suspend fun update(id : Long) {
-        val local = dao.queryById(id)
-
-        if (local != null) {
-            val result = source.get(local)
-
-            if (result.entity.mangaType == null) return
-
-            dao.insertOrUpdate(
-                result.entity.copy(
-                    id = local.id
-                )
-            )
-            titleLastRequest.updateLastRequest(id = id)
-        }
-    }
-
-    suspend fun updateRoles(id: Long) {
-        val local = dao.queryById(id)
-
-        if (local != null) {
-            val result = source.roles(local)
-
-            characterDao.sync(
-                id,
-                TrackTargetType.MANGA,
-                result.characters
-            )
-
-            titleRolesLastRequest.updateLastRequest(id = id)
-        }
-    }
+    suspend fun titleUpdated(id: Long) = titleLastRequest.updateLastRequest(id = id)
+    suspend fun rolesUpdated(id: Long) = titleRolesLastRequest.updateLastRequest(id = id)
+    suspend fun statusUpdated(status: TrackStatus?) = tracksLastRequest.updateLastRequest(
+        id = status?.priority?.toLong() ?: GroupLastRequestStore.ALL_TRACK_STATUSES_ID
+    )
 
     suspend fun needUpdateTitlesWithStatus(
         status: TrackStatus?,

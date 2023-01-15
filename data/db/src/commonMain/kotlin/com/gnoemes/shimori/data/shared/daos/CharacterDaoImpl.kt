@@ -3,7 +3,9 @@ package com.gnoemes.shimori.data.shared.daos
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.CharacterDao
+import com.gnoemes.shimori.data.core.entities.app.SourceDataType
 import com.gnoemes.shimori.data.core.entities.characters.Character
+import com.gnoemes.shimori.data.core.entities.characters.CharacterInfo
 import com.gnoemes.shimori.data.core.entities.characters.CharacterRole
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
@@ -26,10 +28,60 @@ internal class CharacterDaoImpl(
 
     private val syncer = syncerForEntity(
         this,
-        { it.shikimoriId },
-        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        { _, character -> character.name.takeIf { it.isNotEmpty() } },
+        { _, remote, _ -> remote },
         logger
     )
+
+    override suspend fun insert(sourceId: Long, remote: Character) {
+        db.withTransaction {
+            remote.let {
+                db.characterQueries.insert(
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.description,
+                    it.descriptionSourceUrl
+                )
+                val localId = characterQueries.selectLastInsertedRowId().executeAsOne()
+                syncRemoteIds(sourceId, localId, remote.id, syncDataType)
+            }
+        }
+    }
+
+    override suspend fun update(sourceId: Long, remote: Character, local: Character) {
+        db.withTransaction {
+            remote.let {
+                db.characterQueries.update(
+                    local.id,
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.description,
+                    it.descriptionSourceUrl
+                )
+
+                syncRemoteIds(sourceId, local.id, remote.id, syncDataType)
+            }
+        }
+    }
+
+    override suspend fun delete(sourceId: Long, local: Character) {
+        db.withTransaction {
+            characterQueries.deleteById(local.id)
+            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
+        }
+    }
 
     override suspend fun syncRoles(roles: List<CharacterRole>) {
         val time = measureTimeMillis {
@@ -48,12 +100,14 @@ internal class CharacterDaoImpl(
         )
     }
 
-    override suspend fun sync(data: List<Character>) {
+    override suspend fun sync(sourceId: Long, remote: List<Character>) {
         val result: ItemSyncerResult<Character>
         val time = measureTimeMillis {
             result = syncer.sync(
+                sourceId = sourceId,
                 currentValues = db.characterQueries.queryAll(::character).executeAsList(),
-                networkValues = data,
+                networkValues = remote,
+                removeNotMatched = false
             )
         }
 
@@ -64,83 +118,67 @@ internal class CharacterDaoImpl(
     }
 
     override suspend fun sync(
+        sourceId: Long,
         targetId: Long,
         targetType: TrackTargetType,
-        data: List<Character>
+        remote: List<Character>
     ) {
-        val result: ItemSyncerResult<Character>
-        val time = measureTimeMillis {
-            result = syncer.sync(
-                currentValues = db.characterQueries.queryAll(::character).executeAsList(),
-                networkValues = data,
+        sync(sourceId, remote)
+
+        remote.mapNotNull { character ->
+            val localId = db.sourceIdsSyncQueries
+                .findLocalId(sourceId, character.id, syncDataType.type)
+                .executeAsOneOrNull() ?: return@mapNotNull null
+
+            CharacterRole(
+                characterId = localId,
+                targetId = targetId,
+                targetType = targetType
             )
-        }
+        }.also { syncRoles(it) }
+    }
 
-        logger.i(
-            "Character sync results --> Added: ${result.added.size} Updated: ${result.updated.size}, time: $time mills",
-            tag = SYNCER_RESULT_TAG
-        )
+    override suspend fun sync(sourceId: Long, characterInfo: CharacterInfo) {
+        //save character
+        sync(sourceId, arrayListOf(characterInfo.character))
 
-        //TODO refactor. Update ids in syncer via transaction with id return
-        val addedCharacters =
-            db.characterQueries.queryByShikimoriIds(
-                result.added.map { it.shikimoriId },
-                ::character
-            )
-                .executeAsList()
+        val localId = db.sourceIdsSyncQueries
+            .findLocalId(sourceId, characterInfo.character.id, syncDataType.type)
+            .executeAsOneOrNull() ?: return
 
-        val roles = (addedCharacters + result.updated)
-            .map {
+        //create roles from animes and mangas
+        val roles = characterInfo.animes
+            .mapNotNull {
+                db.sourceIdsSyncQueries
+                    .findLocalId(sourceId, it.id, SourceDataType.Anime.type)
+                    .executeAsOneOrNull()
+            }.map {
                 CharacterRole(
-                    characterId = it.id,
-                    targetId = targetId,
-                    targetType = targetType
+                    characterId = localId,
+                    targetId = it,
+                    targetType = TrackTargetType.ANIME
+                )
+            } + characterInfo.mangas
+            .map {
+                val (mangaId, _) = db.sourceIdsSyncQueries
+                    .findLocalId(sourceId, it.id, SourceDataType.Manga.type)
+                    .executeAsOneOrNull() to false
+                if (mangaId == null) {
+                    db.sourceIdsSyncQueries
+                        .findLocalId(sourceId, it.id, SourceDataType.Ranobe.type)
+                        .executeAsOneOrNull() to true
+                } else mangaId to false
+            }.mapNotNull { (id, isRanobe) ->
+                if (id == null) null
+                else CharacterRole(
+                    characterId = localId,
+                    targetId = id,
+                    targetType = if (isRanobe) TrackTargetType.RANOBE else TrackTargetType.MANGA
                 )
             }
 
+        //finally sync roles
         syncRoles(roles)
-    }
-
-    override suspend fun insert(entity: Character) {
-        entity.let {
-            db.characterQueries.insert(
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.description,
-                it.descriptionSourceUrl
-            )
-        }
-    }
-
-    override suspend fun update(entity: Character) {
-        entity.let {
-            db.characterQueries.update(
-                it.id,
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.description,
-                it.descriptionSourceUrl
-            )
-        }
-    }
-
-    override suspend fun delete(entity: Character) {
-        db.characterQueries.deleteById(entity.id)
-        db.characterRoleQueries.deleteByCharacterId(entity.id)
     }
 
     override fun queryById(id: Long): Character? {

@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.shared.daos
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.TrackDao
+import com.gnoemes.shimori.data.core.entities.app.SourceDataType
 import com.gnoemes.shimori.data.core.entities.track.Track
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import kotlin.system.measureTimeMillis
 
 internal class TrackDaoImpl(
@@ -26,12 +26,43 @@ internal class TrackDaoImpl(
 
     private val syncer = syncerForEntity(
         this,
-        { it.shikimoriId },
+        { _, track -> track.targetId to track.targetType },
         ::sync,
-        logger
+        logger,
+        networkEntityToKey = ::findKey
     )
 
-    private suspend fun sync(remote: Track, local: Track?): Track {
+    private fun findKey(
+        sourceId: Long,
+        remote: Track,
+    ): Pair<Long, TrackTargetType>? {
+        val remoteTargetType = remote.targetType
+        val (localTargetId, isRanobe) = db.sourceIdsSyncQueries
+            .findLocalId(sourceId, remote.targetId, remoteTargetType.sourceDataType.type)
+            .executeAsOneOrNull()
+            .let { it to false }
+            .let {
+                //Check ranobe. On shikimori there's no difference between manga and ranobe in tracks
+                if (it.first == null && remoteTargetType.manga) db.sourceIdsSyncQueries
+                    .findLocalId(sourceId, remote.targetId, SourceDataType.Ranobe.type)
+                    .executeAsOneOrNull() to true
+                else it
+            }
+
+        //we can't create track for unknown target
+        if (localTargetId == null) {
+            return null
+        }
+
+        //update track with same key
+        return localTargetId to when (remoteTargetType) {
+            TrackTargetType.ANIME -> remoteTargetType
+            TrackTargetType.MANGA -> if (isRanobe) TrackTargetType.RANOBE else remoteTargetType
+            else -> remoteTargetType
+        }
+    }
+
+    private suspend fun sync(sourceId: Long, remote: Track, local: Track?): Track {
         //if we have pending sync, we won't override local Track
         if (local != null) {
             val pendingSync = db
@@ -45,52 +76,58 @@ internal class TrackDaoImpl(
         }
 
         return remote.copy(
-            id = local?.id ?: 0,
             //do not override ranobe type
             targetType = local?.targetType ?: remote.targetType,
-            targetId = getTargetId(remote, local)
+            targetId = getTargetId(sourceId, remote, local)
         )
     }
 
-    private suspend fun getTargetId(remote: Track, local: Track?): Long {
-        val targetType = local?.targetType ?: remote.targetType
+    private suspend fun getTargetId(sourceId: Long, remote: Track, local: Track?): Long {
         val targetId = local?.targetId?.takeIf { it > 0 }
-
-        if (remote.targetShikimoriId == null) {
-            return 0
-        }
 
         if (targetId != null) {
             return targetId
         }
 
-        return withContext(dispatchers.io) {
-            (when (targetType) {
-                TrackTargetType.ANIME -> db
-                    .animeQueries
-                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
+        val remoteTargetType = remote.targetType
+
+        return db.sourceIdsSyncQueries
+            .findLocalId(sourceId, remote.targetId, remoteTargetType.sourceDataType.type)
+            .executeAsOneOrNull()
+            .let {
+                //Check ranobe. On shikimori there's no difference between manga and ranobe in tracks
+                if (it == null && remoteTargetType.manga) db.sourceIdsSyncQueries
+                    .findLocalId(sourceId, remote.targetId, SourceDataType.Ranobe.type)
                     .executeAsOneOrNull()
-                TrackTargetType.MANGA -> db
-                    .mangaQueries
-                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
-                    .executeAsOneOrNull()
-                TrackTargetType.RANOBE -> db
-                    .ranobeQueries
-                    .queryIdByShikimoriId(remote.targetShikimoriId!!)
-                    .executeAsOneOrNull()
-            })
-            //mark for delete if we can't set target
-                ?: 0
+                else it
+            } ?: 0
+    }
+
+    override suspend fun insert(sourceId: Long, remote: Track) {
+        db.withTransaction {
+            remote.let {
+                trackQueries.insert(
+                    it.targetId,
+                    it.targetType,
+                    it.status,
+                    it.score,
+                    it.comment,
+                    it.progress,
+                    it.reCounter,
+                    it.dateCreated,
+                    it.dateUpdated
+                )
+                val localId = trackQueries.selectLastInsertedRowId().executeAsOne()
+                syncRemoteIds(sourceId, localId, remote.id, syncDataType)
+            }
         }
     }
 
-    override suspend fun insert(entity: Track) {
-        entity.let {
+    override suspend fun insert(track: Track): Long {
+        return track.let {
             db.trackQueries.insert(
-                it.shikimoriId,
                 it.targetId,
                 it.targetType,
-                it.targetShikimoriId,
                 it.status,
                 it.score,
                 it.comment,
@@ -99,18 +136,40 @@ internal class TrackDaoImpl(
                 it.dateCreated,
                 it.dateUpdated
             )
+            db.trackQueries.selectLastInsertedRowId().executeAsOne()
         }
     }
 
-    override suspend fun update(entity: Track) {
-        entity.let {
+    override suspend fun update(sourceId: Long, remote: Track, local: Track) {
+        db.withTransaction {
+            remote.let {
+                trackQueries.update(
+                    comgnoemesshimoridatadb.data.Track(
+                        local.id,
+                        it.targetId,
+                        it.targetType,
+                        it.status,
+                        it.score,
+                        it.comment,
+                        it.progress,
+                        it.reCounter,
+                        it.dateCreated,
+                        it.dateUpdated
+                    )
+                )
+
+                syncRemoteIds(sourceId, local.id, remote.id, syncDataType)
+            }
+        }
+    }
+
+    override suspend fun update(track: Track) {
+        track.let {
             db.trackQueries.update(
-                TrackDAO(
-                    it.id,
-                    it.shikimoriId,
+                comgnoemesshimoridatadb.data.Track(
+                    track.id,
                     it.targetId,
                     it.targetType,
-                    it.targetShikimoriId,
                     it.status,
                     it.score,
                     it.comment,
@@ -123,16 +182,24 @@ internal class TrackDaoImpl(
         }
     }
 
-    override suspend fun delete(entity: Track) {
-        db.trackQueries.deleteById(entity.id)
+    override suspend fun delete(sourceId: Long, local: Track) {
+        db.withTransaction {
+            trackQueries.deleteById(local.id)
+            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
+        }
     }
 
-    override suspend fun syncAll(data: List<Track>) {
+    override suspend fun delete(track: Track) {
+        db.trackQueries.deleteById(track.id)
+    }
+
+    override suspend fun sync(sourceId: Long, remote: List<Track>) {
         val result: ItemSyncerResult<Track>
         val time = measureTimeMillis {
             result = syncer.sync(
+                sourceId = sourceId,
                 currentValues = db.trackQueries.queryAll(::track).executeAsList(),
-                networkValues = data,
+                networkValues = remote,
                 removeNotMatched = true
             )
         }
@@ -143,18 +210,22 @@ internal class TrackDaoImpl(
         )
     }
 
-    override suspend fun syncAll(
-        data: List<Track>,
+    override suspend fun sync(
+        sourceId: Long,
         target: TrackTargetType,
-        status: TrackStatus?
+        status: TrackStatus?,
+        remote: List<Track>
     ) {
         val result: ItemSyncerResult<Track>
         val time = measureTimeMillis {
             result = syncer.sync(
+                sourceId = sourceId,
                 currentValues =
-                if (status == null) db.trackQueries.queryAllByTarget(target, ::track).executeAsList()
-                else db.trackQueries.queryAllByTarget(target, ::track).executeAsList(),
-                networkValues = data,
+                if (status == null) db.trackQueries.queryAllByTarget(target, ::track)
+                    .executeAsList()
+                else db.trackQueries.queryAllByTargetAndStatus(target, status, ::track)
+                    .executeAsList(),
+                networkValues = remote,
                 removeNotMatched = true
             )
         }
@@ -174,14 +245,6 @@ internal class TrackDaoImpl(
     override fun observeById(id: Long): Flow<Track?> {
         return db.trackQueries
             .queryById(id, ::track)
-            .asFlow()
-            .mapToOneOrNull(dispatchers.io)
-            .flowOn(dispatchers.io)
-    }
-
-    override fun observeByShikimoriId(id: Long): Flow<Track?> {
-        return db.trackQueries
-            .queryByShikimoriId(id, ::track)
             .asFlow()
             .mapToOneOrNull(dispatchers.io)
             .flowOn(dispatchers.io)

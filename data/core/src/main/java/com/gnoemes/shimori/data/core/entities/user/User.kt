@@ -1,13 +1,13 @@
 package com.gnoemes.shimori.data.core.entities.user
 
-import com.gnoemes.shimori.data.core.entities.ShikimoriEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import kotlinx.datetime.Instant
 
 data class User(
     override val id: Long = 0,
-    override val shikimoriId: Long = 0,
+    val remoteId: Long,
+    val sourceId: Long,
     val nickname: String = "",
     val image: ShimoriImage? = null,
     val name: String? = null,
@@ -25,7 +25,19 @@ data class User(
     val banned: Boolean = false,
     val lastOnlineAt: Instant? = null,
     val isMe: Boolean = false
-) : ShimoriEntity, ShikimoriEntity {
-    fun isSameShikimoriUser(other: User) =
-        shikimoriId != 0L && shikimoriId == other.shikimoriId
+) : ShimoriEntity {
+    val isLocal get() = sourceId == -1L
+
+    fun User.toUserShort() = UserShort(
+        id = id,
+        remoteId = remoteId,
+        sourceId = sourceId,
+        nickname = nickname,
+        image = image,
+        isMe = isMe
+    )
+
+    companion object {
+        fun createLocalUser() = User(sourceId = -1, isMe = true, remoteId = -1)
+    }
 }

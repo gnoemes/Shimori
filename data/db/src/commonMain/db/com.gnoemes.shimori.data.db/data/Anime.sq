@@ -7,7 +7,6 @@ import kotlinx.datetime.LocalDate;
 
 CREATE TABLE anime (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    shikimori_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     name_ru TEXT,
     name_eng TEXT,
@@ -36,21 +35,19 @@ CREATE TABLE anime (
     next_episode_end_date INTEGER AS Instant
 );
 
-CREATE UNIQUE INDEX anime_shikimori_id ON anime(shikimori_id);
 CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
 
 insert:
-INSERT OR REPLACE INTO anime(shikimori_id, name, name_ru, name_eng, image_original, image_preview,
+INSERT OR REPLACE INTO anime(name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
 date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
 topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
-VALUES (?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
 UPDATE anime
 SET
  id = :id,
- shikimori_id = CASE WHEN :shikimori_id = 0 THEN shikimori_id ELSE :shikimori_id END,
  name = :name,
  name_ru = coalesce(:name_ru, name_ru),
  name_eng = coalesce(:name_eng, name_eng),
@@ -102,14 +99,11 @@ LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE title.id = :id;
 
-queryIdByShikimoriId:
-SELECT id FROM anime WHERE shikimori_id = :shikimoriId;
-
-queryLocalAndShikimoriIdsByShikimoriIds:
-SELECT shikimori_id, id FROM anime WHERE shikimori_id IN :shikimoriIds;
-
 queryByStatus:
 SELECT * FROM anime AS title
 INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
 LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
 WHERE r.status = :status;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

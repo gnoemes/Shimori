@@ -14,7 +14,7 @@ internal class ShikimoriCharacterDataSource(
 ) : CharacterDataSource {
 
     override suspend fun get(character: Character): CharacterInfo {
-        return shikimori.character.getDetails(character.shikimoriId)
+        return shikimori.character.getDetails(character.id)
             .let { detailsMapper.map(it) }
     }
 }

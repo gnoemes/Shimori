@@ -22,18 +22,18 @@ internal class ShikimoriRanobeDataSource(
 ) : RanobeDataSource {
 
     override suspend fun getWithStatus(user: UserShort, status: TrackStatus?): List<RanobeWithTrack> {
-        return shikimori.ranobe.getUserRates(user.shikimoriId, statusMapper.mapInverse(status))
+        return shikimori.ranobe.getUserRates(user.remoteId, statusMapper.mapInverse(status))
             .let { ratedMapper.forLists().invoke(it) }
             .filter { it.entity.ranobeType != null }
     }
 
     override suspend fun get(title: Ranobe): RanobeWithTrack {
-        return shikimori.manga.getDetails(title.shikimoriId)
+        return shikimori.manga.getDetails(title.id)
             .let { detailsMapper.map(it) }
     }
 
     override suspend fun roles(title: Ranobe): RolesInfo {
-        return shikimori.ranobe.getRoles(title.shikimoriId)
+        return shikimori.ranobe.getRoles(title.id)
             .let { rolesMapper.map(it) }
     }
 }

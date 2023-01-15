@@ -32,6 +32,8 @@ import com.gnoemes.shimori.settings.ShimoriStorageImpl
 import com.gnoemes.shimori.settings.settingsModule
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
+import com.gnoemes.shimori.source.CatalogueSource
+import com.gnoemes.shimori.source.TrackSource
 import com.gnoemes.shimori.tasks.tasksModule
 import com.gnoemes.shimori.title.titleModule
 import io.ktor.client.*
@@ -57,6 +59,7 @@ val appModule = DI.Module("app") {
     importOnce(domainModule)
     importOnce(tasksModule)
 
+    importOnce(catalogSources)
     importOnce(shikimoriModule)
 
     importOnce(features)
@@ -114,6 +117,11 @@ private val initializers = DI.Module(name = "initializers") {
     bindProvider { new(::AppInitializers) }
 }
 
+private val catalogSources = DI.Module(name = "catalogSources") {
+    bindSet<CatalogueSource>()
+    bindSet<TrackSource>()
+}
+
 private val networkModule = DI.Module(name = "network") {
 
     bindSingleton(KodeinTag.imageClient) { OkHttpClient.Builder().defaultConfig().build() }
@@ -133,7 +141,7 @@ private val networkModule = DI.Module(name = "network") {
 
             install(Logging) {
                 logger = Logger.ANDROID
-                level = if (platform.debug) LogLevel.HEADERS else LogLevel.NONE
+                level = if (platform.debug) LogLevel.BODY else LogLevel.NONE
             }
 
             install(UserAgent) {

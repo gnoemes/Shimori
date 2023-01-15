@@ -51,3 +51,6 @@ SELECT title.*, r.* FROM character_role AS cr
 INNER JOIN ranobe AS title ON title.id = cr.target_id AND cr.target_type = "RANOBE"
 INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = cr.target_type
 WHERE cr.character_id = :characterId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

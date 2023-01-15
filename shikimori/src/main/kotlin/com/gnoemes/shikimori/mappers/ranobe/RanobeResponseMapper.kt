@@ -14,7 +14,7 @@ internal class RanobeResponseMapper constructor(
 ) : Mapper<MangaResponse, Ranobe> {
 
     override suspend fun map(from: MangaResponse) = Ranobe(
-        shikimoriId = from.id,
+        id = from.id,
         name = from.name.trim(),
         nameRu = from.nameRu?.trim()?.ifEmpty { null },
         image = imageMapper.map(from.image),

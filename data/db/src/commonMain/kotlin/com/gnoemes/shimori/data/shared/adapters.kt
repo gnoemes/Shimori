@@ -2,7 +2,6 @@ package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.data.core.entities.app.Request
 import com.gnoemes.shimori.data.core.entities.app.SyncAction
-import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
@@ -63,14 +62,6 @@ internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
     override fun encode(value: List<Genre>): String = Json.encodeToString(value)
 }
 
-internal object SyncTargetAdapter : ColumnAdapter<List<SyncTarget>, String> {
-    override fun decode(databaseValue: String): List<SyncTarget> {
-        return Json.decodeFromString(databaseValue)
-    }
-
-    override fun encode(value: List<SyncTarget>): String = Json.encodeToString(value)
-}
-
 internal object SyncActionAdapter : ColumnAdapter<SyncAction, String> {
     override fun decode(databaseValue: String) = SyncAction.valueOf(databaseValue)
     override fun encode(value: SyncAction): String = value.name
@@ -128,7 +119,6 @@ internal val PinnedAdapter = Pinned.Adapter(
 )
 
 internal val TrackToSyncAdapter = Track_to_sync.Adapter(
-    sync_targetsAdapter = SyncTargetAdapter,
     sync_actionAdapter = SyncActionAdapter,
     last_attemptAdapter = InstantAdapter
 )

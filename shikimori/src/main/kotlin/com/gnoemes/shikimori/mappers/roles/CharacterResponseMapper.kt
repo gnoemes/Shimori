@@ -11,8 +11,7 @@ internal class CharacterResponseMapper(
 ) : Mapper<CharacterResponse, Character> {
     override suspend fun map(from: CharacterResponse): Character {
         return Character(
-            id = 0,
-            shikimoriId = from.id,
+            id = from.id,
             name = from.name,
             nameRu = from.nameRu,
             nameEn = from.name,

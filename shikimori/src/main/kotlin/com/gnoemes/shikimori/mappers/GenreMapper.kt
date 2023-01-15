@@ -9,7 +9,8 @@ internal class GenreMapper : Mapper<GenreResponse?, Genre?> {
         if (from == null) return null
 
         return Genre(
-            shikimoriId = from.id,
+            //TODO restore
+//            id = from.id,
             name = from.name,
             nameRu = from.nameRu,
         )

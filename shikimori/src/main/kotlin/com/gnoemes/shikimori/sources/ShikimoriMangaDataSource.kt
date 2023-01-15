@@ -21,19 +21,22 @@ internal class ShikimoriMangaDataSource(
     private val rolesMapper: RolesMapper,
 ) : MangaDataSource {
 
-    override suspend fun getWithStatus(user: UserShort, status: TrackStatus?): List<MangaWithTrack> {
-        return shikimori.manga.getUserRates(user.shikimoriId, statusMapper.mapInverse(status))
+    override suspend fun getWithStatus(
+        user: UserShort,
+        status: TrackStatus?
+    ): List<MangaWithTrack> {
+        return shikimori.manga.getUserRates(user.remoteId, statusMapper.mapInverse(status))
             .let { ratedMapper.forLists().invoke(it) }
             .filter { it.entity.mangaType != null }
     }
 
     override suspend fun get(title: Manga): MangaWithTrack {
-        return shikimori.manga.getDetails(title.shikimoriId)
+        return shikimori.manga.getDetails(title.id)
             .let { detailsMapper.map(it) }
     }
 
     override suspend fun roles(title: Manga): RolesInfo {
-        return shikimori.manga.getRoles(title.shikimoriId)
+        return shikimori.manga.getRoles(title.id)
             .let { rolesMapper.map(it) }
     }
 }
