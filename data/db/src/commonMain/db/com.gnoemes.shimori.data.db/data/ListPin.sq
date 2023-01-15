@@ -215,6 +215,9 @@ name ASC
 LIMIT :limit OFFSET :offset;
 
 
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
+
 
 
 

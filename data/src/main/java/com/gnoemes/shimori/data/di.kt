@@ -17,15 +17,16 @@ import com.gnoemes.shimori.data.repositories.ranobe.RanobeDetailsLastRequestStor
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRolesLastRequestStore
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeWithStatusLastRequestStore
+import com.gnoemes.shimori.data.repositories.source.SourceRepository
 import com.gnoemes.shimori.data.repositories.track.SyncPendingTracksLastRequestStore
 import com.gnoemes.shimori.data.repositories.track.TrackRepository
-import com.gnoemes.shimori.data.repositories.user.ShikimoriUserRepository
+import com.gnoemes.shimori.data.repositories.user.UserRepository
 import org.kodein.di.DI
 import org.kodein.di.bindProvider
 import org.kodein.di.bindSingleton
 
 val dataModule = DI.Module("data") {
-    bindProvider { new(::ShikimoriUserRepository) }
+    bindProvider { new(::UserRepository) }
     bindProvider { new(::TrackRepository) }
 
     bindSingleton { new(::ListsStateBus) }
@@ -35,6 +36,7 @@ val dataModule = DI.Module("data") {
     bindProvider { new(::RanobeRepository) }
     bindProvider { new(::ListPinRepository) }
     bindProvider { new(::CharacterRepository) }
+    bindProvider { new(::SourceRepository) }
 
     bindProvider { new(::AnimeWithStatusLastRequestStore) }
     bindProvider { new(::MangaWithStatusLastRequestStore) }

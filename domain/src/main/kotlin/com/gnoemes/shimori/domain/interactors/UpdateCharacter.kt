@@ -2,10 +2,12 @@ package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.repositories.character.CharacterRepository
+import com.gnoemes.shimori.data.repositories.source.SourceRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
 
 class UpdateCharacter(
+    private val sourceRepository: SourceRepository,
     private val characterRepository: CharacterRepository,
     private val dispatchers: AppCoroutineDispatchers,
 ) : Interactor<UpdateCharacter.Params>() {
@@ -17,7 +19,13 @@ class UpdateCharacter(
         }
     }
 
-    private suspend fun update(id: Long) = characterRepository.update(id)
+    private suspend fun update(id: Long) {
+        characterRepository.queryById(id)?.let {
+            val (sourceId, characterInfo) = sourceRepository.get(it)
+            characterRepository.sync(sourceId, characterInfo)
+            characterRepository.characterUpdated(id)
+        }
+    }
 
 
     data class Params(

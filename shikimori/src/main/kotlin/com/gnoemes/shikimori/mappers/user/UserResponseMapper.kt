@@ -1,5 +1,6 @@
 package com.gnoemes.shikimori.mappers.user
 
+import com.gnoemes.shikimori.ShikimoriSource
 import com.gnoemes.shikimori.entities.user.UserDetailsResponse
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.user.User
@@ -12,7 +13,9 @@ internal class UserResponseMapper : Mapper<UserDetailsResponse, User> {
         val commonInfo = convertCommonInfo(from.commonInfo)
 
         return User(
-            shikimoriId = from.id,
+            id = 0,
+            remoteId = from.id,
+            sourceId = ShikimoriSource.ID,
             nickname = from.nickname,
             image = image,
             name = from.name,

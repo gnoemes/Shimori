@@ -13,7 +13,7 @@ internal class ShikimoriTrackDataSource(
     private val rateMapper: RateMapper,
 ) : TrackDataSource {
     override suspend fun getList(user: UserShort): List<Track> {
-        return shikimori.rate.userRates(user.shikimoriId)
+        return shikimori.rate.userRates(user.remoteId)
             .let { rateMapper.forLists().invoke(it) }
     }
 
@@ -25,7 +25,7 @@ internal class ShikimoriTrackDataSource(
 
     override suspend fun update(track: Track): Track {
         return shikimori.rate.update(
-            track.shikimoriId,
+            track.id,
             UserRateCreateOrUpdateRequest(rateMapper.mapInverse(track))
         ).let { rateMapper.map(it) }
     }

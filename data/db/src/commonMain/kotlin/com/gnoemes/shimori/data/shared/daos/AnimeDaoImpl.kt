@@ -4,8 +4,6 @@ import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.database.daos.AnimeDao
 import com.gnoemes.shimori.data.core.entities.PaginatedEntity
-import com.gnoemes.shimori.data.core.entities.app.SyncApi
-import com.gnoemes.shimori.data.core.entities.app.SyncTarget
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.core.entities.track.ListSort
@@ -29,90 +27,100 @@ internal class AnimeDaoImpl(
 
     private val syncer = syncerForEntity(
         this,
-        { it.shikimoriId },
-        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        { _, title -> title.name.takeIf { it.isNotEmpty() } },
+        { _, remote, _ -> remote },
         logger
     )
 
-    override suspend fun insert(entity: Anime) {
-        entity.let {
-            db.animeQueries.insert(
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.animeType?.type,
-                it.rating,
-                it.status,
-                it.episodes,
-                it.episodesAired,
-                it.dateAired,
-                it.dateReleased,
-                it.ageRating,
-                it.description,
-                it.descriptionHtml,
-                it.franchise,
-                it.favorite,
-                it.topicId,
-                it.genres,
-                it.duration,
-                it.nextEpisode,
-                it.nextEpisodeDate,
-                it.nextEpisodeEndDate,
-            )
+    override suspend fun insert(sourceId: Long, remote: Anime) {
+        db.withTransaction {
+            remote.let {
+                animeQueries.insert(
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.animeType?.type,
+                    it.rating,
+                    it.status,
+                    it.episodes,
+                    it.episodesAired,
+                    it.dateAired,
+                    it.dateReleased,
+                    it.ageRating,
+                    it.description,
+                    it.descriptionHtml,
+                    it.franchise,
+                    it.favorite,
+                    it.topicId,
+                    it.genres,
+                    it.duration,
+                    it.nextEpisode,
+                    it.nextEpisodeDate,
+                    it.nextEpisodeEndDate,
+                )
+                val localId = animeQueries.selectLastInsertedRowId().executeAsOne()
+                syncRemoteIds(sourceId, localId, remote.id, syncDataType)
+            }
         }
     }
 
-    override suspend fun update(entity: Anime) {
-        entity.let {
-            db.animeQueries.update(
-                it.id,
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.animeType?.type,
-                it.rating,
-                it.status?.let(TitleStatusAdapter::encode),
-                it.episodes,
-                it.episodesAired,
-                it.dateAired?.let(LocalDateAdapter::encode),
-                it.dateReleased?.let(LocalDateAdapter::encode),
-                it.ageRating.let(AgeRatingAdapter::encode),
-                it.description,
-                it.descriptionHtml,
-                it.franchise,
-                it.favorite,
-                it.topicId,
-                it.genres?.let(GenresAdapter::encode),
-                it.duration?.toLong(),
-                it.nextEpisode?.toLong(),
-                it.nextEpisodeDate?.let(InstantAdapter::encode),
-                it.nextEpisodeEndDate?.let(InstantAdapter::encode),
-            )
+    override suspend fun update(sourceId: Long, remote: Anime, local: Anime) {
+        db.withTransaction {
+            remote.let {
+                animeQueries.update(
+                    local.id,
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.animeType?.type,
+                    it.rating,
+                    it.status?.let(TitleStatusAdapter::encode),
+                    it.episodes,
+                    it.episodesAired,
+                    it.dateAired?.let(LocalDateAdapter::encode),
+                    it.dateReleased?.let(LocalDateAdapter::encode),
+                    it.ageRating.let(AgeRatingAdapter::encode),
+                    it.description,
+                    it.descriptionHtml,
+                    it.franchise,
+                    it.favorite,
+                    it.topicId,
+                    it.genres?.let(GenresAdapter::encode),
+                    it.duration?.toLong(),
+                    it.nextEpisode?.toLong(),
+                    it.nextEpisodeDate?.let(InstantAdapter::encode),
+                    it.nextEpisodeEndDate?.let(InstantAdapter::encode),
+                )
+
+                syncRemoteIds(sourceId, local.id, remote.id, syncDataType)
+            }
         }
     }
 
-    override suspend fun delete(entity: Anime) {
-        db.animeQueries.deleteById(entity.id)
+    override suspend fun delete(sourceId: Long, local: Anime) {
+        db.withTransaction {
+            animeQueries.deleteById(local.id)
+            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
+        }
     }
 
-    override suspend fun insertOrUpdate(entities: List<Anime>) {
+    override suspend fun sync(sourceId: Long, remote: List<Anime>) {
         val result: ItemSyncerResult<Anime>
         val time = measureTimeMillis {
             result = syncer.sync(
+                sourceId = sourceId,
                 currentValues = db.animeQueries.queryAll(::anime).executeAsList(),
-                networkValues = entities,
+                networkValues = remote,
                 removeNotMatched = false
             )
         }
@@ -130,23 +138,6 @@ internal class AnimeDaoImpl(
 
     override suspend fun queryAll(): List<Anime> {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun queryIdsBySyncTargets(
-        targets: List<SyncTarget>
-    ): List<Pair<SyncTarget, Long>> {
-        val ids = targets.map { it.id }
-        //TODO switch between apis
-        return when (targets.first().api) {
-            //TODO refactor sync apis interaction
-            SyncApi.Shikimori -> db.animeQueries.queryLocalAndShikimoriIdsByShikimoriIds(
-                ids,
-                mapper = { shikimori_id: Long, id: Long ->
-                    SyncTarget(SyncApi.Shikimori, shikimori_id) to id
-                }
-            )
-                .executeAsList()
-        }
     }
 
     override suspend fun queryByStatus(status: TrackStatus): List<AnimeWithTrack> {

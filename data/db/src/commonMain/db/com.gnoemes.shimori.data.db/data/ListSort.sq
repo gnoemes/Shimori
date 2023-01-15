@@ -22,3 +22,6 @@ DELETE FROM list_sort WHERE id = :id;
 
 queryByType:
 SELECT * FROM list_sort WHERE type = :type;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

@@ -30,6 +30,7 @@ internal class ShimoriSQLDelightDatabase(
     override val listPinDao: ListPinDao = ListPinDaoImpl(db, logger, dispatchers)
     override val trackToSyncDao: TrackToSyncDao = TrackToSyncDaoImpl(db, logger, dispatchers)
     override val characterDao: CharacterDao = CharacterDaoImpl(db, logger, dispatchers)
+    override val sourceIdsSyncDao: SourceIdsSyncDao = SourceIdsSyncDaoImpl(db, logger, dispatchers)
 }
 
 internal fun createDatabase(

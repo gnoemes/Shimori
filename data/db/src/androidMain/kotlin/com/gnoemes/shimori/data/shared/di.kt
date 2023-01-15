@@ -19,4 +19,5 @@ actual val databaseModule: DI.Module = DI.Module("database") {
     bindProvider { instance<ShimoriDatabase>().listPinDao }
     bindProvider { instance<ShimoriDatabase>().trackToSyncDao }
     bindProvider { instance<ShimoriDatabase>().characterDao }
+    bindProvider { instance<ShimoriDatabase>().sourceIdsSyncDao }
 }

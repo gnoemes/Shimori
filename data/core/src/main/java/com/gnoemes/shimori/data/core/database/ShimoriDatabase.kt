@@ -13,4 +13,5 @@ interface ShimoriDatabase {
     val listPinDao: ListPinDao
     val trackToSyncDao: TrackToSyncDao
     val characterDao: CharacterDao
+    val sourceIdsSyncDao: SourceIdsSyncDao
 }

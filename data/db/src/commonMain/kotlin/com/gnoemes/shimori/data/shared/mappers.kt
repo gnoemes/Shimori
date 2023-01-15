@@ -28,7 +28,8 @@ import kotlinx.datetime.LocalDate
 internal val queryMeShortToUserShortMapper = Mapper<QueryMeShort, UserShort> { from ->
     UserShort(
         id = from.id,
-        shikimoriId = from.shikimori_id,
+        remoteId = from.remote_id,
+        sourceId = from.source_id,
         nickname = from.nickname,
         image = ShimoriImage(from.image_original, from.image_preview),
         isMe = from.is_me
@@ -40,7 +41,8 @@ internal val userToUserShortMapper = Mapper<UserDAO?, UserShort?> { from ->
 
     UserShort(
         id = from.id,
-        shikimoriId = from.shikimori_id,
+        remoteId = from.remote_id,
+        sourceId = from.source_id,
         nickname = from.nickname,
         image = ShimoriImage(
             original = from.image_original,
@@ -57,10 +59,10 @@ internal val trackToSyncMapper = object : TwoWayMapper<TrackToSync, TrackToSyncD
         return TrackToSyncDAO(
             from.id,
             from.trackId,
-            from.targets,
             from.action,
             from.attempts,
-            from.lastAttempt
+            from.lastAttempt,
+            from.attemptSourceId
         )
     }
 
@@ -68,10 +70,10 @@ internal val trackToSyncMapper = object : TwoWayMapper<TrackToSync, TrackToSyncD
         return TrackToSync(
             from.id,
             from.track_id,
-            from.sync_targets,
             from.sync_action,
             from.attempts,
-            from.last_attempt
+            from.last_attempt,
+            from.attempt_source_id
         )
     }
 }
@@ -82,7 +84,8 @@ internal object UserMapper : Mapper<UserDAO?, User?> {
 
         return User(
             id = from.id,
-            shikimoriId = from.shikimori_id,
+            remoteId = from.remote_id,
+            sourceId = from.source_id,
             nickname = from.nickname,
             image = ShimoriImage(
                 original = from.image_original,
@@ -137,7 +140,6 @@ internal object LastRequestMapper : Mapper<LastRequestDAO?, LastRequest?> {
 
 internal fun animeWithTrack(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -165,10 +167,8 @@ internal fun animeWithTrack(
     next_episode_date: Instant?,
     next_episode_end_date: Instant?,
     id_: Long?,
-    shikimori_id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
-    target_shikimori_id: Long?,
     status_: TrackStatus?,
     score: Int?,
     comment: String?,
@@ -181,7 +181,7 @@ internal fun animeWithTrack(
     target_type_: TrackTargetType? = null,
 ) = AnimeWithTrack(
     entity = anime(
-        id, shikimori_id, name, name_ru, name_eng,
+        id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
         url, anime_type, rating, status, episodes, episodes_aired,
         date_aired, date_released, age_rating, description, description_html,
@@ -190,7 +190,7 @@ internal fun animeWithTrack(
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
-        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
+        id_,  target_id, target_type, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinned = pinId != null
@@ -198,7 +198,6 @@ internal fun animeWithTrack(
 
 internal fun anime(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -227,7 +226,6 @@ internal fun anime(
     next_episode_end_date: Instant?,
 ) = Anime(
     id = id,
-    shikimoriId = shikimori_id,
     name = name,
     nameRu = name_ru,
     nameEn = name_eng,
@@ -294,7 +292,6 @@ val animeListViewMapper: (
                         trackId, trackStatus, score, comment, progress, reCounter, dateCreated, dateUpdated, pinId ->
     animeWithTrack(
         id = id,
-        shikimori_id = 0,
         name = name,
         name_ru = nameRu,
         name_eng = nameEn,
@@ -322,10 +319,8 @@ val animeListViewMapper: (
         next_episode_date = nextEpisodeDate,
         next_episode_end_date = nextEpisodeEndDate,
         id_ = trackId,
-        shikimori_id_ = null,
         target_id = id,
         target_type = TrackTargetType.ANIME,
-        target_shikimori_id = null,
         status_ = trackStatus,
         score = score,
         comment = comment,
@@ -341,7 +336,6 @@ val animeListViewMapper: (
 
 internal fun mangaWithTrack(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -365,10 +359,8 @@ internal fun mangaWithTrack(
     topic_id: Long?,
     genres: List<Genre>?,
     id_: Long?,
-    shikimori_id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
-    target_shikimori_id: Long?,
     status_: TrackStatus?,
     score: Int?,
     comment: String?,
@@ -381,7 +373,7 @@ internal fun mangaWithTrack(
     target_type_: TrackTargetType? = null
 ) = MangaWithTrack(
     entity = manga(
-        id, shikimori_id, name, name_ru, name_eng,
+        id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
         url, manga_type, rating, status, chapters, volumes,
         date_aired, date_released, age_rating, description,
@@ -389,7 +381,7 @@ internal fun mangaWithTrack(
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
-        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
+        id_, target_id, target_type,  status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinned = pinId != null,
@@ -397,7 +389,6 @@ internal fun mangaWithTrack(
 
 internal fun manga(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -422,7 +413,6 @@ internal fun manga(
     genres: List<Genre>?,
 ) = Manga(
     id = id,
-    shikimoriId = shikimori_id,
     name = name,
     nameRu = name_ru,
     nameEn = name_eng,
@@ -481,7 +471,6 @@ val mangaListViewMapper: (
                         progress, reCounter, dateCreated, dateUpdated, pinId ->
     mangaWithTrack(
         id = id,
-        shikimori_id = 0,
         name = name,
         name_ru = nameRu,
         name_eng = nameEn,
@@ -505,10 +494,8 @@ val mangaListViewMapper: (
         topic_id = null,
         genres = null,
         id_ = trackId,
-        shikimori_id_ = null,
         target_id = id,
         target_type = TrackTargetType.MANGA,
-        target_shikimori_id = null,
         status_ = trackStatus,
         score = score,
         comment = comment,
@@ -524,7 +511,6 @@ val mangaListViewMapper: (
 
 internal fun ranobeWithTrack(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -548,10 +534,8 @@ internal fun ranobeWithTrack(
     topic_id: Long?,
     genres: List<Genre>?,
     id_: Long?,
-    shikimori_id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
-    target_shikimori_id: Long?,
     status_: TrackStatus?,
     score: Int?,
     comment: String?,
@@ -564,7 +548,7 @@ internal fun ranobeWithTrack(
     target_type_: TrackTargetType? = null
 ) = RanobeWithTrack(
     entity = ranobe(
-        id, shikimori_id, name, name_ru, name_eng,
+        id, name, name_ru, name_eng,
         image_original, image_preview, image_x96, image_x48,
         url, ranobe_type, rating, status, chapters, volumes,
         date_aired, date_released, age_rating, description,
@@ -572,7 +556,7 @@ internal fun ranobeWithTrack(
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
-        id_, shikimori_id_, target_id, target_type, target_shikimori_id, status_, score,
+        id_, target_id, target_type, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinned = pinId != null
@@ -580,7 +564,6 @@ internal fun ranobeWithTrack(
 
 internal fun ranobe(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -605,7 +588,6 @@ internal fun ranobe(
     genres: List<Genre>?,
 ) = Ranobe(
     id = id,
-    shikimoriId = shikimori_id,
     name = name,
     nameRu = name_ru,
     nameEn = name_eng,
@@ -664,7 +646,6 @@ val ranobeListViewMapper: (
                          progress, reCounter, dateCreated, dateUpdated, pinId ->
     ranobeWithTrack(
         id = id,
-        shikimori_id = 0,
         name = name,
         name_ru = nameRu,
         name_eng = nameEn,
@@ -688,10 +669,8 @@ val ranobeListViewMapper: (
         topic_id = null,
         genres = null,
         id_ = trackId,
-        shikimori_id_ = null,
         target_id = id,
         target_type = TrackTargetType.MANGA,
-        target_shikimori_id = null,
         status_ = trackStatus,
         score = score,
         comment = comment,
@@ -707,10 +686,8 @@ val ranobeListViewMapper: (
 
 internal fun track(
     id: Long,
-    shikimori_id: Long?,
     target_id: Long,
     target_type: TrackTargetType,
-    target_shikimori_id: Long?,
     status: TrackStatus,
     score: Int?,
     comment: String?,
@@ -720,10 +697,8 @@ internal fun track(
     date_updated: Instant?
 ) = Track(
     id = id,
-    shikimoriId = shikimori_id ?: 0,
     targetId = target_id,
     targetType = target_type,
-    targetShikimoriId = target_shikimori_id,
     status = status,
     score = score,
     comment = comment,
@@ -736,7 +711,6 @@ internal fun track(
 
 internal fun pinPaginated(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -764,10 +738,8 @@ internal fun pinPaginated(
     next_episode_date: Instant?,
     next_episode_end_date: Instant?,
     id_: Long,
-    shikimori_id_: Long?,
     target_id: Long,
     target_type: TrackTargetType,
-    target_shikimori_id: Long?,
     status_: TrackStatus,
     score: Int?,
     comment: String?,
@@ -782,7 +754,6 @@ internal fun pinPaginated(
     return when (target_type) {
         TrackTargetType.ANIME -> animeWithTrack(
             id,
-            shikimori_id,
             name,
             name_ru,
             name_eng,
@@ -810,10 +781,8 @@ internal fun pinPaginated(
             next_episode_date,
             next_episode_end_date,
             id_,
-            shikimori_id_,
             target_id,
             target_type,
-            target_shikimori_id,
             status_,
             score,
             comment,
@@ -827,7 +796,6 @@ internal fun pinPaginated(
         )
         TrackTargetType.MANGA -> mangaWithTrack(
             id,
-            shikimori_id,
             name,
             name_ru,
             name_eng,
@@ -851,10 +819,8 @@ internal fun pinPaginated(
             topic_id,
             genres,
             id_,
-            shikimori_id_,
             target_id,
             target_type,
-            target_shikimori_id,
             status_,
             score,
             comment,
@@ -868,7 +834,6 @@ internal fun pinPaginated(
         )
         TrackTargetType.RANOBE -> ranobeWithTrack(
             id,
-            shikimori_id,
             name,
             name_ru,
             name_eng,
@@ -892,10 +857,8 @@ internal fun pinPaginated(
             topic_id,
             genres,
             id_,
-            shikimori_id_,
             target_id,
             target_type,
-            target_shikimori_id,
             status_,
             score,
             comment,
@@ -912,7 +875,6 @@ internal fun pinPaginated(
 
 internal fun character(
     id: Long,
-    shikimori_id: Long,
     name: String,
     name_ru: String?,
     name_eng: String?,
@@ -926,7 +888,6 @@ internal fun character(
 ): Character {
     return Character(
         id = id,
-        shikimoriId = shikimori_id,
         name = name,
         nameRu = name_ru,
         nameEn = name_eng,

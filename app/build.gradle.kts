@@ -97,6 +97,7 @@ dependencies {
 
     implementation(projects.data)
     implementation(projects.data.db)
+    implementation(projects.sourceApi)
     implementation(projects.domain)
     implementation(projects.tasks)
 

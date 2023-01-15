@@ -35,17 +35,17 @@ internal class ShikimoriAnimeDataSource(
     }
 
     override suspend fun getWithStatus(user: UserShort, status: TrackStatus?): List<AnimeWithTrack> {
-        return shikimori.anime.getUserRates(user.shikimoriId, statusMapper.mapInverse(status))
+        return shikimori.anime.getUserRates(user.remoteId, statusMapper.mapInverse(status))
             .let { ratedMapper.forLists().invoke(it) }
     }
 
     override suspend fun get(title: Anime): AnimeWithTrack {
-        return shikimori.anime.getDetails(title.shikimoriId)
+        return shikimori.anime.getDetails(title.id)
             .let { detailsMapper.map(it) }
     }
 
     override suspend fun roles(title: Anime): RolesInfo {
-        return shikimori.anime.getRoles(title.shikimoriId)
+        return shikimori.anime.getRoles(title.id)
             .let { rolesMapper.map(it) }
     }
 }

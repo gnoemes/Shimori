@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-@com.gnoemes.shimori.data.core.utils.Shikimori
 class Shikimori(
     private val client: HttpClient,
     private val platform: Platform,

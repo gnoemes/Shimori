@@ -3,20 +3,24 @@ package com.gnoemes.shimori.domain.interactors
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.repositories.anime.AnimeRepository
+import com.gnoemes.shimori.data.repositories.character.CharacterRepository
 import com.gnoemes.shimori.data.repositories.manga.MangaRepository
 import com.gnoemes.shimori.data.repositories.ranobe.RanobeRepository
+import com.gnoemes.shimori.data.repositories.source.SourceRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
 
 class UpdateTitle(
+    private val sourceRepository: SourceRepository,
     private val animeRepository: AnimeRepository,
     private val mangaRepository: MangaRepository,
     private val ranobeRepository: RanobeRepository,
+    private val characterRepository: CharacterRepository,
     private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<UpdateTitle.Params>() {
 
     override suspend fun doWork(params: Params) {
-        withContext(dispatchers.io) {
+        withContext<Unit>(dispatchers.io) {
             if (params.force) {
                 update(params.id, params.type)
                 updateRoles(params.id, params.type)
@@ -29,9 +33,21 @@ class UpdateTitle(
     }
 
     private suspend fun update(id: Long, type: TrackTargetType) = when (type) {
-        TrackTargetType.ANIME -> animeRepository.update(id)
-        TrackTargetType.MANGA -> mangaRepository.update(id)
-        TrackTargetType.RANOBE -> ranobeRepository.update(id)
+        TrackTargetType.ANIME -> animeRepository.queryById(id)?.let {
+            val (sourceId, title) = sourceRepository.get(it)
+            animeRepository.sync(sourceId, title)
+            animeRepository.titleUpdated(id)
+        }
+        TrackTargetType.MANGA -> mangaRepository.queryById(id)?.let {
+            val (sourceId, title) = sourceRepository.get(it)
+            mangaRepository.sync(sourceId, title)
+            mangaRepository.titleUpdated(id)
+        }
+        TrackTargetType.RANOBE -> ranobeRepository.queryById(id)?.let {
+            val (sourceId, title) = sourceRepository.get(it)
+            ranobeRepository.sync(sourceId, title)
+            ranobeRepository.titleUpdated(id)
+        }
     }
 
     private suspend fun needUpdate(id: Long, type: TrackTargetType) = when (type) {
@@ -41,9 +57,21 @@ class UpdateTitle(
     }
 
     private suspend fun updateRoles(id: Long, type: TrackTargetType) = when (type) {
-        TrackTargetType.ANIME -> animeRepository.updateRoles(id)
-        TrackTargetType.MANGA -> mangaRepository.updateRoles(id)
-        TrackTargetType.RANOBE -> ranobeRepository.updateRoles(id)
+        TrackTargetType.ANIME -> animeRepository.queryById(id)?.let {
+            val (sourceId, roles) = sourceRepository.getRoles(it)
+            characterRepository.sync(sourceId, it.id, it.type, roles.characters)
+            animeRepository.rolesUpdated(id)
+        }
+        TrackTargetType.MANGA -> mangaRepository.queryById(id)?.let {
+            val (sourceId, roles) = sourceRepository.getRoles(it)
+            characterRepository.sync(sourceId, it.id, it.type, roles.characters)
+            mangaRepository.rolesUpdated(id)
+        }
+        TrackTargetType.RANOBE -> ranobeRepository.queryById(id)?.let {
+            val (sourceId, roles) = sourceRepository.getRoles(it)
+            characterRepository.sync(sourceId, it.id, it.type, roles.characters)
+            ranobeRepository.rolesUpdated(id)
+        }
     }
 
     private suspend fun needUpdateRoles(id: Long, type: TrackTargetType) = when (type) {
@@ -56,7 +84,6 @@ class UpdateTitle(
         val id: Long,
         val type: TrackTargetType,
         val force: Boolean,
-        //TODO add support for external ids (shikimori, mal, ...)
     ) {
         companion object {
             fun forceUpdate(id: Long, type: TrackTargetType) = Params(

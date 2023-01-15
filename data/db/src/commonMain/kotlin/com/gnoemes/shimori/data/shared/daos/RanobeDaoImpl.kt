@@ -27,82 +27,92 @@ internal class RanobeDaoImpl(
 
     private val syncer = syncerForEntity(
         this,
-        { it.shikimoriId },
-        { remote, local -> remote.copy(id = local?.id ?: 0) },
+        { _, title -> title.name.takeIf { it.isNotEmpty() } },
+        { _, remote, _ -> remote },
         logger
     )
 
-    override suspend fun insert(entity: Ranobe) {
-        entity.let {
-            db.ranobeQueries.insert(
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.ranobeType?.type,
-                it.rating,
-                it.status,
-                it.chapters,
-                it.volumes,
-                it.dateAired,
-                it.dateReleased,
-                it.ageRating,
-                it.description,
-                it.descriptionHtml,
-                it.franchise,
-                it.favorite,
-                it.topicId,
-                it.genres
-            )
+    override suspend fun insert(sourceId: Long, remote: Ranobe) {
+        db.withTransaction {
+            remote.let {
+                ranobeQueries.insert(
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.ranobeType?.type,
+                    it.rating,
+                    it.status,
+                    it.chapters,
+                    it.volumes,
+                    it.dateAired,
+                    it.dateReleased,
+                    it.ageRating,
+                    it.description,
+                    it.descriptionHtml,
+                    it.franchise,
+                    it.favorite,
+                    it.topicId,
+                    it.genres
+                )
+                val localId = ranobeQueries.selectLastInsertedRowId().executeAsOne()
+                syncRemoteIds(sourceId, localId, it.id, syncDataType)
+            }
         }
     }
 
-    override suspend fun update(entity: Ranobe) {
-        entity.let {
-            db.ranobeQueries.update(
-                it.id,
-                it.shikimoriId,
-                it.name,
-                it.nameRu,
-                it.nameEn,
-                it.image?.original,
-                it.image?.preview,
-                it.image?.x96,
-                it.image?.x48,
-                it.url,
-                it.ranobeType?.type,
-                it.rating,
-                it.status?.let(TitleStatusAdapter::encode),
-                it.chapters,
-                it.volumes,
-                it.dateAired?.let(LocalDateAdapter::encode),
-                it.dateReleased?.let(LocalDateAdapter::encode),
-                it.ageRating.let(AgeRatingAdapter::encode),
-                it.description,
-                it.descriptionHtml,
-                it.franchise,
-                it.favorite,
-                it.topicId,
-                it.genres?.let(GenresAdapter::encode),
-            )
+    override suspend fun update(sourceId: Long, remote: Ranobe, local: Ranobe) {
+        db.withTransaction {
+            remote.let {
+                ranobeQueries.update(
+                    local.id,
+                    it.name,
+                    it.nameRu,
+                    it.nameEn,
+                    it.image?.original,
+                    it.image?.preview,
+                    it.image?.x96,
+                    it.image?.x48,
+                    it.url,
+                    it.ranobeType?.type,
+                    it.rating,
+                    it.status?.let(TitleStatusAdapter::encode),
+                    it.chapters,
+                    it.volumes,
+                    it.dateAired?.let(LocalDateAdapter::encode),
+                    it.dateReleased?.let(LocalDateAdapter::encode),
+                    it.ageRating.let(AgeRatingAdapter::encode),
+                    it.description,
+                    it.descriptionHtml,
+                    it.franchise,
+                    it.favorite,
+                    it.topicId,
+                    it.genres?.let(GenresAdapter::encode),
+                )
+
+                syncRemoteIds(sourceId, local.id, it.id, syncDataType)
+            }
         }
     }
 
-    override suspend fun delete(entity: Ranobe) {
-        db.ranobeQueries.deleteById(entity.id)
+    override suspend fun delete(sourceId: Long, local: Ranobe) {
+        db.withTransaction {
+            ranobeQueries.deleteById(local.id)
+            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
+        }
     }
 
-    override suspend fun insertOrUpdate(entities: List<Ranobe>) {
+    override suspend fun sync(sourceId: Long, remote: List<Ranobe>) {
         val result: ItemSyncerResult<Ranobe>
         val time = measureTimeMillis {
             result = syncer.sync(
+                sourceId = sourceId,
                 currentValues = db.ranobeQueries.queryAll(::ranobe).executeAsList(),
-                networkValues = entities,
+                networkValues = remote,
                 removeNotMatched = false
             )
         }

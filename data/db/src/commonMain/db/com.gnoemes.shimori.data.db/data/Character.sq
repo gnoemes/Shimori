@@ -1,6 +1,5 @@
 CREATE TABLE character (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    shikimori_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     name_ru TEXT,
     name_eng TEXT,
@@ -13,19 +12,16 @@ CREATE TABLE character (
     description_source_url TEXT
 );
 
-CREATE UNIQUE INDEX character_shikimori_id ON character(shikimori_id);
-
 insert:
-INSERT OR REPLACE INTO character(shikimori_id, name, name_ru, name_eng, image_original,
+INSERT OR REPLACE INTO character(name, name_ru, name_eng, image_original,
 image_preview,image_x96, image_x48, url, description, description_source_url)
-VALUES (?,?,?,?,?,?,?,?,?,  ?, ?);
+VALUES (?,?,?,?,?,?,?,?,  ?, ?);
 
 
 update:
 UPDATE character
 SET
  id = :id,
- shikimori_id = CASE WHEN :shikimori_id = 0 THEN shikimori_id ELSE :shikimori_id END,
  name = :name,
  name_ru = coalesce(:name_ru, name_ru),
  name_eng = coalesce(:name_eng, name_eng),
@@ -53,6 +49,5 @@ SET
  queryByIds:
  SELECT * FROM character WHERE id IN :ids;
 
- queryByShikimoriIds:
- SELECT * FROM character WHERE shikimori_id IN :ids;
-
+ selectLastInsertedRowId:
+ SELECT last_insert_rowid();

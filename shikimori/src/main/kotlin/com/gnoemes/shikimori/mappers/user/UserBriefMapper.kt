@@ -1,5 +1,6 @@
 package com.gnoemes.shikimori.mappers.user
 
+import com.gnoemes.shikimori.ShikimoriSource
 import com.gnoemes.shikimori.entities.user.UserBriefResponse
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.user.User
@@ -11,7 +12,9 @@ internal class UserBriefMapper : Mapper<UserBriefResponse, User> {
         val image = ShimoriImage(from.image.x160, from.image.x148, from.image.x80, from.image.x48)
 
         return User(
-            shikimoriId = from.id,
+            id = 0,
+            remoteId = from.id,
+            sourceId = ShikimoriSource.ID,
             nickname = from.nickname,
             image = image,
             name = from.name,

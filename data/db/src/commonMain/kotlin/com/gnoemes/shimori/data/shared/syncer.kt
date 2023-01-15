@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.shared
 
 import com.gnoemes.shimori.base.core.utils.Logger
-import com.gnoemes.shimori.data.core.database.daos.EntityDao
+import com.gnoemes.shimori.data.core.database.daos.SourceSyncEntityDao
 import com.gnoemes.shimori.data.core.entities.ShimoriEntity
 
 /**
@@ -10,12 +10,12 @@ import com.gnoemes.shimori.data.core.entities.ShimoriEntity
  * @param Key Network ID type
  */
 internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
-    private val insertEntity: suspend (LocalType) -> Unit,
-    private val updateEntity: suspend (LocalType) -> Unit,
-    private val deleteEntity: suspend (LocalType) -> Unit,
-    private val localEntityToKey: suspend (LocalType) -> Key?,
-    private val networkEntityToKey: suspend (NetworkType) -> Key,
-    private val networkEntityToLocalEntity: suspend (NetworkType, LocalType?) -> LocalType,
+    private val insertEntity: suspend (Long, LocalType) -> Unit,
+    private val updateEntity: suspend (Long, NetworkType, LocalType) -> Unit,
+    private val deleteEntity: suspend (Long, LocalType) -> Unit,
+    private val localEntityToKey: suspend (Long, LocalType) -> Key?,
+    private val networkEntityToKey: suspend (Long, NetworkType) -> Key,
+    private val networkEntityToLocalEntity: suspend (Long, NetworkType, LocalType?) -> LocalType,
     private val logger: Logger
 ) {
 
@@ -24,6 +24,7 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
     }
 
     suspend fun sync(
+        sourceId: Long,
         currentValues: Collection<LocalType>,
         networkValues: Collection<NetworkType>,
         removeNotMatched: Boolean = true
@@ -39,24 +40,24 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         for (networkEntity in networkValues) {
             logger.v("Syncing item from network: $networkEntity", tag = TAG)
 
-            val remoteId = networkEntityToKey(networkEntity)
+            val remoteId = networkEntityToKey(sourceId, networkEntity)
             logger.v("Mapped to remote ID: $remoteId", tag = TAG)
             if (remoteId == null) {
                 break
             }
 
             val dbEntityForId = currentDbEntities.find {
-                localEntityToKey(it) == remoteId
+                localEntityToKey(sourceId, it) == remoteId
             }
             logger.v("Matched database entity for remote ID $remoteId : $dbEntityForId", tag = TAG)
 
             if (dbEntityForId != null) {
-                val entity = networkEntityToLocalEntity(networkEntity, dbEntityForId)
+                val entity = networkEntityToLocalEntity(sourceId, networkEntity, dbEntityForId)
                 logger.v("Mapped network entity to local entity: $entity", tag = TAG)
                 if (dbEntityForId != entity) {
                     // This is currently in the DB, so lets merge it with the saved version
                     // and update it
-                    updateEntity(entity)
+                    updateEntity(sourceId, networkEntity, dbEntityForId)
                     logger.v("Updated entry with remote id: $remoteId", tag = TAG)
                     updated += entity
                 }
@@ -64,14 +65,14 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
                 currentDbEntities.remove(dbEntityForId)
             } else {
                 // Not currently in the DB, so lets insert
-                added += networkEntityToLocalEntity(networkEntity, null)
+                added += networkEntityToLocalEntity(sourceId, networkEntity, null)
             }
         }
 
         if (removeNotMatched) {
             // Anything left in the set needs to be deleted from the database
             currentDbEntities.forEach {
-                deleteEntity(it)
+                deleteEntity(sourceId, it)
                 logger.v("Deleted entry: $it", tag = TAG)
                 removed += it
             }
@@ -79,7 +80,7 @@ internal class ItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
 
         // Finally we can insert all of the new entities
         added.forEach {
-            insertEntity(it)
+            insertEntity(sourceId, it)
         }
 
         return ItemSyncerResult(added, removed, updated)
@@ -93,16 +94,17 @@ data class ItemSyncerResult<ET : ShimoriEntity>(
 )
 
 internal fun <Type : ShimoriEntity, Key> syncerForEntity(
-    entityDao: EntityDao<Type>,
-    entityToKey: suspend (Type) -> Key?,
-    mapper: suspend (Type, Type?) -> Type,
-    logger: Logger
+    entityDao: SourceSyncEntityDao<Type>,
+    entityToKey: suspend (Long, Type) -> Key?,
+    mapper: suspend (Long, Type, Type?) -> Type,
+    logger: Logger,
+    networkEntityToKey: suspend (Long, Type) -> Key? = entityToKey
 ) = ItemSyncer(
     entityDao::insert,
     entityDao::update,
     entityDao::delete,
     entityToKey,
-    entityToKey,
+    networkEntityToKey,
     mapper,
     logger
 )
