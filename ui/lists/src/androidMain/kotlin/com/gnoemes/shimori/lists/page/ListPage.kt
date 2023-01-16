@@ -240,7 +240,7 @@ private fun PaginatedList(
             modifier = Modifier
                 .navigationBarsPadding()
                 //bottomBar + FAB
-                .height(bottomBarHeight + 52.dp)
+                .height(bottomBarHeight + 64.dp)
         )
     }
 
