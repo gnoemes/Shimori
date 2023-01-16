@@ -301,6 +301,12 @@ private fun NavGraphBuilder.addTitleDetails(
                         deleteNotification = false
                     )
                 )
+            },
+            openCharacterDetails = {
+                //TODO
+            },
+            openCharacterList = { id, type ->
+                //TODO
             }
         )
     }

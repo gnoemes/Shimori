@@ -181,3 +181,29 @@ fun ListCard(
         }
     }
 }
+
+@Composable
+fun CharacterCard(
+    image: ShimoriImage?,
+    name: String,
+    onClick: () -> Unit
+) {
+    Column {
+        CharacterCover(
+            image,
+            modifier = Modifier
+                .width(MaterialTheme.dimens.characterPosterWidth)
+                //3:4
+                .aspectRatio(0.75f),
+            onClick = onClick,
+            contentDescription = name
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = name,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+    }
+}

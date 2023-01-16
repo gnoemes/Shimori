@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.gnoemes.shimori.common.ui.theme.ShimoriCharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
@@ -136,5 +138,31 @@ fun Cover(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun CharacterCover(
+    image: ShimoriImage?,
+    modifier: Modifier = Modifier,
+    shape: Shape = ShimoriCharacterCoverRoundedCornerShape,
+    contentDescription: String? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    Box(modifier = modifier) {
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(image)
+                .apply {
+                    crossfade(true)
+                }.build(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape)
+                .clickable { onClick?.invoke() },
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop
+        )
     }
 }
