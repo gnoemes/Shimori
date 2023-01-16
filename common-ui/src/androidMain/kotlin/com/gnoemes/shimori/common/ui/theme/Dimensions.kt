@@ -12,7 +12,8 @@ class Dimensions(
     val listPosterWidth: Dp,
     val bottomBarHeight: Dp,
     val bottomBarContainerHeight: Dp,
-    val titlePosterHeight : Dp,
+    val titlePosterHeight: Dp,
+    val characterPosterWidth: Dp,
 )
 
 
@@ -21,7 +22,8 @@ val defaultDimensions = Dimensions(
     listPosterWidth = 96.dp,
     bottomBarHeight = 80.dp,
     bottomBarContainerHeight = 88.dp,
-    titlePosterHeight = 370.dp
+    titlePosterHeight = 370.dp,
+    characterPosterWidth = 120.dp,
 )
 
 val sw360Dimensions = Dimensions(
@@ -29,7 +31,8 @@ val sw360Dimensions = Dimensions(
     listPosterWidth = 108.dp,
     bottomBarHeight = 80.dp,
     bottomBarContainerHeight = 88.dp,
-    titlePosterHeight = 370.dp
+    titlePosterHeight = 370.dp,
+    characterPosterWidth = 120.dp,
 )
 
 val MaterialTheme.dimens

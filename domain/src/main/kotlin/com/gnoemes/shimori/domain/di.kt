@@ -16,6 +16,7 @@ val domainModule = DI.Module("domain") {
     bindProvider { new(::ObserveExistedStatuses) }
     bindProvider { new(::ObservePinExist) }
     bindProvider { new(::ObserveTitleWithTrackEntity) }
+    bindProvider { new(::ObserveCharacters) }
 
     bindProvider { new(::UpdateUser) }
     bindProvider { new(::UpdateTracks) }

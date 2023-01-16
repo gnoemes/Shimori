@@ -4,12 +4,13 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.core.extensions.combine
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.observers.ObserveCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -18,12 +19,14 @@ internal class TitleDetailsViewModel(
     private val updateTitle: UpdateTitle,
     private val updateTrack: CreateOrUpdateTrack,
     observeTitle: ObserveTitleWithTrackEntity,
+    observeCharacters: ObserveCharacters,
 ) : ViewModel() {
     private val id: Long = savedStateHandle["id"]!!
     private val type: TrackTargetType = savedStateHandle["type"]!!
 
     val state = combine(
         observeTitle.flow,
+        observeCharacters.flow,
         ::TitleDetailsViewState
     ).stateIn(
         scope = viewModelScope,
@@ -39,5 +42,6 @@ internal class TitleDetailsViewModel(
         }
 
         observeTitle(ObserveTitleWithTrackEntity.Params(id, type))
+        observeCharacters(ObserveCharacters.Params(id, type))
     }
 }

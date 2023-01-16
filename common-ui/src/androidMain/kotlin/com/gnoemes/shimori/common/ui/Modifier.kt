@@ -16,10 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.LayoutModifier
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -64,6 +61,15 @@ fun Modifier.minimumTouchTargetSize(): Modifier = composed(
     }
 }
 
+fun Modifier.ignoreHorizontalParentPadding(horizontal: Dp): Modifier {
+    return this.layout { measurable, constraints ->
+        val overridenWidth = constraints.maxWidth + 2 * horizontal.roundToPx()
+        val placeable = measurable.measure(constraints.copy(maxWidth = overridenWidth))
+        layout(placeable.width, placeable.height) {
+            placeable.place(0, 0)
+        }
+    }
+}
 
 fun Modifier.shimoriPlaceholder(
     visible: Boolean,

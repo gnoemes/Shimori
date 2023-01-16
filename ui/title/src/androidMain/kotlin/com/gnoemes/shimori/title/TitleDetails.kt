@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.components.*
+import com.gnoemes.shimori.common.ui.theme.ShimoriCharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.accentRed
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
 import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
+import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
@@ -41,11 +44,15 @@ import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 fun TitleDetails(
     navigateUp: () -> Unit,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
+    openCharacterDetails: (id: Long) -> Unit,
+    openCharacterList: (id: Long, type: TrackTargetType) -> Unit
 ) {
     TitleDetails(
         viewModel = shimoriViewModel(),
         navigateUp = navigateUp,
         openListsEdit = openListsEdit,
+        openCharacterDetails = openCharacterDetails,
+        openCharacterList = openCharacterList
     )
 }
 
@@ -55,6 +62,8 @@ private fun TitleDetails(
     viewModel: TitleDetailsViewModel,
     navigateUp: () -> Unit,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
+    openCharacterDetails: (id: Long) -> Unit,
+    openCharacterList: (id: Long, type: TrackTargetType) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -62,31 +71,25 @@ private fun TitleDetails(
 
     val scrollState = rememberLazyListState()
 
+    ScaffoldExtended(modifier = Modifier.fillMaxSize(), topBar = {
+        //TODO scroll condition
+        val toolbarTitle = ""
+        val colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface
+        )
 
-    ScaffoldExtended(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            //TODO scroll condition
-            val toolbarTitle = ""
-            val colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-                actionIconContentColor = MaterialTheme.colorScheme.onSurface
-            )
-
-            ShimoriSecondaryToolbar(
-                modifier = Modifier.statusBarsPadding(),
-                navigateUp = navigateUp,
-                title = toolbarTitle,
-                colors = colors,
-                actions = {
-                    //TODO actions
-                }
-            )
-        }
-    ) { paddingValues ->
+        ShimoriSecondaryToolbar(modifier = Modifier.statusBarsPadding(),
+            navigateUp = navigateUp,
+            title = toolbarTitle,
+            colors = colors,
+            actions = {
+//                    TODO actions
+            })
+    }) { paddingValues ->
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
@@ -96,8 +99,10 @@ private fun TitleDetails(
                 modifier = Modifier.fillMaxSize(),
                 state = scrollState,
                 title = title,
+                characters = state.characters,
                 openListsEdit = openListsEdit,
-            )
+                openCharacterDetails = openCharacterDetails
+            ) { openCharacterList(title.id, title.type) }
         }
     }
 }
@@ -107,8 +112,7 @@ private fun BackDropImage(
     image: ShimoriImage?
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         AsyncImage(
             model = image,
@@ -127,8 +131,7 @@ private fun BackDropImage(
                         colorStops = arrayOf(
                             0f to MaterialTheme.colorScheme.background.copy(alpha = 0.16f),
                             0.56f to MaterialTheme.colorScheme.background,
-                        ),
-                        tileMode = TileMode.Decal
+                        ), tileMode = TileMode.Decal
                     )
                 )
                 .height(MaterialTheme.dimens.titlePosterHeight)
@@ -142,14 +145,15 @@ private fun TitleContent(
     modifier: Modifier,
     state: LazyListState,
     title: TitleWithTrackEntity,
+    characters: List<Character>?,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
+    openCharacterDetails: (id: Long) -> Unit,
+    openCharacterList: () -> Unit
 ) {
     val textCreator = LocalShimoriTextCreator.current
 
     LazyColumn(
-        modifier = modifier,
-        state = state,
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        modifier = modifier, state = state, contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         itemSpacer(Modifier.statusBarHeight(additional = 128.dp))
 
@@ -187,12 +191,66 @@ private fun TitleContent(
         itemSpacer(32.dp)
 
         item {
-            TitleActions(
-                title = title,
+            TitleActions(title = title,
                 openListsEdit = openListsEdit,
                 onFavoriteClick = { TODO() },
-                onShareClicked = { TODO() }
+                onShareClicked = { TODO() })
+        }
+
+        itemSpacer(32.dp)
+
+        if (characters == null || characters.isNotEmpty()) {
+            item {
+                Characters(
+                    characters = characters,
+                    openCharacterDetails = openCharacterDetails,
+                    openCharacterList = openCharacterList,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Characters(
+    characters: List<Character>?,
+    openCharacterDetails: (id: Long) -> Unit,
+    openCharacterList: () -> Unit
+) {
+    RowContentSection(
+        title = @Composable {
+            Text(
+                text = stringResource(id = R.string.title_characters),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        if (characters != null) openCharacterList()
+                    },
+                style = MaterialTheme.typography.titleMedium,
             )
+        },
+        isMoreVisible = (characters?.size ?: 0) > 3,
+        onClickMore = openCharacterList
+    ) {
+        if (characters == null) {
+            repeat(5) {
+                CharacterCover(
+                    null,
+                    modifier = Modifier
+                        .shimoriPlaceholder(
+                            true,
+                            shape = ShimoriCharacterCoverRoundedCornerShape
+                        )
+                        .width(MaterialTheme.dimens.characterPosterWidth)
+                        .aspectRatio(0.75f),
+                )
+            }
+        } else {
+            characters.forEach {
+                CharacterCard(it.image,
+                    LocalShimoriTextCreator.current.name(it),
+                    onClick = { openCharacterDetails.invoke(it.id) })
+            }
         }
     }
 }
@@ -211,8 +269,7 @@ private fun TitleActions(
     val onButtonDefaultColor = MaterialTheme.colorScheme.onPrimaryContainer
 
     val dominantColors = rememberDominantColorState(
-        defaultColor = buttonDefaultColor,
-        defaultOnColor = onButtonDefaultColor
+        defaultColor = buttonDefaultColor, defaultOnColor = onButtonDefaultColor
     )
 
     val statusButtonColor by animateColorAsState(
@@ -235,20 +292,16 @@ private fun TitleActions(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        val statusText =
-            if (status == null) stringResource(id = R.string.add)
-            else LocalShimoriTextCreator.current.trackStatusText(status = status, type = title.type)
+        val statusText = if (status == null) stringResource(id = R.string.add)
+        else LocalShimoriTextCreator.current.trackStatusText(status = status, type = title.type)
 
         val buttonColors = ShimoriButtonDefaults.buttonColors(
-            containerColor = statusButtonColor,
-            contentColor = onStatusButtonColor
+            containerColor = statusButtonColor, contentColor = onStatusButtonColor
         )
 
-        EnlargedButton(
-            onClick = { openListsEdit(title.id, title.type, false) },
+        EnlargedButton(onClick = { openListsEdit(title.id, title.type, false) },
             modifier = Modifier
                 .height(48.dp)
                 .weight(1f),
@@ -264,44 +317,34 @@ private fun TitleActions(
                         )
                     } else {
                         TrackIcon(
-                            trackStatus = it,
-                            modifier = Modifier.size(24.dp)
+                            trackStatus = it, modifier = Modifier.size(24.dp)
                         )
                     }
                 }
-            }
-        )
+            })
 
-        EnlargedButton(
-            onClick = onFavoriteClick,
-            modifier = Modifier.size(48.dp),
-            rightIcon = {
-                val favoriteColor by animateColorAsState(
-                    targetValue = if (title.entity.favorite) accentRed else MaterialTheme.colorScheme.onSurfaceVariant,
-                    animationSpec = tween(500)
-                )
-                //TODO animate scale?
+        EnlargedButton(onClick = onFavoriteClick, modifier = Modifier.size(48.dp), rightIcon = {
+            val favoriteColor by animateColorAsState(
+                targetValue = if (title.entity.favorite) accentRed else MaterialTheme.colorScheme.onSurfaceVariant,
+                animationSpec = tween(500)
+            )
+            //TODO animate scale?
 
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_heart),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = favoriteColor
-                )
-            }
-        )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_heart),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = favoriteColor
+            )
+        })
 
-        EnlargedButton(
-            onClick = onShareClicked,
-            modifier = Modifier.size(48.dp),
-            rightIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_share),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
-        )
+        EnlargedButton(onClick = onShareClicked, modifier = Modifier.size(48.dp), rightIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_share),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+            )
+        })
     }
 }
 
@@ -398,3 +441,50 @@ private fun TitleProperties(title: ShimoriTitleEntity) {
         }
     }
 }
+
+@Composable
+private fun RowContentSection(
+    title: @Composable RowScope.() -> Unit,
+    isMoreVisible: Boolean,
+    onClickMore: () -> Unit,
+    content: @Composable RowScope.() -> Unit
+) {
+    Column {
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground
+        ) {
+            Row {
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.titleMedium
+                ) {
+                    title()
+                }
+
+
+                if (isMoreVisible) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                    IconButton(
+                        onClick = onClickMore, modifier = Modifier.size(24.dp)
+                    ) {
+                        ChevronIcon()
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier
+                    .ignoreHorizontalParentPadding(16.dp)
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Spacer(modifier = Modifier.width(4.dp))
+                content()
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+        }
+    }
+}
+
