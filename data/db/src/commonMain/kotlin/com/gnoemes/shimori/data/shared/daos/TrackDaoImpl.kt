@@ -146,8 +146,8 @@ internal class TrackDaoImpl(
                 trackQueries.update(
                     comgnoemesshimoridatadb.data.Track(
                         local.id,
-                        it.targetId,
-                        it.targetType,
+                        local.targetId,
+                        local.targetType,
                         it.status,
                         it.score,
                         it.comment,
@@ -167,7 +167,7 @@ internal class TrackDaoImpl(
         track.let {
             db.trackQueries.update(
                 comgnoemesshimoridatadb.data.Track(
-                    track.id,
+                    it.id,
                     it.targetId,
                     it.targetType,
                     it.status,
