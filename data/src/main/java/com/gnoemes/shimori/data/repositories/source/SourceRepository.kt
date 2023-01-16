@@ -49,11 +49,17 @@ class SourceRepository(
     suspend fun createOrUpdateTrack(sourceId: Long, track: Track): SourceResponse<Track> {
         logger.i("Create or update track on source: $sourceId")
         val remoteId = dao.findRemoteId(sourceId, track.id, SourceDataType.Track)
+        val targetRemoteId =
+            dao.findRemoteId(sourceId, track.targetId, track.targetType.sourceDataType)
+                ?: throw IllegalArgumentException("Target id for source with id $sourceId not found")
+        val sourceTrack = track.copy(
+            targetId = targetRemoteId
+        )
         return trackSources.find { it.id == sourceId }
             ?.let { source ->
                 source.sourceResponse {
-                    if (remoteId == null) trackDataSource.create(track)
-                    else trackDataSource.update(track.copy(id = remoteId))
+                    if (remoteId == null) trackDataSource.create(sourceTrack)
+                    else trackDataSource.update(sourceTrack.copy(id = remoteId))
                 }
 
             }
