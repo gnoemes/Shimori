@@ -200,10 +200,17 @@ fun CharacterCard(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(
-            text = name,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
+        Box(
+            modifier = Modifier.width(MaterialTheme.dimens.characterPosterWidth)
+        ) {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
