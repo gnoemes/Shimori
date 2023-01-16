@@ -68,7 +68,20 @@ class SyncPendingTracks(
                                         toSync.trackId
                                     )
                                     else -> {
-                                        sourceRepository.createOrUpdateTrack(source.id, track!!)
+                                        val (_, updatedRemoteTrack) =
+                                            sourceRepository.createOrUpdateTrack(source.id, track!!)
+
+                                        // Force update track on auto status changes:
+                                        // planned, paused -> watching. If progress changed from 0 to x
+                                        // watching -> completed. If progress == size
+                                        //TODO sourceId check. Unintended behavior only on shikimori
+                                        if (updatedRemoteTrack.status != track.status) {
+                                            //update with same progress but with another status updates state for what we need (on Shikimori)
+                                            sourceRepository.createOrUpdateTrack(
+                                                source.id,
+                                                track
+                                            )
+                                        }
                                     }
                                 }
                             }.join()
@@ -110,7 +123,7 @@ class SyncPendingTracks(
                     }
 
                 logger.d(
-                    message = "#$index: Success!",
+                    message = "#$index: Done!",
                     tag = SYNC_TAG
                 )
             }
