@@ -120,6 +120,8 @@ fun ListCard(
                 overflow = TextOverflow.Ellipsis
             )
 
+            Spacer(Modifier.height(2.dp))
+
             description()
 
             Spacer(Modifier.height(10.dp))
