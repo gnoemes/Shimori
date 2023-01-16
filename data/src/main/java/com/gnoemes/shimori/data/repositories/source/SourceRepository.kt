@@ -47,7 +47,7 @@ class SourceRepository(
     }
 
     suspend fun createOrUpdateTrack(sourceId: Long, track: Track): SourceResponse<Track> {
-        logger.i("Create or update track on source: $sourceId")
+        logger.i("Create or update track $track on source: $sourceId")
         val remoteId = dao.findRemoteId(sourceId, track.id, SourceDataType.Track)
         val targetRemoteId =
             dao.findRemoteId(sourceId, track.targetId, track.targetType.sourceDataType)
