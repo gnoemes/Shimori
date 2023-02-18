@@ -37,6 +37,7 @@ import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
@@ -99,6 +100,7 @@ private fun TitleDetails(
                 state = scrollState,
                 title = title,
                 characters = state.characters,
+                videos = state.videos,
                 openListsEdit = openListsEdit,
                 openCharacterDetails = openCharacterDetails
             ) { openCharacterList(title.id, title.type) }
@@ -147,6 +149,7 @@ private fun TitleContent(
     state: LazyListState,
     title: TitleWithTrackEntity,
     characters: OptionalContent<List<Character>?>,
+    videos: OptionalContent<List<AnimeVideo>?>,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
     openCharacterDetails: (id: Long) -> Unit,
     openCharacterList: () -> Unit
@@ -212,9 +215,29 @@ private fun TitleContent(
             item {
                 About(title = title.entity)
             }
+
+            itemSpacer(32.dp)
+        }
+
+        if (!videos.loaded || !videos.content.isNullOrEmpty()
+            //TODO show section header if we have screenshots
+//            || !screenshots.content.isNullOrEmpty
+                ) {
+            item {
+                Trailers(
+                    videos
+                )
+            }
+
+            itemSpacer(32.dp)
         }
 
         itemSpacer(32.dp)
+
+
+        item {
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.bottomBarHeight + 24.dp))
+        }
     }
 }
 
@@ -473,6 +496,41 @@ private fun About(
                     modifier = Modifier
                         .height(32.dp),
                     text = LocalShimoriTextCreator.current.genre(it),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Trailers(
+    videos: OptionalContent<List<AnimeVideo>?>,
+//    onClickMore: () -> Unit
+//    onVideoClick :(AnimeVideo) -> Unit
+) {
+    RowContentSection(
+        title = stringResource(id = R.string.title_trailers_frames),
+        isMoreVisible = true,
+        sectionLoaded = videos.loaded,
+        onClickMore = { /*TODO*/ }
+    ) {
+        if (!videos.loaded) {
+            repeat(3) {
+                TrailerCover(
+                    image = null,
+                    modifier = Modifier
+                        .width(MaterialTheme.dimens.trailerPosterWidth)
+                        .height(MaterialTheme.dimens.trailerPosterHeight)
+                        .shimoriPlaceholder(true),
+                )
+            }
+        } else {
+            videos.content?.forEach { video ->
+                TrailerCard(
+                    image = video.imageUrl,
+                    name = video.name.orEmpty(),
+                    hosting = video.hosting,
+                    onClick = { /*TODO*/ }
                 )
             }
         }

@@ -14,6 +14,8 @@ class Dimensions(
     val bottomBarContainerHeight: Dp,
     val titlePosterHeight: Dp,
     val characterPosterWidth: Dp,
+    val trailerPosterWidth: Dp,
+    val trailerPosterHeight: Dp,
 )
 
 
@@ -24,6 +26,8 @@ val defaultDimensions = Dimensions(
     bottomBarContainerHeight = 88.dp,
     titlePosterHeight = 370.dp,
     characterPosterWidth = 120.dp,
+    trailerPosterWidth = 328.dp,
+    trailerPosterHeight = 164.dp,
 )
 
 val sw360Dimensions = Dimensions(
@@ -33,6 +37,8 @@ val sw360Dimensions = Dimensions(
     bottomBarContainerHeight = 88.dp,
     titlePosterHeight = 370.dp,
     characterPosterWidth = 120.dp,
+    trailerPosterWidth = 328.dp,
+    trailerPosterHeight = 164.dp,
 )
 
 val MaterialTheme.dimens

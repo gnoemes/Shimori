@@ -11,6 +11,7 @@ actual val titleModule = DI.Module("title-module") {
             instance(),
             instance(),
             instance(),
+            instance(),
             instance()
         )
     }

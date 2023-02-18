@@ -21,6 +21,7 @@ class AnimeRepository(
 
     suspend fun queryById(id: Long) = dao.queryById(id)
     fun observeById(id: Long) = dao.observeById(id)
+    fun observeVideos(id: Long) = videoDao.observeByTitleId(id)
 
     fun paging(
         status: TrackStatus,

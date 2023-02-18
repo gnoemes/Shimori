@@ -9,6 +9,7 @@ import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.observers.ObserveAnimeVideos
 import com.gnoemes.shimori.domain.observers.ObserveCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ internal class TitleDetailsViewModel(
     private val updateTrack: CreateOrUpdateTrack,
     observeTitle: ObserveTitleWithTrackEntity,
     observeCharacters: ObserveCharacters,
+    observeAnimeVideos: ObserveAnimeVideos,
 ) : ViewModel() {
     private val id: Long = savedStateHandle["id"]!!
     private val type: TrackTargetType = savedStateHandle["type"]!!
@@ -32,20 +34,26 @@ internal class TitleDetailsViewModel(
         observeTitle.flow,
         updated,
         observeCharacters.flow,
-    ) { title, updated, characters ->
+        observeAnimeVideos.flow,
+    ) { title, updated, characters, videos ->
         TitleDetailsViewState(
             title = title,
             characters = OptionalContent(
                 loaded = !characters.isNullOrEmpty() || updated == true,
                 content = characters
-            )
+            ),
+            videos = OptionalContent(
+                loaded = !type.anime || updated == true || !videos.isNullOrEmpty(),
+                content = if (type.anime) videos else null
+            ),
+
+
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = TitleDetailsViewState()
     )
-
 
     init {
         viewModelScope.launch {
@@ -57,5 +65,7 @@ internal class TitleDetailsViewModel(
 
         observeTitle(ObserveTitleWithTrackEntity.Params(id, type))
         observeCharacters(ObserveCharacters.Params(id, type))
+
+        if (type.anime) observeAnimeVideos(ObserveAnimeVideos.Params(id))
     }
 }

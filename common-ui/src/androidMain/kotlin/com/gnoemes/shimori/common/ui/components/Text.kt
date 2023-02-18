@@ -118,6 +118,28 @@ fun TitlePropertyInfo(
 }
 
 @Composable
+fun TitleTrailerInfo(
+    name: String,
+    hosting: String?,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = buildAnnotatedString {
+            if (hosting != null) {
+                append(hosting)
+                append(Divider)
+            }
+            append(name)
+        },
+        style = MaterialTheme.typography.labelMedium,
+        modifier = modifier,
+        maxLines = 1,
+        color = MaterialTheme.colorScheme.secondary,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+@Composable
 private fun Description(
     text: AnnotatedString,
     modifier: Modifier

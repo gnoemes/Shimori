@@ -95,8 +95,7 @@ fun ListCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(MaterialTheme.dimens.listPosterHeight)
-            .noRippleClickable(onClick = onClick)
-        ,
+            .noRippleClickable(onClick = onClick),
     ) {
         Cover(
             image = image,
@@ -211,6 +210,43 @@ fun CharacterCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+        }
+    }
+}
+
+@Composable
+fun TrailerCard(
+    image: String?,
+    name: String,
+    hosting: String?,
+    onClick: () -> Unit,
+) {
+    Column {
+        Box {
+            TrailerCover(
+                image,
+                modifier = Modifier
+                    .width(MaterialTheme.dimens.trailerPosterWidth)
+                    .height(MaterialTheme.dimens.trailerPosterHeight),
+                onClick = onClick,
+                contentDescription = name
+            )
+            ShimoriCircleButton(
+                onClick = onClick,
+                modifier = Modifier
+                    .size(32.dp)
+                    .align(Alignment.Center),
+                icon = {
+                    Icon(painter = painterResource(id = R.drawable.ic_play), contentDescription = null)
+                }
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Box(
+            modifier = Modifier.width(MaterialTheme.dimens.trailerPosterWidth)
+        ) {
+            TitleTrailerInfo(name = name, hosting = hosting)
         }
     }
 }
