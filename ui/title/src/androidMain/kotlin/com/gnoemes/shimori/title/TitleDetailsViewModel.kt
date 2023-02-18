@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gnoemes.shimori.base.core.extensions.instantCombine
+import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
 import com.gnoemes.shimori.domain.observers.ObserveCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -24,19 +26,31 @@ internal class TitleDetailsViewModel(
     private val id: Long = savedStateHandle["id"]!!
     private val type: TrackTargetType = savedStateHandle["type"]!!
 
-    val state = combine(
+    private val updated = MutableStateFlow(false)
+
+    val state = instantCombine(
         observeTitle.flow,
+        updated,
         observeCharacters.flow,
-        ::TitleDetailsViewState
-    ).stateIn(
+    ) { title, updated, characters ->
+        TitleDetailsViewState(
+            title = title,
+            characters = OptionalContent(
+                loaded = !characters.isNullOrEmpty() || updated == true,
+                content = characters
+            )
+        )
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = TitleDetailsViewState()
     )
 
+
     init {
         viewModelScope.launch {
             updateTitle(UpdateTitle.Params.optionalUpdate(id, type)).collect {
+                updated.value = it.isSuccess || it.isError
                 Log.i("DEVE", "$it")
             }
         }
