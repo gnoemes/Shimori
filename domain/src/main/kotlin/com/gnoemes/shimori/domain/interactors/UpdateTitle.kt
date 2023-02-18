@@ -35,7 +35,11 @@ class UpdateTitle(
     private suspend fun update(id: Long, type: TrackTargetType) = when (type) {
         TrackTargetType.ANIME -> animeRepository.queryById(id)?.let {
             val (sourceId, title) = sourceRepository.get(it)
-            animeRepository.sync(sourceId, title)
+            animeRepository.sync(sourceId, title.entity)
+            animeRepository.syncVideos(
+                it.id,
+                title.videos ?: emptyList()
+            )
             animeRepository.titleUpdated(id)
         }
         TrackTargetType.MANGA -> mangaRepository.queryById(id)?.let {

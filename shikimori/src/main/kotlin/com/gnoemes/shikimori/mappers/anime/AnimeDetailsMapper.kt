@@ -7,7 +7,7 @@ import com.gnoemes.shikimori.mappers.GenreMapper
 import com.gnoemes.shikimori.mappers.ImageResponseMapper
 import com.gnoemes.shikimori.mappers.TitleStatusMapper
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.core.mappers.Mapper
 
 internal class AnimeDetailsMapper(
@@ -15,10 +15,11 @@ internal class AnimeDetailsMapper(
     private val typeMapper: AnimeTypeMapper,
     private val titleStatusMapper: TitleStatusMapper,
     private val ageRatingMapper: AgeRatingMapper,
-    private val genreMapper: GenreMapper
-) : Mapper<AnimeDetailsResponse, AnimeWithTrack> {
+    private val genreMapper: GenreMapper,
+    private val videoMapper: AnimeVideoMapper,
+) : Mapper<AnimeDetailsResponse, AnimeInfo> {
 
-    override suspend fun map(from: AnimeDetailsResponse): AnimeWithTrack {
+    override suspend fun map(from: AnimeDetailsResponse): AnimeInfo {
 
         val title = Anime(
             id = from.id,
@@ -45,10 +46,12 @@ internal class AnimeDetailsMapper(
             genres = from.genres.mapNotNull { genreMapper.map(it) },
         )
 
-        return AnimeWithTrack(
+        val videos = from.videoResponses?.map { videoMapper.map(it) }
+
+        return AnimeInfo(
             entity = title,
             track = null,
-            pinned = false
+            videos = videos,
         )
     }
 }
