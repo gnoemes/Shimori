@@ -95,8 +95,6 @@ private fun TitleDetails(
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            BackDropImage(title.entity.image)
-
             TitleContent(
                 modifier = Modifier.fillMaxSize(),
                 state = scrollState,
@@ -114,7 +112,9 @@ private fun BackDropImage(
     image: ShimoriImage?
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .ignoreHorizontalParentPadding(16.dp)
     ) {
         AsyncImage(
             model = image,
@@ -157,49 +157,45 @@ private fun TitleContent(
     LazyColumn(
         modifier = modifier, state = state, contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        itemSpacer(Modifier.statusBarHeight(additional = 128.dp))
+        item {
+            Box {
+                BackDropImage(title.entity.image)
+                Column {
+                    Spacer(modifier = Modifier.statusBarHeight(additional = 128.dp))
+                    if (title.entity.isOngoing || (title.entity.rating ?: 0.0) > 0) {
+                        TitleDescription(
+                            title = title.entity,
+                            format = DescriptionFormat.Title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(16.dp)
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
 
-        if (title.entity.isOngoing || (title.entity.rating ?: 0.0) > 0) {
-            item {
-                TitleDescription(
-                    title = title.entity,
-                    format = DescriptionFormat.Title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(16.dp)
-                )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = textCreator.name(title = title.entity),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TitleProperties(title.entity)
+                    Spacer(modifier = Modifier.height(32.dp))
+                    TitleActions(
+                        title = title,
+                        openListsEdit = openListsEdit,
+                        onFavoriteClick = { TODO() },
+                        onShareClicked = { TODO() })
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
             }
-        } else {
-            itemSpacer(16.dp)
         }
 
-        itemSpacer(8.dp)
-
-        item {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = textCreator.name(title = title.entity),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-
-        itemSpacer(16.dp)
-
-        item {
-            TitleProperties(title.entity)
-        }
-
-        itemSpacer(32.dp)
-
-        item {
-            TitleActions(title = title,
-                openListsEdit = openListsEdit,
-                onFavoriteClick = { TODO() },
-                onShareClicked = { TODO() })
-        }
-
-        itemSpacer(32.dp)
 
         if (!characters.loaded || !characters.content.isNullOrEmpty()) {
             item {
