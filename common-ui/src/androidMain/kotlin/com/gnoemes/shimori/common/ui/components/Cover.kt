@@ -25,11 +25,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.theme.ShimoriCharacterCoverRoundedCornerShape
+import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.ui.R
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -154,6 +156,32 @@ fun CharacterCover(
             model = ImageRequest
                 .Builder(LocalContext.current)
                 .data(image)
+                .apply {
+                    crossfade(true)
+                }.build(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape)
+                .clickable { onClick?.invoke() },
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Composable
+fun TrailerCover(
+    image: String?,
+    modifier: Modifier = Modifier,
+    shape: Shape = ShimoriDefaultRoundedCornerShape,
+    contentDescription: String? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    Box(modifier = modifier) {
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(image?.toHttpUrlOrNull())
                 .apply {
                     crossfade(true)
                 }.build(),
