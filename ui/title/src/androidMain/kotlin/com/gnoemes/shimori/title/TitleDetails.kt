@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gnoemes.shimori.common.ui.*
@@ -208,51 +209,17 @@ private fun TitleContent(
                     openCharacterList = openCharacterList,
                 )
             }
-        }
-    }
-}
 
-@Composable
-private fun Characters(
-    characters: OptionalContent<List<Character>?>,
-    openCharacterDetails: (id: Long) -> Unit,
-    openCharacterList: () -> Unit
-) {
-    RowContentSection(
-        title = @Composable {
-            Text(
-                text = stringResource(id = R.string.title_characters),
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        if (characters.loaded) openCharacterList()
-                    },
-                style = MaterialTheme.typography.titleMedium,
-            )
-        },
-        isMoreVisible = (characters.content?.size ?: 0) > 6,
-        onClickMore = openCharacterList
-    ) {
-        if (!characters.loaded) {
-            repeat(5) {
-                CharacterCover(
-                    null,
-                    modifier = Modifier
-                        .shimoriPlaceholder(
-                            true,
-                            shape = ShimoriCharacterCoverRoundedCornerShape
-                        )
-                        .width(MaterialTheme.dimens.characterPosterWidth)
-                        .aspectRatio(0.75f),
-                )
-            }
-        } else {
-            characters.content?.forEach {
-                CharacterCard(it.image,
-                    LocalShimoriTextCreator.current.name(it),
-                    onClick = { openCharacterDetails.invoke(it.id) })
+            itemSpacer(32.dp)
+        }
+
+        if (!title.entity.description.isNullOrBlank() || !title.entity.genres.isNullOrEmpty()) {
+            item {
+                About(title = title.entity)
             }
         }
+
+        itemSpacer(32.dp)
     }
 }
 
@@ -444,23 +411,102 @@ private fun TitleProperties(title: ShimoriTitleEntity) {
 }
 
 @Composable
+private fun Characters(
+    characters: OptionalContent<List<Character>?>,
+    openCharacterDetails: (id: Long) -> Unit,
+    openCharacterList: () -> Unit
+) {
+    RowContentSection(
+        title = stringResource(id = R.string.title_characters),
+        isMoreVisible = (characters.content?.size ?: 0) > 6,
+        onClickMore = { if (characters.loaded) openCharacterList() }
+    ) {
+        if (!characters.loaded) {
+            repeat(5) {
+                CharacterCover(
+                    null,
+                    modifier = Modifier
+                        .shimoriPlaceholder(
+                            true,
+                            shape = ShimoriCharacterCoverRoundedCornerShape
+                        )
+                        .width(MaterialTheme.dimens.characterPosterWidth)
+                        .aspectRatio(0.75f),
+                )
+            }
+        } else {
+            characters.content?.forEach {
+                CharacterCard(it.image,
+                    LocalShimoriTextCreator.current.name(it),
+                    onClick = { openCharacterDetails.invoke(it.id) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun About(
+    title: ShimoriTitleEntity,
+    //TODO restore
+//    onGenreClick: (Genre) -> Unit
+) {
+    RowContentSection(
+        title = stringResource(id = R.string.title_about),
+        isMoreVisible = false,
+        onClickMore = { },
+        nonRowContent = {
+            val description = title.description
+            if (!description.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+        },
+        contentHorizontalArrangement = 8.dp
+    ) {
+        val genres = title.genres
+        if (!genres.isNullOrEmpty()) {
+            genres.forEach {
+                ShimoriChip(
+                    onClick = {},
+                    modifier = Modifier
+                        .height(32.dp),
+                    text = LocalShimoriTextCreator.current.genre(it),
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun RowContentSection(
-    title: @Composable RowScope.() -> Unit,
+    title: String,
     isMoreVisible: Boolean,
     onClickMore: () -> Unit,
+    nonRowContent: @Composable ColumnScope.() -> Unit = { },
+    contentHorizontalArrangement: Dp = 12.dp,
     content: @Composable RowScope.() -> Unit
 ) {
     Column {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground
         ) {
-            Row {
+            Row(
+                modifier = Modifier.clickable { onClickMore() }
+            ) {
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.titleMedium
                 ) {
-                    title()
+                    Text(
+                        text = title,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
                 }
-
 
                 if (isMoreVisible) {
                     Spacer(modifier = Modifier.width(12.dp))
@@ -474,17 +520,21 @@ private fun RowContentSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            val screenPadding = 16.dp
+
             Row(
                 modifier = Modifier
-                    .ignoreHorizontalParentPadding(16.dp)
+                    .ignoreHorizontalParentPadding(screenPadding)
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(contentHorizontalArrangement)
             ) {
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(screenPadding - contentHorizontalArrangement))
                 content()
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(screenPadding - contentHorizontalArrangement))
             }
+
+            nonRowContent()
         }
     }
 }

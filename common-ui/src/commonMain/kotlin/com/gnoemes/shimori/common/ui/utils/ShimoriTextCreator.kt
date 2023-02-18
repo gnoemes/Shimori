@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import com.gnoemes.shimori.data.core.entities.ShimoriContentEntity
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.common.AgeRating
+import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeType
@@ -220,5 +221,13 @@ class ShimoriTextCreator(
         AgeRating.PG -> "PG"
         AgeRating.G -> "G"
         else -> null
+    }
+
+    fun genre(genre: Genre): String {
+        return when (titlesLocale) {
+            AppTitlesLocale.English -> genre.name
+            AppTitlesLocale.Russian -> genre.nameRu ?: genre.name
+            else -> genre.name
+        }
     }
 }
