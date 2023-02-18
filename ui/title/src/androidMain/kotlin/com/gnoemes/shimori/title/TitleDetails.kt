@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.ShimoriCharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.accentRed
@@ -145,7 +146,7 @@ private fun TitleContent(
     modifier: Modifier,
     state: LazyListState,
     title: TitleWithTrackEntity,
-    characters: List<Character>?,
+    characters: OptionalContent<List<Character>?>,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
     openCharacterDetails: (id: Long) -> Unit,
     openCharacterList: () -> Unit
@@ -199,7 +200,7 @@ private fun TitleContent(
 
         itemSpacer(32.dp)
 
-        if (characters == null || characters.isNotEmpty()) {
+        if (!characters.loaded || !characters.content.isNullOrEmpty()) {
             item {
                 Characters(
                     characters = characters,
@@ -213,7 +214,7 @@ private fun TitleContent(
 
 @Composable
 private fun Characters(
-    characters: List<Character>?,
+    characters: OptionalContent<List<Character>?>,
     openCharacterDetails: (id: Long) -> Unit,
     openCharacterList: () -> Unit
 ) {
@@ -224,15 +225,15 @@ private fun Characters(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        if (characters != null) openCharacterList()
+                        if (characters.loaded) openCharacterList()
                     },
                 style = MaterialTheme.typography.titleMedium,
             )
         },
-        isMoreVisible = (characters?.size ?: 0) > 3,
+        isMoreVisible = (characters.content?.size ?: 0) > 6,
         onClickMore = openCharacterList
     ) {
-        if (characters == null) {
+        if (!characters.loaded) {
             repeat(5) {
                 CharacterCover(
                     null,
@@ -246,7 +247,7 @@ private fun Characters(
                 )
             }
         } else {
-            characters.forEach {
+            characters.content?.forEach {
                 CharacterCard(it.image,
                     LocalShimoriTextCreator.current.name(it),
                     onClick = { openCharacterDetails.invoke(it.id) })
