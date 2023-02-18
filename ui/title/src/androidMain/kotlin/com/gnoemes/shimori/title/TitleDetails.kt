@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -415,7 +414,8 @@ private fun Characters(
     RowContentSection(
         title = stringResource(id = R.string.title_characters),
         isMoreVisible = (characters.content?.size ?: 0) > 6,
-        onClickMore = { if (characters.loaded) openCharacterList() }
+        onClickMore = { if (characters.loaded) openCharacterList() },
+        sectionLoaded = characters.loaded,
     ) {
         if (!characters.loaded) {
             repeat(5) {
@@ -462,7 +462,8 @@ private fun About(
                 )
             }
         },
-        contentHorizontalArrangement = 8.dp
+        contentHorizontalArrangement = 8.dp,
+        sectionLoaded = true
     ) {
         val genres = title.genres
         if (!genres.isNullOrEmpty()) {
@@ -482,6 +483,7 @@ private fun About(
 private fun RowContentSection(
     title: String,
     isMoreVisible: Boolean,
+    sectionLoaded: Boolean,
     onClickMore: () -> Unit,
     nonRowContent: @Composable ColumnScope.() -> Unit = { },
     contentHorizontalArrangement: Dp = 12.dp,
@@ -491,30 +493,32 @@ private fun RowContentSection(
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground
         ) {
-            Row(
-                modifier = Modifier.clickable { onClickMore() }
-            ) {
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.titleMedium
+            if (sectionLoaded) {
+                Row(
+                    modifier = Modifier.noRippleClickable { onClickMore() }
                 ) {
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                }
-
-                if (isMoreVisible) {
-                    Spacer(modifier = Modifier.width(12.dp))
-                    IconButton(
-                        onClick = onClickMore, modifier = Modifier.size(24.dp)
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.titleMedium
                     ) {
-                        ChevronIcon()
+                        Text(
+                            text = title,
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
+
+                    if (isMoreVisible) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                        IconButton(
+                            onClick = onClickMore, modifier = Modifier.size(24.dp)
+                        ) {
+                            ChevronIcon()
+                        }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             val screenPadding = 16.dp
 
