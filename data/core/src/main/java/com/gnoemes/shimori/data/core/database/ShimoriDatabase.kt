@@ -8,6 +8,7 @@ interface ShimoriDatabase {
     val userDao: UserDao
     val lastRequestDao: LastRequestDao
     val animeDao: AnimeDao
+    val animeVideoDao : AnimeVideoDao
     val mangaDao: MangaDao
     val ranobeDao: RanobeDao
     val listPinDao: ListPinDao

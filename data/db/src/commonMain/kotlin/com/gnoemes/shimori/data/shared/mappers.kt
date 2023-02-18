@@ -7,9 +7,7 @@ import com.gnoemes.shimori.data.core.entities.common.AgeRating
 import com.gnoemes.shimori.data.core.entities.common.Genre
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeType
-import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.core.entities.titles.anime.*
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaType
 import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
@@ -190,7 +188,7 @@ internal fun animeWithTrack(
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
-        id_,  target_id, target_type, status_, score,
+        id_, target_id, target_type, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinned = pinId != null
@@ -381,7 +379,7 @@ internal fun mangaWithTrack(
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
-        id_, target_id, target_type,  status_, score,
+        id_, target_id, target_type, status_, score,
         comment, progress, re_counter, date_created, date_updated
     ),
     pinned = pinId != null,
@@ -900,5 +898,25 @@ internal fun character(
         url = url,
         description = description,
         descriptionSourceUrl = description_source_url
+    )
+}
+
+internal fun video(
+    id: Long,
+    title_id: Long,
+    name: String?,
+    url: String,
+    image_url: String?,
+    type: Int?,
+    hosting: String?
+): AnimeVideo {
+    return AnimeVideo(
+        id = id,
+        titleId = title_id,
+        name = name,
+        url = url,
+        imageUrl = image_url,
+        type = AnimeVideoType.find(type),
+        hosting = hosting
     )
 }

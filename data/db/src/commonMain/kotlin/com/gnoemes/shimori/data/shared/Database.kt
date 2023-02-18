@@ -25,6 +25,7 @@ internal class ShimoriSQLDelightDatabase(
     override val userDao: UserDao = UserDaoImpl(db, logger, dispatchers)
     override val lastRequestDao: LastRequestDao = LastRequestDaoImpl(db, logger)
     override val animeDao: AnimeDao = AnimeDaoImpl(db, logger, dispatchers)
+    override val animeVideoDao: AnimeVideoDao = AnimeVideoDaoImpl(db, logger, dispatchers)
     override val mangaDao: MangaDao = MangaDaoImpl(db, logger, dispatchers)
     override val ranobeDao: RanobeDao = RanobeDaoImpl(db, logger, dispatchers)
     override val listPinDao: ListPinDao = ListPinDaoImpl(db, logger, dispatchers)

@@ -84,7 +84,7 @@ class SourceRepository(
 
     suspend fun get(local: Anime) = local.copy(
         id = currentCatalog.findRemoteId(local.id, SourceDataType.Anime)
-    ).let { sourceResponse { animeDataSource.get(it).entity } }
+    ).let { sourceResponse { animeDataSource.get(it) } }
 
     suspend fun get(local: Manga) = local.copy(
         id = currentCatalog.findRemoteId(local.id, SourceDataType.Manga)

@@ -9,6 +9,7 @@ import com.gnoemes.shikimori.mappers.rate.RateStatusMapper
 import com.gnoemes.shikimori.mappers.roles.RolesMapper
 import com.gnoemes.shimori.data.core.entities.roles.RolesInfo
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.core.entities.user.UserShort
@@ -39,7 +40,7 @@ internal class ShikimoriAnimeDataSource(
             .let { ratedMapper.forLists().invoke(it) }
     }
 
-    override suspend fun get(title: Anime): AnimeWithTrack {
+    override suspend fun get(title: Anime): AnimeInfo {
         return shikimori.anime.getDetails(title.id)
             .let { detailsMapper.map(it) }
     }
