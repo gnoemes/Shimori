@@ -920,3 +920,19 @@ internal fun video(
         hosting = hosting
     )
 }
+
+internal fun screenshot(
+    id: Long,
+    title_id: Long,
+    original: String,
+    preview: String
+): AnimeScreenshot {
+    return AnimeScreenshot(
+        id = id,
+        titleId = title_id,
+        image = ShimoriImage(
+            original = original,
+            preview = preview
+        )
+    )
+}

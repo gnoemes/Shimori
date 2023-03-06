@@ -106,4 +106,5 @@ private val mappers = DI.Module("shikimori-mappers") {
     bindProvider { new(::RolesMapper) }
     bindProvider { new(::AnimeVideoMapper) }
     bindProvider { new(::AnimeVideoTypeMapper) }
+    bindProvider { new(::AnimeScreenshotMapper) }
 }

@@ -37,6 +37,7 @@ import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
@@ -101,6 +102,7 @@ private fun TitleDetails(
                 title = title,
                 characters = state.characters,
                 videos = state.videos,
+                screenshots = state.screenshots,
                 openListsEdit = openListsEdit,
                 openCharacterDetails = openCharacterDetails
             ) { openCharacterList(title.id, title.type) }
@@ -150,6 +152,7 @@ private fun TitleContent(
     title: TitleWithTrackEntity,
     characters: OptionalContent<List<Character>?>,
     videos: OptionalContent<List<AnimeVideo>?>,
+    screenshots: OptionalContent<List<AnimeScreenshot>?>,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
     openCharacterDetails: (id: Long) -> Unit,
     openCharacterList: () -> Unit
@@ -219,10 +222,11 @@ private fun TitleContent(
             itemSpacer(32.dp)
         }
 
-        if (!videos.loaded || !videos.content.isNullOrEmpty()
-            //TODO show section header if we have screenshots
-//            || !screenshots.content.isNullOrEmpty
-                ) {
+        if (!videos.loaded
+            || !videos.content.isNullOrEmpty()
+            || !screenshots.loaded
+            || !screenshots.content.isNullOrEmpty()
+        ) {
             item {
                 Trailers(
                     videos

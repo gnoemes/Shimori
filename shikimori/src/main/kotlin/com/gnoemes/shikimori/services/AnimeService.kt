@@ -3,8 +3,8 @@ package com.gnoemes.shikimori.services
 import com.gnoemes.shikimori.MAX_PAGE_SIZE
 import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
+import com.gnoemes.shikimori.entities.anime.AnimeScreenshotResponse
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
-import com.gnoemes.shikimori.entities.anime.ScreenshotResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
 import com.gnoemes.shikimori.entities.common.RolesResponse
 import com.gnoemes.shikimori.entities.rates.RateResponse
@@ -17,7 +17,7 @@ internal interface AnimeService {
     suspend fun getSimilar(id: Long): List<AnimeResponse>
     suspend fun getRelated(id: Long): List<AnimeResponse>
     suspend fun getRoles(id: Long): List<RolesResponse>
-    suspend fun getScreenshots(id: Long): List<ScreenshotResponse>
+    suspend fun getScreenshots(id: Long): List<AnimeScreenshotResponse>
     suspend fun calendar(): List<CalendarResponse>
     suspend fun getUserRates(
         id: Long,

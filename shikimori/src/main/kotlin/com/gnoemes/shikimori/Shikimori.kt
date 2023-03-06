@@ -2,8 +2,8 @@ package com.gnoemes.shikimori
 
 import com.gnoemes.shikimori.entities.anime.AnimeDetailsResponse
 import com.gnoemes.shikimori.entities.anime.AnimeResponse
+import com.gnoemes.shikimori.entities.anime.AnimeScreenshotResponse
 import com.gnoemes.shikimori.entities.anime.CalendarResponse
-import com.gnoemes.shikimori.entities.anime.ScreenshotResponse
 import com.gnoemes.shikimori.entities.auth.TokenResponse
 import com.gnoemes.shikimori.entities.club.ClubResponse
 import com.gnoemes.shikimori.entities.common.LinkResponse
@@ -360,7 +360,7 @@ class Shikimori(
             }.body()
         }
 
-        override suspend fun getScreenshots(id: Long): List<ScreenshotResponse> {
+        override suspend fun getScreenshots(id: Long): List<AnimeScreenshotResponse> {
             return client.get {
                 url("$serviceUrl/$id/screenshots")
             }.body()
