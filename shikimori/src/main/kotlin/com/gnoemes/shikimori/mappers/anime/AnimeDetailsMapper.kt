@@ -17,6 +17,7 @@ internal class AnimeDetailsMapper(
     private val ageRatingMapper: AgeRatingMapper,
     private val genreMapper: GenreMapper,
     private val videoMapper: AnimeVideoMapper,
+    private val screenshotMapper: AnimeScreenshotMapper,
 ) : Mapper<AnimeDetailsResponse, AnimeInfo> {
 
     override suspend fun map(from: AnimeDetailsResponse): AnimeInfo {
@@ -47,11 +48,13 @@ internal class AnimeDetailsMapper(
         )
 
         val videos = from.videoResponses?.map { videoMapper.map(it) }
+        val screenshots = from.screenshots?.map { screenshotMapper.map(it) }
 
         return AnimeInfo(
             entity = title,
             track = null,
             videos = videos,
+            screenshots = screenshots
         )
     }
 }

@@ -34,6 +34,7 @@ internal data class AnimeDetailsResponse(
     @SerialName("genres") val genres: List<GenreResponse>,
     @SerialName("user_rate") val userRate: RateResponse?,
     @SerialName("videos") val videoResponses: List<AnimeVideoResponse>?,
+    @SerialName("screenshots") val screenshots: List<AnimeScreenshotResponse>?,
     @SerialName("studios") val studioResponses: List<StudioResponse>?,
     @SerialName("rates_scores_stats") val rateScoresStats: List<StatisticResponse>,
     @SerialName("rates_statuses_stats") val rateStatusesStats: List<StatisticResponse>

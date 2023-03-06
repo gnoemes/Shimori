@@ -9,6 +9,7 @@ import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshots
 import com.gnoemes.shimori.domain.observers.ObserveAnimeVideos
 import com.gnoemes.shimori.domain.observers.ObserveCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
@@ -24,6 +25,7 @@ internal class TitleDetailsViewModel(
     observeTitle: ObserveTitleWithTrackEntity,
     observeCharacters: ObserveCharacters,
     observeAnimeVideos: ObserveAnimeVideos,
+    observeAnimeScreenshots: ObserveAnimeScreenshots,
 ) : ViewModel() {
     private val id: Long = savedStateHandle["id"]!!
     private val type: TrackTargetType = savedStateHandle["type"]!!
@@ -35,7 +37,8 @@ internal class TitleDetailsViewModel(
         updated,
         observeCharacters.flow,
         observeAnimeVideos.flow,
-    ) { title, updated, characters, videos ->
+        observeAnimeScreenshots.flow
+    ) { title, updated, characters, videos, screenshots ->
         TitleDetailsViewState(
             title = title,
             characters = OptionalContent(
@@ -45,6 +48,10 @@ internal class TitleDetailsViewModel(
             videos = OptionalContent(
                 loaded = !type.anime || updated == true || !videos.isNullOrEmpty(),
                 content = if (type.anime) videos else null
+            ),
+            screenshots = OptionalContent(
+                loaded = !type.anime || updated == true || !screenshots.isNullOrEmpty(),
+                content = if (type.anime) screenshots else null
             ),
 
 
@@ -67,5 +74,6 @@ internal class TitleDetailsViewModel(
         observeCharacters(ObserveCharacters.Params(id, type))
 
         if (type.anime) observeAnimeVideos(ObserveAnimeVideos.Params(id))
+        if (type.anime) observeAnimeScreenshots(ObserveAnimeScreenshots.Params(id))
     }
 }

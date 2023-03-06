@@ -40,6 +40,10 @@ class UpdateTitle(
                 it.id,
                 title.videos ?: emptyList()
             )
+            animeRepository.syncScreenshots(
+                it.id,
+                title.screenshots ?: emptyList()
+            )
             animeRepository.titleUpdated(id)
         }
         TrackTargetType.MANGA -> mangaRepository.queryById(id)?.let {
