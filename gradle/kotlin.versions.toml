@@ -1,0 +1,27 @@
+[versions]
+kotlin = "1.8.10"
+dateTime = "0.4.0"
+serilization = "1.4.1"
+coroutines = "1.6.4"
+
+[libraries]
+gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+android-extensions = { module = "org.jetbrains.kotlin:kotlin-android-extensions", version.ref = "kotlin" }
+
+coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "coroutines" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
+
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serilization" }
+
+dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
+
+[bundles]
+serialization = ["serialization-json"]
+
+[plugins]
+android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

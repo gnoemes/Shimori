@@ -8,7 +8,6 @@ buildscript {
     }
 
     dependencies {
-        classpath(libs.kotlin.serialization.gradle)
         classpath(libs.sqldelight.gradle)
         classpath(libs.google.gmsGoogleServices)
         classpath(libs.google.crashlyticsGradle)
@@ -17,12 +16,8 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { setUrl("https://jitpack.io") }
-    }
+plugins {
+    alias(kotlinx.plugins.serialization) apply false
 }
 
 subprojects {

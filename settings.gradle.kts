@@ -23,6 +23,26 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("kotlinx") {
+            from(files("gradle/kotlin.versions.toml"))
+        }
+        create("androidx") {
+            from(files("gradle/androidx.versions.toml"))
+        }
+        create("compose") {
+            from(files("gradle/compose.versions.toml"))
+        }
+    }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        google()
+        maven(url = "https://www.jitpack.io")
+    }
+}
+
 rootProject.name = "Shimori"
 
 include(":app")

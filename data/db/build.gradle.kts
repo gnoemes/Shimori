@@ -10,14 +10,14 @@ dependencies {
     commonMainImplementation(libs.sqldelight.coroutines)
 
     androidMainImplementation(libs.sqldelight.driver.android)
-    androidMainImplementation(libs.androidx.paging.common)
+    androidMainImplementation(androidx.paging.common)
     jvmMainImplementation(libs.sqldelight.driver.jvm)
-    jvmMainImplementation(libs.androidx.paging.common)
+    jvmMainImplementation(androidx.paging.common)
 }
 
 sqldelight {
     database("ShimoriDB") {
-        packageName = com.gnoemes.shimori.Application.id + ".data.db"
+        packageName = com.gnoemes.shimori.AndroidConfig.id + ".data.db"
         verifyMigrations = true
         sourceFolders = listOf("db")
         dialect = "sqlite:3.24"

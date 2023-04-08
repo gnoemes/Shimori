@@ -4,12 +4,11 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.stdlib)
-    api(libs.kotlin.coroutines.core)
-    api(libs.kotlin.serialization.json)
+    api(kotlinx.stdlib)
+    api(kotlinx.coroutines.core)
+    api(kotlinx.serialization.json)
+    api(kotlinx.dateTime)
 
     api(libs.kodein)
     api(libs.ktor.core)
-
-    api(libs.kotlin.dateTime)
 }

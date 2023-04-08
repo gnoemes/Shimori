@@ -1,6 +1,6 @@
 package com.gnoemes.shimori
 
-object Application {
+object AndroidConfig {
     const val id = "com.gnoemes.shimori"
 
     const val compileSdk = 33

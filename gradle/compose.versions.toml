@@ -1,0 +1,34 @@
+[versions]
+composeCompiler = "1.4.4"
+compose-bom = "2023.03.00"
+accompanist = "0.30.0"
+
+[libraries]
+bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
+animation-core = { module = "androidx.compose.animation:animation" }
+foundation-core = { module = "androidx.compose.foundation:foundation" }
+foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
+material-iconsext = { module = "androidx.compose.material:material-icons-extended" }
+material-core = { module = "androidx.compose.material:material" }
+material-material3 = { module = "androidx.compose.material3:material3" }
+material-material3-windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
+ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
+ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui-core = { module = "androidx.compose.ui:ui" }
+ui-util = { module = "androidx.compose.ui:ui-util" }
+ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
+
+activity = "androidx.activity:activity-compose:1.7.0"
+
+#Accompanist
+accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+accompanist-pagerindicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+accompanist-navigationanimation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+accompanist-navigationmaterial = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
+accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompanist" }
+
+[bundles]
+core = ["foundation-core", "foundation-layout", "material-core", "material-material3", "material-material3-windowsizeclass", "animation-core", "ui-core", "ui-tooling", "ui-util"]
