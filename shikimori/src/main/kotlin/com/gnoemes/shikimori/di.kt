@@ -85,14 +85,18 @@ val shikimoriModule = DI.Module("shikimori") {
     }
 
     inBindSet<CatalogueSource> {
-        singleton {
-            instance<ShikimoriSource>()
+        add {
+            singleton {
+                instance<ShikimoriSource>()
+            }
         }
     }
 
     inBindSet<TrackSource> {
-        singleton {
-            instance<ShikimoriSource>()
+        add {
+            singleton {
+                instance<ShikimoriSource>()
+            }
         }
     }
 }

@@ -27,15 +27,15 @@ class MainViewModel constructor(
 
     private val updatingUserDataState = ObservableLoadingCounter()
 
-    val settingsState: StateFlow<MainSettingsViewState> =
+    val settingsState: StateFlow<AppSettingsState> =
         combine(
             settings.titlesLocale.observe,
             settings.locale.observe,
-            ::MainSettingsViewState
+            ::AppSettingsState
         ).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = MainSettingsViewState(
+            initialValue = AppSettingsState(
                 AppTitlesLocale.English,
                 AppLocale.English
             )

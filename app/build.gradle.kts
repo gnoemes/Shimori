@@ -103,6 +103,7 @@ dependencies {
     implementation(projects.shikimori)
     implementation(projects.shikimoriAuth)
 
+    implementation(projects.ui.home)
     implementation(projects.ui.auth)
     implementation(projects.ui.lists)
     implementation(projects.ui.lists.change)

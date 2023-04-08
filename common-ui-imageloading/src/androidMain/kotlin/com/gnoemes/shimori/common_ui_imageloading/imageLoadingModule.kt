@@ -11,12 +11,14 @@ actual val imageLoadingModule: DI.Module
     get() = DI.Module("imageLoading") {
 
         inBindSet<AppInitializer<Application>> {
-            provider {
-                CoilAppInitializer(
-                    instance(),
-                    instance(tag = KodeinTag.imageClient),
-                    ShimoriImageInterceptor(),
-                )
+            add {
+                provider {
+                    CoilAppInitializer(
+                        instance(),
+                        instance(tag = KodeinTag.imageClient),
+                        ShimoriImageInterceptor(),
+                    )
+                }
             }
         }
     }

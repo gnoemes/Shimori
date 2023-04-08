@@ -18,8 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import cafe.adriel.voyager.core.registry.rememberScreen
+import cafe.adriel.voyager.navigator.Navigator
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
 import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
@@ -101,6 +104,9 @@ class MainActivity : BaseActivity(), DIAware {
                             onDispose {}
                         }
 
+                        val homeScreen = rememberScreen(FeatureScreen.Home)
+
+                        Navigator(screen = homeScreen)
                     }
                 }
             }
