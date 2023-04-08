@@ -12,11 +12,11 @@ kotlin {
 }
 
 android {
-    compileSdk = com.gnoemes.shimori.Application.compileSdk
+    compileSdk = com.gnoemes.shimori.AndroidConfig.compileSdk
 
     defaultConfig {
-        minSdk = com.gnoemes.shimori.Application.minSdk
-        targetSdk = com.gnoemes.shimori.Application.targetSdk
+        minSdk = com.gnoemes.shimori.AndroidConfig.minSdk
+        targetSdk = com.gnoemes.shimori.AndroidConfig.targetSdk
     }
 
     compileOptions {

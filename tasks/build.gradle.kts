@@ -5,5 +5,5 @@ plugins {
 dependencies {
     commonMainImplementation(projects.domain)
 
-    androidMainApi(libs.androidx.work.runtime)
+    androidMainApi(androidx.work.runtime)
 }

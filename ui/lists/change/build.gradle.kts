@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.LibraryExtension
-
 plugins {
     id("multiplatform-ui-library")
 }
@@ -10,21 +8,13 @@ dependencies {
     commonMainImplementation(projects.commonUiResources)
     commonMainImplementation(projects.commonUiImageloading)
 
-    androidMainImplementation(libs.androidx.core)
-    androidMainImplementation(libs.androidx.lifecycle.runtime)
-    androidMainImplementation(libs.androidx.lifecycle.compose)
-    androidMainImplementation(libs.androidx.lifecycle.viewmodel.ktx)
-    androidMainImplementation(libs.androidx.lifecycle.viewmodel.compose)
-    androidMainImplementation(libs.androidx.activity.compose)
-    androidMainImplementation(libs.androidx.navigation.compose)
-    androidMainImplementation(libs.compose.foundation.foundation)
-    androidMainImplementation(libs.compose.foundation.layout)
-    androidMainImplementation(libs.compose.material.material3)
-    androidMainImplementation(libs.compose.material.material3.windowsizeclass)
-    androidMainImplementation(libs.compose.material.material)
-    androidMainImplementation(libs.compose.animation.animation)
-    androidMainImplementation(libs.compose.ui.util)
-    androidMainImplementation(libs.compose.ui.tooling)
-    androidMainImplementation(libs.compose.ui.ui)
-    androidMainImplementation(libs.accompanist.flowlayout)
+    androidMainImplementation(androidx.core)
+    androidMainImplementation(androidx.bundles.lifecycle)
+    androidMainImplementation(androidx.navigation.compose)
+    androidMainImplementation(platform(compose.bom))
+    androidMainImplementation(compose.bundles.core)
+    androidMainImplementation(compose.activity)
+    androidMainImplementation(compose.accompanist.navigationmaterial)
+    androidMainImplementation(compose.accompanist.placeholder)
+    androidMainImplementation(compose.accompanist.flowlayout)
 }

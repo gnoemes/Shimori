@@ -16,7 +16,7 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    composeOptions.kotlinCompilerExtensionVersion = compose.versions.composeCompiler.get()
 
     val version = readVersion("${project.projectDir}/version.properties")
 
@@ -30,7 +30,6 @@ android {
     println("config code: $appVersionCode, name: $appVersionName")
 
     defaultConfig {
-        applicationId = com.gnoemes.shimori.Application.id
         versionCode = appVersionCode
         versionName = appVersionName
         setProperty("archivesBaseName", "Shimori-v$appVersionName($appVersionCode)")
@@ -111,36 +110,25 @@ dependencies {
     implementation(projects.ui.settings)
     implementation(projects.ui.title)
 
-    implementation(libs.kotlin.coroutines.android)
+    implementation(kotlinx.coroutines.android)
 
-    implementation(libs.androidx.splashscreen)
-    implementation(libs.androidx.datastore)
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.lifecycle.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
+    implementation(androidx.splashscreen)
+    implementation(androidx.datastore)
+    implementation(androidx.bundles.lifecycle)
+    implementation(androidx.fragment)
+    implementation(androidx.navigation.compose)
 
-    implementation(libs.compose.foundation.foundation)
-    implementation(libs.compose.foundation.layout)
-    implementation(libs.compose.material.material3)
-    implementation(libs.compose.material.material3.windowsizeclass)
-    implementation(libs.compose.material.material)
-    implementation(libs.compose.animation.animation)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.compose.ui.viewbinding)
-    implementation(libs.compose.ui.util)
-    implementation(libs.compose.ui.ui)
+    implementation(platform(compose.bom))
+    implementation(compose.activity)
+    implementation(compose.bundles.core)
+
+    implementation(compose.accompanist.systemuicontroller)
+    implementation(compose.accompanist.navigationmaterial)
+    implementation(compose.accompanist.placeholder)
+    implementation(compose.accompanist.webview)
 
     implementation(libs.coil.compose)
     implementation(libs.kodein.compose)
-
-    implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.navigationmaterial)
-    implementation(libs.accompanist.placeholder)
-    implementation(libs.accompanist.webview)
 
     implementation(libs.material.motion.navigation)
 

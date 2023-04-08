@@ -8,13 +8,14 @@ plugins {
 }
 
 //for application module
-if (extensions.findByType(BaseAppModuleExtension::class.java) != null) {
+if (extensions.findByType(BaseAppModuleExtension::class) != null) {
     configure<BaseAppModuleExtension> {
-        compileSdk = com.gnoemes.shimori.Application.compileSdk
+        compileSdk = com.gnoemes.shimori.AndroidConfig.compileSdk
 
         defaultConfig {
-            minSdk = com.gnoemes.shimori.Application.minSdk
-            targetSdk = com.gnoemes.shimori.Application.targetSdk
+            applicationId = com.gnoemes.shimori.AndroidConfig.id
+            minSdk = com.gnoemes.shimori.AndroidConfig.minSdk
+            targetSdk = com.gnoemes.shimori.AndroidConfig.targetSdk
         }
 
         compileOptions {
@@ -25,13 +26,13 @@ if (extensions.findByType(BaseAppModuleExtension::class.java) != null) {
 }
 
 //for library modules
-if (extensions.findByType(LibraryExtension::class.java) != null) {
+if (extensions.findByType(LibraryExtension::class) != null) {
     configure<LibraryExtension> {
-        compileSdk = com.gnoemes.shimori.Application.compileSdk
+        compileSdk = com.gnoemes.shimori.AndroidConfig.compileSdk
 
         defaultConfig {
-            minSdk = com.gnoemes.shimori.Application.minSdk
-            targetSdk = com.gnoemes.shimori.Application.targetSdk
+            minSdk = com.gnoemes.shimori.AndroidConfig.minSdk
+            targetSdk = com.gnoemes.shimori.AndroidConfig.targetSdk
         }
 
         compileOptions {
@@ -42,13 +43,13 @@ if (extensions.findByType(LibraryExtension::class.java) != null) {
 }
 
 //for test modules
-if (extensions.findByType(TestExtension::class.java) != null) {
+if (extensions.findByType(TestExtension::class) != null) {
     configure<TestExtension> {
-        compileSdk = com.gnoemes.shimori.Application.compileSdk
+        compileSdk = com.gnoemes.shimori.AndroidConfig.compileSdk
 
         defaultConfig {
-            minSdk = com.gnoemes.shimori.Application.minSdk
-            targetSdk = com.gnoemes.shimori.Application.targetSdk
+            minSdk = com.gnoemes.shimori.AndroidConfig.minSdk
+            targetSdk = com.gnoemes.shimori.AndroidConfig.targetSdk
         }
 
         compileOptions {

@@ -5,6 +5,6 @@ plugins {
 dependencies {
     commonMainImplementation(projects.base.core)
 
-    androidMainApi(libs.androidx.paging.common)
-    jvmMainApi(libs.androidx.paging.common)
+    androidMainApi(androidx.paging.common)
+    jvmMainApi(androidx.paging.common)
 }
