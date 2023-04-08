@@ -8,7 +8,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,7 +20,6 @@ import org.kodein.di.DirectDI
 import org.kodein.di.bindFactory
 import org.kodein.di.compose.localDI
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ShimoriSettings.shouldUseDarkColors(): Boolean {
     val prefs = LocalPreferences.current

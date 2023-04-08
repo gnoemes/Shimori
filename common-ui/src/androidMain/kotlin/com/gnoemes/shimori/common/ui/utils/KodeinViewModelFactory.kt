@@ -35,7 +35,7 @@ private fun savedStateFactory(
     di: DI
 ): ViewModelProvider.Factory {
     return object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-        override fun <T : ViewModel?> create(
+        override fun <T : ViewModel> create(
             key: String,
             modelClass: Class<T>,
             handle: SavedStateHandle
@@ -53,7 +53,7 @@ private fun defaultFactory(
     di: DI
 ): ViewModelProvider.Factory {
     return object : AbstractSavedStateViewModelFactory() {
-        override fun <T : ViewModel?> create(
+        override fun <T : ViewModel> create(
             key: String,
             modelClass: Class<T>,
             handle: SavedStateHandle

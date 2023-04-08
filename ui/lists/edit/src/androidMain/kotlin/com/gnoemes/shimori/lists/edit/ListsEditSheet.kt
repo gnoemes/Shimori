@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -58,7 +57,6 @@ fun ListsEdit(
     )
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun ListsEdit(
     viewModel: ListsEditViewModel,
@@ -484,7 +482,11 @@ private fun StatusSelector(
                 icon = {
                     Icon(
                         modifier = Modifier.size(16.dp),
-                        painter = painterResource(LocalShimoriTrackUtil.current.trackStatusIcon(status)),
+                        painter = painterResource(
+                            LocalShimoriTrackUtil.current.trackStatusIcon(
+                                status
+                            )
+                        ),
                         contentDescription = null
                     )
                 }
