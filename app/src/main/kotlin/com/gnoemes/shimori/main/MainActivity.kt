@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.main
 
-import Main
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -102,7 +101,6 @@ class MainActivity : BaseActivity(), DIAware {
                             onDispose {}
                         }
 
-                        Main()
                     }
                 }
             }

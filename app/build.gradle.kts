@@ -131,6 +131,7 @@ dependencies {
     implementation(libs.kodein.compose)
 
     implementation(libs.material.motion.navigation)
+    implementation(libs.bundles.voyager)
 
     implementation(libs.ktor.logging)
     implementation(libs.ktor.contentNegotiation)

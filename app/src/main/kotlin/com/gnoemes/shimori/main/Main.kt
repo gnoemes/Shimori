@@ -78,14 +78,14 @@ private fun Main(
         }
     }
 
-    val viewState by viewModel.state.collectAsState()
+//    val viewState by viewModel.state.collectAsState()
 
-    Main(
-        listType = viewState.listType,
-        bottomSheetNavigator = bottomSheetNavigator,
-        navController = navController,
-        bottomSheetNavigateUp = bottomSheetNavigateUp
-    )
+//    Main(
+//        listType = viewState.listType,
+//        bottomSheetNavigator = bottomSheetNavigator,
+//        navController = navController,
+//        bottomSheetNavigateUp = bottomSheetNavigateUp
+//    )
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

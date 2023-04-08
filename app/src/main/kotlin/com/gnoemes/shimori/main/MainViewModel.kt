@@ -11,7 +11,10 @@ import com.gnoemes.shimori.common.ui.utils.collectStatus
 import com.gnoemes.shimori.data.list.ListsStateBus
 import com.gnoemes.shimori.domain.interactors.UpdateUserAndTracks
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class MainViewModel constructor(
@@ -23,14 +26,6 @@ class MainViewModel constructor(
 ) : ViewModel() {
 
     private val updatingUserDataState = ObservableLoadingCounter()
-
-    val state: StateFlow<MainViewState> = listsStateBus.type.observe
-        .map(::MainViewState)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = MainViewState.Empty
-        )
 
     val settingsState: StateFlow<MainSettingsViewState> =
         combine(
