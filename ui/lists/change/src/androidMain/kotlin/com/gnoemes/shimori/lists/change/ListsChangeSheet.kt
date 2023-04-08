@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalLifecycleComposeApi::class)
-
 package com.gnoemes.shimori.lists.change
 
 import androidx.compose.foundation.layout.*
@@ -14,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.gnoemes.shimori.common.ui.components.BottomSheetTitle
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
@@ -46,7 +43,7 @@ private fun ListsChange(
 
 @Composable
 private fun ListsChange(
-    type : ListType,
+    type: ListType,
     onOpenPinedClick: () -> Unit,
     onOpenRandomTitleClick: () -> Unit,
     navigateUp: () -> Unit,

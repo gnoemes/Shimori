@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.common.ui.components.*
 import com.gnoemes.shimori.common.ui.theme.dimens
@@ -33,7 +32,6 @@ fun Auth(
     )
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun Auth(
     viewModel: AuthViewModel,

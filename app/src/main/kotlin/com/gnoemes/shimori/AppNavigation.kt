@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import com.gnoemes.shikimori.Shikimori
@@ -149,7 +148,6 @@ private fun NavGraphBuilder.addFeedRoot(
     }
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 private fun NavGraphBuilder.addLists(navController: NavController, root: RootScreen) {
     composable(
         route = Screen.Lists.createRoute(root),
@@ -257,7 +255,9 @@ private fun NavGraphBuilder.addListEditBottomSheet(
         }
         //used to snap bottom bar
         val offset = remember {
-            bottomSheetNavigator?.navigatorSheetState?.offset ?: mutableStateOf(0f)
+            //TODO fix
+//            bottomSheetNavigator?.navigatorSheetState?.offset ?:
+            mutableStateOf(0f)
         }
 
         ListsEdit(
