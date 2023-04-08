@@ -7,6 +7,7 @@ import com.gnoemes.shikimori.shikimoriModule
 import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.appinitializers.AppInitializers
+import com.gnoemes.shimori.appinitializers.NavigationInitializer
 import com.gnoemes.shimori.auth.authModule
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.core.di.KodeinTag
@@ -18,7 +19,11 @@ import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.base.shared.createLogger
 import com.gnoemes.shimori.base.shared.extensions.defaultConfig
-import com.gnoemes.shimori.common.ui.utils.*
+import com.gnoemes.shimori.common.ui.utils.ShimoriContextTextProvider
+import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
+import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
+import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
+import com.gnoemes.shimori.common.ui.utils.bindViewModel
 import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
@@ -36,17 +41,26 @@ import com.gnoemes.shimori.source.CatalogueSource
 import com.gnoemes.shimori.source.TrackSource
 import com.gnoemes.shimori.tasks.tasksModule
 import com.gnoemes.shimori.title.titleModule
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.UserAgent
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
-import org.kodein.di.*
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSet
+import org.kodein.di.bindSingleton
+import org.kodein.di.inBindSet
+import org.kodein.di.instance
+import org.kodein.di.provider
 
 
 val appModule = DI.Module("app") {
@@ -114,6 +128,7 @@ private val binds = DI.Module(name = "appBinds") {
 
 private val initializers = DI.Module(name = "initializers") {
     bindSet<AppInitializer<Application>>()
+    inBindSet<AppInitializer<Application>> { provider { NavigationInitializer() } }
     bindProvider { new(::AppInitializers) }
 }
 

@@ -7,6 +7,8 @@ dependencies {
     commonMainImplementation(projects.data.core)
     commonMainImplementation(projects.commonUiResources)
     commonMainImplementation(projects.commonUiImageloading)
+    commonMainApi(libs.bundles.voyager)
+    commonMainImplementation(libs.uuid)
 
     androidMainImplementation(androidx.fragment)
     androidMainImplementation(androidx.core)

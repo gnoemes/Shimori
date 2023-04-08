@@ -10,7 +10,7 @@ import org.kodein.di.*
 actual val imageLoadingModule: DI.Module
     get() = DI.Module("imageLoading") {
 
-        addInBindSet<AppInitializer<Application>> {
+        inBindSet<AppInitializer<Application>> {
             provider {
                 CoilAppInitializer(
                     instance(),
