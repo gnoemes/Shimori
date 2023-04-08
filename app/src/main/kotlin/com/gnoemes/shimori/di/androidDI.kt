@@ -28,6 +28,7 @@ import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.domain.domainModule
+import com.gnoemes.shimori.home.HomeFeature
 import com.gnoemes.shimori.lists.change.listsChangeModule
 import com.gnoemes.shimori.lists.edit.listsEditModule
 import com.gnoemes.shimori.lists.listsModule
@@ -58,9 +59,7 @@ import org.kodein.di.DI
 import org.kodein.di.bindProvider
 import org.kodein.di.bindSet
 import org.kodein.di.bindSingleton
-import org.kodein.di.inBindSet
 import org.kodein.di.instance
-import org.kodein.di.provider
 
 
 val appModule = DI.Module("app") {
@@ -127,8 +126,9 @@ private val binds = DI.Module(name = "appBinds") {
 }
 
 private val initializers = DI.Module(name = "initializers") {
-    bindSet<AppInitializer<Application>>()
-    inBindSet<AppInitializer<Application>> { provider { NavigationInitializer() } }
+    bindSet<AppInitializer<Application>>() {
+        add { instance(NavigationInitializer()) }
+    }
     bindProvider { new(::AppInitializers) }
 }
 
@@ -188,4 +188,5 @@ private val features = DI.Module(name = "features") {
     importOnce(listsEditModule)
     importOnce(settingsModule)
     importOnce(titleModule)
+    importOnce(HomeFeature.di)
 }

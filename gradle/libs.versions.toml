@@ -49,6 +49,7 @@ voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voy
 voyager-tab-navigator = { module = "ca.gosyer:voyager-tab-navigator", version.ref = "voyager" }
 voyager-bottom-sheet-navigator = { module = "ca.gosyer:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = "voyager" }
+voyager-kodein = { module = "ca.gosyer:voyager-kodein", version.ref = "voyager" }
 
 #Tests
 junit = "junit:junit:4.13.2"
@@ -67,4 +68,4 @@ material-motion-core = "io.github.fornewid:material-motion-compose-core:0.10.3"
 slf4j = "org.slf4j:slf4j-simple:1.7.30"
 
 [bundles]
-voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions", "voyager-bottom-sheet-navigator"]
+voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions", "voyager-bottom-sheet-navigator", "voyager-kodein"]

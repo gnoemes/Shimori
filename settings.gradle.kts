@@ -57,6 +57,7 @@ include(":tasks")
 
 include(":shikimori", ":shikimori-auth")
 
+include(":ui:home")
 include(":ui:auth")
 include(":ui:lists", ":ui:lists:change", ":ui:lists:edit")
 include(":ui:settings")
