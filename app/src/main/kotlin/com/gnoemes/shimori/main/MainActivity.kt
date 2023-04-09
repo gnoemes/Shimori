@@ -7,7 +7,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.OverscrollConfiguration
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -20,13 +23,24 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
-import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.BaseActivity
+import com.gnoemes.shimori.common.ui.LocalPreferences
+import com.gnoemes.shimori.common.ui.LocalShimoriDimensions
+import com.gnoemes.shimori.common.ui.LocalShimoriSettings
+import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
 import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
-import com.gnoemes.shimori.common.ui.utils.*
+import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
+import com.gnoemes.shimori.common.ui.utils.ShimoriTextCreator
+import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
+import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
+import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+import com.gnoemes.shimori.common.ui.utils.shouldUseDarkColors
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -34,7 +48,7 @@ import org.kodein.di.android.closestDI
 import org.kodein.di.compose.withDI
 import org.kodein.di.instance
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 class MainActivity : BaseActivity(), DIAware {
     override val di: DI by closestDI()
 
@@ -106,7 +120,14 @@ class MainActivity : BaseActivity(), DIAware {
 
                         val homeScreen = rememberScreen(FeatureScreen.Home)
 
-                        Navigator(screen = homeScreen)
+                        BottomSheetNavigator(
+                            scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = .32f),
+                            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                            sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface),
+                            sheetBackgroundColor = MaterialTheme.colorScheme.surface,
+                        ) {
+                            Navigator(screen = homeScreen)
+                        }
                     }
                 }
             }
