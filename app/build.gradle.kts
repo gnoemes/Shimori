@@ -106,7 +106,7 @@ dependencies {
     implementation(projects.ui.home)
     implementation(projects.ui.auth)
     implementation(projects.ui.lists)
-    implementation(projects.ui.lists.change)
+    implementation(projects.ui.lists.menu)
     implementation(projects.ui.lists.edit)
     implementation(projects.ui.settings)
     implementation(projects.ui.title)
