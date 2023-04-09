@@ -30,8 +30,8 @@ import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.domain.domainModule
 import com.gnoemes.shimori.home.HomeFeature
 import com.gnoemes.shimori.lists.ListsFeature
-import com.gnoemes.shimori.lists.change.ListMenuFeature
 import com.gnoemes.shimori.lists.edit.listsEditModule
+import com.gnoemes.shimori.lists.menu.ListMenuFeature
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
