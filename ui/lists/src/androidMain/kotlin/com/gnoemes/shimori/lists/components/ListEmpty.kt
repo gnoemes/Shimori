@@ -1,6 +1,16 @@
-package com.gnoemes.shimori.lists.empty
+package com.gnoemes.shimori.lists.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,7 +49,7 @@ internal fun ListsEmpty(
         Icon(
             painter = painterResource(
                 id = if (type == ListType.Pinned) R.drawable.ic_pin_big
-                else R.drawable.ic_empty
+                else R.drawable.ic_list
             ),
             contentDescription = null,
             modifier = Modifier
@@ -56,19 +66,6 @@ internal fun ListsEmpty(
             ),
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        Text(
-            text = stringResource(
-                id = if (type == ListType.Pinned) R.string.no_pinned_titles_description
-                else R.string.no_titles_description
-            ),
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )

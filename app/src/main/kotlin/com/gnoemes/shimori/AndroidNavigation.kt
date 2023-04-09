@@ -1,10 +1,11 @@
 package com.gnoemes.shimori
 
 import cafe.adriel.voyager.core.registry.ScreenRegistry
-import com.gnoemes.shimori.home.HomeFeature
+import com.gnoemes.shimori.common.ui.navigation.Feature
 
 object AndroidNavigation {
-    fun init() = ScreenRegistry {
-        HomeFeature.screens(this)
+
+    fun init(features: Set<@JvmSuppressWildcards Feature>) = ScreenRegistry {
+        features.forEach { it.screens(this) }
     }
 }
