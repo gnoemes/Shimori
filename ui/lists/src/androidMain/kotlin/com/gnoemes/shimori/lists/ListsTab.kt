@@ -112,7 +112,6 @@ internal object ListsTab : Tab {
                     })
             },
             floatingActionButton = {
-
                 if (state !is ListScreenState.NoTracks) {
                     ShimoriFAB(
                         onClick = {

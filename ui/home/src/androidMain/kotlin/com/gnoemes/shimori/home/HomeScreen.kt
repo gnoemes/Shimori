@@ -6,7 +6,6 @@ import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,7 +57,7 @@ import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
 
 @OptIn(
-    ExperimentalMaterialApi::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterialApi::class,
     ExperimentalAnimationApi::class
 )
 internal object HomeScreen : Screen() {
