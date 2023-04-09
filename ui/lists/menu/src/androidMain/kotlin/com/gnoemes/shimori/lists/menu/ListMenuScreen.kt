@@ -24,7 +24,6 @@ import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
 import com.gnoemes.shimori.common.ui.navigation.Screen
 import com.gnoemes.shimori.data.core.entities.track.ListType
-import com.gnoemes.shimori.lists.menu.R
 import com.gnoemes.shimori.lists.menu.components.StatusSection
 
 internal class ListMenuScreen : Screen() {

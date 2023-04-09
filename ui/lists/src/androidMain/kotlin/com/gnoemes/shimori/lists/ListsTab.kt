@@ -195,6 +195,7 @@ internal object ListsTab : Tab {
         paddingValues: PaddingValues
     ) {
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val screenModel = rememberScreenModel<ListPageScreenModel>()
         val sortScreenModel = rememberScreenModel<ListSortScreenModel>()
 
@@ -208,7 +209,16 @@ internal object ListsTab : Tab {
             onMangaExplore = { /*TODO*/ },
             onRanobeExplore = { /*TODO*/ },
             openTrackEdit = { id, type, markComplete ->
-                navigator.push(ScreenRegistry.get(FeatureScreen.TrackEdit(id, type, markComplete)))
+                bottomSheetNavigator.show(
+                    ScreenRegistry.get(
+                        FeatureScreen.TrackEdit(
+                            id,
+                            type,
+                            markComplete,
+                            true
+                        )
+                    )
+                )
             },
             openTitleDetails = { id, type ->
                 navigator.push(ScreenRegistry.get(FeatureScreen.TitleDetails(id, type)))
