@@ -1,9 +1,11 @@
 package com.gnoemes.shimori.lists.edit
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.gnoemes.shimori.base.core.utils.Logger
+import androidx.compose.runtime.Immutable
+import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.track.Track
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
@@ -14,35 +16,38 @@ import com.gnoemes.shimori.domain.interactors.DeleteTrack
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
 import com.gnoemes.shimori.domain.observers.ObservePinExist
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
-internal class ListsEditViewModel(
-    savedStateHandle: SavedStateHandle,
+internal class TrackEditScreenModel(
+    navData: FeatureScreen.TrackEdit,
     observeTitle: ObserveTitleWithTrackEntity,
     observePinExist: ObservePinExist,
     private val listsStateBus: ListsStateBus,
     private val toggleListPin: ToggleTitlePin,
     private val createOrUpdateTrack: CreateOrUpdateTrack,
     private val deleteTrack: DeleteTrack,
-    private val logger: Logger,
-) : ViewModel() {
-    private val targetId: Long = savedStateHandle["id"]!!
-    private val targetType: TrackTargetType = savedStateHandle["type"]!!
-    private val markComplete: Boolean = savedStateHandle["markComplete"] ?: false
-    private val deleteNotification: Boolean = savedStateHandle["deleteNotification"] ?: false
+    dispatchers: AppCoroutineDispatchers,
+) : StateScreenModel<TrackEditScreenState>(TrackEditScreenState()) {
+    private val targetId: Long = navData.id
+    private val targetType: TrackTargetType = navData.type
+    private val markComplete: Boolean = navData.markComplete
+    private val deleteNotification: Boolean = navData.deleteNotification
 
     private val _uiEvents = MutableSharedFlow<UiEvents>()
-    private val _state = MutableStateFlow(ListsEditViewState.Empty)
 
     private var track: Track? = null
 
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
-    val state: StateFlow<ListsEditViewState> get() = _state
 
     init {
-        viewModelScope.launch {
+        coroutineScope.launch(dispatchers.io) {
             combine(
                 observeTitle.flow,
                 observePinExist.flow
@@ -50,7 +55,7 @@ internal class ListsEditViewModel(
                 track = entity?.track
                 val title = entity?.entity
 
-                ListsEditViewState(
+                TrackEditScreenState(
                     title = title,
                     status = (if (markComplete) TrackStatus.COMPLETED else track?.status)
                         ?: TrackStatus.WATCHING,
@@ -62,7 +67,9 @@ internal class ListsEditViewModel(
                     pinned = pinned,
                     newTrack = track == null
                 )
-            }.collect { _state.value = it }
+            }.collectLatest { state ->
+                mutableState.update { state }
+            }
         }
 
         observeTitle(ObserveTitleWithTrackEntity.Params(targetId, targetType))
@@ -70,69 +77,69 @@ internal class ListsEditViewModel(
     }
 
     fun onStatusChanged(newStatus: TrackStatus) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(status = newStatus)
+        coroutineScope.launch {
+            mutableState.update { it.copy(status = newStatus) }
         }
     }
 
     fun onProgressChanged(newValue: Int) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(progress = newValue)
+        coroutineScope.launch {
+            mutableState.update { it.copy(progress = newValue) }
         }
     }
 
     fun onRewatchesChanged(newValue: Int) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(rewatches = newValue)
+        coroutineScope.launch {
+            mutableState.update { it.copy(rewatches = newValue) }
         }
     }
 
     fun onScoreChanged(newValue: Int?) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(score = newValue)
+        coroutineScope.launch {
+            mutableState.update { it.copy(score = newValue) }
         }
     }
 
     fun onCommentChanged(newComment: String?) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(comment = newComment)
+        coroutineScope.launch {
+            mutableState.update { it.copy(comment = newComment) }
         }
     }
 
     fun onProgressInput() {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = ListEditInputState.Progress)
+        coroutineScope.launch {
+            mutableState.update { it.copy(inputState = TrackEditInputState.Progress) }
         }
     }
 
     fun onRewatchingInput() {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = ListEditInputState.Rewatching)
+        coroutineScope.launch {
+            mutableState.update { it.copy(inputState = TrackEditInputState.Rewatching) }
         }
     }
 
     fun onCommentInput() {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = ListEditInputState.Comment)
+        coroutineScope.launch {
+            mutableState.update { it.copy(inputState = TrackEditInputState.Comment) }
         }
     }
 
     fun onNoneInput() {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(inputState = ListEditInputState.None)
+        coroutineScope.launch {
+            mutableState.update { it.copy(inputState = TrackEditInputState.None) }
         }
     }
 
     fun togglePin() {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(pinned = !_state.value.pinned)
+        coroutineScope.launch {
+            mutableState.update { it.copy(pinned = !it.pinned) }
         }
     }
 
     fun delete() {
-        viewModelScope.launch {
+        coroutineScope.launch {
             val track = track
-            val image = _state.value.title?.image
+            val image = state.value.title?.image
             track?.id?.let {
                 deleteTrack(DeleteTrack.Params(it)).collect { status ->
                     if (status.isSuccess) {
@@ -153,7 +160,7 @@ internal class ListsEditViewModel(
     }
 
     fun createOrUpdate() {
-        viewModelScope.launch {
+        coroutineScope.launch {
             val state = state.value
             val track = Track(
                 id = track?.id ?: 0,
@@ -184,5 +191,29 @@ internal class ListsEditViewModel(
                 }
         }
     }
+}
 
+@Immutable
+internal data class TrackEditScreenState(
+    val title: ShimoriTitleEntity? = null,
+    val status: TrackStatus = TrackStatus.PLANNED,
+    val progress: Int = 0,
+    val rewatches: Int = 0,
+    val score: Int? = null,
+    val comment: String? = null,
+    val type: TrackTargetType = TrackTargetType.ANIME,
+    val inputState: TrackEditInputState = TrackEditInputState.None,
+    val pinned: Boolean = false,
+    val newTrack: Boolean = false,
+)
+
+internal sealed class UiEvents {
+    object NavigateUp : UiEvents()
+}
+
+internal sealed class TrackEditInputState {
+    object None : TrackEditInputState()
+    object Progress : TrackEditInputState()
+    object Rewatching : TrackEditInputState()
+    object Comment : TrackEditInputState()
 }
