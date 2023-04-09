@@ -15,6 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.rememberScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +30,9 @@ fun RootScreenLayout(
     snackBarHost: @Composable () -> Unit = { },
     floatingActionButtonPosition: FabPosition = FabPosition.Center
 ) {
+    val navigator = LocalNavigator.currentOrThrow
+    val settingsScreen = rememberScreen(FeatureScreen.Settings)
+
     ScaffoldExtended(
         topBar = {
             CenterAlignedTopAppBar(
@@ -36,8 +43,10 @@ fun RootScreenLayout(
                         onQueryChange = {},
                         onSearch = { },
                         onActiveChange = { },
-                        onSettingsClick = { },
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                        onSettingsClick = { navigator.push(settingsScreen) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
                         content = { },
                     )
                 },

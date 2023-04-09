@@ -1,117 +1,37 @@
-package com.gnoemes.shimori.settings
+package com.gnoemes.shimori.settings.components
 
 import android.os.Build
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gnoemes.shimori.base.core.settings.AppAccentColor
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTheme
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
-import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.ui.noRippleClickable
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.secondaryColorFromType
-import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+import com.gnoemes.shimori.settings.R
+
 
 @Composable
-fun Settings(
-    navigateUp: () -> Unit
-) {
-    Settings(
-        navigateUp = navigateUp,
-        viewModel = shimoriViewModel()
-    )
-}
-
-@Composable
-private fun Settings(
-    navigateUp: () -> Unit,
-    viewModel: SettingsViewModel
-) {
-
-    val viewState by viewModel.state.collectAsStateWithLifecycle(initialValue = null)
-
-    viewState?.let { state ->
-        Settings(
-            navigateUp = navigateUp,
-            appVersion = state.appVersion,
-            titlesLocale = state.titlesLocale,
-            onChangeTitlesLocale = { viewModel.onChangeTitlesLocale(it) },
-            locale = state.locale,
-            onChangeLocale = { viewModel.onChangeLocale(it) },
-            showSpoilers = state.showSpoilers,
-            onChangeSpoilers = { viewModel.onChangeSpoilers(it) },
-            theme = state.theme,
-            onChangeTheme = { viewModel.onChangeTheme(it) },
-            accentColor = state.accentColor,
-            onChangeAccentColor = { viewModel.onChangeSecondaryColor(it) },
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun Settings(
-    navigateUp: () -> Unit,
-    appVersion: String,
-    titlesLocale: AppTitlesLocale,
-    onChangeTitlesLocale: (AppTitlesLocale) -> Unit,
-    locale: AppLocale,
-    onChangeLocale: (AppLocale) -> Unit,
-    showSpoilers: Boolean,
-    onChangeSpoilers: (Boolean) -> Unit,
-    theme: AppTheme,
-    onChangeTheme: (AppTheme) -> Unit,
-    accentColor: AppAccentColor,
-    onChangeAccentColor: (AppAccentColor) -> Unit
-) {
-    Surface {
-        Column {
-            ShimoriSecondaryToolbar(
-                navigateUp = navigateUp,
-                modifier = Modifier.statusBarsPadding(),
-                title = stringResource(id = R.string.app_name),
-                subTitle = appVersion,
-                // use InterpolatingTopAppBarColors instead AnimatingTopAppBarColors
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    actionIconContentColor = MaterialTheme.colorScheme.onSurface
-                )
-            )
-
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) {
-                TitlesLocale(titlesLocale, onChangeTitlesLocale)
-                Spacer(modifier = Modifier.height(24.dp))
-                Locale(locale, onChangeLocale)
-                Spacer(modifier = Modifier.height(24.dp))
-                Spoilers(showSpoilers, onChangeSpoilers)
-                Spacer(modifier = Modifier.height(24.dp))
-                Theme(theme, onChangeTheme)
-                Spacer(modifier = Modifier.height(24.dp))
-                AccentColor(accentColor, onChangeAccentColor)
-            }
-        }
-    }
-}
-
-@Composable
-private fun ColumnScope.TitlesLocale(
+internal fun ColumnScope.TitlesLocale(
     setting: AppTitlesLocale,
     onChange: (AppTitlesLocale) -> Unit,
 ) {
@@ -139,7 +59,7 @@ private fun ColumnScope.TitlesLocale(
 
 
 @Composable
-private fun ColumnScope.Locale(
+internal fun ColumnScope.Locale(
     setting: AppLocale,
     onChange: (AppLocale) -> Unit,
 ) {
@@ -165,7 +85,7 @@ private fun ColumnScope.Locale(
 }
 
 @Composable
-private fun ColumnScope.Spoilers(
+internal fun ColumnScope.Spoilers(
     setting: Boolean,
     onChange: (Boolean) -> Unit,
 ) {
@@ -191,7 +111,7 @@ private fun ColumnScope.Spoilers(
 }
 
 @Composable
-private fun ColumnScope.Theme(
+internal fun ColumnScope.Theme(
     setting: AppTheme,
     onChange: (AppTheme) -> Unit,
 ) {
@@ -218,7 +138,7 @@ private fun ColumnScope.Theme(
 }
 
 @Composable
-private fun ColumnScope.AccentColor(
+internal fun ColumnScope.AccentColor(
     setting: AppAccentColor,
     onChange: (AppAccentColor) -> Unit,
 ) {
@@ -257,7 +177,7 @@ private fun ColumnScope.AccentColor(
 }
 
 @Composable
-private fun ColumnScope.SettingTitle(
+internal fun ColumnScope.SettingTitle(
     title: String
 ) {
     Text(
@@ -269,7 +189,7 @@ private fun ColumnScope.SettingTitle(
 }
 
 @Composable
-private fun AccentColor(
+internal fun AccentColor(
     color: Color,
     selected: Boolean,
     onClick: () -> Unit

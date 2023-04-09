@@ -15,4 +15,6 @@ sealed class FeatureScreen : ScreenProvider {
     ) : FeatureScreen()
 
     data class TitleDetails(val id: Long, val type: TrackTargetType) : FeatureScreen()
+
+    object Settings : FeatureScreen()
 }

@@ -33,9 +33,9 @@ import com.gnoemes.shimori.lists.ListsFeature
 import com.gnoemes.shimori.lists.edit.TrackEditFeature
 import com.gnoemes.shimori.lists.menu.ListMenuFeature
 import com.gnoemes.shimori.main.MainViewModel
+import com.gnoemes.shimori.settings.SettingsFeature
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
-import com.gnoemes.shimori.settings.settingsModule
 import com.gnoemes.shimori.shikimori.auth.ActivityShikimoriAuthManager
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import com.gnoemes.shimori.source.CatalogueSource
@@ -184,7 +184,8 @@ private val features = setOf(
     HomeFeature,
     ListsFeature,
     ListMenuFeature,
-    TrackEditFeature
+    TrackEditFeature,
+    SettingsFeature
 )
 
 
@@ -194,6 +195,5 @@ private val featuresUi = DI.Module(name = "features-ui") {
     features.forEach { importOnce(it.di) }
 
     importOnce(authModule)
-    importOnce(settingsModule)
     importOnce(titleModule)
 }
