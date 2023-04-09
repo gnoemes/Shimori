@@ -30,7 +30,7 @@ import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.domain.domainModule
 import com.gnoemes.shimori.home.HomeFeature
 import com.gnoemes.shimori.lists.ListsFeature
-import com.gnoemes.shimori.lists.change.listsChangeModule
+import com.gnoemes.shimori.lists.change.ListMenuFeature
 import com.gnoemes.shimori.lists.edit.listsEditModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
@@ -182,7 +182,8 @@ private val networkModule = DI.Module(name = "network") {
 
 private val features = setOf(
     HomeFeature,
-    ListsFeature
+    ListsFeature,
+    ListMenuFeature
 )
 
 
@@ -192,7 +193,6 @@ private val featuresUi = DI.Module(name = "features-ui") {
     features.forEach { importOnce(it.di) }
 
     importOnce(authModule)
-    importOnce(listsChangeModule)
     importOnce(listsEditModule)
     importOnce(settingsModule)
     importOnce(titleModule)
