@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -38,7 +36,6 @@ import androidx.compose.ui.util.fastForEach
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -77,39 +74,32 @@ internal object HomeScreen : Screen() {
 
         val tabs = listOf(listsTab, mockTab1, mockTab2)
 
-        BottomSheetNavigator(
-            scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = .32f),
-            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-            sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface),
-            sheetBackgroundColor = MaterialTheme.colorScheme.surface,
-        ) { bottomSheetNavigator ->
-            TabNavigator(
-                tab = listsTab
-            ) { tabNavigator ->
-                CompositionLocalProvider(LocalNavigator provides navigator) {
-                    Scaffold(
-                        bottomBar = { BottomBar(tabs, state.profileImage) },
-                        contentWindowInsets = WindowInsets.empty
-                    ) { contentPadding ->
-                        Box(
-                            modifier = Modifier
-                        ) {
-                            AnimatedContent(
-                                targetState = tabNavigator.current,
-                                transitionSpec = {
-                                    materialFadeThroughIn(
-                                        initialScale = 1f,
-                                        durationMillis = TabFadeDuration
-                                    ) with materialFadeThroughOut(durationMillis = TabFadeDuration)
-                                },
-                                content = {
-                                    tabNavigator.saveableState(key = "currentTab", it) {
-                                        it.Content()
-                                    }
-                                },
-                                label = "Tab animation",
-                            )
-                        }
+        TabNavigator(
+            tab = listsTab
+        ) { tabNavigator ->
+            CompositionLocalProvider(LocalNavigator provides navigator) {
+                Scaffold(
+                    bottomBar = { BottomBar(tabs, state.profileImage) },
+                    contentWindowInsets = WindowInsets.empty
+                ) { contentPadding ->
+                    Box(
+                        modifier = Modifier
+                    ) {
+                        AnimatedContent(
+                            targetState = tabNavigator.current,
+                            transitionSpec = {
+                                materialFadeThroughIn(
+                                    initialScale = 1f,
+                                    durationMillis = TabFadeDuration
+                                ) with materialFadeThroughOut(durationMillis = TabFadeDuration)
+                            },
+                            content = {
+                                tabNavigator.saveableState(key = "currentTab", it) {
+                                    it.Content()
+                                }
+                            },
+                            label = "Tab animation",
+                        )
                     }
                 }
             }
@@ -166,7 +156,7 @@ internal object HomeScreen : Screen() {
                         icon = {
                             if (profileImage != null
                                 //TODO change to profile tab
-                                   && tab == MockTab
+                                && tab == MockTab
                             ) {
                                 AsyncImage(
                                     model = profileImage,

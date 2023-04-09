@@ -41,7 +41,7 @@ import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
 import com.gnoemes.shimori.source.CatalogueSource
 import com.gnoemes.shimori.source.TrackSource
 import com.gnoemes.shimori.tasks.tasksModule
-import com.gnoemes.shimori.title.titleModule
+import com.gnoemes.shimori.title.TitleDetailsFeature
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.UserAgent
@@ -185,7 +185,8 @@ private val features = setOf(
     ListsFeature,
     ListMenuFeature,
     TrackEditFeature,
-    SettingsFeature
+    SettingsFeature,
+    TitleDetailsFeature
 )
 
 
@@ -195,5 +196,4 @@ private val featuresUi = DI.Module(name = "features-ui") {
     features.forEach { importOnce(it.di) }
 
     importOnce(authModule)
-    importOnce(titleModule)
 }
