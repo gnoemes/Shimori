@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.lists.page
+package com.gnoemes.shimori.lists.components
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -15,11 +15,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -28,20 +25,17 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.components.*
-import com.gnoemes.shimori.common.ui.theme.ShimoriBiggestRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
-import com.gnoemes.shimori.common.ui.theme.dimens
-import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.TitleWithTrack
 import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.data.core.entities.track.*
 import com.gnoemes.shimori.lists.INCREMENTATOR_MAX_PROGRESS
-import com.gnoemes.shimori.lists.R
-import com.gnoemes.shimori.lists.empty.ListsEmpty
-import com.gnoemes.shimori.lists.sort.ListSort
+import com.gnoemes.shimori.lists.page.ListPageScreenModel
+import com.gnoemes.shimori.lists.page.UiEvents
+import com.gnoemes.shimori.lists.sort.ListSortScreenModel
 import com.smarttoolfactory.gesture.pointerMotionEvents
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,62 +43,39 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ListPage(
+    screenModel: ListPageScreenModel,
+    sortScreenModel : ListSortScreenModel,
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
+    openTrackEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
-    ListPage(
-        viewModel = shimoriViewModel(),
-        paddingValues = paddingValues,
-        scrollBehavior = scrollBehavior,
-        snackbarHostState = snackbarHostState,
-        openListsEdit = openListsEdit,
-        onAnimeExplore = onAnimeExplore,
-        onMangaExplore = onMangaExplore,
-        onRanobeExplore = onRanobeExplore,
-        openTitleDetails = openTitleDetails,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ListPage(
-    viewModel: ListPageViewModel,
-    paddingValues: PaddingValues,
-    scrollBehavior: TopAppBarScrollBehavior,
-    snackbarHostState: SnackbarHostState,
-    openListsEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
-    onAnimeExplore: () -> Unit,
-    onMangaExplore: () -> Unit,
-    onRanobeExplore: () -> Unit,
-    openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
-) {
-    val state by viewModel.state.collectAsState()
+    val state by screenModel.state.collectAsState()
 
     val onEditClick = { entity: TitleWithTrackEntity ->
-        openListsEdit(
+        openTrackEdit(
             entity.id,
             entity.type,
             false
         )
     }
+
     val onCardClick = { entity: TitleWithTrackEntity ->
         openTitleDetails(entity.id, entity.type)
     }
-    val onTogglePin = { entity: TitleWithTrackEntity -> viewModel.togglePin(entity) }
-    val onIncrementClick = { entity: TitleWithTrackEntity -> viewModel.showIncrementer(entity) }
+    val onTogglePin = { entity: TitleWithTrackEntity -> screenModel.togglePin(entity) }
+    val onIncrementClick = { entity: TitleWithTrackEntity -> screenModel.showIncrementer(entity) }
     val onIncrementerProgress =
-        { progress: Int -> viewModel.updateProgressFromIncrementer(progress) }
+        { progress: Int -> screenModel.updateProgressFromIncrementer(progress) }
 
-    LaunchedEffect(viewModel) {
-        viewModel.uiEvents.collect {
+    LaunchedEffect(screenModel) {
+        screenModel.uiEvents.collect {
             when (it) {
-                is UiEvents.EditTrack -> openListsEdit(
+                is UiEvents.EditTrack -> openTrackEdit(
                     it.entity.id,
                     it.entity.type,
                     it.markComplete
@@ -113,7 +84,7 @@ private fun ListPage(
         }
     }
 
-    val listItems = viewModel.items.collectAsLazyPagingItems()
+    val listItems = screenModel.items.collectAsLazyPagingItems()
 
     listItems.loadState.prependErrorOrNull()?.let { message ->
         LaunchedEffect(message) {
@@ -137,8 +108,9 @@ private fun ListPage(
             scrollBehavior,
             paddingValues,
             state.type,
+            state.status,
             state.incrementerTitle,
-            state.isLoading,
+            sortScreenModel,
             onEditClick,
             onTogglePin,
             onIncrementClick,
@@ -158,8 +130,9 @@ private fun PaginatedList(
     scrollBehavior: TopAppBarScrollBehavior,
     paddingValues: PaddingValues,
     type: ListType,
+    status: TrackStatus,
     incrementerTitle: TitleWithTrackEntity?,
-    isLoading: Boolean,
+    sortScreenModel : ListSortScreenModel,
     onEditClick: (TitleWithTrackEntity) -> Unit,
     onTogglePin: (TitleWithTrackEntity) -> Unit,
     onIncrementClick: (TitleWithTrackEntity) -> Unit,
@@ -192,8 +165,7 @@ private fun PaginatedList(
             ),
         state = listItems.rememberLazyListState()
     ) {
-        if (!isLoading
-            && listItems.loadState.source.append is LoadState.NotLoading
+        if (listItems.loadState.source.append is LoadState.NotLoading
             && listItems.loadState.source.append.endOfPaginationReached
             && listItems.itemCount == 0
         ) {
@@ -209,31 +181,32 @@ private fun PaginatedList(
             return@LazyColumn
         }
 
-        itemSpacer(paddingValues.calculateTopPadding())
+        itemSpacer(paddingValues.calculateTopPadding() + 24.dp)
 
-        if (isLoading) {
-            item { LoadingSort() }
-            items(5) { LoadingItem() }
-        } else {
-            item("sort") { ListSort() }
 
-            items(
-                items = listItems,
-                key = { "${it.type}-${it.id}" }
-            ) { entity ->
-                if (entity != null) {
-                    ListCard(
-                        title = entity,
-                        onClick = { onCardClick(entity) },
-                        onCoverLongClick = { onTogglePin(entity) },
-                        onEditClick = { onEditClick(entity) },
-                        onIncrementClick = { onIncrementClick(entity) },
-                    )
-                } else {
-                    LoadingItem()
-                }
+        item("sort") { ListSort(sortScreenModel) }
+
+        item("current_page") {
+            CurrentStatusItem(type, status)
+        }
+
+        items(
+            items = listItems,
+            key = { "${it.type}-${it.id}" }
+        ) { entity ->
+            if (entity != null) {
+                ListCard(
+                    title = entity,
+                    onClick = { onCardClick(entity) },
+                    onCoverLongClick = { onTogglePin(entity) },
+                    onEditClick = { onEditClick(entity) },
+                    onIncrementClick = { onIncrementClick(entity) },
+                )
+            } else {
+                LoadingItem()
             }
         }
+
 
         itemSpacer(
             modifier = Modifier
@@ -270,100 +243,6 @@ private fun PaginatedList(
                 initialProgress = incrementerTitle?.track?.progress ?: 0,
                 onProgressUpdated = localIncrementerChange
             )
-        }
-    }
-}
-
-@Composable
-private fun LoadingSort() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .horizontalScroll(rememberScrollState())
-    ) {
-        Spacer(modifier = Modifier.width(8.dp))
-
-        val typeInt = LocalShimoriSettings.current.preferredListType.observe
-            .collectAsStateWithLifecycle(initialValue = ListType.Anime.type)
-
-        val type = ListType.findOrDefault(typeInt.value)
-        val defaultSort = ListSort.defaultForType(type)
-
-        ListSortOption.priorityForType(type).fastForEach { option ->
-            val selected = defaultSort.sortOption == option
-
-            ShimoriChip(
-                onClick = {},
-                modifier = Modifier
-                    .shimoriPlaceholder(true)
-                    .height(32.dp),
-                text = LocalShimoriTextCreator.current.listSortText(type, option),
-                selected = selected,
-                icon = {
-                    if (selected) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_up),
-                            contentDescription = null
-                        )
-                    }
-                }
-            )
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-    }
-}
-
-@Composable
-private fun LoadingItem() {
-    Box(
-        modifier = Modifier.padding(PaddingValues(horizontal = 16.dp, vertical = 12.dp))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(MaterialTheme.dimens.listPosterHeight),
-        ) {
-            Box(
-                modifier = Modifier
-                    .shimoriPlaceholder(true)
-                    .height(MaterialTheme.dimens.listPosterHeight)
-                    .width(MaterialTheme.dimens.listPosterWidth)
-            )
-
-            Spacer(Modifier.width(16.dp))
-
-            Column {
-                Box(
-                    modifier = Modifier
-                        .shimoriPlaceholder(
-                            visible = true,
-                            shape = ShimoriSmallestRoundedCornerShape
-                        )
-                        .fillMaxWidth()
-                        .height(66.dp)
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    repeat(2) {
-                        Box(
-                            modifier = Modifier
-                                .shimoriPlaceholder(
-                                    visible = true,
-                                    shape = ShimoriBiggestRoundedCornerShape
-                                )
-                                .clip(ShimoriBiggestRoundedCornerShape)
-                                .size(32.dp)
-                        )
-                    }
-                }
-            }
         }
     }
 }
@@ -487,14 +366,4 @@ private fun BoxScope.Incrementer(
             contentDescription = null,
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ScreenLayout(
-    content: @Composable (PaddingValues) -> Unit
-) {
-    ScaffoldExtended(
-        content = content
-    )
 }

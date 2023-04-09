@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeScreenModel(
+internal class HomeScreenModel(
     observeMyUserShort: ObserveMyUserShort
 ) : StateScreenModel<HomeScreenState>(HomeScreenState()) {
 
@@ -26,6 +26,6 @@ class HomeScreenModel(
     }
 }
 
-data class HomeScreenState(
+internal data class HomeScreenState(
     val profileImage: ShimoriImage? = null,
 )

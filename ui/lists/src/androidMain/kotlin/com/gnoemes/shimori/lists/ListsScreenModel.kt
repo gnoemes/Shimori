@@ -1,8 +1,9 @@
 package com.gnoemes.shimori.lists
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.extensions.combine
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.api.UiMessageManager
 import com.gnoemes.shimori.common.ui.utils.MessageID
@@ -19,14 +20,21 @@ import com.gnoemes.shimori.data.list.ListsUiEvents
 import com.gnoemes.shimori.domain.interactors.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.interactors.ToggleTitlePin
 import com.gnoemes.shimori.domain.interactors.UpdateTitleTracks
-import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObservePinsExist
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.domain.observers.ObserveTracksExist
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-internal class ListsViewModel(
+internal class ListsScreenModel(
     private val stateBus: ListsStateBus,
     private val updateTitleTracks: UpdateTitleTracks,
     private val textProvider: ShimoriTextProvider,
@@ -34,37 +42,36 @@ internal class ListsViewModel(
     private val updateTrack: CreateOrUpdateTrack,
     observeTracksExist: ObserveTracksExist,
     observePinsExist: ObservePinsExist,
-    observeMyUser: ObserveMyUserShort,
     observeShikimoriAuth: ObserveShikimoriAuth,
-) : ViewModel() {
+    dispatchers: AppCoroutineDispatchers,
+) : StateScreenModel<ListScreenState>(ListScreenState.Loading) {
+
     private val uiMessageManager = UiMessageManager()
 
-    val state = combine(
-        stateBus.type.observe,
-        stateBus.page.observe,
-        observeMyUser.flow,
-        observePinsExist.flow,
-        observeTracksExist.flow,
-        stateBus.tracksLoading.observe,
-        uiMessageManager.message,
-    ) { type, status, user, hasPins, hasTracks, isLoading, message ->
-        ListsViewState(
-            type = type,
-            status = status,
-            user = user,
-            isEmpty = if (type == ListType.Pinned) !hasPins else !hasTracks,
-            hasTracks = hasTracks,
-            isLoading = isLoading,
-            message = message
-        )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = ListsViewState.Empty
-    )
-
     init {
-        viewModelScope.launch {
+        coroutineScope.launch(dispatchers.io) {
+            combine(
+                stateBus.type.observe,
+                stateBus.page.observe,
+                observePinsExist.flow,
+                observeTracksExist.flow,
+                stateBus.tracksLoading.observe,
+                uiMessageManager.message,
+            ) { type, status, hasPins, hasTracks, isLoading, message ->
+                if (isLoading) ListScreenState.Loading
+                else if (type == ListType.Pinned && !hasPins) ListScreenState.NoPins
+                else if (!hasTracks) ListScreenState.NoTracks(type)
+                else ListScreenState.Data(
+                    type = type,
+                    status = status,
+                    uiMessage = message
+                )
+            }.collectLatest { state ->
+                mutableState.update { state }
+            }
+        }
+
+        coroutineScope.launch(dispatchers.io) {
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
@@ -85,25 +92,24 @@ internal class ListsViewModel(
                 .collect(::updatePage)
         }
 
-        viewModelScope.launch {
+        coroutineScope.launch {
             stateBus.uiEvents.observe
                 .collect(::showUiEvent)
         }
 
         observeShikimoriAuth(Unit)
-        observeMyUser(Unit)
         observePinsExist(Unit)
         observeTracksExist(Unit)
     }
 
     fun onMessageShown(id: Long) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             uiMessageManager.clearMessage(id)
         }
     }
 
     fun onMessageAction(id: Long) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             val payload = uiMessageManager.message.firstOrNull()?.payload
 
             when (id) {
@@ -115,7 +121,7 @@ internal class ListsViewModel(
     }
 
     private fun createTrack(track: Track) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             updateTrack(CreateOrUpdateTrack.Params(track)).collect()
         }
     }
@@ -128,6 +134,7 @@ internal class ListsViewModel(
                 event.oldTrack,
                 event.newProgress
             )
+
             is ListsUiEvents.TrackDeleted -> showTrackDeleted(
                 event.image,
                 event.track
@@ -136,7 +143,7 @@ internal class ListsViewModel(
     }
 
     private fun showTrackDeleted(image: ShimoriImage?, track: Track) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             uiMessageManager.emitMessage(
                 UiMessage(
                     id = MESSAGE_TRACK_DELETED,
@@ -154,7 +161,7 @@ internal class ListsViewModel(
         oldTrack: Track,
         newProgress: Int
     ) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             uiMessageManager.emitMessage(
                 UiMessage(
                     id = MESSAGE_INCREMENTER_UPDATE,
@@ -174,7 +181,7 @@ internal class ListsViewModel(
         title: TitleWithTrackEntity,
         pinned: Boolean
     ) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             val message =
                 if (pinned) MessageID.TitlePinned
                 else MessageID.TitleUnPinned
@@ -192,20 +199,20 @@ internal class ListsViewModel(
     }
 
     private fun togglePin(entity: TitleWithTrackEntity) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             togglePin(ToggleTitlePin.Params(entity.type, entity.id)).collect()
         }
     }
 
     private fun undoIncrementerProgress(track: Track) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             updateTrack.invoke(CreateOrUpdateTrack.Params(track)).collect()
         }
     }
 
     private fun updatePage(pair: Pair<TrackTargetType, TrackStatus>) {
         val (type, status) = pair
-        viewModelScope.launch {
+        coroutineScope.launch {
             updateTitleTracks(
                 UpdateTitleTracks.Params.optionalUpdate(
                     type = type,
@@ -221,3 +228,16 @@ internal class ListsViewModel(
         private const val MESSAGE_TRACK_DELETED = 3L
     }
 }
+
+internal sealed class ListScreenState() {
+    object Loading : ListScreenState()
+    object NoPins : ListScreenState()
+    data class NoTracks(val type : ListType) : ListScreenState()
+    data class Data(
+        val type: ListType = ListType.Anime,
+        val status: TrackStatus = TrackStatus.WATCHING,
+        val uiMessage: UiMessage? = null
+    ) : ListScreenState()
+}
+
+internal const val INCREMENTATOR_MAX_PROGRESS = 50

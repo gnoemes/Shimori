@@ -513,7 +513,7 @@ private fun Trailers(
 //    onVideoClick :(AnimeVideo) -> Unit
 ) {
     RowContentSection(
-        title = stringResource(id = R.string.title_trailers_frames),
+        title = stringResource(id = R.string.title_trailers),
         isMoreVisible = true,
         sectionLoaded = videos.loaded,
         onClickMore = { /*TODO*/ }

@@ -29,9 +29,9 @@ import com.gnoemes.shimori.data.dataModule
 import com.gnoemes.shimori.data.shared.databaseModule
 import com.gnoemes.shimori.domain.domainModule
 import com.gnoemes.shimori.home.HomeFeature
+import com.gnoemes.shimori.lists.ListsFeature
 import com.gnoemes.shimori.lists.change.listsChangeModule
 import com.gnoemes.shimori.lists.edit.listsEditModule
-import com.gnoemes.shimori.lists.listsModule
 import com.gnoemes.shimori.main.MainViewModel
 import com.gnoemes.shimori.settings.ShimoriSettingsImpl
 import com.gnoemes.shimori.settings.ShimoriStorageImpl
@@ -60,6 +60,7 @@ import org.kodein.di.bindProvider
 import org.kodein.di.bindSet
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
+import org.kodein.di.provider
 
 
 val appModule = DI.Module("app") {
@@ -75,7 +76,7 @@ val appModule = DI.Module("app") {
     importOnce(catalogSources)
     importOnce(shikimoriModule)
 
-    importOnce(features)
+    importOnce(featuresUi)
 
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
     bindSingleton(tag = KodeinTag.userAgent) { instance<Context>().getString(R.string.user_agent) }
@@ -126,8 +127,8 @@ private val binds = DI.Module(name = "appBinds") {
 }
 
 private val initializers = DI.Module(name = "initializers") {
-    bindSet<AppInitializer<Application>>() {
-        add { instance(NavigationInitializer()) }
+    bindSet<AppInitializer<Application>> {
+        add { provider { NavigationInitializer(features) } }
     }
     bindProvider { new(::AppInitializers) }
 }
@@ -179,14 +180,20 @@ private val networkModule = DI.Module(name = "network") {
     }
 }
 
-private val features = DI.Module(name = "features") {
+private val features = setOf(
+    HomeFeature,
+    ListsFeature
+)
+
+
+private val featuresUi = DI.Module(name = "features-ui") {
     bindViewModel { new(::MainViewModel) }
 
+    features.forEach { importOnce(it.di) }
+
     importOnce(authModule)
-    importOnce(listsModule)
     importOnce(listsChangeModule)
     importOnce(listsEditModule)
     importOnce(settingsModule)
     importOnce(titleModule)
-    importOnce(HomeFeature.di)
 }

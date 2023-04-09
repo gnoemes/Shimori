@@ -8,8 +8,8 @@
     <string name="search">Поиск</string>
     <string name="profile">Профиль</string>
     <string name="lists_title">Списки</string>
-    <string name="explore_title">Каталог</string>
-    <string name="feed_title">Лента</string>
+    <string name="catalog" comment="catalog">Каталог</string>
+    <string name="feed" comment="feed">Лента</string>
     <string name="settings">Настройки</string>
     <string name="open_random_title_from_list">Выбрать за меня</string>
     <string name="sign_in_title">Я не узнаю тебя</string>
@@ -27,10 +27,8 @@
     <string name="rate_status_planned">В планах</string>
     <string name="rate_status_completed">Завершено</string>
     <string name="rate_status_dropped">Брошено</string>
-    <string name="no_pinned_titles">Нет закреплённых тайтлов</string>
-    <string name="no_pinned_titles_description">Зажми обложку, чтобы закрепить любой тайтл.</string>
-    <string name="no_titles">Список пуст</string>
-    <string name="no_titles_description">Добавь тайтл.</string>
+    <string name="no_pinned_titles">Зажми обложку на списках, чтобы закрепить тайтлы</string>
+    <string name="no_titles">Добавь тайтл</string>
     <string name="list_sort_progress">Прогресс</string>
     <string name="list_sort_size_anime">Эпизоды</string>
     <string name="list_sort_size_manga">Главы</string>
@@ -43,7 +41,6 @@
     <string name="status_anons">Скоро</string>
     <string name="status_ongoing">Выходит</string>
     <string name="status_released">Вышло</string>
-    <string name="status_discontinued">Приостановлено</string>
     <string name="progress_format">%d / %s</string>
     <string name="left_format">Ещё %s</string>
     <string name="progress">Прогресс</string>
@@ -82,7 +79,7 @@
     <string name="settings_accent_color">Акцентный цвет</string>
     <string name="settings_accent_color_system">Системный</string>
     <string name="settings_feedback_and_updates">Обратная связь</string>
-    <string name="settings_feedback_and_updates_email">Почта</string>
+    <string name="settings_feedback_and_updates_email">Написать письмо</string>
     <string name="settings_feedback_and_updates_github">GitHub</string>
     <string name="settings_feedback_and_updates_telegram">Telegram</string>
     <string name="settings_special_thanks">Особая благодарность</string>
@@ -90,14 +87,12 @@
     <string name="notification_title_pinned">Закреплено.</string>
     <string name="notification_title_unpinned">Откреплено.</string>
     <string name="category_filters">Фильтры</string>
-    <string name="category_filters_hint">Чтобы исключить фильтр зажмите его.</string>
+    <string name="category_filters_hint">Чтобы исключить фильтр — зажми его.</string>
     <string name="category_filters_apply">Применить</string>
     <string name="category_filters_clear">Сбросить</string>
     <string name="category_filters_anime">Фильтры аниме</string>
     <string name="category_filters_manga">Фильтры манги</string>
     <string name="category_filters_ranobe">Фильтры ранобэ</string>
-    <string name="title_related_chronology_empty">Нет связанных тайтлов</string>
-    <string name="title_related_chronology_empty_desc">Возможно, позже франшиза будет развиваться.</string>
     <string name="title_translators_dub">Озвучка</string>
     <string name="title_translators_sub">Субтитры</string>
     <string name="title_studio_works">Работы студии</string>
@@ -108,28 +103,24 @@
     <string name="title_related_chronology_side_stories">Побочные истории</string>
     <string name="title_menu_share">Поделиться</string>
     <string name="title_menu_web">В браузере</string>
-    <string name="title_menu_names">Скопировать название</string>
-    <string name="title_menu_names_copy">Название скопировано.</string>
+    <string name="title_menu_names">Названия</string>
     <string name="title_character_seiyu">Сэйю</string>
-    <string name="title_trailers_frames_t">Трейлеры</string>
-    <string name="title_trailers_frames_f">Кадры</string>
-    <string name="title_trailers_frames_f_hint">Попробуй увеличить</string>
+    <string name="title_trailers" comment="title_trailers">Трейлеры</string>
+    <string name="title_frames" comment="title_frames">Кадры</string>
+    <string name="title_frames_hint" comment="title_frames_hint">Попробуй увеличить</string>
     <string name="title_translators">Переводчики</string>
     <string name="title_characters">Персонажи</string>
     <string name="title_about">Описание</string>
-    <string name="title_trailers_frames">Трейлеры и кадры</string>
     <string name="title_staff">Авторы</string>
     <string name="title_related_chronology">Связанное и хронология</string>
     <string name="title_similar">Похожие тайтлы</string>
     <string name="title_mark_as_fav">Полюбилось.</string>
     <string name="title_remove_from_fav">Разонравилось.</string>
     <string name="calendar">Календарь эпизодов</string>
-    <string name="calendar_lists">В твоём списке</string>
     <string name="title_type">Тип</string>
     <string name="title_ep">Эпизоды</string>
     <string name="title_ep_duration">Длительность</string>
     <string name="inc_close">Отпусти, чтобы отменить</string>
-    <string name="inc_hint">Зажми +1 и веди вверх, чтобы добавить прогресс.</string>
     <string name="rate_del_snack">Удалено.</string>
     <string name="rate_progress_hint">Твой прогресс</string>
     <string name="airing_anime_cat">Аниме в эфире</string>
@@ -139,8 +130,6 @@
     <string name="ranobe_rec_cat">Ранобэ, что может заинтересовать</string>
     <string name="title_release">Дата выхода</string>
     <string name="search_no_results">Нет результатов</string>
-    <string name="search_no_results_desc" comment="search_no_results_desc">Измени категорию или отредактируй запрос.</string>
-    <string name="search_no_results_action">Изменить запрос</string>
     <string name="filter_status">Статус</string>
     <string name="filter_list">Список</string>
     <string name="filter_season">Сезон</string>
@@ -164,12 +153,58 @@
     <string name="logout_message">Часть функций станет недоступна.</string>
     <string name="title_characters_main">Главные</string>
     <string name="title_characters_supporting" comment="title_characters_supporting">Второстепенные</string>
-    <string name="auth_revoke">Приложение не может получить полноценный доступ к твоему аккаунту.</string>
-    <string name="part_access_title">Часть функций недоступна</string>
-    <string name="part_access_hint">Открой настройки shikimori.one → Нажми «Убрать доступ» на странице приложения → Перезайди в приложение и отметь все пункты.</string>
-    <string name="part_access_listname">Приложение не может</string>
+    <string name="auth_revoke">Shimori не может получить полноценный доступ к твоему аккаунту.</string>
+    <string name="part_access_first_hint" comment="part_access_first_hint">Отзови доступ к аккаунту и дай все разрешения при повторном входе.</string>
     <string name="title_menu_names_selected">Указано в настройках</string>
-    <string name="title_translators_dub_and_sub">Дубляж и субтитры</string>
-    <string name="title_menu_names_other">Другие</string>
-    <string name="updated_changelog">У тебя обновилось приложение</string>
+    <string name="title_translators_dub_and_sub">Озвучка и субтитры</string>
+    <string name="title_menu_names_other">Другое</string>
+    <string name="inc_added_progress">%d → %d.</string>
+    <string name="part_access_second_hint">Перезайди в Shimori со всеми правами доступа.</string>
+    <string name="part_access_yes" comment="part_access_yes">Убрать доступ</string>
+    <string name="part_access_no">В другой раз</string>
+    <string name="part_access_restriction" comment="part_access_restriction">Shimori не может изменить список</string>
+    <string name="status_discontinued">Работа прекращена</string>
+    <string name="status_paused">Работа приостановлена</string>
+    <string name="status_released_recently">Вышло недавно</string>
+    <string name="type_tv13">ТВ, ~13 эп</string>
+    <string name="type_tv24">ТВ, ~24 эп</string>
+    <string name="type_tvover30" comment="type_tvover30">ТВ, 30+ эп</string>
+    <string name="season_summer">Лето %d</string>
+    <string name="season_fall">Осень %d</string>
+    <string name="season_winter">Зима %d</string>
+    <string name="season_spring">Весна %d</string>
+    <string name="duration_less10min">&lt;10 мин</string>
+    <string name="duration_less30min">&lt;30 мин</string>
+    <string name="duration_over30min">30+ мин</string>
+    <string name="title_license">Лицензировано</string>
+    <string name="more">Ещё</string>
+    <string name="accounts_sync_logout">Ты выходишь из %s.</string>
+    <string name="accounts_sync">Синхронизация прогресса</string>
+    <string name="account_video_sources">Источники видео</string>
+    <string name="accounts">Аккаунты</string>
+    <string name="donate" comment="donate">Задонатить</string>
+    <string name="voting_for_features">Голосуй за функции на GitHub</string>
+    <string name="backup_settings" comment="backup_settings">Запасная копия настроек</string>
+    <string name="restore">Восстановить</string>
+    <string name="update">Обновить</string>
+    <string name="choose_player_checkbox">Запомнить мой выбор</string>
+    <string name="choose_player_title">Выбери плеер</string>
+    <string name="external">Сторонний</string>
+    <string name="watch_button">Смотреть</string>
+    <string name="read_button">Читать</string>
+    <string name="update_available">Shimori %s готово к установке</string>
+    <string name="update_new">Новое</string>
+    <string name="update_fixed">Исправления</string>
+    <string name="stats">Статистика</string>
+    <string name="Person_mangaka">Мангака</string>
+    <string name="search_in_your_list">В твоём списке</string>
+    <string name="yesterday">Вчера</string>
+    <string name="login">Подключи аккаунт</string>
+    <string name="login_hint">Твой прогресс пропадёт, если не войти и удалить приложение.</string>
+    <string name="your_list">Твой список</string>
+    <string name="accounts_menu_primary">Сделать основным</string>
+    <string name="accounts_primary">Главный • %s</string>
+    <string name="search_catalog_hint">Тайтлы, персонажи или люди</string>
+    <string name="donate_hint">Мы оплатим хостинг Shimori.</string>
+    <string name="title_characters_search_hint">Персонаж</string>
 </resources>
