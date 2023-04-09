@@ -24,8 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.gnoemes.shimori.common.ui.LocalShimoriDimensions
@@ -64,6 +66,9 @@ internal object ListsTab : Tab {
     override fun Content() {
         val screenModel = rememberScreenModel<ListsScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val listMenuScreen = rememberScreen(FeatureScreen.ListMenu)
+
         val state by screenModel.state.collectAsState()
 
         val appBarState = rememberTopAppBarState()
@@ -107,11 +112,11 @@ internal object ListsTab : Tab {
                     })
             },
             floatingActionButton = {
-//                val listMenuScreen = rememberScreen(FeatureScreen.ListMenu)
+
                 if (state !is ListScreenState.NoTracks) {
                     ShimoriFAB(
                         onClick = {
-//                            navigator.push(listMenuScreen)
+                            bottomSheetNavigator.show(listMenuScreen)
                         },
                         expanded = true,
                         modifier = Modifier

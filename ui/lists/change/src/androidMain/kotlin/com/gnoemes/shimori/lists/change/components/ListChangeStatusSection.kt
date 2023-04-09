@@ -1,6 +1,10 @@
-package com.gnoemes.shimori.lists.change.section
+package com.gnoemes.shimori.lists.change.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,45 +13,36 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
 import com.gnoemes.shimori.common.ui.components.TrackIcon
-import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+import com.gnoemes.shimori.common.ui.navigation.Screen
 import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
+import com.gnoemes.shimori.lists.change.section.ListMenuStatusSectionScreenModel
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-internal fun StatusSection(
+internal fun Screen.StatusSection(
     type: ListType,
     navigateUp: () -> Unit
 ) {
-    StatusSection(
-        viewModel = shimoriViewModel(
-            key = "section-$type",
-            args = arrayOf("type" to type.type)
-        ),
-        navigateUp = navigateUp,
-        sectionType = type
+    val screenModel = rememberScreenModel<Int, ListMenuStatusSectionScreenModel>(
+        tag = "section-${type.type}",
+        arg = type.type
     )
-}
 
-@Composable
-private fun StatusSection(
-    viewModel: ListChangeStatusSectionViewModel,
-    navigateUp: () -> Unit,
-    sectionType: ListType,
-) {
-    val viewState by viewModel.state.collectAsState()
+    val viewState by screenModel.state.collectAsState()
 
     if (viewState.statuses.isNotEmpty()) {
         StatusSection(
             statuses = viewState.statuses,
             selectedStatus = viewState.selectedStatus,
-            sectionType = sectionType,
+            sectionType = type,
             onStatusClick = { newStatus ->
-                viewModel.onStatusChanged(newStatus)
+                screenModel.onStatusChanged(newStatus)
                 navigateUp()
             },
         )
