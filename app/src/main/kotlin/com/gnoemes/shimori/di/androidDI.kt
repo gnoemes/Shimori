@@ -8,7 +8,7 @@ import com.gnoemes.shimori.BuildConfig
 import com.gnoemes.shimori.R
 import com.gnoemes.shimori.appinitializers.AppInitializers
 import com.gnoemes.shimori.appinitializers.NavigationInitializer
-import com.gnoemes.shimori.auth.authModule
+import com.gnoemes.shimori.auth.AuthFeature
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.core.di.KodeinTag
 import com.gnoemes.shimori.base.core.entities.Platform
@@ -182,6 +182,7 @@ private val networkModule = DI.Module(name = "network") {
 
 private val features = setOf(
     HomeFeature,
+    AuthFeature,
     ListsFeature,
     ListMenuFeature,
     TrackEditFeature,
@@ -194,6 +195,4 @@ private val featuresUi = DI.Module(name = "features-ui") {
     bindViewModel { new(::MainViewModel) }
 
     features.forEach { importOnce(it.di) }
-
-    importOnce(authModule)
 }

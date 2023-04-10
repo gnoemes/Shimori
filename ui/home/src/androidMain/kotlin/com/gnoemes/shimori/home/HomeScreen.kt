@@ -70,9 +70,9 @@ internal object HomeScreen : Screen() {
 
         val listsTab = rememberScreen(FeatureScreen.Lists) as Tab
         val mockTab1 = MockTab
-        val mockTab2 = MockTab
+        val authMockTab = rememberScreen(FeatureScreen.Auth) as Tab
 
-        val tabs = listOf(listsTab, mockTab1, mockTab2)
+        val tabs = arrayListOf(listsTab, mockTab1, authMockTab)
 
         TabNavigator(
             tab = listsTab
@@ -154,10 +154,7 @@ internal object HomeScreen : Screen() {
                     ShimoriNavigationBarItem(
                         selected = selected,
                         icon = {
-                            if (profileImage != null
-                                //TODO change to profile tab
-                                && tab == MockTab
-                            ) {
+                            if (profileImage != null && tab == tabs[2]) {
                                 AsyncImage(
                                     model = profileImage,
                                     contentScale = ContentScale.Crop,

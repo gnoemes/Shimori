@@ -1,33 +1,35 @@
 package com.gnoemes.shimori.auth
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shikimori.Shikimori
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.api.UiMessageManager
 import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
 import com.gnoemes.shimori.shikimori.auth.ShikimoriAuthManager
-import com.gnoemes.shimori.shikimori.auth.ShikimoriConstants.ERROR_REASON_ACCESS_DENIED
+import com.gnoemes.shimori.shikimori.auth.ShikimoriConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-internal class AuthViewModel(
+internal class AuthScreenModel(
     authManager: ShikimoriAuthManager,
     private val shikimori: Shikimori,
     private val textProvider: ShimoriTextProvider,
-) : ViewModel(), ShikimoriAuthManager by authManager {
+    dispatchers: AppCoroutineDispatchers,
+) : ScreenModel, ShikimoriAuthManager by authManager {
 
     private val uiMessageManager = UiMessageManager()
 
     val error: Flow<UiMessage?> = uiMessageManager.message
 
     init {
-        viewModelScope.launch {
+        coroutineScope.launch(dispatchers.io) {
             shikimori.authError.collect { reason ->
                 val message = when (reason) {
-                    ERROR_REASON_ACCESS_DENIED -> textProvider[MessageID.OAuthAccessDenied]
+                    ShikimoriConstants.ERROR_REASON_ACCESS_DENIED -> textProvider[MessageID.OAuthAccessDenied]
                     else -> null
                 }
 
@@ -43,7 +45,7 @@ internal class AuthViewModel(
     }
 
     fun onMessageShown(id: Long) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             uiMessageManager.clearMessage(id)
         }
     }
