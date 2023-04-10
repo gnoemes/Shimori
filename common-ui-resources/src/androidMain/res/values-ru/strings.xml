@@ -122,7 +122,7 @@
     <string name="title_ep_duration">Длительность</string>
     <string name="inc_close">Отпусти, чтобы отменить</string>
     <string name="rate_del_snack">Удалено.</string>
-    <string name="rate_progress_hint">Твой прогресс</string>
+    <string name="rate_progress_hint">%d / %d</string>
     <string name="airing_anime_cat">Аниме в эфире</string>
     <string name="upd_anime_cat">Обновления аниме</string>
     <string name="anime_rec_cat">Аниме, которые могут понравиться</string>
@@ -207,4 +207,7 @@
     <string name="search_catalog_hint">Тайтлы, персонажи или люди</string>
     <string name="donate_hint">Мы оплатим хостинг Shimori.</string>
     <string name="title_characters_search_hint">Персонаж</string>
+    <string name="title_note_hint">По умолчанию все видят твои заметки на списке.</string>
+    <string name="List_item_current_state">Сейчас</string>
+    <string name="rate_repeats_hint">%d</string>
 </resources>

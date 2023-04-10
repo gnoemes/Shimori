@@ -45,7 +45,7 @@ fun ShimoriMainToolbar(
         )
 
         TopAppBar(
-            title = { Text(text = title) },
+            title = { Text(text = title, maxLines = 1) },
             scrollBehavior = scrollBehavior,
             actions = {
                 IconButton(onClick = onSearchClick) {
@@ -99,38 +99,49 @@ fun ShimoriSecondaryToolbar(
     title: String,
     actions: @Composable RowScope.() -> Unit = {},
     subTitle: String? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.background,
-        scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-        titleContentColor = MaterialTheme.colorScheme.onSurface,
-        actionIconContentColor = MaterialTheme.colorScheme.onSurface
-    ),
+    containerColor: Color = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
+    navigationIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    actionIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
-    TopAppBar(
-        title = {
-            if (subTitle == null) {
-                Text(text = title)
-            } else {
-                Column(
-                    modifier = Modifier.padding(start = 12.dp)
-                ) {
-                    Text(
-                        text = title, style = MaterialTheme.typography.titleMedium
-                    )
+    Column(
+        Modifier.background(containerColor)
+    ) {
 
-                    Text(
-                        text = subTitle,
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.labelMedium
-                    )
+        Spacer(
+            modifier = Modifier.statusBarHeight(),
+        )
+        TopAppBar(
+            title = {
+                if (subTitle == null) {
+                    Text(text = title)
+                } else {
+                    Column(
+                        modifier = Modifier.padding(start = 12.dp)
+                    ) {
+                        Text(
+                            text = title, style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Text(
+                            text = subTitle,
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
-            }
-        },
-        modifier = modifier,
-        navigationIcon = { BackIcon(navigateUp) },
-        actions = actions,
-        colors = colors,
-        windowInsets = WindowInsets.empty
-    )
+            },
+            modifier = modifier,
+            navigationIcon = { BackIcon(navigateUp) },
+            actions = actions,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = Color.Transparent,
+                navigationIconContentColor = navigationIconContentColor,
+                titleContentColor = titleContentColor,
+                actionIconContentColor = actionIconContentColor
+            ),
+            windowInsets = WindowInsets.empty
+        )
+    }
 }

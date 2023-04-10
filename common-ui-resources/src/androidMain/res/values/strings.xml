@@ -135,7 +135,7 @@
     <string name="title_ep_duration_format" translatable="false">%d %s</string>
     <string name="inc_close">Drop to cancel</string>
     <string name="rate_del_snack">Deleted.</string>
-    <string name="rate_progress_hint">Your progress</string>
+    <string name="rate_progress_hint">%d / %d</string>
     <string name="airing_anime_cat">Airing anime</string>
     <string name="upd_anime_cat">Anime updates</string>
     <string name="anime_rec_cat">Anime you might like</string>
@@ -220,4 +220,7 @@
     <string name="search_catalog_hint">Titles, characters or people</string>
     <string name="donate_hint">We\'ll pay Shimori hosting fees.</string>
     <string name="title_characters_search_hint">Character</string>
+    <string name="title_note_hint">By default, everyone sees the notes on your list.</string>
+    <string name="List_item_current_state">Now</string>
+    <string name="rate_repeats_hint">%d</string>
 </resources>

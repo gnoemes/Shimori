@@ -49,7 +49,7 @@ fun NavigationCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier then Modifier
             .background(MaterialTheme.colorScheme.surface)
             .border(
                 1.dp,
@@ -58,9 +58,7 @@ fun NavigationCard(
             )
             .clip(ShimoriDefaultRoundedCornerShape)
     ) {
-        Column(
-            modifier = modifier,
-        ) {
+        Column {
             content()
         }
     }
@@ -99,7 +97,7 @@ fun ColumnScope.NavigationCardItem(
 
                 if (subTitle != null) {
                     Text(
-                        text = title,
+                        text = subTitle,
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.labelMedium
                     )
