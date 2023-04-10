@@ -16,8 +16,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -34,7 +35,6 @@ import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
-import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
 import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextCreator
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
@@ -64,9 +64,10 @@ class MainActivity : BaseActivity(), DIAware {
 
         setContent {
             withDI(di = di) {
-                val dimensions =
-                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
-                    else sw360Dimensions
+//                val dimensions =
+//                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
+//                    else sw360Dimensions
+                val dimensions = defaultDimensions
 
                 val viewModel: MainViewModel = shimoriViewModel()
 
@@ -95,7 +96,8 @@ class MainActivity : BaseActivity(), DIAware {
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,
                     LocalPreferences provides prefs,
-                    LocalOverscrollConfiguration provides overscrollConfiguration
+                    LocalOverscrollConfiguration provides overscrollConfiguration,
+                    LocalDensity provides Density(3.75f),
                 ) {
                     val useDarkColors = settings.shouldUseDarkColors()
 
