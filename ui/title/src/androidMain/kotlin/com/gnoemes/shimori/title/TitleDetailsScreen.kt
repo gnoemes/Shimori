@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +28,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.api.OptionalContent
+import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.components.DescriptionFormat
 import com.gnoemes.shimori.common.ui.components.ScaffoldExtended
 import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
@@ -67,11 +67,8 @@ internal class TitleDetailsScreen(
 
         val scrollState = rememberLazyListState()
 
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            val title = state.title ?: return@Surface
+        Background {
+            val title = state.title ?: return@Background
 
             ScaffoldExtended(
                 modifier = Modifier.fillMaxSize(),

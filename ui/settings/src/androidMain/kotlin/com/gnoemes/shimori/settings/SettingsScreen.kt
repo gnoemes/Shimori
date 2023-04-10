@@ -2,13 +2,11 @@ package com.gnoemes.shimori.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +21,7 @@ import com.gnoemes.shimori.base.core.settings.AppAccentColor
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTheme
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.ui.navigation.Screen
 import com.gnoemes.shimori.settings.components.AccentColor
@@ -40,10 +39,7 @@ internal object SettingsScreen : Screen() {
 
         val state by screenModel.state.collectAsState()
 
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
+        Background {
             state?.let { state ->
                 Settings(
                     navigateUp = { navigator.pop() },

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +32,7 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
 import com.gnoemes.shimori.common.ui.components.ScaffoldExtended
@@ -87,10 +87,7 @@ object AuthScreen : Tab {
             }
         }
 
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            contentColor = MaterialTheme.colorScheme.background
-        ) {
+        Background {
             Auth(
                 snackbarHostState = snackbarHostState,
                 signIn = { signInLauncher.launch(Unit) },
