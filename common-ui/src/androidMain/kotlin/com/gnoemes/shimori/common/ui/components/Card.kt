@@ -1,17 +1,39 @@
 package com.gnoemes.shimori.common.ui.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.noRippleClickable
+import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
@@ -20,6 +42,87 @@ import com.gnoemes.shimori.data.core.entities.titles.anime.Anime
 import com.gnoemes.shimori.data.core.entities.titles.manga.Manga
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.ui.R
+
+@Composable
+fun NavigationCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
+                ShimoriDefaultRoundedCornerShape
+            )
+            .clip(ShimoriDefaultRoundedCornerShape)
+    ) {
+        Column(
+            modifier = modifier,
+        ) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun ColumnScope.NavigationCardItem(
+    title: String,
+    onClick: () -> Unit,
+    subTitle: String? = null,
+    icon: (@Composable () -> Unit)? = null,
+    button: (@Composable () -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onSurface
+        ) {
+            if (icon != null) {
+                icon()
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall
+                )
+
+                if (subTitle != null) {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
+
+            if (button != null) {
+                Spacer(modifier = Modifier.width(12.dp))
+                button()
+            }
+        }
+    }
+}
+
+@Composable
+fun ColumnScope.NavigationCardDivider() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.12f))
+    )
+}
 
 @Composable
 fun ListCard(
@@ -50,16 +153,19 @@ fun ListCard(
                     title.track?.progress ?: 0,
                     entity.episodesOrUnknown
                 )
+
                 is Manga -> stringResource(
                     R.string.progress_format,
                     title.track?.progress ?: 0,
                     entity.chaptersOrUnknown
                 )
+
                 is Ranobe -> stringResource(
                     R.string.progress_format,
                     title.track?.progress ?: 0,
                     entity.chaptersOrUnknown
                 )
+
                 else -> throw IllegalArgumentException("Entity $entity does not support")
             },
             isPinned = title.pinned,
@@ -237,7 +343,10 @@ fun TrailerCard(
                     .size(32.dp)
                     .align(Alignment.Center),
                 icon = {
-                    Icon(painter = painterResource(id = R.drawable.ic_play), contentDescription = null)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_play),
+                        contentDescription = null
+                    )
                 }
             )
         }
