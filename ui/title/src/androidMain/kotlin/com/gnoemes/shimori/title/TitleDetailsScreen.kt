@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -75,18 +73,11 @@ internal class TitleDetailsScreen(
                 topBar = {
                     //TODO scroll condition
                     val toolbarTitle = ""
-                    val colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-                        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface,
-                        actionIconContentColor = MaterialTheme.colorScheme.onSurface
-                    )
 
-                    ShimoriSecondaryToolbar(modifier = Modifier.statusBarsPadding(),
+                    ShimoriSecondaryToolbar(
                         navigateUp = { navigator.pop() },
                         title = toolbarTitle,
-                        colors = colors,
+                        containerColor = Color.Transparent,
                         actions = {
 //                    TODO actions
                         })
@@ -100,7 +91,7 @@ internal class TitleDetailsScreen(
                     videos = state.videos,
                     screenshots = state.screenshots,
                     openTrackEdit = { id, type, markComplete ->
-                        bottomSheetNavigator.show(
+                        navigator.push(
                             ScreenRegistry.get(
                                 FeatureScreen.TrackEdit(
                                     id,
