@@ -1,10 +1,20 @@
 package com.gnoemes.shimori.common.ui
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalDensity
 
 val WindowInsets.Companion.empty
     @Composable
     @NonRestartableComposable
     get() = WindowInsets(0, 0, 0, 0)
+
+@Composable
+fun imeAsState(): State<Boolean> {
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    return rememberUpdatedState(isImeVisible)
+}

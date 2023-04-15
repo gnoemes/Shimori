@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.main
 
-import Main
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -8,23 +7,40 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.OverscrollConfiguration
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import cafe.adriel.voyager.core.registry.rememberScreen
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
+import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
-import com.gnoemes.shimori.common.ui.*
+import com.gnoemes.shimori.common.ui.BaseActivity
+import com.gnoemes.shimori.common.ui.LocalPreferences
+import com.gnoemes.shimori.common.ui.LocalShimoriDimensions
+import com.gnoemes.shimori.common.ui.LocalShimoriSettings
+import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
+import com.gnoemes.shimori.common.ui.components.Background
+import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
-import com.gnoemes.shimori.common.ui.theme.sw360Dimensions
-import com.gnoemes.shimori.common.ui.utils.*
+import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
+import com.gnoemes.shimori.common.ui.utils.ShimoriTextCreator
+import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
+import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
+import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
+import com.gnoemes.shimori.common.ui.utils.shouldUseDarkColors
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -32,7 +48,7 @@ import org.kodein.di.android.closestDI
 import org.kodein.di.compose.withDI
 import org.kodein.di.instance
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 class MainActivity : BaseActivity(), DIAware {
     override val di: DI by closestDI()
 
@@ -42,15 +58,22 @@ class MainActivity : BaseActivity(), DIAware {
     private val trackUtil: ShimoriTrackUtil by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Do not let the launcher create a new activity http://stackoverflow.com/questions/16283079
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+
         installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             withDI(di = di) {
-                val dimensions =
-                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
-                    else sw360Dimensions
+//                val dimensions =
+//                    if (LocalConfiguration.current.screenWidthDp <= 360) defaultDimensions
+//                    else sw360Dimensions
+                val dimensions = defaultDimensions
 
                 val viewModel: MainViewModel = shimoriViewModel()
 
@@ -79,7 +102,10 @@ class MainActivity : BaseActivity(), DIAware {
                     LocalShimoriSettings provides settings,
                     LocalShimoriDimensions provides dimensions,
                     LocalPreferences provides prefs,
-                    LocalOverscrollConfiguration provides overscrollConfiguration
+                    LocalOverscrollConfiguration provides overscrollConfiguration,
+//                    LocalDensity provides Density(
+//                        LocalDensity.current.density * 1.125f
+//                    ),
                 ) {
                     val useDarkColors = settings.shouldUseDarkColors()
 
@@ -102,7 +128,24 @@ class MainActivity : BaseActivity(), DIAware {
                             onDispose {}
                         }
 
-                        Main()
+                        val homeScreen = rememberScreen(FeatureScreen.Home)
+
+                        BottomSheetNavigator(
+                            scrimColor = MaterialTheme.colorScheme.scrim.copy(alpha = .32f),
+                            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                            sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface),
+                            sheetBackgroundColor = MaterialTheme.colorScheme.surface,
+                        ) {
+                            Background {
+                                Navigator(
+                                    screen = homeScreen,
+                                    disposeBehavior = NavigatorDisposeBehavior(
+                                        disposeNestedNavigators = false,
+                                        disposeSteps = true
+                                    ),
+                                )
+                            }
+                        }
                     }
                 }
             }
