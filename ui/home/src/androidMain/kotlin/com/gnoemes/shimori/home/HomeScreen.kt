@@ -2,9 +2,9 @@ package com.gnoemes.shimori.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -38,11 +38,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import cafe.adriel.voyager.core.stack.StackEvent
 import cafe.adriel.voyager.kodein.rememberScreenModel
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import cafe.adriel.voyager.transitions.ScreenTransition
 import coil.compose.AsyncImage
 import com.gnoemes.shimori.common.ui.components.ShimoriNavigationBarItem
 import com.gnoemes.shimori.common.ui.empty
@@ -57,6 +58,7 @@ import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import kotlinx.coroutines.launch
 import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
+import soup.compose.material.motion.animation.materialSharedAxisZ
 
 @OptIn(
     ExperimentalAnimationApi::class
@@ -101,9 +103,9 @@ internal object HomeScreen : Screen() {
                         },
                         content = {
                             tabNavigator.saveableState(key = "currentTab", it) {
-                                Navigator(screen = it) {
-                                    inTabNavigator = it
-                                    CurrentScreen()
+                                Navigator(screen = it) { navigator ->
+                                    inTabNavigator = navigator
+                                    DefaultNavigatorScreenTransition(navigator)
                                 }
                             }
                         },
@@ -134,8 +136,8 @@ internal object HomeScreen : Screen() {
             inTabNavigator == null || inTabNavigator.lastItem !is BottomControlsScreen
         AnimatedVisibility(
             visible = isBottomNavVisible,
-            enter = EnterTransition.None,
-            exit = ExitTransition.None
+            enter = slideInVertically { it },
+            exit = slideOutVertically { it },
         ) {
             Box(
                 modifier = Modifier
@@ -209,6 +211,18 @@ internal object HomeScreen : Screen() {
                 else inTabNavigator?.let {
                     scope.launch { tab.onReselect(it) }
                 }
+            },
+        )
+    }
+
+    @Composable
+    fun DefaultNavigatorScreenTransition(navigator: Navigator) {
+        ScreenTransition(
+            navigator = navigator,
+            transition = {
+                materialSharedAxisZ(
+                    forward = navigator.lastEvent != StackEvent.Pop,
+                )
             },
         )
     }
