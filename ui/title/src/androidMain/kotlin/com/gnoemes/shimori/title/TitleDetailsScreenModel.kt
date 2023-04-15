@@ -2,12 +2,11 @@ package com.gnoemes.shimori.title
 
 import android.util.Log
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.extensions.instantCombine
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.characters.Character
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeScreenshot
@@ -33,14 +32,14 @@ internal class TitleDetailsScreenModel(
     observeAnimeVideos: ObserveAnimeVideos,
     observeAnimeScreenshots: ObserveAnimeScreenshots,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<TitleDetailsScreenState>(TitleDetailsScreenState()) {
+) : StateScreenModel<TitleDetailsScreenState>(TitleDetailsScreenState(), dispatchers) {
     private val id: Long = args.id
     private val type: TrackTargetType = args.type
 
     private val updated = MutableStateFlow(false)
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             instantCombine(
                 observeTitle.flow,
                 updated,
@@ -70,7 +69,7 @@ internal class TitleDetailsScreenModel(
             }
         }
 
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             updateTitle(UpdateTitle.Params.optionalUpdate(id, type)).collect {
                 updated.value = it.isSuccess || it.isError
                 Log.i("DEVE", "$it")

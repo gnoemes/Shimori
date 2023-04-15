@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.lists.menu.section
 
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.list.ListsStateBus
@@ -18,11 +18,14 @@ internal class ListMenuStatusSectionScreenModel(
     private val listsStateBus: ListsStateBus,
     observeStatuses: ObserveExistedStatuses,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<ListMenuStatusSectionScreenState>(ListMenuStatusSectionScreenState()) {
+) : StateScreenModel<ListMenuStatusSectionScreenState>(
+    ListMenuStatusSectionScreenState(),
+    dispatchers
+) {
     private val sectionType = ListType.findOrDefault(typeInt)
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 observeStatuses.flow,
                 listsStateBus.type.observe,

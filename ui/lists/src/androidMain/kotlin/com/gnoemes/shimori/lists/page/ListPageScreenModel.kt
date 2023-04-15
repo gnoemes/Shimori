@@ -2,9 +2,9 @@ package com.gnoemes.shimori.lists.page
 
 import androidx.compose.runtime.Immutable
 import androidx.paging.cachedIn
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.TitleWithTrackEntity
 import com.gnoemes.shimori.data.core.entities.track.ListSort
 import com.gnoemes.shimori.data.core.entities.track.ListType
@@ -35,7 +35,7 @@ internal class ListPageScreenModel(
     private val togglePin: ToggleTitlePin,
     private val updateTrack: CreateOrUpdateTrack,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<ListPageScreenState>(ListPageScreenState()) {
+) : StateScreenModel<ListPageScreenState>(ListPageScreenState(), dispatchers) {
     private val _uiEvents = MutableSharedFlow<UiEvents>()
 
     private val incrementerEvents = MutableStateFlow<TitleWithTrackEntity?>(null)
@@ -44,10 +44,10 @@ internal class ListPageScreenModel(
 
     val items = observeListPage.flow
         .filterIsInstance<PagingData<TitleWithTrackEntity>>()
-        .cachedIn(coroutineScope)
+        .cachedIn(ioCoroutineScope)
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
@@ -58,7 +58,7 @@ internal class ListPageScreenModel(
             }
         }
 
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
@@ -75,7 +75,7 @@ internal class ListPageScreenModel(
                 .collect(observeListPage::invoke)
         }
 
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             stateBus.type.observe
                 .map(ObserveListSort::Params)
                 .collect(observeListSort::invoke)

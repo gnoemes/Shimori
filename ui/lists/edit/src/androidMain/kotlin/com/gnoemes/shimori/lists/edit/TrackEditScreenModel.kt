@@ -1,10 +1,10 @@
 package com.gnoemes.shimori.lists.edit
 
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.track.Track
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
@@ -34,7 +34,7 @@ internal class TrackEditScreenModel(
     private val createOrUpdateTrack: CreateOrUpdateTrack,
     private val deleteTrack: DeleteTrack,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<TrackEditScreenState>(TrackEditScreenState()) {
+) : StateScreenModel<TrackEditScreenState>(TrackEditScreenState(), dispatchers) {
     private val targetId: Long = navData.id
     private val targetType: TrackTargetType = navData.type
     private val markComplete: Boolean = navData.markComplete
@@ -47,7 +47,7 @@ internal class TrackEditScreenModel(
     val uiEvents: SharedFlow<UiEvents> get() = _uiEvents
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 observeTitle.flow,
                 observePinExist.flow

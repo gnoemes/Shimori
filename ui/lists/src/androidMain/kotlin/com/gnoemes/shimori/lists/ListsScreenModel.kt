@@ -1,11 +1,11 @@
 package com.gnoemes.shimori.lists
 
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.extensions.combine
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.common.ui.api.UiMessage
 import com.gnoemes.shimori.common.ui.api.UiMessageManager
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.common.ui.utils.MessageID
 import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 import com.gnoemes.shimori.common.ui.utils.get
@@ -44,12 +44,12 @@ internal class ListsScreenModel(
     observePinsExist: ObservePinsExist,
     observeShikimoriAuth: ObserveShikimoriAuth,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<ListScreenState>(ListScreenState.Loading) {
+) : StateScreenModel<ListScreenState>(ListScreenState.Loading, dispatchers) {
 
     private val uiMessageManager = UiMessageManager()
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
@@ -71,7 +71,7 @@ internal class ListsScreenModel(
             }
         }
 
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 stateBus.type.observe,
                 stateBus.page.observe,
@@ -232,7 +232,7 @@ internal class ListsScreenModel(
 internal sealed class ListScreenState() {
     object Loading : ListScreenState()
     object NoPins : ListScreenState()
-    data class NoTracks(val type : ListType) : ListScreenState()
+    data class NoTracks(val type: ListType) : ListScreenState()
     data class Data(
         val type: ListType = ListType.Anime,
         val status: TrackStatus = TrackStatus.WATCHING,
