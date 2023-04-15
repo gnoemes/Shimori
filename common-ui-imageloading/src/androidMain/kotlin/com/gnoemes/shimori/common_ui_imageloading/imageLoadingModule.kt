@@ -10,13 +10,15 @@ import org.kodein.di.*
 actual val imageLoadingModule: DI.Module
     get() = DI.Module("imageLoading") {
 
-        addInBindSet<AppInitializer<Application>> {
-            provider {
-                CoilAppInitializer(
-                    instance(),
-                    instance(tag = KodeinTag.imageClient),
-                    ShimoriImageInterceptor(),
-                )
+        inBindSet<AppInitializer<Application>> {
+            add {
+                provider {
+                    CoilAppInitializer(
+                        instance(),
+                        instance(tag = KodeinTag.imageClient),
+                        ShimoriImageInterceptor(),
+                    )
+                }
             }
         }
     }

@@ -103,9 +103,10 @@ dependencies {
     implementation(projects.shikimori)
     implementation(projects.shikimoriAuth)
 
+    implementation(projects.ui.home)
     implementation(projects.ui.auth)
     implementation(projects.ui.lists)
-    implementation(projects.ui.lists.change)
+    implementation(projects.ui.lists.menu)
     implementation(projects.ui.lists.edit)
     implementation(projects.ui.settings)
     implementation(projects.ui.title)
@@ -131,6 +132,7 @@ dependencies {
     implementation(libs.kodein.compose)
 
     implementation(libs.material.motion.navigation)
+    implementation(libs.bundles.voyager)
 
     implementation(libs.ktor.logging)
     implementation(libs.ktor.contentNegotiation)
