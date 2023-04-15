@@ -8,8 +8,8 @@ import com.benasher44.uuid.uuid4
 
 abstract class Screen : Screen {
     override val key: ScreenKey = uniqueScreenKey
-    protected fun Screen.screen(provider: FeatureScreen) = ScreenRegistry.get(provider)
-    protected fun Screen.tab(provider: FeatureScreen) = ScreenRegistry.get(provider) as Tab
+    protected fun screen(provider: FeatureScreen) = ScreenRegistry.get(provider)
+    protected fun tab(provider: FeatureScreen) = ScreenRegistry.get(provider) as Tab
 }
 
 //screen without global bottom navigation
@@ -19,7 +19,7 @@ abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
     override val key: ScreenKey = uniqueScreenKey
 
     open suspend fun onReselect(navigator: Navigator) {}
-    protected fun Screen.screen(provider: FeatureScreen) = ScreenRegistry.get(provider)
+    protected fun screen(provider: FeatureScreen) = ScreenRegistry.get(provider)
 }
 
 // prevents crashes in nested navigators
