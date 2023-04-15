@@ -37,11 +37,13 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun ListSort(
-    screenModel : ListSortScreenModel
+    screenModel : ListSortScreenModel,
+    modifier: Modifier = Modifier
 ) {
     val state by screenModel.state.collectAsState()
 
     ListSort(
+        modifier = modifier,
         listType = state.listType,
         active = state.activeSort,
         options = state.options,
@@ -51,6 +53,7 @@ internal fun ListSort(
 
 @Composable
 private fun ListSort(
+    modifier: Modifier,
     listType: ListType,
     active: ListSort,
     options: List<ListSortOption>,
@@ -72,7 +75,7 @@ private fun ListSort(
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .horizontalScroll(scrollState)
+            .horizontalScroll(scrollState) then modifier
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         options.fastForEach { option ->

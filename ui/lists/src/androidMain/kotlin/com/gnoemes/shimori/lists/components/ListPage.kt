@@ -171,10 +171,19 @@ private fun PaginatedList(
 
         itemSpacer(paddingValues.calculateTopPadding() + 24.dp)
 
-        item("sort") { ListSort(sortScreenModel) }
+        item("sort") {
+            ListSort(
+                sortScreenModel,
+                modifier = Modifier.animateItemPlacement(),
+            )
+        }
 
         item("status_item_${ListType.Anime}") {
-            CurrentStatusItem(type, status)
+            CurrentStatusItem(
+                type,
+                status,
+                modifier = Modifier.animateItemPlacement(),
+            )
         }
 
         items(
