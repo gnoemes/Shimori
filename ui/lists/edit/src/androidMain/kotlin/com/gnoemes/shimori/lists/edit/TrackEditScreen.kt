@@ -139,15 +139,18 @@ internal class TrackEditScreen(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    BottomBar(
-                        modifier = Modifier
-                            .height(84.dp),
-                        newTrack = newTrack,
-                        pinned = pinned,
-                        onDelete = onDelete,
-                        onSave = onSave,
-                        onTogglePin = onTogglePin
-                    )
+                    Column {
+                        BottomBar(
+                            modifier = Modifier
+                                .height(84.dp),
+                            newTrack = newTrack,
+                            pinned = pinned,
+                            onDelete = onDelete,
+                            onSave = onSave,
+                            onTogglePin = onTogglePin
+                        )
+                        Spacer(modifier = Modifier.navigationBarsPadding())
+                    }
                 }
             },
             contentWindowInsets = WindowInsets.ime
