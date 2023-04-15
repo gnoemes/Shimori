@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
@@ -92,7 +91,7 @@ internal class TitleDetailsScreen(
                     screenshots = state.screenshots,
                     openTrackEdit = { id, type, markComplete ->
                         navigator.push(
-                            ScreenRegistry.get(
+                            screen(
                                 FeatureScreen.TrackEdit(
                                     id,
                                     type,

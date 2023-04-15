@@ -18,7 +18,6 @@ import com.gnoemes.shimori.base.core.settings.AppAccentColor
 import com.gnoemes.shimori.base.core.settings.AppLocale
 import com.gnoemes.shimori.base.core.settings.AppTheme
 import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
-import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
 import com.gnoemes.shimori.common.ui.navigation.Screen
 import com.gnoemes.shimori.settings.components.AccentColor
@@ -36,7 +35,6 @@ internal object SettingsScreen : Screen() {
 
         val state by screenModel.state.collectAsState()
 
-        Background {
             state?.let { state ->
                 Settings(
                     navigateUp = { navigator.pop() },
@@ -53,7 +51,6 @@ internal object SettingsScreen : Screen() {
                     onChangeAccentColor = screenModel::onChangeSecondaryColor,
                 )
             }
-        }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

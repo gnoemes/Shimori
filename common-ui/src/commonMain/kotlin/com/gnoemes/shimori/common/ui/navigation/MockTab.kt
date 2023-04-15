@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.TabOptions
 
-object MockTab : Tab {
+object MockTab : Tab() {
     @Composable
     override fun Content() {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -19,7 +19,7 @@ object MockTab : Tab {
     override val options: TabOptions
         @Composable
         get() = TabOptions(
-            0u,
+            1u,
             "Mock",
             null
         )

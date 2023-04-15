@@ -5,6 +5,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,12 +20,13 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gnoemes.shimori.common.ui.*
 import com.gnoemes.shimori.common.ui.components.*
+import com.gnoemes.shimori.common.ui.navigation.Tab
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.ShimoriSmallestRoundedCornerShape
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
@@ -42,18 +44,19 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ListPage(
-    screenModel: ListPageScreenModel,
-    sortScreenModel : ListSortScreenModel,
+internal fun Tab.ListPage(
+    listItems: LazyPagingItems<TitleWithTrack<out ShimoriTitleEntity>>,
+    listState: LazyListState,
     paddingValues: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
-    snackbarHostState: SnackbarHostState,
     openTrackEdit: (id: Long, type: TrackTargetType, markComplete: Boolean) -> Unit,
     onAnimeExplore: () -> Unit,
     onMangaExplore: () -> Unit,
     onRanobeExplore: () -> Unit,
     openTitleDetails: (id: Long, type: TrackTargetType) -> Unit,
 ) {
+    val screenModel = rememberScreenModel<ListPageScreenModel>()
+    val sortScreenModel = rememberScreenModel<ListSortScreenModel>()
     val state by screenModel.state.collectAsState()
 
     val onEditClick = { entity: TitleWithTrackEntity ->
@@ -84,27 +87,10 @@ internal fun ListPage(
         }
     }
 
-    val listItems = screenModel.items.collectAsLazyPagingItems()
-
-    listItems.loadState.prependErrorOrNull()?.let { message ->
-        LaunchedEffect(message) {
-            snackbarHostState.showSnackbar(message.message)
-        }
-    }
-    listItems.loadState.appendErrorOrNull()?.let { message ->
-        LaunchedEffect(message) {
-            snackbarHostState.showSnackbar(message.message)
-        }
-    }
-    listItems.loadState.refreshErrorOrNull()?.let { message ->
-        LaunchedEffect(message) {
-            snackbarHostState.showSnackbar(message.message)
-        }
-    }
-
     ScreenLayout {
         PaginatedList(
             listItems,
+            listState,
             scrollBehavior,
             paddingValues,
             state.type,
@@ -123,16 +109,18 @@ internal fun ListPage(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterial3Api
 @Composable
 private fun PaginatedList(
     listItems: LazyPagingItems<TitleWithTrack<out ShimoriTitleEntity>>,
+    listState: LazyListState,
     scrollBehavior: TopAppBarScrollBehavior,
     paddingValues: PaddingValues,
     type: ListType,
     status: TrackStatus,
     incrementerTitle: TitleWithTrackEntity?,
-    sortScreenModel : ListSortScreenModel,
+    sortScreenModel: ListSortScreenModel,
     onEditClick: (TitleWithTrackEntity) -> Unit,
     onTogglePin: (TitleWithTrackEntity) -> Unit,
     onIncrementClick: (TitleWithTrackEntity) -> Unit,
@@ -163,7 +151,7 @@ private fun PaginatedList(
                 },
                 requireUnconsumed = false
             ),
-        state = listItems.rememberLazyListState()
+        state = listState,
     ) {
         if (listItems.loadState.source.append is LoadState.NotLoading
             && listItems.loadState.source.append.endOfPaginationReached
@@ -183,10 +171,9 @@ private fun PaginatedList(
 
         itemSpacer(paddingValues.calculateTopPadding() + 24.dp)
 
-
         item("sort") { ListSort(sortScreenModel) }
 
-        item("current_page") {
+        item("status_item_${ListType.Anime}") {
             CurrentStatusItem(type, status)
         }
 
@@ -196,6 +183,7 @@ private fun PaginatedList(
         ) { entity ->
             if (entity != null) {
                 ListCard(
+                    modifier = Modifier.animateItemPlacement(),
                     title = entity,
                     onClick = { onCardClick(entity) },
                     onCoverLongClick = { onTogglePin(entity) },

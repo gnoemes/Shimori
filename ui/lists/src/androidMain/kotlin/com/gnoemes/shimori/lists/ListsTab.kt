@@ -6,27 +6,29 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.ScreenRegistry
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -38,6 +40,9 @@ import com.gnoemes.shimori.common.ui.components.TitleSnackIcon
 import com.gnoemes.shimori.common.ui.components.rememberSnackbarHostState
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.navigation.Tab
+import com.gnoemes.shimori.common.ui.rememberLazyListState
+import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
+import com.gnoemes.shimori.data.core.entities.TitleWithTrack
 import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.lists.components.ListPage
 import com.gnoemes.shimori.lists.components.ListsEmpty
@@ -46,30 +51,42 @@ import com.gnoemes.shimori.lists.components.LoadingItem
 import com.gnoemes.shimori.lists.components.LoadingSort
 import com.gnoemes.shimori.lists.components.ScreenLayout
 import com.gnoemes.shimori.lists.page.ListPageScreenModel
-import com.gnoemes.shimori.lists.sort.ListSortScreenModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
-internal object ListsTab : Tab {
+internal object ListsTab : Tab() {
+
     override val options: TabOptions
         @Composable
         get() {
-            return TabOptions(
-                index = 0u,
-                title = stringResource(R.string.lists_title),
-                icon = painterResource(id = R.drawable.ic_bookmark)
-            )
+            val title = stringResource(R.string.lists_title)
+            val icon = painterResource(id = R.drawable.ic_bookmark)
+
+            return remember {
+                TabOptions(
+                    index = 0u,
+                    title = title,
+                    icon = icon
+                )
+            }
         }
 
+    override suspend fun onReselect(navigator: Navigator) {
+        navigator.popUntil { it is ListsTab }
+    }
 
     @Composable
     override fun Content() {
         val screenModel = rememberScreenModel<ListsScreenModel>()
-        val navigator = LocalNavigator.currentOrThrow
+        val pageScreenModel = rememberScreenModel<ListPageScreenModel>()
+
+        val listItems = pageScreenModel.items.collectAsLazyPagingItems()
+        val listState = listItems.rememberLazyListState()
+
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val listMenuScreen = rememberScreen(FeatureScreen.ListMenu)
 
-        val state by screenModel.state.collectAsState()
+        val state by screenModel.state.collectAsStateWithLifecycle()
 
         val appBarState = rememberTopAppBarState()
         val pinBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
@@ -144,8 +161,9 @@ internal object ListsTab : Tab {
                     }
 
                     is ListScreenState.Data -> DataState(
+                        listItems,
+                        listState,
                         scrollBehavior = scrollBehavior,
-                        snackbarHostState = snackbarHostState,
                         paddingValues = paddingValues
                     )
                 }
@@ -189,26 +207,23 @@ internal object ListsTab : Tab {
 
     @Composable
     private fun DataState(
+        listItems: LazyPagingItems<TitleWithTrack<out ShimoriTitleEntity>>,
+        listState: LazyListState,
         scrollBehavior: TopAppBarScrollBehavior,
-        snackbarHostState: SnackbarHostState,
         paddingValues: PaddingValues
     ) {
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = rememberScreenModel<ListPageScreenModel>()
-        val sortScreenModel = rememberScreenModel<ListSortScreenModel>()
-
         ListPage(
-            screenModel = screenModel,
-            sortScreenModel = sortScreenModel,
+            listItems,
+            listState,
             paddingValues = paddingValues,
             scrollBehavior = scrollBehavior,
-            snackbarHostState = snackbarHostState,
             onAnimeExplore = { /*TODO*/ },
             onMangaExplore = { /*TODO*/ },
             onRanobeExplore = { /*TODO*/ },
             openTrackEdit = { id, type, markComplete ->
                 navigator.push(
-                    ScreenRegistry.get(
+                    screen(
                         FeatureScreen.TrackEdit(
                             id,
                             type,
@@ -219,7 +234,7 @@ internal object ListsTab : Tab {
                 )
             },
             openTitleDetails = { id, type ->
-                navigator.push(ScreenRegistry.get(FeatureScreen.TitleDetails(id, type)))
+                navigator.push(screen(FeatureScreen.TitleDetails(id, type)))
             }
         )
     }
