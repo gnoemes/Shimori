@@ -17,13 +17,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.common.ui.BaseActivity
@@ -32,6 +31,7 @@ import com.gnoemes.shimori.common.ui.LocalShimoriDimensions
 import com.gnoemes.shimori.common.ui.LocalShimoriSettings
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.LocalShimoriTrackUtil
+import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.theme.defaultDimensions
@@ -58,6 +58,12 @@ class MainActivity : BaseActivity(), DIAware {
     private val trackUtil: ShimoriTrackUtil by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Do not let the launcher create a new activity http://stackoverflow.com/questions/16283079
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+
         installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -97,7 +103,9 @@ class MainActivity : BaseActivity(), DIAware {
                     LocalShimoriDimensions provides dimensions,
                     LocalPreferences provides prefs,
                     LocalOverscrollConfiguration provides overscrollConfiguration,
-                    LocalDensity provides Density(3.75f),
+//                    LocalDensity provides Density(
+//                        LocalDensity.current.density * 1.125f
+//                    ),
                 ) {
                     val useDarkColors = settings.shouldUseDarkColors()
 
@@ -128,7 +136,15 @@ class MainActivity : BaseActivity(), DIAware {
                             sheetContentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.surface),
                             sheetBackgroundColor = MaterialTheme.colorScheme.surface,
                         ) {
-                            Navigator(screen = homeScreen)
+                            Background {
+                                Navigator(
+                                    screen = homeScreen,
+                                    disposeBehavior = NavigatorDisposeBehavior(
+                                        disposeNestedNavigators = false,
+                                        disposeSteps = true
+                                    ),
+                                )
+                            }
                         }
                     }
                 }

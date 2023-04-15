@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,8 +31,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.components.ShimoriSecondaryToolbar
+import com.gnoemes.shimori.common.ui.navigation.BottomControlsScreen
 import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
-import com.gnoemes.shimori.common.ui.navigation.Screen
 import com.gnoemes.shimori.data.core.entities.common.TitleStatus
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
@@ -43,10 +42,10 @@ import com.gnoemes.shimori.lists.edit.components.ProgressBoxes
 import com.gnoemes.shimori.lists.edit.components.Rating
 import com.gnoemes.shimori.lists.edit.components.StatusSelector
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 internal class TrackEditScreen(
     private val args: FeatureScreen.TrackEdit
-) : Screen() {
+) : BottomControlsScreen() {
 
     @Composable
     override fun Content() {

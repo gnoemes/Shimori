@@ -32,7 +32,6 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.gnoemes.shimori.common.ui.components.Background
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
 import com.gnoemes.shimori.common.ui.components.ScaffoldExtended
@@ -43,7 +42,8 @@ import com.gnoemes.shimori.common.ui.navigation.Tab
 import com.gnoemes.shimori.common.ui.theme.dimens
 import kotlinx.coroutines.delay
 
-object AuthScreen : Tab {
+internal object AuthScreen : Tab() {
+
     override val options: TabOptions
         @Composable
         get() {
@@ -87,14 +87,12 @@ object AuthScreen : Tab {
             }
         }
 
-        Background {
-            Auth(
-                snackbarHostState = snackbarHostState,
-                signIn = { signInLauncher.launch(Unit) },
-                signUp = { signUpLauncher.launch(Unit) },
-                openSettings = { navigator.push(settingsScreen) }
-            )
-        }
+        Auth(
+            snackbarHostState = snackbarHostState,
+            signIn = { signInLauncher.launch(Unit) },
+            signUp = { signUpLauncher.launch(Unit) },
+            openSettings = { navigator.push(settingsScreen) }
+        )
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

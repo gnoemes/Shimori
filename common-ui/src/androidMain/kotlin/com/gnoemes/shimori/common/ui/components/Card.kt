@@ -124,6 +124,7 @@ fun ColumnScope.NavigationCardDivider() {
 
 @Composable
 fun ListCard(
+    modifier: Modifier = Modifier,
     title: TitleWithTrackEntity,
     onClick: () -> Unit,
     onCoverLongClick: () -> Unit,
@@ -132,7 +133,7 @@ fun ListCard(
     padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
 ) {
     Box(
-        modifier = Modifier.padding(padding)
+        modifier = modifier then Modifier.padding(padding)
     ) {
         ListCard(
             image = title.entity.image,
