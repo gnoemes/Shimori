@@ -7,14 +7,14 @@ You require [Android Studio Electric Eel | 2022.1.1 Canary 9](https://developer.
 
 ### API keys
 
-You need to add client key for [Shikimori](https://shikimori.one/oauth)
+You need to add client key for [Shikimori](https://shikimori.me/oauth)
 
 When creating a OAuth Shikimori app, you need to set the OAuth redirect uri to `shimori://oauth/shikimori`.
 
 Once you obtain the keys, set them in `~/.gradle/gradle.properties`:
 
 ```
-# Get these from https://shikimori.one/oauth
+# Get these from https://shikimori.me/oauth
 # ShikimoriClientId = <your key>
 # ShikimoriClientSecret = <your key>
 ```

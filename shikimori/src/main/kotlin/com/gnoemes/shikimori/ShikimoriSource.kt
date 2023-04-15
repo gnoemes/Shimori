@@ -1,6 +1,12 @@
 package com.gnoemes.shikimori
 
-import com.gnoemes.shimori.data.core.sources.*
+import com.gnoemes.shimori.base.core.entities.SourcePlatformValues
+import com.gnoemes.shimori.data.core.sources.AnimeDataSource
+import com.gnoemes.shimori.data.core.sources.CharacterDataSource
+import com.gnoemes.shimori.data.core.sources.MangaDataSource
+import com.gnoemes.shimori.data.core.sources.RanobeDataSource
+import com.gnoemes.shimori.data.core.sources.TrackDataSource
+import com.gnoemes.shimori.data.core.sources.UserDataSource
 import com.gnoemes.shimori.source.CatalogueSource
 import com.gnoemes.shimori.source.TrackSource
 
@@ -10,7 +16,8 @@ class ShikimoriSource(
     ranobeSource: RanobeDataSource,
     characterSource: CharacterDataSource,
     userSource: UserDataSource,
-    trackSource: TrackDataSource
+    trackSource: TrackDataSource,
+    override val values: SourcePlatformValues,
 ) : CatalogueSource, TrackSource {
     override val id: Long = ID
     override val name: String = "Shikimori"

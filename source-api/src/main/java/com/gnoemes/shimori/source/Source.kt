@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.source
 
+import com.gnoemes.shimori.base.core.entities.SourcePlatformValues
+
 interface Source {
     /**
      * Must be unique
@@ -9,4 +11,6 @@ interface Source {
     val name: String
 
     val lang: String get() = ""
+
+    val values : SourcePlatformValues
 }

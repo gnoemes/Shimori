@@ -36,6 +36,7 @@ import com.gnoemes.shikimori.sources.ShikimoriRanobeDataSource
 import com.gnoemes.shikimori.sources.ShikimoriTrackDataSource
 import com.gnoemes.shikimori.sources.ShikimoriUserDataSource
 import com.gnoemes.shimori.base.core.di.KodeinTag
+import com.gnoemes.shimori.base.core.entities.SourcePlatformValues
 import com.gnoemes.shimori.base.core.extensions.new
 import com.gnoemes.shimori.data.core.sources.AnimeDataSource
 import com.gnoemes.shimori.data.core.sources.CharacterDataSource
@@ -56,31 +57,46 @@ import org.kodein.di.singleton
 val shikimoriModule = DI.Module("shikimori") {
     importOnce(mappers)
 
+    bindSingleton(KodeinTag.Shikimori.tag) {
+        val url = instance<String>(KodeinTag.Shikimori.url)
+        SourcePlatformValues(
+            url = url,
+            clientId = instance(KodeinTag.Shikimori.clientId),
+            secretKey = instance(KodeinTag.Shikimori.clientSecret),
+            userAgent = instance(KodeinTag.userAgent),
+            oauthRedirect = instance(KodeinTag.Shikimori.oAuthRedirect),
+            signInUrl = "$url/users/sign_in",
+            signUpUrl = "$url/users/sign_up",
+            oAuthUrl = "$url/oauth/authorize",
+        )
+    }
+
     bindEagerSingleton {
         Shikimori(
-            instance(KodeinTag.shikimori),
-            instance(),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
             instance(),
             instance(),
         )
     }
 
 
-    bindSingleton<TrackDataSource>(KodeinTag.shikimori) { new(::ShikimoriTrackDataSource) }
-    bindSingleton<UserDataSource>(KodeinTag.shikimori) { new(::ShikimoriUserDataSource) }
-    bindSingleton<AnimeDataSource>(KodeinTag.shikimori) { new(::ShikimoriAnimeDataSource) }
-    bindSingleton<MangaDataSource>(KodeinTag.shikimori) { new(::ShikimoriMangaDataSource) }
-    bindSingleton<RanobeDataSource>(KodeinTag.shikimori) { new(::ShikimoriRanobeDataSource) }
-    bindSingleton<CharacterDataSource>(KodeinTag.shikimori) { new(::ShikimoriCharacterDataSource) }
+    bindSingleton<TrackDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriTrackDataSource) }
+    bindSingleton<UserDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriUserDataSource) }
+    bindSingleton<AnimeDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriAnimeDataSource) }
+    bindSingleton<MangaDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriMangaDataSource) }
+    bindSingleton<RanobeDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriRanobeDataSource) }
+    bindSingleton<CharacterDataSource>(KodeinTag.Shikimori.tag) { new(::ShikimoriCharacterDataSource) }
 
     bindSingleton {
         ShikimoriSource(
-            instance(KodeinTag.shikimori),
-            instance(KodeinTag.shikimori),
-            instance(KodeinTag.shikimori),
-            instance(KodeinTag.shikimori),
-            instance(KodeinTag.shikimori),
-            instance(KodeinTag.shikimori),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
+            instance(KodeinTag.Shikimori.tag),
         )
     }
 
