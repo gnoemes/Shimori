@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.home
 
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.common.ShimoriImage
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import kotlinx.coroutines.flow.collectLatest
@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal class HomeScreenModel(
-    observeMyUserShort: ObserveMyUserShort
-) : StateScreenModel<HomeScreenState>(HomeScreenState()) {
+    observeMyUserShort: ObserveMyUserShort,
+    dispatchers : AppCoroutineDispatchers,
+) : StateScreenModel<HomeScreenState>(HomeScreenState(), dispatchers) {
 
     init {
-        coroutineScope.launch {
+        ioCoroutineScope.launch {
             observeMyUserShort.flow
                 .collectLatest { user ->
                     mutableState.update {

@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.settings
 
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.extensions.combine
 import com.gnoemes.shimori.base.core.settings.AppAccentColor
@@ -11,6 +10,7 @@ import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.invoke
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -20,10 +20,10 @@ internal class SettingsScreenModel(
     appVersion: String,
     private val settings: ShimoriSettings,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<SettingsScreenState?>(null) {
+) : StateScreenModel<SettingsScreenState?>(null, dispatchers) {
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 MutableStateFlow(appVersion),
                 settings.titlesLocale.observe,

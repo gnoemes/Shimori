@@ -1,9 +1,9 @@
 package com.gnoemes.shimori.lists.sort
 
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.gnoemes.shimori.base.core.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.ui.navigation.StateScreenModel
 import com.gnoemes.shimori.data.core.entities.track.ListSort
 import com.gnoemes.shimori.data.core.entities.track.ListSortOption
 import com.gnoemes.shimori.data.core.entities.track.ListType
@@ -22,10 +22,13 @@ internal class ListSortScreenModel(
     private val observeSort: ObserveListSort,
     private val updateSort: UpdateListSort,
     dispatchers: AppCoroutineDispatchers,
-) : StateScreenModel<ListSortScreenState>(ListSortScreenState()) {
+) : StateScreenModel<ListSortScreenState>(
+    ListSortScreenState(),
+    dispatchers,
+) {
 
     init {
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             combine(
                 listState.type.observe,
                 observeSort.flow,
@@ -41,7 +44,7 @@ internal class ListSortScreenModel(
             }
         }
 
-        coroutineScope.launch(dispatchers.io) {
+        ioCoroutineScope.launch {
             listState.type.observe
                 .map(ObserveListSort::Params)
                 .collect { observeSort(it) }
