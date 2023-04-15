@@ -42,7 +42,7 @@ fun ButtonRatingBar(
     colorFilled: Color,
     colorNotFilled: Color,
     starSize: Dp = 32.dp,
-    spacing: Dp = 4.dp,
+    spacing: Dp = 2.dp,
     numStars: Int = 10,
     onRatingChanged: (rating: Float) -> Unit = {}
 ) {
