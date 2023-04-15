@@ -12,7 +12,6 @@ import com.gnoemes.shimori.auth.AuthFeature
 import com.gnoemes.shimori.base.core.appinitializers.AppInitializer
 import com.gnoemes.shimori.base.core.di.KodeinTag
 import com.gnoemes.shimori.base.core.entities.Platform
-import com.gnoemes.shimori.base.core.entities.ShikimoriPlatformValues
 import com.gnoemes.shimori.base.core.extensions.new
 import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
@@ -81,6 +80,21 @@ val appModule = DI.Module("app") {
     bindSingleton(tag = KodeinTag.appName) { instance<Context>().getString(R.string.app_name) }
     bindSingleton(tag = KodeinTag.userAgent) { instance<Context>().getString(R.string.user_agent) }
     bindSingleton(tag = KodeinTag.appVersion) { BuildConfig.VERSION_NAME }
+
+    //TODO remove with BuildConfig migration to multiplatform
+    bindSingleton(tag = KodeinTag.Shikimori.url) { BuildConfig.ShikimoriBaseUrl }
+    bindSingleton(tag = KodeinTag.Shikimori.clientId) { BuildConfig.ShikimoriClientId }
+    bindSingleton(tag = KodeinTag.Shikimori.clientSecret) { BuildConfig.ShikimoriClientSecret }
+    bindSingleton(tag = KodeinTag.Shikimori.oAuthRedirect) {
+        instance<Context>().let { context ->
+            val scheme = context.getString(R.string.shikimori_redirect_scheme)
+            val host = context.getString(R.string.shikimori_redirect_host)
+            val path = context.getString(R.string.shikimori_redirect_path)
+
+            "$scheme://$host$path"
+        }
+    }
+
     bindSingleton { createLogger() }
 
     bindSingleton {
@@ -88,19 +102,6 @@ val appModule = DI.Module("app") {
             type = Platform.Type.Android,
             debug = BuildConfig.DEBUG,
             appVersion = instance(KodeinTag.appVersion),
-            shikimori = ShikimoriPlatformValues(
-                url = BuildConfig.ShikimoriBaseUrl,
-                clientId = BuildConfig.ShikimoriClientId,
-                secretKey = BuildConfig.ShikimoriClientSecret,
-                userAgent = instance(KodeinTag.userAgent),
-                oauthRedirect = instance<Context>().let { context ->
-                    val scheme = context.getString(R.string.shikimori_redirect_scheme)
-                    val host = context.getString(R.string.shikimori_redirect_host)
-                    val path = context.getString(R.string.shikimori_redirect_path)
-
-                    "$scheme://$host$path"
-                }
-            )
         )
     }
 
@@ -122,7 +123,13 @@ val appModule = DI.Module("app") {
 private val binds = DI.Module(name = "appBinds") {
     bindSingleton<ShimoriSettings> { ShimoriSettingsImpl(instance()) }
     bindSingleton<ShimoriStorage> { ShimoriStorageImpl(instance()) }
-    bindSingleton<ShikimoriAuthManager> { new(::ActivityShikimoriAuthManager) }
+    bindSingleton<ShikimoriAuthManager> {
+        ActivityShikimoriAuthManager(
+            instance(),
+            instance(KodeinTag.Shikimori.tag),
+            instance()
+        )
+    }
     bindSingleton<ShimoriTextProvider> { new(::ShimoriContextTextProvider) }
 }
 
@@ -141,9 +148,10 @@ private val catalogSources = DI.Module(name = "catalogSources") {
 private val networkModule = DI.Module(name = "network") {
 
     bindSingleton(KodeinTag.imageClient) { OkHttpClient.Builder().defaultConfig().build() }
-    bindSingleton(KodeinTag.shikimori) {
+    bindSingleton(KodeinTag.Shikimori.tag) {
         val platform = instance<Platform>()
         val storage = instance<ShimoriStorage>()
+        val userAgent = instance<String>(KodeinTag.userAgent)
 
         HttpClient(OkHttp) {
             expectSuccess = true
@@ -161,7 +169,7 @@ private val networkModule = DI.Module(name = "network") {
             }
 
             install(UserAgent) {
-                agent = platform.shikimori.userAgent
+                agent = userAgent
             }
 
             install(ContentNegotiation) {

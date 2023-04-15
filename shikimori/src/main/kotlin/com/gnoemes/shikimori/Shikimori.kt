@@ -20,19 +20,34 @@ import com.gnoemes.shikimori.entities.user.FavoriteListResponse
 import com.gnoemes.shikimori.entities.user.UserBriefResponse
 import com.gnoemes.shikimori.entities.user.UserDetailsResponse
 import com.gnoemes.shikimori.entities.user.UserHistoryResponse
-import com.gnoemes.shikimori.services.*
-import com.gnoemes.shimori.base.core.entities.Platform
+import com.gnoemes.shikimori.services.AnimeService
+import com.gnoemes.shikimori.services.AuthService
+import com.gnoemes.shikimori.services.CharacterService
+import com.gnoemes.shikimori.services.MangaService
+import com.gnoemes.shikimori.services.RanobeService
+import com.gnoemes.shikimori.services.RateService
+import com.gnoemes.shikimori.services.UserService
+import com.gnoemes.shimori.base.core.entities.SourcePlatformValues
 import com.gnoemes.shimori.base.core.settings.ShimoriStorage
 import com.gnoemes.shimori.base.core.utils.Logger
 import com.gnoemes.shimori.data.core.entities.auth.ShikimoriAuthState
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.plugin
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -40,7 +55,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class Shikimori(
     private val client: HttpClient,
-    private val platform: Platform,
+    private val platform : SourcePlatformValues,
     private val storage: ShimoriStorage,
     private val logger: Logger,
 ) {
@@ -53,7 +68,7 @@ class Shikimori(
     val authState: StateFlow<ShikimoriAuthState> get() = _state
     val authError: SharedFlow<String> get() = _errorState
 
-    private val API_URL = "${platform.shikimori.url}$API_PATH"
+    private val API_URL = "${platform.url}$API_PATH"
 
     companion object {
         const val API_PATH = "/api"
@@ -138,15 +153,15 @@ class Shikimori(
     ///////////////////////////////////////////////////////
 
     private inner class AuthServiceImpl : AuthService {
-        private val tokenEndpoint = "${platform.shikimori.url}/oauth/token"
+        private val tokenEndpoint = "${platform.url}/oauth/token"
         override suspend fun accessToken(authCode: String): TokenResponse? {
             return try {
                 client.post {
                     url(tokenEndpoint)
                     parameter("grant_type", "authorization_code")
-                    parameter("client_id", platform.shikimori.clientId)
-                    parameter("client_secret", platform.shikimori.secretKey)
-                    parameter("redirect_uri", platform.shikimori.oauthRedirect)
+                    parameter("client_id", platform.clientId)
+                    parameter("client_secret", platform.secretKey)
+                    parameter("redirect_uri", platform.oauthRedirect)
                     parameter("code", authCode)
                 }.body()
             } catch (e: Exception) {
@@ -163,8 +178,8 @@ class Shikimori(
             return try {
                 client.post {
                     url(tokenEndpoint)
-                    parameter("client_id", platform.shikimori.clientId)
-                    parameter("client_secret", platform.shikimori.secretKey)
+                    parameter("client_id", platform.clientId)
+                    parameter("client_secret", platform.secretKey)
                     parameter("refresh_token", refreshToken)
                     parameter("grant_type", "refresh_token")
                     block()
