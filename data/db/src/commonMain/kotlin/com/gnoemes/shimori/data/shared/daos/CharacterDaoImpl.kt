@@ -12,7 +12,15 @@ import com.gnoemes.shimori.data.core.entities.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.core.entities.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.db.ShimoriDB
-import com.gnoemes.shimori.data.shared.*
+import com.gnoemes.shimori.data.shared.ItemSyncerResult
+import com.gnoemes.shimori.data.shared.SYNCER_RESULT_TAG
+import com.gnoemes.shimori.data.shared.animeWithTrack
+import com.gnoemes.shimori.data.shared.character
+import com.gnoemes.shimori.data.shared.mangaWithTrack
+import com.gnoemes.shimori.data.shared.ranobeWithTrack
+import com.gnoemes.shimori.data.shared.syncRemoteIds
+import com.gnoemes.shimori.data.shared.syncerForEntity
+import com.gnoemes.shimori.data.shared.withTransaction
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -86,7 +94,7 @@ internal class CharacterDaoImpl(
     override suspend fun syncRoles(roles: List<CharacterRole>) {
         val time = measureTimeMillis {
             roles.forEach { role ->
-                db.characterRoleQueries.insert(
+                db.characterRoleQueries.upsert(
                     character_id = role.characterId,
                     target_id = role.targetId,
                     target_type = role.targetType
