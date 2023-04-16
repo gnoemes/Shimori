@@ -33,6 +33,7 @@ import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.title.components.About
 import com.gnoemes.shimori.title.components.Characters
+import com.gnoemes.shimori.title.components.Screenshots
 import com.gnoemes.shimori.title.components.TitleHeader
 import com.gnoemes.shimori.title.components.Trailers
 
@@ -88,7 +89,8 @@ internal class TitleDetailsScreen(
                     )
                 },
                 openCharacterDetails = { },
-                openCharacterList = {}
+                openCharacterList = {},
+                openScreenshots = {}
             )
         }
 
@@ -104,7 +106,8 @@ internal class TitleDetailsScreen(
         screenshots: OptionalContent<List<AnimeScreenshot>?>,
         openTrackEdit: (Long, TrackTargetType, Boolean) -> Unit,
         openCharacterDetails: (id: Long) -> Unit,
-        openCharacterList: () -> Unit
+        openCharacterList: () -> Unit,
+        openScreenshots : () -> Unit,
     ) {
 
         LazyColumn(
@@ -140,15 +143,20 @@ internal class TitleDetailsScreen(
                 itemSpacer(32.dp)
             }
 
-            if (!videos.loaded
-                || !videos.content.isNullOrEmpty()
-                || !screenshots.loaded
-                || !screenshots.content.isNullOrEmpty()
-            ) {
+            if (!screenshots.loaded || !screenshots.content.isNullOrEmpty()) {
                 item {
-                    Trailers(
-                        videos
+                    Screenshots(
+                        screenshots,
+                        openScreenshots
                     )
+                }
+
+                itemSpacer(32.dp)
+            }
+
+            if (!videos.loaded || !videos.content.isNullOrEmpty()) {
+                item {
+                    Trailers(videos)
                 }
 
                 itemSpacer(32.dp)
