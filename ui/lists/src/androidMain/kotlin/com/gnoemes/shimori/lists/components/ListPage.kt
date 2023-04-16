@@ -174,7 +174,6 @@ private fun PaginatedList(
         item("sort") {
             ListSort(
                 sortScreenModel,
-                modifier = Modifier.animateItemPlacement(),
             )
         }
 
@@ -182,7 +181,6 @@ private fun PaginatedList(
             CurrentStatusItem(
                 type,
                 status,
-                modifier = Modifier.animateItemPlacement(),
             )
         }
 
@@ -192,7 +190,6 @@ private fun PaginatedList(
         ) { entity ->
             if (entity != null) {
                 ListCard(
-                    modifier = Modifier.animateItemPlacement(),
                     title = entity,
                     onClick = { onCardClick(entity) },
                     onCoverLongClick = { onTogglePin(entity) },
