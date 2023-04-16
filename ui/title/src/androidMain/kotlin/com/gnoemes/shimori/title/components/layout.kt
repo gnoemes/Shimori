@@ -1,17 +1,16 @@
 package com.gnoemes.shimori.title.components
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.components.ChevronIcon
 import com.gnoemes.shimori.common.ui.ignoreHorizontalParentPadding
+import com.gnoemes.shimori.common.ui.itemSpacer
 import com.gnoemes.shimori.common.ui.noRippleClickable
 
 @Composable
@@ -34,7 +34,7 @@ internal fun RowContentSection(
     onClickMore: () -> Unit,
     nonRowContent: @Composable ColumnScope.() -> Unit = { },
     contentHorizontalArrangement: Dp = 12.dp,
-    content: @Composable RowScope.() -> Unit
+    content: LazyListScope.() -> Unit
 ) {
     Column {
         CompositionLocalProvider(
@@ -69,16 +69,15 @@ internal fun RowContentSection(
 
             val screenPadding = 16.dp
 
-            Row(
+            LazyRow(
                 modifier = Modifier
                     .ignoreHorizontalParentPadding(screenPadding)
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(contentHorizontalArrangement)
             ) {
-                Spacer(modifier = Modifier.width(screenPadding - contentHorizontalArrangement))
+                itemSpacer(Modifier.width(screenPadding - contentHorizontalArrangement))
                 content()
-                Spacer(modifier = Modifier.width(screenPadding - contentHorizontalArrangement))
+                itemSpacer(Modifier.width(screenPadding - contentHorizontalArrangement))
             }
 
             nonRowContent()
