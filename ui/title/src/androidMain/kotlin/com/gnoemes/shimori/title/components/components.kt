@@ -49,22 +49,28 @@ internal fun Characters(
     ) {
         if (!characters.loaded) {
             repeat(5) {
-                CharacterCover(
-                    null,
-                    modifier = Modifier
-                        .shimoriPlaceholder(
-                            true,
-                            shape = ShimoriCharacterCoverRoundedCornerShape
-                        )
-                        .width(MaterialTheme.dimens.characterPosterWidth)
-                        .aspectRatio(0.75f),
-                )
+                item {
+                    CharacterCover(
+                        null,
+                        modifier = Modifier
+                            .shimoriPlaceholder(
+                                true,
+                                shape = ShimoriCharacterCoverRoundedCornerShape
+                            )
+                            .width(MaterialTheme.dimens.characterPosterWidth)
+                            .aspectRatio(0.75f),
+                    )
+                }
             }
         } else {
             characters.content?.forEach {
-                CharacterCard(it.image,
-                    LocalShimoriTextCreator.current.name(it),
-                    onClick = { openCharacterDetails.invoke(it.id) })
+                item(key = "character-${it.id}") {
+                    CharacterCard(
+                        it.image,
+                        LocalShimoriTextCreator.current.name(it),
+                        onClick = { openCharacterDetails.invoke(it.id) }
+                    )
+                }
             }
         }
     }
@@ -109,12 +115,14 @@ internal fun About(
         val genres = title?.genres
         if (!genres.isNullOrEmpty()) {
             genres.forEach {
-                ShimoriChip(
-                    onClick = {},
-                    modifier = Modifier
-                        .height(32.dp),
-                    text = LocalShimoriTextCreator.current.genre(it),
-                )
+                item("genre-${it.name}") {
+                    ShimoriChip(
+                        onClick = {},
+                        modifier = Modifier
+                            .height(32.dp),
+                        text = LocalShimoriTextCreator.current.genre(it),
+                    )
+                }
             }
         }
     }
@@ -177,22 +185,26 @@ internal fun Trailers(
     ) {
         if (!videos.loaded) {
             repeat(3) {
-                TrailerCover(
-                    image = null,
-                    modifier = Modifier
-                        .width(MaterialTheme.dimens.trailerPosterWidth)
-                        .height(MaterialTheme.dimens.trailerPosterHeight)
-                        .shimoriPlaceholder(true),
-                )
+                item {
+                    TrailerCover(
+                        image = null,
+                        modifier = Modifier
+                            .width(MaterialTheme.dimens.trailerPosterWidth)
+                            .height(MaterialTheme.dimens.trailerPosterHeight)
+                            .shimoriPlaceholder(true),
+                    )
+                }
             }
         } else {
             videos.content?.forEach { video ->
-                TrailerCard(
-                    image = video.imageUrl,
-                    name = video.name.orEmpty(),
-                    hosting = video.hosting,
-                    onClick = { /*TODO*/ }
-                )
+                item("trailer-${video.id}") {
+                    TrailerCard(
+                        image = video.imageUrl,
+                        name = video.name.orEmpty(),
+                        hosting = video.hosting,
+                        onClick = { /*TODO*/ }
+                    )
+                }
             }
         }
     }
