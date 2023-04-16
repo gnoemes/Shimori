@@ -7,24 +7,30 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.api.OptionalContent
 import com.gnoemes.shimori.common.ui.components.CharacterCard
 import com.gnoemes.shimori.common.ui.components.CharacterCover
+import com.gnoemes.shimori.common.ui.components.NavigationCard
+import com.gnoemes.shimori.common.ui.components.NavigationCardItem
 import com.gnoemes.shimori.common.ui.components.ShimoriChip
 import com.gnoemes.shimori.common.ui.components.TrailerCard
 import com.gnoemes.shimori.common.ui.components.TrailerCover
 import com.gnoemes.shimori.common.ui.shimoriPlaceholder
 import com.gnoemes.shimori.common.ui.theme.ShimoriCharacterCoverRoundedCornerShape
+import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.data.core.entities.ShimoriTitleEntity
 import com.gnoemes.shimori.data.core.entities.characters.Character
+import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.data.core.entities.titles.anime.AnimeVideo
 import com.gnoemes.shimori.title.R
 
@@ -114,6 +120,47 @@ internal fun About(
     }
 }
 
+@Composable
+internal fun Screenshots(
+    screenshots: OptionalContent<List<AnimeScreenshot>?>,
+    onClick: () -> Unit,
+) {
+    RowContentSection(
+        title = "",
+        isMoreVisible = false,
+        sectionLoaded = false,
+        onClickMore = {},
+        nonRowContent = {
+            if (!screenshots.loaded) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .shimoriPlaceholder(
+                            visible = true,
+                            shape = ShimoriDefaultRoundedCornerShape
+                        ),
+                )
+            } else {
+                NavigationCard {
+                    NavigationCardItem(
+                        title = stringResource(id = R.string.title_frames),
+                        subTitle = null,
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_frames),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        onClick = onClick
+                    )
+                }
+            }
+        },
+        content = {}
+    )
+}
 
 
 @Composable
