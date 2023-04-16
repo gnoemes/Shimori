@@ -1,8 +1,11 @@
 package com.gnoemes.shimori.title.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -63,7 +66,7 @@ internal fun Characters(
 
 @Composable
 internal fun About(
-    title: ShimoriTitleEntity,
+    title: ShimoriTitleEntity?,
     //TODO restore
 //    onGenreClick: (Genre) -> Unit
 ) {
@@ -72,21 +75,32 @@ internal fun About(
         isMoreVisible = false,
         onClickMore = { },
         nonRowContent = {
-            val description = title.description
-            if (!description.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.secondary
+            if (title == null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(136.dp)
+                        .shimoriPlaceholder(
+                            visible = true,
+                        )
                 )
+            } else {
+                val description = title.description
+                if (!description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         },
         contentHorizontalArrangement = 8.dp,
-        sectionLoaded = true
+        sectionLoaded = title != null
     ) {
-        val genres = title.genres
+        val genres = title?.genres
         if (!genres.isNullOrEmpty()) {
             genres.forEach {
                 ShimoriChip(
