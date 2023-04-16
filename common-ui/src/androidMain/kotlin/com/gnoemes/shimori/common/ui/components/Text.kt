@@ -1,15 +1,24 @@
 package com.gnoemes.shimori.common.ui.components
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.theme.titleAnnounced
 import com.gnoemes.shimori.common.ui.theme.titleDiscontinued
@@ -144,6 +153,13 @@ private fun Description(
     text: AnnotatedString,
     modifier: Modifier
 ) {
+    val density = LocalDensity.current
+    val iconSize = remember(density) {
+        with(density) {
+            16.dp.toSp()
+        }
+    }
+
     Text(
         text = text,
         modifier = modifier,
@@ -153,15 +169,16 @@ private fun Description(
         inlineContent = mapOf(
             SCORE_IMAGE to InlineTextContent(
                 Placeholder(
-                    MaterialTheme.typography.labelMedium.fontSize,
-                    MaterialTheme.typography.labelMedium.fontSize,
+                    iconSize,
+                    iconSize,
                     PlaceholderVerticalAlign.Center
                 )
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star),
                     tint = MaterialTheme.colorScheme.secondary,
-                    contentDescription = ""
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         )
@@ -324,6 +341,7 @@ private fun buildText(
             scorePart()
             typePart()
         }
+
         else -> {
             scorePart()
             statusPart()
