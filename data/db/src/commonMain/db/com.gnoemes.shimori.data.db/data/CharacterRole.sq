@@ -9,9 +9,11 @@ CREATE TABLE character_role(
 
 CREATE INDEX role_index ON character_role(character_id, target_id, target_type);
 
-insert:
-INSERT OR REPLACE INTO character_role(character_id, target_id, target_type)
-VALUES (?,?,?);
+upsert:
+INSERT INTO character_role(character_id, target_id, target_type)
+VALUES (:character_id, :target_id, :target_type)
+ON CONFLICT(character_id, target_id, target_type)
+DO NOTHING;
 
 update:
 UPDATE character_role
