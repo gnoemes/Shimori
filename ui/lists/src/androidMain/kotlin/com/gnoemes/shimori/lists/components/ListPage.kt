@@ -264,7 +264,7 @@ private fun BoxScope.Incrementer(
     //up to 50
     val maxProgress = remember {
         titleSize.let {
-            if (initialProgress + INCREMENTATOR_MAX_PROGRESS >= actualSize) actualSize - initialProgress
+            if (it != null && initialProgress + INCREMENTATOR_MAX_PROGRESS >= actualSize) actualSize - initialProgress
             else INCREMENTATOR_MAX_PROGRESS
         }
     }
