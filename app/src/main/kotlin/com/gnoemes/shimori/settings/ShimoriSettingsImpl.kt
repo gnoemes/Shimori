@@ -3,9 +3,19 @@ package com.gnoemes.shimori.settings
 import android.content.Context
 import android.os.Build
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.gnoemes.shimori.base.core.settings.*
+import com.gnoemes.shimori.base.core.settings.AppAccentColor
+import com.gnoemes.shimori.base.core.settings.AppLocale
+import com.gnoemes.shimori.base.core.settings.AppTheme
+import com.gnoemes.shimori.base.core.settings.AppTitlesLocale
+import com.gnoemes.shimori.base.core.settings.Setting
+import com.gnoemes.shimori.base.core.settings.ShimoriSettings
 import com.gnoemes.shimori.data.core.entities.track.ListType
 import com.gnoemes.shimori.data.core.entities.track.TrackStatus
 import kotlinx.coroutines.flow.Flow
@@ -41,15 +51,19 @@ class ShimoriSettingsImpl constructor(
             get() = context.store.data
                 .catchIO()
                 .map { preferences ->
+                    val pref = preferences[TITlES_LOCALE]
+                    return@map if (pref == null) {
+                        val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            context.resources.configuration.locales[0].language
+                        } else {
+                            context.resources.configuration.locale.language
+                        }
 
-                    val default = when (preferences[LOCALE]?.let { AppLocale.from(it) }) {
-                        AppLocale.Russian -> AppTitlesLocale.Russian
-                        else -> AppTitlesLocale.English
-                    }
-
-                    preferences[TITlES_LOCALE]?.let {
-                        AppTitlesLocale.from(it)
-                    } ?: default
+                        when (AppLocale.from(language)) {
+                            AppLocale.Russian -> AppTitlesLocale.Russian
+                            else -> AppTitlesLocale.English
+                        }
+                    } else AppTitlesLocale.from(pref)
                 }
     }
 
