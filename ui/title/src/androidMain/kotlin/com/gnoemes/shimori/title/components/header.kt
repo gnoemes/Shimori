@@ -8,11 +8,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -31,12 +34,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gnoemes.shimori.common.ui.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.ui.components.DescriptionFormat
 import com.gnoemes.shimori.common.ui.components.EnlargedButton
 import com.gnoemes.shimori.common.ui.components.ReleaseDateDescription
 import com.gnoemes.shimori.common.ui.components.ShimoriButtonDefaults
+import com.gnoemes.shimori.common.ui.components.TitleDescription
 import com.gnoemes.shimori.common.ui.components.TitlePropertyInfo
 import com.gnoemes.shimori.common.ui.components.TrackIcon
 import com.gnoemes.shimori.common.ui.ignoreHorizontalParentPadding
+import com.gnoemes.shimori.common.ui.shimoriPlaceholder
+import com.gnoemes.shimori.common.ui.statusBarHeight
+import com.gnoemes.shimori.common.ui.theme.ShimoriDefaultRoundedCornerShape
 import com.gnoemes.shimori.common.ui.theme.accentRed
 import com.gnoemes.shimori.common.ui.theme.dimens
 import com.gnoemes.shimori.common.ui.utils.rememberDominantColorState
@@ -49,8 +57,139 @@ import com.gnoemes.shimori.data.core.entities.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.title.R
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun BackDropImage(
+internal fun TitleHeader(
+    title: TitleWithTrackEntity?,
+    openTrackEdit: (Long, TrackTargetType, Boolean) -> Unit,
+) {
+    Box {
+        BackDropImage(title?.entity?.image)
+        when (title) {
+            null -> TitleHeaderShimmer()
+            else -> TitleHeaderContent(title, openTrackEdit)
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.TitleHeaderShimmer() {
+    Column {
+        Spacer(modifier = Modifier.statusBarHeight(additional = 128.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .shimoriPlaceholder(
+                    visible = true,
+                )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            repeat(2) {
+                Box(
+                    modifier = Modifier
+                        .width(76.dp)
+                        .height(34.dp)
+                        .shimoriPlaceholder(
+                            visible = true,
+                        )
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .shimoriPlaceholder(
+                        visible = true,
+                        shape = ShimoriDefaultRoundedCornerShape
+                    )
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .shimoriPlaceholder(
+                        visible = true,
+                        shape = ShimoriDefaultRoundedCornerShape
+                    )
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .shimoriPlaceholder(
+                        visible = true,
+                        shape = ShimoriDefaultRoundedCornerShape
+                    )
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun BoxScope.TitleHeaderContent(
+    title: TitleWithTrackEntity,
+    openTrackEdit: (Long, TrackTargetType, Boolean) -> Unit,
+) {
+    val textCreator = LocalShimoriTextCreator.current
+    Column {
+        Spacer(modifier = Modifier.statusBarHeight(additional = 128.dp))
+        if (title.entity.isOngoing || (title.entity.rating ?: 0.0) > 0) {
+            TitleDescription(
+                title = title.entity,
+                format = DescriptionFormat.Title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+            )
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = textCreator.name(title = title.entity),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        TitleProperties(title.entity)
+        Spacer(modifier = Modifier.height(32.dp))
+        TitleActions(
+            title = title,
+            openListsEdit = openTrackEdit,
+            onFavoriteClick = { TODO() },
+            onShareClicked = { TODO() })
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun BackDropImage(
     image: ShimoriImage?
 ) {
     Box(
@@ -86,7 +225,7 @@ internal fun BackDropImage(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun TitleActions(
+private fun TitleActions(
     title: TitleWithTrackEntity,
     openListsEdit: (Long, TrackTargetType, Boolean) -> Unit,
     onFavoriteClick: () -> Unit,
@@ -178,7 +317,7 @@ internal fun TitleActions(
 }
 
 @Composable
-internal fun TitleProperties(title: ShimoriTitleEntity) {
+private fun TitleProperties(title: ShimoriTitleEntity) {
     val textCreator = LocalShimoriTextCreator.current
 
     Row(
