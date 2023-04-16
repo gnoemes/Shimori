@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -227,7 +226,7 @@ internal fun RowScope.Rewatches(
 ) {
     ProgressBox(
         modifier = Modifier
-            .widthIn(min = 112.dp)
+            .width(112.dp)
             .height(116.dp),
         onEditClicked = onEditClicked
     ) {
