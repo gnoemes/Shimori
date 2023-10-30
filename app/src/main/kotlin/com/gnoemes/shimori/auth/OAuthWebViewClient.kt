@@ -19,7 +19,7 @@ internal class OAuthWebViewClient(
         return super.shouldOverrideUrlLoading(view, request)
     }
 
-    override fun onPageFinished(view: WebView?, url: String?) {
+    override fun onPageFinished(view: WebView, url: String?) {
         super.onPageFinished(view, url)
         if (url == triggerUrl && targetUrl != null) {
             state.content = state.content.withUrl(targetUrl)
