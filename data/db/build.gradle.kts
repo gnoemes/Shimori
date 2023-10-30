@@ -3,6 +3,10 @@ plugins {
     id("com.squareup.sqldelight")
 }
 
+android {
+    namespace = "com.gnoemes.shimori.data.shared"
+}
+
 dependencies {
     commonMainImplementation(projects.base.shared)
     commonMainImplementation(projects.data.core)

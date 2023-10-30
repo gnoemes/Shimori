@@ -1,25 +1,13 @@
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 pluginManagement {
+    includeBuild("gradle/build-logic")
+
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-    }
-
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "kotlin-multiplatform") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-            if (requested.id.id == "com.android.library") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-            if (requested.id.id == "kotlinx-serialization") {
-                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
-            }
-        }
     }
 }
 
@@ -43,24 +31,34 @@ dependencyResolutionManagement {
     }
 }
 
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+}
+
 rootProject.name = "Shimori"
 
-include(":app")
+include(
+    ":app",
+    ":base:core",
+    ":base:shared",
+    ":common-ui",
+    ":common-ui-resources",
+    ":common-ui-imageloading",
+    ":data",
+    ":data:core",
+    ":data:db",
+    ":data:paging",
+    ":domain",
+    ":tasks",
+    ":shikimori",
+    ":shikimori-auth",
+    ":ui:home",
+    ":ui:auth",
+    ":ui:lists",
+    ":ui:lists:menu",
+    ":ui:lists:edit",
+    ":ui:settings",
+    ":ui:title",
 
-include(":base:core", ":base:shared")
-include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
-
-include(":data", ":data:core", ":data:db", ":data:paging")
-
-include(":domain")
-include(":tasks")
-
-include(":shikimori", ":shikimori-auth")
-
-include(":ui:home")
-include(":ui:auth")
-include(":ui:lists", ":ui:lists:menu", ":ui:lists:edit")
-include(":ui:settings")
-
-include(":ui:title")
-include(":source-api")
+    ":source-api"
+    )

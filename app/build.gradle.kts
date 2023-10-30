@@ -12,6 +12,8 @@ plugins {
 }
 
 android {
+    namespace = "com.gnoemes.shimori"
+
     buildFeatures {
         buildConfig = true
         compose = true
