@@ -1,8 +1,8 @@
 [versions]
-kotlin = "1.8.10"
+kotlin = "1.9.10"
 dateTime = "0.4.0"
-serilization = "1.4.1"
-coroutines = "1.6.4"
+serilization = "1.5.1"
+coroutines = "1.7.2"
 
 [libraries]
 gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
