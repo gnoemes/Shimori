@@ -1,10 +1,10 @@
 [versions]
 composeCompiler = "1.5.3"
-compose-bom = "2023.03.00"
-accompanist = "0.30.0"
+compose-bom = "2023.10.01"
+accompanist = "0.32.0"
 
 [libraries]
-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
+bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 animation-core = { module = "androidx.compose.animation:animation" }
 foundation-core = { module = "androidx.compose.foundation:foundation" }
 foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
@@ -18,7 +18,7 @@ ui-core = { module = "androidx.compose.ui:ui" }
 ui-util = { module = "androidx.compose.ui:ui-util" }
 ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 
-activity = "androidx.activity:activity-compose:1.7.0"
+activity = "androidx.activity:activity-compose:1.8.0"
 
 #Accompanist
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }

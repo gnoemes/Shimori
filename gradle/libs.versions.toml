@@ -45,11 +45,11 @@ google-crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.9.
 google-gmsGoogleServices = "com.google.gms:google-services:4.4.0"
 google-appDistribution = "com.google.firebase:firebase-appdistribution-gradle:4.0.1"
 #Voyager
-voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voyager" }
-voyager-tab-navigator = { module = "ca.gosyer:voyager-tab-navigator", version.ref = "voyager" }
-voyager-bottom-sheet-navigator = { module = "ca.gosyer:voyager-bottom-sheet-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = "voyager" }
-voyager-kodein = { module = "ca.gosyer:voyager-kodein", version.ref = "voyager" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-bottom-sheet-navigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyager" }
 
 #Tests
 junit = "junit:junit:4.13.2"
