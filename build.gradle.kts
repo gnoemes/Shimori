@@ -1,54 +1,26 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath(libs.sqldelight.gradle)
-        classpath(libs.google.gmsGoogleServices)
-        classpath(libs.google.crashlyticsGradle)
-        classpath(libs.google.appDistribution)
-        //android & kotlin gradle plugins in buildSrc/build.gradle.kts
-    }
-}
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
+    alias(kotlinx.plugins.detekt) apply false
+    alias(androidx.plugins.android.application) apply false
+    alias(androidx.plugins.android.library) apply false
+    alias(androidx.plugins.android.lint) apply false
+    alias(androidx.plugins.android.test) apply false
+    alias(androidx.plugins.cacheFixPlugin) apply false
+    alias(kotlinx.plugins.android) apply false
     alias(kotlinx.plugins.serialization) apply false
+    alias(kotlinx.plugins.parcelize) apply false
+    alias(libs.plugins.google.gmsGoogleServices) apply false
+    alias(libs.plugins.google.crashlytics) apply false
+    alias(libs.plugins.google.appDistribution) apply false
+    alias(compose.plugins.multiplatform) apply false
 }
 
-subprojects {
-    tasks.withType(KotlinCompile::class.java).configureEach {
-        kotlinOptions {
-            freeCompilerArgs += arrayOf(
-                // Enable experimental coroutines APIs, including Flow, context receivers
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview",
-                "-opt-in=kotlin.Experimental",
-                "-Xcontext-receivers",
-            )
-
-            // Set JVM target to 1.11
-            jvmTarget = JavaVersion.VERSION_11.toString()
-        }
-    }
-
-    configurations.configureEach {
-        // We forcefully exclude AppCompat + MDC from any transitive dependencies.
-        // This is a Compose app, so there's no need for these.
-        exclude(group = "androidx.appcompat")
-        exclude(group = "com.google.android.material", module = "material")
-
-        resolutionStrategy.eachDependency {
-            if (requested.group == "org.jetbrains.kotlinx"
-                && requested.module.name == "kotlinx-collections-immutable-jvm"
-            ) {
-                // kotlinx-collections-immutable-jvm 0.3.4+ is available on Maven Central
-                useVersion("0.3.4")
-            }
+allprojects {
+    tasks.withType<KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+            // Treat all Kotlin warnings as errors
+            allWarningsAsErrors = true
         }
     }
 }

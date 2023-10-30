@@ -3,8 +3,17 @@ package com.gnoemes.shimori
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.LibraryDefaultConfig
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
+
+internal val Project.libs: VersionCatalog
+    get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+internal val Project.compose: VersionCatalog
+    get() = extensions.getByType<VersionCatalogsExtension>().named("compose")
 
 fun Project.propOrDef(propertyName: String, defaultValue: Any): Any {
     var propertyValue = properties[propertyName]
