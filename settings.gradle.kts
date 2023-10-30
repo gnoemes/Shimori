@@ -8,6 +8,9 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+
+        // Prerelease versions of Compose Multiplatform
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
@@ -23,11 +26,14 @@ dependencyResolutionManagement {
             from(files("gradle/compose.versions.toml"))
         }
     }
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
     repositories {
         mavenCentral()
         google()
-        maven(url = "https://www.jitpack.io")
+        mavenLocal()
+
+        // Prerelease versions of Compose Multiplatform
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
