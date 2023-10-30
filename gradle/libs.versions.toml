@@ -3,14 +3,17 @@ napier = "2.6.1"
 settings = "0.8.1"
 kodein = "7.20.2"
 ktor = "2.3.5"
-sqlDelight = "1.5.5"
+sqlDelight = "2.0.0"
 coil = "2.4.0"
-voyager = "1.0.0-rc08"
+
+[plugins]
+buildConfig = "com.github.gmazzo.buildconfig:4.1.2"
+google-gmsGoogleServices = "com.google.gms.google-services:4.4.0"
+google-crashlytics = "com.google.firebase.crashlytics:2.9.9"
+google-appDistribution = "com.google.firebase.appdistribution:4.0.1"
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 [libraries]
-gradle-mobile-multiplatform = "dev.icerock:mobile-multiplatform:0.14.1"
-gradle-detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0-RC2"
-
 multiplatform-logs = { module = "io.github.aakira:napier", version.ref = "napier" }
 #multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 
@@ -27,11 +30,11 @@ ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 #SQLDelight
-sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
-sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
-sqldelight-driver-native = { module = "com.squareup.sqldelight:native-drive", version.ref = "sqlDelight" }
+sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-driver-native = { module = "app.cash.sqldelight:native-drive", version.ref = "sqlDelight" }
 
 #Coil
 coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -41,15 +44,7 @@ coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 #Google
 google-analytics = "com.google.firebase:firebase-analytics-ktx:21.4.0"
 google-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.5.1"
-google-crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
-google-gmsGoogleServices = "com.google.gms:google-services:4.4.0"
 google-appDistribution = "com.google.firebase:firebase-appdistribution-gradle:4.0.1"
-#Voyager
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
-voyager-bottom-sheet-navigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyager" }
 
 #Tests
 junit = "junit:junit:4.13.2"
@@ -59,13 +54,8 @@ mockK = "io.mockk:mockk:1.12.2"
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
 extendedGestures = "com.github.SmartToolFactory:Compose-Extended-Gestures:2.0.0"
 uuid = "com.benasher44:uuid:0.7.0"
-
-#//TODO remove with navigation refactoring
-material-motion-navigation = "io.github.fornewid:material-motion-compose-navigation:1.1.0"
-material-motion-core = "io.github.fornewid:material-motion-compose-core:0.10.3"
+tools-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.3"
 
 #for ktor logs
 slf4j = "org.slf4j:slf4j-simple:1.7.30"
 
-[bundles]
-voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions", "voyager-bottom-sheet-navigator", "voyager-kodein"]
