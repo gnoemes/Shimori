@@ -1,9 +1,10 @@
-import com.android.build.api.dsl.LibraryExtension
-import com.gnoemes.shimori.initConfigField
-
 plugins {
     id("multiplatform-library")
     kotlin("plugin.serialization")
+}
+
+android {
+    namespace = "com.gnoemes.shimori.base.shared"
 }
 
 dependencies {
