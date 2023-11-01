@@ -5,23 +5,23 @@ kodein = "7.20.2"
 ktor = "2.3.5"
 sqlDelight = "2.0.0"
 coil = "2.4.0"
+kotlininject = "0.6.3"
+ksp = "1.9.20-RC2-1.0.13"
+multiplatformsettings = "1.1.0"
 
 [plugins]
 buildConfig = "com.github.gmazzo.buildconfig:4.1.2"
 google-gmsGoogleServices = "com.google.gms.google-services:4.4.0"
 google-crashlytics = "com.google.firebase.crashlytics:2.9.9"
 google-appDistribution = "com.google.firebase.appdistribution:4.0.1"
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 [libraries]
 multiplatform-logs = { module = "io.github.aakira:napier", version.ref = "napier" }
-#multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
+multiplatform-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformsettings" }
+multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformsettings" }
 
-#kodein
-kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
-kodein-jvm = { module = "org.kodein.di:kodein-di-generic-jvm", version.ref = "kodein" }
-kodein-android-core = { module = "org.kodein.di:kodein-di-framework-android-core", version.ref = "kodein" }
-kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
 #ktor
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -35,6 +35,10 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqldelight-driver-native = { module = "app.cash.sqldelight:native-drive", version.ref = "sqlDelight" }
+#inject
+kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlininject" }
+kotlininject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlininject" }
+
 
 #Coil
 coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
