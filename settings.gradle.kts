@@ -44,7 +44,7 @@ plugins {
 rootProject.name = "Shimori"
 
 include(
-//    ":app",
+//    ":android-app",
     ":core:base",
     ":core:settings",
     ":core:preferences",
