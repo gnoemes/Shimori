@@ -7,7 +7,7 @@ import com.gnoemes.shimori.readVersion
 
 plugins {
     id("com.android.application")
-    id("android-app")
+    id("android-android-app")
     kotlin("plugin.serialization")
 }
 
@@ -43,11 +43,11 @@ android {
         }
     }
 
-    val useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
+    val useReleaseKeystore = rootProject.file("release/android-app-release.jks").exists()
 
     signingConfigs {
         getByName("debug") {
-            storeFile = rootProject.file("release/app-debug.jks")
+            storeFile = rootProject.file("release/android-app-debug.jks")
             storePassword = "password"
             keyAlias = "debugkey"
             keyPassword = "password"
@@ -55,7 +55,7 @@ android {
 
         create("release") {
             if (useReleaseKeystore) {
-                storeFile = rootProject.file("release/app-release.jks")
+                storeFile = rootProject.file("release/android-app-release.jks")
                 storePassword = propOrDef("ReleaseStorePassword", "").toString()
                 keyAlias = "shimori"
                 keyPassword = propOrDef("ReleaseKeyPassword", "").toString()
