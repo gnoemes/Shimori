@@ -45,7 +45,12 @@ rootProject.name = "Shimori"
 
 include(
 //    ":app",
-//    ":base:core",
+    ":core:base",
+    ":core:settings",
+    ":core:preferences",
+    ":core:logging:api",
+    ":core:logging:impl"
+//    ":core:logging"
 //    ":base:shared",
 //    ":common-ui",
 //    ":common-ui-resources",
