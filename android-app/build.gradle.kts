@@ -1,24 +1,18 @@
-@file:Suppress("UnstableApiUsage")
-
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import com.gnoemes.shimori.initConfigField
-import com.gnoemes.shimori.propOrDef
-import com.gnoemes.shimori.readVersion
+import com.gnoemes.shimori.convention.initConfigField
+import com.gnoemes.shimori.convention.propOrDef
+import com.gnoemes.shimori.convention.readVersion
 
 plugins {
-    id("com.android.application")
-    id("android-android-app")
-    kotlin("plugin.serialization")
+    id("com.gnoemes.shimori.android.application")
+    id("com.gnoemes.shimori.kotlin.android")
+    id("com.gnoemes.shimori.compose")
 }
+
+val useReleaseKeystore = rootProject.file("release/android-app-release.jks").exists()
 
 android {
     namespace = "com.gnoemes.shimori"
-
-    buildFeatures {
-        buildConfig = true
-        compose = true
-    }
-    composeOptions.kotlinCompilerExtensionVersion = compose.versions.composeCompiler.get()
 
     val version = readVersion("${project.projectDir}/version.properties")
 
@@ -43,7 +37,9 @@ android {
         }
     }
 
-    val useReleaseKeystore = rootProject.file("release/android-app-release.jks").exists()
+    buildFeatures {
+        buildConfig = true
+    }
 
     signingConfigs {
         getByName("debug") {
@@ -64,19 +60,16 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            signingConfig =
-                if (useReleaseKeystore) signingConfigs.getByName("release")
-                else signingConfigs.getByName("debug")
-
+        debug {
+            signingConfig = signingConfigs["debug"]
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-dev"
+        }
+        release {
+            signingConfig = signingConfigs[if (useReleaseKeystore) "release" else "debug"]
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-dev"
         }
         create("qa") {
             matchingFallbacks.add("release")
@@ -88,64 +81,40 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
+
+    flavorDimensions += "mode"
+    productFlavors {
+        create("complete") {
+            dimension = "mode"
+        }
+    }
+
+    packaging {
+        resources.excludes += setOf(
+            // Exclude AndroidX version files
+            "META-INF/*.version",
+            // Exclude consumer proguard files
+            "META-INF/proguard/*",
+            // Exclude the Firebase/Fabric/other random properties files
+            "/*.properties",
+            "fabric/*.properties",
+            "META-INF/*.properties",
+            // License files
+            "LICENSE*",
+            // Exclude Kotlin unused files
+            "META-INF/**/previous-compilation-data.bin",
+        )
+    }
 }
 
 dependencies {
-    implementation(projects.base.shared)
-    implementation(projects.commonUi)
-    implementation(projects.commonUiResources)
-    implementation(projects.commonUiImageloading)
+    completeImplementation(projects.app.complete)
 
-    implementation(projects.data)
-    implementation(projects.data.db)
-    implementation(projects.sourceApi)
-    implementation(projects.domain)
-    implementation(projects.tasks)
-
-    implementation(projects.shikimori)
-    implementation(projects.shikimoriAuth)
-
-    implementation(projects.ui.home)
-    implementation(projects.ui.auth)
-    implementation(projects.ui.lists)
-    implementation(projects.ui.lists.menu)
-    implementation(projects.ui.lists.edit)
-    implementation(projects.ui.settings)
-    implementation(projects.ui.title)
-
-    implementation(kotlinx.coroutines.android)
-
+    implementation(androidx.activity)
+    implementation(androidx.browser)
     implementation(androidx.splashscreen)
-    implementation(androidx.datastore)
-    implementation(androidx.bundles.lifecycle)
-    implementation(androidx.fragment)
-    implementation(androidx.navigation.compose)
-
-    implementation(platform(compose.bom))
-    implementation(compose.activity)
-    implementation(compose.bundles.core)
-
-    implementation(compose.accompanist.systemuicontroller)
-    implementation(compose.accompanist.navigationmaterial)
-    implementation(compose.accompanist.placeholder)
-    implementation(compose.accompanist.webview)
-
-    implementation(libs.coil.compose)
-    implementation(libs.kodein.compose)
-
-    implementation(libs.material.motion.navigation)
-    implementation(libs.bundles.voyager)
-
-    implementation(libs.ktor.logging)
-    implementation(libs.ktor.contentNegotiation)
-    implementation(libs.ktor.serialization.json)
-    implementation(libs.ktor.okhttp)
-    implementation(libs.ktor.auth)
-
-    implementation(libs.google.analytics)
-    implementation(libs.google.crashlytics)
-
-    implementation(libs.slf4j)
+    implementation(kotlinx.coroutines.android)
+    implementation(composelibs.activity)
 }
 
 val firebaseAppId = project.propOrDef("firebaseAppId", "").toString()
@@ -169,3 +138,6 @@ if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
     apply(plugin = "com.google.firebase.crashlytics")
 }
+
+fun DependencyHandler.completeImplementation(dependencyNotation: Any) =
+    add("completeImplementation", dependencyNotation)

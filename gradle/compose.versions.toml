@@ -9,5 +9,4 @@ multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplat
 gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
 activity = "androidx.activity:activity-compose:1.8.0"
-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform"}
 material3-windowsizeclass = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.1"

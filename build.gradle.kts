@@ -13,7 +13,7 @@ plugins {
     alias(libs.plugins.google.gmsGoogleServices) apply false
     alias(libs.plugins.google.crashlytics) apply false
     alias(libs.plugins.google.appDistribution) apply false
-    alias(compose.plugins.multiplatform) apply false
+    alias(composelibs.plugins.multiplatform) apply false
 }
 
 allprojects {

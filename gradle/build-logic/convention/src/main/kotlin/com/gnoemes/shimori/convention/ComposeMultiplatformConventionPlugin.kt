@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.convention
 
-import com.gnoemes.shimori.compose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

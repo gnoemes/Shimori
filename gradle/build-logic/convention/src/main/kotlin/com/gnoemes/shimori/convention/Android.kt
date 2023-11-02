@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.convention
 
 import com.android.build.gradle.BaseExtension
-import com.gnoemes.shimori.libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
