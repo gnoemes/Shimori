@@ -9,7 +9,7 @@ plugins {
     id("com.gnoemes.shimori.compose")
 }
 
-val useReleaseKeystore = rootProject.file("release/android-app-release.jks").exists()
+val useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
 
 android {
     namespace = "com.gnoemes.shimori"
@@ -43,7 +43,7 @@ android {
 
     signingConfigs {
         getByName("debug") {
-            storeFile = rootProject.file("release/android-app-debug.jks")
+            storeFile = rootProject.file("release/app-debug.jks")
             storePassword = "password"
             keyAlias = "debugkey"
             keyPassword = "password"
@@ -51,7 +51,7 @@ android {
 
         create("release") {
             if (useReleaseKeystore) {
-                storeFile = rootProject.file("release/android-app-release.jks")
+                storeFile = rootProject.file("release/app-release.jks")
                 storePassword = propOrDef("ReleaseStorePassword", "").toString()
                 keyAlias = "shimori"
                 keyPassword = propOrDef("ReleaseKeyPassword", "").toString()
