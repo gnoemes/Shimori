@@ -15,6 +15,8 @@ kotlin {
                 api(projects.core.logging.impl)
                 api(projects.core.settings)
                 api(projects.core.preferences)
+
+                api(projects.common.ui.compose)
             }
         }
 

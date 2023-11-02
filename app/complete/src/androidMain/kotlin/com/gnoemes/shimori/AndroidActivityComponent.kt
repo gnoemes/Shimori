@@ -13,4 +13,5 @@ abstract class AndroidActivityComponent(
     @Component val applicationComponent: AndroidApplicationComponent
 ) : SharedActivityComponent {
 
+    companion object
 }
