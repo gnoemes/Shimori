@@ -57,9 +57,10 @@ include(
     ":core:preferences",
     ":core:logging:api",
     ":core:logging:impl",
+    ":common:ui:compose",
     ":app:core",
     ":app:complete",
-//    ":android-app",
+    ":android-app",
 //    ":core:logging"
 //    ":base:shared",
 //    ":common-ui",
