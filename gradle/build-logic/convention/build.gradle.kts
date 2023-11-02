@@ -20,7 +20,7 @@ dependencies {
     compileOnly(kotlinx.gradle.detekt)
     compileOnly(androidx.gradle)
     compileOnly(kotlinx.gradle)
-    compileOnly(compose.gradle)
+    compileOnly(composelibs.gradle)
     compileOnly(libs.google.appDistribution)
 }
 

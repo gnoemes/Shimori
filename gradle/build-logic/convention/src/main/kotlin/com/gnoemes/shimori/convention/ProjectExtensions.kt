@@ -1,4 +1,4 @@
-package com.gnoemes.shimori
+package com.gnoemes.shimori.convention
 
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.LibraryDefaultConfig
@@ -13,7 +13,7 @@ internal val Project.libs: VersionCatalog
     get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 internal val Project.compose: VersionCatalog
-    get() = extensions.getByType<VersionCatalogsExtension>().named("compose")
+    get() = extensions.getByType<VersionCatalogsExtension>().named("composelibs")
 
 fun Project.propOrDef(propertyName: String, defaultValue: Any): Any {
     var propertyValue = properties[propertyName]

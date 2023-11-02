@@ -1,5 +1,11 @@
 
 dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
+
     versionCatalogs {
         create("kotlinx") {
             from(files("../kotlin.versions.toml"))
@@ -7,18 +13,12 @@ dependencyResolutionManagement {
         create("androidx") {
             from(files("../androidx.versions.toml"))
         }
-        create("compose") {
+        create("composelibs") {
             from(files("../compose.versions.toml"))
         }
         create("libs") {
             from(files("../libs.versions.toml"))
         }
-    }
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-        maven(url = "https://www.jitpack.io")
     }
 }
 

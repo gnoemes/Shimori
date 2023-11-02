@@ -1,14 +1,19 @@
 package com.gnoemes.shimori.base.entities
 
-data class PlatformInfo(
+data class ApplicationInfo(
     val packageName: String,
-    val type: Type,
+    val platform: Platform,
+    val flavor: Flavor,
     val debug: Boolean,
     val versionName: String,
     val versionCode: Int,
     val defaultLocale: String,
-) {
-    enum class Type {
-        Android, Jvm, Ios
-    }
+)
+
+enum class Flavor {
+    Complete,
+}
+
+enum class Platform {
+    Android, Jvm, Ios
 }

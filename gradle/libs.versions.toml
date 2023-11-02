@@ -6,15 +6,14 @@ ktor = "2.3.5"
 sqlDelight = "2.0.0"
 coil = "2.4.0"
 kotlininject = "0.6.3"
-ksp = "1.9.20-RC2-1.0.13"
 multiplatformsettings = "1.1.0"
+circuit = "0.15.0"
 
 [plugins]
 buildConfig = "com.github.gmazzo.buildconfig:4.1.2"
 google-gmsGoogleServices = "com.google.gms.google-services:4.4.0"
 google-crashlytics = "com.google.firebase.crashlytics:2.9.9"
 google-appDistribution = "com.google.firebase.appdistribution:4.0.1"
-google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 [libraries]
@@ -29,16 +28,24 @@ ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
 #SQLDelight
 sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqldelight-driver-native = { module = "app.cash.sqldelight:native-drive", version.ref = "sqlDelight" }
+
 #inject
 kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlininject" }
 kotlininject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlininject" }
 
+#circuit
+circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
+circuit-gestureNavigation = { module = "com.slack.circuit:circuitx-gesture-navigation", version.ref = "circuit" }
+circuit-overlay = { module = "com.slack.circuit:circuit-overlay", version.ref = "circuit" }
+circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref = "circuit" }
+circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
 
 #Coil
 coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }

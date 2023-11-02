@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.preferences
 
-import com.gnoemes.shimori.base.entities.PlatformInfo
+import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.settings.AppAccentColor
 import com.gnoemes.shimori.settings.AppLocale
@@ -18,7 +18,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class ShimoriSettingsImpl(
     private val storage: AppObservableSettings,
-    private val platformInfo: PlatformInfo,
+    private val applicationInfo: ApplicationInfo,
     dispatchers: AppCoroutineDispatchers,
 ) : ShimoriSettings {
     private val flowSettings by lazy { storage.toFlowSettings(dispatchers.io) }
@@ -38,7 +38,7 @@ class ShimoriSettingsImpl(
 
         override val observe: Flow<AppTitlesLocale>
             get() = flowSettings.getIntOrNullFlow(TITLES_LOCALE).map { locale ->
-                if (locale == null) when (AppLocale.from(platformInfo.defaultLocale)) {
+                if (locale == null) when (AppLocale.from(applicationInfo.defaultLocale)) {
                     AppLocale.Russian -> AppTitlesLocale.Russian
                     else -> AppTitlesLocale.English
                 }
@@ -54,7 +54,7 @@ class ShimoriSettingsImpl(
 
         override val observe: Flow<AppLocale>
             get() = flowSettings.getIntOrNullFlow(APP_LOCALE).map { locale ->
-                if (locale == null) AppLocale.from(platformInfo.defaultLocale)
+                if (locale == null) AppLocale.from(applicationInfo.defaultLocale)
                 else AppLocale.from(locale)
             }
     }

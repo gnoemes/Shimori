@@ -1,10 +1,9 @@
-package com.gnoemes.shimori.common.ui
+package com.gnoemes.shimori
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.fragment.app.FragmentActivity
 
 abstract class BaseActivity : ComponentActivity() {
 
