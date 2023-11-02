@@ -58,6 +58,7 @@ include(
     ":core:logging:api",
     ":core:logging:impl",
     ":common:ui:compose",
+    ":data:models",
     ":app:core",
     ":app:complete",
     ":android-app",
