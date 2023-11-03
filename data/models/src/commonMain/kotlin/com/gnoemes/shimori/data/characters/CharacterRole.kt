@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.characters
 
 import com.gnoemes.shimori.data.ShimoriEntity
-import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
+import com.gnoemes.shimori.data.track.TrackTargetType
 
 data class CharacterRole(
     override val id: Long = 0,

@@ -17,11 +17,12 @@ detekt {
 }
 
 dependencies {
-    compileOnly(kotlinx.gradle.detekt)
     compileOnly(androidx.gradle)
     compileOnly(kotlinx.gradle)
+    compileOnly(kotlinx.gradle.detekt)
     compileOnly(composelibs.gradle)
     compileOnly(libs.google.appDistribution)
+    compileOnly(libs.sqldelight.gradle)
 }
 
 gradlePlugin {
