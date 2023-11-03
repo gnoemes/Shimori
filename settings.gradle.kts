@@ -85,5 +85,7 @@ include(
 //    ":ui:settings",
 //    ":ui:title",
 //
-//    ":source-api"
+    ":source-api:core",
+    ":source-api:catalogue",
+    ":source-api:track",
     )
