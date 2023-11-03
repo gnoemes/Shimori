@@ -2,8 +2,8 @@ package com.gnoemes.shimori.data.titles.ranobe
 
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.TitleWithTrack
-import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
 import com.gnoemes.shimori.data.track.Track
+import com.gnoemes.shimori.data.track.TrackTargetType
 
 @kotlinx.serialization.Serializable
 data class RanobeWithTrack(

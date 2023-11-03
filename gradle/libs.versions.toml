@@ -7,6 +7,7 @@ sqlDelight = "2.0.0"
 coil = "2.4.0"
 kotlininject = "0.6.3"
 multiplatformsettings = "1.1.0"
+paging-multiplatform = "3.2.0-alpha05-0.2.3"
 circuit = "0.15.0"
 
 [plugins]
@@ -20,6 +21,8 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 multiplatform-logs = { module = "io.github.aakira:napier", version.ref = "napier" }
 multiplatform-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformsettings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformsettings" }
+multiplatform-paging-common = { module = "app.cash.paging:paging-common", version.ref = "paging-multiplatform" }
+multiplatform-paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging-multiplatform" }
 
 #ktor
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -32,9 +35,12 @@ ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", 
 #SQLDelight
 sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
-sqldelight-driver-native = { module = "app.cash.sqldelight:native-drive", version.ref = "sqlDelight" }
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-paging = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref = "sqlDelight" }
+sqldelight-primitive = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqlDelight" }
+sqldelight-dialects-sql = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "sqlDelight" }
 
 #inject
 kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlininject" }
@@ -64,7 +70,7 @@ mockK = "io.mockk:mockk:1.12.2"
 #Other
 leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
 extendedGestures = "com.github.SmartToolFactory:Compose-Extended-Gestures:2.0.0"
-uuid = "com.benasher44:uuid:0.7.0"
+uuid = "com.benasher44:uuid:0.8.1"
 tools-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.3"
 
 #for ktor logs

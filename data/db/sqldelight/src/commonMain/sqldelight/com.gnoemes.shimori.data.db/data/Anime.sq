@@ -1,0 +1,111 @@
+import com.gnoemes.shimori.data.common.AgeRating;
+import com.gnoemes.shimori.data.common.Genre;
+import com.gnoemes.shimori.data.common.TitleStatus;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.collections.List;
+import kotlinx.datetime.Instant;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE anime (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    anime_type TEXT,
+    rating REAL,
+    status TEXT AS TitleStatus,
+    episodes INTEGER AS Int NOT NULL,
+    episodes_aired INTEGER AS Int NOT NULL,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER,
+    genres TEXT AS List<Genre>,
+    duration INTEGER AS Int,
+    next_episode INTEGER AS Int,
+    next_episode_date INTEGER AS Instant,
+    next_episode_end_date INTEGER AS Instant
+);
+
+CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
+
+insert:
+INSERT OR REPLACE INTO anime(name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE anime
+SET
+ id = :id,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ anime_type = coalesce(:anime_type, anime_type),
+ rating = coalesce(:rating, rating),
+ status = coalesce(:status , status),
+ episodes = :episodes,
+ episodes_aired = :episodes_aired,
+ date_aired = coalesce(:date_aired, date_aired),
+ date_released = coalesce(:date_released, date_released),
+ age_rating = CASE WHEN :age_rating = "NONE" THEN age_rating ELSE :age_rating END,
+ description = coalesce(:description, description),
+ description_html = coalesce(:description_html, description_html),
+ franchise = coalesce(:franchise, franchise),
+ favorite = :favorite,
+ topic_id  = coalesce(:topic_id, topic_id),
+ genres = coalesce(:genres, genres),
+ duration = coalesce(:duration, duration),
+ next_episode = coalesce(:next_episode, next_episode),
+ next_episode_date = coalesce(:next_episode_date, next_episode_date),
+ next_episode_end_date = coalesce(:next_episode_end_date, next_episode_end_date)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM anime;
+
+deleteById:
+DELETE FROM anime WHERE id = :id;
+
+countWithStatus:
+SELECT COUNT(*) FROM anime AS title
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+WHERE r.status = :status;
+
+queryAll:
+SELECT * FROM anime;
+
+queryById:
+SELECT * FROM anime WHERE id = :id;
+
+queryByIdWithTrack:
+SELECT * FROM anime AS title
+LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE title.id = :id;
+
+queryByStatus:
+SELECT * FROM anime AS title
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE r.status = :status;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

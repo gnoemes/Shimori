@@ -3,6 +3,7 @@ package com.gnoemes.shimori.app.core.inject
 import com.gnoemes.shimori.base.inject.ApplicationCoroutineScope
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.data.SqlDelightDatabaseComponent
 import com.gnoemes.shimori.logging.impl.LoggerComponent
 import com.gnoemes.shimori.preferences.PreferencesComponent
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +18,9 @@ expect interface SharedPlatformApplicationComponent
 interface SharedApplicationComponent :
     SharedPlatformApplicationComponent,
     PreferencesComponent,
-    LoggerComponent {
+    LoggerComponent,
+    SqlDelightDatabaseComponent
+{
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @ApplicationScope

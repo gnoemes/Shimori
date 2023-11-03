@@ -59,6 +59,8 @@ include(
     ":core:logging:impl",
     ":common:ui:compose",
     ":data:models",
+    ":data:db:api",
+    ":data:db:sqldelight",
     ":app:core",
     ":app:complete",
     ":android-app",

@@ -1,11 +1,11 @@
 package com.gnoemes.shimori.data
 
+import com.gnoemes.shimori.data.common.AgeRating
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.ShimoriImage
-import com.gnoemes.shimori.data.core.entities.common.AgeRating
-import com.gnoemes.shimori.data.core.entities.common.Genre
-import com.gnoemes.shimori.data.core.entities.common.TitleStatus
-import com.gnoemes.shimori.data.core.entities.track.TrackTargetType
+import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.track.Track
+import com.gnoemes.shimori.data.track.TrackTargetType
 import kotlinx.datetime.LocalDate
 
 interface ShimoriEntity {
@@ -20,6 +20,7 @@ interface ShimoriContentEntity : ShimoriEntity {
 
     val url: String?
 }
+
 interface ShimoriTitleEntity : ShimoriContentEntity {
     val size: Int?
     val type: TrackTargetType
