@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.source.data
 
-import com.gnoemes.shimori.data.roles.RolesInfo
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -11,5 +10,4 @@ interface MangaDataSource {
 
     suspend fun get(title: Manga): MangaWithTrack
 
-    suspend fun roles(title: Manga): RolesInfo
 }

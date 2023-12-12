@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.data.util
 
+import com.gnoemes.shimori.base.utils.Mapper
+import com.gnoemes.shimori.base.utils.TwoWayMapper
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.characters.Character
@@ -171,7 +173,6 @@ internal fun animeWithTrack(
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
-    next_episode_end_date: Instant?,
     id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
@@ -192,7 +193,7 @@ internal fun animeWithTrack(
         url, anime_type, rating, status, episodes, episodes_aired,
         date_aired, date_released, age_rating, description, description_html,
         franchise, favorite, topic_id, genres,
-        duration, next_episode, next_episode_date, next_episode_end_date,
+        duration, next_episode, next_episode_date,
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
@@ -229,8 +230,8 @@ internal fun anime(
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
-    next_episode_end_date: Instant?,
 ) = Anime(
+
     id = id,
     name = name,
     nameRu = name_ru,
@@ -251,7 +252,6 @@ internal fun anime(
     dateReleased = date_released,
     nextEpisode = next_episode,
     nextEpisodeDate = next_episode_date,
-    nextEpisodeEndDate = next_episode_end_date,
     ageRating = age_rating,
     duration = duration,
     description = description,
@@ -281,7 +281,6 @@ val animeListViewMapper: (
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
-    next_episode_end_date: Instant?,
     trackId: Long,
     trackStatus: TrackStatus,
     score: Int?,
@@ -294,7 +293,7 @@ val animeListViewMapper: (
 ) -> AnimeWithTrack = { id, name, nameRu, nameEn,
                         imageOriginal, imagePreview, imageX96, imageX48,
                         animeType, rating, status, episodes, episodesAired,
-                        dateAired, dateReleased, duration, nextEpisode, nextEpisodeDate, nextEpisodeEndDate,
+                        dateAired, dateReleased, duration, nextEpisode, nextEpisodeDate,
                         trackId, trackStatus, score, comment, progress, reCounter, dateCreated, dateUpdated, pinId ->
     animeWithTrack(
         id = id,
@@ -323,7 +322,6 @@ val animeListViewMapper: (
         duration = duration,
         next_episode = nextEpisode,
         next_episode_date = nextEpisodeDate,
-        next_episode_end_date = nextEpisodeEndDate,
         id_ = trackId,
         target_id = id,
         target_type = TrackTargetType.ANIME,
@@ -742,7 +740,6 @@ internal fun pinPaginated(
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
-    next_episode_end_date: Instant?,
     id_: Long,
     target_id: Long,
     target_type: TrackTargetType,
@@ -785,7 +782,6 @@ internal fun pinPaginated(
             duration,
             next_episode,
             next_episode_date,
-            next_episode_end_date,
             id_,
             target_id,
             target_type,

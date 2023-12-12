@@ -1,7 +1,6 @@
 package com.gnoemes.shimori
 
 import android.app.Application
-import com.gnoemes.shimori.app.core.appinitializers.AppInitializers
 import com.gnoemes.shimori.app.core.inject.SharedApplicationComponent
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import me.tatarka.inject.annotations.Component
@@ -14,7 +13,7 @@ abstract class AndroidApplicationComponent(
 ) : SharedApplicationComponent,
     DefaultApplicationComponent {
 
-    abstract val initializers: AppInitializers
+//    abstract val initializers: AppInitializers
 
     companion object
 }

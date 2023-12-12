@@ -12,8 +12,8 @@ class MainActivity : BaseActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        val component =
-            AndroidActivityComponent.create(this, AndroidApplicationComponent.from(this))
+//        val component =
+//            AndroidActivityComponent.create(this, AndroidApplicationComponent.from(this))
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 

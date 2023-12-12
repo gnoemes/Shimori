@@ -9,7 +9,6 @@ import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.adapters.GenresAdapter
-import com.gnoemes.shimori.data.adapters.InstantAdapter
 import com.gnoemes.shimori.data.adapters.LocalDateAdapter
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.TitleStatus
@@ -75,7 +74,6 @@ class AnimeDaoImpl(
                     it.duration,
                     it.nextEpisode,
                     it.nextEpisodeDate,
-                    it.nextEpisodeEndDate,
                 )
                 val localId = animeQueries.selectLastInsertedRowId().executeAsOne()
                 syncRemoteIds(sourceId, localId, remote.id, syncDataType)
@@ -112,8 +110,6 @@ class AnimeDaoImpl(
                     it.genres?.let(GenresAdapter::encode),
                     it.duration?.toLong(),
                     it.nextEpisode?.toLong(),
-                    it.nextEpisodeDate?.let(InstantAdapter::encode),
-                    it.nextEpisodeEndDate?.let(InstantAdapter::encode),
                 )
 
                 syncRemoteIds(sourceId, local.id, remote.id, syncDataType)

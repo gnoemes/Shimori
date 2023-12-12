@@ -1,0 +1,112 @@
+fragment AnimeShort on Anime {
+    id
+    name
+    russian
+    japanese
+    kind
+    score
+    status
+    rating
+    episodes
+    episodesAired
+    nextEpisodeAt
+    duration
+    airedOn { year month day date }
+    releasedOn { year month day date }
+    poster { ...PosterShort }
+    url
+}
+
+fragment MangaShort on Manga {
+    id
+    name
+    russian
+    japanese
+    kind
+    score
+    status
+    chapters
+    volumes
+    airedOn { year month day date }
+    releasedOn { year month day date }
+    poster { ...PosterShort}
+    url
+}
+
+fragment CharacterShort on Character {
+    id
+    name
+    russian
+    japanese
+    poster { ...PosterShort }
+    url
+}
+
+fragment PersonShort on Person {
+    id
+    name
+    russian
+    japanese
+    poster { ...PosterShort }
+    url
+}
+
+fragment AnimeUserRate on UserRate {
+    id
+    status
+    episodes
+    rewatches
+    score
+    text
+    createdAt
+    updatedAt
+    anime {
+        id
+    }
+}
+
+fragment AnimeUserRateWithModel on UserRate {
+    id
+    status
+    episodes
+    rewatches
+    score
+    text
+    createdAt
+    updatedAt
+    anime {
+        ...AnimeShort
+    }
+}
+
+fragment MangaUserRate on UserRate {
+    id
+    status
+    chapters
+    volumes
+    score
+    text
+    createdAt
+    updatedAt
+    manga {
+        id
+    }
+}
+
+fragment MangaUserRateWithModel on UserRate {
+    id
+    status
+    chapters
+    volumes
+    score
+    text
+    createdAt
+    updatedAt
+    manga {
+        ...MangaShort
+    }
+}
+
+fragment PosterShort on Poster {
+    originalUrl mainUrl previewUrl
+}

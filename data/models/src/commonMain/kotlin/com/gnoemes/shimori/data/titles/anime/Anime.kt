@@ -27,7 +27,6 @@ data class Anime(
     override val dateReleased: LocalDate? = null,
     val nextEpisode: Int? = null,
     val nextEpisodeDate: Instant? = null,
-    val nextEpisodeEndDate: Instant? = null,
     override val ageRating: AgeRating = AgeRating.NONE,
     //minutes
     val duration: Int? = null,

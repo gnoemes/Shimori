@@ -33,8 +33,7 @@ CREATE TABLE anime (
     genres TEXT AS List<Genre>,
     duration INTEGER AS Int,
     next_episode INTEGER AS Int,
-    next_episode_date INTEGER AS Instant,
-    next_episode_end_date INTEGER AS Instant
+    next_episode_date INTEGER AS Instant
 );
 
 CREATE INDEX anime_next_episode_date ON anime(next_episode_date);
@@ -43,8 +42,8 @@ insert:
 INSERT OR REPLACE INTO anime(name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, anime_type, rating, status, episodes, episodes_aired,
 date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
-topic_id, genres, duration, next_episode, next_episode_date, next_episode_end_date)
-VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+topic_id, genres, duration, next_episode, next_episode_date)
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
 UPDATE anime
@@ -73,9 +72,7 @@ SET
  topic_id  = coalesce(:topic_id, topic_id),
  genres = coalesce(:genres, genres),
  duration = coalesce(:duration, duration),
- next_episode = coalesce(:next_episode, next_episode),
- next_episode_date = coalesce(:next_episode_date, next_episode_date),
- next_episode_end_date = coalesce(:next_episode_end_date, next_episode_end_date)
+ next_episode = coalesce(:next_episode, next_episode)
  WHERE id = :id;
 
 deleteAll:

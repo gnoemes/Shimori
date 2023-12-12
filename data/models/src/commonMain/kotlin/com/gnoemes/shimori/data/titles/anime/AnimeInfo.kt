@@ -7,6 +7,8 @@ data class AnimeInfo(
     val track: Track?,
     val videos: List<AnimeVideo>?,
     val screenshots: List<AnimeScreenshot>?,
+    val fanDubbers: List<String>,
+    val fanSubbers: List<String>,
     //TODO
 //    val genres
 //    val translators

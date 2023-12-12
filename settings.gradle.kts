@@ -61,6 +61,8 @@ include(
     ":data:models",
     ":data:db:api",
     ":data:db:sqldelight",
+    ":data:sources:manager",
+    ":data:sources:shikimori:core",
     ":app:core",
     ":app:complete",
     ":android-app",
@@ -85,6 +87,7 @@ include(
 //    ":ui:settings",
 //    ":ui:title",
 //
+
     ":source-api:core",
     ":source-api:catalogue",
     ":source-api:track",

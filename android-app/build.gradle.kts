@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import com.gnoemes.shimori.convention.initConfigField
 import com.gnoemes.shimori.convention.propOrDef
 import com.gnoemes.shimori.convention.readVersion
 
@@ -29,12 +28,6 @@ android {
         versionCode = appVersionCode
         versionName = appVersionName
         setProperty("archivesBaseName", "Shimori-v$appVersionName($appVersionCode)")
-
-        with(project) {
-            initConfigField(this@defaultConfig, "ShikimoriClientId", "none")
-            initConfigField(this@defaultConfig, "ShikimoriClientSecret", "none")
-            initConfigField(this@defaultConfig, "ShikimoriBaseUrl")
-        }
     }
 
     buildFeatures {
