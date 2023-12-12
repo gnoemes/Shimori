@@ -1,3 +1,5 @@
+import com.gnoemes.shimori.convention.propOrDef
+
 plugins {
     id("com.gnoemes.shimori.kotlin.multiplatform")
     alias(libs.plugins.graphql.apollo3)
@@ -11,12 +13,12 @@ buildConfig {
     buildConfigField(
         type = "String",
         name = "ShikimoriClientId",
-        value = "\"${properties["ShikimoriClientId"]?.toString() ?: "none"}\"",
+        value = "\"${propOrDef("ShikimoriClientId", "none")}\"",
     )
     buildConfigField(
         type = "String",
         name = "ShikimoriClientSecret",
-        value = "\"${properties["ShikimoriClientSecret"]?.toString() ?: "none"}\"",
+        value = "\"${propOrDef("ShikimoriClientSecret", "none")}\"",
     )
     buildConfigField(
         type = "String",
