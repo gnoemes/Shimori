@@ -1,0 +1,9 @@
+query CurrentUser {
+    currentUser {
+        id
+        avatarUrl,
+        nickname
+        url
+        lastOnlineAt
+    }
+}

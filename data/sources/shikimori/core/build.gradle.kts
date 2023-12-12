@@ -1,0 +1,69 @@
+plugins {
+    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.graphql.apollo3)
+    alias(libs.plugins.buildConfig)
+    alias(kotlinx.plugins.serialization)
+}
+
+buildConfig {
+    packageName("com.gnoemes.shimori.data.shikimori")
+
+    buildConfigField(
+        type = "String",
+        name = "ShikimoriClientId",
+        value = "\"${properties["ShikimoriClientId"]?.toString() ?: "none"}\"",
+    )
+    buildConfigField(
+        type = "String",
+        name = "ShikimoriClientSecret",
+        value = "\"${properties["ShikimoriClientSecret"]?.toString() ?: "none"}\"",
+    )
+    buildConfigField(
+        type = "String",
+        name = "ShikimoriBaseUrl",
+        value = "\"${properties["ShikimoriBaseUrl"]?.toString() ?: ""}\"",
+    )
+}
+
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(projects.sourceApi.catalogue)
+                api(projects.sourceApi.track)
+
+                implementation(projects.core.base)
+                implementation(projects.core.logging.api)
+
+                implementation(libs.graphql.apollo3)
+                implementation(kotlinx.atomicfu)
+                implementation(libs.kotlininject.runtime)
+
+                implementation(libs.ktor.core)
+                implementation(libs.ktor.auth)
+                implementation(libs.ktor.logging)
+                implementation(libs.ktor.contentNegotiation)
+                implementation(libs.ktor.serialization.json)
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                api(libs.ktor.okhttp)
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+                implementation(libs.ktor.darwin)
+            }
+        }
+
+    }
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.gnoemes.shimori.data.shikimori")
+    }
+}

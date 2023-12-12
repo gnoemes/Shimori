@@ -61,7 +61,6 @@ internal val AnimeAdapter = Anime.Adapter(
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     next_episode_dateAdapter = InstantAdapter,
-    next_episode_end_dateAdapter = InstantAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
     genresAdapter = GenresAdapter,
     episodesAdapter = IntColumnAdapter,

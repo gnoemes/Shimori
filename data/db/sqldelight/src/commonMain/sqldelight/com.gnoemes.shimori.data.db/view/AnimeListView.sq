@@ -18,7 +18,6 @@ SELECT
     title.duration,
     title.next_episode,
     title.next_episode_date,
-    title.next_episode_end_date,
     track.id AS trackId,
     track.status AS trackStatus,
     track.score,

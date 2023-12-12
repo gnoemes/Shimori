@@ -16,6 +16,7 @@ kotlin {
                 api(projects.core.settings)
                 api(projects.core.preferences)
                 api(projects.data.db.sqldelight)
+                api(projects.data.sources.manager)
 
                 api(projects.common.ui.compose)
             }

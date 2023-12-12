@@ -66,4 +66,8 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
 
 android {
     namespace = "com.gnoemes.shimori.data.sqldelight"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }

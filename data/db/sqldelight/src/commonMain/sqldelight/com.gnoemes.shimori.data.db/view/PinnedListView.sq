@@ -6,13 +6,13 @@ INNER JOIN track ON track.target_id = anime.id AND track.target_type = pinned.ta
 
 UNION ALL
 
-SELECT manga.*, NULL, NULL, NULL, NULL, track.*, pinned.* FROM pinned
+SELECT manga.*, NULL, NULL, NULL, track.*, pinned.* FROM pinned
 INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
 INNER JOIN track ON track.target_id = manga.id AND track.target_type = pinned.target_type
 
 UNION ALL
 
-SELECT ranobe.*, NULL, NULL, NULL, NULL, track.*, pinned.* FROM pinned
+SELECT ranobe.*, NULL, NULL, NULL, track.*, pinned.* FROM pinned
 INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
 INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = pinned.target_type
 );
