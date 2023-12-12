@@ -6,7 +6,7 @@ plugins {
 }
 
 buildConfig {
-    packageName("com.gnoemes.shimori.data.shikimori")
+    packageName("com.gnoemes.shimori.sources.shikimori")
 
     buildConfigField(
         type = "String",
@@ -64,6 +64,6 @@ kotlin {
 
 apollo {
     service("service") {
-        packageName.set("com.gnoemes.shimori.data.shikimori")
+        packageName.set("com.gnoemes.shimori.sources.shikimori")
     }
 }
