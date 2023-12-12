@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.data.shikimori
+package com.gnoemes.shimori.sources.shikimori
 
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.entities.Platform
