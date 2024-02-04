@@ -20,6 +20,8 @@ kotlin {
 
                 api(projects.common.ui.compose)
                 api(projects.common.ui.resources.strings)
+                api(projects.common.ui.resources.fonts)
+                api(projects.common.ui.resources.icons)
             }
         }
 
