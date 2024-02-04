@@ -10,6 +10,7 @@ kotlin {
             dependencies {
                 api(projects.data.models)
 
+                implementation(compose.ui)
                 implementation(compose.components.resources)
             }
         }
@@ -17,7 +18,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.gnoemes.shimori.common.ui.resources.strings"
+    namespace = "com.gnoemes.shimori.common.ui.resources.fonts"
 
     sourceSets["main"].apply {
         res.srcDirs("src/androidMain/res", "src/commonMain/resources")
