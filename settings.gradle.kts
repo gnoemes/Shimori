@@ -64,6 +64,7 @@ include(
     ":data:sources:shikimori:core",
     ":common:ui:compose",
     ":common:ui:resources:strings",
+    ":common:ui:resources:fonts",
     ":app:core",
     ":app:complete",
     ":android-app",
