@@ -19,6 +19,7 @@ kotlin {
                 api(projects.data.sources.manager)
 
                 api(projects.common.ui.compose)
+                api(projects.common.ui.resources.strings)
             }
         }
 
