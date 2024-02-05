@@ -10,6 +10,7 @@ kotlin {
             dependencies {
                 api(projects.data.models)
 
+                implementation(compose.runtime)
                 implementation(compose.components.resources)
             }
         }
