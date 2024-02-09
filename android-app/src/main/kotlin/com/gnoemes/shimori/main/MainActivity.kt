@@ -35,8 +35,8 @@
 //import com.gnoemes.shimori.common.ui.navigation.FeatureScreen
 //import com.gnoemes.shimori.common.ui.theme.ShimoriTheme
 //import com.gnoemes.shimori.common.ui.theme.defaultDimensions
-//import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
-//import com.gnoemes.shimori.common.ui.utils.ShimoriTextCreator
+//import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTimeFormatter
+//import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
 //import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
