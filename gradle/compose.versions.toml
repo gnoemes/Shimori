@@ -1,6 +1,6 @@
 [versions]
 composeCompiler = "1.5.3"
-compose-multiplatform = "1.6.0-beta01"
+compose-multiplatform = "1.6.0-beta02"
 
 [plugins]
 multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

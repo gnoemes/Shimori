@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shimori</string>
+    <string name="user_agent" translatable="false">@string/app_name</string>
+    <string name="anime">Anime</string>
+    <string name="manga">Manga</string>
+    <string name="ranobe">Ranobe</string>
+    <string name="pinned">Pinned</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
+    <string name="lists_title">Lists</string>
+    <string name="catalog" comment="catalog">Catalog</string>
+    <string name="feed" comment="feed">Feed</string>
+    <string name="settings">Settings</string>
+    <string name="open_random_title_from_list">Pick for me</string>
+    <string name="sign_in_title">I didn\'t recognize you</string>
+    <string name="sign_in_message">Log in to use all features.</string>
+    <string name="sign_in">Log in</string>
+    <string name="sign_up">Create account</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="undo">Undo</string>
+    <string name="rate_status_anime_watching">Watching</string>
+    <string name="rate_status_anime_re_watching">Rewatching</string>
+    <string name="rate_status_manga_reading">Reading</string>
+    <string name="rate_status_manga_re_reading">Rereading</string>
+    <string name="rate_status_on_hold">On hold</string>
+    <string name="rate_status_planned">Planned</string>
+    <string name="rate_status_completed">Completed</string>
+    <string name="rate_status_dropped">Dropped</string>
+    <string name="no_pinned_titles">Long tap cover in your lists to pin titles</string>
+    <string name="no_titles">Add a title</string>
+    <string name="list_sort_progress">Progress</string>
+    <string name="list_sort_size_anime">Episodes</string>
+    <string name="list_sort_size_manga">Chapters</string>
+    <string name="list_sort_last_changed">Last changed</string>
+    <string name="list_sort_last_added">Last added</string>
+    <string name="list_sort_last_released">Last released</string>
+    <string name="list_sort_name">Name</string>
+    <string name="list_sort_your_score">Your score</string>
+    <string name="list_sort_rating">Overall score</string>
+    <string name="list_page_watching" translatable="false">@string/rate_status_anime_watching</string>
+    <string name="list_page_reading" translatable="false">@string/rate_status_manga_reading</string>
+    <string name="list_page_re_watching" translatable="false">@string/rate_status_anime_re_watching</string>
+    <string name="list_page_re_reading" translatable="false">@string/rate_status_manga_re_reading</string>
+    <string name="list_page_on_hold" translatable="false">@string/rate_status_on_hold</string>
+    <string name="list_page_planned" translatable="false">@string/rate_status_planned</string>
+    <string name="list_page_completed" translatable="false">@string/rate_status_completed</string>
+    <string name="list_page_dropped" translatable="false">@string/rate_status_dropped</string>
+    <string name="status_anons">Soon</string>
+    <string name="status_ongoing">Ongoing</string>
+    <string name="status_released">Released</string>
+    <string name="progress_format">%d / %s</string>
+    <string name="left_format">%s left</string>
+    <string name="progress">Progress</string>
+    <string name="re_watches">Repeats</string>
+    <string name="add_note">Add a note</string>
+    <string name="note">Note</string>
+    <string name="anons_date_format">Airing in %d %s</string>
+    <string name="ongoing_episode_format">%d ep in %d %s</string>
+    <string name="minute_short">min</string>
+    <string name="hour_short">h</string>
+    <string name="day_short">d</string>
+    <string name="type_tv">TV</string>
+    <string name="type_movie">Movie</string>
+    <string name="type_special">Special</string>
+    <string name="type_music">Music</string>
+    <string name="type_ova" translatable="false">OVA</string>
+    <string name="type_ona" translatable="false">ONA</string>
+    <string name="type_manga">Manga</string>
+    <string name="type_manhua">Manhua</string>
+    <string name="type_manhwa">Manhwa</string>
+    <string name="type_one_shot">One shot</string>
+    <string name="type_doujin">Doujin</string>
+    <string name="type_novel">Novel</string>
+    <string name="type_light_novel">Ranobe</string>
+    <string name="today">Today</string>
+    <string name="settings_titles">Naming language</string>
+    <string name="settings_language_russian">Russian</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_romaji">Romaji</string>
+    <string name="settings_app_language">App language</string>
+    <string name="settings_spoilers">Spoilers</string>
+    <string name="settings_spoilers_hide">Ask first</string>
+    <string name="settings_spoilers_show">Show</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_accent_color">Accent color</string>
+    <string name="settings_accent_color_system">System</string>
+    <string name="settings_feedback_and_updates">Feedback</string>
+    <string name="settings_feedback_and_updates_email">Mail</string>
+    <string name="settings_feedback_and_updates_github">GitHub</string>
+    <string name="settings_feedback_and_updates_telegram">Telegram</string>
+    <string name="settings_special_thanks">Special thanks</string>
+    <string name="settings_special_thanks_shikimori">Shikimori</string>
+    <string name="notification_title_pinned">Pinned.</string>
+    <string name="notification_title_unpinned">Unpinned.</string>
+    <string name="category_filters">Filters</string>
+    <string name="category_filters_hint">Long tap a filter to exclude.</string>
+    <string name="category_filters_apply">Apply</string>
+    <string name="category_filters_clear">Clear</string>
+    <string name="category_filters_anime">Anime filters</string>
+    <string name="category_filters_manga">Manga filters</string>
+    <string name="category_filters_ranobe">Ranobe filters</string>
+    <string name="title_translators_dub">Dubbing</string>
+    <string name="title_translators_sub">Subtitles</string>
+    <string name="title_studio_works">Studio works</string>
+    <string name="title_people_participation">Participation in projects</string>
+    <string name="title_related_chronology_related">Related</string>
+    <string name="title_related_chronology_francise">Franchise</string>
+    <string name="title_related_chronology_main_story">Main story</string>
+    <string name="title_related_chronology_side_stories">Side stories</string>
+    <string name="title_menu_share">Share</string>
+    <string name="title_menu_web">In browser</string>
+    <string name="title_menu_names">Names</string>
+    <string name="title_character_seiyu">Seiyu</string>
+    <string name="title_trailers" comment="title_trailers">Trailers</string>
+    <string name="title_frames" comment="title_frames">Frames</string>
+    <string name="title_frames_hint" comment="title_frames_hint">Try to zoom</string>
+    <string name="title_translators">Translators</string>
+    <string name="title_characters">Characters</string>
+    <string name="title_about">About</string>
+    <string name="title_staff">Staff</string>
+    <string name="title_related_chronology">Related &amp; chronology</string>
+    <string name="title_similar">Similar titles</string>
+    <string name="title_mark_as_fav">Marked as favourite.</string>
+    <string name="title_remove_from_fav">Removed from favourites.</string>
+    <string name="title_release_format" translatable="false">%s–%s</string>
+    <string name="calendar">Episodes calendar</string>
+    <string name="title_type">Type</string>
+    <string name="title_ep">Episodes</string>
+    <string name="title_ep_duration">Duration</string>
+    <string name="title_ep_duration_format" translatable="false">%d %s</string>
+    <string name="inc_close">Drop to cancel</string>
+    <string name="rate_del_snack">Deleted.</string>
+    <string name="rate_progress_hint">%d / %d</string>
+    <string name="airing_anime_cat">Airing anime</string>
+    <string name="upd_anime_cat">Anime updates</string>
+    <string name="anime_rec_cat">Anime you might like</string>
+    <string name="manga_rec_cat">Manga recommendations</string>
+    <string name="ranobe_rec_cat">Ranobe that may interest</string>
+    <string name="title_release">Release date</string>
+    <string name="search_no_results">No results</string>
+    <string name="filter_status">Status</string>
+    <string name="filter_list">List</string>
+    <string name="filter_season">Season</string>
+    <string name="filter_genre">Genre</string>
+    <string name="filter_type">Type</string>
+    <string name="filter_season_duration">Season duration</string>
+    <string name="filter_age_rating">Age rating</string>
+    <string name="filter_duration">Duration</string>
+    <string name="profile_history">History</string>
+    <string name="profile_favourites">Favourites</string>
+    <string name="profile_friends">Friends</string>
+    <string name="profile_add_to_friends">Add to friends</string>
+    <string name="profile_remove_from_friends">Remove from friends</string>
+    <string name="profile_ignore">Ignore</string>
+    <string name="profile_unblock">Unblock</string>
+    <string name="profile_friends_add">Add</string>
+    <string name="profile_friends_remove">Remove</string>
+    <string name="dialog_yes">OK</string>
+    <string name="dialog_no">Cancel</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Some of the features will become unavailable.</string>
+    <string name="title_characters_main">Main</string>
+    <string name="title_characters_supporting" comment="title_characters_supporting">Supporting</string>
+    <string name="auth_revoke">Shimori can\'t access your account sufficiently.</string>
+    <string name="part_access_first_hint" comment="part_access_first_hint">Revoke access to the account and re-login with all permissions.</string>
+    <string name="title_menu_names_selected">Main</string>
+    <string name="title_translators_dub_and_sub">Dubbing and subtitles</string>
+    <string name="title_menu_names_other">Other</string>
+    <string name="inc_added_progress">%d → %d.</string>
+    <string name="part_access_second_hint">Re-login to Shimori with all permissions.</string>
+    <string name="part_access_yes" comment="part_access_yes">Revoke access</string>
+    <string name="part_access_no">Next time</string>
+    <string name="part_access_restriction" comment="part_access_restriction">Shimori can\'t change the list</string>
+    <string name="status_discontinued">Discontinued</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_released_recently">Released recently</string>
+    <string name="type_tv13">TV, ~13 ep</string>
+    <string name="type_tv24">TV, ~24 ep</string>
+    <string name="type_tvover30" comment="type_tvover30">TV, 30+ ep</string>
+    <string name="season_summer">Summer %d</string>
+    <string name="season_fall">Fall %d</string>
+    <string name="season_winter">Winter %d</string>
+    <string name="season_spring">Spring %d</string>
+    <string name="duration_less10min">&lt;10 min</string>
+    <string name="duration_less30min">&lt;30 min</string>
+    <string name="duration_over30min">30+ min</string>
+    <string name="title_license">Licensed</string>
+    <string name="more">More</string>
+    <string name="accounts_sync_logout">You are logging out of %s.</string>
+    <string name="accounts_sync">Progress sync</string>
+    <string name="account_video_sources">Video sources</string>
+    <string name="accounts">Accounts</string>
+    <string name="donate" comment="donate">Donate</string>
+    <string name="voting_for_features">Vote for features on GitHub</string>
+    <string name="backup_settings" comment="backup_settings">Backup settings</string>
+    <string name="restore">Restore</string>
+    <string name="update">Update</string>
+    <string name="choose_player_checkbox">Remember my choice</string>
+    <string name="choose_player_title">Choose a player</string>
+    <string name="external">External</string>
+    <string name="watch_button">Watch</string>
+    <string name="read_button">Read</string>
+    <string name="update_available">Shimori %s is available</string>
+    <string name="update_new">New</string>
+    <string name="update_fixed">Fixed</string>
+    <string name="stats">Stats</string>
+    <string name="Person_mangaka">Mangaka</string>
+    <string name="search_in_your_list">In your list</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="login">Connect an account</string>
+    <string name="login_hint">Without logging in, your progress will be lost if you delete the app.</string>
+    <string name="your_list">Your list</string>
+    <string name="accounts_menu_primary">Make primary</string>
+    <string name="accounts_primary">Primary • %s</string>
+    <string name="search_catalog_hint">Titles, characters or people</string>
+    <string name="donate_hint">We\'ll pay Shimori hosting fees.</string>
+    <string name="title_characters_search_hint">Character</string>
+    <string name="title_note_hint">By default, everyone sees the notes on your list.</string>
+    <string name="List_item_current_state">Now</string>
+    <string name="rate_repeats_hint">%d</string>
+</resources>
