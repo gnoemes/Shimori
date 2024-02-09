@@ -10,10 +10,15 @@ kotlin {
             dependencies {
                 api(projects.core.preferences)
 
+
+                implementation(projects.common.ui.resources.fonts)
+                api(projects.common.ui.resources.strings)
+                api(projects.common.ui.resources.icons)
+
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(compose.materialIconsExtended)
                 implementation(compose.animation)
+                implementation(composelibs.material.kolor)
                 api(compose.material3)
                 api(composelibs.material3.windowsizeclass)
             }
