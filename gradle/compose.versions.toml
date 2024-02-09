@@ -10,3 +10,4 @@ gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref =
 
 activity = "androidx.activity:activity-compose:1.8.2"
 material3-windowsizeclass = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.2"
+material-kolor = "com.materialkolor:material-kolor:1.4.0-alpha05"

@@ -1,6 +1,17 @@
-package com.gnoemes.shimori.common.ui.theme
+package com.gnoemes.shimori.common.compose.theme
 
 import androidx.compose.ui.graphics.Color
+import com.gnoemes.shimori.settings.AppAccentColor
+
+internal fun secondaryColorFromType(type: AppAccentColor) = when (type) {
+    AppAccentColor.Red -> accentRed
+    AppAccentColor.Orange -> accentOrange
+    AppAccentColor.Yellow -> accentYellow
+    AppAccentColor.Green -> accentGreen
+    AppAccentColor.Blue -> accentBlue
+    AppAccentColor.Purple -> accentPurple
+    else -> accentYellow
+}
 
 val titleAnnounced = Color(0xFFFF2D58)
 val titleOngoing = Color(0xFF0088FF)
