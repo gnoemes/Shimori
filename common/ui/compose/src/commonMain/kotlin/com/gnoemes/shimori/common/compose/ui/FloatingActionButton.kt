@@ -8,12 +8,12 @@ import androidx.compose.ui.graphics.Color
 
 
 @Composable
-fun SurfaceSmallFloatingActionButton(
+fun SurfaceFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    SmallFloatingActionButton(
+    FloatingActionButton(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.primary,
@@ -23,12 +23,12 @@ fun SurfaceSmallFloatingActionButton(
 }
 
 @Composable
-fun PrimarySmallFloatingActionButton(
+fun PrimaryFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    SmallFloatingActionButton(
+    FloatingActionButton(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         onClick = onClick,
@@ -37,12 +37,12 @@ fun PrimarySmallFloatingActionButton(
 }
 
 @Composable
-fun SecondarySmallFloatingActionButton(
+fun SecondaryFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    SmallFloatingActionButton(
+    FloatingActionButton(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         onClick = onClick,
@@ -51,12 +51,12 @@ fun SecondarySmallFloatingActionButton(
 }
 
 @Composable
-fun TertiarySmallFloatingActionButton(
+fun TertiaryFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    SmallFloatingActionButton(
+    FloatingActionButton(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
         onClick = onClick,
@@ -65,14 +65,14 @@ fun TertiarySmallFloatingActionButton(
 }
 
 @Composable
-private fun SmallFloatingActionButton(
+private fun FloatingActionButton(
+    onClick: () -> Unit,
     containerColor: Color,
     contentColor: Color = contentColorFor(containerColor),
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    androidx.compose.material3.SmallFloatingActionButton(
+    androidx.compose.material3.FloatingActionButton(
         modifier = modifier,
         containerColor = containerColor,
         contentColor = contentColor,
