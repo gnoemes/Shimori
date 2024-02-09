@@ -2,6 +2,12 @@ plugins {
     id("com.gnoemes.shimori.android.library")
     id("com.gnoemes.shimori.kotlin.multiplatform")
     id("com.gnoemes.shimori.compose")
+
+    //TODO migrate to Compose Resources
+    //Compose resources doesn't support multi module projects right now. Making common:ui:resources basically useless
+    //https://github.com/JetBrains/compose-multiplatform/issues/4083
+    //Temporary replacing this functionality with lib
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -9,7 +15,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(projects.core.preferences)
-
 
                 implementation(projects.common.ui.resources.fonts)
                 api(projects.common.ui.resources.strings)
