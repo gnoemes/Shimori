@@ -37,6 +37,6 @@ android {
 }
 
 multiplatformResources {
-    resourcesPackage.set("com.gnoemes.shimori")
+    resourcesPackage.set("com.gnoemes.shimori.common.ui.resources.strings")
     resourcesClassName.set("Res")
 }
