@@ -66,6 +66,7 @@ include(
     ":common:ui:resources:strings",
     ":common:ui:resources:fonts",
     ":common:ui:resources:icons",
+    ":common:imageloading",
     ":app:core",
     ":app:complete",
     ":android-app",
