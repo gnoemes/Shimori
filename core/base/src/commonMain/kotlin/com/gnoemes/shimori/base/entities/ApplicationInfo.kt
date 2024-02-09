@@ -8,6 +8,7 @@ data class ApplicationInfo(
     val versionName: String,
     val versionCode: Int,
     val defaultLocale: String,
+    val cachePath: () -> String
 )
 
 enum class Flavor {

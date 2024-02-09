@@ -28,7 +28,8 @@ actual interface SharedPlatformApplicationComponent {
             defaultLocale = locale.language,
             versionName = packageInfo.versionName,
             versionCode = @Suppress("DEPRECATION") packageInfo.versionCode,
-            platform = Platform.Android
+            platform = Platform.Android,
+            cachePath = { application.cacheDir.absolutePath },
         )
     }
 }
