@@ -19,7 +19,7 @@
 //import com.gnoemes.shimori.base.shared.createLogger
 //import com.gnoemes.shimori.base.shared.extensions.defaultConfig
 //import com.gnoemes.shimori.common.ui.utils.ShimoriContextTextProvider
-//import com.gnoemes.shimori.common.ui.utils.ShimoriDateTimeFormatter
+//import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTimeFormatter
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
 //import com.gnoemes.shimori.common.ui.utils.bindViewModel
