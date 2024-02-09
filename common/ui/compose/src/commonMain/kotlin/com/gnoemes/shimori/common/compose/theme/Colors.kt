@@ -13,6 +13,9 @@ internal fun secondaryColorFromType(type: AppAccentColor) = when (type) {
     else -> accentYellow
 }
 
+val disabledContainerAlpha = 0.12f
+val disabledContentAlpha = 0.38f
+
 val titleAnnounced = Color(0xFFFF2D58)
 val titleOngoing = Color(0xFF0088FF)
 val titlePaused = Color(0xFFa063cf)
