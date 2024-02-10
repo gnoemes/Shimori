@@ -8,6 +8,9 @@ import me.tatarka.inject.annotations.Provides
 expect interface PreferencesPlatformComponent
 
 interface PreferencesComponent : PreferencesPlatformComponent {
+    val preferences: ShimoriPreferences
+    val settings: ShimoriSettings
+
     @ApplicationScope
     @Provides
     fun providePreferences(bind: ShimoriPreferencesImpl): ShimoriPreferences = bind

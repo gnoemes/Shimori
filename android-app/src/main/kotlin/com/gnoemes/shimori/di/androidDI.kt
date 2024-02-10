@@ -21,7 +21,7 @@
 //import com.gnoemes.shimori.common.ui.utils.ShimoriContextTextProvider
 //import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTimeFormatter
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
-//import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
+//import com.gnoemes.shimori.common.ui.resources.ShimoriTrackUtil
 //import com.gnoemes.shimori.common.ui.utils.bindViewModel
 //import com.gnoemes.shimori.common_ui_imageloading.imageLoadingModule
 //import com.gnoemes.shimori.data.dataModule
