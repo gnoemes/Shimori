@@ -9,6 +9,6 @@ class ShimoriApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-//        component.initializers.init()
+        component.initializers.init()
     }
 }

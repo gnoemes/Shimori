@@ -9,7 +9,7 @@
     <string name="search">Search</string>
     <string name="profile">Profile</string>
     <string name="lists_title">Lists</string>
-    <string name="catalog" comment="catalog">Catalog</string>
+    <string name="explore">Explore</string>
     <string name="feed" comment="feed">Feed</string>
     <string name="settings">Settings</string>
     <string name="open_random_title_from_list">Pick for me</string>

@@ -18,10 +18,13 @@ kotlin {
                 api(projects.data.db.sqldelight)
                 api(projects.data.sources.manager)
 
+                api(projects.common.imageloading)
                 api(projects.common.ui.compose)
                 api(projects.common.ui.resources.strings)
                 api(projects.common.ui.resources.fonts)
                 api(projects.common.ui.resources.icons)
+
+                api(projects.ui.home)
             }
         }
 

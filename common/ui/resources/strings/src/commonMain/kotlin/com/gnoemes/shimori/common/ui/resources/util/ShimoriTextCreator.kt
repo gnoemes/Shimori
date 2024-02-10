@@ -1,14 +1,14 @@
 
 package com.gnoemes.shimori.common.ui.resources.util
 
-import com.gnoemes.shimori.settings.AppLocale
-import com.gnoemes.shimori.settings.AppTitlesLocale
+import com.gnoemes.shimori.base.inject.ActivityScope
+import me.tatarka.inject.annotations.Inject
 
 //TODO restore with UI components
+@Inject
+@ActivityScope
 class ShimoriTextCreator(
     private val formatter: ShimoriDateTextFormatter,
-    private val titlesLocale: AppTitlesLocale,
-    private val appLocale: AppLocale
 ) {
 //
 //    fun name(title: ShimoriContentEntity): String {

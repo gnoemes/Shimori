@@ -6,8 +6,11 @@ interface ShimoriPreferences {
     var currentCatalogueSource: String?
 
     var preferredListType: Int
-    fun observePreferredListType() : Flow<Int>
+    fun observePreferredListType(): Flow<Int>
 
     var preferredListStatus: String
-    fun observePreferredListStatus() : Flow<String>
+    fun observePreferredListStatus(): Flow<String>
+
+    fun setInt(key: String, value: Int)
+    fun getInt(key: String): Int?
 }

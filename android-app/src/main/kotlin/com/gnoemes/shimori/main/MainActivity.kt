@@ -38,7 +38,7 @@
 //import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTimeFormatter
 //import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
 //import com.gnoemes.shimori.common.ui.utils.ShimoriTextProvider
-//import com.gnoemes.shimori.common.ui.utils.ShimoriTrackUtil
+//import com.gnoemes.shimori.common.ui.resources.ShimoriTrackUtil
 //import com.gnoemes.shimori.common.ui.utils.shimoriViewModel
 //import com.gnoemes.shimori.common.ui.utils.shouldUseDarkColors
 //import com.google.accompanist.systemuicontroller.rememberSystemUiController

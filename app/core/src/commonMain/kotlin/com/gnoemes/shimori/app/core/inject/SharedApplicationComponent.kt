@@ -3,6 +3,7 @@ package com.gnoemes.shimori.app.core.inject
 import com.gnoemes.shimori.base.inject.ApplicationCoroutineScope
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.common.imageloading.ImageLoadingComponent
 import com.gnoemes.shimori.data.SourceManagerComponent
 import com.gnoemes.shimori.data.SqlDelightDatabaseComponent
 import com.gnoemes.shimori.logging.impl.LoggerComponent
@@ -19,6 +20,7 @@ expect interface SharedPlatformApplicationComponent
 interface SharedApplicationComponent :
     SharedPlatformApplicationComponent,
     PreferencesComponent,
+    ImageLoadingComponent,
     LoggerComponent,
     SqlDelightDatabaseComponent,
     SourceManagerComponent

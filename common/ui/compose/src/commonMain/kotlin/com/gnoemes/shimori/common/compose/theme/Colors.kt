@@ -3,7 +3,7 @@ package com.gnoemes.shimori.common.compose.theme
 import androidx.compose.ui.graphics.Color
 import com.gnoemes.shimori.settings.AppAccentColor
 
-internal fun secondaryColorFromType(type: AppAccentColor) = when (type) {
+internal fun seedColorFromType(type: AppAccentColor) = when (type) {
     AppAccentColor.Red -> accentRed
     AppAccentColor.Orange -> accentOrange
     AppAccentColor.Yellow -> accentYellow
