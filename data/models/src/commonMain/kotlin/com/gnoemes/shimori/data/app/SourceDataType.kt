@@ -25,4 +25,16 @@ value class SourceDataType private constructor(val type: Int) {
         else -> null
     }
 
+    override fun toString(): String {
+        return when(type){
+            1 -> "Track"
+            2 -> "Anime"
+            3 -> "Manga"
+            4 -> "Ranobe"
+            5 -> "Character"
+            6 -> "Person"
+            7 -> "User"
+            else -> "Unknown type"
+        }
+    }
 }

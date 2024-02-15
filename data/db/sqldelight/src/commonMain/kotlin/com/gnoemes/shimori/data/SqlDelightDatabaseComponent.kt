@@ -5,6 +5,7 @@ import com.gnoemes.shimori.data.daos.AnimeDaoImpl
 import com.gnoemes.shimori.data.daos.AnimeScreenshotDaoImpl
 import com.gnoemes.shimori.data.daos.AnimeVideoDaoImpl
 import com.gnoemes.shimori.data.daos.CharacterDaoImpl
+import com.gnoemes.shimori.data.daos.CharacterRoleDaoImpl
 import com.gnoemes.shimori.data.daos.LastRequestDaoImpl
 import com.gnoemes.shimori.data.daos.ListPinDaoImpl
 import com.gnoemes.shimori.data.daos.ListSortDaoImpl
@@ -18,6 +19,7 @@ import com.gnoemes.shimori.data.db.api.daos.AnimeDao
 import com.gnoemes.shimori.data.db.api.daos.AnimeScreenshotDao
 import com.gnoemes.shimori.data.db.api.daos.AnimeVideoDao
 import com.gnoemes.shimori.data.db.api.daos.CharacterDao
+import com.gnoemes.shimori.data.db.api.daos.CharacterRoleDao
 import com.gnoemes.shimori.data.db.api.daos.LastRequestDao
 import com.gnoemes.shimori.data.db.api.daos.ListPinDao
 import com.gnoemes.shimori.data.db.api.daos.ListSortDao
@@ -100,4 +102,8 @@ interface SqlDelightDatabaseComponent : SqlDelightDatabasePlatformComponent {
     @ApplicationScope
     @Provides
     fun bindUserDao(dao: UserDaoImpl): UserDao = dao
+
+    @ApplicationScope
+    @Provides
+    fun bindCharacterRole(dao: CharacterRoleDaoImpl): CharacterRoleDao = dao
 }

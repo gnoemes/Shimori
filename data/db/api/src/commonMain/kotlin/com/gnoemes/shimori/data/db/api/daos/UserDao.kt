@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao : EntityDao<User> {
     fun observeMeShort(sourceId: Long): Flow<UserShort?>
 
-    suspend fun queryMe(sourceId: Long): User?
-    suspend fun queryMeShort(sourceId: Long): UserShort?
+    fun queryMe(sourceId: Long): User?
+    fun queryMeShort(sourceId: Long): UserShort?
 
-    suspend fun deleteMe(sourceId: Long)
+    fun deleteMe(sourceId: Long)
 }

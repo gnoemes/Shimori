@@ -18,14 +18,10 @@ import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
-import com.gnoemes.shimori.data.util.SYNCER_RESULT_TAG
 import com.gnoemes.shimori.data.util.long
 import com.gnoemes.shimori.data.util.ranobe
 import com.gnoemes.shimori.data.util.ranobeListViewMapper
 import com.gnoemes.shimori.data.util.ranobeWithTrack
-import com.gnoemes.shimori.data.util.syncRemoteIds
-import com.gnoemes.shimori.data.util.syncerForEntity
-import com.gnoemes.shimori.data.util.withTransaction
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -33,115 +29,86 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class RanobeDaoImpl(
-    private val db: ShimoriDB,
+    override val db: ShimoriDB,
     private val logger: Logger,
-    private val dispatchers: AppCoroutineDispatchers
-) : RanobeDao() {
+    private val dispatchers: AppCoroutineDispatchers,
+) : RanobeDao(), SqlDelightEntityDao<Ranobe> {
 
-    private val syncer = syncerForEntity(
-        this,
-        { _, title -> title.name.takeIf { it.isNotEmpty() } },
-        { _, remote, _ -> remote },
-        logger
-    )
+    override fun insert(entity: Ranobe): Long {
+        entity.let {
+            db.ranobeQueries.insert(
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.ranobeType?.type,
+                it.rating,
+                it.status,
+                it.chapters,
+                it.volumes,
+                it.dateAired,
+                it.dateReleased,
+                it.ageRating,
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres
+            )
+        }
 
-    override suspend fun insert(sourceId: Long, remote: Ranobe) {
-        db.withTransaction {
-            remote.let {
-                ranobeQueries.insert(
-                    it.name,
-                    it.nameRu,
-                    it.nameEn,
-                    it.image?.original,
-                    it.image?.preview,
-                    it.image?.x96,
-                    it.image?.x48,
-                    it.url,
-                    it.ranobeType?.type,
-                    it.rating,
-                    it.status,
-                    it.chapters,
-                    it.volumes,
-                    it.dateAired,
-                    it.dateReleased,
-                    it.ageRating,
-                    it.description,
-                    it.descriptionHtml,
-                    it.franchise,
-                    it.favorite,
-                    it.topicId,
-                    it.genres
-                )
-                val localId = ranobeQueries.selectLastInsertedRowId().executeAsOne()
-                syncRemoteIds(sourceId, localId, it.id, syncDataType)
-            }
+        return db.ranobeQueries.selectLastInsertedRowId().executeAsOne()
+    }
+
+    override fun update(entity: Ranobe) {
+        entity.let {
+            db.ranobeQueries.update(
+                it.id,
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.ranobeType?.type,
+                it.rating,
+                it.status?.let { EnumColumnAdapter<TitleStatus>().encode(it) },
+                it.chapters,
+                it.volumes,
+                it.dateAired?.let(LocalDateAdapter::encode),
+                it.dateReleased?.let(LocalDateAdapter::encode),
+                it.ageRating.let { EnumColumnAdapter<AgeRating>().encode(it) },
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres?.let(GenresAdapter::encode),
+            )
         }
     }
 
-    override suspend fun update(sourceId: Long, remote: Ranobe, local: Ranobe) {
-        db.withTransaction {
-            remote.let {
-                ranobeQueries.update(
-                    local.id,
-                    it.name,
-                    it.nameRu,
-                    it.nameEn,
-                    it.image?.original,
-                    it.image?.preview,
-                    it.image?.x96,
-                    it.image?.x48,
-                    it.url,
-                    it.ranobeType?.type,
-                    it.rating,
-                    it.status?.let { EnumColumnAdapter<TitleStatus>().encode(it) },
-                    it.chapters,
-                    it.volumes,
-                    it.dateAired?.let(LocalDateAdapter::encode),
-                    it.dateReleased?.let(LocalDateAdapter::encode),
-                    it.ageRating.let { EnumColumnAdapter<AgeRating>().encode(it) },
-                    it.description,
-                    it.descriptionHtml,
-                    it.franchise,
-                    it.favorite,
-                    it.topicId,
-                    it.genres?.let(GenresAdapter::encode),
-                )
-
-                syncRemoteIds(sourceId, local.id, it.id, syncDataType)
-            }
-        }
+    override fun delete(entity: Ranobe) {
+        return db.ranobeQueries.deleteById(entity.id)
     }
 
-    override suspend fun delete(sourceId: Long, local: Ranobe) {
-        db.withTransaction {
-            ranobeQueries.deleteById(local.id)
-            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
-        }
-    }
-
-    override suspend fun sync(sourceId: Long, remote: List<Ranobe>) {
-        val result = syncer.sync(
-            sourceId = sourceId,
-            currentValues = db.ranobeQueries.queryAll(::ranobe).executeAsList(),
-            networkValues = remote,
-            removeNotMatched = false
-        )
-
-        logger.i(tag = SYNCER_RESULT_TAG) {
-            "Ranobe sync results --> Added: ${result.added.size} Updated: ${result.updated.size}"
-        }
-    }
-
-    override suspend fun queryById(id: Long): Ranobe? {
+    override fun queryById(id: Long): Ranobe? {
         return db.ranobeQueries.queryById(id, ::ranobe)
             .executeAsOneOrNull()
     }
 
-    override suspend fun queryAll(): List<Ranobe> {
-        TODO("Not yet implemented")
+    override fun queryAll(): List<Ranobe> {
+        return db.ranobeQueries.queryAll(::ranobe).executeAsList()
     }
 
-    override suspend fun queryByStatus(status: TrackStatus): List<RanobeWithTrack> {
+    override fun queryByStatus(status: TrackStatus): List<RanobeWithTrack> {
         return db.ranobeQueries.queryByStatus(status, ::ranobeWithTrack)
             .executeAsList()
     }

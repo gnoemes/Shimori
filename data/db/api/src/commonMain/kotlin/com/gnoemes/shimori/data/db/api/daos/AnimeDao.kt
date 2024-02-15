@@ -2,18 +2,16 @@ package com.gnoemes.shimori.data.db.api.daos
 
 import app.cash.paging.PagingSource
 import com.gnoemes.shimori.data.PaginatedEntity
-import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
 import kotlinx.coroutines.flow.Flow
 
-abstract class AnimeDao : SourceSyncEntityDao<Anime>(SourceDataType.Anime) {
-    abstract suspend fun sync(sourceId: Long, remote: List<Anime>)
-    abstract suspend fun queryById(id: Long): Anime?
-    abstract suspend fun queryAll(): List<Anime>
-    abstract suspend fun queryByStatus(status: TrackStatus): List<AnimeWithTrack>
+abstract class AnimeDao : EntityDao<Anime> {
+    abstract fun queryById(id: Long): Anime?
+    abstract fun queryAll(): List<Anime>
+    abstract fun queryByStatus(status: TrackStatus): List<AnimeWithTrack>
 
     abstract fun observeById(id: Long): Flow<AnimeWithTrack?>
     abstract fun observeCalendar(): Flow<List<AnimeWithTrack>>

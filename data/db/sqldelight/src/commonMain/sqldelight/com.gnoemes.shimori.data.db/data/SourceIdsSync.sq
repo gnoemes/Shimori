@@ -23,7 +23,7 @@ delete:
 DELETE FROM source_ids_sync WHERE id = :id;
 
 deleteByLocal:
-DELETE FROM source_ids_sync WHERE local_id = :localId AND type = :type;
+DELETE FROM source_ids_sync WHERE source_id = :sourceId AND local_id = :localId AND type = :type;
 
 deleteByRemote:
 DELETE FROM source_ids_sync WHERE source_id = :sourceId AND remote_id = :remoteId AND type = :type;

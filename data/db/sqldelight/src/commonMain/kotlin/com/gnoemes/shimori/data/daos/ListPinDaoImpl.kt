@@ -53,7 +53,7 @@ class ListPinDaoImpl(
         db.listPinQueries.deleteById(entity.id)
     }
 
-    override suspend fun pin(targetId: Long, targetType: TrackTargetType, pin: Boolean): Boolean {
+    override fun pin(targetId: Long, targetType: TrackTargetType, pin: Boolean): Boolean {
         val local = db.listPinQueries.queryByTarget(targetId, targetType).executeAsOneOrNull()
         if (pin) {
             if (local != null) return true
@@ -66,7 +66,7 @@ class ListPinDaoImpl(
         return pin
     }
 
-    override suspend fun togglePin(targetId: Long, targetType: TrackTargetType): Boolean {
+    override fun togglePin(targetId: Long, targetType: TrackTargetType): Boolean {
         val local = db.listPinQueries.queryByTarget(targetId, targetType).executeAsOneOrNull()
         return if (local != null) {
             db.listPinQueries.deleteById(local.id)

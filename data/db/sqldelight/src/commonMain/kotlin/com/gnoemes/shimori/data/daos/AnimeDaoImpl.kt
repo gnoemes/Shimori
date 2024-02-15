@@ -18,14 +18,10 @@ import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
-import com.gnoemes.shimori.data.util.SYNCER_RESULT_TAG
 import com.gnoemes.shimori.data.util.anime
 import com.gnoemes.shimori.data.util.animeListViewMapper
 import com.gnoemes.shimori.data.util.animeWithTrack
 import com.gnoemes.shimori.data.util.long
-import com.gnoemes.shimori.data.util.syncRemoteIds
-import com.gnoemes.shimori.data.util.syncerForEntity
-import com.gnoemes.shimori.data.util.withTransaction
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -33,120 +29,91 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class AnimeDaoImpl(
-    private val db: ShimoriDB,
+    override val db: ShimoriDB,
     private val logger: Logger,
     private val dispatchers: AppCoroutineDispatchers,
-) : AnimeDao() {
+) : AnimeDao(), SqlDelightEntityDao<Anime> {
 
-    private val syncer = syncerForEntity(
-        this,
-        { _, title -> title.name.takeIf { it.isNotEmpty() } },
-        { _, remote, _ -> remote },
-        logger
-    )
+    override fun insert(entity: Anime): Long {
+        entity.let {
+            db.animeQueries.insert(
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.animeType?.type,
+                it.rating,
+                it.status,
+                it.episodes,
+                it.episodesAired,
+                it.dateAired,
+                it.dateReleased,
+                it.ageRating,
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres,
+                it.duration,
+                it.nextEpisode,
+                it.nextEpisodeDate,
+            )
+        }
 
-    override suspend fun insert(sourceId: Long, remote: Anime) {
-        db.withTransaction {
-            remote.let {
-                db.animeQueries.insert(
-                    it.name,
-                    it.nameRu,
-                    it.nameEn,
-                    it.image?.original,
-                    it.image?.preview,
-                    it.image?.x96,
-                    it.image?.x48,
-                    it.url,
-                    it.animeType?.type,
-                    it.rating,
-                    it.status,
-                    it.episodes,
-                    it.episodesAired,
-                    it.dateAired,
-                    it.dateReleased,
-                    it.ageRating,
-                    it.description,
-                    it.descriptionHtml,
-                    it.franchise,
-                    it.favorite,
-                    it.topicId,
-                    it.genres,
-                    it.duration,
-                    it.nextEpisode,
-                    it.nextEpisodeDate,
-                )
-                val localId = animeQueries.selectLastInsertedRowId().executeAsOne()
-                syncRemoteIds(sourceId, localId, remote.id, syncDataType)
-            }
+        return db.animeQueries.selectLastInsertedRowId().executeAsOne()
+    }
+
+    override fun update(entity: Anime) {
+        entity.let {
+            db.animeQueries.update(
+                entity.id,
+                it.name,
+                it.nameRu,
+                it.nameEn,
+                it.image?.original,
+                it.image?.preview,
+                it.image?.x96,
+                it.image?.x48,
+                it.url,
+                it.animeType?.type,
+                it.rating,
+                it.status?.let { EnumColumnAdapter<TitleStatus>().encode(it) },
+                it.episodes,
+                it.episodesAired,
+                it.dateAired?.let(LocalDateAdapter::encode),
+                it.dateReleased?.let(LocalDateAdapter::encode),
+                it.ageRating.let { EnumColumnAdapter<AgeRating>().encode(it) },
+                it.description,
+                it.descriptionHtml,
+                it.franchise,
+                it.favorite,
+                it.topicId,
+                it.genres?.let(GenresAdapter::encode),
+                it.duration?.toLong(),
+                it.nextEpisode?.toLong(),
+            )
         }
     }
 
-    override suspend fun update(sourceId: Long, remote: Anime, local: Anime) {
-        db.withTransaction {
-            remote.let {
-                animeQueries.update(
-                    local.id,
-                    it.name,
-                    it.nameRu,
-                    it.nameEn,
-                    it.image?.original,
-                    it.image?.preview,
-                    it.image?.x96,
-                    it.image?.x48,
-                    it.url,
-                    it.animeType?.type,
-                    it.rating,
-                    it.status?.let { EnumColumnAdapter<TitleStatus>().encode(it) },
-                    it.episodes,
-                    it.episodesAired,
-                    it.dateAired?.let(LocalDateAdapter::encode),
-                    it.dateReleased?.let(LocalDateAdapter::encode),
-                    it.ageRating.let { EnumColumnAdapter<AgeRating>().encode(it) },
-                    it.description,
-                    it.descriptionHtml,
-                    it.franchise,
-                    it.favorite,
-                    it.topicId,
-                    it.genres?.let(GenresAdapter::encode),
-                    it.duration?.toLong(),
-                    it.nextEpisode?.toLong(),
-                )
-
-                syncRemoteIds(sourceId, local.id, remote.id, syncDataType)
-            }
-        }
+    override fun delete(entity: Anime) {
+        return db.animeQueries.deleteById(entity.id)
     }
 
-    override suspend fun delete(sourceId: Long, local: Anime) {
-        db.withTransaction {
-            animeQueries.deleteById(local.id)
-            sourceIdsSyncQueries.deleteByLocal(local.id, syncDataType.type)
-        }
-    }
-
-    override suspend fun sync(sourceId: Long, remote: List<Anime>) {
-        val result = syncer.sync(
-            sourceId = sourceId,
-            currentValues = db.animeQueries.queryAll(::anime).executeAsList(),
-            networkValues = remote,
-            removeNotMatched = false
-        )
-
-        logger.i(tag = SYNCER_RESULT_TAG) {
-            "Anime sync results --> Added: ${result.added.size} Updated: ${result.updated.size}"
-        }
-    }
-
-    override suspend fun queryById(id: Long): Anime? {
+    override fun queryById(id: Long): Anime? {
         return db.animeQueries.queryById(id, ::anime)
             .executeAsOneOrNull()
     }
 
-    override suspend fun queryAll(): List<Anime> {
-        TODO("Not yet implemented")
+    override fun queryAll(): List<Anime> {
+        return db.animeQueries.queryAll(::anime).executeAsList()
     }
 
-    override suspend fun queryByStatus(status: TrackStatus): List<AnimeWithTrack> {
+    override fun queryByStatus(status: TrackStatus): List<AnimeWithTrack> {
         return db.animeQueries.queryByStatus(status, ::animeWithTrack)
             .executeAsList()
     }

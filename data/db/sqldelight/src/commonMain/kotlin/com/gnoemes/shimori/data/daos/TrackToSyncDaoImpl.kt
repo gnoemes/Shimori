@@ -35,22 +35,21 @@ class TrackToSyncDaoImpl(
         db.trackToSyncQueries.deleteById(entity.id)
     }
 
-    override suspend fun deleteByTrackId(trackId: Long) {
+    override fun deleteByTrackId(trackId: Long) {
         db.trackToSyncQueries.deleteByTrackId(trackId)
     }
 
-    override suspend fun deleteBySourceId(sourceId: Long) {
+    override fun deleteBySourceId(sourceId: Long) {
         db.trackToSyncQueries.deleteBySourceId(sourceId)
     }
 
-
-    override suspend fun queryAll(): List<TrackToSync> {
+    override fun queryAll(): List<TrackToSync> {
         return db.trackToSyncQueries.queryAll()
             .executeAsList()
             .map { trackToSyncMapper.mapInverse(it) }
     }
 
-    override suspend fun queryByTrackId(id: Long): List<TrackToSync> {
+    override fun queryByTrackId(id: Long): List<TrackToSync> {
         return db.trackToSyncQueries.queryByTrackId(id)
             .executeAsList()
             .map { trackToSyncMapper.mapInverse(it) }

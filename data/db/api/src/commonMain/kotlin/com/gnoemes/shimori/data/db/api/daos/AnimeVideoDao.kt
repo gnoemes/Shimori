@@ -4,7 +4,6 @@ import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeVideoDao : EntityDao<AnimeVideo> {
-    suspend fun sync(titleId: Long, remote: List<AnimeVideo>)
-
+    fun queryByTitleId(id: Long): List<AnimeVideo>
     fun observeByTitleId(id: Long): Flow<List<AnimeVideo>>
 }

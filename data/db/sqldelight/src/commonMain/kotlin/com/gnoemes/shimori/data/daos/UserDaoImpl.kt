@@ -92,7 +92,7 @@ class UserDaoImpl(
         db.userQueries.deleteById(entity.id)
     }
 
-    override suspend fun deleteMe(sourceId: Long) {
+    override fun deleteMe(sourceId: Long) {
         db.userQueries.deleteMe(sourceId)
     }
 
@@ -104,11 +104,11 @@ class UserDaoImpl(
             .flowOn(dispatchers.io)
     }
 
-    override suspend fun queryMe(sourceId: Long): User? {
+    override fun queryMe(sourceId: Long): User? {
         return db.userQueries.queryMe(sourceId).executeAsOneOrNull()?.let { UserMapper.map(it) }
     }
 
-    override suspend fun queryMeShort(sourceId: Long): UserShort? {
+    override fun queryMeShort(sourceId: Long): UserShort? {
         return db.userQueries.queryMeShort(sourceId).executeAsOneOrNull()?.let {
             queryMeShortToUserShortMapper.map(it)
         }

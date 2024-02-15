@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                api(projects.core.logging.api)
                 api(kotlinx.coroutines.core)
                 api(kotlinx.serialization.json)
                 api(kotlinx.dateTime)
