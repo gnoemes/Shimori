@@ -1,11 +1,21 @@
 plugins {
-    id("base-module")
-    id("kotlin")
+    id("com.gnoemes.shimori.kotlin.multiplatform")
 }
 
-dependencies {
-    api(projects.base.core)
-    api(projects.data)
-    implementation(projects.shikimori)
-    implementation(projects.sourceApi)
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(projects.core.base)
+
+                api(projects.data.lists)
+                implementation(projects.data.source.core)
+                implementation(projects.data.anime)
+                implementation(projects.data.manga)
+                implementation(projects.data.ranobe)
+                implementation(projects.data.tracks)
+                implementation(projects.data.user)
+            }
+        }
+    }
 }

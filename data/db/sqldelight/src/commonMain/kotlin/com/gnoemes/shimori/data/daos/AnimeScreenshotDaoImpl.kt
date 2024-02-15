@@ -6,9 +6,7 @@ import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.db.api.daos.AnimeScreenshotDao
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
-import com.gnoemes.shimori.data.util.SYNCER_RESULT_TAG
 import com.gnoemes.shimori.data.util.screenshot
-import com.gnoemes.shimori.data.util.syncerForEntity
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.flowOn
 import me.tatarka.inject.annotations.Inject
@@ -19,13 +17,6 @@ class AnimeScreenshotDaoImpl(
     private val logger: Logger,
     private val dispatchers: AppCoroutineDispatchers
 ) : AnimeScreenshotDao, SqlDelightEntityDao<AnimeScreenshot> {
-
-    private val syncer = syncerForEntity(
-        this,
-        { it.image.original },
-        { remote, local -> remote.copy(id = local?.id ?: 0) },
-        logger
-    )
 
     override fun insert(entity: AnimeScreenshot): Long {
         entity.let {
@@ -53,22 +44,13 @@ class AnimeScreenshotDaoImpl(
         db.animeScreenshotQueries.deleteById(entity.id)
     }
 
+    override fun queryByTitleId(id: Long): List<AnimeScreenshot> {
+        return db.animeScreenshotQueries.queryByTitleId(id, ::screenshot).executeAsList()
+    }
+
     override fun observeByTitleId(id: Long) = db.animeScreenshotQueries
         .queryByTitleId(id, ::screenshot)
         .asFlow()
         .mapToList(dispatchers.io)
         .flowOn(dispatchers.io)
-
-    override suspend fun sync(titleId: Long, remote: List<AnimeScreenshot>) {
-        val result = syncer.sync(
-            currentValues = db.animeScreenshotQueries.queryByTitleId(titleId, ::screenshot)
-                .executeAsList(),
-            networkValues = remote.map { it.copy(titleId = titleId) },
-            removeNotMatched = true
-        )
-
-        logger.i(tag = SYNCER_RESULT_TAG) {
-            "Anime screenshot sync results --> Added: ${result.added.size} Updated: ${result.updated.size}"
-        }
-    }
 }

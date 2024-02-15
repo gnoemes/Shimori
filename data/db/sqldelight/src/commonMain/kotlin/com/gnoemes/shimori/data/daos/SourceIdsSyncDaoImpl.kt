@@ -54,4 +54,45 @@ class SourceIdsSyncDaoImpl(
             .findRemoteId(sourceId, localId, type.type)
             .executeAsOneOrNull()
     }
+
+    override fun findLocalId(sourceId: Long, remoteId: Long, type: SourceDataType): Long? {
+        return db.sourceIdsSyncQueries
+            .findLocalId(sourceId, remoteId, type.type)
+            .executeAsOneOrNull()
+    }
+
+    override fun deleteByLocalId(sourceId: Long, localId: Long, type: SourceDataType) {
+        return db.sourceIdsSyncQueries
+            .deleteByLocal(sourceId, localId, type.type)
+
+    }
+
+    override fun syncRemoteIds(
+        sourceId: Long,
+        localId: Long,
+        remoteId: Long,
+        sourceDataType: SourceDataType
+    ) {
+        val dataType = sourceDataType.type
+        db.sourceIdsSyncQueries
+            .findIdByRemote(sourceId, remoteId, dataType)
+            .executeAsOneOrNull()
+            .let { id ->
+                if (id == null) db.sourceIdsSyncQueries.insert(
+                    sourceId,
+                    localId,
+                    remoteId,
+                    dataType
+                )
+                else db.sourceIdsSyncQueries.update(
+                    Source_ids_sync(
+                        id,
+                        sourceId,
+                        localId,
+                        remoteId,
+                        dataType
+                    )
+                )
+            }
+    }
 }

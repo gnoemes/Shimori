@@ -4,7 +4,7 @@ import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.manga.Manga
 
 data class CharacterInfo(
-    val character : Character,
+    val entity : Character,
     val animes : List<Anime>,
     val mangas : List<Manga>,
     //TODO add

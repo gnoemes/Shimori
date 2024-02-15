@@ -1,29 +1,14 @@
 package com.gnoemes.shimori.data.db.api.daos
 
-import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.characters.Character
-import com.gnoemes.shimori.data.characters.CharacterInfo
-import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.TrackTargetType
 import kotlinx.coroutines.flow.Flow
 
-abstract class CharacterDao : SourceSyncEntityDao<Character>(SourceDataType.Character) {
-    abstract suspend fun sync(sourceId: Long, remote: List<Character>)
-    abstract suspend fun sync(
-        sourceId: Long,
-        targetId: Long,
-        targetType: TrackTargetType,
-        remote: List<Character>
-    )
-
-    abstract suspend fun sync(sourceId: Long, characterInfo: CharacterInfo)
-
-    abstract suspend fun syncRoles(
-        roles: List<CharacterRole>,
-    )
+abstract class CharacterDao : EntityDao<Character> {
+    abstract fun queryAll(): List<Character>
 
     abstract fun queryById(id: Long): Character?
 

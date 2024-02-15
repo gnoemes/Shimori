@@ -15,8 +15,9 @@ kotlin {
                 api(projects.core.logging.impl)
                 api(projects.core.settings)
                 api(projects.core.preferences)
+                api(projects.data.source.core)
                 api(projects.data.db.sqldelight)
-                api(projects.data.sources.manager)
+                api(projects.domain)
 
                 api(projects.common.imageloading)
                 api(projects.common.ui.compose)

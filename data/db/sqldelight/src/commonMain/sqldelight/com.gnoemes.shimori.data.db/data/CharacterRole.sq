@@ -36,6 +36,10 @@ SELECT c.* FROM character_role AS cr
 INNER JOIN character AS c ON cr.character_id = c.id
 WHERE target_id = :targetId AND target_type = :target_type;
 
+queryByCharacterId:
+SELECT cr.* FROM character_role AS cr
+WHERE character_id = :characterId;
+
 queryAnimesByCharacter:
 SELECT title.*, r.* FROM character_role AS cr
 INNER JOIN anime AS title ON title.id = cr.target_id AND cr.target_type = "ANIME"

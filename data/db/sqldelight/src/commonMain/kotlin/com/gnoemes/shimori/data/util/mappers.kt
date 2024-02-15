@@ -5,6 +5,7 @@ import com.gnoemes.shimori.base.utils.TwoWayMapper
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.characters.Character
+import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.ShimoriImage
@@ -904,6 +905,20 @@ internal fun character(
         url = url,
         description = description,
         descriptionSourceUrl = description_source_url
+    )
+}
+
+internal fun characterRole(
+    id: Long,
+    characterId: Long,
+    targetId: Long,
+    target_type: TrackTargetType,
+): CharacterRole {
+    return CharacterRole(
+        id = id,
+        characterId = characterId,
+        targetId = targetId,
+        targetType = target_type,
     )
 }
 

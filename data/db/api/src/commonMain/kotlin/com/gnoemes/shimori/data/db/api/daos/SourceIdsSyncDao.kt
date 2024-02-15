@@ -9,4 +9,23 @@ interface SourceIdsSyncDao : EntityDao<SourceIdsSync> {
         localId: Long,
         type: SourceDataType
     ): Long?
+
+    fun findLocalId(
+        sourceId: Long,
+        remoteId: Long,
+        type: SourceDataType
+    ): Long?
+
+    fun syncRemoteIds(
+        sourceId: Long,
+        localId: Long,
+        remoteId: Long,
+        sourceDataType: SourceDataType
+    )
+
+    fun deleteByLocalId(
+        sourceId: Long,
+        localId: Long,
+        type: SourceDataType
+    )
 }
