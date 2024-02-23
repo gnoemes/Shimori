@@ -70,6 +70,14 @@ class TrackRepository(
             }
     }
 
+    suspend fun <T> trySync(data: SourceResponse<T>) {
+        transactionRunner {
+            store.trySync(data)
+        }
+    }
+
+    fun pendingTracksSynced() = groupLastRequestStore.updateLastRequest(Request.SYNC_PENDING_TRACKS)
+
     fun needSyncPendingTracks(
         expiry: Instant = ExpiryConstants.SYNC_PENDING_TASKS.minutes.inPast
     ) = groupLastRequestStore.isRequestBefore(Request.SYNC_PENDING_TRACKS, expiry)

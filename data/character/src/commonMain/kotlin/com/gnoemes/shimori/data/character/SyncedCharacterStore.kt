@@ -10,6 +10,7 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
+import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
 
@@ -23,6 +24,7 @@ class SyncedCharacterStore(
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
             is List<*> -> trySync(response.sourceId, data)
+            is AnimeInfo -> trySync(response.sourceId, data.characters)
             is Character -> sync(response.sourceId, data)
             is CharacterInfo -> sync(response.sourceId, data.entity)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }

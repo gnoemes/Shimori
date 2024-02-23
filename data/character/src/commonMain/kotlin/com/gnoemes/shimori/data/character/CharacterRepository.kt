@@ -8,6 +8,7 @@ import com.gnoemes.shimori.data.characters.CharacterInfo
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
@@ -23,6 +24,8 @@ class CharacterRepository(
     private val transactionRunner: DatabaseTransactionRunner
 ) {
     fun observeById(id: Long) = store.dao.observeById(id)
+    fun observeByTitle(titleId: Long, type: TrackTargetType) =
+        store.dao.observeByTitle(titleId, type)
 
     suspend fun sync(id: Long): SourceResponse<CharacterInfo> {
         val local = store.dao.queryById(id)

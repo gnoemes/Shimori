@@ -27,7 +27,7 @@ class SourceRequestMapper(
         }
     }
 
-    private fun findRemoteId(sourceId: Long, localId: Long, type: SourceDataType): Long {
+    fun findRemoteId(sourceId: Long, localId: Long, type: SourceDataType): Long {
         return dao.findRemoteId(sourceId, localId, type)
             ?: throw IllegalArgumentException("Remote id for $type from source with id: $sourceId not found")
     }

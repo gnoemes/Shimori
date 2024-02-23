@@ -1,7 +1,10 @@
 package com.gnoemes.shimori.data.track
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 @JvmInline
-@kotlinx.serialization.Serializable
+@Serializable
 value class ListType private constructor(val type: Int) {
     companion object {
         /**

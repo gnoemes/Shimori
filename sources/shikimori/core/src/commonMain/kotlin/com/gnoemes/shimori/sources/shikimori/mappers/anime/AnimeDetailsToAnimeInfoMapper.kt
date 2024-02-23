@@ -1,6 +1,8 @@
 package com.gnoemes.shimori.sources.shikimori.mappers.anime
 
 import com.gnoemes.shimori.base.utils.Mapper
+import com.gnoemes.shimori.data.characters.Character
+import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
@@ -71,6 +73,27 @@ class AnimeDetailsToAnimeInfoMapper(
             )
         }
 
+        val characters = from.characterRoles
+            ?.map { it.character.characterShort }
+            ?.map { character ->
+                Character(
+                    id = character.id.toLong(),
+                    name = character.name,
+                    nameRu = character.russian,
+                    nameEn = character.japanese,
+                    image = character.poster?.posterShort?.toShimoriImage(),
+                    url = character.url.appendHostIfNeed(values),
+                )
+            } ?: emptyList()
+
+        val characterRoles = from.characterRoles?.map {
+            CharacterRole(
+                characterId = it.character.characterShort.id.toLong(),
+                targetId = from.id.toLong(),
+                targetType = TrackTargetType.ANIME
+            )
+        } ?: emptyList()
+
 
         return AnimeInfo(
             entity = title,
@@ -79,6 +102,8 @@ class AnimeDetailsToAnimeInfoMapper(
             screenshots = screenshots,
             fanDubbers = fandubbers,
             fanSubbers = fansubbers,
+            characters = characters,
+            charactersRoles = characterRoles
         )
     }
 }
