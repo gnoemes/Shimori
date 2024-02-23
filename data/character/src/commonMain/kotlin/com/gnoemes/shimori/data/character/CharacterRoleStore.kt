@@ -10,6 +10,7 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.EntityStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
+import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
@@ -25,8 +26,8 @@ class CharacterRoleStore(
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
             is List<*> -> trySync(response.sourceId, data)
+            is AnimeInfo -> sync(response.sourceId, data.charactersRoles)
             //TODO add roles from title details
-//            is AnimeInfo -> sync(response.sourceId, data)
 //            is MangaInfo -> sync(response.sourceId, data)
 //            is RanobeInfo -> sync(response.sourceId, data)
             is CharacterInfo -> sync(response.sourceId, data)

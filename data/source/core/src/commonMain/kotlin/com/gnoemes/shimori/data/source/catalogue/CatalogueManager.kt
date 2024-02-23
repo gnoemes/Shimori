@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.source.catalogue
 
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.source.SourceManager
 import com.gnoemes.shimori.data.source.mapper.SourceRequestMapper
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.source.CatalogueSource
@@ -15,8 +16,8 @@ import me.tatarka.inject.annotations.Inject
 class CatalogueManager(
     private val catalogs: Set<CatalogueSource>,
     private val prefs: ShimoriPreferences,
-    private val mapper: SourceRequestMapper,
-) {
+    mapper: SourceRequestMapper,
+) : SourceManager<CatalogueSource>(mapper) {
     private val currentCatalog: CatalogueSource
         get() {
             val active = prefs.currentCatalogueSource
@@ -84,31 +85,7 @@ class CatalogueManager(
         )
     }
 
-    private suspend fun <DataSource, ResponseType> request(
-        catalogue: CatalogueSource,
-        dataSource: DataSource,
-        action: suspend DataSource.() -> ResponseType
-    ) = wrapResponse(catalogue) { action(dataSource) }
 
-    private suspend fun <DataSource, RequestType, ResponseType> request(
-        catalogue: CatalogueSource,
-        dataSource: DataSource,
-        mapper: SourceRequestMapper,
-        type: SourceDataType,
-        data: RequestType,
-        action: suspend DataSource.(RequestType) -> ResponseType
-    ) = wrapResponse(catalogue) {
-        val preparedData = mapper(id, type, data)
-        action(dataSource, preparedData)
-    }
 
-    private suspend fun <T> wrapResponse(
-        catalogue: CatalogueSource,
-        block: suspend CatalogueSource.() -> T
-    ) =
-        SourceResponse(
-            sourceId = catalogue.id,
-            data = block(catalogue)
-        )
 
 }

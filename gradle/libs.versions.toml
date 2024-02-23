@@ -7,7 +7,7 @@ sqlDelight = "2.0.1"
 coil = "3.0.0-alpha04"
 kotlininject = "0.6.3"
 multiplatformsettings = "1.1.1"
-paging-multiplatform = "3.2.0-alpha05-0.2.3"
+paging-multiplatform = "3.3.0-alpha02-0.4.0"
 circuit = "0.18.2"
 apollo3 = "3.8.2"
 

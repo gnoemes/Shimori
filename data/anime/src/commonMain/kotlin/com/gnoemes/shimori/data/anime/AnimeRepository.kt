@@ -87,17 +87,7 @@ class AnimeRepository(
         expiry
     )
 
-    fun needUpdateTitleRoles(
-        id: Long,
-        expiry: Instant = ExpiryConstants.TITLE_ROLES.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
-        Request.ANIME_ROLES,
-        id,
-        expiry
-    )
-
     fun titleUpdated(id: Long) = entityLastRequest.updateLastRequest(Request.ANIME_DETAILS, id)
-    fun rolesUpdated(id: Long) = entityLastRequest.updateLastRequest(Request.ANIME_ROLES, id)
     fun statusUpdated(status: TrackStatus?) = entityLastRequest.updateLastRequest(
         Request.ANIMES_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong()

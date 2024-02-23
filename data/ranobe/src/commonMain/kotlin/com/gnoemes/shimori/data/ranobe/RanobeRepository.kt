@@ -78,17 +78,7 @@ class RanobeRepository(
         expiry
     )
 
-    fun needUpdateTitleRoles(
-        id: Long,
-        expiry: Instant = ExpiryConstants.TITLE_ROLES.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
-        Request.RANOBE_ROLES,
-        id,
-        expiry
-    )
-
     fun titleUpdated(id: Long) = entityLastRequest.updateLastRequest(Request.RANOBE_DETAILS, id)
-    fun rolesUpdated(id: Long) = entityLastRequest.updateLastRequest(Request.RANOBE_ROLES, id)
     fun statusUpdated(status: TrackStatus?) = entityLastRequest.updateLastRequest(
         Request.RANOBE_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong()

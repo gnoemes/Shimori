@@ -25,6 +25,8 @@ class ListsRepository(
 
     fun observePinsExist() = dao.observePinsExist()
 
+    fun upsert(sort: ListSort) = listSortDao.upsert(sort)
+
     fun togglePin(targetId: Long, targetType: TrackTargetType) = transactionRunner {
         dao.togglePin(targetId, targetType)
     }
