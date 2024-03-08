@@ -18,6 +18,7 @@ kotlin {
                 api(projects.data.source.core)
                 api(projects.data.db.sqldelight)
                 api(projects.domain)
+                api(projects.tasks)
 
                 api(projects.common.imageloading)
                 api(projects.common.ui.compose)
@@ -26,6 +27,8 @@ kotlin {
                 api(projects.common.ui.resources.icons)
 
                 api(projects.ui.home)
+
+                api(libs.graphql.apollo3)
             }
         }
 

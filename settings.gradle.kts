@@ -71,6 +71,7 @@ include(
     ":data:lists",
     ":data:user",
     ":domain",
+    ":tasks",
     ":common:ui:circuit-overlay",
     ":common:ui:compose",
     ":common:ui:resources:strings",

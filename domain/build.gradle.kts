@@ -17,8 +17,10 @@ kotlin {
                 api(projects.data.character)
                 api(projects.data.tracks)
                 api(projects.data.user)
+                api(projects.data.lastrequest)
 
                 api(libs.multiplatform.paging.common)
+                implementation(kotlinx.atomicfu)
                 implementation(libs.kotlininject.runtime)
             }
         }

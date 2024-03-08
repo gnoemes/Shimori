@@ -46,11 +46,10 @@ class ShikimoriApi(
     private val apiUrl = "${values.url}/$API_PATH"
 
     private companion object {
-        const val API_PATH = "/api"
+        const val API_PATH = "api"
     }
 
-    private suspend fun <D : Query.Data> query(query: Query<D>) =
-        graphql.query(query).execute()
+    private suspend fun <D : Query.Data> query(query: Query<D>) = graphql.query(query).execute()
 
     ///////////////////////////////////////////////////////
     // Services

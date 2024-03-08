@@ -8,6 +8,7 @@ import com.gnoemes.shimori.data.SqlDelightDatabaseComponent
 import com.gnoemes.shimori.data.source.SourcesComponent
 import com.gnoemes.shimori.logging.impl.LoggerComponent
 import com.gnoemes.shimori.preferences.PreferencesComponent
+import com.gnoemes.shimori.tasks.TasksComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,8 +24,8 @@ interface SharedApplicationComponent :
     ImageLoadingComponent,
     LoggerComponent,
     SqlDelightDatabaseComponent,
-    SourcesComponent
-{
+    SourcesComponent,
+    TasksComponent {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @ApplicationScope

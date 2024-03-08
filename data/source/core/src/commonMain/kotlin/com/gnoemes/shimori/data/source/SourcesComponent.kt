@@ -16,9 +16,9 @@ import me.tatarka.inject.annotations.Provides
 
 
 interface SourcesComponent :
+    ShikimoriComponent,
     SourceCatalogueComponent,
-    SourceTrackComponent,
-    ShikimoriComponent {
+    SourceTrackComponent {
 
     @ApplicationScope
     @Provides

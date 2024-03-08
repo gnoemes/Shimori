@@ -7,7 +7,9 @@ import com.gnoemes.shimori.source.data.TrackDataSource
 import com.gnoemes.shimori.sources.shikimori.ShikimoriApi
 import com.gnoemes.shimori.sources.shikimori.mappers.rate.RateMapper
 import com.gnoemes.shimori.sources.shikimori.models.rates.UserRateCreateOrUpdateRequest
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 class ShikimoriTrackDataSource(
     private val api: ShikimoriApi,
     private val rateMapper: RateMapper,

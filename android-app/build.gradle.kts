@@ -106,6 +106,7 @@ dependencies {
     implementation(androidx.activity)
     implementation(androidx.browser)
     implementation(androidx.splashscreen)
+    implementation(androidx.work.runtime)
     implementation(kotlinx.coroutines.android)
     implementation(composelibs.activity)
 }
