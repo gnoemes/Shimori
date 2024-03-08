@@ -5,7 +5,9 @@ import com.gnoemes.shimori.source.data.UserDataSource
 import com.gnoemes.shimori.sources.shikimori.ShikimoriApi
 import com.gnoemes.shimori.sources.shikimori.mappers.user.UserBriefMapper
 import com.gnoemes.shimori.sources.shikimori.mappers.user.UserResponseMapper
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 class ShikimoriUserDataSource(
     private val api: ShikimoriApi,
     private val briefMapper: UserBriefMapper,

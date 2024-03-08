@@ -68,14 +68,14 @@ class UpdateTitleTracks(
         val status: TrackStatus?
     ) {
         companion object {
-            fun fullUpdate(type: TrackTargetType, status: TrackStatus? = null) = Params(
+            fun fullUpdate(type: TrackTargetType) = Params(
                 type = type,
                 forceUpdate = true,
                 optionalUpdate = false,
                 status = null
             )
 
-            fun optionalUpdate(type: TrackTargetType, status: TrackStatus? = null) = Params(
+            fun optionalUpdate(type: TrackTargetType) = Params(
                 type = type,
                 forceUpdate = false,
                 optionalUpdate = true,

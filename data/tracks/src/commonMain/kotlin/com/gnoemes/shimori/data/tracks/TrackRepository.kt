@@ -15,8 +15,10 @@ import com.gnoemes.shimori.data.track.TrackToSync
 import com.gnoemes.shimori.data.user.UserShort
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
 import kotlin.time.Duration.Companion.minutes
 
+@Inject
 class TrackRepository(
     private val tracker: TrackManager,
     private val store: SyncedTrackStore,

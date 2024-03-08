@@ -7,7 +7,9 @@ import com.gnoemes.shimori.source.data.CharacterDataSource
 import com.gnoemes.shimori.sources.shikimori.CharacterDetailsQuery
 import com.gnoemes.shimori.sources.shikimori.ShikimoriApi
 import com.gnoemes.shimori.sources.shikimori.mappers.character.CharacterDetailsToCharacterInfoMapper
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 class ShikimoriCharacterDataSource(
     private val api: ShikimoriApi,
     private val mapper : CharacterDetailsToCharacterInfoMapper,

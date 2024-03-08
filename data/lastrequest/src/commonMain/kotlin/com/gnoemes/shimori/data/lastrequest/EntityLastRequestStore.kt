@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.lastrequest
 
+import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.db.api.daos.LastRequestDao
@@ -9,6 +10,7 @@ import me.tatarka.inject.annotations.Inject
 import kotlin.time.Duration
 
 @Inject
+@ApplicationScope
 class EntityLastRequestStore(
     private val dao: LastRequestDao
 ) {

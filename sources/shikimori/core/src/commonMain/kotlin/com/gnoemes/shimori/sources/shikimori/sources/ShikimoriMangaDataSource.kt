@@ -13,7 +13,9 @@ import com.gnoemes.shimori.sources.shikimori.ShikimoriApi
 import com.gnoemes.shimori.sources.shikimori.mappers.from
 import com.gnoemes.shimori.sources.shikimori.mappers.manga.MangaTracksQueryToMangaWithTrack
 import com.gnoemes.shimori.sources.shikimori.type.UserRateStatusEnum
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 class ShikimoriMangaDataSource(
     private val api: ShikimoriApi,
     private val mangaTracksQueryToMangaWithTrack: MangaTracksQueryToMangaWithTrack,

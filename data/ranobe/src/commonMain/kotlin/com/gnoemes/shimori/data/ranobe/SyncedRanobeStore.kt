@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.ranobe
 
+import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.RanobeDao
@@ -14,6 +15,7 @@ import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@ApplicationScope
 class SyncedRanobeStore(
     internal val dao: RanobeDao,
     syncDao: SourceIdsSyncDao,

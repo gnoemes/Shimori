@@ -103,4 +103,5 @@ actual interface ShikimoriPlatformComponent {
         }
 
     }
+
 }

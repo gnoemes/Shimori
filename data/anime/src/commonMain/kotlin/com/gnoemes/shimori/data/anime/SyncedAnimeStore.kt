@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.anime
 
+import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.AnimeDao
@@ -15,6 +16,7 @@ import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@ApplicationScope
 class SyncedAnimeStore(
     internal val dao: AnimeDao,
     syncDao: SourceIdsSyncDao,

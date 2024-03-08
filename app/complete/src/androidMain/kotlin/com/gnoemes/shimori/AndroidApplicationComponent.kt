@@ -5,6 +5,7 @@ import com.gnoemes.shimori.app.core.appinitializers.AppInitializers
 import com.gnoemes.shimori.app.core.inject.SharedApplicationComponent
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.tasks.ShimoriWorkerFactory
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
@@ -17,6 +18,7 @@ abstract class AndroidApplicationComponent(
 
     abstract val initializers: AppInitializers
     abstract val dispatchers: AppCoroutineDispatchers
+    abstract val workerFactory: ShimoriWorkerFactory
 
     companion object
 }

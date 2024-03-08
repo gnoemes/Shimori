@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.character
 
+import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.characters.CharacterInfo
@@ -16,6 +17,7 @@ import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@ApplicationScope
 class CharacterRoleStore(
     private val characterRoleDao: CharacterRoleDao,
     private val dao: SourceIdsSyncDao,

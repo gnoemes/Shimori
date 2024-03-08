@@ -1,15 +1,21 @@
 package com.gnoemes.shimori.tasks
 
+import android.content.Context
 import androidx.work.CoroutineWorker
-import com.gnoemes.shimori.base.core.utils.Logger
+import androidx.work.WorkerParameters
 import com.gnoemes.shimori.domain.interactors.SyncPendingTracks
+import com.gnoemes.shimori.logging.api.Logger
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 import kotlin.system.measureTimeMillis
 
-internal class SyncPendingTracksWorker(
-    payload: WorkerPayload,
-    private val syncPendingTracks: SyncPendingTracks,
+@Inject
+class SyncPendingTracksWorker(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val syncPendingTracks: Lazy<SyncPendingTracks>,
     private val logger: Logger
-) : CoroutineWorker(payload.context, payload.params) {
+) : CoroutineWorker(context, params) {
 
     companion object {
         const val TAG = "SyncPendingTracksWorker"
@@ -17,16 +23,16 @@ internal class SyncPendingTracksWorker(
 
     override suspend fun doWork(): Result {
         logger.d(
-            message = "Worker is running",
+            message = { "Worker is running" },
             tag = TAG
         )
 
         val time = measureTimeMillis {
-            syncPendingTracks.executeSync(Unit)
+            syncPendingTracks.value.invoke(Unit)
         }
 
         logger.d(
-            message = "Work is done. Work time: $time mills",
+            message = { "Work is done. Work time: $time mills" },
             tag = TAG
         )
 
