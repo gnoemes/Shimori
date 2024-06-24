@@ -1,5 +1,5 @@
 [versions]
-agp = "8.2.2"
+agp = "8.5.0"
 lifecycle = "2.7.0"
 androidxtest = "1.5.2"
 paging3 = "3.2.1"
