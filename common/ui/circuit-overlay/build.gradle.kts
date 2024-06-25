@@ -9,7 +9,7 @@ android {
 }
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.common.ui.compose)
                 implementation(projects.common.ui.screens)

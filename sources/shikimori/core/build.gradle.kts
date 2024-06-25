@@ -29,7 +29,7 @@ buildConfig {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.sourceApi.catalogue)
                 api(projects.sourceApi.track)
@@ -49,13 +49,13 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
+        jvmMain {
             dependencies {
                 api(libs.ktor.okhttp)
             }
         }
 
-        val iosMain by getting {
+        iosMain {
             dependencies {
                 implementation(libs.ktor.darwin)
             }

@@ -30,7 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.ui.PersonCover
-import com.gnoemes.shimori.common.ui.resources.strings.Res
+import com.gnoemes.shimori.common.ui.resources.Icons
+import com.gnoemes.shimori.common.ui.resources.icons.ic_explore
+import com.gnoemes.shimori.common.ui.resources.icons.ic_list
+import com.gnoemes.shimori.common.ui.resources.icons.ic_profile
+import com.gnoemes.shimori.common.ui.resources.strings.explore
+import com.gnoemes.shimori.common.ui.resources.strings.lists_title
+import com.gnoemes.shimori.common.ui.resources.strings.profile
+import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.screens.MockScreen
 import com.slack.circuit.backstack.SaveableBackStack
@@ -40,10 +47,10 @@ import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
-import dev.icerock.moko.resources.ImageResource
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.compose.painterResource
-import dev.icerock.moko.resources.compose.stringResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun Home(
@@ -85,7 +92,7 @@ internal fun Home(
             ) {
                 NavigableCircuitContent(
                     navigator = navigator,
-                    backstack = backStack,
+                    backStack = backStack,
                     decoration = remember(navigator) {
                         GestureNavigationDecoration(onBackInvoked = navigator::pop)
                     },
@@ -158,13 +165,13 @@ private fun HomeNavigationItemIcon(item: HomeNavigationItem, selected: Boolean) 
         Crossfade(targetState = selected) { s ->
             Icon(
                 painter = painterResource(if (s) item.selectedImageResource else item.iconImageResource),
-                contentDescription = item.contentDescription,
+                contentDescription = stringResource(item.contentDescription),
             )
         }
     } else {
         Icon(
             painter = painterResource(item.iconImageResource),
-            contentDescription = item.contentDescription,
+            contentDescription = stringResource(item.contentDescription),
         )
     }
 }
@@ -188,22 +195,22 @@ internal enum class NavigationType {
 private abstract class HomeNavigationItem {
     abstract val screen: Screen
     abstract val label: StringResource
-    abstract val contentDescription: String
-    abstract val iconImageResource: ImageResource
+    abstract val contentDescription: StringResource
+    abstract val iconImageResource: DrawableResource
 
     data class IconNavigationItem(
         override val screen: Screen,
         override val label: StringResource,
-        override val contentDescription: String,
-        override val iconImageResource: ImageResource,
-        val selectedImageResource: ImageResource? = null,
+        override val contentDescription: StringResource,
+        override val iconImageResource: DrawableResource,
+        val selectedImageResource: DrawableResource? = null,
     ) : HomeNavigationItem()
 
     data class ImageNavigationItem(
         override val screen: Screen,
         override val label: StringResource,
-        override val contentDescription: String,
-        override val iconImageResource: ImageResource,
+        override val contentDescription: StringResource,
+        override val iconImageResource: DrawableResource,
         val image: ShimoriImage?,
     ) : HomeNavigationItem()
 }
@@ -214,21 +221,21 @@ private fun buildNavigationItems(
     return listOf(
         HomeNavigationItem.IconNavigationItem(
             screen = MockScreen,
-            label = Res.strings.lists_title,
-            contentDescription = Res.strings.lists_title.toString(),
-            iconImageResource = com.gnoemes.shimori.common.ui.resources.icons.Res.images.ic_bookmark
+            label = Strings.lists_title,
+            contentDescription = Strings.lists_title,
+            iconImageResource = Icons.ic_list
         ),
         HomeNavigationItem.IconNavigationItem(
             screen = MockScreen,
-            label = Res.strings.explore,
-            contentDescription = Res.strings.explore.toString(),
-            iconImageResource = com.gnoemes.shimori.common.ui.resources.icons.Res.images.ic_explore
+            label = Strings.explore,
+            contentDescription = Strings.explore,
+            iconImageResource = Icons.ic_explore
         ),
         HomeNavigationItem.ImageNavigationItem(
             screen = MockScreen,
-            label = Res.strings.profile,
-            contentDescription = Res.strings.profile.toString(),
-            iconImageResource = com.gnoemes.shimori.common.ui.resources.icons.Res.images.ic_profile,
+            label = Strings.profile,
+            contentDescription = Strings.profile,
+            iconImageResource = Icons.ic_profile,
             image = profileImage
         )
     )

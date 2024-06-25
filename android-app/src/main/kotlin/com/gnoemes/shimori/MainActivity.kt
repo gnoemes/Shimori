@@ -30,8 +30,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val applicationComponent = AndroidApplicationComponent.from(this)
-        val component =
-            AndroidActivityComponent.create(this, applicationComponent)
+        val component = AndroidActivityComponent.create(this, applicationComponent)
 
         lifecycle.coroutineScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -43,15 +42,16 @@ class MainActivity : BaseActivity() {
         }
 
         setContent {
-            val backstack = rememberSaveableBackStack { push(ListsScreen) }
+            val backstack = rememberSaveableBackStack(listOf(ListsScreen))
             val navigator = rememberCircuitNavigator(backstack)
 
-            component.shimoriContent(
+            component.shimoriContent.Content(
                 backstack,
                 navigator,
                 { url ->
                     val intent = CustomTabsIntent.Builder().build()
                     intent.launchUrl(this@MainActivity, Uri.parse(url))
+                    true
                 },
                 Modifier
             )
