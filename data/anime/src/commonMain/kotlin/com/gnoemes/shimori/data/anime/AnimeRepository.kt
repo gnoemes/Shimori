@@ -50,7 +50,7 @@ class AnimeRepository(
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Anime with id: $id not found")
 
-        return catalogue.anime { get(local) }
+        return catalogue.anime(local) { get(it) }
             .also {
                 transactionRunner {
                     store.trySync(it)

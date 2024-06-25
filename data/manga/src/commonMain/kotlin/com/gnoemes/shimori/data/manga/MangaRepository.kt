@@ -45,7 +45,7 @@ class MangaRepository(
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Anime with id: $id not found")
 
-        return catalogue.manga { get(local) }
+        return catalogue.manga(local) { get(it) }
             .also {
                 transactionRunner {
                     store.trySync(it)

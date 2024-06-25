@@ -1,5 +1,7 @@
 package com.gnoemes.shimori.data.app
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 @kotlinx.serialization.Serializable
 value class SourceDataType private constructor(val type: Int) {

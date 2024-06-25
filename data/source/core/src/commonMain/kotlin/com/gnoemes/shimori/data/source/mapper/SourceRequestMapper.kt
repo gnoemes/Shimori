@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.data.source.mapper
 
 import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.manga.Manga
@@ -21,6 +22,7 @@ class SourceRequestMapper(
             is Manga -> data.copy(id = findRemoteId(sourceId, data.id, type)) as T
             is Ranobe -> data.copy(id = findRemoteId(sourceId, data.id, type)) as T
             is Track -> data.copy(id = findRemoteId(sourceId, data.id, type)) as T
+            is Character -> data.copy(id = findRemoteId(sourceId, data.id, type)) as T
             //user always contains remote id
             is UserShort -> data
             else -> throw IllegalArgumentException("Data with type ${data!!::class} is not supported")

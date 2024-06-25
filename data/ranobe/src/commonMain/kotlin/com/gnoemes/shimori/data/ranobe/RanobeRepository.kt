@@ -45,7 +45,7 @@ class RanobeRepository(
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Ranobe with id: $id not found")
 
-        return catalogue.ranobe { get(local) }
+        return catalogue.ranobe(local) { get(it) }
             .also {
                 transactionRunner {
                     store.trySync(it)
