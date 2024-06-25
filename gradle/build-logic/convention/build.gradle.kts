@@ -21,6 +21,7 @@ dependencies {
     compileOnly(kotlinx.gradle)
     compileOnly(kotlinx.gradle.detekt)
     compileOnly(composelibs.gradle)
+    compileOnly(kotlinx.gradle.compose.compiler)
     compileOnly(libs.google.appDistribution)
     compileOnly(libs.sqldelight.gradle)
 }

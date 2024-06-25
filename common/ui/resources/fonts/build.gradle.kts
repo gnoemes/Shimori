@@ -6,7 +6,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.data.models)
 
@@ -19,8 +19,4 @@ kotlin {
 
 android {
     namespace = "com.gnoemes.shimori.common.ui.resources.fonts"
-
-    sourceSets["main"].apply {
-        res.srcDirs("src/androidMain/res", "src/commonMain/resources")
-    }
 }

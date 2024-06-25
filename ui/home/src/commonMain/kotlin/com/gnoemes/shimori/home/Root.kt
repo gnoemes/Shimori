@@ -25,6 +25,7 @@ import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.preferences.ShimoriPreferences
+import com.gnoemes.shimori.screens.UrlScreen
 import com.gnoemes.shimori.settings.ShimoriSettings
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
@@ -32,65 +33,73 @@ import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.retained.LocalRetainedStateRegistry
 import com.slack.circuit.retained.continuityRetainedStateRegistry
 import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.screen.PopResult
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
-typealias ShimoriContent = @Composable (
-    backstack: SaveableBackStack,
-    navigator: Navigator,
-    onOpenUrl: (String) -> Unit,
-    modifier: Modifier,
-) -> Unit
+interface ShimoriContent {
+    @Composable
+    fun Content(
+        backstack: SaveableBackStack,
+        navigator: Navigator,
+        onOpenUrl: (String) -> Boolean,
+        modifier: Modifier,
+    )
+}
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Inject
-@Composable
-fun ShimoriContent(
-    @Assisted backstack: SaveableBackStack,
-    @Assisted navigator: Navigator,
-    @Assisted onOpenUrl: (String) -> Unit,
-    rootViewModel: (CoroutineScope) -> RootViewModel,
-    circuit: Circuit,
-    textCreator: ShimoriTextCreator,
-    dateFormatter: ShimoriDateTextFormatter,
-    preferences: ShimoriPreferences,
-    settings: ShimoriSettings,
-    iconsUtil: ShimoriIconsUtil,
-    imageLoader: ImageLoader,
-    logger: Logger,
-    @Assisted modifier: Modifier,
-) {
-    val coroutineScope = rememberCoroutineScope()
-    remember { rootViewModel(coroutineScope) }
+class DefaultShimoriContent(
+    private val rootViewModel: (CoroutineScope) -> RootViewModel,
+    private val circuit: Circuit,
+    private val textCreator: ShimoriTextCreator,
+    private val dateFormatter: ShimoriDateTextFormatter,
+    private val preferences: ShimoriPreferences,
+    private val settings: ShimoriSettings,
+    private val iconsUtil: ShimoriIconsUtil,
+    private val imageLoader: ImageLoader,
+    private val logger: Logger,
+) : ShimoriContent {
 
-    val shimoriNavigator: Navigator = remember(navigator) {
-        ShimoriNavigator(navigator, backstack, onOpenUrl, logger)
-    }
-
-    setSingletonImageLoaderFactory { imageLoader }
-
-    CompositionLocalProvider(
-        LocalNavigator provides shimoriNavigator,
-        LocalShimoriIconsUtil provides iconsUtil,
-        LocalShimoriTextCreator provides textCreator,
-        LocalShimoriDateTextFormatter provides dateFormatter,
-        LocalShimoriPreferences provides preferences,
-        LocalShimoriSettings provides settings,
-        LocalWindowSizeClass provides calculateWindowSizeClass(),
-        LocalRetainedStateRegistry provides continuityRetainedStateRegistry()
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalCoilApi::class)
+    @Composable
+    override fun Content(
+        backstack: SaveableBackStack,
+        navigator: Navigator,
+        onOpenUrl: (String) -> Boolean,
+        modifier: Modifier
     ) {
-        CircuitCompositionLocals(circuit) {
-            ShimoriTheme(
-                useDarkColors = settings.shouldUseDarkColors(),
-                useDynamicColors = settings.shouldUseDynamicColors()
-            ) {
-                Home(
-                    backStack = backstack,
-                    navigator = shimoriNavigator,
-                    modifier = modifier
-                )
+        val coroutineScope = rememberCoroutineScope()
+        remember { rootViewModel(coroutineScope) }
+
+        val shimoriNavigator: Navigator = remember(navigator) {
+            ShimoriNavigator(navigator, backstack, onOpenUrl, logger)
+        }
+
+        setSingletonImageLoaderFactory { imageLoader }
+
+        CompositionLocalProvider(
+            LocalNavigator provides shimoriNavigator,
+            LocalShimoriIconsUtil provides iconsUtil,
+            LocalShimoriTextCreator provides textCreator,
+            LocalShimoriDateTextFormatter provides dateFormatter,
+            LocalShimoriPreferences provides preferences,
+            LocalShimoriSettings provides settings,
+            LocalWindowSizeClass provides calculateWindowSizeClass(),
+            LocalRetainedStateRegistry provides continuityRetainedStateRegistry()
+        ) {
+            CircuitCompositionLocals(circuit) {
+                ShimoriTheme(
+                    useDarkColors = settings.shouldUseDarkColors(),
+                    useDynamicColors = settings.shouldUseDynamicColors()
+                ) {
+                    Home(
+                        backStack = backstack,
+                        navigator = shimoriNavigator,
+                        modifier = modifier
+                    )
+                }
             }
         }
     }
@@ -99,22 +108,34 @@ fun ShimoriContent(
 private class ShimoriNavigator(
     private val navigator: Navigator,
     private val backstack: SaveableBackStack,
-    private val onOpenUrl: (String) -> Unit,
+    private val onOpenUrl: (String) -> Boolean,
     private val logger: Logger,
 ) : Navigator {
-    override fun goTo(screen: Screen) {
-        logger.d { "goTo Screen : $screen. Current stack: ${backstack.toList()}" }
 
-        navigator.goTo(screen)
+    override fun goTo(screen: Screen): Boolean {
+        logger.d { "goTo. Screen: $screen. Current stack: ${backstack.toList()}" }
+
+        if (screen is UrlScreen && onOpenUrl(screen.url)) {
+            return true
+        }
+        return navigator.goTo(screen)
     }
 
-    override fun pop(): Screen? {
-        logger.d { "pop. Current stack: ${backstack.toList()}" }
-        return navigator.pop()
-    }
-
-    override fun resetRoot(newRoot: Screen): List<Screen> {
+    override fun resetRoot(
+        newRoot: Screen,
+        saveState: Boolean,
+        restoreState: Boolean
+    ): ImmutableList<Screen> {
         logger.d { "resetRoot. New root: $newRoot. Current stack: ${backstack.toList()}" }
         return navigator.resetRoot(newRoot)
     }
+
+    override fun pop(result: PopResult?): Screen? {
+        logger.d { "pop. Current stack: ${backstack.toList()}" }
+        return navigator.pop(result)
+    }
+
+    override fun peek(): Screen? = navigator.peek()
+    override fun peekBackStack(): ImmutableList<Screen> = navigator.peekBackStack()
+
 }

@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.core.base)
                 implementation(projects.core.logging.api)
@@ -27,19 +27,19 @@ kotlin {
             }
         }
 
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.sqldelight.android)
             }
         }
 
-        val jvmMain by getting {
+        jvmMain {
             dependencies {
                 implementation(libs.sqldelight.sqlite)
             }
         }
 
-        val iosMain by getting {
+        iosMain {
             dependencies {
                 implementation(libs.sqldelight.native)
             }

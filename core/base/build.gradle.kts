@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.core.logging.api)
                 api(kotlinx.coroutines.core)
@@ -15,7 +15,5 @@ kotlin {
                 api(libs.kotlininject.runtime)
             }
         }
-
-        val jvmMain by getting
     }
 }

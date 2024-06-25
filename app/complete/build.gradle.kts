@@ -9,13 +9,13 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(projects.app.core)
             }
         }
 
-        val androidMain by getting {
+        androidMain {
             dependencies {
 
             }

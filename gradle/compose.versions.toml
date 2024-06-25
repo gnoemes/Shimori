@@ -1,6 +1,5 @@
 [versions]
-composeCompiler = "1.5.3"
-compose-multiplatform = "1.6.0-beta02"
+compose-multiplatform = "1.6.11"
 
 [plugins]
 multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
@@ -8,6 +7,6 @@ multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplat
 [libraries]
 gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
-activity = "androidx.activity:activity-compose:1.8.2"
-material3-windowsizeclass = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.3.2"
+activity = "androidx.activity:activity-compose:1.9.0"
+material3-windowsizeclass = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0"
 material-kolor = "com.materialkolor:material-kolor:1.4.0-alpha05"

@@ -1,14 +1,15 @@
 [versions]
-kotlin = "1.9.22"
-ksp = "1.9.22-1.0.17"
-dateTime = "0.5.0"
-serilization = "1.6.2"
-coroutines = "1.7.3"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.22"
+dateTime = "0.6.0"
+serilization = "1.7.0"
+coroutines = "1.8.1"
 detekt = "1.23.1"
 
 [libraries]
 gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 android-extensions = { module = "org.jetbrains.kotlin:kotlin-android-extensions", version.ref = "kotlin" }
@@ -20,7 +21,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serilization" }
 
-atomicfu = "org.jetbrains.kotlinx:atomicfu:0.23.2"
+atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
 dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
 
 [bundles]
@@ -32,3 +33,4 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

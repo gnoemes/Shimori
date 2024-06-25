@@ -40,34 +40,30 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                     // Add linker flag for SQLite. See:
                     // https://github.com/touchlab/SQLiter/issues/77
                     linkerOpts("-lsqlite3")
+
+                    // Workaround for https://youtrack.jetbrains.com/issue/KT-64508
+                    freeCompilerArgs += "-Xdisable-phases=RemoveRedundantCallsToStaticInitializersPhase"
                 }
 
                 compilations.configureEach {
-                    compilerOptions.configure {
-                        // Try out preview custom allocator in K/N 1.9
-                        // https://kotlinlang.org/docs/whatsnew19.html#preview-of-custom-memory-allocator
-                        freeCompilerArgs.add("-Xallocator=custom")
-
-                        // https://kotlinlang.org/docs/whatsnew19.html#compiler-option-for-c-interop-implicit-integer-conversions
-                        freeCompilerArgs.add("-XXLanguage:+ImplicitSignedToUnsignedIntegerConversion")
-
-                        // Enable debug symbols:
-                        // https://kotlinlang.org/docs/native-ios-symbolication.html
-                        freeCompilerArgs.add("-Xadd-light-debug=enable")
-
-                        // Various opt-ins
-                        freeCompilerArgs.addAll(
-                            "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
-                            "-opt-in=kotlinx.cinterop.BetaInteropApi",
-                        )
+                    compileTaskProvider.configure {
+                        compilerOptions {
+                            // Various opt-ins
+                            freeCompilerArgs.addAll(
+                                "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+                                "-opt-in=kotlinx.cinterop.BetaInteropApi",
+                            )
+                        }
                     }
                 }
             }
 
             targets.configureEach {
                 compilations.configureEach {
-                    compilerOptions.configure {
-                        freeCompilerArgs.add("-Xexpect-actual-classes")
+                    compileTaskProvider.configure {
+                        compilerOptions {
+                            freeCompilerArgs.add("-Xexpect-actual-classes")
+                        }
                     }
                 }
             }
@@ -77,8 +73,11 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
     }
 }
 
-fun Project.addKspDependencyForAllTargets(dependencyNotation: Any) = addKspDependencyForAllTargets("", dependencyNotation)
-fun Project.addKspTestDependencyForAllTargets(dependencyNotation: Any) = addKspDependencyForAllTargets("Test", dependencyNotation)
+fun Project.addKspDependencyForAllTargets(dependencyNotation: Any) =
+    addKspDependencyForAllTargets("", dependencyNotation)
+
+fun Project.addKspTestDependencyForAllTargets(dependencyNotation: Any) =
+    addKspDependencyForAllTargets("Test", dependencyNotation)
 
 private fun Project.addKspDependencyForAllTargets(
     configurationNameSuffix: String,

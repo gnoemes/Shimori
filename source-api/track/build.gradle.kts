@@ -3,8 +3,8 @@ plugins {
 }
 
 kotlin {
-    sourceSets{
-        val commonMain by getting {
+    sourceSets {
+        commonMain {
             dependencies {
                 api(projects.sourceApi.core)
                 api(projects.data.models)
