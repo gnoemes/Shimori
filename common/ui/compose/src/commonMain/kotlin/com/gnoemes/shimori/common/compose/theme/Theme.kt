@@ -6,8 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.gnoemes.shimori.common.compose.LocalShimoriPreferences
 import com.gnoemes.shimori.common.compose.LocalShimoriSettings
+import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.settings.AppAccentColor
-import com.materialkolor.AnimatedDynamicMaterialTheme
+import com.materialkolor.DynamicMaterialTheme
 import com.materialkolor.PaletteStyle
 
 @Composable
@@ -24,13 +25,13 @@ fun ShimoriTheme(
         .observe
         .collectAsState(
             initial =
-            (prefs.getInt("initial_theme")
+            (prefs.getInt(ShimoriPreferences.ValueKey.INITIAL_THEME)
                 ?: if (useDynamicColors) AppAccentColor.System.value else AppAccentColor.Yellow.value)
                 .let { AppAccentColor.from(it) }
         )
         .value
 
-    prefs.setInt("initial_theme", accentColorType.value)
+    prefs.setInt(ShimoriPreferences.ValueKey.INITIAL_THEME, accentColorType.value)
 
     if (useDynamicColors) {
         MaterialTheme(
@@ -41,12 +42,13 @@ fun ShimoriTheme(
         )
     } else {
         val seedColor = seedColorFromType(accentColorType)
-        AnimatedDynamicMaterialTheme(
+        DynamicMaterialTheme(
             seedColor = seedColor,
+            animate = true,
             useDarkTheme = useDarkColors,
+            withAmoled = false,
             style = PaletteStyle.TonalSpot,
             shapes = ShimoriShapes,
-            typography = ShimoriTypography,
             content = content
         )
     }

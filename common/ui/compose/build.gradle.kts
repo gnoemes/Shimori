@@ -24,6 +24,8 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.animation)
                 implementation(composelibs.material.kolor)
+                implementation(composelibs.kmpalette.core)
+                implementation(composelibs.kmpalette.extensions.network)
 
                 api(compose.material3)
                 api(composelibs.material3.windowsizeclass)
