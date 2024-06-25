@@ -13,4 +13,9 @@ interface ShimoriPreferences {
 
     fun setInt(key: String, value: Int)
     fun getInt(key: String): Int?
+
+
+    object ValueKey {
+        const val INITIAL_THEME = "initial_theme"
+    }
 }
