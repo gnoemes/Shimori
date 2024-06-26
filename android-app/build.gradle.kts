@@ -12,8 +12,7 @@ val useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
 
 android {
     namespace = "com.gnoemes.shimori"
-
-    val version = readVersion("${project.projectDir}/version.properties")
+    val version = readVersion("${project.rootProject.projectDir}/version.properties")
 
     val versionMajor = version["major"].toString().toInt()
     val versionMinor = version["minor"].toString().toInt()

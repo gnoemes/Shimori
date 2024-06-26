@@ -8,6 +8,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
+import java.nio.file.NoSuchFileException
 
 internal val Project.libs: VersionCatalog
     get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -60,11 +61,19 @@ fun Project.initConfigField(
 }
 
 fun readVersion(path: String): Properties {
-    val version = loadProperties(path)
+    val version = try {
+        loadProperties(path)
+    } catch (e: NoSuchFileException) {
+        println("Project Version not found")
+        Properties()
+    }
+
     // safety defaults in case file is missing
     if (version["major"] == null) version["major"] = 1
     if (version["minor"] == null) version["minor"] = 0
     if (version["patch"] == null) version["patch"] = 0
+
+    if (version["VERSION_CODE"] == null) version["VERSION_CODE"] = 1
 
     return version
 }
