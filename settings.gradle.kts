@@ -81,10 +81,12 @@ include(
     ":common:imageloading",
     ":app:core",
     ":app:complete",
-    ":android-app",
     ":ui:home",
     ":source-api:core",
     ":source-api:catalogue",
     ":source-api:track",
     ":sources:shikimori:core",
+
+    ":android-app",
+    ":desktop-app",
 )
