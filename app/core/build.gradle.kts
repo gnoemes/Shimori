@@ -27,6 +27,9 @@ kotlin {
                 api(projects.common.ui.resources.icons)
 
                 api(projects.ui.home)
+                api(projects.ui.tracks.list)
+                api(projects.ui.tracks.menu)
+                api(projects.ui.tracks.edit)
 
                 api(libs.graphql.apollo3)
             }

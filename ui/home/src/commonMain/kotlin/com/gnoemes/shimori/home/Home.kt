@@ -39,6 +39,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.lists_title
 import com.gnoemes.shimori.common.ui.resources.strings.profile
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.common.ShimoriImage
+import com.gnoemes.shimori.screens.ListsScreen
 import com.gnoemes.shimori.screens.MockScreen
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.backstack.isAtRoot
@@ -220,7 +221,7 @@ private fun buildNavigationItems(
 ): List<HomeNavigationItem> {
     return listOf(
         HomeNavigationItem.IconNavigationItem(
-            screen = MockScreen,
+            screen = ListsScreen,
             label = Strings.lists_title,
             contentDescription = Strings.lists_title,
             iconImageResource = Icons.ic_list

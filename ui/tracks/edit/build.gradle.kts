@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.gnoemes.shimori.home"
+    namespace = "com.gnoemes.shimori.tracks.edit"
 }
 
 kotlin {
