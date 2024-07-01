@@ -6,10 +6,8 @@ import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 class KotlinMultiplatformConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
@@ -25,38 +23,38 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 androidTarget()
             }
 
-            listOf(
-//                iosX64(),
-                iosArm64(),
-                iosSimulatorArm64(),
-            ).forEach { target ->
-                target.binaries.framework {
-                    baseName = path.substring(1).replace(':', '-')
-                }
-            }
-
-            targets.withType<KotlinNativeTarget>().configureEach {
-                binaries.all {
-                    // Add linker flag for SQLite. See:
-                    // https://github.com/touchlab/SQLiter/issues/77
-                    linkerOpts("-lsqlite3")
-
-                    // Workaround for https://youtrack.jetbrains.com/issue/KT-64508
-                    freeCompilerArgs += "-Xdisable-phases=RemoveRedundantCallsToStaticInitializersPhase"
-                }
-
-                compilations.configureEach {
-                    compileTaskProvider.configure {
-                        compilerOptions {
-                            // Various opt-ins
-                            freeCompilerArgs.addAll(
-                                "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
-                                "-opt-in=kotlinx.cinterop.BetaInteropApi",
-                            )
-                        }
-                    }
-                }
-            }
+//            listOf(
+////                iosX64(),
+//                iosArm64(),
+//                iosSimulatorArm64(),
+//            ).forEach { target ->
+//                target.binaries.framework {
+//                    baseName = path.substring(1).replace(':', '-')
+//                }
+//            }
+//
+//            targets.withType<KotlinNativeTarget>().configureEach {
+//                binaries.all {
+//                    // Add linker flag for SQLite. See:
+//                    // https://github.com/touchlab/SQLiter/issues/77
+//                    linkerOpts("-lsqlite3")
+//
+//                    // Workaround for https://youtrack.jetbrains.com/issue/KT-64508
+//                    freeCompilerArgs += "-Xdisable-phases=RemoveRedundantCallsToStaticInitializersPhase"
+//                }
+//
+//                compilations.configureEach {
+//                    compileTaskProvider.configure {
+//                        compilerOptions {
+//                            // Various opt-ins
+//                            freeCompilerArgs.addAll(
+//                                "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+//                                "-opt-in=kotlinx.cinterop.BetaInteropApi",
+//                            )
+//                        }
+//                    }
+//                }
+//            }
 
             targets.configureEach {
                 compilations.configureEach {
