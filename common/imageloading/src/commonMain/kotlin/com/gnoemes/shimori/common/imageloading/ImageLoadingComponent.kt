@@ -13,7 +13,6 @@ expect interface ImageLoadingPlatformComponent
 
 interface ImageLoadingComponent : ImageLoadingPlatformComponent {
 
-
     @Provides
     fun provideImageLoader(
         context: PlatformContext,
@@ -36,6 +35,5 @@ interface ImageLoadingComponent : ImageLoadingPlatformComponent {
     @IntoSet
     fun providerShimoriImageInterceptor(initializer: ShimoriImageInterceptor): Interceptor =
         initializer
-
 
 }

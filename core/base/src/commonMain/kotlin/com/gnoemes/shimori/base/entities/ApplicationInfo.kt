@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.base.entities
 
 data class ApplicationInfo(
+    val name: String,
     val packageName: String,
     val platform: Platform,
     val flavor: Flavor,

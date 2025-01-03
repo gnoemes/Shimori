@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.sources.shikimori.services
 
-import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Query
+import com.apollographql.apollo.api.ApolloResponse
+import com.apollographql.apollo.api.Query
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.sources.shikimori.models.rates.ShikimoriRateStatus
 import com.gnoemes.shimori.sources.shikimori.models.rates.UserRateCreateOrUpdateRequest

@@ -1,5 +1,5 @@
 [versions]
-compose-multiplatform = "1.6.11"
+compose-multiplatform = "1.7.3"
 kmpalette = "3.1.0"
 
 [plugins]
@@ -8,9 +8,9 @@ multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplat
 [libraries]
 gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
-activity = "androidx.activity:activity-compose:1.9.0"
+activity = "androidx.activity:activity-compose:1.9.3"
 material3-windowsizeclass = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0"
-material-kolor = "com.materialkolor:material-kolor:1.7.0"
+material-kolor = "com.materialkolor:material-kolor:2.0.0"
 
 kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
 kmpalette-extensions-base64 = { module = "com.kmpalette:extensions-base64", version.ref = "kmpalette" }

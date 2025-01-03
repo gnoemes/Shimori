@@ -1,4 +1,5 @@
 plugins {
+    id("com.gnoemes.shimori.android.library")
     id("com.gnoemes.shimori.kotlin.multiplatform")
 }
 
@@ -15,5 +16,15 @@ kotlin {
                 api(libs.kotlininject.runtime)
             }
         }
+
+        androidMain {
+            dependencies {
+                api(androidx.core)
+            }
+        }
     }
+}
+
+android {
+    namespace = "com.gnoemes.shimori.base"
 }

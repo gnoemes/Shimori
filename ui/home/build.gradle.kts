@@ -17,6 +17,8 @@ kotlin {
                 implementation(projects.common.ui.screens)
                 implementation(projects.common.ui.circuitOverlay)
 
+                implementation(projects.domain)
+
                 implementation(libs.circuit.foundation)
                 implementation(libs.circuit.retained)
                 implementation(libs.circuit.gestureNavigation)

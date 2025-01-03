@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.sources.shikimori.sources
 
 
-import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo.api.Optional
 import com.gnoemes.shimori.base.utils.forLists
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo

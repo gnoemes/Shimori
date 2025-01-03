@@ -27,6 +27,11 @@ android {
         versionCode = appVersionCode
         versionName = appVersionName
         setProperty("archivesBaseName", "Shimori-v$appVersionName($appVersionCode)")
+
+        addManifestPlaceholders(
+            //TODO move some constants to project level
+            mapOf("oidcRedirectScheme" to "shimori")
+        )
     }
 
     buildFeatures {
@@ -108,6 +113,7 @@ dependencies {
     implementation(androidx.work.runtime)
     implementation(kotlinx.coroutines.android)
     implementation(composelibs.activity)
+    implementation(libs.multiplatform.oidc)
 }
 
 val firebaseAppId = project.propOrDef("firebaseAppId", "").toString()

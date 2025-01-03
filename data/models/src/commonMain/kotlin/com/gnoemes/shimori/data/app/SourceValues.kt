@@ -8,4 +8,6 @@ data class SourceValues(
     val signInUrl : String = "",
     val signUpUrl : String = "",
     val oAuthUrl : String = "",
+    val tokenUrl : String = "",
+    val userAgent : String = ""
 )

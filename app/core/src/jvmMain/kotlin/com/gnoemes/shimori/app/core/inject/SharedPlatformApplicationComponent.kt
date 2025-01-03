@@ -6,7 +6,6 @@ import com.gnoemes.shimori.base.entities.Platform
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import me.tatarka.inject.annotations.Provides
 import java.io.File
-import java.lang.management.ManagementFactory
 import java.util.Locale
 
 actual interface SharedPlatformApplicationComponent {
@@ -16,13 +15,14 @@ actual interface SharedPlatformApplicationComponent {
         flavor: Flavor,
     ): ApplicationInfo {
 
-        val isDebug = ManagementFactory.getRuntimeMXBean()
-            .inputArguments
-            .toString().indexOf("jdwp") >= 0;
+//        val isDebug = ManagementFactory.getRuntimeMXBean()
+//            .inputArguments
+//            .toString().indexOf("jdwp") >= 0;
 
         return ApplicationInfo(
+            name = "Shimori",
             packageName = System.getProperty("ShimoriPackageName"),
-            debug = isDebug,
+            debug = true,
             flavor = flavor,
             defaultLocale = Locale.getDefault().language,
             versionName = System.getProperty("ShimoriVersionName"),

@@ -1,9 +1,9 @@
 [versions]
-kotlin = "2.0.0"
-ksp = "2.0.0-1.0.22"
-dateTime = "0.6.0"
-serilization = "1.7.0"
-coroutines = "1.8.1"
+kotlin = "2.0.21"
+ksp = "2.0.21-1.0.27"
+dateTime = "0.6.1"
+serilization = "1.7.3"
+coroutines = "1.9.0"
 detekt = "1.23.1"
 
 [libraries]
@@ -22,7 +22,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serilization" }
 
-atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
+atomicfu = "org.jetbrains.kotlinx:atomicfu:0.26.0"
 dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
 
 [bundles]

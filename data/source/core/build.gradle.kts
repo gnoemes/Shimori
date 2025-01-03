@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.sources.shikimori.core)
+                api(projects.data.source.auth)
 
                 implementation(projects.core.base)
                 implementation(projects.core.preferences)
