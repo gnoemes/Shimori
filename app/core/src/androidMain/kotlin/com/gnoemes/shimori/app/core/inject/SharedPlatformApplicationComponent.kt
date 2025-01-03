@@ -21,11 +21,12 @@ actual interface SharedPlatformApplicationComponent {
         val packageInfo = packageManager.getPackageInfo(application.packageName, 0)
 
         return ApplicationInfo(
+            name = "Shimori",
             packageName = application.packageName,
             debug = (applicationInfo.flags and FLAG_DEBUGGABLE) != 0,
             flavor = flavor,
             defaultLocale = Locale.getDefault().language,
-            versionName = packageInfo.versionName,
+            versionName = packageInfo.versionName ?: "",
             versionCode = @Suppress("DEPRECATION") packageInfo.versionCode,
             platform = Platform.Android,
             cachePath = { application.cacheDir.absolutePath },

@@ -18,12 +18,25 @@ actual interface PreferencesPlatformComponent {
 
     @ApplicationScope
     @Provides
-    fun providePreferences(): AppPreferences = Preferences.userRoot().node("com.gnoemes.shimori.prefs")
+    fun provideAuthPreferences(delegate: AppAuthPreferences): AppAuthObservablePreferences =
+        PreferencesSettings(delegate)
 
     @ApplicationScope
     @Provides
-    fun provideSettings(): AppSettings = Preferences.userRoot().node("com.gnoemes.shimori.settings")
+    fun provideAuthPreferences(): AppAuthPreferences =
+        Preferences.userRoot().node("com.gnoemes.shimori.sources.auth")
+
+    @ApplicationScope
+    @Provides
+    fun providePreferences(): AppPreferences =
+        Preferences.userRoot().node("com.gnoemes.shimori.prefs")
+
+    @ApplicationScope
+    @Provides
+    fun provideSettings(): AppSettings =
+        Preferences.userRoot().node("com.gnoemes.shimori.settings")
 }
 
 typealias AppPreferences = Preferences
+typealias AppAuthPreferences = Preferences
 typealias AppSettings = Preferences

@@ -6,6 +6,9 @@ import com.slack.circuit.runtime.screen.Screen
 object ListsScreen : ShimoriScreen("Lists()")
 
 @Parcelize
+object AuthScreen : ShimoriScreen("Auth()")
+
+@Parcelize
 object MockScreen : ShimoriScreen("Mock()")
 
 @Parcelize

@@ -34,6 +34,8 @@ kotlin {
                 api(compose.components.resources)
 
                 implementation(libs.multiplatform.paging.compose)
+
+                implementation(libs.uuid)
             }
         }
     }

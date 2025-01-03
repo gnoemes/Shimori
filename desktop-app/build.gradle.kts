@@ -1,3 +1,4 @@
+import com.gnoemes.shimori.convention.APP_PACKAGE
 import com.gnoemes.shimori.convention.readVersion
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
@@ -16,7 +17,7 @@ val versionPatch = version["patch"].toString().toInt()
 val versionCode = version["VERSION_CODE"].toString().toInt()
 
 val appVersionName = "$versionMajor.$versionMinor.$versionPatch"
-val appPackageName = "com.gnoemes.shimori"
+val appPackageName = APP_PACKAGE
 
 buildConfig {
     packageName(appPackageName)
@@ -35,6 +36,8 @@ kotlin {
                 implementation(projects.app.complete)
                 implementation(compose.desktop.currentOs)
                 implementation(kotlinx.coroutines.swing)
+                implementation(libs.slf4j)
+                implementation(libs.slf4jImpl)
             }
         }
     }
@@ -43,7 +46,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.gnoemes.shimori.MainKt"
+        mainClass = "${appPackageName}.MainKt"
 
         nativeDistributions {
             modules("java.sql")

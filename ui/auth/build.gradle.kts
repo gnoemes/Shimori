@@ -1,23 +1,35 @@
 plugins {
-    id("multiplatform-ui-library")
+    id("com.gnoemes.shimori.android.library")
+    id("com.gnoemes.shimori.kotlin.multiplatform")
+    id("com.gnoemes.shimori.compose")
 }
 
 android {
     namespace = "com.gnoemes.shimori.auth"
 }
 
-dependencies {
-    commonMainImplementation(projects.domain)
-    commonMainImplementation(projects.commonUi)
-    commonMainImplementation(projects.commonUiResources)
-    commonMainImplementation(projects.commonUiImageloading)
-    commonMainImplementation(projects.shikimoriAuth)
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(projects.core.base)
+                implementation(projects.common.ui.compose)
+                implementation(projects.common.ui.screens)
+                implementation(projects.common.ui.circuitOverlay)
 
-    androidMainImplementation(androidx.core)
-    androidMainImplementation(androidx.bundles.lifecycle)
-    androidMainImplementation(androidx.navigation.compose)
-    androidMainImplementation(platform(compose.bom))
-    androidMainImplementation(compose.bundles.core)
-    androidMainImplementation(compose.activity)
-    androidMainImplementation(libs.kodein.compose)
+                implementation(libs.circuit.foundation)
+                implementation(libs.circuit.retained)
+                implementation(libs.circuit.gestureNavigation)
+                implementation(libs.circuit.overlay)
+
+                implementation(compose.foundation)
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(androidx.activity.compose)
+            }
+        }
+    }
 }

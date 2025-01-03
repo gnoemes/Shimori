@@ -20,6 +20,7 @@ import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.publicvalue.multiplatform.oidc.appsupport.AndroidCodeAuthFlowFactory
 
 class MainActivity : BaseActivity() {
 
@@ -31,6 +32,8 @@ class MainActivity : BaseActivity() {
 
         val applicationComponent = AndroidApplicationComponent.from(this)
         val component = AndroidActivityComponent.create(this, applicationComponent)
+
+        (component.applicationComponent.factory as AndroidCodeAuthFlowFactory).registerActivity(this)
 
         lifecycle.coroutineScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -23,9 +23,21 @@ actual interface PreferencesPlatformComponent {
 
     @ApplicationScope
     @Provides
+    fun provideAuthPreferences(delegate: AppAuthSharedPreferences): AppAuthObservablePreferences =
+        SharedPreferencesSettings(delegate)
+
+    @ApplicationScope
+    @Provides
     fun provideAppSharedPreferences(
         context: Application
     ): AppSharedPreferences = context.getSharedPreferences("local_storage", Context.MODE_PRIVATE)
+
+    @ApplicationScope
+    @Provides
+    fun provideAuthPreferences(
+        context: Application
+    ): AppAuthSharedPreferences = context.getSharedPreferences("shimori_source_auth", Context.MODE_PRIVATE)
+
 
     @ApplicationScope
     @Provides
@@ -35,4 +47,5 @@ actual interface PreferencesPlatformComponent {
 }
 
 typealias AppSharedPreferences = SharedPreferences
+typealias AppAuthSharedPreferences = SharedPreferences
 typealias AppSettings = SharedPreferences

@@ -1,6 +1,8 @@
 package com.gnoemes.shimori.sources.shikimori
 
+import com.gnoemes.shimori.source.AuthSource
 import com.gnoemes.shimori.source.CatalogueSource
+import com.gnoemes.shimori.source.SourceAuthState
 import com.gnoemes.shimori.source.TrackSource
 import com.gnoemes.shimori.source.data.AnimeDataSource
 import com.gnoemes.shimori.source.data.CharacterDataSource
@@ -8,6 +10,8 @@ import com.gnoemes.shimori.source.data.MangaDataSource
 import com.gnoemes.shimori.source.data.RanobeDataSource
 import com.gnoemes.shimori.source.data.TrackDataSource
 import com.gnoemes.shimori.source.data.UserDataSource
+import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriRefreshTokenAction
+import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriSignInAction
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriAnimeDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriCharacterDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriMangaDataSource
@@ -15,7 +19,6 @@ import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriRanobeDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriTrackDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriUserDataSource
 
-//TODO authorization
 class Shikimori(
     override val id: Long,
     private val values: ShikimoriValues,
@@ -25,7 +28,10 @@ class Shikimori(
     character: ShikimoriCharacterDataSource,
     user: ShikimoriUserDataSource,
     track: ShikimoriTrackDataSource,
-) : CatalogueSource, TrackSource {
+    private val authStore: ShikimoriAuthStore,
+    private val signInAction: ShikimoriSignInAction,
+    private val refreshTokenAction: ShikimoriRefreshTokenAction,
+) : CatalogueSource, TrackSource, AuthSource {
 
     companion object {
         const val NAME = "Shikimori"
@@ -45,4 +51,8 @@ class Shikimori(
     override val userDataSource: UserDataSource = user
     override val trackDataSource: TrackDataSource = track
 
+    override suspend fun signIn(): SourceAuthState? = signInAction()
+    override suspend fun signUp(): SourceAuthState? = signInAction()
+    override suspend fun refreshToken(): SourceAuthState? = refreshTokenAction()
+    override fun getState(): SourceAuthState? = authStore.get()
 }

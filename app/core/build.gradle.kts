@@ -16,6 +16,7 @@ kotlin {
                 api(projects.core.settings)
                 api(projects.core.preferences)
                 api(projects.data.source.core)
+                api(projects.data.source.auth)
                 api(projects.data.db.sqldelight)
                 api(projects.domain)
                 api(projects.tasks)
@@ -31,7 +32,7 @@ kotlin {
                 api(projects.ui.tracks.menu)
                 api(projects.ui.tracks.edit)
 
-                api(libs.graphql.apollo3)
+                api(libs.graphql.apollo)
             }
         }
 

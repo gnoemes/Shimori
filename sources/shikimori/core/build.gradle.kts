@@ -1,30 +1,7 @@
-import com.gnoemes.shimori.convention.propOrDef
-
 plugins {
     id("com.gnoemes.shimori.kotlin.multiplatform")
-    alias(libs.plugins.graphql.apollo3)
-    alias(libs.plugins.buildConfig)
+    alias(libs.plugins.graphql.apollo)
     alias(kotlinx.plugins.serialization)
-}
-
-buildConfig {
-    packageName("com.gnoemes.shimori.sources.shikimori")
-
-    buildConfigField(
-        type = "String",
-        name = "ShikimoriClientId",
-        value = "\"${propOrDef("ShikimoriClientId", "none")}\"",
-    )
-    buildConfigField(
-        type = "String",
-        name = "ShikimoriClientSecret",
-        value = "\"${propOrDef("ShikimoriClientSecret", "none")}\"",
-    )
-    buildConfigField(
-        type = "String",
-        name = "ShikimoriBaseUrl",
-        value = "\"${properties["ShikimoriBaseUrl"]?.toString() ?: ""}\"",
-    )
 }
 
 kotlin {
@@ -33,11 +10,13 @@ kotlin {
             dependencies {
                 api(projects.sourceApi.catalogue)
                 api(projects.sourceApi.track)
+                api(projects.sourceApi.auth)
+                api(projects.sources.shikimori.auth)
 
                 implementation(projects.core.base)
                 implementation(projects.core.logging.api)
 
-                implementation(libs.graphql.apollo3)
+                implementation(libs.graphql.apollo)
                 implementation(kotlinx.atomicfu)
                 implementation(libs.kotlininject.runtime)
 
@@ -54,13 +33,6 @@ kotlin {
                 api(libs.ktor.okhttp)
             }
         }
-
-        iosMain {
-            dependencies {
-                implementation(libs.ktor.darwin)
-            }
-        }
-
     }
 }
 

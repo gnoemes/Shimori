@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.sources.shikimori.sources
 
-import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo.api.Optional
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.characters.CharacterInfo
 import com.gnoemes.shimori.source.data.CharacterDataSource

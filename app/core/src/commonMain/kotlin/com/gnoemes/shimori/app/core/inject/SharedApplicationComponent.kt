@@ -11,8 +11,6 @@ import com.gnoemes.shimori.preferences.PreferencesComponent
 import com.gnoemes.shimori.tasks.TasksComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import me.tatarka.inject.annotations.Provides
 
@@ -27,7 +25,6 @@ interface SharedApplicationComponent :
     SourcesComponent,
     TasksComponent {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @ApplicationScope
     @Provides
     fun provideCoroutineDispatchers(): AppCoroutineDispatchers = AppCoroutineDispatchers(

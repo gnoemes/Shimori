@@ -21,4 +21,5 @@ interface PreferencesComponent : PreferencesPlatformComponent {
 }
 
 typealias AppObservablePreferences = ObservableSettings
+typealias AppAuthObservablePreferences = ObservableSettings
 typealias AppObservableSettings = ObservableSettings

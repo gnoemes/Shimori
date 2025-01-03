@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.sources.shikimori.services
 
-import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Query
+import com.apollographql.apollo.api.ApolloResponse
+import com.apollographql.apollo.api.Query
 import com.gnoemes.shimori.sources.shikimori.models.anime.AnimeResponse
 import com.gnoemes.shimori.sources.shikimori.models.anime.CalendarResponse
 

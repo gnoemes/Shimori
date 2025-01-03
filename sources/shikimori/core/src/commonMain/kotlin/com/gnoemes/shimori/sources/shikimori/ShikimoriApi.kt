@@ -1,11 +1,10 @@
 package com.gnoemes.shimori.sources.shikimori
 
-import com.apollographql.apollo3.api.Query
+import com.apollographql.apollo.api.Query
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.sources.shikimori.models.anime.AnimeResponse
 import com.gnoemes.shimori.sources.shikimori.models.anime.CalendarResponse
-import com.gnoemes.shimori.sources.shikimori.models.auth.TokenResponse
 import com.gnoemes.shimori.sources.shikimori.models.club.ClubResponse
 import com.gnoemes.shimori.sources.shikimori.models.manga.MangaResponse
 import com.gnoemes.shimori.sources.shikimori.models.rates.ShikimoriRateStatus
@@ -16,14 +15,12 @@ import com.gnoemes.shimori.sources.shikimori.models.user.UserBriefResponse
 import com.gnoemes.shimori.sources.shikimori.models.user.UserDetailsResponse
 import com.gnoemes.shimori.sources.shikimori.models.user.UserHistoryResponse
 import com.gnoemes.shimori.sources.shikimori.services.AnimeService
-import com.gnoemes.shimori.sources.shikimori.services.AuthService
 import com.gnoemes.shimori.sources.shikimori.services.CharacterService
 import com.gnoemes.shimori.sources.shikimori.services.MangaService
 import com.gnoemes.shimori.sources.shikimori.services.RanobeService
 import com.gnoemes.shimori.sources.shikimori.services.RateService
 import com.gnoemes.shimori.sources.shikimori.services.UserService
 import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -55,7 +52,6 @@ class ShikimoriApi(
     // Services
     ///////////////////////////////////////////////////////
 
-    internal val auth: AuthService by lazy { AuthServiceImpl() }
     internal val rate: RateService by lazy { RateServiceImpl() }
     internal val user: UserService by lazy { UserServiceImpl() }
     internal val anime: AnimeService by lazy { AnimeServiceImpl() }
@@ -63,50 +59,9 @@ class ShikimoriApi(
     internal val ranobe: RanobeService by lazy { RanobeServiceImpl() }
     internal val character: CharacterService by lazy { CharacterServiceImpl() }
 
-
     ///////////////////////////////////////////////////////
     // Implementations
     ///////////////////////////////////////////////////////
-
-    private inner class AuthServiceImpl : AuthService {
-        private val tokenEndpoint = "${values.url}/oauth/token"
-        override suspend fun accessToken(authCode: String): TokenResponse? {
-            return try {
-                client.post {
-                    url(tokenEndpoint)
-                    parameter("grant_type", "authorization_code")
-                    parameter("client_id", values.clientId)
-                    parameter("client_secret", values.secretKey)
-                    parameter("redirect_uri", values.oauthRedirect)
-                    parameter("code", authCode)
-                }.body()
-            } catch (e: Exception) {
-                logger.e(e, tag = "Shikimori") { "Failed get access token" }
-//                onAuthError(e.localizedMessage)
-                null
-            }
-        }
-
-        override suspend fun refreshToken(
-            refreshToken: String,
-            block: HttpRequestBuilder.() -> Unit
-        ): TokenResponse? {
-            return try {
-                client.post {
-                    url(tokenEndpoint)
-                    parameter("client_id", values.clientId)
-                    parameter("client_secret", values.secretKey)
-                    parameter("refresh_token", refreshToken)
-                    parameter("grant_type", "refresh_token")
-                    block()
-                }.body()
-            } catch (e: Exception) {
-                logger.e(e, tag = "Shikimori") { "Failed refresh token update" }
-//                onAuthExpired()
-                null
-            }
-        }
-    }
 
     private inner class RateServiceImpl : RateService {
         private val serviceUrl = "$apiUrl/v2/user_rates"

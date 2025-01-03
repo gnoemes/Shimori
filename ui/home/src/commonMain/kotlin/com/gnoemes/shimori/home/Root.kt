@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
-import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import com.gnoemes.shimori.common.compose.LocalShimoriDateTextFormatter
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
@@ -62,7 +61,7 @@ class DefaultShimoriContent(
     private val logger: Logger,
 ) : ShimoriContent {
 
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalCoilApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     @Composable
     override fun Content(
         backstack: SaveableBackStack,

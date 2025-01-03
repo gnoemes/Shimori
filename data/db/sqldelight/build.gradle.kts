@@ -38,12 +38,6 @@ kotlin {
                 implementation(libs.sqldelight.sqlite)
             }
         }
-
-        iosMain {
-            dependencies {
-                implementation(libs.sqldelight.native)
-            }
-        }
     }
 }
 
