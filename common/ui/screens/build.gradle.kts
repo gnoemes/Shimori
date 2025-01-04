@@ -1,8 +1,8 @@
+import com.gnoemes.shimori.convention.ProjectConfig
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(kotlinx.plugins.parcelize)
 }
 
@@ -23,15 +23,11 @@ kotlin {
                     if (isAndroidTarget) {
                         freeCompilerArgs.addAll(
                             "-P",
-                            "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.gnoemes.shimori.screens.Parcelize",
+                            "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=${ProjectConfig.APP_PACKAGE}.screens.Parcelize",
                         )
                     }
                 }
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.screens"
 }

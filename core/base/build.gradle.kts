@@ -1,6 +1,5 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.core)
 }
 
 kotlin {
@@ -23,8 +22,4 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.base"
 }

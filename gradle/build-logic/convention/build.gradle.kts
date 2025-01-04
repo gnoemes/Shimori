@@ -30,32 +30,50 @@ gradlePlugin {
     plugins {
         register("kotlinMultiplatform") {
             id = "com.gnoemes.shimori.kotlin.multiplatform"
-            implementationClass = "com.gnoemes.shimori.convention.KotlinMultiplatformConventionPlugin"
+            implementationClass =
+                "com.gnoemes.shimori.convention.multiplatform.KotlinMultiplatformConventionPlugin"
         }
 
-        register("kotlinAndroid") {
-            id = "com.gnoemes.shimori.kotlin.android"
-            implementationClass = "com.gnoemes.shimori.convention.KotlinAndroidConventionPlugin"
+        register("kotlinMultiplatformCommon") {
+            id = "com.gnoemes.shimori.kotlin.multiplatform.common"
+            implementationClass =
+                "com.gnoemes.shimori.convention.multiplatform.KotlinMultiplatformCommonConventionPlugin"
+        }
+
+        register("kotlinMultiplatformData") {
+            id = "com.gnoemes.shimori.kotlin.multiplatform.data"
+            implementationClass =
+                "com.gnoemes.shimori.convention.multiplatform.KotlinMultiplatformDataConventionPlugin"
         }
 
         register("androidApplication") {
             id = "com.gnoemes.shimori.android.application"
-            implementationClass = "com.gnoemes.shimori.convention.AndroidApplicationConventionPlugin"
+            implementationClass =
+                "com.gnoemes.shimori.convention.android.AndroidApplicationConventionPlugin"
         }
 
         register("androidLibrary") {
             id = "com.gnoemes.shimori.android.library"
-            implementationClass = "com.gnoemes.shimori.convention.AndroidLibraryConventionPlugin"
+            implementationClass =
+                "com.gnoemes.shimori.convention.android.AndroidLibraryConventionPlugin"
         }
 
         register("androidTest") {
             id = "com.gnoemes.shimori.android.test"
-            implementationClass = "com.gnoemes.shimori.convention.AndroidTestConventionPlugin"
+            implementationClass =
+                "com.gnoemes.shimori.convention.android.AndroidTestConventionPlugin"
         }
 
         register("compose") {
             id = "com.gnoemes.shimori.compose"
-            implementationClass = "com.gnoemes.shimori.convention.ComposeMultiplatformConventionPlugin"
+            implementationClass =
+                "com.gnoemes.shimori.convention.multiplatform.ComposeMultiplatformConventionPlugin"
+        }
+
+        register("composeFeature") {
+            id = "com.gnoemes.shimori.compose.feature"
+            implementationClass =
+                "com.gnoemes.shimori.convention.multiplatform.ComposeMultiplatformFeatureConventionPlugin"
         }
     }
 }

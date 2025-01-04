@@ -1,13 +1,11 @@
 plugins {
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
 }
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.base)
-
                 api(projects.data.models)
                 api(projects.data.lists)
                 api(projects.data.source.core)
@@ -22,7 +20,6 @@ kotlin {
 
                 api(libs.multiplatform.paging.common)
                 implementation(kotlinx.atomicfu)
-                implementation(libs.kotlininject.runtime)
             }
         }
     }

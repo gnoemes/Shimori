@@ -1,5 +1,5 @@
 plugins {
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.core)
 }
 
 kotlin {

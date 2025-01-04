@@ -1,10 +1,10 @@
-import com.gnoemes.shimori.convention.APP_PACKAGE
+import com.gnoemes.shimori.convention.ProjectConfig
 import com.gnoemes.shimori.convention.readVersion
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    id("com.gnoemes.shimori.kotlin.multiplatform")
-    id("com.gnoemes.shimori.compose")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
+    alias(libs.plugins.shimori.compose)
     alias(libs.plugins.buildConfig)
 }
 
@@ -17,7 +17,7 @@ val versionPatch = version["patch"].toString().toInt()
 val versionCode = version["VERSION_CODE"].toString().toInt()
 
 val appVersionName = "$versionMajor.$versionMinor.$versionPatch"
-val appPackageName = APP_PACKAGE
+val appPackageName = ProjectConfig.APP_PACKAGE
 
 buildConfig {
     packageName(appPackageName)

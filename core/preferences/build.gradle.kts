@@ -1,28 +1,24 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.core)
 }
+
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.base)
                 api(projects.core.settings)
                 api(libs.multiplatform.settings.core)
                 api(libs.multiplatform.settings.coroutines)
+
+                implementation(projects.core.base)
             }
         }
 
         androidMain {
             dependencies {
                 implementation(androidx.core)
-                implementation(libs.kotlininject.runtime)
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.core.preferences"
 }

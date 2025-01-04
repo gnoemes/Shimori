@@ -1,5 +1,5 @@
 plugins {
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
 }
 
 kotlin {
@@ -8,10 +8,7 @@ kotlin {
             dependencies {
                 api(projects.data.models)
                 implementation(projects.data.db.api)
-
-                implementation(libs.kotlininject.runtime)
             }
         }
     }
 }
-

@@ -1,7 +1,6 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
-    id("com.gnoemes.shimori.compose")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
+    alias(libs.plugins.shimori.compose)
 }
 
 kotlin {
@@ -15,8 +14,4 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.common.ui.resources.fonts"
 }

@@ -1,30 +1,37 @@
 package com.gnoemes.shimori.sources.shikimori
 
 import com.gnoemes.shimori.base.entities.ApplicationInfo
+import com.gnoemes.shimori.base.entities.isDesktop
 import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceValues
 import me.tatarka.inject.annotations.Provides
 
 
-interface ShikimoriValuesComponent  {
+interface ShikimoriValuesComponent {
 
     @ApplicationScope
     @Provides
     fun provideShikimoriValues(
         info: ApplicationInfo
     ): ShikimoriValues {
-        val baseUrl = BuildConfig.ShikimoriBaseUrl
-
         return SourceValues(
-            url = baseUrl,
-            clientId = BuildConfig.ShikimoriClientId,
-            secretKey = BuildConfig.ShikimoriClientSecret,
-            oauthRedirect = "shimori://oauth",
-            signInUrl = "$baseUrl/users/sign_in",
-            signUpUrl = "$baseUrl/users/sign_up",
-            oAuthUrl = "$baseUrl/oauth/authorize",
-            tokenUrl = "$baseUrl/oauth/token",
-            userAgent = info.name,
+            url = BuildConfig.ShikimoriBaseUrl,
+            clientId =
+            if (info.platform.isDesktop) BuildConfig.ShikimoriClientIdDesktop
+            else BuildConfig.ShikimoriClientId,
+            secretKey =
+            if (info.platform.isDesktop) BuildConfig.ShikimoriClientSecretDesktop
+            else BuildConfig.ShikimoriClientSecret,
+            oauthRedirect =
+            if (info.platform.isDesktop) BuildConfig.ShikimoriRedirectDesktop
+            else BuildConfig.ShikimoriRedirect,
+            signInUrl = BuildConfig.ShikimoriSignInUrl,
+            signUpUrl = BuildConfig.ShikimoriSignUpUrl,
+            oAuthUrl = BuildConfig.ShikimoriAuthorizeUrl,
+            tokenUrl = BuildConfig.ShikimoriTokenUrl,
+            userAgent =
+            if (info.platform.isDesktop) "${info.name} (Desktop)"
+            else info.name,
         )
     }
 }

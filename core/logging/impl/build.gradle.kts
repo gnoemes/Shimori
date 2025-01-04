@@ -1,14 +1,13 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.core)
 }
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.base)
-                api(projects.core.logging.api)
+                implementation(projects.core.base)
+                implementation(projects.core.logging.api)
                 implementation(libs.multiplatform.logs)
             }
         }
@@ -19,8 +18,4 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.logging.impl"
 }

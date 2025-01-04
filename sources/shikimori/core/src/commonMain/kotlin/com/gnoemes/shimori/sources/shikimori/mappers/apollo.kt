@@ -18,8 +18,9 @@ import com.gnoemes.shimori.sources.shikimori.fragment.MangaUserRateWithModel
 import com.gnoemes.shimori.sources.shikimori.fragment.PosterShort
 import com.gnoemes.shimori.sources.shikimori.type.AnimeKindEnum
 import com.gnoemes.shimori.sources.shikimori.type.AnimeRatingEnum
+import com.gnoemes.shimori.sources.shikimori.type.AnimeStatusEnum
 import com.gnoemes.shimori.sources.shikimori.type.MangaKindEnum
-import com.gnoemes.shimori.sources.shikimori.type.StatusEnum
+import com.gnoemes.shimori.sources.shikimori.type.MangaStatusEnum
 import com.gnoemes.shimori.sources.shikimori.type.UserRateStatusEnum
 import com.gnoemes.shimori.sources.shikimori.type.VideoKindEnum
 import kotlinx.datetime.Instant
@@ -70,12 +71,22 @@ fun MangaKindEnum?.toShimoriRanobeType() = when (this) {
     else -> null
 }
 
-fun StatusEnum?.toShimoriType() = when (this) {
-    StatusEnum.anons -> TitleStatus.ANONS
-    StatusEnum.released -> TitleStatus.RELEASED
-    StatusEnum.ongoing -> TitleStatus.ONGOING
+fun AnimeStatusEnum?.toShimoriType() = when (this) {
+    AnimeStatusEnum.anons -> TitleStatus.ANONS
+    AnimeStatusEnum.released -> TitleStatus.RELEASED
+    AnimeStatusEnum.ongoing -> TitleStatus.ONGOING
     else -> null
 }
+
+fun MangaStatusEnum?.toShimoriType() = when (this) {
+    MangaStatusEnum.anons -> TitleStatus.ANONS
+    MangaStatusEnum.released -> TitleStatus.RELEASED
+    MangaStatusEnum.ongoing -> TitleStatus.ONGOING
+    MangaStatusEnum.discontinued -> TitleStatus.DISCONTINUED
+    MangaStatusEnum.paused -> TitleStatus.PAUSED
+    else -> null
+}
+
 
 fun AnimeRatingEnum?.toShimoriType() = when (this) {
     AnimeRatingEnum.g -> AgeRating.G

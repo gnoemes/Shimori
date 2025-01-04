@@ -1,15 +1,12 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
 }
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.base)
                 implementation(projects.domain)
-                implementation(libs.kotlininject.runtime)
             }
         }
 
@@ -19,9 +16,4 @@ kotlin {
             }
         }
     }
-}
-
-
-android {
-    namespace = "com.gnoemes.shimori.tasks"
 }
