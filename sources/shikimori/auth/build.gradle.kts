@@ -1,24 +1,14 @@
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(kotlinx.plugins.serialization)
-}
-
-android {
-    namespace = "com.gnoemes.shimori.sources.shikimori"
 }
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.base)
-                implementation(projects.core.logging.api)
-
                 implementation(projects.data.source.auth)
                 api(projects.sources.shikimori.values)
-
-                implementation(libs.kotlininject.runtime)
 
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.logging)

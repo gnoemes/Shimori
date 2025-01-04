@@ -58,8 +58,8 @@ query MangaDetails(
             manga {
                 ...MangaShort
             }
-            relationRu
-            relationEn
+            relationKind
+            relationText
         }
 
         scoresStats { score count }
@@ -76,11 +76,11 @@ query MangaDetails(
 }
 
 query mangas(
-    $page: Int = 1
-    $limit: Int = 2
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
     $order: OrderEnum = ranked
     $kind: MangaKindString
-    $status: StatusString
+    $status: MangaStatusString
     $season: SeasonString
     $score: Int
     $genre: String
@@ -155,8 +155,8 @@ query mangas(
                 id
                 name
             }
-            relationRu
-            relationEn
+            relationKind
+            relationText
         }
 
         scoresStats { score count }

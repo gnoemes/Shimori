@@ -3,15 +3,12 @@ import com.gnoemes.shimori.convention.propOrDef
 import com.gnoemes.shimori.convention.readVersion
 
 plugins {
-    id("com.gnoemes.shimori.android.application")
-    id("com.gnoemes.shimori.kotlin.android")
-    id("com.gnoemes.shimori.compose")
+    alias(libs.plugins.shimori.android.application)
 }
 
 val useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
 
 android {
-    namespace = "com.gnoemes.shimori"
     val version = readVersion("${project.rootProject.projectDir}/version.properties")
 
     val versionMajor = version["major"].toString().toInt()
@@ -29,7 +26,6 @@ android {
         setProperty("archivesBaseName", "Shimori-v$appVersionName($appVersionCode)")
 
         addManifestPlaceholders(
-            //TODO move some constants to project level
             mapOf("oidcRedirectScheme" to "shimori")
         )
     }
@@ -70,7 +66,6 @@ android {
         }
         create("qa") {
             matchingFallbacks.add("release")
-            isDebuggable = true
             isMinifyEnabled = true
             isShrinkResources = true
             signingConfig = signingConfigs.getByName("debug")

@@ -1,6 +1,6 @@
 query AnimeTracks(
-    $page: Int = 1
-    $limit: Int = 2
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
     $userId: ID
     $status: UserRateStatusEnum
 )  {
@@ -10,8 +10,8 @@ query AnimeTracks(
 }
 
 query MangaTracks(
-    $page: Int = 1
-    $limit: Int = 2
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
     $userId: ID
     $status: UserRateStatusEnum
 )  {

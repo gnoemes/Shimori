@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.home
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -15,10 +14,11 @@ import com.gnoemes.shimori.common.compose.LocalShimoriPreferences
 import com.gnoemes.shimori.common.compose.LocalShimoriSettings
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.calculateWindowSizeClass
 import com.gnoemes.shimori.common.compose.shouldUseDarkColors
 import com.gnoemes.shimori.common.compose.shouldUseDynamicColors
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
-import com.gnoemes.shimori.common.ui.overlays.LocalNavigator
+import com.gnoemes.shimori.common.ui.overlay.LocalNavigator
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator

@@ -1,7 +1,8 @@
+import com.gnoemes.shimori.convention.ProjectConfig
+
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
-    id("com.gnoemes.shimori.compose")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
+    alias(libs.plugins.shimori.compose)
 }
 
 kotlin {
@@ -17,12 +18,8 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.gnoemes.shimori.common.ui.resources.icons"
-}
-
 compose.resources {
     publicResClass = true
-    packageOfResClass = "com.gnoemes.shimori.common.ui.resources.icons"
+    packageOfResClass = "${ProjectConfig.APP_PACKAGE}.common.ui.resources.icons"
     generateResClass = always
 }

@@ -1,8 +1,8 @@
+import com.gnoemes.shimori.convention.ProjectConfig
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(libs.plugins.sqldelight)
 }
 
@@ -10,16 +10,11 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.base)
-                implementation(projects.core.logging.api)
-
                 api(projects.data.db.api)
-                api(kotlinx.dateTime)
+                api(projects.data.models)
                 // Need to force upgrade these for recent Kotlin support
                 api(kotlinx.atomicfu)
                 api(kotlinx.coroutines.core)
-
-                implementation(libs.kotlininject.runtime)
 
                 implementation(libs.sqldelight.coroutines)
                 implementation(libs.sqldelight.paging)
@@ -44,7 +39,7 @@ kotlin {
 sqldelight {
     databases {
         create("ShimoriDB") {
-            packageName = "com.gnoemes.shimori.data"
+            packageName = "${ProjectConfig.APP_PACKAGE}.data"
             dialect(libs.sqldelight.dialects.sql)
         }
     }
@@ -55,13 +50,5 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
         // Have to disable this as some of the generated code has
         // warnings for unused parameters
         allWarningsAsErrors = false
-    }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.data.sqldelight"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }

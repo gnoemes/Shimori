@@ -18,6 +18,14 @@ google-appDistribution = "com.google.firebase.appdistribution:5.0.0"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 graphql-apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 
+# Project plugins
+shimori-kotlin-multiplatform-core = { id = "com.gnoemes.shimori.kotlin.multiplatform", version = "unspecified" }
+shimori-kotlin-multiplatform-common = { id = "com.gnoemes.shimori.kotlin.multiplatform.common", version = "unspecified" }
+shimori-kotlin-multiplatform-data = { id = "com.gnoemes.shimori.kotlin.multiplatform.data", version = "unspecified" }
+shimori-android-application = { id = "com.gnoemes.shimori.android.application", version = "unspecified" }
+shimori-compose = { id = "com.gnoemes.shimori.compose", version = "unspecified" }
+shimori-compose-feature = { id = "com.gnoemes.shimori.compose.feature", version = "unspecified" }
+
 [libraries]
 multiplatform-logs = { module = "io.github.aakira:napier", version.ref = "napier" }
 multiplatform-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformsettings" }

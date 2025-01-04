@@ -1,5 +1,8 @@
 package com.gnoemes.shimori.base.entities
 
+import com.gnoemes.shimori.base.entities.Platform.Android
+import com.gnoemes.shimori.base.entities.Platform.Jvm
+
 data class ApplicationInfo(
     val name: String,
     val packageName: String,
@@ -17,5 +20,8 @@ enum class Flavor {
 }
 
 enum class Platform {
-    Android, Jvm, Ios
+    Android, Jvm;
 }
+
+val Platform.isAndroid: Boolean get() = this == Android
+val Platform.isDesktop: Boolean get() = this == Jvm

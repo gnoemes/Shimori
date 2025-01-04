@@ -16,6 +16,12 @@ internal val Project.libs: VersionCatalog
 internal val Project.compose: VersionCatalog
     get() = extensions.getByType<VersionCatalogsExtension>().named("composelibs")
 
+internal val Project.jetbrainsCompose: VersionCatalog
+    get() = extensions.getByType<VersionCatalogsExtension>().named("compose")
+
+internal val Project.androidx: VersionCatalog
+    get() = extensions.getByType<VersionCatalogsExtension>().named("androidx")
+
 fun Project.propOrDef(propertyName: String, defaultValue: Any): Any {
     var propertyValue = properties[propertyName]
 

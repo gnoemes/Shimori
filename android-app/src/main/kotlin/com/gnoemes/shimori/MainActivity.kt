@@ -9,11 +9,13 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.gnoemes.shimori.common.compose.LocalActivity
 import com.gnoemes.shimori.screens.ListsScreen
 import com.gnoemes.shimori.settings.AppTheme
 import com.slack.circuit.backstack.rememberSaveableBackStack
@@ -48,16 +50,20 @@ class MainActivity : BaseActivity() {
             val backstack = rememberSaveableBackStack(listOf(ListsScreen))
             val navigator = rememberCircuitNavigator(backstack)
 
-            component.shimoriContent.Content(
-                backstack,
-                navigator,
-                { url ->
-                    val intent = CustomTabsIntent.Builder().build()
-                    intent.launchUrl(this@MainActivity, Uri.parse(url))
-                    true
-                },
-                Modifier
-            )
+            CompositionLocalProvider(
+                LocalActivity provides this
+            ) {
+                component.shimoriContent.Content(
+                    backstack,
+                    navigator,
+                    { url ->
+                        val intent = CustomTabsIntent.Builder().build()
+                        intent.launchUrl(this@MainActivity, Uri.parse(url))
+                        true
+                    },
+                    Modifier
+                )
+            }
         }
     }
 }

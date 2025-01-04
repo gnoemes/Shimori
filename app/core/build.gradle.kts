@@ -1,9 +1,8 @@
-import com.gnoemes.shimori.convention.addKspDependencyForAllTargets
+import com.gnoemes.shimori.convention.core.addKspDependencyForAllTargets
 
 plugins {
-    id("com.gnoemes.shimori.android.library")
-    id("com.gnoemes.shimori.kotlin.multiplatform")
-    id("com.gnoemes.shimori.compose")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
+    alias(libs.plugins.shimori.compose)
     alias(kotlinx.plugins.ksp)
 }
 
@@ -42,10 +41,6 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "com.gnoemes.shimori.app.core"
 }
 
 ksp {

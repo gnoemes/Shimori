@@ -4,6 +4,7 @@ directive @oneOf on INPUT_OBJECT
 type Anime {
   airedOn: IncompleteDate
   characterRoles: [CharacterRole!]
+  chronology: [Anime!]
   createdAt: ISO8601DateTime!
   description: String
   descriptionHtml: String
@@ -30,6 +31,7 @@ type Anime {
   malId: ID
   name: String!
   nextEpisodeAt: ISO8601DateTime
+  opengraphImageUrl: String
   personRoles: [PersonRole!]
   poster: Poster
   rating: AnimeRatingEnum
@@ -40,10 +42,11 @@ type Anime {
   scoresStats: [ScoreStat!]
   screenshots: [Screenshot!]!
   season: String
-  status: StatusEnum
+  status: AnimeStatusEnum
   statusesStats: [StatusStat!]
   studios: [Studio!]!
   synonyms: [String!]!
+  topic: Topic
   updatedAt: ISO8601DateTime!
   url: String!
   userRate: UserRate
@@ -66,8 +69,17 @@ enum AnimeKindEnum {
   # Special
   special
 
+  # TV Special
+  tv_special
+
   # Music
   music
+
+  # PV
+  pv
+
+  # CM
+  cm
 }
 
 # List of values separated by comma.
@@ -93,6 +105,12 @@ enum AnimeKindEnum {
 # `tv_24` - Average TV Series
 #
 # `tv_48` - Long TV Series
+#
+# `tv_special` - TV Specials
+#
+# `pv` - Promotional Videos
+#
+# `cm` - Commercial Messages
 scalar AnimeKindString
 
 enum AnimeRatingEnum {
@@ -118,6 +136,28 @@ enum AnimeRatingEnum {
   rx
 }
 
+enum AnimeStatusEnum {
+  # Planned
+  anons
+
+  # Airing
+  ongoing
+
+  # Released
+  released
+}
+
+# List of values separated by comma.
+# Add `!` before value to apply negative filter.
+#
+#
+# `anons` - Planned
+#
+# `ongoing` - Airing
+#
+# `released` - Released
+scalar AnimeStatusString
+
 type Character {
   createdAt: ISO8601DateTime!
   description: String
@@ -133,6 +173,7 @@ type Character {
   poster: Poster
   russian: String
   synonyms: [String!]!
+  topic: Topic
   updatedAt: ISO8601DateTime!
   url: String!
 }
@@ -142,6 +183,104 @@ type CharacterRole {
   id: ID!
   rolesEn: [String!]!
   rolesRu: [String!]!
+}
+
+type Contest {
+  description: String
+  descriptionHtml: String
+  descriptionSource: String
+  finishedOn: ISO8601Date
+  id: ID!
+  matchDuration: Int
+  matchesInterval: Int
+  matchesPerRound: Int
+  memberType: ContestMemberTypeEnum!
+  name: String!
+  rounds: [ContestRound!]!
+  startedOn: ISO8601Date
+  state: ContestStateEnum!
+  strategyType: ContestStrategyTypeEnum!
+}
+
+type ContestMatch {
+  id: ID!
+  leftAnime: Anime
+  leftCharacter: Character
+  leftId: Int
+  leftVotes: Int
+  rightAnime: Anime
+  rightCharacter: Character
+  rightId: Int
+  rightVotes: Int
+  state: ContestMatchStateEnum!
+  winnerId: Int
+}
+
+enum ContestMatchStateEnum {
+  # created
+  created
+
+  # started
+  started
+
+  # freezed
+  freezed
+
+  # finished
+  finished
+}
+
+enum ContestMemberTypeEnum {
+  # Anime
+  anime
+
+  # Characters
+  character
+}
+
+type ContestRound {
+  id: ID!
+  isAdditional: Boolean!
+  matches: [ContestMatch!]!
+  name: String!
+  number: Int!
+  state: ContestRoundStateEnum!
+}
+
+enum ContestRoundStateEnum {
+  # created
+  created
+
+  # started
+  started
+
+  # finished
+  finished
+}
+
+enum ContestStateEnum {
+  # created
+  created
+
+  # proposing
+  proposing
+
+  # started
+  started
+
+  # finished
+  finished
+}
+
+enum ContestStrategyTypeEnum {
+  # Double elimination
+  double_elimination
+
+  # Olympic system
+  play_off
+
+  # Swiss system
+  swiss
 }
 
 # List of values separated by comma.
@@ -156,10 +295,10 @@ type CharacterRole {
 scalar DurationString
 
 type ExternalLink {
-  createdAt: ISO8601DateTime!
-  id: ID!
+  createdAt: ISO8601DateTime
+  id: ID
   kind: ExternalLinkKindEnum!
-  updatedAt: ISO8601DateTime!
+  updatedAt: ISO8601DateTime
   url: String!
 }
 
@@ -188,14 +327,41 @@ enum ExternalLinkKindEnum {
   # Kage Project
   kage_project
 
-  # subs.com.ru
-  subs_com_ru
-
-  # Twitter
+  # Twitter/X
   twitter
 
   # Anime 365
   smotret_anime
+
+  # Crunchyroll
+  crunchyroll
+
+  # Amazon
+  amazon
+
+  # Hidive
+  hidive
+
+  # Hulu
+  hulu
+
+  # Ivi
+  ivi
+
+  # KinoPoisk HD
+  kinopoisk_hd
+
+  # Wink
+  wink
+
+  # Netflix
+  netflix
+
+  # Okko
+  okko
+
+  # Youtube
+  youtube
 
   # ReadManga
   readmanga
@@ -251,11 +417,11 @@ enum GenreEntryTypeEnum {
 }
 
 enum GenreKindEnum {
-  # Genre
-  genre
-
   # Demographic
   demographic
+
+  # Genre
+  genre
 
   # Theme
   theme
@@ -278,6 +444,7 @@ type Manga {
   airedOn: IncompleteDate
   chapters: Int!
   characterRoles: [CharacterRole!]
+  chronology: [Manga!]
   createdAt: ISO8601DateTime!
   description: String
   descriptionHtml: String
@@ -296,6 +463,7 @@ type Manga {
   licensors: [String!]
   malId: ID
   name: String!
+  opengraphImageUrl: String
   personRoles: [PersonRole!]
   poster: Poster
   publishers: [Publisher!]!
@@ -304,9 +472,10 @@ type Manga {
   russian: String
   score: Float
   scoresStats: [ScoreStat!]
-  status: StatusEnum
+  status: MangaStatusEnum
   statusesStats: [StatusStat!]
   synonyms: [String!]!
+  topic: Topic
   updatedAt: ISO8601DateTime!
   url: String!
   userRate: UserRate
@@ -354,6 +523,38 @@ enum MangaKindEnum {
 #
 # `one_shot` - One Shots
 scalar MangaKindString
+
+enum MangaStatusEnum {
+  # Planned
+  anons
+
+  # Publishing
+  ongoing
+
+  # Published
+  released
+
+  # Paused
+  paused
+
+  # Discontinued
+  discontinued
+}
+
+# List of values separated by comma.
+# Add `!` before value to apply negative filter.
+#
+#
+# `anons` - Planned
+#
+# `ongoing` - Publishing
+#
+# `released` - Published
+#
+# `paused` - Paused
+#
+# `discontinued` - Discontinued
+scalar MangaStatusString
 
 type Mutation {
   # An example field added by the generator
@@ -435,6 +636,7 @@ type Person {
   poster: Poster
   russian: String
   synonyms: [String!]!
+  topic: Topic
   updatedAt: ISO8601DateTime!
   url: String!
   website: String
@@ -446,6 +648,9 @@ type PersonRole {
   rolesEn: [String!]!
   rolesRu: [String!]!
 }
+
+# A positive integer (>= 1)
+scalar PositiveInt
 
 type Poster {
   id: ID!
@@ -471,13 +676,13 @@ type Publisher {
 
 type Query {
   animes(
-    page: Int = 1
+    page: PositiveInt = 1
 
     # Maximum 50
-    limit: Int = 2
+    limit: PositiveInt = 2
     order: OrderEnum = ranked
     kind: AnimeKindString
-    status: StatusString
+    status: AnimeStatusString
     season: SeasonString
 
     # Minimal anime score
@@ -506,23 +711,30 @@ type Query {
     search: String
   ): [Anime!]!
   characters(
-    page: Int = 1
+    page: PositiveInt = 1
 
     # Maximum 50
-    limit: Int = 2
+    limit: PositiveInt = 2
     ids: [ID!]
     search: String
   ): [Character!]!
+  contests(
+    page: PositiveInt = 1
+
+    # Maximum 10
+    limit: PositiveInt = 2
+    ids: [ID!]
+  ): [Contest!]!
   currentUser: User
   genres(entryType: GenreEntryTypeEnum!): [Genre!]!
   mangas(
-    page: Int = 1
+    page: PositiveInt = 1
 
     # Maximum 50
-    limit: Int = 2
+    limit: PositiveInt = 2
     order: OrderEnum = ranked
     kind: MangaKindString
-    status: StatusString
+    status: MangaStatusString
     season: SeasonString
 
     # Minimal manga score
@@ -549,10 +761,10 @@ type Query {
     search: String
   ): [Manga!]!
   people(
-    page: Int = 1
+    page: PositiveInt = 1
 
     # Maximum 50
-    limit: Int = 2
+    limit: PositiveInt = 2
     ids: [ID!]
     search: String
     isSeyu: Boolean
@@ -560,16 +772,25 @@ type Query {
     isMangaka: Boolean
   ): [Person!]!
   userRates(
-    page: Int = 1
+    page: PositiveInt = 1
 
     # Maximum 50
-    limit: Int = 2
+    limit: PositiveInt = 2
 
     # ID of current user is used by default
     userId: ID
-    targetType: UserRateTargetTypeEnum!
+    targetType: UserRateTargetTypeEnum
     status: UserRateStatusEnum
+    order: UserRateOrderInputType
   ): [UserRate!]!
+  users(
+    page: PositiveInt = 1
+
+    # Maximum 50
+    limit: PositiveInt = 2
+    ids: [ID!]
+    search: String
+  ): [User!]!
 }
 
 # List of values separated by comma.
@@ -596,7 +817,53 @@ type Related {
   id: ID!
   manga: Manga
   relationEn: String!
+  @deprecated(
+    reason: "use relation_kind/relation_text instead. This field will be deleted after 2025-01-01"
+  )
+  relationKind: RelationKindEnum!
   relationRu: String!
+  @deprecated(
+    reason: "use relation_kind/relation_text instead. This field will be deleted after 2025-01-01"
+  )
+  relationText: String!
+}
+
+enum RelationKindEnum {
+  # Adaptation
+  adaptation
+
+  # Alternative Setting
+  alternative_setting
+
+  # Alternative Version
+  alternative_version
+
+  # Character
+  character
+
+  # Full Story
+  full_story
+
+  # Other
+  other
+
+  # Parent Story
+  parent_story
+
+  # Prequel
+  prequel
+
+  # Sequel
+  sequel
+
+  # Side Story
+  side_story
+
+  # Spin-off
+  spin_off
+
+  # Summary
+  summary
 }
 
 type ScoreStat {
@@ -627,15 +894,12 @@ type Screenshot {
 #
 scalar SeasonString
 
-enum StatusEnum {
-  # Planned
-  anons
+enum SortOrderEnum {
+  # Sort in ascending order
+  asc
 
-  # Airing
-  ongoing
-
-  # Released
-  released
+  # Sort in descending order
+  desc
 }
 
 type StatusStat {
@@ -643,21 +907,23 @@ type StatusStat {
   status: UserRateStatusEnum!
 }
 
-# List of values separated by comma.
-# Add `!` before value to apply negative filter.
-#
-#
-# `anons` - Planned
-#
-# `ongoing` - Airing
-#
-# `released` - Released
-scalar StatusString
-
 type Studio {
   id: ID!
   imageUrl: String
   name: String!
+}
+
+type Topic {
+  body: String!
+  commentsCount: Int!
+  createdAt: ISO8601DateTime!
+  htmlBody: String!
+  id: ID
+  tags: [String!]!
+  title: String!
+  type: String!
+  updatedAt: ISO8601DateTime!
+  url: String!
 }
 
 type User {
@@ -681,6 +947,19 @@ type UserRate {
   text: String
   updatedAt: ISO8601DateTime!
   volumes: Int!
+}
+
+enum UserRateOrderFieldEnum {
+  # By id
+  id
+
+  # By updated_at
+  updated_at
+}
+
+input UserRateOrderInputType {
+  field: UserRateOrderFieldEnum!
+  order: SortOrderEnum!
 }
 
 enum UserRateStatusEnum {
@@ -712,10 +991,12 @@ enum UserRateTargetTypeEnum {
 }
 
 type Video {
-  id: ID
-  kind: VideoKindEnum
+  id: ID!
+  imageUrl: String!
+  kind: VideoKindEnum!
   name: String
-  url: String
+  playerUrl: String!
+  url: String!
 }
 
 enum VideoKindEnum {
