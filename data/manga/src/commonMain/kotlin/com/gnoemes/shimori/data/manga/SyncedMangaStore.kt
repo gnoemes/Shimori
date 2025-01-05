@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.data.manga
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.MangaDao
@@ -13,9 +12,11 @@ import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class SyncedMangaStore(
     internal val dao: MangaDao,
     syncDao: SourceIdsSyncDao,

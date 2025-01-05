@@ -1,12 +1,12 @@
-
 package com.gnoemes.shimori.common.ui.resources.util
 
-import com.gnoemes.shimori.base.inject.ActivityScope
+import com.gnoemes.shimori.base.inject.UiScope
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 //TODO restore with UI components
 @Inject
-@ActivityScope
+@SingleIn(UiScope::class)
 class ShimoriTextCreator(
     private val formatter: ShimoriDateTextFormatter,
 ) {

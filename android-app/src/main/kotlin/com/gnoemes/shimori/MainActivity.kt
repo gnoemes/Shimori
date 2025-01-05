@@ -33,9 +33,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val applicationComponent = AndroidApplicationComponent.from(this)
-        val component = AndroidActivityComponent.create(this, applicationComponent)
+        val component = applicationComponent.activityComponentFactory.createUiComponent(this)
 
-        (component.applicationComponent.factory as AndroidCodeAuthFlowFactory).registerActivity(this)
+        (applicationComponent.codeAuthFlowFactory as AndroidCodeAuthFlowFactory).registerActivity(this)
 
         lifecycle.coroutineScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

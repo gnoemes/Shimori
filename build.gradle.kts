@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.google.appDistribution) apply false
     alias(composelibs.plugins.multiplatform) apply false
     alias(kotlinx.plugins.compose.compiler) apply false
+    alias(kotlinx.plugins.ksp) apply false
 }
 
 tasks.register("clean", Delete::class) {

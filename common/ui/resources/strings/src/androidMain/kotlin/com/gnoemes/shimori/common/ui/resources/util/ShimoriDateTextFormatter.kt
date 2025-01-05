@@ -1,13 +1,14 @@
 package com.gnoemes.shimori.common.ui.resources.util
 
-import com.gnoemes.shimori.base.inject.ActivityScope
+import com.gnoemes.shimori.base.inject.UiScope
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 //TODO formatters
-@ActivityScope
+@SingleIn(UiScope::class)
 @Inject
 actual class ShimoriDateTextFormatter {
     actual fun formatShortTime(instant: Instant): String = instant.toString()

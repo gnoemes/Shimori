@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.common.ui.resources
 
-import com.gnoemes.shimori.base.inject.ActivityScope
+import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.ui.resources.icons.ic_anime
 import com.gnoemes.shimori.common.ui.resources.icons.ic_completed
 import com.gnoemes.shimori.common.ui.resources.icons.ic_dropped
@@ -15,9 +15,10 @@ import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
 import me.tatarka.inject.annotations.Inject
 import org.jetbrains.compose.resources.DrawableResource
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 
-@ActivityScope
+@SingleIn(UiScope::class)
 @Inject
 class ShimoriIconsUtil {
     fun listIcon(type: ListType): DrawableResource = when (type) {

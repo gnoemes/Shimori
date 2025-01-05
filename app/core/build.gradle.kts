@@ -3,7 +3,6 @@ import com.gnoemes.shimori.convention.core.addKspDependencyForAllTargets
 plugins {
     alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(libs.plugins.shimori.compose)
-    alias(kotlinx.plugins.ksp)
 }
 
 kotlin {
@@ -27,6 +26,7 @@ kotlin {
                 api(projects.common.ui.resources.icons)
 
                 api(projects.ui.home)
+                api(projects.ui.auth)
                 api(projects.ui.tracks.list)
                 api(projects.ui.tracks.menu)
                 api(projects.ui.tracks.edit)
@@ -41,10 +41,6 @@ kotlin {
             }
         }
     }
-}
-
-ksp {
-    arg("me.tatarka.inject.generateCompanionExtensions", "true")
 }
 
 addKspDependencyForAllTargets(libs.kotlininject.compiler)

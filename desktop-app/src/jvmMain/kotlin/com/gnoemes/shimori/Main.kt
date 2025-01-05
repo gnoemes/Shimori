@@ -16,11 +16,11 @@ fun main() = application {
     initEnvProperties()
 
     val applicationComponent = remember {
-        DesktopApplicationComponent.create()
+        DesktopApplicationComponent::class.create()
     }
 
     LaunchedEffect(applicationComponent) {
-        applicationComponent.initializers.init()
+        applicationComponent.initializers.forEach { it.init() }
     }
 
     Window(
@@ -28,7 +28,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         val component = remember(applicationComponent) {
-            WindowComponent.create(applicationComponent)
+            applicationComponent.windowComponentFactory.createUiComponent()
         }
 
         val backstack = rememberSaveableBackStack(listOf(ListsScreen))

@@ -13,6 +13,8 @@ kotlin {
 
                 api(libs.ktor.core)
                 api(libs.kotlininject.runtime)
+                api(libs.kotlininject.anvil.runtime)
+                api(libs.kotlininject.anvil.runtime.optional)
             }
         }
 

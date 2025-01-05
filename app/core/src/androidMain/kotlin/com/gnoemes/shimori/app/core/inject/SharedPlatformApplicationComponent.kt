@@ -5,12 +5,10 @@ import android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.entities.Flavor
 import com.gnoemes.shimori.base.entities.Platform
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import me.tatarka.inject.annotations.Provides
 import java.util.Locale
 
 actual interface SharedPlatformApplicationComponent {
-    @ApplicationScope
     @Provides
     fun provideApplicationInfo(
         application: Application,

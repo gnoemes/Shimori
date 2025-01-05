@@ -1,37 +1,38 @@
 package com.gnoemes.shimori.preferences
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.russhwolf.settings.PreferencesSettings
 import me.tatarka.inject.annotations.Provides
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import java.util.prefs.Preferences
 
 actual interface PreferencesPlatformComponent {
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun providePreferences(delegate: AppPreferences): AppObservablePreferences =
         PreferencesSettings(delegate)
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideSettings(delegate: AppSettings): AppObservableSettings =
         PreferencesSettings(delegate)
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideAuthPreferences(delegate: AppAuthPreferences): AppAuthObservablePreferences =
         PreferencesSettings(delegate)
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideAuthPreferences(): AppAuthPreferences =
         Preferences.userRoot().node("com.gnoemes.shimori.sources.auth")
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun providePreferences(): AppPreferences =
         Preferences.userRoot().node("com.gnoemes.shimori.prefs")
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideSettings(): AppSettings =
         Preferences.userRoot().node("com.gnoemes.shimori.settings")

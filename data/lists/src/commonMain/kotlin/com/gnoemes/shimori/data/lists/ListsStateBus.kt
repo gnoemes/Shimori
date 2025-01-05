@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.data.lists
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.preferences.ShimoriPreferences
@@ -11,9 +10,11 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class ListsStateBus(
     prefs: ShimoriPreferences,
 ) {

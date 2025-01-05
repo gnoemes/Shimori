@@ -20,6 +20,7 @@ dependencies {
     compileOnly(androidx.gradle)
     compileOnly(kotlinx.gradle)
     compileOnly(kotlinx.gradle.detekt)
+    compileOnly(kotlinx.ksp.gradle)
     compileOnly(composelibs.gradle)
     compileOnly(kotlinx.gradle.compose.compiler)
     compileOnly(libs.google.appDistribution)
@@ -38,6 +39,18 @@ gradlePlugin {
             id = "com.gnoemes.shimori.kotlin.multiplatform.common"
             implementationClass =
                 "com.gnoemes.shimori.convention.multiplatform.KotlinMultiplatformCommonConventionPlugin"
+        }
+
+        register("kotlinInjectAnvil") {
+            id = "com.gnoemes.shimori.ksp.anvil"
+            implementationClass =
+                "com.gnoemes.shimori.convention.ksp.KspKotlinInjectAnvilConventionPlugin"
+        }
+
+        register("kotlinInjectAnvilFeature") {
+            id = "com.gnoemes.shimori.ksp.anvil.feature"
+            implementationClass =
+                "com.gnoemes.shimori.convention.ksp.KspKotlinInjectAnvilFeatureConventionPlugin"
         }
 
         register("kotlinMultiplatformData") {

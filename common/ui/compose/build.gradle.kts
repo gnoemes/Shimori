@@ -17,20 +17,23 @@ kotlin {
                 api(projects.common.ui.screens)
 
                 api(libs.circuit.foundation)
+                api(libs.circuit.codegen.annotations)
 
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.animation)
                 implementation(composelibs.material.kolor)
                 implementation(composelibs.kmpalette.core)
                 implementation(composelibs.kmpalette.extensions.network)
 
+                api(compose.foundation)
+                api(compose.animation)
+                api(compose.preview)
+                api(compose.material)
                 api(compose.material3)
                 api(compose.material3AdaptiveNavigationSuite)
                 api(composelibs.material3.windowsizeclass)
                 api(composelibs.material3.adaptive)
                 api(composelibs.material3.adaptive.layout)
                 api(composelibs.material3.adaptive.navigation)
+
                 api(libs.coil.compose)
                 api(libs.uuid)
 

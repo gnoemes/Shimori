@@ -1,8 +1,6 @@
 package com.gnoemes.shimori.data.source.shikimori
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.source.SourceIds
-import com.gnoemes.shimori.source.AuthSource
 import com.gnoemes.shimori.sources.shikimori.Shikimori
 import com.gnoemes.shimori.sources.shikimori.ShikimoriAuthStore
 import com.gnoemes.shimori.sources.shikimori.ShikimoriComponent
@@ -16,21 +14,22 @@ import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriMangaDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriRanobeDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriTrackDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriUserDataSource
-import me.tatarka.inject.annotations.IntoSet
 import me.tatarka.inject.annotations.Provides
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 interface ShikimoriSourceComponent : ShikimoriComponent {
 
-    @IntoSet
-    @ApplicationScope
-    @Provides
-    fun provideShikimoriAuthSource(source: Shikimori): AuthSource = source
+//    @IntoSet
+//    @SingleIn(AppScope::class)
+//    @Provides
+//    fun provideShikimoriAuthSource(source: Shikimori): AuthSource = source
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideShikimoriId(): ShikimoriId = SourceIds.SHIKIMORI
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideShikimori(
         id: ShikimoriId,
