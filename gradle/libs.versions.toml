@@ -3,6 +3,7 @@ napier = "2.6.1"
 ktor = "3.0.2"
 sqlDelight = "2.0.2"
 coil = "3.0.4"
+kotlininject-anvil = "0.1.2"
 kotlininject = "0.7.2"
 multiplatformsettings = "1.2.0"
 paging-multiplatform = "3.3.0-alpha02-0.4.0"
@@ -22,6 +23,8 @@ graphql-apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 shimori-kotlin-multiplatform-core = { id = "com.gnoemes.shimori.kotlin.multiplatform", version = "unspecified" }
 shimori-kotlin-multiplatform-common = { id = "com.gnoemes.shimori.kotlin.multiplatform.common", version = "unspecified" }
 shimori-kotlin-multiplatform-data = { id = "com.gnoemes.shimori.kotlin.multiplatform.data", version = "unspecified" }
+shimori-ksp-anvil = { id = "com.gnoemes.shimori.ksp.anvil", version = "unspecified" }
+shimori-ksp-anvil-feature = { id = "com.gnoemes.shimori.ksp.anvil.feature", version = "unspecified" }
 shimori-android-application = { id = "com.gnoemes.shimori.android.application", version = "unspecified" }
 shimori-compose = { id = "com.gnoemes.shimori.compose", version = "unspecified" }
 shimori-compose-feature = { id = "com.gnoemes.shimori.compose.feature", version = "unspecified" }
@@ -57,6 +60,9 @@ sqldelight-dialects-sql = { module = "app.cash.sqldelight:sqlite-3-38-dialect", 
 #inject
 kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlininject" }
 kotlininject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlininject" }
+kotlininject-anvil-compiler = { module = "software.amazon.lastmile.kotlin.inject.anvil:compiler", version.ref = "kotlininject-anvil" }
+kotlininject-anvil-runtime = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime", version.ref = "kotlininject-anvil" }
+kotlininject-anvil-runtime-optional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlininject-anvil" }
 
 #circuit
 circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
@@ -64,6 +70,8 @@ circuit-gestureNavigation = { module = "com.slack.circuit:circuitx-gesture-navig
 circuit-overlay = { module = "com.slack.circuit:circuit-overlay", version.ref = "circuit" }
 circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref = "circuit" }
 circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
+circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
+circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 
 #Coil
 coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }

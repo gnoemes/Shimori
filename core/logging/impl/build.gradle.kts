@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.shimori.kotlin.multiplatform.core)
+    alias(libs.plugins.shimori.ksp.anvil)
 }
 
 kotlin {

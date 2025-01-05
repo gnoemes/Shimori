@@ -13,9 +13,14 @@ import com.russhwolf.settings.coroutines.toFlowSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @OptIn(ExperimentalSettingsApi::class)
 @Inject
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class ShimoriSettingsImpl(
     private val storage: AppObservableSettings,
     private val applicationInfo: ApplicationInfo,

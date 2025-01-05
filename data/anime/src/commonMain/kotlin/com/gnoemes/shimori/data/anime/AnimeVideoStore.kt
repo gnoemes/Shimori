@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.data.anime
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.AnimeVideoDao
@@ -13,9 +12,11 @@ import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class AnimeVideoStore(
     internal val dao: AnimeVideoDao,
     private val syncDao: SourceIdsSyncDao,

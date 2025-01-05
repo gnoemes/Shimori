@@ -14,6 +14,7 @@ class ComposeMultiplatformFeatureConventionPlugin : Plugin<Project> {
             apply("${ProjectConfig.APP_PACKAGE}.kotlin.multiplatform")
             apply("${ProjectConfig.APP_PACKAGE}.kotlin.multiplatform.common")
             apply("${ProjectConfig.APP_PACKAGE}.compose")
+            apply("${ProjectConfig.APP_PACKAGE}.ksp.anvil.feature")
         }
 
         extensions.configure<KotlinMultiplatformExtension>() {

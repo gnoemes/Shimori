@@ -12,8 +12,11 @@ import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
+@SingleIn(AppScope::class)
 class AnimeScreenshotStore(
     internal val dao: AnimeScreenshotDao,
     private val syncDao: SourceIdsSyncDao,

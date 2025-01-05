@@ -8,8 +8,13 @@ import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.logging.api.Logger
 import comgnoemesshimoridatadb.data.Source_ids_sync
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class, boundType = SourceIdsSyncDao::class)
 class SourceIdsSyncDaoImpl(
     override val db: ShimoriDB,
     private val logger: Logger,

@@ -11,6 +11,7 @@ class KotlinMultiplatformDataConventionPlugin : Plugin<Project> {
         with(pluginManager) {
             apply("${ProjectConfig.APP_PACKAGE}.kotlin.multiplatform")
             apply("${ProjectConfig.APP_PACKAGE}.kotlin.multiplatform.common")
+            apply("${ProjectConfig.APP_PACKAGE}.ksp.anvil")
         }
 
         extensions.configure<KotlinMultiplatformExtension>() {

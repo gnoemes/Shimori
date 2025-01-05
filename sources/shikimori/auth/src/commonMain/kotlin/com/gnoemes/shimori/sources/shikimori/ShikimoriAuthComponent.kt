@@ -1,18 +1,21 @@
 package com.gnoemes.shimori.sources.shikimori
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.logging.api.Logger
 import io.ktor.client.HttpClient
 import me.tatarka.inject.annotations.Provides
 import org.publicvalue.multiplatform.oidc.OpenIdConnectClient
 import org.publicvalue.multiplatform.oidc.types.CodeChallengeMethod
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 expect interface ShikimoriAuthPlatformComponent
 
-interface ShikimoriAuthComponent : ShikimoriAuthPlatformComponent, ShikimoriValuesComponent {
+@ContributesTo(AppScope::class)
+interface ShikimoriAuthComponent : ShikimoriAuthPlatformComponent {
 
     @Provides
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     fun provideShikimoriOAuthClient(
         values: ShikimoriValues,
         logger: Logger,

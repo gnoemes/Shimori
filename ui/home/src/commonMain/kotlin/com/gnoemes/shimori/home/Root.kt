@@ -3,11 +3,13 @@ package com.gnoemes.shimori.home
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
+import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriDateTextFormatter
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriPreferences
@@ -22,6 +24,7 @@ import com.gnoemes.shimori.common.ui.overlay.LocalNavigator
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
+import com.gnoemes.shimori.data.auth.AuthState
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.screens.UrlScreen
@@ -30,6 +33,7 @@ import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.retained.LocalRetainedStateRegistry
+import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.continuityRetainedStateRegistry
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.PopResult
@@ -37,6 +41,8 @@ import com.slack.circuit.runtime.screen.Screen
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 interface ShimoriContent {
     @Composable
@@ -49,6 +55,8 @@ interface ShimoriContent {
 }
 
 @Inject
+@SingleIn(UiScope::class)
+@ContributesBinding(UiScope::class)
 class DefaultShimoriContent(
     private val rootViewModel: (CoroutineScope) -> RootViewModel,
     private val circuit: Circuit,
@@ -70,11 +78,14 @@ class DefaultShimoriContent(
         modifier: Modifier
     ) {
         val coroutineScope = rememberCoroutineScope()
-        remember { rootViewModel(coroutineScope) }
+        val viewModel = remember { rootViewModel(coroutineScope) }
 
         val shimoriNavigator: Navigator = remember(navigator) {
             ShimoriNavigator(navigator, backstack, onOpenUrl, logger)
         }
+
+        val authState by viewModel.authState.collectAsRetainedState(AuthState.LOGGED_OUT)
+        val profile by viewModel.profile.collectAsRetainedState(null)
 
         setSingletonImageLoaderFactory { imageLoader }
 
@@ -96,6 +107,8 @@ class DefaultShimoriContent(
                     Home(
                         backStack = backstack,
                         navigator = shimoriNavigator,
+                        isAuthorized = authState.isAuthorized,
+                        profileImage = profile?.image,
                         modifier = modifier
                     )
                 }

@@ -1,13 +1,14 @@
 package com.gnoemes.shimori.data.source.auth
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class AuthExpirationEvents {
     private val _events = MutableSharedFlow<Long>()
     val events: SharedFlow<Long> = _events.asSharedFlow()

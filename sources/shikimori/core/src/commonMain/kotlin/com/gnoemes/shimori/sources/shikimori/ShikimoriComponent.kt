@@ -3,7 +3,6 @@ package com.gnoemes.shimori.sources.shikimori
 import com.apollographql.apollo.ApolloClient
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.entities.Platform
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriRefreshTokenAction
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -23,12 +22,17 @@ import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Provides
 import okhttp3.ConnectionPool
 import okhttp3.Dispatcher
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import java.util.concurrent.TimeUnit
 
 expect interface ShikimoriPlatformComponent
-interface ShikimoriComponent : ShikimoriPlatformComponent, ShikimoriAuthComponent {
 
-    @ApplicationScope
+@ContributesTo(AppScope::class)
+interface ShikimoriComponent : ShikimoriPlatformComponent {
+
+    @SingleIn(AppScope::class)
     @Provides
     fun provideShikimoriGraphql(
         values: ShikimoriValues,
@@ -36,7 +40,7 @@ interface ShikimoriComponent : ShikimoriPlatformComponent, ShikimoriAuthComponen
         .serverUrl("${values.url}/api/graphql")
         .build()
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideShikimoriKtor(
         applicationInfo: ApplicationInfo,

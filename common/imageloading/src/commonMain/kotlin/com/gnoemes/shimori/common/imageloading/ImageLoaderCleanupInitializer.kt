@@ -8,8 +8,11 @@ import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 import okio.FileSystem
 import okio.Path.Companion.toPath
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@ContributesBinding(AppScope::class, multibinding = true)
 class ImageLoaderCleanupInitializer(
     private val scope: ApplicationCoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,

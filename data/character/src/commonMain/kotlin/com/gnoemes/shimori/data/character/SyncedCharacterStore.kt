@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.data.character
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.characters.Character
@@ -14,9 +13,11 @@ import com.gnoemes.shimori.data.syncer.syncerForEntity
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class SyncedCharacterStore(
     internal val dao: CharacterDao,
     syncDao: SourceIdsSyncDao,

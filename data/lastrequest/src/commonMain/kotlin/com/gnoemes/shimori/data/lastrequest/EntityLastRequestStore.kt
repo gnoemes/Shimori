@@ -1,16 +1,17 @@
 package com.gnoemes.shimori.data.lastrequest
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.db.api.daos.LastRequestDao
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import kotlin.time.Duration
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class EntityLastRequestStore(
     private val dao: LastRequestDao
 ) {

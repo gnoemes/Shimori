@@ -39,6 +39,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.lists_title
 import com.gnoemes.shimori.common.ui.resources.strings.profile
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.common.ShimoriImage
+import com.gnoemes.shimori.screens.AuthScreen
 import com.gnoemes.shimori.screens.ListsScreen
 import com.gnoemes.shimori.screens.MockScreen
 import com.slack.circuit.backstack.SaveableBackStack
@@ -57,6 +58,8 @@ import org.jetbrains.compose.resources.stringResource
 internal fun Home(
     backStack: SaveableBackStack,
     navigator: Navigator,
+    isAuthorized: Boolean,
+    profileImage: ShimoriImage?,
     modifier: Modifier = Modifier
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -68,9 +71,7 @@ internal fun Home(
         derivedStateOf { backStack.last().screen }
     }
 
-    //TODO get from db
-    val profileImage: ShimoriImage? = null
-    val navigationItems = remember(profileImage) { buildNavigationItems(profileImage) }
+    val navigationItems = remember(isAuthorized, profileImage) { buildNavigationItems(isAuthorized, profileImage) }
 
     Scaffold(
         modifier = modifier,
@@ -217,11 +218,12 @@ private abstract class HomeNavigationItem {
 }
 
 private fun buildNavigationItems(
+    isAuthorized: Boolean,
     profileImage: ShimoriImage?
 ): List<HomeNavigationItem> {
     return listOf(
         HomeNavigationItem.IconNavigationItem(
-            screen = ListsScreen,
+            screen = if (isAuthorized) ListsScreen else AuthScreen,
             label = Strings.lists_title,
             contentDescription = Strings.lists_title,
             iconImageResource = Icons.ic_list

@@ -2,14 +2,17 @@ package com.gnoemes.shimori.sources.shikimori
 
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.entities.isDesktop
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.app.SourceValues
 import me.tatarka.inject.annotations.Provides
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 
+@ContributesTo(AppScope::class)
 interface ShikimoriValuesComponent {
 
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     @Provides
     fun provideShikimoriValues(
         info: ApplicationInfo

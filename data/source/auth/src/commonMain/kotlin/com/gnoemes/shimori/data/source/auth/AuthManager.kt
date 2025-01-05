@@ -1,13 +1,14 @@
 package com.gnoemes.shimori.data.source.auth
 
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.source.AuthSource
 import com.gnoemes.shimori.source.SourceAuthState
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class AuthManager(
     private val sources: Set<AuthSource>,
     private val logger: Logger

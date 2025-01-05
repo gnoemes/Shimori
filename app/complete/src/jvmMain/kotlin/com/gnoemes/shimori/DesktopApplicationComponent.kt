@@ -1,16 +1,17 @@
 package com.gnoemes.shimori
 
-import com.gnoemes.shimori.app.core.appinitializers.AppInitializers
 import com.gnoemes.shimori.app.core.inject.SharedApplicationComponent
-import com.gnoemes.shimori.base.inject.ApplicationScope
-import me.tatarka.inject.annotations.Component
+import com.gnoemes.shimori.base.appinitializers.AppInitializer
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-@Component
-@ApplicationScope
-abstract class DesktopApplicationComponent :
-    SharedApplicationComponent,
+@MergeComponent(AppScope::class)
+@SingleIn(AppScope::class)
+abstract class DesktopApplicationComponent : SharedApplicationComponent,
     DefaultApplicationComponent {
-    abstract val initializers: AppInitializers
+    abstract val initializers: Set<AppInitializer>
+    abstract val windowComponentFactory: WindowComponent.Factory
 
     companion object
 }

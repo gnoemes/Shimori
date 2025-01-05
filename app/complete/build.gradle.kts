@@ -3,7 +3,6 @@ import com.gnoemes.shimori.convention.core.addKspDependencyForAllTargets
 plugins {
     alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(libs.plugins.shimori.compose)
-    alias(kotlinx.plugins.ksp)
 }
 
 kotlin {
@@ -16,8 +15,10 @@ kotlin {
     }
 }
 
+
 ksp {
-    arg("me.tatarka.inject.generateCompanionExtensions", "true")
+    //kotlin-inject-anvil component generation is bugged for child components
+    arg("me.tatarka.inject.generateCompanionExtensions", "false")
 }
 
 addKspDependencyForAllTargets(libs.kotlininject.compiler)

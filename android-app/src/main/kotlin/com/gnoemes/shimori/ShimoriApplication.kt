@@ -6,7 +6,7 @@ import androidx.work.WorkerFactory
 
 class ShimoriApplication : Application(), Configuration.Provider {
     val component: AndroidApplicationComponent by lazy {
-        AndroidApplicationComponent.create(this)
+        AndroidApplicationComponent::class.create(this)
     }
 
     private lateinit var workerFactory: WorkerFactory
@@ -14,7 +14,7 @@ class ShimoriApplication : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         workerFactory = component.workerFactory
-        component.initializers.init()
+        component.initializers.forEach { it.init() }
     }
 
     override val workManagerConfiguration: Configuration

@@ -5,29 +5,39 @@ package com.gnoemes.shimori.data
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import me.tatarka.inject.annotations.Provides
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import java.io.File
 
 actual interface SqlDelightDatabasePlatformComponent {
 
     @Provides
-    @ApplicationScope
+    @SingleIn(AppScope::class)
     fun provideDriverFactory(
         configuration: DatabaseConfiguration
-    ) : SqlDriver = JdbcSqliteDriver(
+    ): SqlDriver = JdbcSqliteDriver(
         url = when {
             configuration.inMemory -> JdbcSqliteDriver.IN_MEMORY
             else -> "jdbc:sqlite:${getDatabaseFile().absolutePath}"
         }
-    ).also {db ->
-        ShimoriDB.Schema.create(db)
-        db.execute(null, "PRAGMA foreign_keys=ON", 0)
+    ).also { db ->
+        val version = db.execute(
+            identifier = null,
+            sql = "PRAGMA user_version;",
+            parameters = 0,
+        )
+
+        if (version.value == 0L) {
+//            ShimoriDB.Schema.create(db)
+            db.execute(null, "PRAGMA foreign_keys=ON;", 0)
+            db.execute(null, sql = "PRAGMA user_version = 1;", 0)
+        }
     }
 }
 
 
-private fun getDatabaseFile() : File = File(
+private fun getDatabaseFile(): File = File(
     appDir.also { if (!it.exists()) it.mkdirs() },
     "shimori.db",
 )

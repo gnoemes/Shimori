@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data.auth
 
 import com.gnoemes.shimori.base.inject.ApplicationCoroutineScope
-import com.gnoemes.shimori.base.inject.ApplicationScope
 import com.gnoemes.shimori.data.source.auth.AuthExpirationEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
 import com.gnoemes.shimori.logging.api.Logger
@@ -11,9 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@ApplicationScope
+@SingleIn(AppScope::class)
 class AuthRepository(
     scope: ApplicationCoroutineScope,
     private val expirations: AuthExpirationEvents,
