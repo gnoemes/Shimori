@@ -16,7 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.gnoemes.shimori.common.compose.LocalActivity
-import com.gnoemes.shimori.screens.ListsScreen
+import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.settings.AppTheme
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.rememberCircuitNavigator
@@ -47,7 +47,7 @@ class MainActivity : BaseActivity() {
         }
 
         setContent {
-            val backstack = rememberSaveableBackStack(listOf(ListsScreen))
+            val backstack = rememberSaveableBackStack(listOf(HomeScreen))
             val navigator = rememberCircuitNavigator(backstack)
 
             CompositionLocalProvider(

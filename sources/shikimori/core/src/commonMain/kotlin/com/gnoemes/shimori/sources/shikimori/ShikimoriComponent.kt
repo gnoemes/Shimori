@@ -12,10 +12,10 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.ANDROID
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -97,7 +97,7 @@ interface ShikimoriComponent : ShikimoriPlatformComponent {
         install(Logging) {
             logger = when (applicationInfo.platform) {
                 Platform.Android -> Logger.ANDROID
-                else -> Logger.DEFAULT
+                else -> Logger.SIMPLE
             }
             level = if (applicationInfo.debug) LogLevel.BODY else LogLevel.NONE
         }

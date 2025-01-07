@@ -36,8 +36,6 @@ kotlin {
                 implementation(projects.app.complete)
                 implementation(compose.desktop.currentOs)
                 implementation(kotlinx.coroutines.swing)
-                implementation(libs.slf4j)
-                implementation(libs.slf4jImpl)
             }
         }
     }
@@ -47,10 +45,14 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "${appPackageName}.MainKt"
-
         nativeDistributions {
-            modules("java.sql")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            macOS {
+                iconFile.set(project.file("ic_launcher.png"))
+            }
+
+            modules("java.sql")
+
             packageName = appPackageName
             //TODO: change after release or wait for fix
             //https://github.com/JetBrains/compose-multiplatform/issues/2360

@@ -23,7 +23,7 @@ class ComposeMultiplatformFeatureConventionPlugin : Plugin<Project> {
                     dependencies {
                         implementation(project(":common:ui:compose"))
                         implementation(project(":common:ui:screens"))
-                        implementation(project(":common:ui:overlay"))
+                        implementation(project(":common:ui:circuit"))
                         implementation(project(":common:imageloading"))
 
                         implementation(project(":domain"))

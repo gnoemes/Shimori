@@ -31,7 +31,7 @@ class UpdateUser(
                     val user = trackManager.user(source.id) {
                         getMyUser()
                     }
-                    userRepository.trySync(user)
+                    userRepository.trySync(user.copy(data = user.data.copy(isMe = true)))
                 }
             }
         }

@@ -3,11 +3,11 @@ package com.gnoemes.shimori.domain.interactors
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SyncAction
-import com.gnoemes.shimori.data.source.SourceIds
 import com.gnoemes.shimori.data.source.track.TrackManager
 import com.gnoemes.shimori.data.tracks.TrackRepository
 import com.gnoemes.shimori.domain.Interactor
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.sources.SourceIds
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.SupervisorJob

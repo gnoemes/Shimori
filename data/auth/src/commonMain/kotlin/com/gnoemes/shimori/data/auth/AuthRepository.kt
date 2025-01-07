@@ -8,6 +8,7 @@ import com.gnoemes.shimori.source.SourceAuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
@@ -22,7 +23,7 @@ class AuthRepository(
     private val logger: Logger
 ) {
     private val _state = MutableStateFlow(getPersistedStates())
-    val state: StateFlow<MutableMap<Long, AuthState>> get() = _state.asStateFlow()
+    val state: StateFlow<MutableMap<Long, AuthState>> = _state.asStateFlow()
 
     init {
         scope.launch {
@@ -31,6 +32,8 @@ class AuthRepository(
             }
         }
     }
+
+    fun observeAuthSources() = authManager.observeSources()
 
     suspend fun signIn(sourceId: Long) {
         logger.d(tag = "[AuthRepository]") { "Requested login. Source: $sourceId" }
@@ -56,20 +59,16 @@ class AuthRepository(
         logger.d(tag = "[AuthRepository]") { "Updating AuthState $state of source: $sourceId" }
 
         if (state == null) {
-            _state.value = _state.value.apply {
-                put(
-                    sourceId,
-                    AuthState.LOGGED_OUT
-                )
+            _state.update {
+                HashMap(it + (sourceId to AuthState.LOGGED_OUT))
             }
         } else {
-            _state.value = _state.value.apply {
-                put(
-                    sourceId,
-                    if (state.isAuthorized) AuthState.LOGGED_IN else AuthState.LOGGED_OUT
+            _state.update {
+                HashMap(
+                    it + (sourceId to if (state.isAuthorized) AuthState.LOGGED_IN else AuthState.LOGGED_OUT)
                 )
             }
         }
-    }
 
+    }
 }

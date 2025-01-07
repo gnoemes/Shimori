@@ -1,7 +1,7 @@
 package com.gnoemes.shimori
 
 import com.gnoemes.shimori.base.inject.UiScope
-import com.gnoemes.shimori.home.ShimoriContent
+import com.gnoemes.shimori.root.ShimoriContent
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn

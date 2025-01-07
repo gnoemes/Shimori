@@ -25,6 +25,7 @@ kotlin {
                 api(projects.common.ui.resources.fonts)
                 api(projects.common.ui.resources.icons)
 
+                api(projects.ui.root)
                 api(projects.ui.home)
                 api(projects.ui.auth)
                 api(projects.ui.tracks.list)
@@ -32,12 +33,22 @@ kotlin {
                 api(projects.ui.tracks.edit)
 
                 api(libs.graphql.apollo)
+
+
+                api(libs.slf4j)
             }
         }
 
         androidMain {
             dependencies {
                 implementation(androidx.core)
+                api(libs.slf4j.android)
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                api(libs.slf4j.desktop)
             }
         }
     }
