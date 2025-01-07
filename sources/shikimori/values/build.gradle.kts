@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 import com.gnoemes.shimori.convention.ProjectConfig
 import com.gnoemes.shimori.convention.propOrDef
 
@@ -7,12 +9,18 @@ plugins {
 }
 
 val baseUrl: String by project
-val redirectUrl: String? by project
-val redirectUrlDesktop: String by project
 val authorize = "$baseUrl/oauth/authorize"
 val token = "$baseUrl/oauth/token"
 val signIn = "$baseUrl/users/sign_in"
 val signUp = "$baseUrl/users/sign_up"
+
+val ShikimoriClientId: String? by project
+val ShikimoriClientSecret: String? by project
+val ShikimoriRedirectUrl: String? by project
+
+val ShikimoriClientIdDesktop : String? by project
+val ShikimoriClientSecretDesktop : String? by project
+val ShikimoriRedirectUrlDesktop: String by project
 
 buildConfig {
     packageName("${ProjectConfig.APP_PACKAGE}.sources.shikimori")
@@ -50,33 +58,33 @@ buildConfig {
     buildConfigField(
         type = "String",
         name = "ShikimoriClientId",
-        value = "${propOrDef("ShikimoriClientId", "none")}",
+        value = ShikimoriClientId ?: "${propOrDef("ShikimoriClientId", "none")}",
     )
     buildConfigField(
         type = "String",
         name = "ShikimoriClientSecret",
-        value = "${propOrDef("ShikimoriClientSecret", "none")}",
+        value = ShikimoriClientSecret ?: "${propOrDef("ShikimoriClientSecret", "none")}",
     )
     buildConfigField(
         type = "String",
         name = "ShikimoriRedirect",
-        value = redirectUrl ?: "none",
+        value = ShikimoriRedirectUrl ?: "${propOrDef("ShikimoriRedirectUrl", "none")}",
     )
 
     buildConfigField(
         type = "String",
         name = "ShikimoriClientIdDesktop",
-        value = "${propOrDef("ShikimoriClientIdDesktop", "none")}",
+        value = ShikimoriClientIdDesktop ?: "${propOrDef("ShikimoriClientIdDesktop", "none")}",
     )
     buildConfigField(
         type = "String",
         name = "ShikimoriClientSecretDesktop",
-        value = "${propOrDef("ShikimoriClientSecretDesktop", "none")}",
+        value = ShikimoriClientSecretDesktop ?: "${propOrDef("ShikimoriClientSecretDesktop", "none")}",
     )
     buildConfigField(
         type = "String",
         name = "ShikimoriRedirectDesktop",
-        value = redirectUrlDesktop,
+        value = ShikimoriRedirectUrlDesktop,
     )
 
 }
@@ -87,6 +95,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.data.models)
+                implementation(projects.sources.ids)
             }
         }
     }

@@ -11,6 +11,7 @@ kotlin {
             dependencies {
                 api(projects.core.settings)
                 api(projects.data.models)
+                api(projects.sourceApi.core)
 
                 implementation(compose.runtime)
                 implementation(compose.components.resources)

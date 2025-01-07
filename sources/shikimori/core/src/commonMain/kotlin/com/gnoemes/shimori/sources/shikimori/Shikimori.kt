@@ -18,16 +18,18 @@ import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriMangaDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriRanobeDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriTrackDataSource
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriUserDataSource
+import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
+@Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, boundType = CatalogueSource::class, multibinding = true)
 @ContributesBinding(AppScope::class, boundType = TrackSource::class, multibinding = true)
 @ContributesBinding(AppScope::class, boundType = AuthSource::class, multibinding = true)
 class Shikimori(
-    override val id: Long,
+    override val id: ShikimoriId,
     private val values: ShikimoriValues,
     anime: ShikimoriAnimeDataSource,
     manga: ShikimoriMangaDataSource,

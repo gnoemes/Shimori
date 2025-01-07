@@ -2,8 +2,8 @@ package com.gnoemes.shimori.domain.observers
 
 import com.gnoemes.shimori.data.auth.AuthRepository
 import com.gnoemes.shimori.data.auth.AuthState
-import com.gnoemes.shimori.data.source.SourceIds
 import com.gnoemes.shimori.domain.SubjectInteractor
+import com.gnoemes.shimori.sources.SourceIds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject

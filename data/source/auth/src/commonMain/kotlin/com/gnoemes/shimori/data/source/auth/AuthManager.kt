@@ -3,6 +3,8 @@ package com.gnoemes.shimori.data.source.auth
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.source.AuthSource
 import com.gnoemes.shimori.source.SourceAuthState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -18,6 +20,7 @@ class AuthManager(
         private const val TAG = "SourceAuthManager"
     }
 
+    fun observeSources(): Flow<List<AuthSource>> = MutableStateFlow(sources.toList())
     fun getAuthorizedSources() = sources.filter { it.isAuthorized }
 
     fun isAuthorized(sourceId: Long): Boolean {

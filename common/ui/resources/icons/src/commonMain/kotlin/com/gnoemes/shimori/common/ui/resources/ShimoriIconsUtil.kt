@@ -11,8 +11,11 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_pin
 import com.gnoemes.shimori.common.ui.resources.icons.ic_planned
 import com.gnoemes.shimori.common.ui.resources.icons.ic_ranobe
 import com.gnoemes.shimori.common.ui.resources.icons.ic_re_do
+import com.gnoemes.shimori.common.ui.resources.icons.ic_shikimori
 import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
+import com.gnoemes.shimori.source.Source
+import com.gnoemes.shimori.sources.SourceIds
 import me.tatarka.inject.annotations.Inject
 import org.jetbrains.compose.resources.DrawableResource
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -21,6 +24,12 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(UiScope::class)
 @Inject
 class ShimoriIconsUtil {
+
+    fun sourceIcon(source : Source) : DrawableResource? = when(source.id) {
+        SourceIds.SHIKIMORI -> Icons.ic_shikimori
+        else -> null
+    }
+
     fun listIcon(type: ListType): DrawableResource = when (type) {
         ListType.Pinned -> Icons.ic_pin
         ListType.Anime -> Icons.ic_anime

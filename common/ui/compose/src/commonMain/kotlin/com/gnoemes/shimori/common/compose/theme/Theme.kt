@@ -53,3 +53,21 @@ fun ShimoriTheme(
         )
     }
 }
+
+@Composable
+fun ShimoriThemePreview(
+    useDarkColors: Boolean = true,
+    accentColorType: AppAccentColor = AppAccentColor.Yellow,
+    content: @Composable () -> Unit,
+) {
+    val seedColor = seedColorFromType(accentColorType)
+    DynamicMaterialTheme(
+        seedColor = seedColor,
+        animate = true,
+        useDarkTheme = useDarkColors,
+        withAmoled = false,
+        style = PaletteStyle.TonalSpot,
+        shapes = ShimoriShapes,
+        content = content
+    )
+}

@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +23,7 @@ fun PersonCover(
         AsyncImage(
             model = image,
             modifier = Modifier
-                .minimumInteractiveComponentSize()
+//                .minimumInteractiveComponentSize()
                 .size(24.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .clickable { onClick?.invoke() },

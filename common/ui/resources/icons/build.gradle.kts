@@ -10,6 +10,8 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.data.models)
+                api(projects.sourceApi.core)
+                api(projects.sources.ids)
 
                 implementation(compose.runtime)
                 implementation(compose.components.resources)

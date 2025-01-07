@@ -11,6 +11,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(libs.circuit.runtime)
+                api(libs.circuit.foundation)
             }
         }
     }

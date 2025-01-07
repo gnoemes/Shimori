@@ -1,15 +1,16 @@
-package com.gnoemes.shimori.home
+package com.gnoemes.shimori.root
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalShimoriDateTextFormatter
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriPreferences
@@ -21,24 +22,22 @@ import com.gnoemes.shimori.common.compose.shouldUseDarkColors
 import com.gnoemes.shimori.common.compose.shouldUseDynamicColors
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.overlay.LocalNavigator
+import com.gnoemes.shimori.common.ui.overlay.ShimoriNavigator
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
-import com.gnoemes.shimori.data.auth.AuthState
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.preferences.ShimoriPreferences
-import com.gnoemes.shimori.screens.UrlScreen
 import com.gnoemes.shimori.settings.ShimoriSettings
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.retained.LocalRetainedStateRegistry
-import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.continuityRetainedStateRegistry
 import com.slack.circuit.runtime.Navigator
-import com.slack.circuit.runtime.screen.PopResult
-import com.slack.circuit.runtime.screen.Screen
-import kotlinx.collections.immutable.ImmutableList
+import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import kotlinx.coroutines.CoroutineScope
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -78,14 +77,11 @@ class DefaultShimoriContent(
         modifier: Modifier
     ) {
         val coroutineScope = rememberCoroutineScope()
-        val viewModel = remember { rootViewModel(coroutineScope) }
+        remember { rootViewModel(coroutineScope) }
 
         val shimoriNavigator: Navigator = remember(navigator) {
             ShimoriNavigator(navigator, backstack, onOpenUrl, logger)
         }
-
-        val authState by viewModel.authState.collectAsRetainedState(AuthState.LOGGED_OUT)
-        val profile by viewModel.profile.collectAsRetainedState(null)
 
         setSingletonImageLoaderFactory { imageLoader }
 
@@ -96,6 +92,7 @@ class DefaultShimoriContent(
             LocalShimoriDateTextFormatter provides dateFormatter,
             LocalShimoriPreferences provides preferences,
             LocalShimoriSettings provides settings,
+            LocalLogger provides logger,
             LocalWindowSizeClass provides calculateWindowSizeClass(),
             LocalRetainedStateRegistry provides continuityRetainedStateRegistry()
         ) {
@@ -104,50 +101,22 @@ class DefaultShimoriContent(
                     useDarkColors = settings.shouldUseDarkColors(),
                     useDynamicColors = settings.shouldUseDynamicColors()
                 ) {
-                    Home(
-                        backStack = backstack,
-                        navigator = shimoriNavigator,
-                        isAuthorized = authState.isAuthorized,
-                        profileImage = profile?.image,
-                        modifier = modifier
-                    )
+                    ContentWithOverlays(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        NavigableCircuitContent(
+                            navigator = shimoriNavigator,
+                            backStack = backstack,
+                            decoration = remember(shimoriNavigator) {
+                                GestureNavigationDecoration(onBackInvoked = shimoriNavigator::pop)
+                            },
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-private class ShimoriNavigator(
-    private val navigator: Navigator,
-    private val backstack: SaveableBackStack,
-    private val onOpenUrl: (String) -> Boolean,
-    private val logger: Logger,
-) : Navigator {
-
-    override fun goTo(screen: Screen): Boolean {
-        logger.d { "goTo. Screen: $screen. Current stack: ${backstack.toList()}" }
-
-        if (screen is UrlScreen && onOpenUrl(screen.url)) {
-            return true
-        }
-        return navigator.goTo(screen)
-    }
-
-    override fun resetRoot(
-        newRoot: Screen,
-        saveState: Boolean,
-        restoreState: Boolean
-    ): ImmutableList<Screen> {
-        logger.d { "resetRoot. New root: $newRoot. Current stack: ${backstack.toList()}" }
-        return navigator.resetRoot(newRoot)
-    }
-
-    override fun pop(result: PopResult?): Screen? {
-        logger.d { "pop. Current stack: ${backstack.toList()}" }
-        return navigator.pop(result)
-    }
-
-    override fun peek(): Screen? = navigator.peek()
-    override fun peekBackStack(): ImmutableList<Screen> = navigator.peekBackStack()
-
-}

@@ -3,6 +3,9 @@ package com.gnoemes.shimori.screens
 import com.slack.circuit.runtime.screen.Screen
 
 @Parcelize
+object HomeScreen : ShimoriScreen("Home()")
+
+@Parcelize
 object ListsScreen : ShimoriScreen("Lists()")
 
 @Parcelize

@@ -14,6 +14,7 @@ internal fun Project.configureKotlin() {
             compilerOptions {
                 jvmTarget.set(JvmTarget.JVM_17)
                 allWarningsAsErrors.set(true)
+                freeCompilerArgs.add("-opt-in=kotlin.uuid.ExperimentalUuidApi")
             }
         }
     }
