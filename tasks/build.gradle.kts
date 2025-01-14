@@ -1,9 +1,19 @@
 plugins {
-    id("multiplatform-library")
+    alias(libs.plugins.shimori.kotlin.multiplatform.common)
 }
 
-dependencies {
-    commonMainImplementation(projects.domain)
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(projects.domain)
+            }
+        }
 
-    androidMainApi(androidx.work.runtime)
+        androidMain {
+            dependencies {
+                api(androidx.work.runtime)
+            }
+        }
+    }
 }

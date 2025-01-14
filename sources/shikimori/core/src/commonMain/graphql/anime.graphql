@@ -1,0 +1,191 @@
+query AnimeDetails(
+    $ids: String
+) {
+    animes(ids: $ids) {
+        id
+        malId
+        name
+        russian
+        licenseNameRu
+        english
+        japanese
+        synonyms
+        kind
+        rating
+        score
+        status
+        episodes
+        episodesAired
+        duration
+        airedOn { year month day date }
+        releasedOn { year month day date }
+        url
+        season
+
+        poster { ...PosterShort }
+
+        franchise
+        fansubbers
+        fandubbers
+        licensors
+        createdAt,
+        updatedAt,
+        nextEpisodeAt,
+        isCensored
+
+        genres { id name russian kind }
+        studios { id name imageUrl }
+
+        externalLinks {
+            id
+            kind
+            url
+            createdAt
+            updatedAt
+        }
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { ...PersonShort }
+        }
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { ...CharacterShort }
+        }
+
+        related {
+            id
+            anime {
+                ...AnimeShort
+            }
+            manga {
+                ...MangaShort
+            }
+            relationKind
+            relationText
+        }
+
+        videos { id url name kind }
+        screenshots { id originalUrl x166Url x332Url }
+
+        scoresStats { score count }
+        statusesStats { status count }
+
+        description
+        descriptionHtml
+        descriptionSource
+
+        userRate {
+            ...AnimeUserRate
+        }
+    }
+}
+
+query animes(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $order: OrderEnum = ranked
+    $kind: AnimeKindString
+    $status: AnimeStatusString
+    $season: SeasonString
+    $score: Int
+    $duration: DurationString
+    $rating: RatingString
+    $genre: String
+    $studio: String
+    $franchise: String
+    $censored: Boolean
+    $mylist: MylistString
+    $ids: String
+    $excludeIds: String
+    $search: String
+) {
+    full: animes(
+        page: $page, limit: $limit, order: $order,kind: $kind, status: $status,
+        season: $season, score: $score, duration: $duration, rating: $rating, genre: $genre,
+        studio: $studio, franchise: $franchise, censored: $censored, mylist: $mylist, ids: $ids,
+        excludeIds: $excludeIds, search: $search
+    ) {
+        id
+        malId
+        name
+        russian
+        licenseNameRu
+        english
+        japanese
+        synonyms
+        kind
+        rating
+        score
+        status
+        episodes
+        episodesAired
+        duration
+        airedOn { year month day date }
+        releasedOn { year month day date }
+        url
+        season
+
+        poster { ...PosterShort }
+
+        fansubbers
+        fandubbers
+        licensors
+        createdAt,
+        updatedAt,
+        nextEpisodeAt,
+        isCensored
+
+        genres { id name russian kind }
+        studios { id name imageUrl }
+
+        externalLinks {
+            id
+            kind
+            url
+            createdAt
+            updatedAt
+        }
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { id name poster { id } }
+        }
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { id name poster { id } }
+        }
+
+        related {
+            id
+            anime {
+                id
+                name
+            }
+            manga {
+                id
+                name
+            }
+            relationKind
+            relationText
+        }
+
+        videos { id url name kind }
+        screenshots { id originalUrl x166Url x332Url }
+
+        scoresStats { score count }
+        statusesStats { status count }
+
+        description
+        descriptionHtml
+        descriptionSource
+    }
+}

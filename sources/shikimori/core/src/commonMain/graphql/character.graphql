@@ -1,0 +1,52 @@
+query CharacterDetails(
+    $ids: [ID!]
+) {
+    characters(ids: $ids) {
+        id
+        malId
+        name
+        russian
+        japanese
+        synonyms
+        url
+        createdAt
+        updatedAt
+        isAnime
+        isManga
+        isRanobe
+
+        poster { ...PosterShort }
+
+        description
+        descriptionHtml
+        descriptionSource
+
+    }
+}
+
+query CharacterSearch(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $search: String
+) {
+    characters(page: $page, limit: $limit, search: $search) {
+        id
+        malId
+        name
+        russian
+        japanese
+        synonyms
+        url
+        createdAt
+        updatedAt
+        isAnime
+        isManga
+        isRanobe
+
+        poster { ...PosterShort }
+
+        description
+        descriptionHtml
+        descriptionSource
+    }
+}
