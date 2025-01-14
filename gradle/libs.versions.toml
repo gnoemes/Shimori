@@ -1,24 +1,43 @@
 [versions]
 napier = "2.6.1"
-settings = "0.8.1"
-kodein = "7.20.2"
-ktor = "2.3.3"
-sqlDelight = "1.5.5"
-coil = "2.4.0"
-voyager = "1.0.0-rc08"
+ktor = "3.0.2"
+sqlDelight = "2.0.2"
+coil = "3.0.4"
+kotlininject-anvil = "0.1.2"
+kotlininject = "0.7.2"
+multiplatformsettings = "1.2.0"
+paging-multiplatform = "3.3.0-alpha02-0.4.0"
+circuit = "0.25.0"
+apollo = "4.1.0"
+oidc = "0.12.0"
+
+[plugins]
+buildConfig = "com.github.gmazzo.buildconfig:5.5.0"
+google-gmsGoogleServices = "com.google.gms.google-services:4.4.2"
+google-crashlytics = "com.google.firebase.crashlytics:3.0.2"
+google-appDistribution = "com.google.firebase.appdistribution:5.0.0"
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+graphql-apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
+
+# Project plugins
+shimori-kotlin-multiplatform-core = { id = "com.gnoemes.shimori.kotlin.multiplatform", version = "unspecified" }
+shimori-kotlin-multiplatform-common = { id = "com.gnoemes.shimori.kotlin.multiplatform.common", version = "unspecified" }
+shimori-kotlin-multiplatform-data = { id = "com.gnoemes.shimori.kotlin.multiplatform.data", version = "unspecified" }
+shimori-ksp-anvil = { id = "com.gnoemes.shimori.ksp.anvil", version = "unspecified" }
+shimori-ksp-anvil-feature = { id = "com.gnoemes.shimori.ksp.anvil.feature", version = "unspecified" }
+shimori-android-application = { id = "com.gnoemes.shimori.android.application", version = "unspecified" }
+shimori-compose = { id = "com.gnoemes.shimori.compose", version = "unspecified" }
+shimori-compose-feature = { id = "com.gnoemes.shimori.compose.feature", version = "unspecified" }
 
 [libraries]
-gradle-mobile-multiplatform = "dev.icerock:mobile-multiplatform:0.14.1"
-gradle-detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0-RC2"
-
 multiplatform-logs = { module = "io.github.aakira:napier", version.ref = "napier" }
-#multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
+multiplatform-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformsettings" }
+multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformsettings" }
+multiplatform-paging-common = { module = "app.cash.paging:paging-common", version.ref = "paging-multiplatform" }
+multiplatform-paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging-multiplatform" }
+multiplatform-oidc = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-appsupport", version.ref = "oidc" }
+multiplatform-oidc-ktor = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-ktor", version.ref = "oidc" }
 
-#kodein
-kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
-kodein-jvm = { module = "org.kodein.di:kodein-di-generic-jvm", version.ref = "kodein" }
-kodein-android-core = { module = "org.kodein.di:kodein-di-framework-android-core", version.ref = "kodein" }
-kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
 #ktor
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -26,46 +45,60 @@ ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
 #SQLDelight
-sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
-sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
-sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
-sqldelight-driver-native = { module = "com.squareup.sqldelight:native-drive", version.ref = "sqlDelight" }
+sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-paging = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref = "sqlDelight" }
+sqldelight-primitive = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqlDelight" }
+sqldelight-dialects-sql = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "sqlDelight" }
+
+#inject
+kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlininject" }
+kotlininject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlininject" }
+kotlininject-anvil-compiler = { module = "software.amazon.lastmile.kotlin.inject.anvil:compiler", version.ref = "kotlininject-anvil" }
+kotlininject-anvil-runtime = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime", version.ref = "kotlininject-anvil" }
+kotlininject-anvil-runtime-optional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlininject-anvil" }
+
+#circuit
+circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
+circuit-gestureNavigation = { module = "com.slack.circuit:circuitx-gesture-navigation", version.ref = "circuit" }
+circuit-overlay = { module = "com.slack.circuit:circuit-overlay", version.ref = "circuit" }
+circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref = "circuit" }
+circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
+circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
+circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 
 #Coil
-coil-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
+coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 #Google
-google-analytics = "com.google.firebase:firebase-analytics-ktx:21.4.0"
-google-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.5.1"
-google-crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
-google-gmsGoogleServices = "com.google.gms:google-services:4.4.0"
-google-appDistribution = "com.google.firebase:firebase-appdistribution-gradle:4.0.1"
-#Voyager
-voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voyager" }
-voyager-tab-navigator = { module = "ca.gosyer:voyager-tab-navigator", version.ref = "voyager" }
-voyager-bottom-sheet-navigator = { module = "ca.gosyer:voyager-bottom-sheet-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = "voyager" }
-voyager-kodein = { module = "ca.gosyer:voyager-kodein", version.ref = "voyager" }
+google-analytics = "com.google.firebase:firebase-analytics-ktx:22.1.2"
+google-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:19.3.0"
+google-appDistribution = "com.google.firebase:firebase-appdistribution-gradle:5.0.0"
+
+#graphql
+graphql-apollo = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
 
 #Tests
 junit = "junit:junit:4.13.2"
 mockK = "io.mockk:mockk:1.12.2"
 
 #Other
-leakCanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+leakCanary = "com.squareup.leakcanary:leakcanary-android:2.14"
 extendedGestures = "com.github.SmartToolFactory:Compose-Extended-Gestures:2.0.0"
-uuid = "com.benasher44:uuid:0.7.0"
-
-#//TODO remove with navigation refactoring
-material-motion-navigation = "io.github.fornewid:material-motion-compose-navigation:0.10.3"
-material-motion-core = "io.github.fornewid:material-motion-compose-core:0.10.3"
+uuid = "com.benasher44:uuid:0.8.4"
+tools-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.4"
 
 #for ktor logs
-slf4j = "org.slf4j:slf4j-simple:1.7.30"
+slf4j = "org.slf4j:slf4j-api:2.0.16"
+slf4j-desktop = "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
+slf4j-android = "uk.uuid.slf4j:slf4j-android:2.0.7-0"
 
-[bundles]
-voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions", "voyager-bottom-sheet-navigator", "voyager-kodein"]

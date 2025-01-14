@@ -1,0 +1,169 @@
+query MangaDetails(
+    $ids: String
+) {
+    mangas(ids: $ids) {
+        id
+        malId
+        name
+        russian
+        licenseNameRu
+        english
+        japanese
+        synonyms
+        kind
+        score
+        status
+        volumes
+        chapters
+        airedOn { year month day date }
+        releasedOn { year month day date }
+        url
+
+        poster { ...PosterShort }
+
+        licensors
+        createdAt,
+        updatedAt,
+        isCensored
+
+        genres { id name russian kind }
+        publishers { id name }
+
+        externalLinks {
+            id
+            kind
+            url
+            createdAt
+            updatedAt
+        }
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { ...PersonShort }
+        }
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { ...CharacterShort }
+        }
+
+        related {
+            id
+            anime {
+                ...AnimeShort
+            }
+            manga {
+                ...MangaShort
+            }
+            relationKind
+            relationText
+        }
+
+        scoresStats { score count }
+        statusesStats { status count }
+
+        description
+        descriptionHtml
+        descriptionSource
+
+        userRate {
+            ...AnimeUserRate
+        }
+    }
+}
+
+query mangas(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $order: OrderEnum = ranked
+    $kind: MangaKindString
+    $status: MangaStatusString
+    $season: SeasonString
+    $score: Int
+    $genre: String
+    $publisher: String
+    $franchise: String
+    $censored: Boolean
+    $mylist: MylistString
+    $ids: String
+    $excludeIds: String
+    $search: String
+) {
+    full: mangas(
+        page: $page, limit: $limit, order: $order,kind: $kind, status: $status,
+        season: $season, score: $score, genre: $genre,publisher: $publisher, franchise: $franchise,
+        censored: $censored, mylist: $mylist, ids: $ids,excludeIds: $excludeIds, search: $search
+    ) {
+        id
+        malId
+        name
+        russian
+        licenseNameRu
+        english
+        japanese
+        synonyms
+        kind
+        score
+        status
+        volumes
+        chapters
+        airedOn { year month day date }
+        releasedOn { year month day date }
+        url
+
+        poster { id originalUrl mainUrl }
+
+        licensors
+        createdAt,
+        updatedAt,
+        isCensored
+
+        genres { id name russian kind }
+        publishers { id name }
+
+        externalLinks {
+            id
+            kind
+            url
+            createdAt
+            updatedAt
+        }
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { id name poster { id } }
+        }
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { id name poster { id } }
+        }
+
+        related {
+            id
+            anime {
+                id
+                name
+            }
+            manga {
+                id
+                name
+            }
+            relationKind
+            relationText
+        }
+
+        scoresStats { score count }
+        statusesStats { status count }
+
+        description
+        descriptionHtml
+        descriptionSource
+    }
+}

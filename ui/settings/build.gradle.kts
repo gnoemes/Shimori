@@ -2,6 +2,10 @@ plugins {
     id("multiplatform-ui-library")
 }
 
+android {
+    namespace = "com.gnoemes.shimori.settings"
+}
+
 dependencies {
     commonMainImplementation(projects.domain)
     commonMainImplementation(projects.commonUi)

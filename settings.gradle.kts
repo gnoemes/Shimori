@@ -1,25 +1,20 @@
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 pluginManagement {
+    includeBuild("gradle/build-logic")
+
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-    }
 
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "kotlin-multiplatform") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-            if (requested.id.id == "com.android.library") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-            if (requested.id.id == "kotlinx-serialization") {
-                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
-            }
-        }
+        // Prerelease versions of Compose Multiplatform
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
+        // Used for snapshots if needed
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
@@ -31,36 +26,81 @@ dependencyResolutionManagement {
         create("androidx") {
             from(files("gradle/androidx.versions.toml"))
         }
-        create("compose") {
+        create("composelibs") {
             from(files("gradle/compose.versions.toml"))
         }
     }
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
     repositories {
         mavenCentral()
         google()
-        maven(url = "https://www.jitpack.io")
+        mavenLocal()
+
+        // Prerelease versions of Compose Multiplatform
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
+        // Used for snapshots if needed
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 rootProject.name = "Shimori"
 
-include(":app")
+include(
+    ":core:base",
+    ":core:settings",
+    ":core:preferences",
+    ":core:logging:api",
+    ":core:logging:impl",
+    ":data:models",
+    ":data:db:api",
+    ":data:db:sqldelight",
+    ":data:source:core",
+    ":data:source:auth",
+    ":data:syncer",
+    ":data:lastrequest",
+    ":data:anime",
+    ":data:tracks",
+    ":data:manga",
+    ":data:ranobe",
+    ":data:character",
+    ":data:lists",
+    ":data:user",
+    ":data:auth",
+    ":domain",
+    ":tasks",
+    ":common:ui:circuit",
+    ":common:ui:compose",
+    ":common:ui:resources:strings",
+    ":common:ui:resources:fonts",
+    ":common:ui:resources:icons",
+    ":common:ui:screens",
+    ":common:imageloading",
 
-include(":base:core", ":base:shared")
-include(":common-ui", ":common-ui-resources", ":common-ui-imageloading")
+    ":source-api:core",
+    ":source-api:catalogue",
+    ":source-api:track",
+    ":source-api:auth",
+    ":sources:ids",
+    ":sources:shikimori:values",
+    ":sources:shikimori:auth",
+    ":sources:shikimori:core",
 
-include(":data", ":data:core", ":data:db", ":data:paging")
+    ":ui:root",
+    ":ui:home",
+    ":ui:auth",
+    ":ui:tracks:list",
+    ":ui:tracks:menu",
+    ":ui:tracks:edit",
 
-include(":domain")
-include(":tasks")
+    ":app:core",
+    ":app:complete",
 
-include(":shikimori", ":shikimori-auth")
-
-include(":ui:home")
-include(":ui:auth")
-include(":ui:lists", ":ui:lists:menu", ":ui:lists:edit")
-include(":ui:settings")
-
-include(":ui:title")
-include(":source-api")
+    ":android-app",
+    ":desktop-app",
+)

@@ -1,0 +1,21 @@
+query AnimeTracks(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $userId: ID
+    $status: UserRateStatusEnum
+)  {
+    userRates(page: $page, limit: $limit, targetType: Anime, status: $status, userId: $userId) {
+        ...AnimeUserRateWithModel
+    }
+}
+
+query MangaTracks(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $userId: ID
+    $status: UserRateStatusEnum
+)  {
+    userRates(page: $page, limit: $limit, targetType: Manga, status: $status, userId: $userId) {
+        ...MangaUserRateWithModel
+    }
+}

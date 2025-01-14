@@ -1,0 +1,71 @@
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlinx.datetime.Instant;
+
+CREATE TABLE user (
+     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+     remote_id INTEGER NOT NULL,
+     source_id INTEGER NOT NULL,
+     nickname TEXT NOT NULL,
+     image_original TEXT,
+     image_preview TEXT,
+     image_x96 TEXT,
+     image_x48 TEXT,
+     name TEXT,
+     about TEXT,
+     common_info TEXT,
+     sex TEXT,
+     website TEXT,
+     date_birth TEXT,
+     locale TEXT,
+     full_years INTEGER AS Int,
+     location TEXT,
+     show_comments INTEGER AS Boolean NOT NULL,
+     friend INTEGER AS Boolean NOT NULL,
+     ignored INTEGER AS Boolean NOT NULL,
+     banned INTEGER AS Boolean NOT NULL,
+     is_me INTEGER AS Boolean NOT NULL,
+     last_online INTEGER AS Instant
+);
+
+CREATE UNIQUE INDEX user_source_id ON user(source_id);
+CREATE INDEX user_is_me ON user(is_me);
+
+insert:
+INSERT OR REPLACE INTO user(
+remote_id,source_id, nickname, image_original, image_preview, image_x96, image_x48,
+name, about, common_info, sex, website, date_birth, locale, full_years, location, show_comments,
+friend, ignored, banned, is_me, last_online)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+update:
+INSERT OR REPLACE INTO user(
+id, remote_id, source_id, nickname, image_original, image_preview, image_x96, image_x48,
+name, about, common_info, sex, website, date_birth, locale, full_years, location, show_comments,
+friend, ignored, banned, is_me, last_online)
+VALUES ?;
+
+deleteById:
+DELETE FROM user WHERE id = ?;
+
+deleteAll:
+DELETE FROM user;
+
+deleteMe:
+DELETE FROM user WHERE is_me = 1 AND source_id = :sourceId;
+
+queryAll:
+SELECT * FROM user;
+
+queryById:
+SELECT * FROM user WHERE id = :id;
+
+queryMe:
+SELECT * FROM user WHERE is_me = 1 AND source_id = :sourceId;
+
+queryMeShort:
+SELECT id, remote_id, source_id, nickname, image_original, image_preview, image_x96, image_x48, is_me FROM user WHERE is_me = 1 AND source_id = :sourceId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
+
