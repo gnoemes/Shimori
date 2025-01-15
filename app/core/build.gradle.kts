@@ -1,8 +1,22 @@
+import com.gnoemes.shimori.convention.ProjectConfig
 import com.gnoemes.shimori.convention.core.addKspDependencyForAllTargets
 
 plugins {
     alias(libs.plugins.shimori.kotlin.multiplatform.common)
     alias(libs.plugins.shimori.compose)
+    alias(libs.plugins.buildConfig)
+}
+
+@Suppress("PropertyName")
+val GithubLink: String by project
+
+buildConfig {
+    packageName("${ProjectConfig.APP_PACKAGE}.app")
+    buildConfigField(
+        type = "String",
+        name = "GithubLink",
+        value = GithubLink,
+    )
 }
 
 kotlin {
@@ -28,12 +42,12 @@ kotlin {
                 api(projects.ui.root)
                 api(projects.ui.home)
                 api(projects.ui.auth)
+                api(projects.ui.settings)
                 api(projects.ui.tracks.list)
                 api(projects.ui.tracks.menu)
                 api(projects.ui.tracks.edit)
 
                 api(libs.graphql.apollo)
-
 
                 api(libs.slf4j)
             }

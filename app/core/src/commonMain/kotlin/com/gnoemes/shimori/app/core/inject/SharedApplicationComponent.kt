@@ -1,6 +1,8 @@
 package com.gnoemes.shimori.app.core.inject
 
+import com.gnoemes.shimori.app.BuildConfig
 import com.gnoemes.shimori.base.inject.ApplicationCoroutineScope
+import com.gnoemes.shimori.base.inject.GithubLink
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,4 +26,7 @@ interface SharedApplicationComponent : SharedPlatformApplicationComponent {
     fun provideApplicationCoroutineScope(
         dispatchers: AppCoroutineDispatchers,
     ): ApplicationCoroutineScope = CoroutineScope(dispatchers.main + SupervisorJob())
+
+    @Provides
+    fun provideGithubLink(): GithubLink = BuildConfig.GithubLink
 }

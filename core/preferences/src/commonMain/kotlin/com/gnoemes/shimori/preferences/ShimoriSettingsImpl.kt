@@ -96,7 +96,7 @@ class ShimoriSettingsImpl(
                 //TODO check system color available
                 val defaultColor = when (storage.getStringOrNull(APP_THEME)) {
                     AppTheme.LIGHT.name -> AppAccentColor.Orange
-                    else -> AppAccentColor.Yellow
+                    else -> AppAccentColor.Orange
                 }
                 color?.let { AppAccentColor.from(it) } ?: defaultColor
             }

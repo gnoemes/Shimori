@@ -8,6 +8,7 @@
     <string name="search">Поиск</string>
     <string name="profile">Профиль</string>
     <string name="lists_title">Списки</string>
+    <string name="feature_work_in_progress">В процессе разработки</string>
     <string name="explore" comment="catalog">Каталог</string>
     <string name="feed" comment="feed">Лента</string>
     <string name="settings">Настройки</string>
@@ -64,6 +65,7 @@
     <string name="type_novel">Новелла</string>
     <string name="type_light_novel">Ранобэ</string>
     <string name="today">Сегодня</string>
+    <string name="settings_appearence">Внешний вид</string>
     <string name="settings_titles">Язык названий</string>
     <string name="settings_language_russian">Русский</string>
     <string name="settings_language_english">Английский</string>
@@ -81,9 +83,12 @@
     <string name="settings_feedback_and_updates">Обратная связь</string>
     <string name="settings_feedback_and_updates_email">Написать письмо</string>
     <string name="settings_feedback_and_updates_github">GitHub</string>
+    <string name="settings_feedback_and_updates_github_description">Предложения и голосование для улучшений</string>
     <string name="settings_feedback_and_updates_telegram">Telegram</string>
     <string name="settings_special_thanks">Особая благодарность</string>
     <string name="settings_special_thanks_shikimori">Shikimori</string>
+    <string name="settings_backup">Бэкап</string>
+    <string name="settings_watching">Просмотр</string>
     <string name="notification_title_pinned">Закреплено.</string>
     <string name="notification_title_unpinned">Откреплено.</string>
     <string name="category_filters">Фильтры</string>

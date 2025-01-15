@@ -94,6 +94,7 @@ include(
     ":ui:root",
     ":ui:home",
     ":ui:auth",
+    ":ui:settings",
     ":ui:tracks:list",
     ":ui:tracks:menu",
     ":ui:tracks:edit",

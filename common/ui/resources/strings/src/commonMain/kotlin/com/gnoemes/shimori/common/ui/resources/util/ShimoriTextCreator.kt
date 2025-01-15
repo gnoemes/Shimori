@@ -1,7 +1,18 @@
 package com.gnoemes.shimori.common.ui.resources.util
 
+import androidx.compose.runtime.Composable
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.common.ui.resources.strings.settings_language_english
+import com.gnoemes.shimori.common.ui.resources.strings.settings_language_romaji
+import com.gnoemes.shimori.common.ui.resources.strings.settings_language_russian
+import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_dark
+import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_light
+import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_system
+import com.gnoemes.shimori.settings.AppLocale
+import com.gnoemes.shimori.settings.AppTheme
+import com.gnoemes.shimori.settings.AppTitlesLocale
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.stringResource
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 //TODO restore with UI components
@@ -10,6 +21,33 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class ShimoriTextCreator(
     private val formatter: ShimoriDateTextFormatter,
 ) {
+
+    @Composable
+    fun name(setting: AppLocale): String {
+        return when (setting) {
+            AppLocale.Russian -> stringResource(Strings.settings_language_russian)
+            else -> stringResource(Strings.settings_language_english)
+        }
+    }
+
+    @Composable
+    fun name(setting: AppTitlesLocale): String {
+        return when (setting) {
+            AppTitlesLocale.Russian -> stringResource(Strings.settings_language_russian)
+            AppTitlesLocale.Romaji -> stringResource(Strings.settings_language_romaji)
+            else -> stringResource(Strings.settings_language_english)
+        }
+    }
+
+    @Composable
+    fun name(setting: AppTheme): String {
+        return when (setting) {
+            AppTheme.SYSTEM -> stringResource(Strings.settings_theme_system)
+            AppTheme.DARK -> stringResource(Strings.settings_theme_dark)
+            else -> stringResource(Strings.settings_theme_light)
+        }
+    }
+
 //
 //    fun name(title: ShimoriContentEntity): String {
 //        return when (titlesLocale) {

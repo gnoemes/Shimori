@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common.ui.overlay
+package com.gnoemes.shimori.common.ui.navigator
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.gnoemes.shimori.logging.api.Logger

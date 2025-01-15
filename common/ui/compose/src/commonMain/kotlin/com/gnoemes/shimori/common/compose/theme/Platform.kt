@@ -8,4 +8,4 @@ internal expect fun dynamicColorScheme(
     useDarkColors: Boolean
 ): ColorScheme
 
-internal expect fun isDynamicColorsAvailable(): Boolean
+expect fun isDynamicColorsAvailable(): Boolean
