@@ -8,6 +8,7 @@
     <string name="search">Search</string>
     <string name="profile">Profile</string>
     <string name="lists_title">Lists</string>
+    <string name="feature_work_in_progress">Work in progress</string>
     <string name="explore" comment="catalog">Explore</string>
     <string name="feed" comment="feed">Feed</string>
     <string name="settings">Settings</string>
@@ -74,6 +75,7 @@
     <string name="type_novel">Novel</string>
     <string name="type_light_novel">Ranobe</string>
     <string name="today">Today</string>
+    <string name="settings_appearence">Appearance</string>
     <string name="settings_titles">Naming language</string>
     <string name="settings_language_russian">Russian</string>
     <string name="settings_language_english">English</string>
@@ -91,9 +93,12 @@
     <string name="settings_feedback_and_updates">Feedback</string>
     <string name="settings_feedback_and_updates_email">Mail</string>
     <string name="settings_feedback_and_updates_github">GitHub</string>
+    <string name="settings_feedback_and_updates_github_description">Suggest and vote for improvements.</string>
     <string name="settings_feedback_and_updates_telegram">Telegram</string>
     <string name="settings_special_thanks">Special thanks</string>
     <string name="settings_special_thanks_shikimori">Shikimori</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_watching">Watching</string>
     <string name="notification_title_pinned">Pinned.</string>
     <string name="notification_title_unpinned">Unpinned.</string>
     <string name="category_filters">Filters</string>

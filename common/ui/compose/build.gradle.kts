@@ -24,9 +24,9 @@ kotlin {
                 implementation(composelibs.kmpalette.extensions.network)
 
                 api(compose.foundation)
+                api(compose.runtime)
                 api(compose.animation)
                 api(compose.preview)
-                api(compose.material)
                 api(compose.material3)
                 api(compose.material3AdaptiveNavigationSuite)
                 api(composelibs.material3.windowsizeclass)

@@ -8,4 +8,4 @@ internal actual fun dynamicColorScheme(
     useDarkColors: Boolean
 ): ColorScheme = throw IllegalStateException("Dynamic color scheme is not supported for JVM")
 
-internal actual fun isDynamicColorsAvailable(): Boolean = false
+actual fun isDynamicColorsAvailable(): Boolean = false

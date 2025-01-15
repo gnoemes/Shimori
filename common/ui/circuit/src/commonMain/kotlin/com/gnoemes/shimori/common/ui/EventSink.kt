@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.common.ui.overlay
+package com.gnoemes.shimori.common.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope

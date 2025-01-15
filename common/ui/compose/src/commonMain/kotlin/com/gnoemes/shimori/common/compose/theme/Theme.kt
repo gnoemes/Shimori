@@ -26,7 +26,7 @@ fun ShimoriTheme(
         .collectAsState(
             initial =
             (prefs.getInt(ShimoriPreferences.ValueKey.INITIAL_THEME)
-                ?: if (useDynamicColors) AppAccentColor.System.value else AppAccentColor.Yellow.value)
+                ?: if (useDynamicColors) AppAccentColor.System.value else AppAccentColor.Orange.value)
                 .let { AppAccentColor.from(it) }
         )
         .value

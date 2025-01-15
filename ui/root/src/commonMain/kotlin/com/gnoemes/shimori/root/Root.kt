@@ -21,8 +21,8 @@ import com.gnoemes.shimori.common.compose.calculateWindowSizeClass
 import com.gnoemes.shimori.common.compose.shouldUseDarkColors
 import com.gnoemes.shimori.common.compose.shouldUseDynamicColors
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
-import com.gnoemes.shimori.common.ui.overlay.LocalNavigator
-import com.gnoemes.shimori.common.ui.overlay.ShimoriNavigator
+import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
+import com.gnoemes.shimori.common.ui.navigator.ShimoriNavigator
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator

@@ -25,7 +25,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 class ShimoriIconsUtil {
 
-    fun sourceIcon(source : Source) : DrawableResource? = when(source.id) {
+    fun sourceIcon(source : Source) : DrawableResource? = sourceIcon(source.id)
+
+    fun sourceIcon(id : Long) : DrawableResource? = when(id) {
         SourceIds.SHIKIMORI -> Icons.ic_shikimori
         else -> null
     }

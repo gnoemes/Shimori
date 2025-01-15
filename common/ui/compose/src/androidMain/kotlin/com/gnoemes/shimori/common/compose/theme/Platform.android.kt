@@ -19,4 +19,4 @@ internal actual fun dynamicColorScheme(
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-internal actual fun isDynamicColorsAvailable(): Boolean = Build.VERSION.SDK_INT >= 31
+actual fun isDynamicColorsAvailable(): Boolean = Build.VERSION.SDK_INT >= 31
