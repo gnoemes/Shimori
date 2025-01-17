@@ -10,6 +10,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(projects.data.models)
+
                 api(libs.circuit.runtime)
                 api(libs.circuit.foundation)
             }

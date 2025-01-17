@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.screens
 
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.slack.circuit.runtime.screen.Screen
 
 @Parcelize
@@ -7,6 +8,16 @@ object HomeScreen : ShimoriScreen("Home()")
 
 @Parcelize
 object TracksScreen : ShimoriScreen("Tracks()")
+
+@Parcelize
+object TracksEmptyScreen : ShimoriScreen("TracksEmpty()")
+
+@Parcelize
+data class ExploreScreen(
+    val type : TrackTargetType? = null,
+) : ShimoriScreen("Explore()") {
+    override val arguments get() = mapOf("type" to type)
+}
 
 @Parcelize
 object AuthScreen : ShimoriScreen("Auth()")

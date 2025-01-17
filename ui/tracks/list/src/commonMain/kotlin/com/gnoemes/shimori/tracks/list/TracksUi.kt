@@ -17,8 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
+import com.gnoemes.shimori.screens.TracksEmptyScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.foundation.CircuitContent
 
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -75,7 +77,7 @@ private fun TracksUi(
             }
         },
     ) {
-
+        CircuitContent(TracksEmptyScreen)
     }
 }
 

@@ -14,6 +14,7 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_re_do
 import com.gnoemes.shimori.common.ui.resources.icons.ic_shikimori
 import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.source.Source
 import com.gnoemes.shimori.sources.SourceIds
 import me.tatarka.inject.annotations.Inject
@@ -32,11 +33,17 @@ class ShimoriIconsUtil {
         else -> null
     }
 
-    fun listIcon(type: ListType): DrawableResource = when (type) {
+    fun icon(type: ListType): DrawableResource = when (type) {
         ListType.Pinned -> Icons.ic_pin
         ListType.Anime -> Icons.ic_anime
         ListType.Manga -> Icons.ic_manga
         else -> Icons.ic_ranobe
+    }
+
+    fun icon(type: TrackTargetType): DrawableResource = when (type) {
+        TrackTargetType.ANIME -> Icons.ic_anime
+        TrackTargetType.MANGA -> Icons.ic_manga
+        TrackTargetType.RANOBE -> Icons.ic_ranobe
     }
 
     fun trackStatusIcon(status: TrackStatus): DrawableResource = when (status) {

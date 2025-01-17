@@ -2,12 +2,16 @@ package com.gnoemes.shimori.common.ui.resources.util
 
 import androidx.compose.runtime.Composable
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.common.ui.resources.strings.anime
+import com.gnoemes.shimori.common.ui.resources.strings.manga
+import com.gnoemes.shimori.common.ui.resources.strings.ranobe
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_english
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_romaji
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_russian
 import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_dark
 import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_light
 import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_system
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.settings.AppLocale
 import com.gnoemes.shimori.settings.AppTheme
 import com.gnoemes.shimori.settings.AppTitlesLocale
@@ -45,6 +49,15 @@ class ShimoriTextCreator(
             AppTheme.SYSTEM -> stringResource(Strings.settings_theme_system)
             AppTheme.DARK -> stringResource(Strings.settings_theme_dark)
             else -> stringResource(Strings.settings_theme_light)
+        }
+    }
+
+    @Composable
+    fun name(type: TrackTargetType): String {
+        return when (type) {
+            TrackTargetType.ANIME -> stringResource(Strings.anime)
+            TrackTargetType.MANGA -> stringResource(Strings.manga)
+            TrackTargetType.RANOBE -> stringResource(Strings.ranobe)
         }
     }
 
