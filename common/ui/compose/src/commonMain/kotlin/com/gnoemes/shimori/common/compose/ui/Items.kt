@@ -8,14 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,16 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
@@ -47,7 +42,6 @@ import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
-import com.gnoemes.shimori.data.track.Track
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -95,38 +89,30 @@ fun ColumnScope.ListItem(
 
 @Composable
 fun TrackItem(
+    //aspect ratio doesn't work properly for parent height
+    //so we are going to calculate width/height for cover
+    parentWidth: Dp,
     titleWithTrack: TitleWithTrackEntity,
     modifier: Modifier,
     openEdit: () -> Unit,
     openDetails: () -> Unit,
-    addOneToProgress: ((Track) -> Unit)? = null,
+    addOneToProgress: (() -> Unit)? = null,
     widthSizeClass: WindowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass,
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val track = titleWithTrack.track
 
-    //aspect ratio doesn't work properly for parent height
-    //so we are going to calculate width/height for cover
-    var size by remember { mutableStateOf(IntSize.Zero) }
-
     Surface(
         modifier = modifier
-            .composed {
-                onGloballyPositioned {
-                    size = it.size
-                }
-            }
     ) {
         if (widthSizeClass.isCompact()) {
             Row {
-                val density = LocalDensity.current
-
-                val width by remember(size.width) {
-                    mutableStateOf(with(density) { (size.width * 0.25f).toDp() })
+                val width by remember(parentWidth) {
+                    mutableStateOf(parentWidth * 0.25f)
                 }
 
                 val height by remember(width) {
-                    mutableStateOf(width / 3 * 4)
+                    mutableStateOf((width / 3) * 4)
                 }
 
                 Spacer(Modifier.width(16.dp))
@@ -145,7 +131,7 @@ fun TrackItem(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight()
+                        .height(height)
                 ) {
                     SelectionContainer {
                         Text(
@@ -231,25 +217,23 @@ fun TrackItem(
 
 
                         Row {
-                            FilledIconButton(
+                            FilledTonalIconButton(
                                 onClick = openEdit,
-                                modifier = Modifier.size(32.dp),
                             ) {
                                 Icon(
                                     painterResource(Icons.ic_edit),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             }
 
                             if (addOneToProgress != null) {
                                 Spacer(Modifier.width(16.dp))
-                                FilledIconButton(
-                                    onClick = { addOneToProgress(track!!) },
-                                    modifier = Modifier.size(32.dp),
+                                FilledTonalIconButton(
+                                    onClick = addOneToProgress,
                                 ) {
                                     Icon(
                                         painterResource(Icons.ic_add_one),
-                                        contentDescription = null
+                                        contentDescription = null,
                                     )
                                 }
                             }

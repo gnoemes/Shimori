@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-inline fun LazyListScope.itemSpacer(height: Dp) {
-    item {
+inline fun LazyListScope.itemSpacer(height: Dp, key : Any? = null) {
+    item(key) {
         Spacer(
             Modifier
                 .height(height)
@@ -20,7 +20,7 @@ inline fun LazyListScope.itemSpacer(height: Dp) {
 }
 
 inline fun LazyListScope.statusBarSpacer(additional: Dp = 0.dp) {
-    item {
+    item("status_bar_spacer") {
         Spacer(
             Modifier
                 .statusBarHeight(additional)
