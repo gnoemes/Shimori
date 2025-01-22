@@ -2,11 +2,16 @@ package com.gnoemes.shimori.tracks.list
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -23,7 +28,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -46,6 +52,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
@@ -206,6 +213,7 @@ private fun TracksUi(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TracksUiContent(
     scrollConnection: CollapsingAppBarNestedScrollConnection,
@@ -224,18 +232,17 @@ private fun TracksUiContent(
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val coroutineScope = rememberCoroutineScope()
-
-    if (widthSizeClass.isCompact()) {
-        val density = LocalDensity.current
-        val spaceHeight by remember(density) {
-            derivedStateOf {
-                with(density) {
-                    (scrollConnection.appBarMaxHeight + scrollConnection.appBarOffset).toDp()
-                }
+    val density = LocalDensity.current
+    val spaceHeight by remember(density) {
+        derivedStateOf {
+            with(density) {
+                (scrollConnection.appBarMaxHeight + scrollConnection.appBarOffset).toDp()
             }
         }
+    }
 
 
+    if (widthSizeClass.isCompact()) {
         Box(
             modifier = Modifier.nestedScroll(scrollConnection)
         ) {
@@ -298,6 +305,7 @@ private fun TracksUiContent(
                             modifier = Modifier
                                 .animateItem(placementSpec = null)
                                 .fillMaxWidth()
+                                .clickable(onClick = openDetailsClick)
                                 .padding(vertical = 12.dp),
                             openDetails = openDetailsClick,
                             openEdit = openEditClick,
@@ -312,18 +320,88 @@ private fun TracksUiContent(
 
 
     } else {
-        Column {
-
-            LazyHorizontalGrid(
-                rows = GridCells.FixedSize(158.dp)
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Adaptive(158.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            item(
+                span = { GridItemSpan(this.maxLineSpan) }
             ) {
+                Column {
+                    Spacer(modifier = Modifier.height(18.dp))
 
+                    Text(
+                        textCreator {
+                            "${status.name(type)} $divider ${type.name()}"
+                        },
+                        style = MaterialTheme.typography.headlineMedium,
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        SortOptions(
+                            scrollState = rememberScrollState(),
+                            sort = sort,
+                            availableOptions = sortOptions,
+                            onClick = {
+                                changeSort(it)
+                            }
+                        )
+                    }
+
+                    Spacer(Modifier.height(4.dp))
+                }
             }
+
+
+            items(
+                count = items.itemCount,
+                key = items.itemKey { "track_${it.track?.id}" },
+            ) { index ->
+                val entity = items[index]
+                val track = entity?.track
+                if (entity != null && track != null) {
+                    val openDetailsClick = remember(track.id) {
+                        { openDetails(entity) }
+                    }
+
+                    val openEditClick = remember(track.id) {
+                        { openEdit(entity) }
+                    }
+
+                    TrackItem(
+                        parentWidth = Dp.Unspecified,
+                        titleWithTrack = entity,
+                        modifier = Modifier
+                            .animateItem(placementSpec = null)
+                            .animateContentSize()
+                            .fillMaxWidth(),
+                        openDetails = openDetailsClick,
+                        openEdit = openEditClick,
+                        addOneToProgress = { addOneToProgress(track) }
+                    )
+                }
+            }
+
+            item(
+                span = { GridItemSpan(this.maxLineSpan) }
+            ) {
+                Spacer(Modifier.height(96.dp))
+            }
+
         }
+
     }
 
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RowScope.SortOptions(
     scrollState: ScrollState,
@@ -340,7 +418,7 @@ private fun RowScope.SortOptions(
         (16 + 18).dp.roundToPx()
     }
 
-    Spacer(Modifier.width(8.dp))
+    if (this !is FlowRowScope) Spacer(Modifier.width(8.dp))
     availableOptions.forEach { option ->
         val selected = option == sort.sortOption
         val isDescending = sort.isDescending
@@ -379,7 +457,7 @@ private fun RowScope.SortOptions(
             }
         )
     }
-    Spacer(Modifier.width(8.dp))
+    if (this !is FlowRowScope) Spacer(Modifier.width(8.dp))
 }
 
 

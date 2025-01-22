@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -107,7 +109,7 @@ fun TrackItem(
     val track = titleWithTrack.track
 
     Surface(
-        modifier = modifier
+        modifier = modifier,
     ) {
         if (widthSizeClass.isCompact()) {
             Row {
@@ -127,7 +129,6 @@ fun TrackItem(
                         .height(height)
                         .animateContentSize(),
                     showEditButton = false,
-                    windowWidthSizeClass = widthSizeClass,
                     onClick = openDetails
                 )
                 Spacer(Modifier.width(16.dp))
@@ -249,6 +250,37 @@ fun TrackItem(
                 }
 
                 Spacer(Modifier.width(16.dp))
+            }
+        } else {
+            val title = titleWithTrack.entity
+            Column(
+                modifier = modifier
+                    .clip(MaterialTheme.shapes.medium.copy())
+                    .clickable(onClick = openDetails),
+            ) {
+                TrackCover(
+                    title.image,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(3 / 4f)
+                        .animateContentSize(),
+                    showEditButton = true,
+                    onClick = openDetails,
+                    onEditClick = openEdit
+                )
+
+                Text(
+                    textCreator {
+                        title.name()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+
+                TitleSubInfo(title, modifier.fillMaxWidth())
             }
         }
     }

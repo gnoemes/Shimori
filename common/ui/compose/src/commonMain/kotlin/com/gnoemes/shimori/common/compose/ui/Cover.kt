@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -24,9 +21,10 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
-import com.gnoemes.shimori.common.compose.isCompact
+import com.gnoemes.shimori.common.ui.resources.Icons
+import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.data.common.ShimoriImage
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun PersonCover(
@@ -58,22 +56,12 @@ fun PersonCover(
 fun TrackCover(
     image: ShimoriImage?,
     modifier: Modifier = Modifier,
-    windowWidthSizeClass: WindowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass,
     shape: Shape = MaterialTheme.shapes.medium,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     showEditButton: Boolean = false,
     onEditClick: (() -> Unit)? = null,
 ) {
-    val isCompact = windowWidthSizeClass.isCompact()
-    val width by remember(isCompact) {
-        mutableIntStateOf(
-            if (isCompact) 90
-            else 158
-        )
-    }
-
-
     Box(
         modifier = modifier
             .clip(shape)
@@ -99,11 +87,14 @@ fun TrackCover(
         if (showEditButton) {
             FilledTonalIconButton(
                 onClick = { onEditClick?.invoke() },
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
             ) {
-
+                Icon(
+                    painter = painterResource(Icons.ic_edit),
+                    contentDescription = null
+                )
             }
         }
     }

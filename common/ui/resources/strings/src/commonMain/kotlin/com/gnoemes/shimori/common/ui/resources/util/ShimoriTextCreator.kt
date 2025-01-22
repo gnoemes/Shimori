@@ -53,6 +53,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.type_ova
 import com.gnoemes.shimori.common.ui.resources.strings.type_special
 import com.gnoemes.shimori.common.ui.resources.strings.type_tv
 import com.gnoemes.shimori.data.ShimoriContentEntity
+import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.titles.anime.Anime
@@ -93,7 +94,7 @@ class ShimoriTextCreator(
 
 
     @Composable
-    private fun String.colorSpan(
+    fun String.colorSpan(
         color: Color = MaterialTheme.colorScheme.tertiary
     ) = AnnotatedString(
         this,
@@ -184,7 +185,7 @@ class ShimoriTextCreator(
         }
 
     @Composable
-    fun Anime.status(): AnnotatedString? {
+    private fun Anime.status(): AnnotatedString? {
         return when (status) {
             TitleStatus.ANONS -> {
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
@@ -246,10 +247,12 @@ class ShimoriTextCreator(
                     }
                 }
 
-                return stringResource(Strings.status_ongoing).colorSpan()
+                return dateReleased?.year?.let {
+                    "$it—".colorSpan()
+                } ?: stringResource(Strings.status_ongoing).colorSpan()
             }
 
-            TitleStatus.RELEASED -> dateReleased?.year?.toString()?.colorSpan()
+            TitleStatus.RELEASED -> dateReleased?.year?.toString()?.let { AnnotatedString(it) }
             else -> null
         }
     }
@@ -263,17 +266,6 @@ class ShimoriTextCreator(
             AnimeType.Music -> stringResource(Strings.type_music)
             AnimeType.Movie -> stringResource(Strings.type_movie)
             AnimeType.Special -> stringResource(Strings.type_special)
-            else -> null
-        }
-    }
-
-
-    @Composable
-    fun Manga.status(): AnnotatedString? {
-        return when (status) {
-            TitleStatus.ANONS -> stringResource(Strings.status_anons).colorSpan()
-            TitleStatus.ONGOING -> stringResource(Strings.status_ongoing).colorSpan()
-            TitleStatus.RELEASED -> dateReleased?.year?.toString()?.colorSpan()
             else -> null
         }
     }
@@ -292,21 +284,33 @@ class ShimoriTextCreator(
 
 
     @Composable
-    fun Ranobe.status(): AnnotatedString? {
-        return when (status) {
-            TitleStatus.ANONS -> stringResource(Strings.status_anons).colorSpan()
-            TitleStatus.ONGOING -> stringResource(Strings.status_ongoing).colorSpan()
-            TitleStatus.RELEASED -> dateReleased?.year?.toString()?.colorSpan()
-            else -> null
-        }
-    }
-
-    @Composable
     fun Ranobe.type(): String? {
         return when (ranobeType) {
             RanobeType.Novel -> stringResource(Strings.type_novel)
             RanobeType.LightNovel -> stringResource(Strings.type_light_novel)
             else -> null
+        }
+    }
+
+    @Composable
+    fun ShimoriTitleEntity.status(): AnnotatedString? {
+        if (this is Anime) return status()
+
+        return when (status) {
+            TitleStatus.ANONS -> {
+                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                dateReleased?.daysUntil(now.date)?.let {
+                    if (it == 0) stringResource(Strings.today).colorSpan()
+                    else null
+                } ?: stringResource(Strings.status_anons).colorSpan()
+            }
+
+            TitleStatus.ONGOING ->
+                dateReleased?.year?.let {
+                    "$it—".colorSpan()
+                } ?: stringResource(Strings.status_ongoing).colorSpan()
+
+            else -> dateReleased?.year?.toString()?.let { AnnotatedString(it) }
         }
     }
 
