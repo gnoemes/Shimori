@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +25,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +61,9 @@ import com.gnoemes.shimori.common.compose.ui.TrackItem
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_asc
 import com.gnoemes.shimori.common.ui.resources.icons.ic_desc
+import com.gnoemes.shimori.common.ui.resources.icons.ic_list
+import com.gnoemes.shimori.common.ui.resources.strings.lists_title
+import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.ListSortOption
@@ -68,6 +74,7 @@ import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 
@@ -144,6 +151,36 @@ private fun TracksUi(
                 }
             }
         },
+        floatingActionButton = {
+            if (state.isMenuVisible) {
+                val expanded by remember {
+                    derivedStateOf {
+                        scrollConnection.appBarOffset != -scrollConnection.appBarMaxHeight
+                    }
+                }
+
+                ExtendedFloatingActionButton(
+                    text = {
+                        Text(stringResource(Strings.lists_title))
+                    },
+                    icon = {
+                        Icon(
+                            painterResource(Icons.ic_list),
+                            contentDescription = stringResource(Strings.lists_title)
+                        )
+                    },
+                    expanded = expanded,
+                    onClick = openMenu,
+                )
+
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        bottomBar = {
+            if (isList) {
+                Box(modifier = Modifier.height(84.dp))
+            }
+        }
     ) {
         val items = state.items
 
@@ -210,7 +247,6 @@ private fun TracksUiContent(
             ) {
                 itemSpacer(spaceHeight + 8.dp, key = "scroll_spacer")
 
-
                 item("header_list") {
                     Text(
                         textCreator {
@@ -270,7 +306,7 @@ private fun TracksUiContent(
                     }
                 }
 
-                itemSpacer(96.dp)
+                itemSpacer(paddingValues.calculateBottomPadding() + 68.dp)
             }
         }
 

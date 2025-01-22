@@ -168,6 +168,9 @@ private fun HomeUi(
                             restoreState = true
                         )
                     },
+                    onNavigationReSelected = {
+                        navigator.resetRootIfDifferent(it, restoreState = true)
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -192,6 +195,9 @@ private fun HomeUi(
                             restoreState = true
                         )
                     },
+                    onNavigationReSelected = {
+                        navigator.resetRootIfDifferent(it, restoreState = true)
+                    },
                     modifier = Modifier.fillMaxHeight(),
                 )
             }
@@ -214,11 +220,13 @@ private fun HomeNavigationRail(
     selectedNavigation: Screen,
     navigationItems: List<HomeNavigationItem>,
     onNavigationSelected: (Screen) -> Unit,
+    onNavigationReSelected: (Screen) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavigationRail(modifier = modifier) {
         Spacer(Modifier.weight(1f))
         for (item in navigationItems) {
+            val selected = selectedNavigation == item.screen
             NavigationRailItem(
                 icon = {
                     if (item is HomeNavigationItem.ImageNavigationItem && item.image != null) {
@@ -235,8 +243,11 @@ private fun HomeNavigationRail(
                     .heightIn(max = 56.dp)
                     .fillMaxHeight(),
                 label = { Text(text = stringResource(item.label)) },
-                selected = selectedNavigation == item.screen,
-                onClick = { onNavigationSelected(item.screen) },
+                selected = selected,
+                onClick = {
+                    if (selected) onNavigationReSelected(item.screen)
+                    else onNavigationSelected(item.screen)
+                },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -251,6 +262,7 @@ private fun HomeNavigationBar(
     selectedNavigation: Screen,
     navigationItems: List<HomeNavigationItem>,
     onNavigationSelected: (Screen) -> Unit,
+    onNavigationReSelected: (Screen) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val surface = MaterialTheme.colorScheme.surface
@@ -281,6 +293,7 @@ private fun HomeNavigationBar(
             windowInsets = WindowInsets.navigationBars
         ) {
             for (item in navigationItems) {
+                val selected = selectedNavigation == item.screen
                 NavigationBarItem(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -289,15 +302,18 @@ private fun HomeNavigationBar(
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     ),
-                    selected = selectedNavigation == item.screen,
-                    onClick = { onNavigationSelected(item.screen) },
+                    selected = selected,
+                    onClick = {
+                        if (selected) onNavigationReSelected(item.screen)
+                        else onNavigationSelected(item.screen)
+                    },
                     icon = {
                         if (item is HomeNavigationItem.ImageNavigationItem && item.image != null) {
                             PersonCover(image = item.image)
                         } else {
                             HomeNavigationItemIcon(
                                 item = item,
-                                selected = selectedNavigation == item.screen
+                                selected = selected
                             )
                         }
                     },
@@ -335,7 +351,6 @@ internal enum class NavigationType {
         fun forWindowSizeSize(windowSizeClass: WindowSizeClass): NavigationType = when {
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact -> BOTTOM_NAVIGATION
             windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact -> BOTTOM_NAVIGATION
-            windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium -> RAIL
             else -> RAIL
         }
     }
