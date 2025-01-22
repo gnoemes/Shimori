@@ -8,10 +8,13 @@ interface ShimoriSettings {
     val showSpoilers: Setting<Boolean>
     val theme: Setting<AppTheme>
     val accentColor: Setting<AppAccentColor>
+    val onProgressCompleteAction: Setting<OnProgressCompleteAction>
+    val onProgressNotInWatchingAction: Setting<OnProgressNotInWatchingAction>
 }
 
 interface Setting<T> {
     suspend fun update(newState: T)
+    suspend fun get(): T
     val observe: Flow<T>
 }
 

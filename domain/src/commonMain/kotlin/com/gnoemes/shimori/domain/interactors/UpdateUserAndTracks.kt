@@ -10,16 +10,25 @@ class UpdateUserAndTracks(
     private val updateUser: UpdateUser,
     private val updateTracks: UpdateTracks,
     private val dispatchers: AppCoroutineDispatchers
-) : Interactor<Unit, Unit>() {
+) : Interactor<UpdateUserAndTracks.Params, Unit>() {
 
-    override suspend fun doWork(params: Unit) {
+    override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             updateUser.invoke(
                 UpdateUser.Params(isMe = true, id = null)
             )
-        }
-        withContext(dispatchers.io) {
-            updateTracks.invoke(UpdateTracks.Params(true))
+
+            updateTracks.invoke(
+                UpdateTracks.Params(
+                    forceTitlesUpdate = params.forceTitlesUpdate,
+                    optionalTitlesUpdate = params.optionalTitlesUpdate
+                )
+            )
         }
     }
+
+    data class Params(
+        val forceTitlesUpdate: Boolean,
+        val optionalTitlesUpdate: Boolean,
+    )
 }

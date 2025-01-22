@@ -86,14 +86,14 @@ private fun TracksEmptyUi(
                         modifier = Modifier,
                         onClick = { openExplore(type) },
                         label = {
-                            Text(textCreator.name(type))
+                            Text(textCreator { type.name() })
                         },
                         leadingIcon = {
                             val icon = iconUtil.icon(type)
                             Icon(
                                 painter = painterResource(icon),
                                 modifier = Modifier.size(18.dp),
-                                contentDescription = textCreator.name(type),
+                                contentDescription = textCreator { type.name() },
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                         },

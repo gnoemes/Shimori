@@ -22,7 +22,7 @@ class AnimeShortMapper(
             id = from.id.toLong(),
             name = from.name,
             nameRu = from.russian,
-            nameEn = from.japanese,
+            nameEn = from.english,
             image = from.poster?.posterShort?.toShimoriImage(),
             type = TrackTargetType.ANIME,
             animeType = from.kind?.toShimoriType(),

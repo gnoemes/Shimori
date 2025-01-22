@@ -7,12 +7,10 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_dropped
 import com.gnoemes.shimori.common.ui.resources.icons.ic_in_progress
 import com.gnoemes.shimori.common.ui.resources.icons.ic_manga
 import com.gnoemes.shimori.common.ui.resources.icons.ic_on_hold
-import com.gnoemes.shimori.common.ui.resources.icons.ic_pin
 import com.gnoemes.shimori.common.ui.resources.icons.ic_planned
 import com.gnoemes.shimori.common.ui.resources.icons.ic_ranobe
 import com.gnoemes.shimori.common.ui.resources.icons.ic_re_do
 import com.gnoemes.shimori.common.ui.resources.icons.ic_shikimori
-import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.source.Source
@@ -26,18 +24,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 class ShimoriIconsUtil {
 
-    fun sourceIcon(source : Source) : DrawableResource? = sourceIcon(source.id)
+    fun sourceIcon(source: Source): DrawableResource? = sourceIcon(source.id)
 
-    fun sourceIcon(id : Long) : DrawableResource? = when(id) {
+    fun sourceIcon(id: Long): DrawableResource? = when (id) {
         SourceIds.SHIKIMORI -> Icons.ic_shikimori
         else -> null
-    }
-
-    fun icon(type: ListType): DrawableResource = when (type) {
-        ListType.Pinned -> Icons.ic_pin
-        ListType.Anime -> Icons.ic_anime
-        ListType.Manga -> Icons.ic_manga
-        else -> Icons.ic_ranobe
     }
 
     fun icon(type: TrackTargetType): DrawableResource = when (type) {

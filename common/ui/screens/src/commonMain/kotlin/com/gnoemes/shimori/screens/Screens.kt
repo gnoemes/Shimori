@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.screens
 
+import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.slack.circuit.runtime.screen.Screen
 
@@ -14,7 +15,7 @@ object TracksEmptyScreen : ShimoriScreen("TracksEmpty()")
 
 @Parcelize
 data class ExploreScreen(
-    val type : TrackTargetType? = null,
+    val type: TrackTargetType? = null,
 ) : ShimoriScreen("Explore()") {
     override val arguments get() = mapOf("type" to type)
 }
@@ -26,8 +27,22 @@ object AuthScreen : ShimoriScreen("Auth()")
 object SettingsScreen : ShimoriScreen("Settings()"), OverlayScreen
 
 @Parcelize
-data class SettingsAppearanceScreen(val card: Boolean = false) : ShimoriScreen("SettingsAppearance()") {
+data class SettingsAppearanceScreen(val card: Boolean = false) :
+    ShimoriScreen("SettingsAppearance()") {
     override val arguments get() = mapOf("card" to card)
+}
+
+@Parcelize
+data class EditTrackScreen(
+    val targetId: Long,
+    val targetType: TrackTargetType,
+    val predefinedStatus: TrackStatus?
+) : ShimoriScreen("EditTrack()"), OverlayScreen {
+    override val arguments get() = mapOf(
+        "targetId" to targetId,
+        "targetType" to targetType,
+        "predefinedStatus" to predefinedStatus,
+    )
 }
 
 @Parcelize

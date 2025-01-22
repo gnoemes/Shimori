@@ -2,6 +2,7 @@ package com.gnoemes.shimori.common.compose
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 
@@ -12,3 +13,6 @@ val LocalWindowSizeClass = compositionLocalOf<WindowSizeClass> {
 @Composable
 @ExperimentalMaterial3WindowSizeClassApi
 expect fun calculateWindowSizeClass(): WindowSizeClass
+
+@Composable
+fun WindowWidthSizeClass.isCompact() = this == WindowWidthSizeClass.Compact

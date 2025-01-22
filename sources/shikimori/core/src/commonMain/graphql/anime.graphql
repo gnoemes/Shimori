@@ -6,9 +6,9 @@ query AnimeDetails(
         malId
         name
         russian
-        licenseNameRu
         english
         japanese
+        licenseNameRu
         synonyms
         kind
         rating

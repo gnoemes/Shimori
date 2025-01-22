@@ -19,19 +19,20 @@ fun ShimoriTheme(
 ) {
     val prefs = LocalShimoriPreferences.current
 
+
     val accentColorType = LocalShimoriSettings
         .current
         .accentColor
         .observe
         .collectAsState(
             initial =
-            (prefs.getInt(ShimoriPreferences.ValueKey.INITIAL_THEME)
+            (prefs.getInt(ShimoriPreferences.ValueKey.INITIAL_ACCENT)
                 ?: if (useDynamicColors) AppAccentColor.System.value else AppAccentColor.Orange.value)
                 .let { AppAccentColor.from(it) }
         )
         .value
 
-    prefs.setInt(ShimoriPreferences.ValueKey.INITIAL_THEME, accentColorType.value)
+    prefs.setInt(ShimoriPreferences.ValueKey.INITIAL_ACCENT, accentColorType.value)
 
     if (useDynamicColors) {
         MaterialTheme(

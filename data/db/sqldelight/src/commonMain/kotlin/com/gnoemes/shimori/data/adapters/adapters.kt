@@ -40,7 +40,7 @@ internal val UserAdapter = User.Adapter(
 
 internal val ListSortAdapter = List_sort.Adapter(
     sortAdapter = EnumColumnAdapter<ListSortOption>(),
-    typeAdapter = IntColumnAdapter
+    typeAdapter = EnumColumnAdapter<TrackTargetType>()
 )
 
 internal val LastRequestAdapter = Last_request.Adapter(

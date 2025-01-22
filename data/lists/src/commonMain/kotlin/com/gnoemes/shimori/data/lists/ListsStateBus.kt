@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.lists
 
-import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackStatus
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,15 +20,15 @@ class ListsStateBus(
 ) {
 
     /**
-     * Represents selected [ListType]
+     * Represents selected [TrackTargetType]
      */
-    val type = object : State<ListType> {
-        override suspend fun update(newState: ListType) {
-            prefs.preferredListType = newState.type
+    val type = object : State<TrackTargetType> {
+        override suspend fun update(newState: TrackTargetType) {
+            prefs.preferredListType = newState.name
         }
 
-        override val observe: Flow<ListType>
-            get() = prefs.observePreferredListType().map { ListType.findOrDefault(it) }
+        override val observe: Flow<TrackTargetType>
+            get() = prefs.observePreferredListType().map { TrackTargetType.valueOf(it) }
     }
 
     /**
@@ -55,7 +55,7 @@ class ListsStateBus(
     }
 
     /**
-     * Event to notify listeners to open random title from current [TrackStatus] or [ListType.Pinned]
+     * Event to notify listeners to open random title from current [TrackStatus]
      */
     val openRandomTitleEvent = object : EventState<Unit> {
         private val openRandomTitle = MutableSharedFlow<Unit>()

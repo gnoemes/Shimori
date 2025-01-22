@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.domain.interactors
+package com.gnoemes.shimori.domain.interactors.tracks
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.app.SourceDataType

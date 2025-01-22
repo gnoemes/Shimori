@@ -1,10 +1,10 @@
 import com.gnoemes.shimori.data.track.ListSortOption;
-import kotlin.Int;
+import com.gnoemes.shimori.data.track.TrackTargetType;
 import kotlin.Boolean;
 
 CREATE TABLE list_sort (
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      type INTEGER AS Int NOT NULL,
+      type TEXT AS TrackTargetType NOT NULL,
       sort TEXT AS ListSortOption NOT NULL,
       descending INTEGER AS Boolean NOT NULL
 );

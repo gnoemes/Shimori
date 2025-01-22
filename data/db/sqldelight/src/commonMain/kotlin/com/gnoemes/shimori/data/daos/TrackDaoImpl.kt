@@ -75,10 +75,21 @@ class TrackDaoImpl(
         return db.trackQueries.queryAll(::track).executeAsList()
     }
 
+    override fun queryByTargetType(type: TrackTargetType): List<Track> {
+        return db.trackQueries.queryAllByTarget(type, ::track).executeAsList()
+    }
+
     override fun queryById(id: Long): Track? {
         return db.trackQueries
             .queryById(id, ::track)
             .executeAsOneOrNull()
+    }
+
+    override fun queryCount(): Int {
+        return db.trackQueries
+            .queryCount()
+            .executeAsOne()
+            .toInt()
     }
 
     override fun observeById(id: Long): Flow<Track?> {

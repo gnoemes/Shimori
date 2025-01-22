@@ -12,6 +12,8 @@ abstract class TrackDao : EntityDao<Track> {
     abstract fun observeExistedStatuses(type: TrackTargetType): Flow<List<TrackStatus>>
 
     abstract fun queryById(id: Long): Track?
+    abstract fun queryCount(): Int
 
     abstract fun queryAll(): List<Track>
+    abstract fun queryByTargetType(type : TrackTargetType): List<Track>
 }

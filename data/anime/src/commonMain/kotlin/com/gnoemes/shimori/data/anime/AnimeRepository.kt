@@ -28,6 +28,7 @@ class AnimeRepository(
     private val transactionRunner: DatabaseTransactionRunner
 ) {
 
+    fun queryById(id: Long) = store.dao.queryById(id)
     fun observeById(id: Long) = store.dao.observeById(id)
     fun observeVideos(id: Long) = videoStore.dao.observeByTitleId(id)
     fun observeScreenshots(id: Long) = screenshotStore.dao.observeByTitleId(id)

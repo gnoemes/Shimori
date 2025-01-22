@@ -24,6 +24,7 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
     private val deleteEntity: (LocalType) -> Unit,
     private val localEntityToKey: (Long, LocalType) -> Key?,
     private val networkEntityToKey: (Long, NetworkType) -> Key,
+    private val networkToId: (NetworkType) -> Long,
     private val networkEntityToLocalEntity: (Long, NetworkType, LocalType?) -> LocalType,
     private val logger: Logger
 ) : ItemSyncer<LocalType, NetworkType, Key> {
@@ -36,6 +37,7 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         val currentDbEntities = ArrayList(currentValues)
 
         val removed = ArrayList<LocalType>()
+        val addedNetwork = ArrayList<NetworkType>()
         val added = ArrayList<LocalType>()
         val updated = ArrayList<LocalType>()
 
@@ -70,7 +72,7 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
                 currentDbEntities.remove(dbEntityForId)
             } else {
                 // Not currently in the DB, so lets insert
-                added += networkEntityToLocalEntity(sourceId, networkEntity, null)
+                addedNetwork += networkEntity
             }
         }
 
@@ -85,9 +87,17 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         }
 
         // Finally we can insert all of the new entities
-        added.forEach {
-            val id = insertEntity(it)
-            syncDao.syncRemoteIds(sourceId, id, it.id, sourceDataType)
+        addedNetwork.forEach {
+            val localEntity = networkEntityToLocalEntity(sourceId, it, null)
+            val id = insertEntity(localEntity)
+            logger.v(tag = TAG) { "Added entry: $localEntity" }
+            syncDao.syncRemoteIds(
+                sourceId,
+                id,
+                networkToId(it),
+                sourceDataType
+            )
+            added += localEntity
         }
 
         return ItemSyncerResult(added, removed, updated)
@@ -98,6 +108,7 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         networkEntity: NetworkType
     ): ItemSyncerResult<LocalType> {
         val removed = ArrayList<LocalType>()
+        val addedNetwork = ArrayList<NetworkType>()
         val added = ArrayList<LocalType>()
         val updated = ArrayList<LocalType>()
 
@@ -124,14 +135,21 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
                 }
             } else {
                 // Not currently in the DB, so lets insert
-                added += networkEntityToLocalEntity(sourceId, networkEntity, null)
+                addedNetwork += networkEntity
             }
         }
 
         // Finally we can insert all of the new entities
-        added.forEach {
-            val id = insertEntity(it)
-            syncDao.syncRemoteIds(sourceId, id, it.id, sourceDataType)
+        addedNetwork.forEach {
+            val localEntity = networkEntityToLocalEntity(sourceId, it, null)
+            val id = insertEntity(localEntity)
+            syncDao.syncRemoteIds(
+                sourceId,
+                id,
+                networkToId(it),
+                sourceDataType
+            )
+            added += localEntity
         }
 
         return ItemSyncerResult(added, removed, updated)
@@ -145,6 +163,7 @@ fun <Type : ShimoriEntity, Key> syncerForEntity(
     entityDao: EntityDao<Type>,
     entityToKey: (Long, Type) -> Key?,
     networkEntityToKey: (Long, Type) -> Key?,
+    networkToId: (Type) -> Long,
     mapper: (Long, Type, Type?) -> Type,
     logger: Logger
 ) = SourceItemSyncer(
@@ -156,6 +175,7 @@ fun <Type : ShimoriEntity, Key> syncerForEntity(
     entityDao::delete,
     entityToKey,
     networkEntityToKey,
+    networkToId,
     mapper,
     logger
 )

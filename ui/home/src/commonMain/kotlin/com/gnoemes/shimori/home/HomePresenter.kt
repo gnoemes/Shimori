@@ -4,10 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.ui.wrapEventSink
+import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.lists.ListsUiEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
+import com.gnoemes.shimori.domain.interactors.LogoutSource
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
+import com.gnoemes.shimori.screens.EditTrackScreen
 import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.sources.SourceIds
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -27,7 +32,9 @@ class HomePresenter(
     @Assisted private val navigator: Navigator,
     private val observeShikimoriAuth: Lazy<ObserveShikimoriAuth>,
     private val observeMyUserShort: Lazy<ObserveMyUserShort>,
-    private val authManager: Lazy<AuthManager>
+    private val authManager: Lazy<AuthManager>,
+    private val logoutSource: Lazy<LogoutSource>,
+    private val stateBus: ListsStateBus,
 ) : Presenter<HomeUiState> {
 
     private val isAuthorizedBefore by lazy { authManager.value.isAuthorized(SourceIds.SHIKIMORI) }
@@ -43,11 +50,29 @@ class HomePresenter(
         LaunchedEffect(Unit) {
             observeShikimoriAuth.value(Unit)
             observeMyUserShort.value(Unit)
+
+            stateBus.uiEvents.observe.collect { event ->
+                when (event) {
+                    is ListsUiEvents.OpenEdit -> navigator.goTo(
+                        EditTrackScreen(
+                            event.targetId,
+                            event.targetType,
+                            event.predefinedStatus
+                        )
+                    )
+
+                    else -> Unit
+                }
+            }
         }
 
         val eventSink: CoroutineScope.(HomeUiEvent) -> Unit = { event ->
             when (event) {
                 is HomeUiEvent.OnNavEvent -> navigator.onNavEvent(event.navEvent)
+                is HomeUiEvent.Logout -> launchOrThrow {
+                    logoutSource.value(LogoutSource.Params(SourceIds.SHIKIMORI))
+                }
+
                 else -> {}
 //                HomeUiEvent.OpenSearch -> navigator
             }

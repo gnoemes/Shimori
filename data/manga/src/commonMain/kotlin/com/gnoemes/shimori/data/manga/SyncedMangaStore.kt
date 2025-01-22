@@ -77,9 +77,10 @@ class SyncedMangaStore(
         type,
         sourceId,
         dao,
-        { _, title -> title.id },
-        { _, title -> syncDao.findLocalId(sourceId, title.id, type) },
-        { _, remote, local -> remote.copy(id = local?.id ?: 0) },
+        entityToKey = { _, title -> syncDao.findRemoteId(sourceId, title.id, type) },
+        networkEntityToKey = { _, title -> title.id },
+        networkToId = { remote -> remote.id },
+        mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0) },
         logger
     )
 

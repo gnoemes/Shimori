@@ -35,7 +35,7 @@ class SyncedTrackStore(
             is Track -> sync(response.sourceId, data)
             is AnimeWithTrack -> sync(response.sourceId, data.track)
             is MangaWithTrack -> sync(response.sourceId, data.track)
-            is RanobeWithTrack -> sync(response.sourceId, data.track)
+            is RanobeWithTrack -> sync(response.sourceId, data.track, true)
             is AnimeInfo -> sync(response.sourceId, data.track)
 //            is MangaInfo -> sync(response.sourceId, data.track)
 //            is RanobeInfo -> sync(response.sourceId, data.track)
@@ -47,19 +47,23 @@ class SyncedTrackStore(
         when {
             data.filterIsInstance<Track>().isNotEmpty() -> sync(
                 sourceId,
-                data.filterIsInstance<Track>()
+                null,
+                data.filterIsInstance<Track>(),
             )
 
             data.filterIsInstance<AnimeWithTrack>().isNotEmpty() -> sync(
                 sourceId,
+                TrackTargetType.ANIME,
                 data.filterIsInstance<AnimeWithTrack>().mapNotNull { it.track })
 
             data.filterIsInstance<MangaWithTrack>().isNotEmpty() -> sync(
                 sourceId,
+                TrackTargetType.MANGA,
                 data.filterIsInstance<MangaWithTrack>().mapNotNull { it.track })
 
             data.filterIsInstance<RanobeWithTrack>().isNotEmpty() -> sync(
                 sourceId,
+                TrackTargetType.RANOBE,
                 data.filterIsInstance<RanobeWithTrack>().mapNotNull { it.track })
 
             else -> logger.d(tag = tag) {
@@ -70,10 +74,10 @@ class SyncedTrackStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: Track?) {
+    private fun sync(sourceId: Long, remote: Track?, isRanobe: Boolean = false) {
         if (remote == null) return
 
-        val result = createSyncer(sourceId).sync(
+        val result = createSyncer(sourceId, isRanobe).sync(
             syncDao.findLocalId(sourceId, remote.id, type)?.let { dao.queryById(it) },
             remote
         )
@@ -81,9 +85,13 @@ class SyncedTrackStore(
         log(result)
     }
 
-    private fun sync(sourceId: Long, remote: List<Track>) {
-        val result = createSyncer(sourceId).sync(
-            currentValues = dao.queryAll(),
+    private fun sync(
+        sourceId: Long,
+        type: TrackTargetType?,
+        remote: List<Track>
+    ) {
+        val result = createSyncer(sourceId, type == TrackTargetType.RANOBE).sync(
+            currentValues = if (type == null) dao.queryAll() else dao.queryByTargetType(type),
             networkValues = remote,
             removeNotMatched = true
         )
@@ -92,44 +100,44 @@ class SyncedTrackStore(
     }
 
     private fun createSyncer(
-        sourceId: Long
+        sourceId: Long,
+        isRanobe: Boolean
     ) = syncerForEntity(
         syncDao,
         type,
         sourceId,
         dao,
-        { _, track -> track.targetId to track.targetType },
-        ::findKey,
-        ::mapper,
+        entityToKey = ::findKey,
+        networkEntityToKey = { _, track -> track.targetId to track.targetType },
+        networkToId = { remote -> remote.id },
+        mapper = { _, remote, local -> mapper(sourceId, remote, local, isRanobe) },
         logger
     )
 
-    private fun findKey(sourceId: Long, remote: Track): Pair<Long, TrackTargetType>? {
-        val remoteTargetType = remote.targetType
-        val (localTargetId, isRanobe) = syncDao
-            .findLocalId(sourceId, remote.targetId, remoteTargetType.sourceDataType)
-            .let { it to false }
+    private fun findKey(sourceId: Long, local: Track): Pair<Long, TrackTargetType>? {
+        val localTargetType = local.targetType
+        val remoteTargetId = syncDao
+            .findRemoteId(sourceId, local.targetId, localTargetType.sourceDataType)
             .let {
                 //Check ranobe. On shikimori there's no difference between manga and ranobe in tracks
-                if (it.first == null && remoteTargetType.manga) syncDao
-                    .findLocalId(sourceId, remote.targetId, SourceDataType.Ranobe) to true
+                if (it == null && localTargetType.ranobe) syncDao
+                    .findRemoteId(sourceId, local.targetId, SourceDataType.Ranobe)
                 else it
             }
 
         //we can't create track for unknown target
-        if (localTargetId == null) {
+        if (remoteTargetId == null) {
             return null
         }
 
         //update track with same key
-        return localTargetId to when (remoteTargetType) {
-            TrackTargetType.ANIME -> remoteTargetType
-            TrackTargetType.MANGA -> if (isRanobe) TrackTargetType.RANOBE else remoteTargetType
-            else -> remoteTargetType
+        return remoteTargetId to when (localTargetType) {
+            TrackTargetType.RANOBE -> TrackTargetType.MANGA
+            else -> localTargetType
         }
     }
 
-    private fun mapper(sourceId: Long, remote: Track, local: Track?): Track {
+    private fun mapper(sourceId: Long, remote: Track, local: Track?, isRanobe: Boolean): Track {
         //if we have pending sync, we won't override local Track
         if (local != null) {
             val pendingSync = trackToSyncDao
@@ -140,8 +148,10 @@ class SyncedTrackStore(
         }
 
         return remote.copy(
+            id = local?.id ?: 0,
             //do not override ranobe type
-            targetType = local?.targetType ?: remote.targetType,
+            targetType = local?.targetType
+                ?: if (isRanobe) TrackTargetType.RANOBE else remote.targetType,
             targetId = getTargetId(sourceId, remote, local)
         )
     }
@@ -167,7 +177,7 @@ class SyncedTrackStore(
 
     private fun log(result: ItemSyncerResult<Track>) {
         logger.i(tag = RESULT_TAG) {
-            "Track sync results --> Added: ${result.added.size} Updated: ${result.updated.size}"
+            "Track sync results --> Added: ${result.added.size} Updated: ${result.updated.size} Deleted: ${result.deleted.size}"
         }
     }
 }

@@ -1,15 +1,31 @@
 package com.gnoemes.shimori.common.compose.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.data.common.ShimoriImage
 
 @Composable
@@ -26,9 +42,69 @@ fun PersonCover(
 //                .minimumInteractiveComponentSize()
                 .size(24.dp)
                 .clip(MaterialTheme.shapes.medium)
-                .clickable { onClick?.invoke() },
+                .composed {
+                    if (onClick != null) {
+                        clickable { onClick() }
+                    } else Modifier
+                },
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun TrackCover(
+    image: ShimoriImage?,
+    modifier: Modifier = Modifier,
+    windowWidthSizeClass: WindowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass,
+    shape: Shape = MaterialTheme.shapes.medium,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
+    showEditButton: Boolean = false,
+    onEditClick: (() -> Unit)? = null,
+) {
+    val isCompact = windowWidthSizeClass.isCompact()
+    val width by remember(isCompact) {
+        mutableIntStateOf(
+            if (isCompact) 90
+            else 158
+        )
+    }
+
+
+    Box(
+        modifier = modifier
+            .clip(shape)
+    ) {
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalPlatformContext.current)
+                .data(image)
+                .apply {
+                    crossfade(true)
+                }
+                .build(),
+            modifier = Modifier
+                .matchParentSize()
+                .combinedClickable(
+                    onLongClick = onLongClick,
+                    onClick = { onClick?.invoke() }
+                ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+
+        if (showEditButton) {
+            FilledTonalIconButton(
+                onClick = { onEditClick?.invoke() },
+                modifier = Modifier.size(32.dp)
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+            ) {
+
+            }
+        }
     }
 }

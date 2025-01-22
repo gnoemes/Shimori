@@ -15,4 +15,5 @@ data class HomeUiState(
 
 sealed interface HomeUiEvent : CircuitUiEvent {
     data class OnNavEvent(val navEvent: NavEvent) : HomeUiEvent
+    data object Logout : HomeUiEvent
 }

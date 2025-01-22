@@ -20,6 +20,7 @@ import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.settings.AppTheme
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.rememberCircuitNavigator
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.publicvalue.multiplatform.oidc.appsupport.AndroidCodeAuthFlowFactory
@@ -28,21 +29,24 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-        enableEdgeToEdgeForTheme(AppTheme.SYSTEM)
-
         super.onCreate(savedInstanceState)
 
         val applicationComponent = AndroidApplicationComponent.from(this)
         val component = applicationComponent.activityComponentFactory.createUiComponent(this)
 
+
         (applicationComponent.codeAuthFlowFactory as AndroidCodeAuthFlowFactory).registerActivity(this)
 
         lifecycle.coroutineScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val settings = withContext(applicationComponent.dispatchers.io) {
-                    applicationComponent.settings.theme.observe
+                val theme = withContext(applicationComponent.dispatchers.io) {
+                    applicationComponent.settings.theme
                 }
-                settings.collect(::enableEdgeToEdgeForTheme)
+                enableEdgeToEdgeForTheme(theme.get())
+                theme.observe
+                    //skip initial
+                    .drop(1)
+                    .collect(::enableEdgeToEdgeForTheme)
             }
         }
 

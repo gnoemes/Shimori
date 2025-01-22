@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.root
 
 import com.gnoemes.shimori.base.utils.launchOrThrow
-import com.gnoemes.shimori.domain.interactors.UpdateUser
+import com.gnoemes.shimori.domain.interactors.UpdateUserAndTracks
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import me.tatarka.inject.annotations.Inject
 class RootViewModel(
     @Assisted private val coroutineScope: CoroutineScope,
     observeShikimoriAuth: Lazy<ObserveShikimoriAuth>,
-    private val updateUser: Lazy<UpdateUser>,
+    private val updateUserAndTracks: Lazy<UpdateUserAndTracks>,
     private val logger: Logger,
 ) {
 
@@ -20,13 +20,25 @@ class RootViewModel(
         coroutineScope.launchOrThrow {
             observeShikimoriAuth.value.flow.collect {
                 logger.i(tag = "[Root]") { "New auth status $it" }
-                if (it.isAuthorized)
-                    updateUser.value.invoke(UpdateUser.Params(null, true)).onFailure {
-                        logger.e(throwable = it) { "Update user error" }
-                    }
+                if (it.isAuthorized) sync()
             }
         }
 
         observeShikimoriAuth.value.invoke(Unit)
+    }
+
+    private fun sync() {
+        coroutineScope.launchOrThrow {
+            updateUserAndTracks.value(
+                UpdateUserAndTracks.Params(
+                    forceTitlesUpdate = false,
+                    optionalTitlesUpdate = true
+                )
+            ).onFailure {
+                logger.e(throwable = it) { "Update user & tracks error" }
+            }.onSuccess {
+                logger.d { "User & tracks successfully updated" }
+            }
+        }
     }
 }

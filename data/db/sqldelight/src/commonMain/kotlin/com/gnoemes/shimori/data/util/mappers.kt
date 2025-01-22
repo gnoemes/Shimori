@@ -23,7 +23,6 @@ import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeType
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.ListSort
-import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
@@ -127,7 +126,7 @@ internal object ListSortMapper : Mapper<ListSortDAO?, ListSort?> {
 
         return ListSort(
             id = from.id,
-            type = ListType.findOrDefault(from.type),
+            type = from.type,
             sortOption = from.sort,
             isDescending = from.descending
         )

@@ -25,6 +25,7 @@ class RanobeRepository(
     private val transactionRunner: DatabaseTransactionRunner
 ) {
 
+    fun queryById(id: Long) = store.dao.queryById(id)
     fun observeById(id: Long) = store.dao.observeById(id)
     fun paging(status: TrackStatus, sort: ListSort) = store.dao.paging(status, sort)
 

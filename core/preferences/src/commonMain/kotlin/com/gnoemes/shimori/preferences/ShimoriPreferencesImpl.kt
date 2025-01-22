@@ -30,11 +30,12 @@ class ShimoriPreferencesImpl(
         get() = storage.getStringOrNull(CURRENT_CATALOGUE_SOURCE)
         set(value) = storage.putString(CURRENT_CATALOGUE_SOURCE, value ?: "")
 
-    override var preferredListType: Int
-        get() = storage.getInt(PREFERRED_LIST, 1)
-        set(value) = storage.putInt(PREFERRED_LIST, value)
+    override var preferredListType: String
+        get() = storage.getString(PREFERRED_LIST, "ANIME")
+        set(value) = storage.putString(PREFERRED_LIST, value)
 
-    override fun observePreferredListType(): Flow<Int> = flowSettings.getIntFlow(PREFERRED_LIST, 1)
+    override fun observePreferredListType(): Flow<String> =
+        flowSettings.getStringFlow(PREFERRED_LIST, "ANIME")
 
     override var preferredListStatus: String
         get() = storage.getString(PREFERRED_STATUS, "WATCHING")
@@ -49,4 +50,9 @@ class ShimoriPreferencesImpl(
 
     override fun getInt(key: String): Int? = storage.getIntOrNull(key)
 
+    override fun setString(key: String, value: String) {
+        storage.putString(key, value)
+    }
+
+    override fun getString(key: String): String? = storage.getStringOrNull(key)
 }

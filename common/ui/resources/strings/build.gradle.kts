@@ -14,6 +14,8 @@ kotlin {
                 api(projects.sourceApi.core)
 
                 implementation(compose.runtime)
+                implementation(compose.ui)
+                implementation(compose.material3)
                 implementation(compose.components.resources)
             }
         }

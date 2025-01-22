@@ -10,6 +10,7 @@ import com.gnoemes.shimori.source.data.MangaDataSource
 import com.gnoemes.shimori.source.data.RanobeDataSource
 import com.gnoemes.shimori.source.data.TrackDataSource
 import com.gnoemes.shimori.source.data.UserDataSource
+import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriLogoutAction
 import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriRefreshTokenAction
 import com.gnoemes.shimori.sources.shikimori.actions.ShikimoriSignInAction
 import com.gnoemes.shimori.sources.shikimori.sources.ShikimoriAnimeDataSource
@@ -40,6 +41,7 @@ class Shikimori(
     private val authStore: ShikimoriAuthStore,
     private val signInAction: ShikimoriSignInAction,
     private val refreshTokenAction: ShikimoriRefreshTokenAction,
+    private val logoutAction: ShikimoriLogoutAction,
 ) : CatalogueSource, TrackSource, AuthSource {
 
     companion object {
@@ -63,5 +65,6 @@ class Shikimori(
     override suspend fun signIn(): SourceAuthState? = signInAction()
     override suspend fun signUp(): SourceAuthState? = signInAction()
     override suspend fun refreshToken(): SourceAuthState? = refreshTokenAction()
+    override suspend fun logout()  = logoutAction(Unit)
     override fun getState(): SourceAuthState? = authStore.get()
 }

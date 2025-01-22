@@ -28,6 +28,7 @@ class TrackRepository(
 ) {
     fun queryById(id: Long) = store.dao.queryById(id)
     fun querySyncPendingTracks() = syncDao.queryAll()
+    fun queryTracksCount() = store.dao.queryCount()
     fun observeTracksExist() = store.dao.observeHasTracks()
     fun observeExistedStatuses(type: TrackTargetType) = store.dao.observeExistedStatuses(type)
 

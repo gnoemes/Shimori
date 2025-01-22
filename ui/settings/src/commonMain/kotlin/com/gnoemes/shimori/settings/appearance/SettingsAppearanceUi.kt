@@ -153,7 +153,9 @@ private fun SettingsAppearanceUi(
                     selected = selected,
                     onClick = { changeLocale(locale) },
                     label = {
-                        Text(textCreator.name(locale))
+                        Text(
+                            textCreator { locale.name() }
+                        )
                     }
                 )
             }
@@ -177,7 +179,9 @@ private fun SettingsAppearanceUi(
                     selected = selected,
                     onClick = { changeTitlesLocale(locale) },
                     label = {
-                        Text(textCreator.name(locale))
+                        Text(
+                            textCreator { locale.name() }
+                        )
                     }
                 )
             }
@@ -202,7 +206,7 @@ private fun SettingsAppearanceUi(
                     selected = selected,
                     onClick = { changeTheme(theme) },
                     label = {
-                        Text(textCreator.name(theme))
+                        Text(textCreator { theme.name() })
                     }
                 )
             }

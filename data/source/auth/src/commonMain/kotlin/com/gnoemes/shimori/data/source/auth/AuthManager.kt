@@ -53,6 +53,13 @@ class AuthManager(
         return source.signUp()
     }
 
+    suspend fun logout(sourceId: Long) {
+        val source = sources.find { it.id == sourceId }
+            ?: throw IllegalArgumentException("Source with id $sourceId not found")
+        logger.d(tag = TAG) { "Performing logout for source: ${source.name}" }
+        return source.logout()
+    }
+
     suspend fun refreshToken(sourceId: Long): SourceAuthState? {
         val source = sources.find { it.id == sourceId }
             ?: throw IllegalArgumentException("Source with id $sourceId not found")

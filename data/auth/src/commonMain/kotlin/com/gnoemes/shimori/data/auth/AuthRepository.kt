@@ -49,6 +49,13 @@ class AuthRepository(
         }
     }
 
+    suspend fun logout(sourceId: Long) {
+        logger.d(tag = "[AuthRepository]") { "Requested logout. Source: $sourceId" }
+        authManager.logout(sourceId).also {
+            updateAuthState(sourceId, null)
+        }
+    }
+
     private fun getPersistedStates(): HashMap<Long, AuthState> {
         return HashMap(
             authManager.getAuthorizedSources().associate { it.id to AuthState.LOGGED_IN }

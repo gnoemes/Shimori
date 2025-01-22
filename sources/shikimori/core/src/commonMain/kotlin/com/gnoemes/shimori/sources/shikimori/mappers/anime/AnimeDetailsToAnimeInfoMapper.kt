@@ -28,7 +28,7 @@ class AnimeDetailsToAnimeInfoMapper(
             id = from.id.toLong(),
             name = from.name,
             nameRu = from.russian,
-            nameEn = from.japanese,
+            nameEn = from.english,
             image = from.poster?.posterShort?.toShimoriImage(),
             type = TrackTargetType.ANIME,
             animeType = from.kind?.toShimoriType(),
@@ -80,7 +80,7 @@ class AnimeDetailsToAnimeInfoMapper(
                     id = character.id.toLong(),
                     name = character.name,
                     nameRu = character.russian,
-                    nameEn = character.japanese,
+                    nameEn = character.name,
                     image = character.poster?.posterShort?.toShimoriImage(),
                     url = character.url.appendHostIfNeed(values),
                 )

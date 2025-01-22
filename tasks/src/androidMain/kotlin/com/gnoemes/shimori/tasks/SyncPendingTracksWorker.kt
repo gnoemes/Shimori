@@ -3,7 +3,7 @@ package com.gnoemes.shimori.tasks
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.gnoemes.shimori.domain.interactors.SyncPendingTracks
+import com.gnoemes.shimori.domain.interactors.tracks.SyncPendingTracks
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject

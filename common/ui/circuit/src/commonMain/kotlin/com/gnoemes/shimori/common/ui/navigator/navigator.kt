@@ -35,7 +35,7 @@ class ShimoriNavigator(
         restoreState: Boolean
     ): ImmutableList<Screen> {
         logger.d { "resetRoot. New root: $newRoot. Current stack: ${backstack.toList()}" }
-        return navigator.resetRoot(newRoot)
+        return navigator.resetRoot(newRoot, saveState, restoreState)
     }
 
     override fun pop(result: PopResult?): Screen? {

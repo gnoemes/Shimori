@@ -4,7 +4,6 @@ import com.gnoemes.shimori.data.db.api.daos.ListPinDao
 import com.gnoemes.shimori.data.db.api.daos.ListSortDao
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.track.ListSort
-import com.gnoemes.shimori.data.track.ListType
 import com.gnoemes.shimori.data.track.TrackTargetType
 import kotlinx.coroutines.flow.Flow
 import me.tatarka.inject.annotations.Inject
@@ -19,7 +18,7 @@ class ListsRepository(
         sort: ListSort
     ) = dao.paging(sort)
 
-    fun observeListSort(type: ListType): Flow<ListSort?> = listSortDao.observe(type)
+    fun observeListSort(type: TrackTargetType): Flow<ListSort?> = listSortDao.observe(type)
     fun observePinExist(targetId: Long, targetType: TrackTargetType) =
         dao.observePinExist(targetId, targetType)
 

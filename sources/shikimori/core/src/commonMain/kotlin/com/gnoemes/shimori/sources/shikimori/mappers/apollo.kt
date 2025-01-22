@@ -156,13 +156,13 @@ fun AnimeUserRate?.toShimoriType(): Track? {
     )
 }
 
-fun MangaUserRateWithModel?.toShimoriType(): Track? {
+fun MangaUserRateWithModel?.toShimoriType(isRanobe: Boolean = false): Track? {
     if (this == null) return null
 
     return Track(
         id = this.id.toLong(),
         targetId = this.manga!!.mangaShort.id.toLong(),
-        targetType = TrackTargetType.ANIME,
+        targetType = if (isRanobe) TrackTargetType.RANOBE else TrackTargetType.MANGA,
         status = this.status.toShimoriType()!!,
         score = this.score,
         comment = this.text,

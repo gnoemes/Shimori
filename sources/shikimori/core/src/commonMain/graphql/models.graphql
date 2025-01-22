@@ -2,6 +2,7 @@ fragment AnimeShort on Anime {
     id
     name
     russian
+    english
     japanese
     kind
     score
@@ -21,6 +22,7 @@ fragment MangaShort on Manga {
     id
     name
     russian
+    english
     japanese
     kind
     score

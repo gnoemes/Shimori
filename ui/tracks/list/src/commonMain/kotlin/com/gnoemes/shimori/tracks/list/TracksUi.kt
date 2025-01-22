@@ -1,26 +1,74 @@
 package com.gnoemes.shimori.tracks.list
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.itemKey
+import app.cash.paging.compose.LazyPagingItems
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.isCompact
+import com.gnoemes.shimori.common.compose.itemSpacer
+import com.gnoemes.shimori.common.compose.statusBarSpacer
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
-import com.gnoemes.shimori.screens.TracksEmptyScreen
+import com.gnoemes.shimori.common.compose.ui.TrackItem
+import com.gnoemes.shimori.common.ui.resources.Icons
+import com.gnoemes.shimori.common.ui.resources.icons.ic_asc
+import com.gnoemes.shimori.common.ui.resources.icons.ic_desc
+import com.gnoemes.shimori.data.TitleWithTrackEntity
+import com.gnoemes.shimori.data.track.ListSort
+import com.gnoemes.shimori.data.track.ListSortOption
+import com.gnoemes.shimori.data.track.Track
+import com.gnoemes.shimori.data.track.TrackStatus
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.foundation.CircuitContent
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
+import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -33,29 +81,35 @@ internal fun TracksUi(
     val windowSizeClass = LocalWindowSizeClass.current
     val eventSink = state.eventSink
 
-    val uiType = remember(windowSizeClass) {
-        when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> TracksUiType.Compact
-            else -> TracksUiType.Expanded
-        }
-    }
 
     TracksUi(
-        uiType = uiType,
+        widthSizeClass = windowSizeClass.widthSizeClass,
+        state = state,
+        addOneToProgress = { eventSink(TracksUiEvent.AddOneToProgress(it)) },
+        changeSort = { eventSink(TracksUiEvent.ChangeSort(it)) },
+        openEdit = { eventSink(TracksUiEvent.OpenEdit(it)) },
+        openDetails = { eventSink(TracksUiEvent.OpenDetails(it)) },
+        openMenu = { eventSink(TracksUiEvent.OpenMenu) },
         openSettings = { eventSink(TracksUiEvent.OpenSettings) },
     )
 }
 
 @Composable
 private fun TracksUi(
-    uiType: TracksUiType,
+    widthSizeClass: WindowWidthSizeClass,
+    state: TracksUiState,
+    addOneToProgress: (Track) -> Unit,
+    changeSort: (ListSort) -> Unit,
+    openEdit: (TitleWithTrackEntity) -> Unit,
+    openDetails: (TitleWithTrackEntity) -> Unit,
+    openMenu: () -> Unit,
     openSettings: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AnimatedContent(uiType) { uiType ->
-                if (uiType == TracksUiType.Compact) {
+            AnimatedContent(widthSizeClass) { size ->
+                if (size.isCompact()) {
                     ShimoriSearchBar(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 16.dp),
@@ -77,13 +131,205 @@ private fun TracksUi(
             }
         },
     ) {
-        CircuitContent(TracksEmptyScreen)
+        val items = state.items
+
+//        if (items.itemCount == 0) {
+//            CircuitContent(TracksEmptyScreen)
+//        } else {
+        TracksUiContent(
+            paddingValues = it,
+            widthSizeClass = widthSizeClass,
+            type = state.type,
+            status = state.status,
+            sort = state.sort,
+            items = items,
+            sortOptions = state.sortOptions,
+            firstSyncLoading = state.firstSyncLoading,
+            addOneToProgress = addOneToProgress,
+            changeSort = changeSort,
+            openEdit = openEdit,
+            openDetails = openDetails
+        )
+//        }
     }
 }
 
-enum class TracksUiType {
-    Compact,
-    Expanded
+@Composable
+private fun TracksUiContent(
+    paddingValues: PaddingValues,
+    widthSizeClass: WindowWidthSizeClass,
+    type: TrackTargetType,
+    status: TrackStatus,
+    sort: ListSort,
+    items: LazyPagingItems<TitleWithTrackEntity>,
+    sortOptions: List<ListSortOption>,
+    firstSyncLoading: Boolean,
+    addOneToProgress: (Track) -> Unit,
+    changeSort: (ListSort) -> Unit,
+    openEdit: (TitleWithTrackEntity) -> Unit,
+    openDetails: (TitleWithTrackEntity) -> Unit,
+) {
+    val textCreator = LocalShimoriTextCreator.current
+    val coroutineScope = rememberCoroutineScope()
+
+    if (widthSizeClass.isCompact()) {
+        val lazyListState = rememberLazyListState()
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+                .draggable(
+                    orientation = Orientation.Vertical,
+                    state = rememberDraggableState { delta ->
+                        coroutineScope.launch {
+                            lazyListState.scrollBy(-delta)
+                        }
+                    }
+                ),
+            state = lazyListState
+        ) {
+            statusBarSpacer(additional = 80.dp)
+
+            item("header_list") {
+                Text(
+                    textCreator {
+                        "${status.name(type)} $divider ${type.name()}"
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                )
+            }
+
+            item("sort") {
+                val scrollState = rememberScrollState()
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .horizontalScroll(scrollState)
+                        .draggable(
+                            orientation = Orientation.Horizontal,
+                            state = rememberDraggableState { delta ->
+                                coroutineScope.launch {
+                                    scrollState.scrollBy(-delta)
+                                }
+                            }
+                        )
+                    ,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    SortOptions(
+                        scrollState = scrollState,
+                        sort = sort,
+                        availableOptions = sortOptions,
+                        onClick = {
+
+                            changeSort(it)
+                        }
+                    )
+                }
+            }
+
+
+            items(
+                count = items.itemCount,
+                key = items.itemKey { "track_${it.track?.id}" },
+            ) { index ->
+                val entity = items[index]
+                val track = entity?.track
+                if (entity != null && track != null) {
+                    val openDetailsClick = remember(track.id) {
+                        { openDetails(entity) }
+                    }
+
+                    val openEditClick = remember(track.id) {
+                        { openEdit(entity) }
+                    }
+
+                    TrackItem(
+                        entity,
+                        modifier = Modifier
+                            .animateItem(placementSpec = null)
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min)
+                            .padding(vertical = 12.dp)
+                        ,
+                        openDetails = openDetailsClick,
+                        openEdit = openEditClick,
+                        addOneToProgress = addOneToProgress
+                    )
+                }
+            }
+
+            itemSpacer(96.dp)
+        }
+    } else {
+        Column {
+
+            LazyHorizontalGrid(
+                rows = GridCells.FixedSize(158.dp)
+            ) {
+
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun RowScope.SortOptions(
+    scrollState: ScrollState,
+    sort: ListSort,
+    availableOptions: List<ListSortOption>,
+    onClick: (ListSort) -> Unit,
+) {
+    val textCreator = LocalShimoriTextCreator.current
+    val scope = rememberCoroutineScope()
+    var initialScrolled by remember(sort.sortOption) { mutableStateOf(false) }
+
+    val offset = with(LocalDensity.current) {
+        //offset + icon size
+        (16 + 18).dp.roundToPx()
+    }
+
+    Spacer(Modifier.width(8.dp))
+    availableOptions.forEach { option ->
+        val selected = option == sort.sortOption
+        val isDescending = sort.isDescending
+
+        FilterChip(
+            modifier = Modifier.onGloballyPositioned { coordinates ->
+                if (!initialScrolled && selected) {
+                    scope.launch {
+                        val position = coordinates.positionInParent().x.roundToInt()
+                        scrollState.animateScrollTo(position - offset)
+                    }
+
+                    initialScrolled = true
+                }
+            },
+            selected = selected,
+            onClick = {
+                if (selected) onClick(sort.copy(isDescending = !isDescending))
+                else onClick(sort.copy(sortOption = option))
+            },
+            label = {
+                Text(
+                    textCreator {
+                        option.name(sort.type)
+                    }
+                )
+            },
+            leadingIcon = {
+                AnimatedVisibility(selected) {
+                    Icon(
+                        painterResource(if (isDescending) Icons.ic_asc else Icons.ic_desc),
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+        )
+    }
+    Spacer(Modifier.width(8.dp))
 }
 
 

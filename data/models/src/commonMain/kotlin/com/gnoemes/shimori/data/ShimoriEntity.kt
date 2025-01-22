@@ -15,8 +15,8 @@ interface ShimoriEntity {
 interface ShimoriContentEntity : ShimoriEntity {
     val image: ShimoriImage?
     val name: String
-    val nameEn: String?
     val nameRu: String?
+    val nameEn: String?
 
     val url: String?
 }

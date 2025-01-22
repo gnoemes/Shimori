@@ -61,6 +61,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.profile
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.screens.AuthScreen
+import com.gnoemes.shimori.screens.ExploreScreen
 import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.screens.MockScreen
 import com.gnoemes.shimori.screens.SettingsScreen
@@ -125,6 +126,7 @@ internal fun HomeUi(
         backstack,
         openSearch = { },
         openSettings = { shimoriNavigator.goTo(SettingsScreen) },
+        logout = { eventSink(HomeUiEvent.Logout) }
     )
 }
 
@@ -136,6 +138,7 @@ private fun HomeUi(
     backstack: SaveableBackStack,
     openSearch: () -> Unit,
     openSettings: () -> Unit,
+    logout: () -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val navigationType = remember(windowSizeClass) {
@@ -178,6 +181,11 @@ private fun HomeUi(
                     selectedNavigation = rootScreen,
                     navigationItems = navigationItems,
                     onNavigationSelected = {
+                        //TODO remove. simple auth clean for desktop testing
+                        if (it is MockScreen) {
+                            logout()
+                        }
+
                         navigator.resetRoot(
                             it,
                             saveState = true,
@@ -369,7 +377,7 @@ private fun buildNavigationItems(
             iconImageResource = Icons.ic_bookmark
         ),
         HomeNavigationItem.IconNavigationItem(
-            screen = MockScreen,
+            screen = ExploreScreen(),
             label = Strings.explore,
             contentDescription = Strings.explore,
             iconImageResource = Icons.ic_explore
