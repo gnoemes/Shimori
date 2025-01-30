@@ -17,6 +17,7 @@ kotlin {
                 api(projects.data.user)
                 api(projects.data.lastrequest)
                 api(projects.data.auth)
+                api(projects.data.queryable)
 
                 api(libs.multiplatform.paging.common)
                 implementation(kotlinx.atomicfu)

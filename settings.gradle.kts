@@ -72,6 +72,7 @@ include(
     ":data:lists",
     ":data:user",
     ":data:auth",
+    ":data:queryable",
     ":domain",
     ":tasks",
     ":common:ui:circuit",

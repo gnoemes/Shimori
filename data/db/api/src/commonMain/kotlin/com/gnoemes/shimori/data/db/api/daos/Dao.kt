@@ -2,7 +2,9 @@ package com.gnoemes.shimori.data.db.api.daos
 
 import com.gnoemes.shimori.data.ShimoriEntity
 
-interface EntityDao<in E : ShimoriEntity> {
+interface QueryableDao<in E : ShimoriEntity>
+
+interface EntityDao<in E : ShimoriEntity> : QueryableDao<E> {
     fun insert(entity: E): Long
     fun insert(entities: List<E>)
     fun update(entity: E)

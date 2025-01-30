@@ -9,7 +9,6 @@ object HomeScreen : ShimoriScreen("Home()")
 
 @Parcelize
 object TracksScreen : ShimoriScreen("Tracks()")
-
 @Parcelize
 object TracksEmptyScreen : ShimoriScreen("TracksEmpty()")
 
@@ -19,6 +18,8 @@ data class ExploreScreen(
 ) : ShimoriScreen("Explore()") {
     override val arguments get() = mapOf("type" to type)
 }
+
+object TracksMenuScreen : ShimoriScreen("TracksMenu()")
 
 @Parcelize
 object AuthScreen : ShimoriScreen("Auth()")

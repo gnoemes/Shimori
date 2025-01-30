@@ -14,7 +14,11 @@ class ObserveListSort(
 ) : SubjectInteractor<ObserveListSort.Params, ListSort>() {
 
     override fun create(params: Params): Flow<ListSort> {
-        return repository.observeListSort(params.type)
+        return repository.observeListSort(
+            //mangas and ranobes are shown on single list
+            //so count ranobe as manga
+            params.type.let { if (it.ranobe) TrackTargetType.MANGA else it }
+        )
             .mapNotNull { it ?: ListSort.defaultForType(params.type) }
     }
 

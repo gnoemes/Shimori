@@ -5,8 +5,7 @@ import app.cash.paging.PagingConfig
 import app.cash.paging.PagingData
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.anime.AnimeRepository
-import com.gnoemes.shimori.data.manga.MangaRepository
-import com.gnoemes.shimori.data.ranobe.RanobeRepository
+import com.gnoemes.shimori.data.queryable.QueryableRepository
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
@@ -17,8 +16,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class ObserveListPage(
     private val animeRepository: AnimeRepository,
-    private val mangaRepository: MangaRepository,
-    private val ranobeRepository: RanobeRepository,
+    private val queryableRepository: QueryableRepository,
 ) : PagingInteractor<ObserveListPage.Params, PaginatedEntity>() {
 
     override fun create(params: Params): Flow<PagingData<PaginatedEntity>> {
@@ -27,8 +25,12 @@ class ObserveListPage(
             pagingSourceFactory = {
                 when (val type = params.type) {
                     TrackTargetType.ANIME -> animeRepository.paging(params.status, params.sort)
-                    TrackTargetType.MANGA -> mangaRepository.paging(params.status, params.sort)
-                    TrackTargetType.RANOBE -> ranobeRepository.paging(params.status, params.sort)
+                    //show mangas and ranobes in single list
+                    TrackTargetType.MANGA, TrackTargetType.RANOBE -> queryableRepository.pagingMangaAndRanobe(
+                        params.status,
+                        params.sort
+                    )
+
                     else -> throw IllegalArgumentException("List with type $type not supported")
                 }
             }

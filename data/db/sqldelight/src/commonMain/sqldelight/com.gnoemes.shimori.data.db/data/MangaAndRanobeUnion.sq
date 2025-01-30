@@ -1,0 +1,13 @@
+countWithStatus:
+SELECT COUNT() FROM (
+SELECT title.id FROM manga AS title
+INNER JOIN track AS r ON r.target_id = title.id  AND r.target_type = "MANGA"
+WHERE r.status = :status
+
+UNION ALL
+
+SELECT title.id FROM ranobe AS title
+INNER JOIN track AS r ON r.target_id = title.id  AND r.target_type = "RANOBE"
+WHERE r.status = :status
+);
+
