@@ -2,8 +2,15 @@ package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.anime.AnimeRepository
+import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.app.newData
 import com.gnoemes.shimori.data.manga.MangaRepository
 import com.gnoemes.shimori.data.ranobe.RanobeRepository
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
+import com.gnoemes.shimori.data.titles.manga.Manga
+import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.titles.ranobe.Ranobe
+import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.tracks.TrackRepository
@@ -46,19 +53,52 @@ class UpdateTitleTracks(
                 trackRepository.trySync(it)
             }
 
-            TrackTargetType.MANGA -> mangaRepository.syncTracked(user, status).also {
-                trackRepository.trySync(it)
-            }
+            TrackTargetType.MANGA -> mangaRepository.syncTracked(user, status)
+                .also { syncMangaOrRanobeResponse(it, status) }
 
-            TrackTargetType.RANOBE -> ranobeRepository.syncTracked(user, status).also {
-                trackRepository.trySync(it)
-            }
+            //not used right now actually
+            TrackTargetType.RANOBE -> ranobeRepository.syncTracked(user, status)
+                .also { syncMangaOrRanobeResponse(it, status) }
         }
 
     private suspend fun needUpdate(type: TrackTargetType, status: TrackStatus?) = when (type) {
         TrackTargetType.ANIME -> animeRepository.needUpdateTitlesWithStatus(status)
         TrackTargetType.MANGA -> mangaRepository.needUpdateTitlesWithStatus(status)
         TrackTargetType.RANOBE -> ranobeRepository.needUpdateTitlesWithStatus(status)
+    }
+
+    //mangaSource is always true for shikimori, may be changed later for other sources
+    private suspend fun syncMangaOrRanobeResponse(
+        response: SourceResponse<List<MangaOrRanobeWithTrack>>,
+        status: TrackStatus?,
+        mangaSource : Boolean = true
+    ) {
+        //sync manga tracks
+        response.newData { data ->
+            data.filter { title -> title.type.manga }
+                .map { MangaWithTrack(it.entity as Manga, it.track, false) }
+        }.also {
+            if (!mangaSource) {
+                mangaRepository.trySync(it)
+                mangaRepository.statusUpdated(status)
+            }
+
+            trackRepository.trySync(it)
+        }
+
+        //sync ranobe tracks
+        response.newData { data ->
+            data
+                .filter { title -> title.type.ranobe }
+                .map { RanobeWithTrack(it.entity as Ranobe, it.track, false) }
+        }.also {
+            if (mangaSource) {
+                ranobeRepository.trySync(it)
+                ranobeRepository.statusUpdated(status)
+            }
+
+            trackRepository.trySync(it)
+        }
     }
 
     data class Params(

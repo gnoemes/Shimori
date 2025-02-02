@@ -19,7 +19,7 @@ class UpdateTracks(
     private val updateTitleTracks: UpdateTitleTracks,
     private val listStateBus: ListsStateBus,
     private val dispatchers: AppCoroutineDispatchers,
-    private val logger : Logger,
+    private val logger: Logger,
 ) : Interactor<UpdateTracks.Params, Unit>() {
 
     override suspend fun doWork(params: Params) {
@@ -31,7 +31,7 @@ class UpdateTracks(
             }
 
             if (params.forceTitlesUpdate || params.optionalTitlesUpdate || noLocalTracks) {
-                updateTitles(params.forceTitlesUpdate  || noLocalTracks)
+                updateTitles(params.forceTitlesUpdate || noLocalTracks)
                 listStateBus.tracksLoading(false)
             } else {
                 // sync only tracks
@@ -56,13 +56,17 @@ class UpdateTracks(
     //sync titles & tracks
     private suspend fun updateTitles(force: Boolean) {
         try {
-            TrackTargetType.entries.forEach { target ->
-                updateTitleTracks.invoke(
-                    if (force) UpdateTitleTracks.Params.fullUpdate(target)
-                    else UpdateTitleTracks.Params.optionalUpdate(target)
-                )
-            }
-        } catch (e : Exception) {
+            TrackTargetType.entries
+                //currently, manga & ranobe have the single endpoint for update.
+                //Avoid additional requests
+                .filterNot { it.ranobe }
+                .forEach { target ->
+                    updateTitleTracks.invoke(
+                        if (force) UpdateTitleTracks.Params.fullUpdate(target)
+                        else UpdateTitleTracks.Params.optionalUpdate(target)
+                    )
+                }
+        } catch (e: Exception) {
             logger.e(throwable = e) { "Update titles failed" }
             listStateBus.tracksLoading(false)
         }

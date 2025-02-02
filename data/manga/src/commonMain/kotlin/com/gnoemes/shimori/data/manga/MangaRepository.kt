@@ -7,6 +7,7 @@ import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -32,7 +33,7 @@ class MangaRepository(
     suspend fun syncTracked(
         user: UserShort,
         status: TrackStatus?
-    ): SourceResponse<List<MangaWithTrack>> {
+    ): SourceResponse<List<MangaOrRanobeWithTrack>> {
         return catalogue.manga { getWithStatus(user, status) }
             .also {
                 transactionRunner {

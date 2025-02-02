@@ -8,6 +8,7 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.logging.api.Logger
@@ -42,6 +43,12 @@ class SyncedMangaStore(
             data.filterIsInstance<MangaWithTrack>().isNotEmpty() -> sync(
                 sourceId,
                 data.filterIsInstance<MangaWithTrack>().map { it.entity })
+
+            data.filterIsInstance<MangaOrRanobeWithTrack>().any { it.type.manga } -> sync(
+                sourceId,
+                data.filterIsInstance<MangaOrRanobeWithTrack>().map { it.entity }
+                    .filterIsInstance<Manga>()
+            )
 
             else -> logger.d(tag = tag) {
                 "Unsupported data type for sync: ${

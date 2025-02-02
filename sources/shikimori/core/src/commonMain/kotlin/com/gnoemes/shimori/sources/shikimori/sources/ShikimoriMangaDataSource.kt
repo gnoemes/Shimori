@@ -2,6 +2,7 @@ package com.gnoemes.shimori.sources.shikimori.sources
 
 import com.apollographql.apollo.api.Optional
 import com.gnoemes.shimori.base.utils.forLists
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -11,20 +12,20 @@ import com.gnoemes.shimori.sources.shikimori.MangaTracksQuery
 import com.gnoemes.shimori.sources.shikimori.Shikimori
 import com.gnoemes.shimori.sources.shikimori.ShikimoriApi
 import com.gnoemes.shimori.sources.shikimori.mappers.from
-import com.gnoemes.shimori.sources.shikimori.mappers.manga.MangaTracksQueryToMangaWithTrack
+import com.gnoemes.shimori.sources.shikimori.mappers.manga.MangaOrRanobeTracksQueryToMangaWithTrack
 import com.gnoemes.shimori.sources.shikimori.type.UserRateStatusEnum
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class ShikimoriMangaDataSource(
     private val api: ShikimoriApi,
-    private val mangaTracksQueryToMangaWithTrack: MangaTracksQueryToMangaWithTrack,
+    private val mangaTracksQueryToMangaWithTrack: MangaOrRanobeTracksQueryToMangaWithTrack,
 ) : MangaDataSource {
 
     override suspend fun getWithStatus(
         user: UserShort,
         status: TrackStatus?
-    ): List<MangaWithTrack> {
+    ): List<MangaOrRanobeWithTrack> {
         return api.rate.graphql(
             MangaTracksQuery(
                 limit = Optional.present(Shikimori.MAX_PAGE_SIZE),

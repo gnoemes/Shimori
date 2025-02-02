@@ -8,6 +8,7 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.logging.api.Logger
@@ -42,6 +43,12 @@ class SyncedRanobeStore(
             data.filterIsInstance<RanobeWithTrack>().isNotEmpty() -> sync(
                 sourceId,
                 data.filterIsInstance<RanobeWithTrack>().map { it.entity })
+
+            data.filterIsInstance<MangaOrRanobeWithTrack>().any { it.type.ranobe } -> sync(
+                sourceId,
+                data.filterIsInstance<MangaOrRanobeWithTrack>().map { it.entity }
+                    .filterIsInstance<Ranobe>()
+            )
 
             else -> logger.d(tag = tag) {
                 "Unsupported data type for sync: ${
