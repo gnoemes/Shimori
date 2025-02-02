@@ -63,6 +63,7 @@ import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.itemSpacer
+import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
 import com.gnoemes.shimori.common.compose.ui.TrackItem
 import com.gnoemes.shimori.common.ui.resources.Icons
@@ -231,7 +232,6 @@ private fun TracksUiContent(
     openDetails: (TitleWithTrackEntity) -> Unit,
 ) {
     val textCreator = LocalShimoriTextCreator.current
-    val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
     val spaceHeight by remember(density) {
         derivedStateOf {
@@ -250,7 +250,8 @@ private fun TracksUiContent(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
-                    .onGloballyPositioned { parentWidth = with(density) { it.size.width.toDp() } }
+                    .onGloballyPositioned { parentWidth = with(density) { it.size.width.toDp() } },
+                state = items.rememberLazyListState()
             ) {
                 itemSpacer(spaceHeight + 8.dp, key = "scroll_spacer")
 

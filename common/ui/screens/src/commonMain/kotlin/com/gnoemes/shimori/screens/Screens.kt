@@ -19,6 +19,7 @@ data class ExploreScreen(
     override val arguments get() = mapOf("type" to type)
 }
 
+@Parcelize
 object TracksMenuScreen : ShimoriScreen("TracksMenu()")
 
 @Parcelize
