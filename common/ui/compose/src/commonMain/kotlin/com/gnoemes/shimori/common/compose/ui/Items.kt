@@ -156,22 +156,28 @@ fun TrackItem(
                                 when (val title = titleWithTrack.entity) {
                                     is Anime -> {
                                         val status = title.status()
-                                        append(status)
-                                        if (status != null) append(" $divider ")
+                                        if (status != null) {
+                                            append(status)
+                                            append(" $divider ")
+                                        }
                                         append(title.type())
                                     }
 
                                     is Manga -> {
                                         val status = title.status()
-                                        append(status)
-                                        if (status != null) append(" $divider ")
+                                        if (status != null) {
+                                            append(status)
+                                            append(" $divider ")
+                                        }
                                         append(title.type())
                                     }
 
                                     is Ranobe -> {
                                         val status = title.status()
-                                        append(status)
-                                        if (status != null) append(" $divider ")
+                                        if (status != null) {
+                                            append(status)
+                                            append(" $divider ")
+                                        }
                                         append(title.type())
                                     }
                                 }
