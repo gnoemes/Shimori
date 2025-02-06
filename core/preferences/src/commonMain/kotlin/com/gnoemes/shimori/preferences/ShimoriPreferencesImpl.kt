@@ -42,7 +42,7 @@ class ShimoriPreferencesImpl(
         set(value) = storage.putString(PREFERRED_STATUS, value)
 
     override fun observePreferredListStatus(): Flow<String> =
-        flowSettings.getStringFlow(PREFERRED_LIST, "WATCHING")
+        flowSettings.getStringFlow(PREFERRED_STATUS, "WATCHING")
 
     override fun setInt(key: String, value: Int) {
         storage.putInt(key, value)
