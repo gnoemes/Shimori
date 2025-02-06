@@ -56,8 +56,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import com.gnoemes.shimori.common.compose.Dialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -197,12 +196,6 @@ internal fun ModalSideSheet(
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false,
-            usePlatformInsets = false,
-            scrimColor = Color.Transparent
-        ),
         content = content
     )
 }
