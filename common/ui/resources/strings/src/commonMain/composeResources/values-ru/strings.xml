@@ -4,6 +4,7 @@
     <string name="anime">Аниме</string>
     <string name="manga">Манга</string>
     <string name="ranobe">Ранобэ</string>
+    <string name="manga_and_ranobe">Манга и ранобэ</string>
     <string name="pinned">Закреплённые</string>
     <string name="search">Поиск</string>
     <string name="profile">Профиль</string>

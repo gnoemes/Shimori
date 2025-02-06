@@ -3,6 +3,9 @@ package com.gnoemes.shimori.tracks.list
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,16 +35,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -78,8 +86,10 @@ import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
+import com.gnoemes.shimori.screens.TracksMenuScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.foundation.CircuitContent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -121,7 +131,7 @@ private fun TracksUi(
     openSettings: () -> Unit,
 ) {
     val density = LocalDensity.current
-    val isList = widthSizeClass.isCompact()
+    val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
     val insets = with(density) { WindowInsets.statusBars.getTop(density).toDp() }
     val appbarHeight = remember(isList) {
         if (isList) insets + 72.dp
@@ -131,87 +141,123 @@ private fun TracksUi(
         CollapsingAppBarNestedScrollConnection(with(density) { appbarHeight.roundToPx() })
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            AnimatedContent(widthSizeClass) { size ->
-                if (size.isCompact()) {
-                    ShimoriSearchBar(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .offset {
-                                IntOffset(0, scrollConnection.appBarOffset)
-                            },
-                        openSettings = openSettings
-                    )
-                } else {
-                    Row {
-                        Spacer(Modifier.weight(1f))
-
+    Row(
+        modifier = Modifier.fillMaxSize()
+            .animateContentSize()
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxHeight().composed {
+                if (state.isMenuVisible) weight(.75f)
+                else fillMaxWidth()
+            },
+            topBar = {
+                AnimatedContent(isList) { isList ->
+                    if (isList) {
                         ShimoriSearchBar(
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .widthIn(max = 328.dp)
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .offset {
+                                    IntOffset(0, scrollConnection.appBarOffset)
+                                },
                             openSettings = openSettings
                         )
+                    } else {
+                        Row {
+                            Spacer(Modifier.weight(1f))
+
+                            ShimoriSearchBar(
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .widthIn(max = 328.dp)
+                                    .fillMaxWidth(),
+                                openSettings = openSettings
+                            )
+                        }
                     }
                 }
-            }
-        },
-        floatingActionButton = {
-            if (state.isMenuVisible) {
-                val expanded by remember {
-                    derivedStateOf {
-                        scrollConnection.appBarOffset != -scrollConnection.appBarMaxHeight
+            },
+            floatingActionButton = {
+                if (state.isMenuButtonVisible) {
+                    val expanded by remember {
+                        derivedStateOf {
+                            scrollConnection.appBarOffset != -scrollConnection.appBarMaxHeight
+                        }
                     }
+
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(stringResource(Strings.lists_title))
+                        },
+                        icon = {
+                            Icon(
+                                painterResource(Icons.ic_list),
+                                contentDescription = stringResource(Strings.lists_title)
+                            )
+                        },
+                        expanded = expanded,
+                        onClick = openMenu,
+                    )
+
                 }
-
-                ExtendedFloatingActionButton(
-                    text = {
-                        Text(stringResource(Strings.lists_title))
-                    },
-                    icon = {
-                        Icon(
-                            painterResource(Icons.ic_list),
-                            contentDescription = stringResource(Strings.lists_title)
-                        )
-                    },
-                    expanded = expanded,
-                    onClick = openMenu,
-                )
-
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            bottomBar = {
+                if (isList) {
+                    Box(modifier = Modifier.height(84.dp))
+                }
             }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        bottomBar = {
-            if (isList) {
-                Box(modifier = Modifier.height(84.dp))
-            }
-        }
-    ) {
-        val items = state.items
+        ) {
+            val items = state.items
 
 //        if (items.itemCount == 0) {
 //            CircuitContent(TracksEmptyScreen)
 //        } else {
-        TracksUiContent(
-            scrollConnection = scrollConnection,
-            paddingValues = it,
-            widthSizeClass = widthSizeClass,
-            type = state.type,
-            status = state.status,
-            sort = state.sort,
-            items = items,
-            sortOptions = state.sortOptions,
-            firstSyncLoading = state.firstSyncLoading,
-            addOneToProgress = addOneToProgress,
-            changeSort = changeSort,
-            openEdit = openEdit,
-            openDetails = openDetails
-        )
+            TracksUiContent(
+                scrollConnection = scrollConnection,
+                paddingValues = it,
+                widthSizeClass = widthSizeClass,
+                type = state.type,
+                status = state.status,
+                sort = state.sort,
+                items = items,
+                sortOptions = state.sortOptions,
+                firstSyncLoading = state.firstSyncLoading,
+                addOneToProgress = addOneToProgress,
+                changeSort = changeSort,
+                openEdit = openEdit,
+                openDetails = openDetails
+            )
 //        }
+        }
+
+
+        AnimatedVisibility(
+            visible = state.isMenuVisible,
+            enter = slideInHorizontally(
+                initialOffsetX = { fullWidth -> fullWidth * 2 },
+                animationSpec = tween(durationMillis = 300)
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = { fullWidth -> fullWidth * 2 },
+                animationSpec = tween(durationMillis = 300)
+            ),
+            modifier = Modifier.fillMaxHeight()
+                .widthIn(max = 300.dp)
+                .fillMaxWidth()
+        ) {
+            Row {
+                Divider(
+                    modifier = Modifier.fillMaxHeight()
+                        .width(1.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    thickness = 0.5.dp
+                )
+                CircuitContent(TracksMenuScreen)
+            }
+        }
     }
+
+
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -240,9 +286,10 @@ private fun TracksUiContent(
             }
         }
     }
+    val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
 
 
-    if (widthSizeClass.isCompact()) {
+    if (isList) {
         Box(
             modifier = Modifier.nestedScroll(scrollConnection)
         ) {
@@ -344,16 +391,20 @@ private fun TracksUiContent(
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        SortOptions(
-                            scrollState = rememberScrollState(),
-                            sort = sort,
-                            availableOptions = sortOptions,
-                            onClick = {
-                                changeSort(it)
-                            }
-                        )
+                        CompositionLocalProvider(
+                            LocalMinimumInteractiveComponentSize provides 0.dp
+                        ) {
+                            SortOptions(
+                                scrollState = rememberScrollState(),
+                                sort = sort,
+                                availableOptions = sortOptions,
+                                onClick = {
+                                    changeSort(it)
+                                }
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(4.dp))

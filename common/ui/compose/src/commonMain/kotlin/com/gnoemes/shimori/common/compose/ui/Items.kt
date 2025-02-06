@@ -25,8 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,18 +107,23 @@ fun TrackItem(
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val track = titleWithTrack.track
+    val isListItem by remember(widthSizeClass) {
+        derivedStateOf {
+            widthSizeClass.isCompact()
+        }
+    }
 
     Surface(
         modifier = modifier,
     ) {
-        if (widthSizeClass.isCompact()) {
+        if (isListItem) {
             Row {
                 val width by remember(parentWidth) {
-                    mutableStateOf(parentWidth * 0.25f)
+                    derivedStateOf { parentWidth * 0.25f }
                 }
 
                 val height by remember(width) {
-                    mutableStateOf((width / 3) * 4)
+                    derivedStateOf { (width / 3) * 4 }
                 }
 
                 Spacer(Modifier.width(16.dp))

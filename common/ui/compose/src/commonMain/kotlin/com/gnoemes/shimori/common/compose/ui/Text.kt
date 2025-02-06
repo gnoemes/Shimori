@@ -54,7 +54,8 @@ fun TitleSubInfo(
                         append("%.2f".format(title.rating))
                         append(" $divider ")
                     }
-                    append(title.status())
+                    val status = title.status()
+                    if (status != null) append(status)
                 }
             },
             style = MaterialTheme.typography.labelMedium.copy(

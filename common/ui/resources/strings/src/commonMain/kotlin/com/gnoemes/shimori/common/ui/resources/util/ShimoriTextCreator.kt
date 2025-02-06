@@ -19,6 +19,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.list_sort_size_anime
 import com.gnoemes.shimori.common.ui.resources.strings.list_sort_size_manga
 import com.gnoemes.shimori.common.ui.resources.strings.list_sort_your_score
 import com.gnoemes.shimori.common.ui.resources.strings.manga
+import com.gnoemes.shimori.common.ui.resources.strings.manga_and_ranobe
 import com.gnoemes.shimori.common.ui.resources.strings.minute_short
 import com.gnoemes.shimori.common.ui.resources.strings.ongoing_episode_format
 import com.gnoemes.shimori.common.ui.resources.strings.ranobe
@@ -135,6 +136,14 @@ class ShimoriTextCreator(
             TrackTargetType.ANIME -> stringResource(Strings.anime)
             TrackTargetType.MANGA -> stringResource(Strings.manga)
             TrackTargetType.RANOBE -> stringResource(Strings.ranobe)
+        }
+    }
+
+    @Composable
+    fun TrackTargetType.nameMenu(): String {
+        return when (this) {
+            TrackTargetType.ANIME -> stringResource(Strings.anime)
+            TrackTargetType.MANGA, TrackTargetType.RANOBE -> stringResource(Strings.manga_and_ranobe)
         }
     }
 

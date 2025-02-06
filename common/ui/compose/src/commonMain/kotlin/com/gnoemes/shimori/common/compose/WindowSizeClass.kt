@@ -14,5 +14,7 @@ val LocalWindowSizeClass = compositionLocalOf<WindowSizeClass> {
 @ExperimentalMaterial3WindowSizeClassApi
 expect fun calculateWindowSizeClass(): WindowSizeClass
 
-@Composable
 fun WindowWidthSizeClass.isCompact() = this == WindowWidthSizeClass.Compact
+fun WindowWidthSizeClass.isMedium() = this == WindowWidthSizeClass.Medium
+fun WindowWidthSizeClass.isExpanded() = this == WindowWidthSizeClass.Expanded
+

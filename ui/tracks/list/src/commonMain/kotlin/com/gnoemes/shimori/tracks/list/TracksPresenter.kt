@@ -1,17 +1,26 @@
 package com.gnoemes.shimori.tracks.list
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposableTarget
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.paging.PagingConfig
 import app.cash.paging.PagingData
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
+import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.isCompact
+import com.gnoemes.shimori.common.compose.isExpanded
+import com.gnoemes.shimori.common.compose.isMedium
 import com.gnoemes.shimori.common.compose.rememberRetainedCachedPagingFlow
 import com.gnoemes.shimori.common.compose.ui.UiMessageManager
+import com.gnoemes.shimori.common.ui.overlay.showInBottomSheet
+import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.lists.ListsStateBus
@@ -26,8 +35,10 @@ import com.gnoemes.shimori.domain.observers.ObserveListSort
 import com.gnoemes.shimori.domain.observers.ObserveTracksExist
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.screens.SettingsScreen
+import com.gnoemes.shimori.screens.TracksMenuScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
@@ -51,14 +62,20 @@ class TracksPresenter(
 ) : Presenter<TracksUiState> {
 
     @Composable
+    @ComposableTarget("presenter")
     override fun present(): TracksUiState {
+        val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
+        val isCompact by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
+        val isMedium by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isMedium() } }
+        val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
+
         val uiMessageManager = remember { UiMessageManager() }
 
         val type by listsState.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
         val status by listsState.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
         val sort by observeSort.value.flow.collectAsRetainedState(ListSort.defaultForType(type))
 
-        val isMenuVisible by observeTracksExist.value.flow.collectAsRetainedState(false)
+        val tracksExist by observeTracksExist.value.flow.collectAsRetainedState(false)
         val firstSyncLoading by listsState.tracksLoading.observe.collectAsState(false)
 
         val sortOptions = remember(type) { ListSortOption.priorityForType(type) }
@@ -70,6 +87,9 @@ class TracksPresenter(
             .collectAsLazyPagingItems()
 
         val message by uiMessageManager.message.collectAsState(null)
+
+        val scope = rememberCoroutineScope()
+        val overlayHost = LocalOverlayHost.current
 
         LaunchedEffect(type, status, sort) {
             retainedPagingInteractor(
@@ -103,14 +123,26 @@ class TracksPresenter(
 
                 is TracksUiEvent.OpenDetails -> TODO()
                 is TracksUiEvent.OpenEdit -> TODO()
-                TracksUiEvent.OpenMenu -> TODO()
+                TracksUiEvent.OpenMenu -> {
+                    val screen = TracksMenuScreen
+                    when {
+                        isCompact -> scope.launchOrThrow {
+                            overlayHost.showInBottomSheet(screen)
+                        }
+
+                        isMedium -> scope.launchOrThrow {
+                            overlayHost.showInSideSheet(screen)
+                        }
+                    }
+                }
             }
         }
 
         return TracksUiState(
             type = type,
             status = status,
-            isMenuVisible = isMenuVisible,
+            isMenuButtonVisible = (isCompact || isMedium) && tracksExist,
+            isMenuVisible = isExpanded && tracksExist,
             sort = sort,
             sortOptions = sortOptions,
             items = items,

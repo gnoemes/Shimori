@@ -16,4 +16,5 @@ data class TracksMenuUiState(
 
 sealed interface TracksMenuUiEvent : CircuitUiEvent {
     data class OpenStatus(val type: TrackTargetType, val status: TrackStatus) : TracksMenuUiEvent
+    data object NavigateUp : TracksMenuUiEvent
 }

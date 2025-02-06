@@ -17,6 +17,7 @@ data class TracksUiState(
     val type: TrackTargetType,
     val status: TrackStatus,
     val sort : ListSort,
+    val isMenuButtonVisible: Boolean,
     val isMenuVisible: Boolean,
     val sortOptions: List<ListSortOption>,
     val items: LazyPagingItems<TitleWithTrackEntity>,
