@@ -81,10 +81,12 @@ DELETE FROM anime;
 deleteById:
 DELETE FROM anime WHERE id = :id;
 
+-- https://github.com/sqldelight/sqldelight/issues/5489
+
 countWithStatus:
-SELECT COUNT(*) FROM anime AS title
-INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
-WHERE r.status = :status;
+SELECT COUNT(*) FROM anime
+INNER JOIN track ON track.target_id = anime.id AND track.target_type = "ANIME"
+WHERE track.status = :status;
 
 queryAll:
 SELECT * FROM anime;
@@ -93,16 +95,16 @@ queryById:
 SELECT * FROM anime WHERE id = :id;
 
 queryByIdWithTrack:
-SELECT * FROM anime AS title
-LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE title.id = :id;
+SELECT * FROM anime
+LEFT OUTER JOIN track ON track.target_id = anime.id AND track.target_type = "ANIME"
+LEFT OUTER JOIN pinned ON pinned.target_id = anime.id AND pinned.target_type = track.target_type
+WHERE anime.id = :id;
 
 queryByStatus:
-SELECT * FROM anime AS title
-INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "ANIME"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE r.status = :status;
+SELECT * FROM anime
+INNER JOIN track ON track.target_id = anime.id AND track.target_type = "ANIME"
+LEFT OUTER JOIN pinned ON pinned.target_id = anime.id AND pinned.target_type = track.target_type
+WHERE track.status = :status;
 
 selectLastInsertedRowId:
 SELECT last_insert_rowid();

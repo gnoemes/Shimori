@@ -75,9 +75,9 @@ deleteById:
 DELETE FROM manga WHERE id = :id;
 
 countWithStatus:
-SELECT COUNT(*) FROM manga AS title
-INNER JOIN track AS r ON r.target_id = title.id  AND r.target_type = "MANGA"
-WHERE r.status = :status;
+SELECT COUNT(*) FROM manga
+INNER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+WHERE track.status = :status;
 
 queryById:
 SELECT * FROM manga WHERE id = :id;
@@ -86,16 +86,16 @@ queryAll:
 SELECT * FROM manga;
 
 queryByIdWithTrack:
-SELECT * FROM manga AS title
-LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE title.id = :id;
+SELECT * FROM manga
+LEFT OUTER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+LEFT OUTER JOIN pinned ON pinned.target_id = manga.id AND pinned.target_type = track.target_type
+WHERE manga.id = :id;
 
 queryByStatus:
-SELECT * FROM manga AS title
-INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "MANGA"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE r.status = :status;
+SELECT * FROM manga
+INNER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+LEFT OUTER JOIN pinned ON pinned.target_id = manga.id AND pinned.target_type = track.target_type
+WHERE track.status = :status;
 
 selectLastInsertedRowId:
 SELECT last_insert_rowid();

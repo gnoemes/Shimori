@@ -52,7 +52,7 @@ SET
  image_x96 = :image_x96,
  image_x48 = :image_x48,
  url = coalesce(:url, url),
- ranobe_type = coalesce(:manga_type, ranobe_type),
+ ranobe_type = coalesce(:ranobe_type, ranobe_type),
  rating = coalesce(:rating, rating),
  status = coalesce(:status , status),
  chapters = :chapters,
@@ -75,9 +75,9 @@ deleteById:
 DELETE FROM ranobe WHERE id = :id;
 
 countWithStatus:
-SELECT COUNT(*) FROM ranobe AS title
-INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
-WHERE r.status = :status;
+SELECT COUNT(*) FROM ranobe
+INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+WHERE track.status = :status;
 
 queryById:
 SELECT * FROM ranobe WHERE id = :id;
@@ -86,16 +86,16 @@ queryAll:
 SELECT * FROM ranobe;
 
 queryByIdWithTrack:
-SELECT * FROM ranobe AS title
-LEFT OUTER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE title.id = :id;
+SELECT * FROM ranobe
+LEFT OUTER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+LEFT OUTER JOIN pinned ON pinned.target_id = ranobe.id AND pinned.target_type = track.target_type
+WHERE ranobe.id = :id;
 
 queryByStatus:
-SELECT * FROM ranobe AS title
-INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = "RANOBE"
-LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
-WHERE r.status = :status;
+SELECT * FROM ranobe
+INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+LEFT OUTER JOIN pinned ON pinned.target_id = ranobe.id AND pinned.target_type = track.target_type
+WHERE track.status = :status;
 
 selectLastInsertedRowId:
 SELECT last_insert_rowid();
