@@ -9,6 +9,7 @@ object HomeScreen : ShimoriScreen("Home()")
 
 @Parcelize
 object TracksScreen : ShimoriScreen("Tracks()")
+
 @Parcelize
 object TracksEmptyScreen : ShimoriScreen("TracksEmpty()")
 
@@ -26,7 +27,7 @@ object TracksMenuScreen : ShimoriScreen("TracksMenu()")
 object AuthScreen : ShimoriScreen("Auth()")
 
 @Parcelize
-object SettingsScreen : ShimoriScreen("Settings()"), OverlayScreen
+object SettingsScreen : ShimoriScreen("Settings()")
 
 @Parcelize
 data class SettingsAppearanceScreen(val card: Boolean = false) :
@@ -39,12 +40,13 @@ data class EditTrackScreen(
     val targetId: Long,
     val targetType: TrackTargetType,
     val predefinedStatus: TrackStatus?
-) : ShimoriScreen("EditTrack()"), OverlayScreen {
-    override val arguments get() = mapOf(
-        "targetId" to targetId,
-        "targetType" to targetType,
-        "predefinedStatus" to predefinedStatus,
-    )
+) : ShimoriScreen("EditTrack()") {
+    override val arguments
+        get() = mapOf(
+            "targetId" to targetId,
+            "targetType" to targetType,
+            "predefinedStatus" to predefinedStatus,
+        )
 }
 
 @Parcelize
@@ -58,14 +60,3 @@ data class UrlScreen(val url: String) : ShimoriScreen(name = "UrlScreen()") {
 abstract class ShimoriScreen(val name: String) : Screen {
     open val arguments: Map<String, *>? = null
 }
-
-sealed interface OverlayScreen
-
-enum class OverlayType {
-    None,
-    Dialog,
-    BottomSheet,
-    SideSheet
-}
-
-expect fun overlayTypeFor(screen: OverlayScreen): OverlayType

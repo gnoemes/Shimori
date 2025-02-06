@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import com.gnoemes.shimori.base.inject.UiScope
-import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalShimoriDateTextFormatter
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
@@ -25,15 +24,11 @@ import com.gnoemes.shimori.common.compose.shouldUseDynamicColors
 import com.gnoemes.shimori.common.compose.theme.ShimoriTheme
 import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
 import com.gnoemes.shimori.common.ui.navigator.ShimoriNavigator
-import com.gnoemes.shimori.common.ui.overlay.showInBottomSheet
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriTextCreator
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.preferences.ShimoriPreferences
-import com.gnoemes.shimori.screens.OverlayScreen
-import com.gnoemes.shimori.screens.OverlayType
-import com.gnoemes.shimori.screens.overlayTypeFor
 import com.gnoemes.shimori.settings.AppLocale
 import com.gnoemes.shimori.settings.AppTitlesLocale
 import com.gnoemes.shimori.settings.ShimoriSettings
@@ -42,7 +37,6 @@ import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.overlay.ContentWithOverlays
-import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.LocalRetainedStateRegistry
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.continuityRetainedStateRegistry
@@ -139,29 +133,13 @@ class DefaultShimoriContent(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        val scope = rememberCoroutineScope()
-                        val overlayHost = LocalOverlayHost.current
-
                         NavigableCircuitContent(
                             navigator = shimoriNavigator,
                             backStack = backstack,
                             decoration = remember(shimoriNavigator) {
                                 GestureNavigationDecoration(onBackInvoked = shimoriNavigator::pop)
                             },
-                            modifier = Modifier.fillMaxSize(),
-                            //TODO somehow move to navigator?
-                            unavailableRoute = { screen, _ ->
-                                if (screen is OverlayScreen) {
-                                    val type = overlayTypeFor(screen)
-                                    when (type) {
-                                        OverlayType.BottomSheet -> scope.launchOrThrow {
-                                            overlayHost.showInBottomSheet(screen)
-                                        }
-
-                                        else -> circuit.onUnavailableContent
-                                    }
-                                } else circuit.onUnavailableContent
-                            }
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
                 }
