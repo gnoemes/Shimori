@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -42,10 +44,12 @@ import com.gnoemes.shimori.common.compose.ui.TransparentToolbar
 import com.gnoemes.shimori.common.compose.ui.gradientBackground
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_appearence
+import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.common.ui.resources.icons.ic_github
 import com.gnoemes.shimori.common.ui.resources.icons.ic_shikimori
 import com.gnoemes.shimori.common.ui.resources.icons.ic_shimori_logo
 import com.gnoemes.shimori.common.ui.resources.strings.feature_work_in_progress
+import com.gnoemes.shimori.common.ui.resources.strings.settings
 import com.gnoemes.shimori.common.ui.resources.strings.settings_appearence
 import com.gnoemes.shimori.common.ui.resources.strings.settings_backup
 import com.gnoemes.shimori.common.ui.resources.strings.settings_feedback_and_updates
@@ -81,6 +85,7 @@ internal fun SettingsUi(
     SettingsUi(
         appName = state.appName,
         versionName = state.versionName,
+        navigateUpEnabled = state.navigateUpEnabled,
         viewType = viewType,
         openAppearenceSettings = { eventSink(SettingsUiEvent.OpenAppearenceSettings) },
         openGithub = { eventSink(SettingsUiEvent.OpenGithub) },
@@ -94,6 +99,7 @@ internal fun SettingsUi(
 private fun SettingsUi(
     appName: String,
     versionName: String,
+    navigateUpEnabled : Boolean,
     viewType: SettingsViewType,
     openAppearenceSettings: () -> Unit,
     openGithub: () -> Unit,
@@ -104,7 +110,23 @@ private fun SettingsUi(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            TransparentToolbar(onNavigationClick = navigateUp)
+                TransparentToolbar(
+                    title = {
+                        if (viewType == SettingsViewType.Grid) {
+                            Text(stringResource(Strings.settings))
+                        }
+                    },
+                    navigationIcon = {
+                        if (navigateUpEnabled) {
+                            IconButton(
+                                onClick = navigateUp,
+                            ) {
+                                Icon(painterResource(Icons.ic_back), contentDescription = null)
+                            }
+                        }
+                    },
+                    onNavigationClick = navigateUp
+                )
         }
     ) { paddingValues ->
         AnimatedContent(viewType) {

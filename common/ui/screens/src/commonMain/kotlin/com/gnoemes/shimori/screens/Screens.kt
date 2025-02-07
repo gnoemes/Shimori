@@ -27,6 +27,9 @@ object TracksMenuScreen : ShimoriScreen("TracksMenu()")
 object AuthScreen : ShimoriScreen("Auth()")
 
 @Parcelize
+object SearchScreen : ShimoriScreen("Search()")
+
+@Parcelize
 object SettingsScreen : ShimoriScreen("Settings()")
 
 @Parcelize
@@ -36,11 +39,11 @@ data class SettingsAppearanceScreen(val card: Boolean = false) :
 }
 
 @Parcelize
-data class EditTrackScreen(
+data class TrackEditScreen(
     val targetId: Long,
     val targetType: TrackTargetType,
     val predefinedStatus: TrackStatus?
-) : ShimoriScreen("EditTrack()") {
+) : ShimoriScreen("TrackEdit()") {
     override val arguments
         get() = mapOf(
             "targetId" to targetId,

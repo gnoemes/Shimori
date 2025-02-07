@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.ui.PersonCover
 import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
 import com.gnoemes.shimori.common.ui.navigator.ShimoriNavigator
@@ -55,15 +56,20 @@ import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_bookmark
 import com.gnoemes.shimori.common.ui.resources.icons.ic_explore
 import com.gnoemes.shimori.common.ui.resources.icons.ic_profile
+import com.gnoemes.shimori.common.ui.resources.icons.ic_search
+import com.gnoemes.shimori.common.ui.resources.icons.ic_settings
 import com.gnoemes.shimori.common.ui.resources.strings.explore
 import com.gnoemes.shimori.common.ui.resources.strings.lists_title
 import com.gnoemes.shimori.common.ui.resources.strings.profile
+import com.gnoemes.shimori.common.ui.resources.strings.search
+import com.gnoemes.shimori.common.ui.resources.strings.settings
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.screens.AuthScreen
 import com.gnoemes.shimori.screens.ExploreScreen
 import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.screens.MockScreen
+import com.gnoemes.shimori.screens.SearchScreen
 import com.gnoemes.shimori.screens.SettingsScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.gnoemes.shimori.screens.UrlScreen
@@ -105,9 +111,22 @@ internal fun HomeUi(
             logger
         )
     }
+    val windowSizeClass = LocalWindowSizeClass.current.widthSizeClass
+    val isCompact by remember(windowSizeClass) {
+        derivedStateOf {
+            windowSizeClass.isCompact()
+        }
+    }
 
-    val navigationItems =
-        remember(state) { buildNavigationItems(state.isAuthorized, state.profileImage) }
+    val navigationItems by remember(state, isCompact) {
+        derivedStateOf {
+            buildNavigationItems(
+                isAuthorized = state.isAuthorized,
+                extendedNavigation = !isCompact,
+                profileImage = state.profileImage
+            )
+        }
+    }
 
     //update root for lists tab by auth
     LaunchedEffect(state.isAuthorized) {
@@ -141,8 +160,8 @@ private fun HomeUi(
     logout: () -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
-    val navigationType = remember(windowSizeClass) {
-        NavigationType.forWindowSizeSize(windowSizeClass)
+    val navigationType by remember(windowSizeClass) {
+        derivedStateOf { NavigationType.forWindowSizeSize(windowSizeClass) }
     }
 
     val rootScreen by remember(backstack) {
@@ -227,6 +246,12 @@ private fun HomeNavigationRail(
         Spacer(Modifier.weight(1f))
         for (item in navigationItems) {
             val selected = selectedNavigation == item.screen
+
+            if (item.screen is SettingsScreen) {
+                //add spacing before settings
+                Spacer(Modifier.weight(1f))
+            }
+
             NavigationRailItem(
                 icon = {
                     if (item is HomeNavigationItem.ImageNavigationItem && item.image != null) {
@@ -252,7 +277,6 @@ private fun HomeNavigationRail(
 
             Spacer(modifier = Modifier.height(16.dp))
         }
-        Spacer(Modifier.weight(1f))
     }
 }
 
@@ -382,9 +406,10 @@ private abstract class HomeNavigationItem {
 
 private fun buildNavigationItems(
     isAuthorized: Boolean,
-    profileImage: ShimoriImage?
+    extendedNavigation: Boolean,
+    profileImage: ShimoriImage?,
 ): List<HomeNavigationItem> {
-    return listOf(
+    return mutableListOf(
         HomeNavigationItem.IconNavigationItem(
             screen = if (isAuthorized) TracksScreen else AuthScreen,
             label = Strings.lists_title,
@@ -404,7 +429,27 @@ private fun buildNavigationItems(
             iconImageResource = Icons.ic_profile,
             image = profileImage
         )
-    )
+    ).apply {
+        if (extendedNavigation) {
+            add(
+                HomeNavigationItem.IconNavigationItem(
+                    screen = SearchScreen,
+                    label = Strings.search,
+                    contentDescription = Strings.search,
+                    iconImageResource = Icons.ic_search
+                )
+            )
+
+            add(
+                HomeNavigationItem.IconNavigationItem(
+                    screen = SettingsScreen,
+                    label = Strings.settings,
+                    contentDescription = Strings.settings,
+                    iconImageResource = Icons.ic_settings
+                )
+            )
+        }
+    }
 }
 
 private fun Navigator.resetRootIfDifferent(
