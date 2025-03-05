@@ -29,8 +29,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.NestedScaffold
+import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.ui.ListItem
 import com.gnoemes.shimori.common.compose.ui.ShimoriCard
 import com.gnoemes.shimori.common.compose.ui.TransparentToolbar
@@ -72,13 +74,8 @@ internal fun SettingsUi(
     state: SettingsUiState,
     modifier: Modifier = Modifier
 ) {
-    val windowSizeClass = LocalWindowSizeClass.current
-    val viewType = remember(windowSizeClass) {
-        when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> SettingsViewType.Grid
-            else -> SettingsViewType.List
-        }
-    }
+    val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
+    val isCompact by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
 
     val eventSink = state.eventSink
 
@@ -86,7 +83,7 @@ internal fun SettingsUi(
         appName = state.appName,
         versionName = state.versionName,
         navigateUpEnabled = state.navigateUpEnabled,
-        viewType = viewType,
+        isCompact = isCompact,
         openAppearenceSettings = { eventSink(SettingsUiEvent.OpenAppearenceSettings) },
         openGithub = { eventSink(SettingsUiEvent.OpenGithub) },
         openShikimori = { eventSink(SettingsUiEvent.OpenShikimori) },
@@ -99,8 +96,8 @@ internal fun SettingsUi(
 private fun SettingsUi(
     appName: String,
     versionName: String,
-    navigateUpEnabled : Boolean,
-    viewType: SettingsViewType,
+    navigateUpEnabled: Boolean,
+    isCompact: Boolean,
     openAppearenceSettings: () -> Unit,
     openGithub: () -> Unit,
     openShikimori: () -> Unit,
@@ -110,27 +107,27 @@ private fun SettingsUi(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-                TransparentToolbar(
-                    title = {
-                        if (viewType == SettingsViewType.Grid) {
-                            Text(stringResource(Strings.settings))
+            TransparentToolbar(
+                title = {
+                    if (!isCompact) {
+                        Text(stringResource(Strings.settings))
+                    }
+                },
+                navigationIcon = {
+                    if (navigateUpEnabled) {
+                        IconButton(
+                            onClick = navigateUp,
+                        ) {
+                            Icon(painterResource(Icons.ic_back), contentDescription = null)
                         }
-                    },
-                    navigationIcon = {
-                        if (navigateUpEnabled) {
-                            IconButton(
-                                onClick = navigateUp,
-                            ) {
-                                Icon(painterResource(Icons.ic_back), contentDescription = null)
-                            }
-                        }
-                    },
-                    onNavigationClick = navigateUp
-                )
+                    }
+                },
+                onNavigationClick = navigateUp
+            )
         }
     ) { paddingValues ->
-        AnimatedContent(viewType) {
-            if (viewType == SettingsViewType.Grid) {
+        AnimatedContent(isCompact) {
+            if (!isCompact) {
                 Column(
                     modifier = Modifier
                         .padding(paddingValues)
@@ -391,10 +388,4 @@ private fun ColumnScope.About(
         color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.align(Alignment.CenterHorizontally)
     )
-}
-
-
-internal enum class SettingsViewType {
-    List,
-    Grid
 }

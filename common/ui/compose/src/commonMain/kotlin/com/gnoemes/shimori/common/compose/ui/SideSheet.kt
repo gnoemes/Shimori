@@ -22,10 +22,8 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
@@ -169,7 +167,6 @@ internal fun BoxScope.ModalSideSheetContent(
         Column(
             modifier = Modifier.fillMaxSize()
                 .windowInsetsPadding(contentWindowInsets())
-                .verticalScroll(rememberScrollState())
                 .semantics(
                     mergeDescendants = true
                 ) {
@@ -282,7 +279,7 @@ object SideSheetDefaults {
 
     /** The default container color for a sheet. */
     val ContainerColor: Color
-        @Composable get() = MaterialTheme.colorScheme.surfaceContainerLow
+        @Composable get() = MaterialTheme.colorScheme.surfaceContainer
 
     /** The default elevation for a sheet. */
     val Elevation = 1.dp

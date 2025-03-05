@@ -96,7 +96,6 @@ class DefaultShimoriContent(
         val locale by settings.locale.observe.collectAsRetainedState(initialLocale)
         preferences.setInt(ShimoriPreferences.ValueKey.INITIAL_LOCALE, locale.value)
 
-
         val initialTitlesLocale =
             preferences.getInt(ShimoriPreferences.ValueKey.INITIAL_TITLES_LOCALE)
                 ?.let { AppTitlesLocale.from(it) }

@@ -21,6 +21,7 @@
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
     <string name="undo">Отмена</string>
+    <string name="edit">Редактировать</string>
     <string name="rate_status_anime_watching">Смотрю</string>
     <string name="rate_status_anime_re_watching">Пересматриваю</string>
     <string name="rate_status_manga_reading">Читаю</string>

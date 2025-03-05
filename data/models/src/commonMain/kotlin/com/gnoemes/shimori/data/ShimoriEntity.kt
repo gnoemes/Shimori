@@ -4,6 +4,9 @@ import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.TitleStatus
+import com.gnoemes.shimori.data.titles.anime.Anime
+import com.gnoemes.shimori.data.titles.manga.Manga
+import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import kotlinx.datetime.LocalDate
@@ -38,6 +41,19 @@ interface ShimoriTitleEntity : ShimoriContentEntity {
     val genres: List<Genre>?
 
     val isOngoing get() = status != null && status == TitleStatus.ONGOING
+
+    fun calculateProgressLimit(): Int {
+        return when {
+            //we have size, just return it
+            size != null -> size!!
+            else -> when (this) {
+                is Anime -> episodes
+                is Manga -> chapters
+                is Ranobe -> chapters
+                else -> throw IllegalStateException("Unknown title entity: ${this::class}")
+            }
+        }
+    }
 }
 
 interface TitleWithTrack<E : ShimoriTitleEntity> {

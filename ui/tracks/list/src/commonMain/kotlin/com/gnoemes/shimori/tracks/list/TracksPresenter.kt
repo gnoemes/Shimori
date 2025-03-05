@@ -35,6 +35,7 @@ import com.gnoemes.shimori.domain.observers.ObserveListSort
 import com.gnoemes.shimori.domain.observers.ObserveTracksExist
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.screens.SettingsScreen
+import com.gnoemes.shimori.screens.TrackEditScreen
 import com.gnoemes.shimori.screens.TracksMenuScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -122,7 +123,19 @@ class TracksPresenter(
                 }
 
                 is TracksUiEvent.OpenDetails -> TODO()
-                is TracksUiEvent.OpenEdit -> TODO()
+                is TracksUiEvent.OpenEdit -> {
+                    val screen = TrackEditScreen(
+                        event.title.id,
+                        event.title.type,
+                        predefinedStatus = null
+                    )
+
+                    if (isCompact) navigator.goTo(screen)
+                    else scope.launchOrThrow {
+                        overlayHost.showInSideSheet(screen)
+                    }
+                }
+
                 TracksUiEvent.OpenMenu -> {
                     val screen = TracksMenuScreen
                     when {

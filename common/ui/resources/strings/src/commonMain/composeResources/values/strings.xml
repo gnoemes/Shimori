@@ -21,6 +21,7 @@
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="undo">Undo</string>
+    <string name="edit">Edit</string>
     <string name="rate_status_anime_watching">Watching</string>
     <string name="rate_status_anime_re_watching">Rewatching</string>
     <string name="rate_status_manga_reading">Reading</string>

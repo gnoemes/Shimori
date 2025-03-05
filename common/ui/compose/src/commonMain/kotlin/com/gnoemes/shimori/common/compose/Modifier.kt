@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -37,3 +41,10 @@ fun Modifier.ignoreHorizontalParentPadding(horizontal: Dp): Modifier {
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+expect fun Modifier.mouseWheelNestedScrollConnectionFix(
+    state : LazyListState,
+    scrollBehavior: TopAppBarScrollBehavior,
+) : Modifier

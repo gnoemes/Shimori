@@ -1,7 +1,9 @@
 package com.gnoemes.shimori.common.compose.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -89,6 +91,29 @@ fun Modifier.gradientBackground(
             0f to dominantColorState.color.copy(alpha = 0.2f),
             .5f to dominantColorState.color.copy(alpha = 0.0f),
             1f to MaterialTheme.colorScheme.surface,
+        ),
+        tileMode = TileMode.Clamp
+    )
+
+    return this.background(
+        brush = brush
+    )
+}
+
+@Composable
+fun Modifier.gradientBackground(
+    color: Color = MaterialTheme.colorScheme.secondary,
+    containerColor : Color = LocalAbsoluteTonalElevation.current.let {
+        MaterialTheme.colorScheme.surfaceColorAtElevation(it)
+    }
+): Modifier {
+    val dominantColorState = rememberDominantColorState(defaultColor = color)
+
+    val brush = Brush.verticalGradient(
+        colorStops = arrayOf(
+            0f to dominantColorState.color.copy(alpha = 0.2f),
+            .5f to dominantColorState.color.copy(alpha = 0.0f),
+            1f to containerColor,
         ),
         tileMode = TileMode.Clamp
     )

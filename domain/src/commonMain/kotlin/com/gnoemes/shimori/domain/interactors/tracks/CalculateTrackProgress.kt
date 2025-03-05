@@ -28,10 +28,16 @@ class CalculateTrackProgress(
                 TrackTargetType.RANOBE -> ranobeRepository.queryById(track.targetId)
             }
 
+            if (title == null) {
+                return@withContext track.progress
+            }
+
+            val maxProgress = title.calculateProgressLimit()
+
             return@withContext (track.progress + params.changeBy)
                 .let {
                     if (it < 0) 0
-                    else if (title?.size != null && it > title.size!!) title.size!!
+                    else if (it > maxProgress) maxProgress
                     else it
                 }
         }

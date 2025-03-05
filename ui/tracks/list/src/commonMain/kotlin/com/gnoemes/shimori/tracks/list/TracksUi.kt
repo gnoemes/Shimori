@@ -1,11 +1,14 @@
 package com.gnoemes.shimori.tracks.list
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -36,6 +39,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
@@ -73,6 +77,7 @@ import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.itemSpacer
 import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
+import com.gnoemes.shimori.common.compose.ui.SideSheetDefaults
 import com.gnoemes.shimori.common.compose.ui.TrackItem
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_asc
@@ -119,6 +124,7 @@ internal fun TracksUi(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TracksUi(
     widthSizeClass: WindowWidthSizeClass,
@@ -133,9 +139,10 @@ private fun TracksUi(
     val density = LocalDensity.current
     val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
     val insets = with(density) { WindowInsets.statusBars.getTop(density).toDp() }
-    val appbarHeight = remember(isList) {
-        if (isList) insets + 72.dp
-        else 104.dp
+    val appbarHeight by remember(isList) {
+        derivedStateOf {
+            insets + 72.dp
+        }
     }
     val scrollConnection = remember(appbarHeight) {
         CollapsingAppBarNestedScrollConnection(with(density) { appbarHeight.roundToPx() })
@@ -151,29 +158,19 @@ private fun TracksUi(
                 else fillMaxWidth()
             },
             topBar = {
-                AnimatedContent(isList) { isList ->
-                    if (isList) {
-                        ShimoriSearchBar(
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .offset {
-                                    IntOffset(0, scrollConnection.appBarOffset)
-                                },
-                            openSettings = openSettings
-                        )
-                    } else {
-                        Row {
-                            Spacer(Modifier.weight(1f))
-
-                            ShimoriSearchBar(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .widthIn(max = 328.dp)
-                                    .fillMaxWidth(),
-                                openSettings = openSettings
-                            )
-                        }
-                    }
+                AnimatedVisibility(
+                    isList,
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically()
+                ) {
+                    ShimoriSearchBar(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .offset {
+                                IntOffset(0, scrollConnection.appBarOffset)
+                            },
+                        openSettings = openSettings
+                    )
                 }
             },
             floatingActionButton = {
@@ -242,7 +239,7 @@ private fun TracksUi(
                 animationSpec = tween(durationMillis = 300)
             ),
             modifier = Modifier.fillMaxHeight()
-                .widthIn(max = 300.dp)
+                .widthIn(max = SideSheetDefaults.SheetMaxWidth)
                 .fillMaxWidth()
         ) {
             Row {
@@ -287,7 +284,6 @@ private fun TracksUiContent(
         }
     }
     val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
-
 
     if (isList) {
         Box(

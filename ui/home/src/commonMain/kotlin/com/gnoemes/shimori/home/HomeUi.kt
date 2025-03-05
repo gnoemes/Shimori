@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,11 +45,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.isCompact
+import com.gnoemes.shimori.common.compose.isKeyboardVisible
 import com.gnoemes.shimori.common.compose.ui.PersonCover
 import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
 import com.gnoemes.shimori.common.ui.navigator.ShimoriNavigator
@@ -160,9 +163,11 @@ private fun HomeUi(
     logout: () -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
+    val density = LocalDensity.current
     val navigationType by remember(windowSizeClass) {
         derivedStateOf { NavigationType.forWindowSizeSize(windowSizeClass) }
     }
+
 
     val rootScreen by remember(backstack) {
         derivedStateOf { backstack.last().screen }
@@ -194,8 +199,16 @@ private fun HomeUi(
                 )
             }
         }
-    ) {
-        Row(modifier = Modifier.fillMaxSize()) {
+    ) { paddingValue ->
+        Row(
+            modifier = Modifier.fillMaxSize()
+                .then(
+                    //add navigation bar inset for non root screens
+                    if (!density.isKeyboardVisible() && navigationType == NavigationType.BOTTOM_NAVIGATION && backstack.size > 1)
+                        Modifier.padding(bottom = paddingValue.calculateBottomPadding())
+                    else Modifier
+                )
+        ) {
             AnimatedVisibility(
                 navigationType == NavigationType.RAIL
             ) {
