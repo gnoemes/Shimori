@@ -505,7 +505,8 @@ private fun TrackEditUiContent(
                     stringResource(
                         if (isEdit) Strings.edit
                         else Strings.save
-                    )
+                    ),
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
