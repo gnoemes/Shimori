@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
@@ -53,7 +54,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -292,7 +292,6 @@ private fun TrackEditUiContent(
 
                 itemSpacer(paddingValue.calculateTopPadding(), "gradient_spacer")
 
-                itemSpacer(16.dp)
 
                 item("statuses") {
                     CompositionLocalProvider(
@@ -320,6 +319,7 @@ private fun TrackEditUiContent(
                                             Icon(
                                                 painterResource(icons.trackStatusIcon(status)),
                                                 contentDescription = null,
+                                                modifier = Modifier.size(18.dp)
                                             )
                                         }
                                     }
@@ -428,7 +428,8 @@ private fun TrackEditUiContent(
                         FilledTonalButton(
                             onClick = decrementProgress,
                             modifier = Modifier.weight(1f),
-                            enabled = decrementEnabled
+                            enabled = decrementEnabled,
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Text("-1")
                         }
@@ -436,7 +437,8 @@ private fun TrackEditUiContent(
                         FilledTonalButton(
                             onClick = incrementProgress,
                             modifier = Modifier.weight(1f),
-                            enabled = incrementEnabled
+                            enabled = incrementEnabled,
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Text("+1")
                         }
@@ -472,9 +474,12 @@ private fun TrackEditUiContent(
                 item("note_hint") {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.TopStart
                     ) {
-                        Text(stringResource(Strings.title_note_hint), textAlign = TextAlign.Center)
+                        Text(
+                            stringResource(Strings.title_note_hint),
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
                     }
                 }
 
