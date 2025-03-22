@@ -10,8 +10,6 @@ paging-multiplatform = "3.3.0-alpha02-0.4.0"
 circuit = "0.25.0"
 apollo = "4.1.0"
 oidc = "0.12.0"
-uiGeometryAndroid = "1.7.7"
-uiUnitAndroid = "1.7.7"
 
 [plugins]
 buildConfig = "com.github.gmazzo.buildconfig:5.5.0"
@@ -103,6 +101,4 @@ tools-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.4"
 slf4j = "org.slf4j:slf4j-api:2.0.16"
 slf4j-desktop = "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
 slf4j-android = "uk.uuid.slf4j:slf4j-android:2.0.7-0"
-ui-geometry-android = { group = "androidx.compose.ui", name = "ui-geometry-android", version.ref = "uiGeometryAndroid" }
-ui-unit-android = { group = "androidx.compose.ui", name = "ui-unit-android", version.ref = "uiUnitAndroid" }
 

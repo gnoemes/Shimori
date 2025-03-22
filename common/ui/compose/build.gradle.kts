@@ -44,7 +44,3 @@ kotlin {
         }
     }
 }
-dependencies {
-    implementation(libs.ui.geometry.android)
-    implementation(libs.ui.unit.android)
-}
