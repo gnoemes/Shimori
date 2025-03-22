@@ -1,6 +1,5 @@
 package com.gnoemes.shimori.tracks.edit
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -315,7 +314,7 @@ private fun TrackEditUiContent(
                                         )
                                     },
                                     leadingIcon = {
-                                        AnimatedVisibility(isSelected) {
+                                        if(isSelected) {
                                             Icon(
                                                 painterResource(icons.trackStatusIcon(status)),
                                                 contentDescription = null,

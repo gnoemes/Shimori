@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+kotlin = "2.1.10"
+ksp = "2.1.10-1.0.31"
 dateTime = "0.6.1"
 serilization = "1.7.3"
 coroutines = "1.9.0"
@@ -23,8 +23,6 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serilization" }
 
 ksp-gradle = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-
-
 
 atomicfu = "org.jetbrains.kotlinx:atomicfu:0.26.0"
 dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
