@@ -47,7 +47,7 @@ interface ShimoriTitleEntity : ShimoriContentEntity {
             //we have size, just return it
             size != null -> size!!
             else -> when (this) {
-                is Anime -> episodes
+                is Anime -> if (episodes > 0) episodes else episodesAired
                 is Manga -> chapters
                 is Ranobe -> chapters
                 else -> throw IllegalStateException("Unknown title entity: ${this::class}")
