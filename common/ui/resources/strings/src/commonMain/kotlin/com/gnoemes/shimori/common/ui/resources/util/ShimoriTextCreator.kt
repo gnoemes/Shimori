@@ -23,6 +23,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.manga_and_ranobe
 import com.gnoemes.shimori.common.ui.resources.strings.minute_short
 import com.gnoemes.shimori.common.ui.resources.strings.ongoing_episode_format
 import com.gnoemes.shimori.common.ui.resources.strings.ranobe
+import com.gnoemes.shimori.common.ui.resources.strings.rate_del_snack
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_anime_re_watching
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_anime_watching
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_completed
@@ -53,6 +54,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.type_one_shot
 import com.gnoemes.shimori.common.ui.resources.strings.type_ova
 import com.gnoemes.shimori.common.ui.resources.strings.type_special
 import com.gnoemes.shimori.common.ui.resources.strings.type_tv
+import com.gnoemes.shimori.common.ui.resources.strings.undo
 import com.gnoemes.shimori.data.ShimoriContentEntity
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
@@ -64,6 +66,7 @@ import com.gnoemes.shimori.data.titles.manga.MangaType
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeType
 import com.gnoemes.shimori.data.track.ListSortOption
+import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.settings.AppLocale
@@ -93,6 +96,10 @@ class ShimoriTextCreator(
         return this.block()
     }
 
+    @Composable
+    inline fun <T : CharSequence> nullable(block: @Composable ShimoriTextCreator.() -> T?): T? {
+        return this.block()
+    }
 
     @Composable
     fun String.colorSpan(
@@ -328,6 +335,22 @@ class ShimoriTextCreator(
         val progress = "${track?.progress ?: 0}"
         val size = "${entity.size ?: "?"}"
         return "$progress / $size"
+    }
+
+    @Composable
+    fun ListsUiEvents.message(): String {
+        return when (this) {
+            is ListsUiEvents.TrackDeleted -> stringResource(Strings.rate_del_snack)
+            else -> throw IllegalStateException("${this::class.java} event is not supported")
+        }
+    }
+
+    @Composable
+    fun ListsUiEvents.actionLabel(): String? {
+        return when (this) {
+            is ListsUiEvents.TrackDeleted -> stringResource(Strings.undo)
+            else -> null
+        }
     }
 
 //

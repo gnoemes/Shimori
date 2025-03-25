@@ -1,12 +1,13 @@
-package com.gnoemes.shimori.data.lists
+package com.gnoemes.shimori.data.track
 
+import com.benasher44.uuid.uuid4
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.common.ShimoriImage
-import com.gnoemes.shimori.data.track.Track
-import com.gnoemes.shimori.data.track.TrackStatus
-import com.gnoemes.shimori.data.track.TrackTargetType
 
-sealed class ListsUiEvents {
+sealed class ListsUiEvents(
+    val navigation: Boolean = false,
+    val eventId: Long = uuid4().mostSignificantBits
+) {
     data class IncrementerProgress(
         val title: TitleWithTrackEntity,
         val oldTrack: Track,
@@ -27,5 +28,5 @@ sealed class ListsUiEvents {
         val targetId: Long,
         val targetType: TrackTargetType,
         val predefinedStatus: TrackStatus? = null
-    ) : ListsUiEvents()
+    ) : ListsUiEvents(navigation = true)
 }

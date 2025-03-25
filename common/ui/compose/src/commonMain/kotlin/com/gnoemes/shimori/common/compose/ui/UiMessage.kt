@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.common.compose.ui
 
+import androidx.compose.runtime.Stable
 import com.benasher44.uuid.uuid4
 import com.gnoemes.shimori.data.common.ShimoriImage
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 
+@Stable
 data class UiMessage(
     val message: String,
     val image: ShimoriImage? = null,

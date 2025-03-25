@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.gnoemes.shimori.home
 
 import androidx.compose.animation.AnimatedVisibility
@@ -19,7 +21,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -28,6 +36,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -53,6 +64,8 @@ import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.isKeyboardVisible
 import com.gnoemes.shimori.common.compose.ui.PersonCover
+import com.gnoemes.shimori.common.compose.ui.ShimoriSnackbar
+import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
 import com.gnoemes.shimori.common.ui.navigator.ShimoriNavigator
 import com.gnoemes.shimori.common.ui.resources.Icons
@@ -146,6 +159,10 @@ internal fun HomeUi(
         navigationItems,
         shimoriNavigator,
         backstack,
+        state.fabSpacing,
+        state.message,
+        onMessageShown = { eventSink(HomeUiEvent.ClearMessage(it)) },
+        onMessageAction = { eventSink(HomeUiEvent.ActionMessage(it)) },
         openSearch = { },
         openSettings = { shimoriNavigator.goTo(SettingsScreen) },
         logout = { eventSink(HomeUiEvent.Logout) }
@@ -158,6 +175,10 @@ private fun HomeUi(
     navigationItems: List<HomeNavigationItem>,
     navigator: Navigator,
     backstack: SaveableBackStack,
+    fabSpacing: Boolean,
+    message: UiMessage?,
+    onMessageShown: (Long) -> Unit,
+    onMessageAction: (UiMessage) -> Unit,
     openSearch: () -> Unit,
     openSettings: () -> Unit,
     logout: () -> Unit,
@@ -168,13 +189,61 @@ private fun HomeUi(
         derivedStateOf { NavigationType.forWindowSizeSize(windowSizeClass) }
     }
 
-
     val rootScreen by remember(backstack) {
         derivedStateOf { backstack.last().screen }
     }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val dismissSnackbarState = rememberDismissState { value ->
+        if (value != DismissValue.Default) {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            true
+        } else {
+            false
+        }
+    }
+
+    message?.let {
+        LaunchedEffect(it) {
+            snackbarHostState.showSnackbar(
+                it.message,
+                it.actionLabel,
+                withDismissAction = it.actionLabel != null,
+                duration = SnackbarDuration.Long
+            )
+            onMessageShown(it.id)
+        }
+    }
+
     Scaffold(
         modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                SwipeToDismiss(
+                    state = dismissSnackbarState,
+                    background = {},
+                    dismissContent = {
+                        ShimoriSnackbar(
+                            data = data,
+                            message = message,
+                            dismissAction = {
+                                message?.let(onMessageAction)
+                            }
+                        )
+                    },
+                    modifier = Modifier.padding(bottom = 24.dp)
+                        .padding(horizontal = 8.dp)
+                )
+            }
+        },
+        floatingActionButton = {
+            //add fab spacing if nested screen contains it
+            if (fabSpacing) {
+                Box(modifier = Modifier.size(56.dp))
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             AnimatedVisibility(
                 navigationType == NavigationType.BOTTOM_NAVIGATION,

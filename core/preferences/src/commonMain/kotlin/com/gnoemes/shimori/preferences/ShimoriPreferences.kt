@@ -11,6 +11,9 @@ interface ShimoriPreferences {
     var preferredListStatus: String
     fun observePreferredListStatus(): Flow<String>
 
+    var nestedScaffoldContainsFab : Boolean
+    fun observeNestedScaffoldContainsFab(): Flow<Boolean>
+
     fun setInt(key: String, value: Int)
     fun getInt(key: String): Int?
 

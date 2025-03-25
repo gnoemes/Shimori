@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,6 +40,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -62,6 +64,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
@@ -79,6 +82,7 @@ import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
 import com.gnoemes.shimori.common.compose.ui.SideSheetDefaults
 import com.gnoemes.shimori.common.compose.ui.TrackItem
+import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_asc
 import com.gnoemes.shimori.common.ui.resources.icons.ic_desc
@@ -111,10 +115,14 @@ internal fun TracksUi(
     val windowSizeClass = LocalWindowSizeClass.current
     val eventSink = state.eventSink
 
+    val message = state.uiMessage
 
     TracksUi(
         widthSizeClass = windowSizeClass.widthSizeClass,
         state = state,
+        message = message,
+        onMessageShown = { eventSink(TracksUiEvent.ClearMessage(message?.id ?: 0)) },
+        onMessageAction = { eventSink(TracksUiEvent.ActionMessage(message?.id ?: 0)) },
         addOneToProgress = { eventSink(TracksUiEvent.AddOneToProgress(it)) },
         changeSort = { eventSink(TracksUiEvent.ChangeSort(it)) },
         openEdit = { eventSink(TracksUiEvent.OpenEdit(it)) },
@@ -124,11 +132,14 @@ internal fun TracksUi(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun TracksUi(
     widthSizeClass: WindowWidthSizeClass,
     state: TracksUiState,
+    message: UiMessage?,
+    onMessageShown: () -> Unit,
+    onMessageAction: () -> Unit,
     addOneToProgress: (Track) -> Unit,
     changeSort: (ListSort) -> Unit,
     openEdit: (TitleWithTrackEntity) -> Unit,
@@ -182,6 +193,7 @@ private fun TracksUi(
                     }
 
                     ExtendedFloatingActionButton(
+                        modifier = Modifier.navigationBarsPadding(),
                         text = {
                             Text(stringResource(Strings.lists_title))
                         },
@@ -204,11 +216,9 @@ private fun TracksUi(
                 }
             }
         ) {
-            val items = state.items
-
-//        if (items.itemCount == 0) {
-//            CircuitContent(TracksEmptyScreen)
-//        } else {
+//            if () {
+//                CircuitContent(TracksEmptyScreen)
+//            } else {
             TracksUiContent(
                 scrollConnection = scrollConnection,
                 paddingValues = it,
@@ -216,7 +226,7 @@ private fun TracksUi(
                 type = state.type,
                 status = state.status,
                 sort = state.sort,
-                items = items,
+                items = state.items,
                 sortOptions = state.sortOptions,
                 firstSyncLoading = state.firstSyncLoading,
                 addOneToProgress = addOneToProgress,
@@ -224,7 +234,7 @@ private fun TracksUi(
                 openEdit = openEdit,
                 openDetails = openDetails
             )
-//        }
+//            }
         }
 
 
@@ -293,7 +303,7 @@ private fun TracksUiContent(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
-                    .onGloballyPositioned { parentWidth = with(density) { it.size.width.toDp() } },
+                    .onSizeChanged { parentWidth = with(density) { it.width.toDp() } },
                 state = items.rememberLazyListState()
             ) {
                 itemSpacer(spaceHeight + 8.dp, key = "scroll_spacer")
@@ -330,16 +340,16 @@ private fun TracksUiContent(
 
                 items(
                     count = items.itemCount,
-                    key = items.itemKey { "track_${it.track?.id}" },
+                    key = items.itemKey { "track_${it.id}" },
                 ) { index ->
                     val entity = items[index]
                     val track = entity?.track
                     if (entity != null && track != null) {
-                        val openDetailsClick = remember(track.id) {
+                        val openDetailsClick = remember(entity.id) {
                             { openDetails(entity) }
                         }
 
-                        val openEditClick = remember(track.id) {
+                        val openEditClick = remember(entity.id) {
                             { openEdit(entity) }
                         }
 

@@ -12,6 +12,7 @@ import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.domain.interactors.tracks.CalculateTrackProgress
@@ -142,7 +143,15 @@ class TrackEditPresenter(
 
                 TrackEditUiEvent.Delete -> launchOrThrow {
                     deleteTrack(DeleteTrack.Params(localTrack.id))
-                        .onSuccess { navigator.pop() }
+                        .onSuccess {
+                            listsState.uiEvents.invoke(
+                                ListsUiEvents.TrackDeleted(
+                                    title?.entity?.image,
+                                    localTrack
+                                )
+                            )
+                            navigator.pop()
+                        }
                         .onFailure { navigator.pop() }
                 }
 

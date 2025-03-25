@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.lists
 
+import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.preferences.ShimoriPreferences
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
@@ -70,7 +72,7 @@ class ListsStateBus(
         override suspend fun update(newState: ListsUiEvents) =
             kotlin.run { uiEvents.emit(newState) }
 
-        override val observe: SharedFlow<ListsUiEvents> = uiEvents
+        override val observe: SharedFlow<ListsUiEvents> = uiEvents.asSharedFlow()
     }
 
     /**

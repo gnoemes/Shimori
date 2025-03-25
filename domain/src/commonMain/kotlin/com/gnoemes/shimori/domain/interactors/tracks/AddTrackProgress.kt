@@ -2,7 +2,7 @@ package com.gnoemes.shimori.domain.interactors.tracks
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.lists.ListsStateBus
-import com.gnoemes.shimori.data.lists.ListsUiEvents
+import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext

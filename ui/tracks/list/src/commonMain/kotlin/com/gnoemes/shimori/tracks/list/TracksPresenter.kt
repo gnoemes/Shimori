@@ -79,18 +79,29 @@ class TracksPresenter(
         val tracksExist by observeTracksExist.value.flow.collectAsRetainedState(false)
         val firstSyncLoading by listsState.tracksLoading.observe.collectAsState(false)
 
-        val sortOptions = remember(type) { ListSortOption.priorityForType(type) }
+        val sortOptions by remember(type) {
+            derivedStateOf {
+                ListSortOption.priorityForType(type)
+            }
+        }
 
-        val retainedPagingInteractor = rememberRetained { observeItems.value }
-        val items = retainedPagingInteractor.flow
-            .filterIsInstance<PagingData<TitleWithTrackEntity>>()
+        val retainedPagingInteractor = rememberRetained(type, status, sort) { observeItems.value }
+        //remember flow too. Presenter recompositions causes unwanted list update
+        val itemsFlow = remember(type, status, sort) {
+            retainedPagingInteractor.flow
+                .filterIsInstance<PagingData<TitleWithTrackEntity>>()
+        }
+        val items = itemsFlow
             .rememberRetainedCachedPagingFlow()
             .collectAsLazyPagingItems()
 
-        val message by uiMessageManager.message.collectAsState(null)
-
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
+
+        val message by uiMessageManager.message.collectAsState(null)
+
+        val isMenuButtonVisible = (isCompact || isMedium) && tracksExist
+        prefs.nestedScaffoldContainsFab = isMenuButtonVisible
 
         LaunchedEffect(type, status, sort) {
             retainedPagingInteractor(
@@ -114,6 +125,7 @@ class TracksPresenter(
         val eventSink: CoroutineScope.(TracksUiEvent) -> Unit = { event ->
             when (event) {
                 is TracksUiEvent.OpenSettings -> navigator.goTo(SettingsScreen)
+
                 is TracksUiEvent.AddOneToProgress -> launchOrThrow {
                     addTrackProgress.value(AddTrackProgress.Params(+1, event.track))
                 }
@@ -122,18 +134,30 @@ class TracksPresenter(
                     changeSort.value(UpdateListSort.Params(event.sort))
                 }
 
-                is TracksUiEvent.OpenDetails -> TODO()
+                is TracksUiEvent.OpenDetails -> launchOrThrow {
+
+                }
+
                 is TracksUiEvent.OpenEdit -> {
                     val screen = TrackEditScreen(
-                        event.title.id,
-                        event.title.type,
-                        predefinedStatus = null
+                        event.targetId,
+                        event.targetType,
+                        predefinedStatus = event.predefinedStatus
                     )
 
                     if (isCompact) navigator.goTo(screen)
                     else scope.launchOrThrow {
                         overlayHost.showInSideSheet(screen)
                     }
+                }
+
+                is TracksUiEvent.ClearMessage -> launchOrThrow {
+                    uiMessageManager.clearMessage(event.id)
+                }
+
+                is TracksUiEvent.ActionMessage -> launchOrThrow {
+                    val actionMessage = uiMessageManager.get(event.id)
+                    uiMessageManager.clearMessage(event.id)
                 }
 
                 TracksUiEvent.OpenMenu -> {
@@ -154,7 +178,7 @@ class TracksPresenter(
         return TracksUiState(
             type = type,
             status = status,
-            isMenuButtonVisible = (isCompact || isMedium) && tracksExist,
+            isMenuButtonVisible = isMenuButtonVisible,
             isMenuVisible = isExpanded && tracksExist,
             sort = sort,
             sortOptions = sortOptions,

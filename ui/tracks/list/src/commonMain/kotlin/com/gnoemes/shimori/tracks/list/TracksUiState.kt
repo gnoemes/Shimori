@@ -16,7 +16,7 @@ import com.slack.circuit.runtime.CircuitUiState
 data class TracksUiState(
     val type: TrackTargetType,
     val status: TrackStatus,
-    val sort : ListSort,
+    val sort: ListSort,
     val isMenuButtonVisible: Boolean,
     val isMenuVisible: Boolean,
     val sortOptions: List<ListSortOption>,
@@ -30,7 +30,16 @@ sealed interface TracksUiEvent : CircuitUiEvent {
     data object OpenSettings : TracksUiEvent
     data object OpenMenu : TracksUiEvent
     data class AddOneToProgress(val track: Track) : TracksUiEvent
-    data class OpenDetails(val title : TitleWithTrackEntity) : TracksUiEvent
-    data class OpenEdit(val title : TitleWithTrackEntity) : TracksUiEvent
+    data class OpenDetails(val title: TitleWithTrackEntity) : TracksUiEvent
+    data class OpenEdit(
+        val targetId: Long,
+        val targetType: TrackTargetType,
+        val predefinedStatus: TrackStatus? = null
+    ) : TracksUiEvent {
+        constructor(title: TitleWithTrackEntity) : this(title.id, title.type, null)
+    }
+
     data class ChangeSort(val sort: ListSort) : TracksUiEvent
+    data class ClearMessage(val id: Long) : TracksUiEvent
+    data class ActionMessage(val id: Long) : TracksUiEvent
 }

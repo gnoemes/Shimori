@@ -24,6 +24,7 @@ class ShimoriPreferencesImpl(
         const val CURRENT_CATALOGUE_SOURCE = "CURRENT_CATALOGUE_SOURCE"
         const val PREFERRED_LIST = "PREFERRED_LIST"
         const val PREFERRED_STATUS = "PREFERRED_STATUS"
+        const val SCAFFOLD_FAB = "SCAFFOLD_FAB"
     }
 
     override var currentCatalogueSource: String?
@@ -43,6 +44,13 @@ class ShimoriPreferencesImpl(
 
     override fun observePreferredListStatus(): Flow<String> =
         flowSettings.getStringFlow(PREFERRED_STATUS, "WATCHING")
+
+    override var nestedScaffoldContainsFab: Boolean
+        get() = storage.getBoolean(SCAFFOLD_FAB, false)
+        set(value) = storage.putBoolean(SCAFFOLD_FAB, value)
+
+    override fun observeNestedScaffoldContainsFab(): Flow<Boolean> =
+        flowSettings.getBooleanFlow(SCAFFOLD_FAB, false)
 
     override fun setInt(key: String, value: Int) {
         storage.putInt(key, value)
