@@ -7,7 +7,7 @@ kotlininject-anvil = "0.1.2"
 kotlininject = "0.7.2"
 multiplatformsettings = "1.2.0"
 paging-multiplatform = "3.3.0-alpha02-0.4.0"
-circuit = "0.25.0"
+circuit = "0.26.0"
 apollo = "4.1.0"
 oidc = "0.12.0"
 
