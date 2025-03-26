@@ -267,7 +267,6 @@ private fun TrackEditUiContent(
     val state = rememberLazyListState()
     Box(
         modifier = Modifier.fillMaxSize()
-            .padding(bottom = paddingValue.calculateBottomPadding())
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -315,7 +314,7 @@ private fun TrackEditUiContent(
                                         )
                                     },
                                     leadingIcon = {
-                                        if(isSelected) {
+                                        if (isSelected) {
                                             Icon(
                                                 painterResource(icons.trackStatusIcon(status)),
                                                 contentDescription = null,
@@ -495,6 +494,7 @@ private fun TrackEditUiContent(
                 .align(Alignment.BottomCenter)
                 .zIndex(1f)
                 .padding(20.dp)
+                .padding(bottom = paddingValue.calculateBottomPadding())
         ) {
             androidx.compose.material3.Button(
                 onClick = save,

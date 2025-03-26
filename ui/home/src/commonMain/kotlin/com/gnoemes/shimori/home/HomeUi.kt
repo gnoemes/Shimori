@@ -4,7 +4,6 @@ package com.gnoemes.shimori.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -53,7 +52,6 @@ import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -248,7 +246,6 @@ private fun HomeUi(
                 exit = fadeOut() + slideOutVertically { it }
             ) {
                 HomeNavigationBar(
-                    backStackSize = backstack.size,
                     selectedNavigation = rootScreen,
                     navigationItems = navigationItems,
                     onNavigationSelected = {
@@ -355,7 +352,6 @@ private fun HomeNavigationRail(
 
 @Composable
 private fun HomeNavigationBar(
-    backStackSize: Int,
     selectedNavigation: Screen,
     navigationItems: List<HomeNavigationItem>,
     onNavigationSelected: (Screen) -> Unit,
@@ -363,22 +359,16 @@ private fun HomeNavigationBar(
     modifier: Modifier = Modifier,
 ) {
     val surface = MaterialTheme.colorScheme.surface
-    val surfaceContainer = MaterialTheme.colorScheme.surfaceContainer
 
-    val color by animateColorAsState(
-        if (backStackSize == 1) surface
-        else surfaceContainer
-    )
-    val brush = if (backStackSize == 1) Brush.verticalGradient(
+    val brush = Brush.verticalGradient(
         colorStops = arrayOf(
-            0f to color.copy(alpha = 0f),
-            .22f to color.copy(alpha = 0.6f),
-            .54f to color.copy(alpha = 0.9f),
-            1f to color,
+            0f to surface.copy(alpha = 0f),
+            .22f to surface.copy(alpha = 0.6f),
+            .54f to surface.copy(alpha = 0.9f),
+            1f to surface,
         ),
         tileMode = TileMode.Clamp
     )
-    else SolidColor(color)
 
     Box(
         modifier = modifier
