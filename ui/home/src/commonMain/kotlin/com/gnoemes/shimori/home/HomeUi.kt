@@ -35,7 +35,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -61,8 +60,8 @@ import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
+import com.gnoemes.shimori.common.compose.NestedScaffold
 import com.gnoemes.shimori.common.compose.isCompact
-import com.gnoemes.shimori.common.compose.isKeyboardVisible
 import com.gnoemes.shimori.common.compose.ui.PersonCover
 import com.gnoemes.shimori.common.compose.ui.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.ui.UiMessage
@@ -216,7 +215,7 @@ private fun HomeUi(
         }
     }
 
-    Scaffold(
+    NestedScaffold(
         modifier = modifier,
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
@@ -227,9 +226,7 @@ private fun HomeUi(
                         ShimoriSnackbar(
                             data = data,
                             message = message,
-                            dismissAction = {
-                                message?.let(onMessageAction)
-                            }
+                            dismissAction = { message?.let(onMessageAction) }
                         )
                     },
                     modifier = Modifier.padding(bottom = 24.dp)
@@ -268,15 +265,9 @@ private fun HomeUi(
                 )
             }
         }
-    ) { paddingValue ->
+    ) {
         Row(
             modifier = Modifier.fillMaxSize()
-                .then(
-                    //add navigation bar inset for non root screens
-                    if (!density.isKeyboardVisible() && navigationType == NavigationType.BOTTOM_NAVIGATION && backstack.size > 1)
-                        Modifier.padding(bottom = paddingValue.calculateBottomPadding())
-                    else Modifier
-                )
         ) {
             AnimatedVisibility(
                 navigationType == NavigationType.RAIL

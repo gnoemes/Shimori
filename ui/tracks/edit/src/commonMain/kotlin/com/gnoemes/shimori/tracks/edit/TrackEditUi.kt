@@ -32,7 +32,6 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
@@ -60,6 +59,7 @@ import androidx.compose.ui.zIndex
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.compose.NestedScaffold
 import com.gnoemes.shimori.common.compose.ProgressNumberVisualTransformation
 import com.gnoemes.shimori.common.compose.itemSpacer
 import com.gnoemes.shimori.common.compose.mouseWheelNestedScrollConnectionFix
@@ -147,7 +147,7 @@ private fun TrackEditUi(
     val behavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollBehavior by remember(behavior) { mutableStateOf(behavior) }
 
-    Scaffold(
+    NestedScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             val isCollapsed by remember(scrollBehavior.state) { derivedStateOf { scrollBehavior.state.collapsedFraction == 1f } }
@@ -267,6 +267,7 @@ private fun TrackEditUiContent(
     val state = rememberLazyListState()
     Box(
         modifier = Modifier.fillMaxSize()
+            .padding(bottom = paddingValue.calculateBottomPadding())
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()

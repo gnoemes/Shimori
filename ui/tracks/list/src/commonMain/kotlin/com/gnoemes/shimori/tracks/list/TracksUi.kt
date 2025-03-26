@@ -368,7 +368,7 @@ private fun TracksUiContent(
                     }
                 }
 
-                itemSpacer(paddingValues.calculateBottomPadding() + 68.dp)
+                itemSpacer(paddingValues.calculateBottomPadding() + 92.dp)
             }
         }
 
