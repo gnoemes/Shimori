@@ -1,6 +1,8 @@
 package com.gnoemes.shimori.data.daos
 
 import app.cash.paging.PagingSource
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
@@ -13,6 +15,9 @@ import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.util.long
 import com.gnoemes.shimori.data.util.mangaListViewMapper
 import com.gnoemes.shimori.logging.api.Logger
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -26,6 +31,15 @@ class MangaAndRanobeQueryableDaoImpl(
     private val logger: Logger,
     private val dispatchers: AppCoroutineDispatchers,
 ) : MangaAndRanobeQueryableDao(), SqlDelightQueryableDao<ShimoriTitleEntity> {
+
+    override fun observeStatusExists(status: TrackStatus): Flow<Boolean> {
+        return db.mangaAndRanobeUnionQueries.countWithStatus(status)
+            .asFlow()
+            .mapToOneOrNull(dispatchers.io)
+            .map { it != null && it > 0 }
+            .flowOn(dispatchers.io)
+    }
+
     override fun paging(status: TrackStatus, sort: ListSort): PagingSource<Int, PaginatedEntity> {
         fun query(
             limit: Long,

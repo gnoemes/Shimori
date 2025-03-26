@@ -20,6 +20,7 @@ data class TracksUiState(
     val isMenuButtonVisible: Boolean,
     val isMenuVisible: Boolean,
     val sortOptions: List<ListSortOption>,
+    val itemsExist : Boolean,
     val items: LazyPagingItems<TitleWithTrackEntity>,
     val firstSyncLoading: Boolean,
     val uiMessage: UiMessage?,

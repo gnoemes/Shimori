@@ -33,6 +33,7 @@ class AnimeRepository(
     fun observeVideos(id: Long) = videoStore.dao.observeByTitleId(id)
     fun observeScreenshots(id: Long) = screenshotStore.dao.observeByTitleId(id)
     fun paging(status: TrackStatus, sort: ListSort) = store.dao.paging(status, sort)
+    fun observeStatusExists(status: TrackStatus) = store.dao.observeStatusExists(status)
 
     suspend fun syncTracked(
         user: UserShort,

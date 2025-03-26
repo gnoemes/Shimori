@@ -16,6 +16,8 @@ abstract class AnimeDao : EntityDao<Anime> {
     abstract fun observeById(id: Long): Flow<AnimeWithTrack?>
     abstract fun observeCalendar(): Flow<List<AnimeWithTrack>>
 
+    abstract fun observeStatusExists(status: TrackStatus): Flow<Boolean>
+
     abstract fun paging(
         status: TrackStatus,
         sort: ListSort,

@@ -31,6 +31,7 @@ import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.domain.interactors.UpdateListSort
 import com.gnoemes.shimori.domain.interactors.tracks.AddTrackProgress
 import com.gnoemes.shimori.domain.observers.ObserveListPage
+import com.gnoemes.shimori.domain.observers.ObserveListPageExist
 import com.gnoemes.shimori.domain.observers.ObserveListSort
 import com.gnoemes.shimori.domain.observers.ObserveTracksExist
 import com.gnoemes.shimori.preferences.ShimoriPreferences
@@ -57,9 +58,10 @@ class TracksPresenter(
     private val listsState: ListsStateBus,
     private val observeItems: Lazy<ObserveListPage>,
     private val observeSort: Lazy<ObserveListSort>,
+    private val observeItemsExist: Lazy<ObserveListPageExist>,
     private val observeTracksExist: Lazy<ObserveTracksExist>,
     private val addTrackProgress: Lazy<AddTrackProgress>,
-    private val changeSort: Lazy<UpdateListSort>,
+    private val changeSort: Lazy<UpdateListSort>
 ) : Presenter<TracksUiState> {
 
     @Composable
@@ -78,6 +80,7 @@ class TracksPresenter(
 
         val tracksExist by observeTracksExist.value.flow.collectAsRetainedState(false)
         val firstSyncLoading by listsState.tracksLoading.observe.collectAsState(false)
+        val itemsExist by observeItemsExist.value.flow.collectAsState(true)
 
         val sortOptions by remember(type) {
             derivedStateOf {
@@ -112,6 +115,10 @@ class TracksPresenter(
                     pagingConfig = PAGING_CONFIG
                 )
             )
+        }
+
+        LaunchedEffect(type, status) {
+            observeItemsExist.value(ObserveListPageExist.Params(type, status))
         }
 
         LaunchedEffect(type) {
@@ -182,6 +189,7 @@ class TracksPresenter(
             isMenuVisible = isExpanded && tracksExist,
             sort = sort,
             sortOptions = sortOptions,
+            itemsExist = itemsExist,
             items = items,
             firstSyncLoading = firstSyncLoading,
             uiMessage = message,

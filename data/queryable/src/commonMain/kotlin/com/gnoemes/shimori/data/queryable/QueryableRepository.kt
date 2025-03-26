@@ -16,6 +16,7 @@ class QueryableRepository(
     private val logger: Logger,
     private val transactionRunner: DatabaseTransactionRunner
 ) {
+    fun observeStatusExists(status: TrackStatus) = mangaAndRanobeQueryableDao.observeStatusExists(status)
     fun pagingMangaAndRanobe(status: TrackStatus, sort: ListSort) = mangaAndRanobeQueryableDao.paging(status, sort)
 
 }

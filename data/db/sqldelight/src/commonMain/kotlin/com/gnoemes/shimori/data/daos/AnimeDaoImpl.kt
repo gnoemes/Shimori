@@ -25,6 +25,7 @@ import com.gnoemes.shimori.data.util.long
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -132,6 +133,14 @@ class AnimeDaoImpl(
 
     override fun observeCalendar(): Flow<List<AnimeWithTrack>> {
         TODO("Not yet implemented")
+    }
+
+    override fun observeStatusExists(status: TrackStatus): Flow<Boolean> {
+        return db.animeQueries.countWithStatus(status)
+            .asFlow()
+            .mapToOneOrNull(dispatchers.io)
+            .map { it != null && it > 0 }
+            .flowOn(dispatchers.io)
     }
 
     override fun paging(

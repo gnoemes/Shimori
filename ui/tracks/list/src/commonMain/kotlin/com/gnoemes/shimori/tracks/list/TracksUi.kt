@@ -95,6 +95,7 @@ import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
+import com.gnoemes.shimori.screens.TracksEmptyScreen
 import com.gnoemes.shimori.screens.TracksMenuScreen
 import com.gnoemes.shimori.screens.TracksScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -216,25 +217,25 @@ private fun TracksUi(
                 }
             }
         ) {
-//            if () {
-//                CircuitContent(TracksEmptyScreen)
-//            } else {
-            TracksUiContent(
-                scrollConnection = scrollConnection,
-                paddingValues = it,
-                widthSizeClass = widthSizeClass,
-                type = state.type,
-                status = state.status,
-                sort = state.sort,
-                items = state.items,
-                sortOptions = state.sortOptions,
-                firstSyncLoading = state.firstSyncLoading,
-                addOneToProgress = addOneToProgress,
-                changeSort = changeSort,
-                openEdit = openEdit,
-                openDetails = openDetails
-            )
-//            }
+            if (!state.itemsExist) {
+                CircuitContent(TracksEmptyScreen)
+            } else {
+                TracksUiContent(
+                    scrollConnection = scrollConnection,
+                    paddingValues = it,
+                    widthSizeClass = widthSizeClass,
+                    type = state.type,
+                    status = state.status,
+                    sort = state.sort,
+                    items = state.items,
+                    sortOptions = state.sortOptions,
+                    firstSyncLoading = state.firstSyncLoading,
+                    addOneToProgress = addOneToProgress,
+                    changeSort = changeSort,
+                    openEdit = openEdit,
+                    openDetails = openDetails
+                )
+            }
         }
 
 
