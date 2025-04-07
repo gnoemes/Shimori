@@ -4,15 +4,17 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import me.tatarka.inject.annotations.Inject
+import kotlinx.datetime.format.MonthNames
 
-@Inject
-class ShimoriDateTextFormatter() {
+class ShimoriDateTextFormatter(
+    private val monthsShort: MonthNames,
+    private val monthsFull: MonthNames,
+) {
     fun formatShortTime(instant: Instant): String = instant.toString()
-    fun formatShortDate(date: LocalDate): String= date.toString()
-    fun formatMediumDate(instant: Instant): String= instant.toString()
+    fun formatShortDate(date: LocalDate): String = date.toString()
+    fun formatMediumDate(instant: Instant): String = instant.toString()
     fun formatMediumDate(date: LocalDate): String = date.toString()
-    fun formatMediumDateTime(instant: Instant): String= instant.toString()
+    fun formatMediumDateTime(instant: Instant): String = instant.toString()
     fun formatRelativeTime(
         instant: Instant,
         reference: Instant = Clock.System.now()

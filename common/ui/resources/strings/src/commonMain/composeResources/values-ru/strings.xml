@@ -214,5 +214,32 @@
     <string name="search_catalog_hint">Тайтлы, персонажи или люди</string>
     <string name="title_characters_search_hint">Персонаж</string>
     <string name="title_note_hint">По умолчанию все видят твои заметки на списке.</string>
+    <string name="title_score">Оценка</string>
     <string name="List_item_current_state">Сейчас</string>
+
+    <string name="month_jan_short">Янв</string>
+    <string name="month_feb_short">Фев</string>
+    <string name="month_mar_short">Мар</string>
+    <string name="month_apr_short">Апр</string>
+    <string name="month_may_short">Май</string>
+    <string name="month_jun_short">Июн</string>
+    <string name="month_jul_short">Июл</string>
+    <string name="month_aug_short">Авг</string>
+    <string name="month_sep_short">Сен</string>
+    <string name="month_oct_short">Окт</string>
+    <string name="month_nov_short">Ноя</string>
+    <string name="month_dec_short">Дек</string>
+
+    <string name="month_jan">Январь</string>
+    <string name="month_feb">Февраль</string>
+    <string name="month_mar">Март</string>
+    <string name="month_apr">Апрель</string>
+    <string name="month_may">Май</string>
+    <string name="month_jun">Июнь</string>
+    <string name="month_jul">Июль</string>
+    <string name="month_aug">Август</string>
+    <string name="month_sep">Сентябрь</string>
+    <string name="month_oct">Октябрь</string>
+    <string name="month_nov">Ноябрь</string>
+    <string name="month_dec">Декабрь</string>
 </resources>

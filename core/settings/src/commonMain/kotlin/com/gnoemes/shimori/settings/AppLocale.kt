@@ -1,7 +1,5 @@
 package com.gnoemes.shimori.settings
 
-import kotlin.jvm.JvmInline
-
 @JvmInline
 value class AppLocale private constructor(val value: Int) {
     companion object {
@@ -13,9 +11,15 @@ value class AppLocale private constructor(val value: Int) {
             else -> English
         }
 
-        fun from(locale : Int) = when(locale) {
+        fun from(locale: Int) = when (locale) {
             0 -> Russian
             else -> English
         }
+
+        fun AppLocale.toTag(): String = when (this) {
+            Russian -> "ru"
+            else -> "en"
+        }
+
     }
 }
