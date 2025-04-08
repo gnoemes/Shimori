@@ -47,6 +47,8 @@ kotlin {
                 api(projects.ui.tracks.menu)
                 api(projects.ui.tracks.edit)
 
+                api(projects.ui.title.details)
+
                 api(libs.graphql.apollo)
 
                 api(libs.slf4j)

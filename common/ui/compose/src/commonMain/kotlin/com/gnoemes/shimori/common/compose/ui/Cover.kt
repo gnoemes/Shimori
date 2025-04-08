@@ -27,7 +27,7 @@ import com.gnoemes.shimori.data.common.ShimoriImage
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun PersonCover(
+fun ProfileCover(
     image: ShimoriImage?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
@@ -97,5 +97,36 @@ fun TrackCover(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun CharacterCover(
+    image: ShimoriImage?,
+    modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clip(shape)
+    ) {
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalPlatformContext.current)
+                .data(image)
+                .apply {
+                    crossfade(true)
+                }
+                .build(),
+            modifier = Modifier
+                .matchParentSize()
+                .combinedClickable(
+                    onClick = onClick
+                ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+
     }
 }

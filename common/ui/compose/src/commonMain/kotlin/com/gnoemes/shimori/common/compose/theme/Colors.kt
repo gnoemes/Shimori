@@ -38,6 +38,9 @@ val accentGreen = Color(0xFF43a047)
 val accentBlue = Color(0xFF1e88e5)
 val accentPurple = Color(0xFF5e35b1)
 
+val favorite = Color(0xFFF13737)
+val favoriteContainer = Color(0xFF751717)
+
 val lightError = Color(0xFFBA1B1B)
 val lightOnError = Color(0xFFFFFFFF)
 val lightErrorContainer = Color(0xFFFFDAD4)

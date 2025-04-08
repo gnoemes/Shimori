@@ -34,6 +34,12 @@ DELETE FROM character_role WHERE character_id = :id;
 queryByTitle:
 SELECT c.* FROM character_role AS cr
 INNER JOIN character AS c ON cr.character_id = c.id
+WHERE target_id = :targetId AND target_type = :target_type
+LIMIT :limit OFFSET :offset;
+
+countByTitle:
+SELECT COUNT(*) FROM character_role AS cr
+INNER JOIN character AS c ON cr.character_id = c.id
 WHERE target_id = :targetId AND target_type = :target_type;
 
 queryByCharacterId:

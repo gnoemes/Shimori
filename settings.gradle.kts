@@ -100,6 +100,8 @@ include(
     ":ui:tracks:menu",
     ":ui:tracks:edit",
 
+    ":ui:title:details",
+
     ":app:core",
     ":app:complete",
 

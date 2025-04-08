@@ -52,6 +52,13 @@ data class TrackEditScreen(
         )
 }
 
+
+@Parcelize
+data class TitleDetailsScreen(
+    val id: Long,
+    val type: TrackTargetType
+) : ShimoriScreen("TitleDetails()")
+
 @Parcelize
 object MockScreen : ShimoriScreen("Mock()")
 

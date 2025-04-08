@@ -2,7 +2,7 @@
 napier = "2.6.1"
 ktor = "3.0.2"
 sqlDelight = "2.0.2"
-coil = "3.0.4"
+coil = "3.1.0"
 kotlininject-anvil = "0.1.2"
 kotlininject = "0.7.2"
 multiplatformsettings = "1.2.0"

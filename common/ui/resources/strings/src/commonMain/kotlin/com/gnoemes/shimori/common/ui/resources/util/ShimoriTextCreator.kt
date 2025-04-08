@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import com.gnoemes.shimori.base.extensions.twoDigitsString
 import com.gnoemes.shimori.common.ui.resources.strings.anime
 import com.gnoemes.shimori.common.ui.resources.strings.anons_date_format
 import com.gnoemes.shimori.common.ui.resources.strings.day_short
@@ -22,6 +23,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.manga
 import com.gnoemes.shimori.common.ui.resources.strings.manga_and_ranobe
 import com.gnoemes.shimori.common.ui.resources.strings.minute_short
 import com.gnoemes.shimori.common.ui.resources.strings.ongoing_episode_format
+import com.gnoemes.shimori.common.ui.resources.strings.progress_format
 import com.gnoemes.shimori.common.ui.resources.strings.ranobe
 import com.gnoemes.shimori.common.ui.resources.strings.rate_del_snack
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_anime_re_watching
@@ -39,7 +41,10 @@ import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_dark
 import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_light
 import com.gnoemes.shimori.common.ui.resources.strings.settings_theme_system
 import com.gnoemes.shimori.common.ui.resources.strings.status_anons
+import com.gnoemes.shimori.common.ui.resources.strings.status_discontinued
 import com.gnoemes.shimori.common.ui.resources.strings.status_ongoing
+import com.gnoemes.shimori.common.ui.resources.strings.status_paused
+import com.gnoemes.shimori.common.ui.resources.strings.title_ep_duration_format
 import com.gnoemes.shimori.common.ui.resources.strings.today
 import com.gnoemes.shimori.common.ui.resources.strings.type_doujin
 import com.gnoemes.shimori.common.ui.resources.strings.type_light_novel
@@ -58,6 +63,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.undo
 import com.gnoemes.shimori.data.ShimoriContentEntity
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
+import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeType
@@ -86,6 +92,7 @@ class ShimoriTextCreator(
     private val titlesLocale: AppTitlesLocale,
 ) {
     val divider by lazy { "•" }
+    val dateDivider by lazy { "—" }
 
     @Composable
     inline fun build(crossinline block: @Composable ShimoriTextCreator.() -> Unit) =
@@ -201,8 +208,13 @@ class ShimoriTextCreator(
         }
 
     @Composable
-    private fun Anime.status(): AnnotatedString? {
+    private fun Anime.status(
+        releaseFull: Boolean = false,
+        ongoingWithNextEpisode: Boolean = true,
+    ): AnnotatedString? {
         return when (status) {
+            TitleStatus.DISCONTINUED -> stringResource(Strings.status_discontinued).colorSpan()
+            TitleStatus.PAUSED -> stringResource(Strings.status_paused).colorSpan()
             TitleStatus.ANONS -> {
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 val date = dateAired
@@ -228,6 +240,12 @@ class ShimoriTextCreator(
             }
 
             TitleStatus.ONGOING -> {
+                if (!ongoingWithNextEpisode) {
+                    return dateAired?.year?.let {
+                        "$it$dateDivider".colorSpan()
+                    } ?: stringResource(Strings.status_ongoing).colorSpan()
+                }
+
                 val date = nextEpisodeDate
                 val episode = nextEpisode
 
@@ -263,12 +281,29 @@ class ShimoriTextCreator(
                     }
                 }
 
-                return dateReleased?.year?.let {
-                    "$it—".colorSpan()
+                return dateAired?.year?.let {
+                    "$it$dateDivider".colorSpan()
                 } ?: stringResource(Strings.status_ongoing).colorSpan()
             }
 
-            TitleStatus.RELEASED -> dateReleased?.year?.toString()?.let { AnnotatedString(it) }
+            TitleStatus.RELEASED -> {
+                if (releaseFull && dateReleased != null && dateAired != null) {
+                    "${formatter.formatMediumDate(dateAired!!)} $dateDivider ${
+                        formatter.formatMediumDate(dateReleased!!)
+                    }".let { AnnotatedString(it) }
+                } else dateReleased?.year?.toString()?.let { AnnotatedString(it) }
+            }
+
+            else -> null
+        }
+    }
+
+    @Composable
+    fun ShimoriTitleEntity.type(): String? {
+        return when (this) {
+            is Anime -> type()
+            is Manga -> type()
+            is Ranobe -> type()
             else -> null
         }
     }
@@ -309,10 +344,15 @@ class ShimoriTextCreator(
     }
 
     @Composable
-    fun ShimoriTitleEntity.status(): AnnotatedString? {
-        if (this is Anime) return status()
+    fun ShimoriTitleEntity.status(
+        releaseFull: Boolean = false,
+        fullOngoing: Boolean = true,
+    ): AnnotatedString? {
+        if (this is Anime) return status(releaseFull, fullOngoing)
 
         return when (status) {
+            TitleStatus.DISCONTINUED -> stringResource(Strings.status_discontinued).colorSpan()
+            TitleStatus.PAUSED -> stringResource(Strings.status_paused).colorSpan()
             TitleStatus.ANONS -> {
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 dateReleased?.daysUntil(now.date)?.let {
@@ -327,6 +367,91 @@ class ShimoriTextCreator(
                 } ?: stringResource(Strings.status_ongoing).colorSpan()
 
             else -> dateReleased?.year?.toString()?.let { AnnotatedString(it) }
+        }
+    }
+
+    @Composable
+    fun ShimoriTitleEntity.size(): AnnotatedString? {
+        val format = stringResource(Strings.progress_format)
+        return when (this) {
+            is Anime -> size()
+            is Manga -> size?.let {
+                format.format(
+                    chapters,
+                    chaptersOrUnknown
+                ).colorSpan()
+            }
+
+            is Ranobe -> size?.let {
+                format.format(
+                    chapters,
+                    chaptersOrUnknown
+                ).colorSpan()
+            }
+
+            else -> null
+        }
+    }
+
+    @Composable
+    fun Anime.size(): AnnotatedString? {
+        val format = stringResource(Strings.progress_format)
+
+        if (isOngoing) {
+            val date = nextEpisodeDate
+            val episode = nextEpisode
+
+            val ongoingPart = if (date != null && episode != null) {
+                val now = Clock.System.now()
+                if (date > now) {
+                    val ongoingFormat = stringResource(Strings.ongoing_episode_format)
+                    val hours = now.until(date, DateTimeUnit.HOUR)
+                    val days = now.daysUntil(date, TimeZone.currentSystemDefault())
+
+                    when {
+                        hours < 1 -> {
+                            val minutes = now.until(date, DateTimeUnit.MINUTE)
+                            ongoingFormat.format(
+                                episode,
+                                minutes,
+                                stringResource(Strings.minute_short)
+                            ).colorSpan()
+                        }
+
+                        days < 1 -> {
+                            ongoingFormat.format(
+                                episode,
+                                hours,
+                                stringResource(Strings.hour_short)
+                            ).colorSpan()
+                        }
+
+                        else -> {
+                            ongoingFormat.format(
+                                episode,
+                                days,
+                                stringResource(Strings.day_short)
+                            ).colorSpan()
+                        }
+                    }
+                } else null
+            } else null
+
+            val episodes = format.format(
+                episodesAired,
+                episodesOrUnknown
+            )
+
+            if (ongoingPart != null) {
+                return "$episodes, $ongoingPart".colorSpan()
+            }
+
+            return episodes.colorSpan()
+        } else {
+            return format.format(
+                episodesAired,
+                episodesOrUnknown
+            ).colorSpan()
         }
     }
 
@@ -353,55 +478,41 @@ class ShimoriTextCreator(
         }
     }
 
-//
-//    fun scoreDescription(score: Double?): String? {
-//        if (score == null || score == 0.0) return null
-//        //TODO score format
-//        return score.toString()
-//    }
-//
-//
-//    fun releaseDate(title: ShimoriTitleEntity): String? {
-//        if (title.status == TitleStatus.DISCONTINUED) {
-//            return textProvider[MessageID.Discontinued]
-//        }
-//
-//        val date = title.dateReleased ?: return null
-//        return buildString {
-//            append(formatter.formatMediumDate(date))
-//
-//            if (title.isOngoing) {
-//                append("-")
-//            }
-//        }
-//    }
-//
-//    fun duration(anime: Anime): String? {
-//        val duration = anime.duration ?: return null
-//
-//        val format = textProvider[MessageID.EpisodeDurationFormat]
-//
-//        val hourText = textProvider[MessageID.HourShort]
-//        val minuteText = textProvider[MessageID.MinuteShort]
-//
-//        return if (duration == 60) {
-//            format.format(duration / 60, hourText)
-//        } else if (duration > 60) {
-//            format.format(duration, "${duration / 60} $hourText ${duration % 60} $minuteText")
-//        } else {
-//            format.format(duration, minuteText)
-//        }
-//    }
-//
-//    fun ageRating(ageRating: AgeRating): String? = when (ageRating) {
-//        AgeRating.RX -> "Rx"
-//        AgeRating.R_PLUS -> "R+"
-//        AgeRating.R -> "R-17"
-//        AgeRating.PG_13 -> "PG-13"
-//        AgeRating.PG -> "PG"
-//        AgeRating.G -> "G"
-//        else -> null
-//    }
+    @Composable
+    fun ShimoriTitleEntity.score(): String? {
+        if (rating == null || rating == 0.0) return null
+        return rating?.twoDigitsString()
+    }
+
+    @Composable
+    fun Anime.duration(): String? {
+        val duration = duration?.takeIf { it != 0 } ?: return null
+
+        val format = stringResource(Strings.title_ep_duration_format)
+
+        val hourText = stringResource(Strings.hour_short)
+        val minuteText = stringResource(Strings.minute_short)
+
+        return if (duration == 60) {
+            format.format(duration / 60, hourText)
+        } else if (duration > 60) {
+            format.format(duration, "${duration / 60} $hourText ${duration % 60} $minuteText")
+        } else {
+            format.format(duration, minuteText)
+        }
+    }
+
+    fun ShimoriTitleEntity.ageRating(): String? = when (ageRating) {
+        AgeRating.RX -> "Rx"
+        AgeRating.R_PLUS -> "R+"
+        AgeRating.R -> "R-17"
+        AgeRating.PG_13 -> "PG-13"
+        AgeRating.PG -> "PG"
+        AgeRating.G -> "G"
+        else -> null
+    }
+
+
 //
 //    fun genre(genre: Genre): String {
 //        return when (titlesLocale) {

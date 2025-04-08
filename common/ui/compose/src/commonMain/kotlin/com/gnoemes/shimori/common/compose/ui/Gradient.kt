@@ -74,7 +74,6 @@ fun Modifier.gradientBackground(
             .data(image)
             .size(Size.ORIGINAL)
             .build(),
-
         )
     val state = painter.state
     val dominantColorState = rememberDominantColorState(loader)
@@ -103,19 +102,37 @@ fun Modifier.gradientBackground(
 @Composable
 fun Modifier.gradientBackground(
     color: Color = MaterialTheme.colorScheme.secondary,
-    containerColor : Color = LocalAbsoluteTonalElevation.current.let {
+    containerColor: Color = LocalAbsoluteTonalElevation.current.let {
         MaterialTheme.colorScheme.surfaceColorAtElevation(it)
     }
 ): Modifier {
-    val dominantColorState = rememberDominantColorState(defaultColor = color)
 
     val brush = Brush.verticalGradient(
         colorStops = arrayOf(
-            0f to dominantColorState.color.copy(alpha = 0.2f),
-            .5f to dominantColorState.color.copy(alpha = 0.0f),
+            0f to color.copy(alpha = 0.2f),
+            .5f to color.copy(alpha = 0.0f),
             1f to containerColor,
         ),
         tileMode = TileMode.Clamp
+    )
+
+    return this.background(
+        brush = brush
+    )
+}
+
+
+@Composable
+fun Modifier.imageGradientBackground(
+    color: Color = MaterialTheme.colorScheme.surface,
+): Modifier {
+    val brush = Brush.verticalGradient(
+        colorStops = arrayOf(
+            0f to color.copy(alpha = 0.16f),
+            0.5f to color.copy(alpha = 0.76f),
+            1f to color,
+        ),
+        tileMode = TileMode.Clamp,
     )
 
     return this.background(

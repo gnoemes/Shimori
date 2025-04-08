@@ -60,7 +60,7 @@ import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.NestedScaffold
 import com.gnoemes.shimori.common.compose.isCompact
-import com.gnoemes.shimori.common.compose.ui.PersonCover
+import com.gnoemes.shimori.common.compose.ui.ProfileCover
 import com.gnoemes.shimori.common.compose.ui.ShimoriSnackbar
 import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
@@ -325,7 +325,7 @@ private fun HomeNavigationRail(
             NavigationRailItem(
                 icon = {
                     if (item is HomeNavigationItem.ImageNavigationItem && item.image != null) {
-                        PersonCover(image = item.image)
+                        ProfileCover(image = item.image)
                     } else {
                         HomeNavigationItemIcon(
                             item = item,
@@ -396,7 +396,7 @@ private fun HomeNavigationBar(
                     },
                     icon = {
                         if (item is HomeNavigationItem.ImageNavigationItem && item.image != null) {
-                            PersonCover(image = item.image)
+                            ProfileCover(image = item.image)
                         } else {
                             HomeNavigationItemIcon(
                                 item = item,

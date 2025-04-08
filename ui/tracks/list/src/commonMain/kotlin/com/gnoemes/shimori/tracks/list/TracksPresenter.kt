@@ -36,6 +36,7 @@ import com.gnoemes.shimori.domain.observers.ObserveListSort
 import com.gnoemes.shimori.domain.observers.ObserveTracksExist
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.screens.SettingsScreen
+import com.gnoemes.shimori.screens.TitleDetailsScreen
 import com.gnoemes.shimori.screens.TrackEditScreen
 import com.gnoemes.shimori.screens.TracksMenuScreen
 import com.gnoemes.shimori.screens.TracksScreen
@@ -142,7 +143,12 @@ class TracksPresenter(
                 }
 
                 is TracksUiEvent.OpenDetails -> launchOrThrow {
+                    val screen = TitleDetailsScreen(
+                        event.title.id,
+                        event.title.type,
+                    )
 
+                    navigator.goTo(screen)
                 }
 
                 is TracksUiEvent.OpenEdit -> {

@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.common.compose.ui
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,12 +44,39 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_add_one
 import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.common.ui.resources.icons.ic_star
 import com.gnoemes.shimori.data.TitleWithTrackEntity
+import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CharacterItem(
+    character: Character,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val textCreator = LocalShimoriTextCreator.current
+    Column(
+        modifier
+    ) {
+        CharacterCover(
+            character.image,
+            modifier = Modifier.width(132.dp)
+                .aspectRatio(4 / 3f),
+            onClick = onClick
+        )
+
+        Text(
+            textCreator {
+                character.name()
+            },
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleSmall
+        )
+    }
+}
+
 @Composable
 fun ColumnScope.ListItem(
     icon: Painter,

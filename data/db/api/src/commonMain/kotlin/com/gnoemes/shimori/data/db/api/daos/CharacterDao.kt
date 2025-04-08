@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data.db.api.daos
 
+import androidx.paging.PagingSource
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
@@ -17,7 +18,7 @@ abstract class CharacterDao : EntityDao<Character> {
     abstract fun observeByTitle(
         targetId: Long,
         targetType: TrackTargetType,
-    ): Flow<List<Character>>
+    ): PagingSource<Int, Character>
 
     abstract fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithTrack>>
     abstract fun observeCharacterMangas(id: Long): Flow<List<MangaWithTrack>>

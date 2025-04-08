@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.common.compose
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -12,3 +13,11 @@ actual fun Modifier.mouseWheelNestedScrollConnectionFix(
     state: LazyListState,
     scrollBehavior: TopAppBarScrollBehavior
 ): Modifier = this
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+actual fun Modifier.mouseWheelNestedScrollConnectionFix(
+    state : LazyGridState,
+    scrollBehavior: TopAppBarScrollBehavior,
+) : Modifier = this

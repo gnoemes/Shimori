@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
-import com.gnoemes.shimori.common.compose.ui.TonalButton
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_profile
 import com.gnoemes.shimori.common.ui.resources.strings.login
@@ -73,21 +74,24 @@ private fun AuthUi(
             Spacer(modifier = Modifier.height(32.dp))
 
             state.availableSources.forEach { source ->
-                TonalButton(
+                FilledTonalButton(
                     modifier = Modifier
                         .widthIn(max = 328.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     onClick = { signIn(source.id) },
-                    text = source.name,
-                    icon = {
+                    content = {
                         val icon = LocalShimoriIconsUtil.current.sourceIcon(source)
                         if (icon != null) {
                             Icon(
                                 painter = painterResource(icon),
                                 contentDescription = source.name
                             )
+
+                            Spacer(modifier = Modifier.width(8.dp))
                         }
+
+                        Text(text = source.name)
                     }
                 )
 

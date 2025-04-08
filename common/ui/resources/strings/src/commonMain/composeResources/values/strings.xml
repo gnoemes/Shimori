@@ -137,6 +137,7 @@
     <string name="calendar">Episodes calendar</string>
     <string name="title_type">Type</string>
     <string name="title_ep">Episodes</string>
+    <string name="title_chapters">Chapters</string>
     <string name="title_ep_duration">Duration</string>
     <string name="title_ep_duration_format" translatable="false">%d %s</string>
     <string name="inc_close">Drop to cancel</string>
@@ -229,59 +230,32 @@
     <string name="title_score">Score</string>
     <string name="List_item_current_state">Now</string>
 
-    <string name="month_jan_short">Jan</string>
-    <string name="month_feb_short">Feb</string>
-    <string name="month_mar_short">Mar</string>
-    <string name="month_apr_short">Apr</string>
-    <string name="month_may_short">May</string>
-    <string name="month_jun_short">Jun</string>
-    <string name="month_jul_short">Jul</string>
-    <string name="month_aug_short">Aug</string>
-    <string name="month_sep_short">Sep</string>
-    <string name="month_oct_short">Oct</string>
-    <string name="month_nov_short">Nov</string>
-    <string name="month_dec_short">Dec</string>
-
-    <string name="month_jan">January</string>
-    <string name="month_feb">February</string>
-    <string name="month_mar">March</string>
-    <string name="month_apr">April</string>
-    <string name="month_may">May</string>
-    <string name="month_jun">June</string>
-    <string name="month_jul">July</string>
-    <string name="month_aug">August</string>
-    <string name="month_sep">September</string>
-    <string name="month_oct">October</string>
-    <string name="month_nov">November</string>
-    <string name="month_dec">December</string>
-
-    <string-array name="months_short" translatable="false">
-        <item>@string/month_jan_short</item>
-        <item>@string/month_feb_short</item>
-        <item>@string/month_mar_short</item>
-        <item>@string/month_apr_short</item>
-        <item>@string/month_may_short</item>
-        <item>@string/month_jun_short</item>
-        <item>@string/month_jul_short</item>
-        <item>@string/month_aug_short</item>
-        <item>@string/month_sep_short</item>
-        <item>@string/month_oct_short</item>
-        <item>@string/month_nov_short</item>
-        <item>@string/month_dec_short</item>
+    <string-array name="months_short">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
     </string-array>
-
-    <string-array name="months_full" translatable="false">
-        <item>@string/month_jan</item>
-        <item>@string/month_feb</item>
-        <item>@string/month_mar</item>
-        <item>@string/month_apr</item>
-        <item>@string/month_may</item>
-        <item>@string/month_jun</item>
-        <item>@string/month_jul</item>
-        <item>@string/month_aug</item>
-        <item>@string/month_sep</item>
-        <item>@string/month_oct</item>
-        <item>@string/month_nov</item>
-        <item>@string/month_dec</item>
+    <string-array name="months_full">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>

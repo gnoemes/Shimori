@@ -1,8 +1,10 @@
 package com.gnoemes.shimori.data.daos
 
+import androidx.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import app.cash.sqldelight.paging3.QueryPagingSource
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.characters.Character
@@ -91,12 +93,17 @@ class CharacterDaoImpl(
     override fun observeByTitle(
         targetId: Long,
         targetType: TrackTargetType
-    ): Flow<List<Character>> {
-        return db.characterRoleQueries
-            .queryByTitle(targetId, targetType, ::character)
-            .asFlow()
-            .mapToList(dispatchers.io)
-            .flowOn(dispatchers.io)
+    ): PagingSource<Int, Character> {
+        return QueryPagingSource(
+            countQuery = db.characterRoleQueries.countByTitle(targetId, targetType),
+            transacter = db.characterRoleQueries,
+            context = dispatchers.io,
+            queryProvider = { limit, offset ->
+                db.characterRoleQueries
+                    .queryByTitle(targetId, targetType, limit, offset, ::character)
+            }
+        )
+
     }
 
     override fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithTrack>> {

@@ -126,6 +126,7 @@
     <string name="calendar">Календарь эпизодов</string>
     <string name="title_type">Тип</string>
     <string name="title_ep">Эпизоды</string>
+    <string name="title_chapters">Главы</string>
     <string name="title_ep_duration">Длительность</string>
     <string name="inc_close">Отпусти, чтобы отменить</string>
     <string name="rate_del_snack">Удалено.</string>
@@ -217,29 +218,32 @@
     <string name="title_score">Оценка</string>
     <string name="List_item_current_state">Сейчас</string>
 
-    <string name="month_jan_short">Янв</string>
-    <string name="month_feb_short">Фев</string>
-    <string name="month_mar_short">Мар</string>
-    <string name="month_apr_short">Апр</string>
-    <string name="month_may_short">Май</string>
-    <string name="month_jun_short">Июн</string>
-    <string name="month_jul_short">Июл</string>
-    <string name="month_aug_short">Авг</string>
-    <string name="month_sep_short">Сен</string>
-    <string name="month_oct_short">Окт</string>
-    <string name="month_nov_short">Ноя</string>
-    <string name="month_dec_short">Дек</string>
-
-    <string name="month_jan">Январь</string>
-    <string name="month_feb">Февраль</string>
-    <string name="month_mar">Март</string>
-    <string name="month_apr">Апрель</string>
-    <string name="month_may">Май</string>
-    <string name="month_jun">Июнь</string>
-    <string name="month_jul">Июль</string>
-    <string name="month_aug">Август</string>
-    <string name="month_sep">Сентябрь</string>
-    <string name="month_oct">Октябрь</string>
-    <string name="month_nov">Ноябрь</string>
-    <string name="month_dec">Декабрь</string>
+    <string-array name="months_short">
+        <item>Янв</item>
+        <item>Фев</item>
+        <item>Мар</item>
+        <item>Апр</item>
+        <item>Май</item>
+        <item>Июн</item>
+        <item>Июл</item>
+        <item>Авг</item>
+        <item>Сен</item>
+        <item>Окт</item>
+        <item>Ноя</item>
+        <item>Дек</item>
+    </string-array>
+    <string-array name="months_full">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
 </resources>
