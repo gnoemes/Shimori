@@ -1,5 +1,8 @@
 package com.gnoemes.shimori.source
 
+import com.gnoemes.shimori.source.model.SourceDataType
+import com.gnoemes.shimori.source.model.SourceValues
+
 interface Source {
     /**
      * Must be unique
@@ -8,6 +11,12 @@ interface Source {
 
     val name: String
 
-    val lang: String get() = ""
+    val values: SourceValues
 
+    val availableData: List<SourceDataType>
+    val supportsMalIds: Boolean get() = malIdsSupport.isNotEmpty()
+
+    val malIdsSupport: List<SourceDataType> get() = emptyList()
+
+    val languages: List<String> get() = emptyList()
 }

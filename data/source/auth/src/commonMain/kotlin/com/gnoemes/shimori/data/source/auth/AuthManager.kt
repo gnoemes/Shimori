@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.data.source.auth
 
 import com.gnoemes.shimori.logging.api.Logger
-import com.gnoemes.shimori.source.AuthSource
-import com.gnoemes.shimori.source.SourceAuthState
+import com.gnoemes.shimori.source.auth.AuthSource
+import com.gnoemes.shimori.source.model.SourceAuthState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.tatarka.inject.annotations.Inject

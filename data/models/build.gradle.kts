@@ -7,6 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(projects.sourceApi.core)
                 api(libs.uuid)
             }
         }

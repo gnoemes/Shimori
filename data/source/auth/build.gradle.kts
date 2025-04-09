@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.sourceApi.auth)
+                api(projects.sourceApi.core)
                 api(libs.multiplatform.oidc)
             }
         }

@@ -1,23 +1,30 @@
 package com.gnoemes.shimori.data.source.catalogue
 
-import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.source.SourceManager
-import com.gnoemes.shimori.data.source.mapper.SourceRequestMapper
 import com.gnoemes.shimori.preferences.ShimoriPreferences
-import com.gnoemes.shimori.source.CatalogueSource
-import com.gnoemes.shimori.source.data.AnimeDataSource
-import com.gnoemes.shimori.source.data.CharacterDataSource
-import com.gnoemes.shimori.source.data.MangaDataSource
-import com.gnoemes.shimori.source.data.RanobeDataSource
+import com.gnoemes.shimori.source.Source
+import com.gnoemes.shimori.source.catalogue.AnimeDataSource
+import com.gnoemes.shimori.source.catalogue.CatalogueSource
+import com.gnoemes.shimori.source.catalogue.CharacterDataSource
+import com.gnoemes.shimori.source.catalogue.MangaDataSource
+import com.gnoemes.shimori.source.catalogue.RanobeDataSource
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
+@SingleIn(AppScope::class)
 class CatalogueManager(
-    private val catalogs: Set<CatalogueSource>,
+    val catalogs: Set<CatalogueSource>,
     private val prefs: ShimoriPreferences,
-    mapper: SourceRequestMapper,
-) : SourceManager<CatalogueSource>(mapper) {
+    private val animeSourceAdapter: AnimeDataSourceAdapter,
+    private val mangaSourceAdapter: MangaDataSourceAdapter,
+    private val ranobeSourceAdapter: RanobeDataSourceAdapter,
+    private val characterSourceAdapter: CharacterDataSourceAdapter,
+    dao: SourceIdsSyncDao,
+) : SourceManager<CatalogueSource>(dao) {
     private val currentCatalog: CatalogueSource
         get() {
             val active = prefs.currentCatalogueSource
@@ -27,65 +34,31 @@ class CatalogueManager(
         }
 
     suspend fun <ResponseType> anime(
-        action: suspend AnimeDataSource.() -> ResponseType
+        action: suspend AnimeDataSourceAdapter.() -> suspend AnimeDataSource.(Source) -> ResponseType
     ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, animeDataSource, action)
-    }
-
-    suspend fun <RequestType, ResponseType> anime(
-        data: RequestType,
-        action: suspend AnimeDataSource.(RequestType) -> ResponseType
-    ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, animeDataSource, mapper, SourceDataType.Anime, data, action)
+        val sourceAction = animeSourceAdapter(action)
+        return@with request(this, animeDataSource, sourceAction)
     }
 
     suspend fun <ResponseType> manga(
-        action: suspend MangaDataSource.() -> ResponseType
+        action: suspend MangaDataSourceAdapter.() -> suspend MangaDataSource.(Source) -> ResponseType
     ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, mangaDataSource, action)
-    }
-
-    suspend fun <RequestType, ResponseType> manga(
-        data: RequestType,
-        action: suspend MangaDataSource.(RequestType) -> ResponseType
-    ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, mangaDataSource, mapper, SourceDataType.Manga, data, action)
+        val sourceAction = mangaSourceAdapter(action)
+        return@with request(this, mangaDataSource, sourceAction)
     }
 
     suspend fun <ResponseType> ranobe(
-        action: suspend RanobeDataSource.() -> ResponseType
+        action: suspend RanobeDataSourceAdapter.() -> suspend RanobeDataSource.(Source) -> ResponseType
     ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, ranobeDataSource, action)
-    }
-
-    suspend fun <RequestType, ResponseType> ranobe(
-        data: RequestType,
-        action: suspend RanobeDataSource.(RequestType) -> ResponseType
-    ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, ranobeDataSource, mapper, SourceDataType.Ranobe, data, action)
+        val sourceAction = ranobeSourceAdapter(action)
+        return@with request(this, ranobeDataSource, sourceAction)
     }
 
     suspend fun <ResponseType> character(
-        action: suspend CharacterDataSource.() -> ResponseType
+        action: suspend CharacterDataSourceAdapter.() -> suspend CharacterDataSource.(Source) -> ResponseType
     ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(this, characterDataSource, action)
+        val sourceAction = characterSourceAdapter(action)
+        return@with request(this, characterDataSource, sourceAction)
     }
-
-    suspend fun <RequestType, ResponseType> character(
-        data: RequestType,
-        action: suspend CharacterDataSource.(RequestType) -> ResponseType
-    ): SourceResponse<ResponseType> = with(currentCatalog) {
-        return@with request(
-            this,
-            characterDataSource,
-            mapper,
-            SourceDataType.Character,
-            data,
-            action
-        )
-    }
-
-
-
 
 }

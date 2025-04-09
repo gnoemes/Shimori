@@ -8,5 +8,12 @@ enum class AgeRating(val rating: String) {
     PG_13("pg_13"),
     R("r"),
     R_PLUS("r_plus"),
-    RX("rx")
+    RX("rx"),
+    ;
+
+    companion object {
+        fun find(value: String?): AgeRating {
+            return entries.firstOrNull { it.rating == value } ?: NONE
+        }
+    }
 }

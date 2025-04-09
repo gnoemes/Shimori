@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.anime
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.AnimeVideoDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
@@ -11,6 +11,7 @@ import com.gnoemes.shimori.data.syncer.syncerForEntity
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -26,17 +27,22 @@ class AnimeVideoStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is AnimeInfo -> sync(response.sourceId, data.videos)
+            is List<*> -> trySync(response.params, data)
+            is AnimeInfo -> sync(response.params, data.videos)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<AnimeVideo>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<AnimeVideo>()
+            )
+
+            data.filterIsInstance<AnimeInfo>().mapNotNull { it.videos }.isNotEmpty() -> sync(
+                params,
+                data.filterIsInstance<AnimeInfo>().mapNotNull { it.videos }.flatten()
             )
 
             else -> logger.d(tag = tag) {
@@ -47,11 +53,12 @@ class AnimeVideoStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: List<AnimeVideo>?) {
+    private fun sync(params: SourceParams, remote: List<AnimeVideo>?) {
         if (remote.isNullOrEmpty()) return
 
         val titleId = remote.firstOrNull()
-            ?.let { syncDao.findLocalId(sourceId, it.titleId, SourceDataType.Anime) } ?: return
+            ?.let { syncDao.findLocalId(params.sourceId, it.titleId, SourceDataType.Anime) }
+            ?: return
         syncVideos(titleId, remote)
     }
 

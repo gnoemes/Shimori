@@ -7,11 +7,13 @@ import androidx.compose.runtime.remember
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.inject.GithubLink
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.ui.wrapEventSink
+import com.gnoemes.shimori.domain.interactors.GetSource
 import com.gnoemes.shimori.screens.SettingsAppearanceScreen
 import com.gnoemes.shimori.screens.SettingsScreen
 import com.gnoemes.shimori.screens.UrlScreen
-import com.gnoemes.shimori.sources.shikimori.ShikimoriValues
+import com.gnoemes.shimori.sources.SourceIds
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -25,7 +27,7 @@ class SettingsPresenter(
     @Assisted private val navigator: Navigator,
     private val applicationInfo: Lazy<ApplicationInfo>,
     private val githubLink: Lazy<GithubLink>,
-    private val shikimoriValues: Lazy<ShikimoriValues>,
+    private val getSource: Lazy<GetSource>,
 ) : Presenter<SettingsUiState> {
 
     @Composable
@@ -37,7 +39,12 @@ class SettingsPresenter(
                 is SettingsUiEvent.NavigateUp -> navigator.pop()
                 is SettingsUiEvent.OpenAppearenceSettings -> navigator.goTo(SettingsAppearanceScreen())
                 is SettingsUiEvent.OpenGithub -> navigator.goTo(UrlScreen(githubLink.value))
-                is SettingsUiEvent.OpenShikimori -> navigator.goTo(UrlScreen(shikimoriValues.value.url))
+                is SettingsUiEvent.OpenShikimori -> launchOrThrow {
+                    val source = getSource.value(GetSource.Params(SourceIds.SHIKIMORI)).getOrNull()
+                    if (source != null) {
+                        navigator.goTo(UrlScreen(source.values.url))
+                    }
+                }
             }
         }
 

@@ -8,7 +8,6 @@ import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
-import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.user.UserShort
@@ -38,7 +37,7 @@ class AnimeRepository(
     suspend fun syncTracked(
         user: UserShort,
         status: TrackStatus?
-    ): SourceResponse<List<AnimeWithTrack>> {
+    ): SourceResponse<List<AnimeInfo>> {
         return catalogue.anime { getWithStatus(user, status) }
             .also {
                 transactionRunner {
@@ -52,7 +51,7 @@ class AnimeRepository(
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Anime with id: $id not found")
 
-        return catalogue.anime(local) { get(it) }
+        return catalogue.anime { get(local) }
             .also {
                 transactionRunner {
                     store.trySync(it)

@@ -6,5 +6,11 @@ enum class TitleStatus(val status: String) {
     ONGOING("ongoing"),
     RELEASED("released"),
     PAUSED("paused"),
-    DISCONTINUED("discontinued"),
+    DISCONTINUED("discontinued");
+
+    companion object {
+        fun find(status: String?): TitleStatus? {
+            return entries.firstOrNull { it.status == status }
+        }
+    }
 }

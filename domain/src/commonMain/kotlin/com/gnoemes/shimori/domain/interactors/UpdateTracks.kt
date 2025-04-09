@@ -38,8 +38,8 @@ class UpdateTracks(
                 trackManager.trackers.forEach { source ->
                     val user = userRepository.queryMeShort(source.id) ?: return@withContext
                     try {
-                        val tracks = trackManager.track(source.id, user) {
-                            getList(it)
+                        val tracks = trackManager.track(source.id) {
+                            getList(user)
                         }
                         trackRepository.trySync(tracks)
                         listStateBus.tracksLoading(false)

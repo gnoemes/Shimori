@@ -31,7 +31,7 @@ class CharacterRepository(
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Character with id: $id not found")
 
-        return catalogue.character(local) { get(it) }
+        return catalogue.character { get(local) }
             .also {
                 transactionRunner {
                     store.trySync(it)

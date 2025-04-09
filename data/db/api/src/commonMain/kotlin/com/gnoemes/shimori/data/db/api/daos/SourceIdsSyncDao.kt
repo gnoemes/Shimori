@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.db.api.daos
 
-import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SourceIdsSync
+import com.gnoemes.shimori.source.model.SourceDataType
 
 interface SourceIdsSyncDao : EntityDao<SourceIdsSync> {
     fun findRemoteId(

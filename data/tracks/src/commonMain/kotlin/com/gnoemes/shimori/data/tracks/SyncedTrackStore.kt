@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.tracks
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.daos.TrackDao
@@ -9,13 +9,18 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
+import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
+import com.gnoemes.shimori.data.titles.manga.Manga
+import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
+import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -31,40 +36,55 @@ class SyncedTrackStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is Track -> sync(response.sourceId, data)
-            is AnimeWithTrack -> sync(response.sourceId, data.track)
-            is MangaWithTrack -> sync(response.sourceId, data.track)
-            is RanobeWithTrack -> sync(response.sourceId, data.track)
-            is AnimeInfo -> sync(response.sourceId, data.track)
-//            is MangaInfo -> sync(response.sourceId, data.track)
-//            is RanobeInfo -> sync(response.sourceId, data.track)
+            is List<*> -> trySync(response.params, data)
+            is Track -> sync(response.params, data)
+            is AnimeWithTrack -> sync(response.params, data.track)
+            is MangaWithTrack -> sync(response.params, data.track)
+            is RanobeWithTrack -> sync(response.params, data.track)
+            is MangaOrRanobeWithTrack -> sync(response.params, data.track)
+            is AnimeInfo -> sync(response.params, data.track)
+            is MangaInfo -> sync(response.params, data.track)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<Track>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 null,
                 data.filterIsInstance<Track>(),
             )
 
             data.filterIsInstance<AnimeWithTrack>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 TrackTargetType.ANIME,
                 data.filterIsInstance<AnimeWithTrack>().mapNotNull { it.track })
 
             data.filterIsInstance<MangaWithTrack>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 TrackTargetType.MANGA,
                 data.filterIsInstance<MangaWithTrack>().mapNotNull { it.track })
 
             data.filterIsInstance<RanobeWithTrack>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 TrackTargetType.RANOBE,
                 data.filterIsInstance<RanobeWithTrack>().mapNotNull { it.track })
+
+            data.filterIsInstance<AnimeInfo>().isNotEmpty() -> sync(
+                params,
+                TrackTargetType.ANIME,
+                data.filterIsInstance<AnimeInfo>().mapNotNull { it.track })
+
+            data.filterIsInstance<MangaInfo>().any { it.entity is Manga } -> sync(
+                params,
+                TrackTargetType.MANGA,
+                data.filterIsInstance<MangaInfo>().mapNotNull { it.track })
+
+            data.filterIsInstance<MangaInfo>().any { it.entity is Ranobe } -> sync(
+                params,
+                TrackTargetType.RANOBE,
+                data.filterIsInstance<MangaInfo>().mapNotNull { it.track })
 
             else -> logger.d(tag = tag) {
                 "Unsupported data type for sync: ${
@@ -74,11 +94,11 @@ class SyncedTrackStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: Track?) {
+    private fun sync(params: SourceParams, remote: Track?) {
         if (remote == null) return
 
-        val result = createSyncer(sourceId).sync(
-            syncDao.findLocalId(sourceId, remote.id, type)?.let { dao.queryById(it) },
+        val result = createSyncer(params).sync(
+            syncDao.findLocalId(params.sourceId, remote.id, type)?.let { dao.queryById(it) },
             remote
         )
 
@@ -86,11 +106,11 @@ class SyncedTrackStore(
     }
 
     private fun sync(
-        sourceId: Long,
+        params: SourceParams,
         type: TrackTargetType?,
         remote: List<Track>
     ) {
-        val result = createSyncer(sourceId).sync(
+        val result = createSyncer(params).sync(
             currentValues = if (type == null) dao.queryAll() else dao.queryByTargetType(type),
             networkValues = remote,
             removeNotMatched = true
@@ -100,34 +120,25 @@ class SyncedTrackStore(
     }
 
     private fun createSyncer(
-        sourceId: Long,
+        params: SourceParams
     ) = syncerForEntity(
         syncDao,
         type,
-        sourceId,
+        params,
         dao,
         entityToKey = ::findKey,
         networkEntityToKey = { _, track -> track.targetId to track.targetType },
         networkToId = { remote -> remote.id },
-        mapper = { _, remote, local -> mapper(sourceId, remote, local) },
+        mapper = { _, remote, local -> mapper(params.sourceId, remote, local) },
         logger
     )
 
     private fun findKey(sourceId: Long, local: Track): Pair<Long, TrackTargetType>? {
         val localTargetType = local.targetType
-        val remoteTargetId = syncDao
-            .findRemoteId(sourceId, local.targetId, localTargetType.sourceDataType)
-            .let {
-                //Check ranobe. On shikimori there's no difference between manga and ranobe in tracks
-                if (it == null && localTargetType.ranobe) syncDao
-                    .findRemoteId(sourceId, local.targetId, SourceDataType.Ranobe)
-                else it
-            }
-
+        val remoteTargetId = syncDao.findRemoteId(sourceId, local.targetId, localTargetType.sourceDataType)
         //we can't create track for unknown target
-        if (remoteTargetId == null) {
-            return null
-        }
+            ?: return null
+
 
         //update track with same key
         return remoteTargetId to localTargetType

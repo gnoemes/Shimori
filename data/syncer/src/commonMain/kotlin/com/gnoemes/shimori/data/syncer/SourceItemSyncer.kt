@@ -1,13 +1,15 @@
 package com.gnoemes.shimori.data.syncer
 
 import com.gnoemes.shimori.data.ShimoriEntity
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.db.api.daos.EntityDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.TAG
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
+import com.gnoemes.shimori.sources.SourceIds
 
 
 /**
@@ -18,7 +20,7 @@ import com.gnoemes.shimori.logging.api.Logger
 class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
     private val syncDao: SourceIdsSyncDao,
     private val sourceDataType: SourceDataType,
-    private val sourceId: Long,
+    private val sourceParams: SourceParams,
     private val insertEntity: (LocalType) -> Long,
     private val updateEntity: (LocalType) -> Unit,
     private val deleteEntity: (LocalType) -> Unit,
@@ -47,19 +49,20 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
         for (networkEntity in networkValues) {
             logger.v(tag = TAG) { "Syncing item from network: $networkEntity" }
 
-            val remoteId = networkEntityToKey(sourceId, networkEntity)
+            val remoteId = networkEntityToKey(sourceParams.sourceId, networkEntity)
             logger.v(tag = TAG) { "Mapped to remote ID: $remoteId" }
             if (remoteId == null) {
                 break
             }
 
             val dbEntityForId = currentDbEntities.find {
-                localEntityToKey(sourceId, it) == remoteId
+                localEntityToKey(sourceParams.sourceId, it) == remoteId
             }
             logger.v(tag = TAG) { "Matched database entity for remote ID $remoteId : $dbEntityForId" }
 
             if (dbEntityForId != null) {
-                val entity = networkEntityToLocalEntity(sourceId, networkEntity, dbEntityForId)
+                val entity =
+                    networkEntityToLocalEntity(sourceParams.sourceId, networkEntity, dbEntityForId)
                 logger.v(tag = TAG) { "Mapped network entity to local entity: $entity" }
                 if (dbEntityForId != entity) {
                     // This is currently in the DB, so lets merge it with the saved version
@@ -82,21 +85,35 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
                 deleteEntity(it)
                 logger.v(tag = TAG) { "Deleted entry: $it" }
                 removed += it
-                syncDao.deleteByLocalId(sourceId, it.id, sourceDataType)
+                syncDao.deleteByLocalId(sourceParams.sourceId, it.id, sourceDataType)
+
+                if (sourceParams.malIdsSupport.contains(sourceDataType)) {
+                    syncDao.deleteByLocalId(SourceIds.MALUniversal, it.id, sourceDataType)
+                }
             }
         }
 
         // Finally we can insert all of the new entities
         addedNetwork.forEach {
-            val localEntity = networkEntityToLocalEntity(sourceId, it, null)
+            val localEntity = networkEntityToLocalEntity(sourceParams.sourceId, it, null)
             val id = insertEntity(localEntity)
             logger.v(tag = TAG) { "Added entry: $localEntity" }
             syncDao.syncRemoteIds(
-                sourceId,
+                sourceParams.sourceId,
                 id,
                 networkToId(it),
                 sourceDataType
             )
+
+            if (sourceParams.malIdsSupport.contains(sourceDataType)) {
+                syncDao.syncRemoteIds(
+                    SourceIds.MALUniversal,
+                    id,
+                    networkToId(it),
+                    sourceDataType
+                )
+            }
+
             added += localEntity
         }
 
@@ -114,17 +131,22 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
 
         logger.v(tag = TAG) { "Syncing item from network: $networkEntity" }
 
-        val remoteId = networkEntityToKey(sourceId, networkEntity)
+        val remoteId = networkEntityToKey(sourceParams.sourceId, networkEntity)
         logger.v(tag = TAG) { "Mapped to remote ID: $remoteId" }
         if (remoteId != null) {
             val dbEntityForId =
                 if (localEntity == null) null
-                else if (localEntityToKey(sourceId, localEntity) == remoteId) localEntity
+                else if (localEntityToKey(
+                        sourceParams.sourceId,
+                        localEntity
+                    ) == remoteId
+                ) localEntity
                 else null
             logger.v(tag = TAG) { "Matched database entity for remote ID $remoteId : $dbEntityForId" }
 
             if (dbEntityForId != null) {
-                val entity = networkEntityToLocalEntity(sourceId, networkEntity, dbEntityForId)
+                val entity =
+                    networkEntityToLocalEntity(sourceParams.sourceId, networkEntity, dbEntityForId)
                 logger.v(tag = TAG) { "Mapped network entity to local entity: $entity" }
                 if (dbEntityForId != entity) {
                     // This is currently in the DB, so lets merge it with the saved version
@@ -141,14 +163,24 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
 
         // Finally we can insert all of the new entities
         addedNetwork.forEach {
-            val localEntity = networkEntityToLocalEntity(sourceId, it, null)
+            val localEntity = networkEntityToLocalEntity(sourceParams.sourceId, it, null)
             val id = insertEntity(localEntity)
             syncDao.syncRemoteIds(
-                sourceId,
+                sourceParams.sourceId,
                 id,
                 networkToId(it),
                 sourceDataType
             )
+
+            if (sourceParams.malIdsSupport.contains(sourceDataType)) {
+                syncDao.syncRemoteIds(
+                    SourceIds.MALUniversal,
+                    id,
+                    networkToId(it),
+                    sourceDataType
+                )
+            }
+
             added += localEntity
         }
 
@@ -159,7 +191,7 @@ class SourceItemSyncer<LocalType : ShimoriEntity, NetworkType, Key>(
 fun <Type : ShimoriEntity, Key> syncerForEntity(
     syncDao: SourceIdsSyncDao,
     sourceDataType: SourceDataType,
-    sourceId: Long,
+    sourceParams: SourceParams,
     entityDao: EntityDao<Type>,
     entityToKey: (Long, Type) -> Key?,
     networkEntityToKey: (Long, Type) -> Key?,
@@ -169,7 +201,7 @@ fun <Type : ShimoriEntity, Key> syncerForEntity(
 ) = SourceItemSyncer(
     syncDao,
     sourceDataType,
-    sourceId,
+    sourceParams,
     entityDao::insert,
     entityDao::update,
     entityDao::delete,

@@ -7,8 +7,7 @@ import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
-import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
-import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
+import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.user.UserShort
@@ -33,7 +32,7 @@ class RanobeRepository(
     suspend fun syncTracked(
         user: UserShort,
         status: TrackStatus?
-    ): SourceResponse<List<MangaOrRanobeWithTrack>> {
+    ): SourceResponse<List<MangaInfo>> {
         return catalogue.ranobe { getWithStatus(user, status) }
             .also {
                 transactionRunner {
@@ -43,11 +42,11 @@ class RanobeRepository(
             }
     }
 
-    suspend fun sync(id: Long): SourceResponse<RanobeWithTrack> {
+    suspend fun sync(id: Long): SourceResponse<MangaInfo> {
         val local = store.dao.queryById(id)
             ?: throw IllegalStateException("Ranobe with id: $id not found")
 
-        return catalogue.ranobe(local) { get(it) }
+        return catalogue.ranobe { get(local) }
             .also {
                 transactionRunner {
                     store.trySync(it)

@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.ranobe
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.RanobeDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
@@ -9,9 +9,11 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
 import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
+import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -26,27 +28,36 @@ class SyncedRanobeStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-//            is RanobeInfo -> sync(response.sourceId, data.entity)
-            is RanobeWithTrack -> sync(response.sourceId, data.entity)
+            is List<*> -> trySync(response.params, data)
+            is MangaInfo -> if (data.entity is Ranobe) {
+                sync(response.params, data.entity as Ranobe)
+            }
+
+            is RanobeWithTrack -> sync(response.params, data.entity)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<Ranobe>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<Ranobe>()
             )
 
             data.filterIsInstance<RanobeWithTrack>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<RanobeWithTrack>().map { it.entity })
 
             data.filterIsInstance<MangaOrRanobeWithTrack>().any { it.type.ranobe } -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<MangaOrRanobeWithTrack>().map { it.entity }
+                    .filterIsInstance<Ranobe>()
+            )
+
+            data.filterIsInstance<MangaInfo>().any { it.entity is Ranobe } -> sync(
+                params,
+                data.filterIsInstance<MangaInfo>().map { it.entity }
                     .filterIsInstance<Ranobe>()
             )
 
@@ -58,17 +69,17 @@ class SyncedRanobeStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: Ranobe) {
-        val result = createSyncer(sourceId).sync(
-            syncDao.findLocalId(sourceId, remote.id, type)?.let { dao.queryById(it) },
+    private fun sync(params: SourceParams, remote: Ranobe) {
+        val result = createSyncer(params).sync(
+            syncDao.findLocalId(params.sourceId, remote.id, type)?.let { dao.queryById(it) },
             remote
         )
 
         log(result)
     }
 
-    private fun sync(sourceId: Long, remote: List<Ranobe>) {
-        val result = createSyncer(sourceId).sync(
+    private fun sync(params: SourceParams, remote: List<Ranobe>) {
+        val result = createSyncer(params).sync(
             currentValues = dao.queryAll(),
             networkValues = remote,
             removeNotMatched = false
@@ -78,13 +89,13 @@ class SyncedRanobeStore(
     }
 
     private fun createSyncer(
-        sourceId: Long
+        params: SourceParams
     ) = syncerForEntity(
         syncDao,
         type,
-        sourceId,
+        params,
         dao,
-        entityToKey = { _, title -> syncDao.findRemoteId(sourceId, title.id, type) },
+        entityToKey = { _, title -> syncDao.findRemoteId(params.sourceId, title.id, type) },
         networkEntityToKey = { _, title -> title.id },
         networkToId = { remote -> remote.id },
         mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0) },

@@ -65,7 +65,7 @@ class TrackRepository(
     fun deleteByTrackId(entity: TrackToSync) = syncDao.deleteByTrackId(entity.trackId)
 
     suspend fun sync(user: UserShort): SourceResponse<List<Track>> {
-        return tracker.track(user.sourceId, user) { getList(it) }
+        return tracker.track(user.sourceId) { getList(user) }
             .also {
                 transactionRunner {
                     store.trySync(it)

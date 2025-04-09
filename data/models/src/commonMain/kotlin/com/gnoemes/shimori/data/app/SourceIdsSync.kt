@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.data.app
 
 import com.gnoemes.shimori.data.ShimoriEntity
+import com.gnoemes.shimori.source.model.SourceDataType
 
 @kotlinx.serialization.Serializable
 data class SourceIdsSync(

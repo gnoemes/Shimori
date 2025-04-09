@@ -6,8 +6,8 @@ import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.app.newData
 import com.gnoemes.shimori.data.manga.MangaRepository
 import com.gnoemes.shimori.data.ranobe.RanobeRepository
-import com.gnoemes.shimori.data.titles.MangaOrRanobeWithTrack
 import com.gnoemes.shimori.data.titles.manga.Manga
+import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
@@ -69,34 +69,27 @@ class UpdateTitleTracks(
 
     //mangaSource is always true for shikimori, may be changed later for other sources
     private suspend fun syncMangaOrRanobeResponse(
-        response: SourceResponse<List<MangaOrRanobeWithTrack>>,
+        response: SourceResponse<List<MangaInfo>>,
         status: TrackStatus?,
-        mangaSource : Boolean = true
     ) {
         //sync manga tracks
         response.newData { data ->
-            data.filter { title -> title.type.manga }
+            data.filter { title -> title.entity is Manga }
                 .map { MangaWithTrack(it.entity as Manga, it.track, false) }
         }.also {
-            if (!mangaSource) {
-                mangaRepository.trySync(it)
-                mangaRepository.statusUpdated(status)
-            }
-
+            mangaRepository.trySync(it)
+            mangaRepository.statusUpdated(status)
             trackRepository.trySync(it)
         }
 
         //sync ranobe tracks
         response.newData { data ->
             data
-                .filter { title -> title.type.ranobe }
+                .filter { title -> title.entity is Ranobe }
                 .map { RanobeWithTrack(it.entity as Ranobe, it.track, false) }
         }.also {
-            if (mangaSource) {
-                ranobeRepository.trySync(it)
-                ranobeRepository.statusUpdated(status)
-            }
-
+            ranobeRepository.trySync(it)
+            ranobeRepository.statusUpdated(status)
             trackRepository.trySync(it)
         }
     }

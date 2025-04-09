@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.anime
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.AnimeDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
@@ -12,6 +12,7 @@ import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -26,23 +27,28 @@ class SyncedAnimeStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is Anime -> sync(response.sourceId, data)
-            is AnimeInfo -> sync(response.sourceId, data.entity)
-            is AnimeWithTrack -> sync(response.sourceId, data.entity)
+            is List<*> -> trySync(response.params, data)
+            is Anime -> sync(response.params, data)
+            is AnimeInfo -> sync(response.params, data.entity)
+            is AnimeWithTrack -> sync(response.params, data.entity)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<Anime>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<Anime>()
             )
 
+            data.filterIsInstance<AnimeInfo>().isNotEmpty() -> sync(
+                params,
+                data.filterIsInstance<AnimeInfo>().map { it.entity }
+            )
+
             data.filterIsInstance<AnimeWithTrack>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<AnimeWithTrack>().map { it.entity })
 
             else -> logger.d(tag = tag) {
@@ -53,17 +59,17 @@ class SyncedAnimeStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: Anime) {
-        val result = createSyncer(sourceId).sync(
-            syncDao.findLocalId(sourceId, remote.id, type)?.let { dao.queryById(it) },
+    private fun sync(params: SourceParams, remote: Anime) {
+        val result = createSyncer(params).sync(
+            syncDao.findLocalId(params.sourceId, remote.id, type)?.let { dao.queryById(it) },
             remote
         )
 
         log(result)
     }
 
-    private fun sync(sourceId: Long, remote: List<Anime>) {
-        val result = createSyncer(sourceId).sync(
+    private fun sync(params: SourceParams, remote: List<Anime>) {
+        val result = createSyncer(params).sync(
             currentValues = dao.queryAll(),
             networkValues = remote,
             removeNotMatched = false
@@ -73,13 +79,13 @@ class SyncedAnimeStore(
     }
 
     private fun createSyncer(
-        sourceId: Long
+        params: SourceParams
     ) = syncerForEntity(
         syncDao,
         type,
-        sourceId,
+        params,
         dao,
-        entityToKey = { _, title -> syncDao.findRemoteId(sourceId, title.id, type) },
+        entityToKey = { _, title -> syncDao.findRemoteId(params.sourceId, title.id, type) },
         networkEntityToKey = { _, title -> title.id },
         networkToId = { remote -> remote.id },
         mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0) },

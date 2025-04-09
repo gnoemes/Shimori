@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.track
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.source.model.SourceDataType
 
 enum class TrackTargetType {
     ANIME, MANGA, RANOBE, ;

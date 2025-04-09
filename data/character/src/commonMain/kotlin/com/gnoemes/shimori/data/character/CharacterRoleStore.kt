@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.character
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.characters.CharacterInfo
 import com.gnoemes.shimori.data.characters.CharacterRole
@@ -10,9 +10,9 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.EntityStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
-import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -28,22 +28,19 @@ class CharacterRoleStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is AnimeInfo -> sync(response.sourceId, data.charactersRoles)
-            //TODO add roles from title details
-//            is MangaInfo -> sync(response.sourceId, data)
-//            is RanobeInfo -> sync(response.sourceId, data)
-            is CharacterInfo -> sync(response.sourceId, data)
+            is List<*> -> trySync(response.params, data)
+//            is AnimeInfo -> data.charactersRoles?.let { sync(it) }
+//            is MangaInfo -> data.charactersRoles?.let { sync(it) }
+            is CharacterInfo -> sync(response.params, data)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
-            data.filterIsInstance<CharacterRole>().isNotEmpty() -> sync(
-                sourceId,
-                data.filterIsInstance<CharacterRole>()
-            )
+//            data.filterIsInstance<CharacterRole>().isNotEmpty() -> sync(
+//                data.filterIsInstance<CharacterRole>()
+//            )
 
             else -> logger.d(tag = tag) {
                 "Unsupported data type for sync: ${
@@ -53,9 +50,9 @@ class CharacterRoleStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: CharacterInfo) {
+    private fun sync(params: SourceParams, remote: CharacterInfo) {
         val characterId = dao.findLocalId(
-            sourceId,
+            params.sourceId,
             remote.entity.id,
             SourceDataType.Character
         ) ?: return
@@ -63,7 +60,7 @@ class CharacterRoleStore(
         val roles = mutableListOf<CharacterRole>()
 
         for (title in remote.animes) {
-            val id = dao.findLocalId(sourceId, title.id, SourceDataType.Anime) ?: continue
+            val id = dao.findLocalId(params.sourceId, title.id, SourceDataType.Anime) ?: continue
 
             roles += CharacterRole(
                 characterId = characterId,
@@ -74,11 +71,11 @@ class CharacterRoleStore(
 
         for (title in remote.mangas) {
             val (id, type) = dao.findLocalId(
-                sourceId,
+                params.sourceId,
                 title.id,
                 SourceDataType.Manga
             )?.let { it to TrackTargetType.MANGA } ?: dao.findLocalId(
-                sourceId,
+                params.sourceId,
                 title.id,
                 SourceDataType.Ranobe
             )?.let { it to TrackTargetType.RANOBE } ?: continue
@@ -102,6 +99,25 @@ class CharacterRoleStore(
         )
 
         log(result)
+    }
+
+    private fun sync(params: SourceParams, remote: List<CharacterRole>) {
+        remote.groupBy { it.characterId }
+            .forEach { entry ->
+                val characterId = dao.findLocalId(
+                    params.sourceId,
+                    entry.key,
+                    SourceDataType.Character
+                ) ?: return
+
+                val result = createSyncer().sync(
+                    currentValues = characterRoleDao.queryByCharacterId(characterId),
+                    networkValues = entry.value,
+                    removeNotMatched = true
+                )
+
+                log(result)
+            }
     }
 
     private fun createSyncer() = syncerForEntity(

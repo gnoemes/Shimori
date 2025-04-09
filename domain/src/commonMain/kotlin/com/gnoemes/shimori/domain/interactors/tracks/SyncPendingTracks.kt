@@ -1,12 +1,12 @@
 package com.gnoemes.shimori.domain.interactors.tracks
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.app.SourceDataType
 import com.gnoemes.shimori.data.app.SyncAction
 import com.gnoemes.shimori.data.source.track.TrackManager
 import com.gnoemes.shimori.data.tracks.TrackRepository
 import com.gnoemes.shimori.domain.Interactor
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.sources.SourceIds
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.http.HttpStatusCode
@@ -62,36 +62,36 @@ class SyncPendingTracks(
                     }
                     .forEach { source ->
                         try {
-                            trackManager.track(source.id, track) {
-                                launch {
-                                    when (toSync.action) {
-                                        SyncAction.DELETE -> delete(
-                                            trackManager.findRemoteId(
-                                                source.id,
-                                                toSync.trackId,
-                                                SourceDataType.Track
-                                            )
-                                        )
+                            launch {
+                                when (toSync.action) {
+                                    SyncAction.DELETE ->
+                                        trackManager.findRemoteId(
+                                            source.id,
+                                            toSync.trackId,
+                                            SourceDataType.Track
+                                        )?.let {
+                                            trackManager.track(source.id) { delete(it) }
+                                        }
 
-                                        else -> {
-                                            val remoteTrack =
-                                                if (toSync.action == SyncAction.CREATE) create(it!!)
-                                                else update(it!!)
+                                    else -> {
+                                        val remoteTrack =
+                                            if (toSync.action == SyncAction.CREATE)
+                                                trackManager.track(source.id) { create(track!!) }
+                                            else trackManager.track(source.id) { update(track!!) }
 
-                                            // Force update track on auto status changes:
-                                            // planned, paused -> watching. If progress changed from 0 to x
-                                            // watching -> completed. If progress == size
-                                            if (
-                                                remoteTrack.status != track!!.status
-                                                && source.id == SourceIds.SHIKIMORI
-                                            ) {
-                                                //update with same progress but with another status updates state for what we need (on Shikimori)
-                                                update(it)
-                                            }
+                                        // Force update track on auto status changes:
+                                        // planned, paused -> watching. If progress changed from 0 to x
+                                        // watching -> completed. If progress == size
+                                        if (
+                                            remoteTrack.data.status != track!!.status
+                                            && source.id == SourceIds.SHIKIMORI
+                                        ) {
+                                            //update with same progress but with another status updates state for what we need (on Shikimori)
+                                            trackManager.track(source.id) { update(track) }
                                         }
                                     }
-                                }.join()
-                            }
+                                }
+                            }.join()
                         } catch (e: Exception) {
                             logger.d(
                                 message = { "#$index: Sync error with source ${source.name}. $e \ncause: ${e.cause}" },

@@ -6,10 +6,11 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.sources.ids)
-                api(projects.sources.shikimori.core)
+                api(projects.sourceBundled.ids)
                 api(projects.data.source.auth)
+                api(projects.sourceBundled.shikimori)
                 implementation(projects.data.db.api)
+                implementation(projects.data.models)
             }
         }
     }

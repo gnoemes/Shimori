@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.data.models)
+                implementation(projects.sourceBundled.ids)
                 implementation(projects.data.db.api)
             }
         }

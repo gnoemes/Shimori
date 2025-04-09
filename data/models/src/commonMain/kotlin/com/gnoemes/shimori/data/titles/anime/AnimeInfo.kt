@@ -6,13 +6,13 @@ import com.gnoemes.shimori.data.track.Track
 
 data class AnimeInfo(
     val entity: Anime,
-    val track: Track?,
-    val videos: List<AnimeVideo>?,
-    val screenshots: List<AnimeScreenshot>?,
-    val fanDubbers: List<String>,
-    val fanSubbers: List<String>,
-    val characters: List<Character>,
-    val charactersRoles: List<CharacterRole>
+    val track: Track? = null,
+    val videos: List<AnimeVideo>? = null,
+    val screenshots: List<AnimeScreenshot>? = null,
+    val fanDubbers: List<String>? = null,
+    val fanSubbers: List<String>? = null,
+    val characters: List<Character>? = null,
+    val charactersRoles: List<CharacterRole>? = null,
     //TODO
 //    val genres
 //    val translators

@@ -1,8 +1,9 @@
 package com.gnoemes.shimori.data.source.auth.store
 
-import com.gnoemes.shimori.data.source.auth.SimpleAuthState
 import com.gnoemes.shimori.preferences.AppAuthObservablePreferences
-import com.gnoemes.shimori.source.SourceAuthState
+import com.gnoemes.shimori.source.auth.SourceAuthStore
+import com.gnoemes.shimori.source.model.SimpleAuthState
+import com.gnoemes.shimori.source.model.SourceAuthState
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope

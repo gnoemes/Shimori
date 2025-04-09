@@ -1,41 +1,34 @@
 package com.gnoemes.shimori.data.source
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
-import com.gnoemes.shimori.data.source.mapper.SourceRequestMapper
+import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.source.Source
+import com.gnoemes.shimori.source.model.SourceDataType
 
 abstract class SourceManager<S : Source>(
-    protected val mapper: SourceRequestMapper,
+    private val dao: SourceIdsSyncDao,
 ) {
 
     fun findRemoteId(sourceId: Long, localId: Long, type: SourceDataType) =
-        mapper.findRemoteId(sourceId, localId, type)
+        dao.findRemoteId(sourceId, localId, type)
 
     protected suspend fun <DataSource, ResponseType> request(
         source: S,
         dataSource: DataSource,
-        action: suspend DataSource.() -> ResponseType
-    ) = wrapResponse(source) { action(dataSource) }
+        action: suspend DataSource.(S) -> ResponseType
+    ) = wrapResponse(source) { action(dataSource, source) }
 
-    protected suspend fun <DataSource, RequestType, ResponseType> request(
-        source: S,
-        dataSource: DataSource,
-        mapper: SourceRequestMapper,
-        type: SourceDataType,
-        data: RequestType,
-        action: suspend DataSource.(RequestType) -> ResponseType
-    ) = wrapResponse(source) {
-        val preparedData = mapper(id, type, data)
-        action(dataSource, preparedData)
-    }
 
-    private suspend fun <T> wrapResponse(
+    private suspend fun <ResponseType> wrapResponse(
         source: S,
-        block: suspend S.() -> T
+        block: suspend S.() -> ResponseType
     ) =
         SourceResponse(
-            sourceId = source.id,
+            params = SourceParams(
+                source.id,
+                source.malIdsSupport
+            ),
             data = block(source)
         )
 

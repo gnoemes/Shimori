@@ -1,0 +1,3 @@
+package com.gnoemes.shimori.source.shikimori
+
+actual interface ShikimoriPlatformComponent

@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.anime
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.db.api.daos.AnimeScreenshotDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
@@ -11,6 +11,7 @@ import com.gnoemes.shimori.data.syncer.syncerForEntity
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -26,17 +27,22 @@ class AnimeScreenshotStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is AnimeInfo -> sync(response.sourceId, data.screenshots)
+            is List<*> -> trySync(response.params, data)
+            is AnimeInfo -> sync(response.params, data.screenshots)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<AnimeScreenshot>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<AnimeScreenshot>()
+            )
+
+            data.filterIsInstance<AnimeInfo>().mapNotNull { it.screenshots }.isNotEmpty() -> sync(
+                params,
+                data.filterIsInstance<AnimeInfo>().mapNotNull { it.screenshots }.flatten()
             )
 
             else -> logger.d(tag = tag) {
@@ -47,11 +53,12 @@ class AnimeScreenshotStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: List<AnimeScreenshot>?) {
+    private fun sync(params: SourceParams, remote: List<AnimeScreenshot>?) {
         if (remote.isNullOrEmpty()) return
 
         val titleId = remote.firstOrNull()
-            ?.let { syncDao.findLocalId(sourceId, it.titleId, SourceDataType.Anime) } ?: return
+            ?.let { syncDao.findLocalId(params.sourceId, it.titleId, SourceDataType.Anime) }
+            ?: return
         syncVideos(titleId, remote)
     }
 

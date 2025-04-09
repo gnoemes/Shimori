@@ -19,7 +19,7 @@ class UpdateUser(
             if (params.id != null) {
                 trackManager.trackers.forEach { source ->
                     val user = trackManager.user(source.id) {
-                        getUser(params.id)
+                        get(params.id)
                     }
                     userRepository.trySync(user)
                 }

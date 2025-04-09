@@ -4,7 +4,7 @@ import com.gnoemes.shimori.base.inject.ApplicationCoroutineScope
 import com.gnoemes.shimori.data.source.auth.AuthExpirationEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
 import com.gnoemes.shimori.logging.api.Logger
-import com.gnoemes.shimori.source.SourceAuthState
+import com.gnoemes.shimori.source.model.SourceAuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

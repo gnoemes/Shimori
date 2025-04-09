@@ -84,13 +84,8 @@ include(
     ":common:imageloading",
 
     ":source-api:core",
-    ":source-api:catalogue",
-    ":source-api:track",
-    ":source-api:auth",
-    ":sources:ids",
-    ":sources:shikimori:values",
-    ":sources:shikimori:auth",
-    ":sources:shikimori:core",
+    ":source-bundled:ids",
+    ":source-bundled:shikimori",
 
     ":ui:root",
     ":ui:home",

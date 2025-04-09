@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.character
 
-import com.gnoemes.shimori.data.app.SourceDataType
+import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.characters.CharacterInfo
@@ -11,7 +11,9 @@ import com.gnoemes.shimori.data.db.api.syncer.ItemSyncerResult
 import com.gnoemes.shimori.data.syncer.SyncedSourceStore
 import com.gnoemes.shimori.data.syncer.syncerForEntity
 import com.gnoemes.shimori.data.titles.anime.AnimeInfo
+import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -26,23 +28,24 @@ class SyncedCharacterStore(
 
     override fun <T> trySync(response: SourceResponse<T>) {
         when (val data = response.data) {
-            is List<*> -> trySync(response.sourceId, data)
-            is AnimeInfo -> trySync(response.sourceId, data.characters)
-            is Character -> sync(response.sourceId, data)
-            is CharacterInfo -> sync(response.sourceId, data.entity)
+            is List<*> -> trySync(response.params, data)
+            is AnimeInfo -> data.characters?.let { trySync(response.params, it) }
+            is MangaInfo -> data.characters?.let { trySync(response.params, it) }
+            is Character -> sync(response.params, data)
+            is CharacterInfo -> sync(response.params, data.entity)
             else -> logger.d(tag = tag) { "Unsupported data type for sync: ${data!!::class}" }
         }
     }
 
-    override fun <E> trySync(sourceId: Long, data: List<E>) {
+    override fun <E> trySync(params: SourceParams, data: List<E>) {
         when {
             data.filterIsInstance<Character>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<Character>()
             )
 
             data.filterIsInstance<CharacterInfo>().isNotEmpty() -> sync(
-                sourceId,
+                params,
                 data.filterIsInstance<CharacterInfo>().map { it.entity }
             )
 
@@ -54,17 +57,17 @@ class SyncedCharacterStore(
         }
     }
 
-    private fun sync(sourceId: Long, remote: Character) {
-        val result = createSyncer(sourceId).sync(
-            syncDao.findLocalId(sourceId, remote.id, type)?.let { dao.queryById(it) },
+    private fun sync(params: SourceParams, remote: Character) {
+        val result = createSyncer(params).sync(
+            syncDao.findLocalId(params.sourceId, remote.id, type)?.let { dao.queryById(it) },
             remote
         )
 
         log(result)
     }
 
-    private fun sync(sourceId: Long, remote: List<Character>) {
-        val result = createSyncer(sourceId).sync(
+    private fun sync(params: SourceParams, remote: List<Character>) {
+        val result = createSyncer(params).sync(
             currentValues = dao.queryAll(),
             networkValues = remote,
             removeNotMatched = false
@@ -74,13 +77,13 @@ class SyncedCharacterStore(
     }
 
     private fun createSyncer(
-        sourceId: Long
+        params: SourceParams
     ) = syncerForEntity(
         syncDao,
         type,
-        sourceId,
+        params,
         dao,
-        entityToKey = { _, title -> syncDao.findRemoteId(sourceId, title.id, type) },
+        entityToKey = { _, title -> syncDao.findRemoteId(params.sourceId, title.id, type) },
         networkEntityToKey = { _, title -> title.id },
         networkToId = { remote -> remote.id },
         mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0) },
