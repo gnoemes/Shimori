@@ -73,6 +73,7 @@ include(
     ":data:user",
     ":data:auth",
     ":data:queryable",
+    ":data:eventbus",
     ":domain",
     ":tasks",
     ":common:ui:circuit",

@@ -22,7 +22,7 @@ import com.gnoemes.shimori.common.ui.overlay.showInBottomSheet
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.TitleWithTrackEntity
-import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.eventbus.StateBus
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -55,7 +55,7 @@ import me.tatarka.inject.annotations.Inject
 class TracksPresenter(
     @Assisted private val navigator: Navigator,
     private val prefs: ShimoriPreferences,
-    private val listsState: ListsStateBus,
+    private val statusBus: StateBus,
     private val observeItems: Lazy<ObserveListPage>,
     private val observeSort: Lazy<ObserveListSort>,
     private val observeItemsExist: Lazy<ObserveListPageExist>,
@@ -72,12 +72,12 @@ class TracksPresenter(
         val isMedium by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isMedium() } }
         val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
 
-        val type by listsState.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
-        val status by listsState.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
+        val type by statusBus.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
+        val status by statusBus.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
         val sort by observeSort.value.flow.collectAsRetainedState(ListSort.defaultForType(type))
 
         val tracksExist by observeTracksExist.value.flow.collectAsRetainedState(false)
-        val firstSyncLoading by listsState.tracksLoading.observe.collectAsState(false)
+        val firstSyncLoading by statusBus.tracksLoading.observe.collectAsState(false)
         val itemsExist by observeItemsExist.value.flow.collectAsState(true)
 
         val sortOptions by remember(type) {

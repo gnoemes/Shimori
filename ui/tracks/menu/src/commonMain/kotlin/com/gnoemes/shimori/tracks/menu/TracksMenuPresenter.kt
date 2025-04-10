@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.eventbus.StateBus
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.domain.observers.ObserveExistedStatuses
@@ -26,7 +26,7 @@ import me.tatarka.inject.annotations.Inject
 @CircuitInject(screen = TracksMenuScreen::class, UiScope::class)
 class TracksMenuPresenter(
     @Assisted private val navigator: Navigator,
-    private val listsState: ListsStateBus,
+    private val stateBus: StateBus,
     private val prefs: ShimoriPreferences,
     private val observeAnimeStatuses: Lazy<ObserveExistedStatuses>,
     private val observeMangaStatuses: Lazy<ObserveExistedStatuses>,
@@ -34,8 +34,8 @@ class TracksMenuPresenter(
 ) : Presenter<TracksMenuUiState> {
     @Composable
     override fun present(): TracksMenuUiState {
-        val type by listsState.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
-        val status by listsState.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
+        val type by stateBus.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
+        val status by stateBus.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
 
         val animeStatuses by observeAnimeStatuses.value.flow.collectAsRetainedState(emptyList())
         val mangaStatuses by observeMangaStatuses.value.flow.collectAsRetainedState(emptyList())
@@ -61,8 +61,8 @@ class TracksMenuPresenter(
             when (event) {
                 is TracksMenuUiEvent.NavigateUp -> navigator.pop()
                 is TracksMenuUiEvent.OpenStatus -> launchOrThrow {
-                    listsState.type.update(event.type)
-                    listsState.page.update(event.status)
+                    stateBus.type.update(event.type)
+                    stateBus.page.update(event.status)
 
                     prefs.preferredListType = event.type.name
                     prefs.preferredListStatus = event.status.name

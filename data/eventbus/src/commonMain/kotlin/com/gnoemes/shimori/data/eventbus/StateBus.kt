@@ -1,15 +1,11 @@
-package com.gnoemes.shimori.data.lists
+package com.gnoemes.shimori.data.eventbus
 
-import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
@@ -17,7 +13,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
 @SingleIn(AppScope::class)
-class ListsStateBus(
+class StateBus(
     prefs: ShimoriPreferences,
 ) {
 
@@ -29,8 +25,8 @@ class ListsStateBus(
             prefs.preferredListType = newState.name
         }
 
-        override val observe: Flow<TrackTargetType>
-            get() = prefs.observePreferredListType().map { TrackTargetType.valueOf(it) }
+        override val observe: Flow<TrackTargetType> =
+            prefs.observePreferredListType().map { TrackTargetType.valueOf(it) }
     }
 
     /**
@@ -41,8 +37,8 @@ class ListsStateBus(
             prefs.preferredListStatus = newState.name
         }
 
-        override val observe: Flow<TrackStatus>
-            get() = prefs.observePreferredListStatus().map { TrackStatus.valueOf(it) }
+        override val observe: Flow<TrackStatus> =
+            prefs.observePreferredListStatus().map { TrackStatus.valueOf(it) }
     }
 
     /**
@@ -53,26 +49,7 @@ class ListsStateBus(
         override suspend fun update(newState: Boolean) =
             kotlin.run { tracksLoading.value = newState }
 
-        override val observe: StateFlow<Boolean> get() = tracksLoading
-    }
-
-    /**
-     * Event to notify listeners to open random title from current [TrackStatus]
-     */
-    val openRandomTitleEvent = object : EventState<Unit> {
-        private val openRandomTitle = MutableSharedFlow<Unit>()
-        override suspend fun update(newState: Unit) =
-            kotlin.run { openRandomTitle.emit(newState) }
-
-        override val observe: SharedFlow<Unit> get() = openRandomTitle
-    }
-
-    val uiEvents = object : EventState<ListsUiEvents> {
-        private val uiEvents = MutableSharedFlow<ListsUiEvents>()
-        override suspend fun update(newState: ListsUiEvents) =
-            kotlin.run { uiEvents.emit(newState) }
-
-        override val observe: SharedFlow<ListsUiEvents> = uiEvents.asSharedFlow()
+        override val observe: StateFlow<Boolean> = tracksLoading
     }
 
     /**
@@ -85,13 +62,4 @@ class ListsStateBus(
         suspend operator fun invoke(newState: T) = update(newState = newState)
     }
 
-    /**
-     * Interface for trigger events
-     */
-    interface EventState<T> {
-        suspend fun update(newState: T)
-        val observe: SharedFlow<T>
-
-        suspend operator fun invoke(newState: T) = update(newState = newState)
-    }
 }

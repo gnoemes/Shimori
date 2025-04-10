@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.data.models)
+                api(projects.data.eventbus)
                 api(projects.data.lists)
                 api(projects.data.source.core)
                 api(projects.data.anime)

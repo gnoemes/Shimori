@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.eventbus.StateBus
 import com.gnoemes.shimori.data.source.track.TrackManager
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.tracks.TrackRepository
@@ -17,7 +17,7 @@ class UpdateTracks(
     private val trackRepository: TrackRepository,
     private val userRepository: UserRepository,
     private val updateTitleTracks: UpdateTitleTracks,
-    private val listStateBus: ListsStateBus,
+    private val stateBus: StateBus,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
 ) : Interactor<UpdateTracks.Params, Unit>() {
@@ -27,12 +27,12 @@ class UpdateTracks(
             val noLocalTracks = trackRepository.queryTracksCount() == 0
             //create event of first loading
             if (noLocalTracks) {
-                listStateBus.tracksLoading(true)
+                stateBus.tracksLoading(true)
             }
 
             if (params.forceTitlesUpdate || params.optionalTitlesUpdate || noLocalTracks) {
                 updateTitles(params.forceTitlesUpdate || noLocalTracks)
-                listStateBus.tracksLoading(false)
+                stateBus.tracksLoading(false)
             } else {
                 // sync only tracks
                 trackManager.trackers.forEach { source ->
@@ -42,11 +42,11 @@ class UpdateTracks(
                             getList(user)
                         }
                         trackRepository.trySync(tracks)
-                        listStateBus.tracksLoading(false)
+                        stateBus.tracksLoading(false)
                     } catch (e: Exception) {
                         //ignore for now
                         logger.e(throwable = e) { "Update tracks failed" }
-                        listStateBus.tracksLoading(false)
+                        stateBus.tracksLoading(false)
                     }
                 }
             }
@@ -68,7 +68,7 @@ class UpdateTracks(
                 }
         } catch (e: Exception) {
             logger.e(throwable = e) { "Update titles failed" }
-            listStateBus.tracksLoading(false)
+            stateBus.tracksLoading(false)
         }
     }
 

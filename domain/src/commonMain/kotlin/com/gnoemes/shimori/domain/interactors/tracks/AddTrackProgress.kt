@@ -1,8 +1,8 @@
 package com.gnoemes.shimori.domain.interactors.tracks
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.lists.ListsStateBus
-import com.gnoemes.shimori.data.track.ListsUiEvents
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
@@ -13,7 +13,6 @@ class AddTrackProgress(
     private val createOrUpdateTrack: CreateOrUpdateTrack,
     private val calculateTrackStatus: CalculateTrackStatus,
     private val calculateTrackProgress: CalculateTrackProgress,
-    private val listsStateBus: ListsStateBus,
     private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<AddTrackProgress.Params, Unit>() {
 
@@ -41,8 +40,8 @@ class AddTrackProgress(
                 )
 
                 //send event to open EditTrack screen with calculated status
-                listsStateBus.uiEvents(
-                    ListsUiEvents.OpenEdit(
+                EventBus.publish(
+                    TrackUiEvents.OpenEdit(
                         targetId = newTrack.targetId,
                         targetType = newTrack.targetType,
                         predefinedStatus = calculatedStatus.status

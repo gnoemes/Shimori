@@ -11,8 +11,8 @@ import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.data.lists.ListsStateBus
-import com.gnoemes.shimori.data.track.ListsUiEvents
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.domain.interactors.tracks.CalculateTrackProgress
@@ -33,7 +33,6 @@ import me.tatarka.inject.annotations.Inject
 class TrackEditPresenter(
     @Assisted private val screen: TrackEditScreen,
     @Assisted private val navigator: Navigator,
-    private val listsState: ListsStateBus,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
     private val calculateTrackProgress: CalculateTrackProgress,
     private val createOrUpdateTrack: CreateOrUpdateTrack,
@@ -144,8 +143,8 @@ class TrackEditPresenter(
                 TrackEditUiEvent.Delete -> launchOrThrow {
                     deleteTrack(DeleteTrack.Params(localTrack.id))
                         .onSuccess {
-                            listsState.uiEvents.invoke(
-                                ListsUiEvents.TrackDeleted(
+                            EventBus.publish(
+                                TrackUiEvents.TrackDeleted(
                                     title?.entity?.image,
                                     localTrack
                                 )

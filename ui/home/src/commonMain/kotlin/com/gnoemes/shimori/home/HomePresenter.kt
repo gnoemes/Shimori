@@ -17,9 +17,9 @@ import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.common.compose.ui.UiMessageManager
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.data.lists.ListsStateBus
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
-import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.domain.interactors.LogoutSource
 import com.gnoemes.shimori.domain.interactors.tracks.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
@@ -36,7 +36,6 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -45,7 +44,6 @@ import me.tatarka.inject.annotations.Inject
 @CircuitInject(screen = HomeScreen::class, UiScope::class)
 class HomePresenter(
     @Assisted private val navigator: Navigator,
-    private val stateBus: ListsStateBus,
     private val prefs: ShimoriPreferences,
     private val observeShikimoriAuth: Lazy<ObserveShikimoriAuth>,
     private val observeMyUserShort: Lazy<ObserveMyUserShort>,
@@ -103,7 +101,7 @@ class HomePresenter(
                     //on snackbar action
                     when (val payload = event.message.payload) {
                         //if was deleted
-                        is ListsUiEvents.TrackDeleted -> {
+                        is TrackUiEvents.TrackDeleted -> {
                             //restore track
                             createOrUpdateTrack.value(CreateOrUpdateTrack.Params(payload.track))
                         }
@@ -115,7 +113,7 @@ class HomePresenter(
             }
         }
 
-        uiEventHandler(uiMessageManager, eventSink)
+        trackUiEventHandler(uiMessageManager, eventSink)
 
         return HomeUiState(
             fabSpacing = fabSpacing,
@@ -127,20 +125,20 @@ class HomePresenter(
     }
 
     @Composable
-    private fun uiEventHandler(
+    private fun trackUiEventHandler(
         uiMessageManager: UiMessageManager,
         eventSink: CoroutineScope.(HomeUiEvent) -> Unit,
     ) {
         val textCreator = LocalShimoriTextCreator.current
-        var listUiEvent by remember { mutableStateOf<ListsUiEvents?>(null) }
+        var trackUiEvent by remember { mutableStateOf<TrackUiEvents?>(null) }
 
-        val eventPreparedMessage = listUiEvent?.let { event ->
+        val eventPreparedMessage = trackUiEvent?.let { event ->
             UiMessage(
                 id = event.eventId,
                 message = textCreator { event.message() },
                 actionLabel = textCreator.nullable { event.actionLabel() },
                 image = when (event) {
-                    is ListsUiEvents.TrackDeleted -> event.image
+                    is TrackUiEvents.TrackDeleted -> event.image
                     else -> null
                 },
                 payload = event
@@ -148,22 +146,20 @@ class HomePresenter(
         }
 
         LaunchedEffect(Unit) {
-            stateBus.uiEvents.observe
-                .filterNot { it.navigation }
-                .collect {
-                    if (!it.navigation) listUiEvent = it
-                    else when (it) {
-                        is ListsUiEvents.OpenEdit -> eventSink(
-                            HomeUiEvent.OpenTrackEdit(
-                                it.targetId,
-                                it.targetType,
-                                it.predefinedStatus
-                            )
+            EventBus.observe<TrackUiEvents> {
+                if (!it.navigation) trackUiEvent = it
+                else when (it) {
+                    is TrackUiEvents.OpenEdit -> eventSink(
+                        HomeUiEvent.OpenTrackEdit(
+                            it.targetId,
+                            it.targetType,
+                            it.predefinedStatus
                         )
+                    )
 
-                        else -> Unit
-                    }
+                    else -> Unit
                 }
+            }
         }
 
         eventPreparedMessage?.let {

@@ -23,6 +23,7 @@ class KotlinMultiplatformDataConventionPlugin : Plugin<Project> {
                         implementation(project(":data:source:core"))
                         implementation(project(":data:lastrequest"))
                         implementation(project(":data:syncer"))
+                        implementation(project(":data:eventbus"))
                     }
                 }
             }

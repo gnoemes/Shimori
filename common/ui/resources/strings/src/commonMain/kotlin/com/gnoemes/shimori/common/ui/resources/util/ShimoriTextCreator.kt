@@ -65,6 +65,7 @@ import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.TitleStatus
+import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeType
 import com.gnoemes.shimori.data.titles.manga.Manga
@@ -72,7 +73,6 @@ import com.gnoemes.shimori.data.titles.manga.MangaType
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import com.gnoemes.shimori.data.titles.ranobe.RanobeType
 import com.gnoemes.shimori.data.track.ListSortOption
-import com.gnoemes.shimori.data.track.ListsUiEvents
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.settings.AppLocale
@@ -463,17 +463,17 @@ class ShimoriTextCreator(
     }
 
     @Composable
-    fun ListsUiEvents.message(): String {
+    fun TrackUiEvents.message(): String {
         return when (this) {
-            is ListsUiEvents.TrackDeleted -> stringResource(Strings.rate_del_snack)
+            is TrackUiEvents.TrackDeleted -> stringResource(Strings.rate_del_snack)
             else -> throw IllegalStateException("${this::class.java} event is not supported")
         }
     }
 
     @Composable
-    fun ListsUiEvents.actionLabel(): String? {
+    fun TrackUiEvents.actionLabel(): String? {
         return when (this) {
-            is ListsUiEvents.TrackDeleted -> stringResource(Strings.undo)
+            is TrackUiEvents.TrackDeleted -> stringResource(Strings.undo)
             else -> null
         }
     }
