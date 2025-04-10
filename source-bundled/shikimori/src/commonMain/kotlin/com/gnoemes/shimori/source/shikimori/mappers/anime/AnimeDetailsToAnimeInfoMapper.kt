@@ -56,7 +56,9 @@ class AnimeDetailsToAnimeInfoMapper(
             SCharacterRole(
                 characterId = it.character.characterShort.id.toLong(),
                 targetId = from.id.toLong(),
-                targetType = SourceDataType.Anime
+                targetType = SourceDataType.Anime,
+                role = it.rolesEn.firstOrNull(),
+                roleRu = it.rolesRu.firstOrNull()
             )
         }
 

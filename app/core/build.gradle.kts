@@ -48,6 +48,7 @@ kotlin {
                 api(projects.ui.tracks.edit)
 
                 api(projects.ui.title.details)
+                api(projects.ui.title.characters)
 
                 api(libs.graphql.apollo)
 

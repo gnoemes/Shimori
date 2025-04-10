@@ -23,7 +23,9 @@ class MangaCharactersMapper(
             SCharacterRole(
                 characterId = it.character.characterShort.id.toLong(),
                 targetId = from.id.toLong(),
-                targetType = SourceDataType.Manga
+                targetType = SourceDataType.Manga,
+                role = it.rolesEn.firstOrNull(),
+                roleRu = it.rolesRu.firstOrNull()
             )
         }
 

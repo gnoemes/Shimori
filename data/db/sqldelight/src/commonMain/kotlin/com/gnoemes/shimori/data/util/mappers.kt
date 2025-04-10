@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.characters.CharacterRole
+import com.gnoemes.shimori.data.characters.CharacterWithRole
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.ShimoriImage
@@ -907,17 +908,60 @@ internal fun character(
     )
 }
 
+internal fun characterWithRole(
+    id: Long,
+    name: String,
+    name_ru: String?,
+    name_eng: String?,
+    image_original: String?,
+    image_preview: String?,
+    image_x96: String?,
+    image_x48: String?,
+    roleId: Long,
+    role: String?,
+    roleRu: String?,
+    target_id: Long,
+    target_type: TrackTargetType
+): CharacterWithRole {
+    val character = Character(
+        id = id,
+        name = name,
+        nameRu = name_ru,
+        nameEn = name_eng,
+        image = ShimoriImage(
+            original = image_original,
+            preview = image_preview,
+            x96 = image_x96,
+            x48 = image_x48
+        ),
+    )
+    val role = CharacterRole(
+        id = roleId,
+        characterId = id,
+        targetId = target_id,
+        targetType = target_type,
+        role = role,
+        roleRu = roleRu
+    )
+
+    return CharacterWithRole(character, role)
+}
+
 internal fun characterRole(
     id: Long,
     characterId: Long,
     targetId: Long,
     target_type: TrackTargetType,
+    role: String?,
+    roleRu: String?,
 ): CharacterRole {
     return CharacterRole(
         id = id,
         characterId = characterId,
         targetId = targetId,
         targetType = target_type,
+        role = role,
+        roleRu = roleRu,
     )
 }
 

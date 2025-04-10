@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -34,15 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import app.cash.paging.compose.LazyPagingItems
-import app.cash.paging.compose.itemKey
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
-import com.gnoemes.shimori.common.compose.itemSpacer
 import com.gnoemes.shimori.common.compose.noRippleClickable
-import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
-import com.gnoemes.shimori.common.compose.ui.CharacterItem
 import com.gnoemes.shimori.common.compose.ui.StatusButton
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_arrow_right
@@ -63,10 +57,11 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_score
 import com.gnoemes.shimori.common.ui.resources.strings.title_type
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.ShimoriTitleEntity
-import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
+import com.gnoemes.shimori.screens.TitleCharactersScreen
+import com.slack.circuit.foundation.CircuitContent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -285,37 +280,15 @@ internal fun TitleActions(
 
 @Composable
 internal fun TitleCharacters(
-    characters: LazyPagingItems<Character>,
+    id: Long,
+    type: TrackTargetType,
     openCharactersList: () -> Unit,
-    openCharacter: (Long) -> Unit,
 ) {
     TitleListCategory(
         stringResource(Strings.title_characters),
         openCharactersList,
     ) {
-        LazyRow(
-            Modifier.fillMaxWidth(),
-            state = characters.rememberLazyListState(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            itemSpacer(0.dp)
-            items(
-                count = characters.itemCount,
-                key = characters.itemKey { "character_${it.id}" },
-            ) { index ->
-                val entity = characters[index]
-                if (entity != null) {
-                    val openCharacterClick = remember(entity.id) {
-                        { openCharacter(entity.id) }
-                    }
-                    CharacterItem(entity, onClick = openCharacterClick)
-
-                }
-
-
-            }
-            itemSpacer(0.dp)
-        }
+        CircuitContent(TitleCharactersScreen(id, type, grid = false))
     }
 }
 

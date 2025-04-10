@@ -8,6 +8,7 @@ import app.cash.sqldelight.paging3.QueryPagingSource
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.characters.Character
+import com.gnoemes.shimori.data.characters.CharacterWithRole
 import com.gnoemes.shimori.data.db.api.daos.CharacterDao
 import com.gnoemes.shimori.data.titles.anime.AnimeWithTrack
 import com.gnoemes.shimori.data.titles.manga.MangaWithTrack
@@ -15,6 +16,7 @@ import com.gnoemes.shimori.data.titles.ranobe.RanobeWithTrack
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.util.animeWithTrack
 import com.gnoemes.shimori.data.util.character
+import com.gnoemes.shimori.data.util.characterWithRole
 import com.gnoemes.shimori.data.util.mangaWithTrack
 import com.gnoemes.shimori.data.util.ranobeWithTrack
 import com.gnoemes.shimori.logging.api.Logger
@@ -90,17 +92,23 @@ class CharacterDaoImpl(
             .flowOn(dispatchers.io)
     }
 
-    override fun observeByTitle(
+    override fun observeTitleCharacters(
         targetId: Long,
-        targetType: TrackTargetType
-    ): PagingSource<Int, Character> {
+        targetType: TrackTargetType,
+        search : String?
+    ): PagingSource<Int, CharacterWithRole> {
         return QueryPagingSource(
             countQuery = db.characterRoleQueries.countCharactersByTitle(targetId, targetType),
-            transacter = db.characterRoleQueries,
+            transacter = db.titleCharactersViewQueries,
             context = dispatchers.io,
             queryProvider = { limit, offset ->
-                db.characterRoleQueries
-                    .queryCharactersByTitle(targetId, targetType, limit, offset, ::character)
+                if (search.isNullOrBlank()) {
+                    db.titleCharactersViewQueries
+                        .querySortByRoleAndName(targetId, targetType, limit, offset, ::characterWithRole)
+                } else {
+                    db.titleCharactersViewQueries
+                        .querySearchSortByRoleAndName(targetId, targetType, search, limit, offset, ::characterWithRole)
+                }
             }
         )
 

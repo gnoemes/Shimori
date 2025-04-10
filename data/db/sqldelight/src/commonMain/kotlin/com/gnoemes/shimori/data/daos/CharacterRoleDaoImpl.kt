@@ -25,7 +25,9 @@ class CharacterRoleDaoImpl(
             db.characterRoleQueries.insert(
                 it.characterId,
                 it.targetId,
-                it.targetType
+                it.targetType,
+                it.role,
+                it.roleRu
             )
         }
 
@@ -38,7 +40,9 @@ class CharacterRoleDaoImpl(
                 it.id,
                 it.characterId,
                 it.targetId,
-                it.targetType
+                it.targetType,
+                it.role,
+                it.roleRu
             )
         }
     }

@@ -9,31 +9,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.paging.PagingConfig
-import app.cash.paging.PagingData
-import app.cash.paging.compose.collectAsLazyPagingItems
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.isExpanded
 import com.gnoemes.shimori.common.compose.isMedium
-import com.gnoemes.shimori.common.compose.rememberRetainedCachedPagingFlow
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
-import com.gnoemes.shimori.domain.observers.ObserveTitleCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.screens.TitleDetailsScreen
 import com.gnoemes.shimori.screens.TrackEditScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.overlay.LocalOverlayHost
-import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.filterIsInstance
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -44,7 +36,6 @@ class TitleDetailsPresenter(
     @Assisted private val navigator: Navigator,
     private val updateTitle: Lazy<UpdateTitle>,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
-    private val observeTitleCharacters: Lazy<ObserveTitleCharacters>,
 ) : Presenter<TitleDetailsUiState> {
 
     @Composable
@@ -55,17 +46,6 @@ class TitleDetailsPresenter(
         val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
 
         val titleWithEntity by observeTitleWithTrack.value.flow.collectAsState(null)
-
-        val retainedCharacterPagingInteractor =
-            rememberRetained(screen.id, screen.type) { observeTitleCharacters.value }
-        val charactersFlow = remember(screen.id, screen.type) {
-            retainedCharacterPagingInteractor.flow
-                .filterIsInstance<PagingData<Character>>()
-        }
-
-        val characters = charactersFlow
-            .rememberRetainedCachedPagingFlow()
-            .collectAsLazyPagingItems()
 
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
 
@@ -79,10 +59,6 @@ class TitleDetailsPresenter(
 
             observeTitleWithTrack.value(
                 ObserveTitleWithTrackEntity.Params(screen.id, screen.type)
-            )
-
-            observeTitleCharacters.value(
-                ObserveTitleCharacters.Params(screen.id, screen.type, PAGING_CONFIG)
             )
         }
 
@@ -120,7 +96,6 @@ class TitleDetailsPresenter(
                 is TitleDetailsUiEvent.OpenStudioSearch -> TODO()
                 is TitleDetailsUiEvent.OpenTitle -> TODO()
                 is TitleDetailsUiEvent.OpenTrailer -> TODO()
-                is TitleDetailsUiEvent.OpenCharacter -> TODO()
             }
         }
 
@@ -131,16 +106,9 @@ class TitleDetailsPresenter(
             isFavorite = titleWithEntity?.entity?.favorite ?: false,
             descriptionExpanded = descriptionExpanded,
 
-            characters = characters,
+            showCharactersList = true,
 
             eventSink = wrapEventSink(eventSink)
-        )
-    }
-
-    private companion object {
-        val PAGING_CONFIG = PagingConfig(
-            pageSize = 10,
-            initialLoadSize = 20,
         )
     }
 }

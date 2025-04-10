@@ -53,6 +53,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CharacterItem(
     character: Character,
+    coverHeight : Dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -62,8 +63,8 @@ fun CharacterItem(
     ) {
         CharacterCover(
             character.image,
-            modifier = Modifier.width(132.dp)
-                .aspectRatio(4 / 3f),
+            modifier = Modifier.height(coverHeight)
+                .aspectRatio(3 / 4f),
             onClick = onClick
         )
 

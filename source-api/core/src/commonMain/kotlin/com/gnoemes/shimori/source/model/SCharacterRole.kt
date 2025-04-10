@@ -5,4 +5,6 @@ class SCharacterRole(
     val characterId: Long,
     val targetId: Long,
     val targetType: SourceDataType,
+    val role : String?,
+    val roleRu : String?,
 )

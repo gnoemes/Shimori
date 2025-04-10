@@ -40,7 +40,11 @@ sqldelight {
     databases {
         create("ShimoriDB") {
             packageName = "${ProjectConfig.APP_PACKAGE}.data"
+            srcDirs("src/commonMain/sqldelight")
             dialect(libs.sqldelight.dialects.sql)
+
+            schemaOutputDirectory = file("src/commonMain/sqldelight/databases")
+            verifyMigrations = true
         }
     }
 }

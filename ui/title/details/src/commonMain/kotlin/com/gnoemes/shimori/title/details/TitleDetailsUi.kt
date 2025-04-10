@@ -34,19 +34,18 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import app.cash.paging.compose.LazyPagingItems
 import coil3.compose.AsyncImage
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.NestedScaffold
+import com.gnoemes.shimori.common.compose.calculateBottomWithAdditional
 import com.gnoemes.shimori.common.compose.itemSpacer
 import com.gnoemes.shimori.common.compose.mouseWheelNestedScrollConnectionFix
 import com.gnoemes.shimori.common.compose.ui.imageGradientBackground
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.data.ShimoriTitleEntity
-import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleDetailsScreen
@@ -61,12 +60,11 @@ internal fun TitleDetailsUi(
 ) {
     val eventSink = state.eventSink
 
-    TrackEditUi(
+    TitleDetailsUi(
         title = state.title,
         track = state.track,
         isFavorite = state.isFavorite,
 
-        characters = state.characters,
 
         toggleFavorite = { eventSink(TitleDetailsUiEvent.ToggleFavorite) },
         expandDescription = { eventSink(TitleDetailsUiEvent.ExpandDescription) },
@@ -81,7 +79,6 @@ internal fun TitleDetailsUi(
 
         openTrailer = { eventSink(TitleDetailsUiEvent.OpenTrailer(it)) },
         openEditTrack = { id, type -> eventSink(TitleDetailsUiEvent.OpenEditTrack(id, type)) },
-        openCharacter = { eventSink(TitleDetailsUiEvent.OpenCharacter(it)) },
         openGenreSearch = { eventSink(TitleDetailsUiEvent.OpenGenreSearch(it)) },
         openStudioSearch = { eventSink(TitleDetailsUiEvent.OpenStudioSearch(it)) },
         openHuman = { eventSink(TitleDetailsUiEvent.OpenHuman(it)) },
@@ -93,12 +90,11 @@ internal fun TitleDetailsUi(
     ExperimentalMaterial3Api::class
 )
 @Composable
-private fun TrackEditUi(
+private fun TitleDetailsUi(
     title: ShimoriTitleEntity?,
     track: Track?,
     isFavorite: Boolean,
 
-    characters: LazyPagingItems<Character>,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -113,7 +109,6 @@ private fun TrackEditUi(
 
     openTrailer: (Long) -> Unit,
     openEditTrack: (Long, TrackTargetType) -> Unit,
-    openCharacter: (Long) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,
     openHuman: (Long) -> Unit,
@@ -215,7 +210,6 @@ private fun TrackEditUi(
                 scrollBehavior = scrollBehavior,
                 title = title,
                 track = track,
-                characters = characters,
                 isFavorite = isFavorite,
                 toggleFavorite = toggleFavorite,
                 expandDescription = expandDescription,
@@ -228,7 +222,6 @@ private fun TrackEditUi(
                 openChronology = openChronology,
                 openTrailer = openTrailer,
                 openEditTrack = openEditTrack,
-                openCharacter = openCharacter,
                 openGenreSearch = openGenreSearch,
                 openStudioSearch = openStudioSearch,
                 openHuman = openHuman,
@@ -253,8 +246,6 @@ private fun TitleDetailsUiContent(
     track: Track?,
     isFavorite: Boolean,
 
-    characters: LazyPagingItems<Character>,
-
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
     share: () -> Unit,
@@ -267,7 +258,6 @@ private fun TitleDetailsUiContent(
 
     openTrailer: (Long) -> Unit,
     openEditTrack: (Long, TrackTargetType) -> Unit,
-    openCharacter: (Long) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,
     openHuman: (Long) -> Unit,
@@ -320,14 +310,10 @@ private fun TitleDetailsUiContent(
                 key = "characters",
                 span = { GridItemSpan(this.maxLineSpan) }
             ) {
-                TitleCharacters(
-                    characters,
-                    openCharactersList,
-                    openCharacter
-                )
+                TitleCharacters(title.id, title.type, openCharactersList)
             }
 
-            itemSpacer(paddingValue.calculateBottomPadding() + 16.dp)
+            itemSpacer(paddingValue.calculateBottomWithAdditional())
         }
     }
 }

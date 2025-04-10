@@ -96,6 +96,7 @@ include(
     ":ui:tracks:edit",
 
     ":ui:title:details",
+    ":ui:title:characters",
 
     ":app:core",
     ":app:complete",

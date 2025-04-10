@@ -59,6 +59,19 @@ data class TitleDetailsScreen(
     val type: TrackTargetType
 ) : ShimoriScreen("TitleDetails()")
 
+
+@Parcelize
+data class TitleCharactersScreen(
+    val id: Long,
+    val type: TrackTargetType,
+    val grid : Boolean,
+) : ShimoriScreen("TitleCharacters()")
+
+@Parcelize
+data class CharacterDetailsScreen(
+    val id: Long,
+) : ShimoriScreen("CharacterDetails()")
+
 @Parcelize
 object MockScreen : ShimoriScreen("Mock()")
 

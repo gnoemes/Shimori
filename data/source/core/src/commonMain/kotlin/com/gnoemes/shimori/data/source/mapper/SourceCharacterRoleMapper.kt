@@ -17,7 +17,9 @@ class SourceCharacterRoleMapper : Mapper<SCharacterRole?, CharacterRole?> {
                 id = from.id,
                 characterId = from.characterId,
                 targetType = it,
-                targetId = from.targetId
+                targetId = from.targetId,
+                role = from.role,
+                roleRu = from.roleRu,
             )
 
         }

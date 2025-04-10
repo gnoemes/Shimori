@@ -4,14 +4,16 @@ CREATE TABLE character_role(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     character_id INTEGER NOT NULL,
     target_id INTEGER NOT NULL,
-    target_type TEXT AS TrackTargetType NOT NULL
-    );
+    target_type TEXT AS TrackTargetType NOT NULL,
+    role TEXT,
+    role_ru TEXT
+ );
 
 CREATE INDEX role_index ON character_role(character_id, target_id, target_type);
 
 insert:
-INSERT INTO character_role(character_id, target_id, target_type)
-VALUES (?,?,?);
+INSERT INTO character_role(character_id, target_id, target_type, role, role_ru)
+VALUES (?,?,?,?, ?);
 
 update:
 UPDATE character_role
@@ -19,7 +21,9 @@ SET
  id = :id,
  character_id = :character_id,
  target_id = :target_id,
- target_type = :target_type
+ target_type = :target_type,
+ role = :role,
+ role_ru = : role_ru
 WHERE id = :id;
 
 deleteById:
@@ -27,12 +31,6 @@ DELETE FROM character_role WHERE id = :id;
 
 deleteByCharacterId:
 DELETE FROM character_role WHERE character_id = :id;
-
-queryCharactersByTitle:
-SELECT c.* FROM character_role AS cr
-INNER JOIN character AS c ON cr.character_id = c.id
-WHERE target_id = :targetId AND target_type = :target_type
-LIMIT :limit OFFSET :offset;
 
 queryByTitle:
 SELECT * FROM character_role

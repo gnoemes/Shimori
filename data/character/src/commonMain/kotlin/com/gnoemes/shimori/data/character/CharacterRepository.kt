@@ -28,8 +28,8 @@ class CharacterRepository(
     private val transactionRunner: DatabaseTransactionRunner
 ) {
     fun observeById(id: Long) = store.dao.observeById(id)
-    fun observeByTitle(titleId: Long, type: TrackTargetType) =
-        store.dao.observeByTitle(titleId, type)
+    fun observeTitleCharacters(titleId: Long, type: TrackTargetType, search: String?) =
+        store.dao.observeTitleCharacters(titleId, type, search)
 
     suspend fun sync(id: Long): SourceResponse<CharacterInfo> {
         val local = store.dao.queryById(id)

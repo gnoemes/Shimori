@@ -23,7 +23,9 @@ class RanobeCharactersMapper(
             SCharacterRole(
                 characterId = it.character.characterShort.id.toLong(),
                 targetId = from.id.toLong(),
-                targetType = SourceDataType.Ranobe
+                targetType = SourceDataType.Ranobe,
+                role = it.rolesEn.firstOrNull(),
+                roleRu = it.rolesRu.firstOrNull()
             )
         }
 

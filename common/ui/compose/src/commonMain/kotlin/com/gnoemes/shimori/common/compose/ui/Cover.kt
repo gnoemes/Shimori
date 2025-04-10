@@ -21,6 +21,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.gnoemes.shimori.common.compose.theme.CharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.data.common.ShimoriImage
@@ -104,7 +105,7 @@ fun TrackCover(
 fun CharacterCover(
     image: ShimoriImage?,
     modifier: Modifier = Modifier,
-    shape: Shape = MaterialTheme.shapes.extraLarge,
+    shape: Shape = CharacterCoverRoundedCornerShape,
     onClick: () -> Unit,
 ) {
     Box(
