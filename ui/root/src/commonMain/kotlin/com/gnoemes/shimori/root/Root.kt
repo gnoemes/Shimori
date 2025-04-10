@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import com.gnoemes.shimori.base.inject.UiScope
+import com.gnoemes.shimori.common.compose.LocalIsDarkColors
 import com.gnoemes.shimori.common.compose.LocalLogger
 import com.gnoemes.shimori.common.compose.LocalShimoriDateTextFormatter
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
@@ -144,22 +145,25 @@ class DefaultShimoriContent(
             LocalRetainedStateRegistry provides continuityRetainedStateRegistry()
         ) {
             CircuitCompositionLocals(circuit) {
-                ShimoriTheme(
-                    useDarkColors = settings.shouldUseDarkColors(),
-                    useDynamicColors = settings.shouldUseDynamicColors()
-                ) {
-                    ContentWithOverlays(
-                        modifier = Modifier
-                            .fillMaxSize()
+                val useDarkColors = settings.shouldUseDarkColors()
+                CompositionLocalProvider(LocalIsDarkColors provides useDarkColors) {
+                    ShimoriTheme(
+                        useDarkColors = useDarkColors,
+                        useDynamicColors = settings.shouldUseDynamicColors()
                     ) {
-                        NavigableCircuitContent(
-                            navigator = shimoriNavigator,
-                            backStack = backstack,
-                            decoration = remember(shimoriNavigator) {
-                                GestureNavigationDecoration(onBackInvoked = shimoriNavigator::pop)
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        ContentWithOverlays(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            NavigableCircuitContent(
+                                navigator = shimoriNavigator,
+                                backStack = backstack,
+                                decoration = remember(shimoriNavigator) {
+                                    GestureNavigationDecoration(onBackInvoked = shimoriNavigator::pop)
+                                },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
                 }
             }

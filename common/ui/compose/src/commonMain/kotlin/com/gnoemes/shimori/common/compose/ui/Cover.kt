@@ -22,6 +22,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.gnoemes.shimori.common.compose.theme.CharacterCoverRoundedCornerShape
+import com.gnoemes.shimori.common.compose.theme.ic_no_image
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.data.common.ShimoriImage
@@ -46,6 +47,8 @@ fun ProfileCover(
                         clickable { onClick() }
                     } else Modifier
                 },
+            error = painterResource(Icons.ic_no_image),
+            fallback = painterResource(Icons.ic_no_image),
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
@@ -75,6 +78,8 @@ fun TrackCover(
                     crossfade(true)
                 }
                 .build(),
+            error = painterResource(Icons.ic_no_image),
+            fallback = painterResource(Icons.ic_no_image),
             modifier = Modifier
                 .matchParentSize()
                 .combinedClickable(
@@ -120,6 +125,8 @@ fun CharacterCover(
                     crossfade(true)
                 }
                 .build(),
+            error = painterResource(Icons.ic_no_image),
+            fallback = painterResource(Icons.ic_no_image),
             modifier = Modifier
                 .matchParentSize()
                 .combinedClickable(

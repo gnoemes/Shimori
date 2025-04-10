@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Text
@@ -22,9 +24,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.itemKey
+import com.eygraber.compose.placeholder.PlaceholderHighlight
+import com.eygraber.compose.placeholder.placeholder
+import com.eygraber.compose.placeholder.shimmer
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.NestedScaffold
 import com.gnoemes.shimori.common.compose.rememberLazyListState
+import com.gnoemes.shimori.common.compose.theme.CharacterCoverRoundedCornerShape
+import com.gnoemes.shimori.common.compose.ui.CharacterCover
 import com.gnoemes.shimori.common.compose.ui.CharacterItem
 import com.gnoemes.shimori.common.compose.ui.TransparentToolbar
 import com.gnoemes.shimori.common.ui.resources.Icons
@@ -45,6 +52,7 @@ internal fun TitleDetailsUi(
     TitleCharactersUi(
         isList = state.isList,
         titleName = state.titleName,
+        isLoading = state.isLoading,
         isShowSearchButton = state.isShowSearchButton,
         isSearchActive = state.isSearchActive,
         characters = state.characters,
@@ -60,6 +68,7 @@ internal fun TitleDetailsUi(
 private fun TitleCharactersUi(
     isList: Boolean,
     titleName: String,
+    isLoading: Boolean,
     isShowSearchButton: Boolean,
     isSearchActive: Boolean,
     characters: LazyPagingItems<CharacterWithRole>,
@@ -70,10 +79,11 @@ private fun TitleCharactersUi(
     openCharacter: (Long) -> Unit,
 ) {
     if (isList) {
-        TitleCharactersUiListContent(characters, openCharacter)
+        TitleCharactersUiListContent(characters, isLoading, openCharacter)
     } else {
         TitleCharactersUiGridContent(
             titleName,
+            isLoading,
             isShowSearchButton,
             isSearchActive,
             characters,
@@ -90,6 +100,7 @@ private fun TitleCharactersUi(
 @Composable
 private fun TitleCharactersUiListContent(
     characters: LazyPagingItems<CharacterWithRole>,
+    isLoading: Boolean,
     openCharacter: (Long) -> Unit,
 ) {
     LazyRow(
@@ -99,11 +110,29 @@ private fun TitleCharactersUiListContent(
     ) {
         item { Spacer(Modifier.width(0.dp)) }
 
+        if (characters.itemCount == 0) {
+            items(10) {
+                CharacterCover(
+                    null,
+                    modifier = Modifier.height(176.dp)
+                        .aspectRatio(3 / 4f)
+                        .placeholder(
+                            visible = true,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                            highlight = PlaceholderHighlight.shimmer(
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.52f)
+                            ),
+                            shape = CharacterCoverRoundedCornerShape,
+                        ),
+                    onClick = {}
+                )
+            }
+        }
+
         items(
             count = characters.itemCount,
             key = characters.itemKey { "character_${it.id}" },
         ) { index ->
-
             val character = characters[index]
             if (character != null) {
                 val openCharacterClick = remember(character.id) {
@@ -121,6 +150,7 @@ private fun TitleCharactersUiListContent(
 @Composable
 private fun TitleCharactersUiGridContent(
     titleName: String,
+    isLoading: Boolean,
     isShowSearchButton: Boolean,
     isSearchActive: Boolean,
     characters: LazyPagingItems<CharacterWithRole>,

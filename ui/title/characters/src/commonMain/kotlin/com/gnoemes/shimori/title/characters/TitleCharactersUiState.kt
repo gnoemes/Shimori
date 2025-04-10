@@ -10,6 +10,7 @@ import com.slack.circuit.runtime.CircuitUiState
 data class TitleCharactersUiState(
     val isList: Boolean,
     val titleName: String,
+    val isLoading : Boolean,
     val isShowSearchButton: Boolean,
     val isSearchActive: Boolean,
     val characters: LazyPagingItems<CharacterWithRole>,

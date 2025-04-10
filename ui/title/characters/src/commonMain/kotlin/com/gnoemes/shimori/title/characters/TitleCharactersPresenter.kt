@@ -63,7 +63,7 @@ class TitleCharactersPresenter(
 
         val titleName by remember { derivedStateOf { titleNameLocalized } }
         val charactersCount by observeCharactersCount.value.flow.collectAsState(-1)
-        val charactersUpdating by updateTitleCharacters.value.inProgress.collectAsState(false)
+        val charactersUpdating by updateTitleCharacters.value.inProgress.collectAsState(true)
 
         val retainedCharacterPagingInteractor =
             rememberRetained(screen.id, screen.type) { observeTitleCharacters.value }
@@ -81,23 +81,33 @@ class TitleCharactersPresenter(
 
         if (isGrid) {
             LaunchedEffect(Unit) {
-                launchOrThrow {
-                    updateTitleCharacters.value(
-                        UpdateTitleCharacters.Params.optionalUpdate(
-                            screen.id,
-                            screen.type
-                        )
-                    ).onFailurePublishToBus()
-                }
-
                 observeTitle.value(
                     ObserveTitleWithTrackEntity.Params(screen.id, screen.type)
                 )
-
-                observeCharactersCount.value(
-                    ObserveTitleCharactersCount.Params(screen.id, screen.type)
-                )
             }
+        }
+
+        LaunchedEffect(Unit) {
+            launchOrThrow {
+                updateTitleCharacters.value(
+                    UpdateTitleCharacters.Params.optionalUpdate(
+                        screen.id,
+                        screen.type
+                    )
+                ).onSuccess {
+                    //observe count only after update
+                    observeCharactersCount.value(
+                        ObserveTitleCharactersCount.Params(screen.id, screen.type)
+                    )
+                }.onFailurePublishToBus()
+                    .onFailure {
+                        if (characters.itemCount == 0 && !isGrid) {
+                            EventBus.publish(TitleUiEvents.HideCharacters)
+                        }
+                    }
+            }
+
+
         }
 
         LaunchedEffect(searchInput) {
@@ -130,6 +140,7 @@ class TitleCharactersPresenter(
         return TitleCharactersUiState(
             isList = !isGrid,
             titleName = titleName,
+            isLoading = charactersUpdating,
             isShowSearchButton = isGrid && !isSearchActive,
             isSearchActive = isSearchActive,
             characters = characters,

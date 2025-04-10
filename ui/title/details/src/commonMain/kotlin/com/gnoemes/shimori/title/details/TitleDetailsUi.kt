@@ -1,10 +1,15 @@
 package com.gnoemes.shimori.title.details
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -64,7 +69,7 @@ internal fun TitleDetailsUi(
         title = state.title,
         track = state.track,
         isFavorite = state.isFavorite,
-
+        isShowCharacters = state.isShowCharacters,
 
         toggleFavorite = { eventSink(TitleDetailsUiEvent.ToggleFavorite) },
         expandDescription = { eventSink(TitleDetailsUiEvent.ExpandDescription) },
@@ -94,7 +99,7 @@ private fun TitleDetailsUi(
     title: ShimoriTitleEntity?,
     track: Track?,
     isFavorite: Boolean,
-
+    isShowCharacters: Boolean,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -211,6 +216,7 @@ private fun TitleDetailsUi(
                 title = title,
                 track = track,
                 isFavorite = isFavorite,
+                isShowCharacters = isShowCharacters,
                 toggleFavorite = toggleFavorite,
                 expandDescription = expandDescription,
                 share = share,
@@ -245,6 +251,7 @@ private fun TitleDetailsUiContent(
     title: ShimoriTitleEntity,
     track: Track?,
     isFavorite: Boolean,
+    isShowCharacters: Boolean,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -310,7 +317,17 @@ private fun TitleDetailsUiContent(
                 key = "characters",
                 span = { GridItemSpan(this.maxLineSpan) }
             ) {
-                TitleCharacters(title.id, title.type, openCharactersList)
+                AnimatedVisibility(
+                    isShowCharacters,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Column {
+                        TitleCharacters(title.id, title.type, openCharactersList)
+                        //moved from LazyVerticalGrid for smooth hiding
+                        Spacer(Modifier.height(24.dp))
+                    }
+                }
             }
 
             itemSpacer(paddingValue.calculateBottomWithAdditional())

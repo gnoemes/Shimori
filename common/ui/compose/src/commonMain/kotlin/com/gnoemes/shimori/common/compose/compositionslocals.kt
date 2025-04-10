@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.common.compose
 
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.gnoemes.shimori.common.ui.resources.ShimoriIconsUtil
 import com.gnoemes.shimori.common.ui.resources.util.ShimoriDateTextFormatter
@@ -14,3 +15,4 @@ val LocalShimoriDateTextFormatter = staticCompositionLocalOf<ShimoriDateTextForm
 val LocalShimoriSettings = staticCompositionLocalOf<ShimoriSettings> { error("empty") }
 val LocalShimoriPreferences = staticCompositionLocalOf<ShimoriPreferences> { error("empty") }
 val LocalLogger = staticCompositionLocalOf<Logger> { error("empty") }
+val LocalIsDarkColors = compositionLocalOf<Boolean> { error("empty") }

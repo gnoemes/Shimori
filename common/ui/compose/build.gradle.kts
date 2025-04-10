@@ -33,6 +33,7 @@ kotlin {
                 api(composelibs.material3.adaptive)
                 api(composelibs.material3.adaptive.layout)
                 api(composelibs.material3.adaptive.navigation)
+                api(composelibs.material3.placeholder)
 
                 api(libs.coil.compose)
                 api(libs.uuid)

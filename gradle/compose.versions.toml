@@ -1,5 +1,5 @@
 [versions]
-compose-multiplatform = "1.8.0-beta01"
+compose-multiplatform = "1.8.0-beta02"
 compose-adaptive = "1.0.1"
 kmpalette = "3.1.0"
 
@@ -9,12 +9,14 @@ multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplat
 [libraries]
 gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
-activity = "androidx.activity:activity-compose:1.9.3"
+activity = "androidx.activity:activity-compose:1.10.1"
 material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "compose-adaptive" }
 material3-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "compose-adaptive" }
 material3-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "compose-adaptive" }
 material3-windowsizeclass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "compose-multiplatform" }
+material3-placeholder = "com.eygraber:compose-placeholder-material3:1.0.10"
 material-kolor = "com.materialkolor:material-kolor:2.0.0"
+
 
 kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
 kmpalette-extensions-base64 = { module = "com.kmpalette:extensions-base64", version.ref = "kmpalette" }
