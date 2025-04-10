@@ -27,9 +27,12 @@ kotlin {
                 api(projects.core.logging.impl)
                 api(projects.core.settings)
                 api(projects.core.preferences)
+                api(projects.data.db.sqldelight)
                 api(projects.data.source.core)
                 api(projects.data.source.auth)
-                api(projects.data.db.sqldelight)
+
+                api(projects.sourceBundled.shikimori)
+
                 api(projects.domain)
                 api(projects.tasks)
 
