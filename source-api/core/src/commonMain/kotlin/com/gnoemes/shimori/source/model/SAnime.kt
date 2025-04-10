@@ -36,7 +36,10 @@ data class SAnime(
     val charactersRoles: List<SCharacterRole>? = null,
 ) {
 
-    constructor(entity: SAnime, track: STrack?) : this(
+    constructor(
+        entity: SAnime,
+        track: STrack?,
+    ) : this(
         id = entity.id,
         name = entity.name,
         nameRu = entity.nameRu,

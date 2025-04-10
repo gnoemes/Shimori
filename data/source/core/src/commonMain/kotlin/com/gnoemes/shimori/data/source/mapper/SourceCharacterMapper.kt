@@ -24,8 +24,8 @@ class SourceCharacterMapper(
         )
         return CharacterInfo(
             entity = character,
-            animes = emptyList(),
-            mangas = emptyList()
+            animes = null,
+            mangas = null
         )
     }
 }

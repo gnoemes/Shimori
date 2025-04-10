@@ -95,12 +95,12 @@ class CharacterDaoImpl(
         targetType: TrackTargetType
     ): PagingSource<Int, Character> {
         return QueryPagingSource(
-            countQuery = db.characterRoleQueries.countByTitle(targetId, targetType),
+            countQuery = db.characterRoleQueries.countCharactersByTitle(targetId, targetType),
             transacter = db.characterRoleQueries,
             context = dispatchers.io,
             queryProvider = { limit, offset ->
                 db.characterRoleQueries
-                    .queryByTitle(targetId, targetType, limit, offset, ::character)
+                    .queryCharactersByTitle(targetId, targetType, limit, offset, ::character)
             }
         )
 

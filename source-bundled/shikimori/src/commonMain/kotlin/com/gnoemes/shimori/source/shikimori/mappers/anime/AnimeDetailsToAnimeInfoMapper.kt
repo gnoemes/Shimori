@@ -22,46 +22,22 @@ class AnimeDetailsToAnimeInfoMapper(
 ) : Mapper<AnimeDetailsQuery.Anime, SAnime> {
 
     override fun map(from: AnimeDetailsQuery.Anime): SAnime {
-        val title = SAnime(
-            id = from.id.toLong(),
-            name = from.name,
-            nameRu = from.russian,
-            nameEn = from.english,
-            image = from.poster?.posterShort?.toSourceType(),
-            animeType = from.kind?.toSourceType(),
-            url = from.url.appendHostIfNeed(values),
-            rating = from.score,
-            status = from.status.toSourceType(),
-            episodes = from.episodes,
-            episodesAired = from.episodesAired,
-            dateAired = from.airedOn?.date?.toLocalDate(),
-            dateReleased = from.releasedOn?.date?.toLocalDate(),
-            nextEpisode = from.episodesAired + 1,
-            nextEpisodeDate = from.nextEpisodeAt?.toInstant(),
-            ageRating = from.rating.toSourceType(),
-            duration = from.duration,
-            description = from.description,
-            descriptionHtml = from.descriptionHtml,
-            franchise = from.franchise,
-            genres = from.genres?.map { it.toSourceType() }
-        )
-
         val fandubbers = from.fandubbers
         val fansubbers = from.fansubbers
 
-        val track = from.userRate?.animeUserRate?.toSourceType()
-
         val videos = from.videos.map {
             SAnimeVideo(
-                titleId = title.id,
+                titleId = from.id.toLong(),
                 name = it.name,
-                type = it.kind.toSourceType()
+                type = it.kind.toSourceType(),
+                url = it.url,
+                imageUrl = it.imageUrl
             )
         }
 
         val screenshots = from.screenshots.map {
             SAnimeScreenshot(
-                titleId = title.id,
+                titleId = from.id.toLong(),
                 image = SImage(
                     original = it.originalUrl,
                     preview = it.x332Url,
@@ -92,14 +68,40 @@ class AnimeDetailsToAnimeInfoMapper(
         } ?: emptyList()
 
 
-        return SAnime(
-            track = track,
+        val title = SAnime(
+            id = from.id.toLong(),
+            name = from.name,
+            nameRu = from.russian,
+            nameEn = from.english,
+            image = from.poster?.posterShort?.toSourceType(),
+            animeType = from.kind?.toSourceType(),
+            url = from.url.appendHostIfNeed(values),
+            rating = from.score,
+            status = from.status.toSourceType(),
+            episodes = from.episodes,
+            episodesAired = from.episodesAired,
+            dateAired = from.airedOn?.date?.toLocalDate(),
+            dateReleased = from.releasedOn?.date?.toLocalDate(),
+            nextEpisode = from.episodesAired + 1,
+            nextEpisodeDate = from.nextEpisodeAt?.toInstant(),
+            ageRating = from.rating.toSourceType(),
+            duration = from.duration,
+            description = from.description,
+            descriptionHtml = from.descriptionHtml,
+            franchise = from.franchise,
+            genres = from.genres?.map { it.toSourceType() },
             videos = videos,
             screenshots = screenshots,
             fanDubbers = fandubbers,
             fanSubbers = fansubbers,
             characters = characters,
             charactersRoles = characterRoles
+        )
+
+
+        return SAnime(
+            entity = title,
+            track = null,
         )
     }
 }

@@ -44,12 +44,6 @@ query AnimeDetails(
             updatedAt
         }
 
-        personRoles {
-            id
-            rolesRu
-            rolesEn
-            person { ...PersonShort }
-        }
         characterRoles {
             id
             rolesRu
@@ -57,31 +51,12 @@ query AnimeDetails(
             character { ...CharacterShort }
         }
 
-        related {
-            id
-            anime {
-                ...AnimeShort
-            }
-            manga {
-                ...MangaShort
-            }
-            relationKind
-            relationText
-        }
-
-        videos { id url name kind }
+        videos { id url name kind imageUrl }
         screenshots { id originalUrl x166Url x332Url }
-
-        scoresStats { score count }
-        statusesStats { status count }
 
         description
         descriptionHtml
         descriptionSource
-
-        userRate {
-            ...AnimeUserRate
-        }
     }
 }
 

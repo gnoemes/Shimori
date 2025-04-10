@@ -59,7 +59,7 @@ class AnimeVideoStore(
         val titleId = remote.firstOrNull()
             ?.let { syncDao.findLocalId(params.sourceId, it.titleId, SourceDataType.Anime) }
             ?: return
-        syncVideos(titleId, remote)
+        syncVideos(titleId, remote.map { it.copy(titleId = titleId) })
     }
 
     private fun syncVideos(titleId: Long, remote: List<AnimeVideo>) {

@@ -25,5 +25,17 @@ value class AnimeVideoType private constructor(val type: Int) {
             7 -> EpisodePreview
             else -> Other
         }
+
+        fun find(value: String?) = when (value) {
+            "op" -> Opening
+            "ed" -> Ending
+            "op_ed_clip" -> Music
+            "clip" -> Clip
+            "character_trailer" -> CharacterTrailer
+            "pv" -> Promo
+            "cm" -> Commercial
+            "episode_preview" -> EpisodePreview
+            else -> Other
+        }
     }
 }

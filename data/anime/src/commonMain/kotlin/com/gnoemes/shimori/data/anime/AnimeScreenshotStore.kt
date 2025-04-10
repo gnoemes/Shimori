@@ -59,10 +59,11 @@ class AnimeScreenshotStore(
         val titleId = remote.firstOrNull()
             ?.let { syncDao.findLocalId(params.sourceId, it.titleId, SourceDataType.Anime) }
             ?: return
-        syncVideos(titleId, remote)
+
+        syncScreenshots(titleId, remote.map { it.copy(titleId = titleId) })
     }
 
-    private fun syncVideos(titleId: Long, remote: List<AnimeScreenshot>) {
+    private fun syncScreenshots(titleId: Long, remote: List<AnimeScreenshot>) {
         val result = createSyncer().sync(
             currentValues = dao.queryByTitleId(titleId),
             networkValues = remote,

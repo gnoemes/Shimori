@@ -17,4 +17,13 @@ enum class TrackTargetType {
             MANGA -> SourceDataType.Manga
             RANOBE -> SourceDataType.Ranobe
         }
+
+    companion object {
+        fun find(type: SourceDataType) = when (type) {
+            SourceDataType.Anime -> ANIME
+            SourceDataType.Manga -> MANGA
+            SourceDataType.Ranobe -> RANOBE
+            else -> null
+        }
+    }
 }

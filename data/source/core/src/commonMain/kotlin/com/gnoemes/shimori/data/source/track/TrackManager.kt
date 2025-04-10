@@ -14,7 +14,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppScope::class)
 class TrackManager(
-    private val bundledTrackers: Set<TrackSource>,
+    bundledTrackers: Set<TrackSource>,
     dao: SourceIdsSyncDao,
     private val trackAdapter: TrackDataSourceAdapter,
     private val userAdapter: UserDataSourceAdapter,

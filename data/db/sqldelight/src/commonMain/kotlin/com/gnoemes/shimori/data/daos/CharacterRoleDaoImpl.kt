@@ -4,6 +4,7 @@ import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.db.api.daos.CharacterRoleDao
+import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.util.characterRole
 import com.gnoemes.shimori.logging.api.Logger
 import me.tatarka.inject.annotations.Inject
@@ -21,7 +22,7 @@ class CharacterRoleDaoImpl(
 ) : CharacterRoleDao(), SqlDelightEntityDao<CharacterRole> {
     override fun insert(entity: CharacterRole): Long {
         entity.let {
-            db.characterRoleQueries.upsert(
+            db.characterRoleQueries.insert(
                 it.characterId,
                 it.targetId,
                 it.targetType
@@ -48,5 +49,9 @@ class CharacterRoleDaoImpl(
 
     override fun queryByCharacterId(id: Long): List<CharacterRole> {
         return db.characterRoleQueries.queryByCharacterId(id, ::characterRole).executeAsList()
+    }
+
+    override fun queryByTitle(id: Long, type: TrackTargetType): List<CharacterRole> {
+        return db.characterRoleQueries.queryByTitle(id, type, ::characterRole).executeAsList()
     }
 }

@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.source.shikimori
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.network.http.LoggingInterceptor
 import com.gnoemes.shimori.base.entities.ApplicationInfo
 import com.gnoemes.shimori.base.entities.Platform
 import com.gnoemes.shimori.source.shikimori.actions.ShikimoriRefreshTokenAction
@@ -38,9 +39,16 @@ interface ShikimoriComponent : ShikimoriPlatformComponent {
     @SingleIn(AppScope::class)
     @Provides
     fun provideShikimoriGraphql(
+        info: ApplicationInfo,
         values: ShikimoriValues,
     ): ShikimoriApollo = ApolloClient.Builder()
         .serverUrl("${values.url}/api/graphql")
+        .addHttpInterceptor(
+            LoggingInterceptor(
+                if (info.debug) LoggingInterceptor.Level.BODY
+                else LoggingInterceptor.Level.NONE
+            )
+        )
         .build()
 
     @SingleIn(AppScope::class)

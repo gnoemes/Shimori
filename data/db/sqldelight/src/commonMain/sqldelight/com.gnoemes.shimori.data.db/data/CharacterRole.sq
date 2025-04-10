@@ -9,12 +9,9 @@ CREATE TABLE character_role(
 
 CREATE INDEX role_index ON character_role(character_id, target_id, target_type);
 
-upsert:
-INSERT OR REPLACE INTO character_role(
-character_id, target_id, target_type
-) VALUES (?, ?, ?)
-ON CONFLICT(character_id, target_id, target_type)
-DO NOTHING;
+insert:
+INSERT INTO character_role(character_id, target_id, target_type)
+VALUES (?,?,?);
 
 update:
 UPDATE character_role
@@ -31,13 +28,17 @@ DELETE FROM character_role WHERE id = :id;
 deleteByCharacterId:
 DELETE FROM character_role WHERE character_id = :id;
 
-queryByTitle:
+queryCharactersByTitle:
 SELECT c.* FROM character_role AS cr
 INNER JOIN character AS c ON cr.character_id = c.id
 WHERE target_id = :targetId AND target_type = :target_type
 LIMIT :limit OFFSET :offset;
 
-countByTitle:
+queryByTitle:
+SELECT * FROM character_role
+WHERE target_id = :targetId AND target_type = :target_type;
+
+countCharactersByTitle:
 SELECT COUNT(*) FROM character_role AS cr
 INNER JOIN character AS c ON cr.character_id = c.id
 WHERE target_id = :targetId AND target_type = :target_type;

@@ -64,8 +64,8 @@ val ShikimoriClientId: String? by project
 val ShikimoriClientSecret: String? by project
 val ShikimoriRedirectUrl: String? by project
 
-val ShikimoriClientIdDesktop : String? by project
-val ShikimoriClientSecretDesktop : String? by project
+val ShikimoriClientIdDesktop: String? by project
+val ShikimoriClientSecretDesktop: String? by project
 val ShikimoriRedirectUrlDesktop: String by project
 
 buildConfig {
@@ -125,7 +125,12 @@ buildConfig {
     buildConfigField(
         type = "String",
         name = "ShikimoriClientSecretDesktop",
-        value = ShikimoriClientSecretDesktop ?: "${propOrDef("ShikimoriClientSecretDesktop", "none")}",
+        value = ShikimoriClientSecretDesktop ?: "${
+            propOrDef(
+                "ShikimoriClientSecretDesktop",
+                "none"
+            )
+        }",
     )
     buildConfigField(
         type = "String",
