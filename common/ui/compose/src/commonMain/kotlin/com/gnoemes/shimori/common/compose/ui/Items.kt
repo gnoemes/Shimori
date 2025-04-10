@@ -53,7 +53,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CharacterItem(
     character: Character,
-    coverHeight : Dp,
+    coverHeight: Dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -72,8 +72,11 @@ fun CharacterItem(
             textCreator {
                 character.name()
             },
+            modifier = Modifier.width(coverHeight / 4 * 3f),
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
