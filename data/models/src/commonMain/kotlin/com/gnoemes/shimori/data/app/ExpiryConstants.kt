@@ -7,6 +7,7 @@ object ExpiryConstants {
 
     const val TITLES_WITH_STATUS = 15
     const val TITLE_DETAILS = DAY
+    const val TITLE_CHARACTERS = DAY
     const val CHARACTER_DETAILS = DAY
     const val SYNC_PENDING_TASKS = 5
 }

@@ -37,12 +37,6 @@ query MangaDetails(
             updatedAt
         }
 
-        personRoles {
-            id
-            rolesRu
-            rolesEn
-            person { ...PersonShort }
-        }
         characterRoles {
             id
             rolesRu
@@ -50,27 +44,24 @@ query MangaDetails(
             character { ...CharacterShort }
         }
 
-        related {
-            id
-            anime {
-                ...AnimeShort
-            }
-            manga {
-                ...MangaShort
-            }
-            relationKind
-            relationText
-        }
-
-        scoresStats { score count }
-        statusesStats { status count }
-
         description
         descriptionHtml
         descriptionSource
+    }
+}
 
-        userRate {
-            ...MangaUserRate
+query MangaCharacters(
+    $ids: String
+) {
+    mangas(ids: $ids) {
+        id
+        name
+
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { ...CharacterShort }
         }
     }
 }

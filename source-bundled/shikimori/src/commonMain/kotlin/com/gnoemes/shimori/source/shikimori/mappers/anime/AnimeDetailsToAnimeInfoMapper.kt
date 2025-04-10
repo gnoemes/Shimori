@@ -1,16 +1,17 @@
 package com.gnoemes.shimori.source.shikimori.mappers.anime
 
 import com.gnoemes.shimori.base.utils.Mapper
+import com.gnoemes.shimori.base.utils.invoke
 import com.gnoemes.shimori.source.model.SAnime
 import com.gnoemes.shimori.source.model.SAnimeScreenshot
 import com.gnoemes.shimori.source.model.SAnimeVideo
-import com.gnoemes.shimori.source.model.SCharacter
 import com.gnoemes.shimori.source.model.SCharacterRole
 import com.gnoemes.shimori.source.model.SImage
 import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.source.shikimori.AnimeDetailsQuery
 import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.appendHostIfNeed
 import com.gnoemes.shimori.source.shikimori.ShikimoriValues
+import com.gnoemes.shimori.source.shikimori.mappers.character.CharacterShortToSCharacterMapper
 import com.gnoemes.shimori.source.shikimori.mappers.toInstant
 import com.gnoemes.shimori.source.shikimori.mappers.toLocalDate
 import com.gnoemes.shimori.source.shikimori.mappers.toSourceType
@@ -19,6 +20,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AnimeDetailsToAnimeInfoMapper(
     private val values: ShikimoriValues,
+    private val characterMapper: CharacterShortToSCharacterMapper,
 ) : Mapper<AnimeDetailsQuery.Anime, SAnime> {
 
     override fun map(from: AnimeDetailsQuery.Anime): SAnime {
@@ -48,16 +50,7 @@ class AnimeDetailsToAnimeInfoMapper(
 
         val characters = from.characterRoles
             ?.map { it.character.characterShort }
-            ?.map { character ->
-                SCharacter(
-                    id = character.id.toLong(),
-                    name = character.name,
-                    nameRu = character.russian,
-                    nameEn = character.name,
-                    image = character.poster?.posterShort?.toSourceType(),
-                    url = character.url.appendHostIfNeed(values),
-                )
-            } ?: emptyList()
+            ?.map { characterMapper(it) }
 
         val characterRoles = from.characterRoles?.map {
             SCharacterRole(
@@ -65,7 +58,7 @@ class AnimeDetailsToAnimeInfoMapper(
                 targetId = from.id.toLong(),
                 targetType = SourceDataType.Anime
             )
-        } ?: emptyList()
+        }
 
 
         val title = SAnime(

@@ -25,6 +25,8 @@ data class SManga(
     val topicId: Long? = null,
     val genres: List<String>? = null,
     val track: STrack? = null,
+    val characters: List<SCharacter>? = null,
+    val charactersRoles: List<SCharacterRole>? = null,
 ) {
 
     constructor(entity: SManga, track: STrack?) : this(

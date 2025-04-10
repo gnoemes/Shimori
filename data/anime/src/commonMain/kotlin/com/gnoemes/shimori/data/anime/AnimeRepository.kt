@@ -62,6 +62,15 @@ class AnimeRepository(
             }
     }
 
+    suspend fun syncTitleCharacters(
+        id: Long
+    ) : SourceResponse<AnimeInfo> {
+        val local = store.dao.queryById(id)
+            ?: throw IllegalStateException("Anime with id: $id not found")
+
+        return catalogue.anime { getCharacters(local) }
+    }
+
     suspend fun <T> trySync(data: SourceResponse<T>) {
         transactionRunner {
             store.trySync(data)

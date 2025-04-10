@@ -9,4 +9,6 @@ interface MangaDataSource {
     suspend fun getWithStatus(userId: SourceIdArgument, status: STrackStatus?): List<SManga>
     suspend fun get(id: MalIdArgument): SManga
     suspend fun get(id: SourceIdArgument): SManga
+    suspend fun getCharacters(id : MalIdArgument): SManga
+    suspend fun getCharacters(id : SourceIdArgument): SManga
 }

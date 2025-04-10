@@ -39,6 +39,15 @@ class RanobeDataSourceAdapter(
         }.let(mapper::invoke)
     }
 
+    fun getCharacters(data: Ranobe): suspend RanobeDataSource.(Source) -> MangaInfo = { source ->
+        val arg = requestMapper.toId(source, data)
+        when (arg) {
+            is MalIdArgument -> getCharacters(arg)
+            is SourceIdArgument -> getCharacters(arg)
+            else -> throw IllegalArgumentException("Unknown argument $arg for request")
+        }.let(mapper::invoke)
+    }
+
     fun getWithStatus(
         user: UserShort?,
         status: TrackStatus?

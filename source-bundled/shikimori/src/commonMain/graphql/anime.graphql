@@ -60,6 +60,23 @@ query AnimeDetails(
     }
 }
 
+
+query AnimeCharacters(
+    $ids: String
+) {
+    animes(ids: $ids) {
+        id
+        name
+
+        characterRoles {
+            id
+            rolesRu
+            rolesEn
+            character { ...CharacterShort }
+        }
+    }
+}
+
 query animes(
     $page: PositiveInt = 1
     $limit: PositiveInt = 2
