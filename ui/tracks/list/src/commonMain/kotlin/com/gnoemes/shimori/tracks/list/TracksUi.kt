@@ -82,7 +82,6 @@ import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.ui.ShimoriSearchBar
 import com.gnoemes.shimori.common.compose.ui.SideSheetDefaults
 import com.gnoemes.shimori.common.compose.ui.TrackItem
-import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_asc
 import com.gnoemes.shimori.common.ui.resources.icons.ic_desc
@@ -116,14 +115,9 @@ internal fun TracksUi(
     val windowSizeClass = LocalWindowSizeClass.current
     val eventSink = state.eventSink
 
-    val message = state.uiMessage
-
     TracksUi(
         widthSizeClass = windowSizeClass.widthSizeClass,
         state = state,
-        message = message,
-        onMessageShown = { eventSink(TracksUiEvent.ClearMessage(message?.id ?: 0)) },
-        onMessageAction = { eventSink(TracksUiEvent.ActionMessage(message?.id ?: 0)) },
         addOneToProgress = { eventSink(TracksUiEvent.AddOneToProgress(it)) },
         changeSort = { eventSink(TracksUiEvent.ChangeSort(it)) },
         openEdit = { eventSink(TracksUiEvent.OpenEdit(it)) },
@@ -138,9 +132,6 @@ internal fun TracksUi(
 private fun TracksUi(
     widthSizeClass: WindowWidthSizeClass,
     state: TracksUiState,
-    message: UiMessage?,
-    onMessageShown: () -> Unit,
-    onMessageAction: () -> Unit,
     addOneToProgress: (Track) -> Unit,
     changeSort: (ListSort) -> Unit,
     openEdit: (TitleWithTrackEntity) -> Unit,

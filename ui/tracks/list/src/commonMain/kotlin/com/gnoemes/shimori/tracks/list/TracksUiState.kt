@@ -2,7 +2,6 @@ package com.gnoemes.shimori.tracks.list
 
 import androidx.compose.runtime.Stable
 import app.cash.paging.compose.LazyPagingItems
-import com.gnoemes.shimori.common.compose.ui.UiMessage
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.ListSortOption
@@ -23,7 +22,6 @@ data class TracksUiState(
     val itemsExist : Boolean,
     val items: LazyPagingItems<TitleWithTrackEntity>,
     val firstSyncLoading: Boolean,
-    val uiMessage: UiMessage?,
     val eventSink: (TracksUiEvent) -> Unit
 ) : CircuitUiState
 
@@ -41,6 +39,4 @@ sealed interface TracksUiEvent : CircuitUiEvent {
     }
 
     data class ChangeSort(val sort: ListSort) : TracksUiEvent
-    data class ClearMessage(val id: Long) : TracksUiEvent
-    data class ActionMessage(val id: Long) : TracksUiEvent
 }

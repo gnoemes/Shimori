@@ -18,7 +18,6 @@ import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.isExpanded
 import com.gnoemes.shimori.common.compose.isMedium
 import com.gnoemes.shimori.common.compose.rememberRetainedCachedPagingFlow
-import com.gnoemes.shimori.common.compose.ui.UiMessageManager
 import com.gnoemes.shimori.common.ui.overlay.showInBottomSheet
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
@@ -73,8 +72,6 @@ class TracksPresenter(
         val isMedium by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isMedium() } }
         val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
 
-        val uiMessageManager = remember { UiMessageManager() }
-
         val type by listsState.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
         val status by listsState.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
         val sort by observeSort.value.flow.collectAsRetainedState(ListSort.defaultForType(type))
@@ -101,8 +98,6 @@ class TracksPresenter(
 
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
-
-        val message by uiMessageManager.message.collectAsState(null)
 
         val isMenuButtonVisible = (isCompact || isMedium) && tracksExist
         prefs.nestedScaffoldContainsFab = isMenuButtonVisible
@@ -164,15 +159,6 @@ class TracksPresenter(
                     }
                 }
 
-                is TracksUiEvent.ClearMessage -> launchOrThrow {
-                    uiMessageManager.clearMessage(event.id)
-                }
-
-                is TracksUiEvent.ActionMessage -> launchOrThrow {
-                    val actionMessage = uiMessageManager.get(event.id)
-                    uiMessageManager.clearMessage(event.id)
-                }
-
                 TracksUiEvent.OpenMenu -> {
                     val screen = TracksMenuScreen
                     when {
@@ -198,7 +184,6 @@ class TracksPresenter(
             itemsExist = itemsExist,
             items = items,
             firstSyncLoading = firstSyncLoading,
-            uiMessage = message,
             eventSink = wrapEventSink(eventSink)
         )
     }
