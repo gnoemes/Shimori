@@ -14,7 +14,7 @@ data class TitleDetailsUiState(
     val track: Track?,
     val isFavorite: Boolean,
     val descriptionExpanded: Boolean,
-    val showCharactersList: Boolean,
+    val isShowCharacters: Boolean,
     val eventSink: (TitleDetailsUiEvent) -> Unit
 ) : CircuitUiState
 

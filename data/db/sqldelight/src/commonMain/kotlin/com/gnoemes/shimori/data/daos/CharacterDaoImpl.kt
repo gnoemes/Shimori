@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.daos
 import androidx.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
@@ -22,6 +23,7 @@ import com.gnoemes.shimori.data.util.ranobeWithTrack
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -92,10 +94,21 @@ class CharacterDaoImpl(
             .flowOn(dispatchers.io)
     }
 
+    override fun observeTitleCharactersCount(
+        targetId: Long,
+        targetType: TrackTargetType
+    ): Flow<Int> {
+        return db.characterRoleQueries.countCharactersByTitle(targetId, targetType)
+            .asFlow()
+            .mapToOne(dispatchers.io)
+            .map { it.toInt() }
+            .flowOn(dispatchers.io)
+    }
+
     override fun observeTitleCharacters(
         targetId: Long,
         targetType: TrackTargetType,
-        search : String?
+        search: String?
     ): PagingSource<Int, CharacterWithRole> {
         return QueryPagingSource(
             countQuery = db.characterRoleQueries.countCharactersByTitle(targetId, targetType),
@@ -104,10 +117,23 @@ class CharacterDaoImpl(
             queryProvider = { limit, offset ->
                 if (search.isNullOrBlank()) {
                     db.titleCharactersViewQueries
-                        .querySortByRoleAndName(targetId, targetType, limit, offset, ::characterWithRole)
+                        .querySortByRoleAndName(
+                            targetId,
+                            targetType,
+                            limit,
+                            offset,
+                            ::characterWithRole
+                        )
                 } else {
                     db.titleCharactersViewQueries
-                        .querySearchSortByRoleAndName(targetId, targetType, search, limit, offset, ::characterWithRole)
+                        .querySearchSortByRoleAndName(
+                            targetId,
+                            targetType,
+                            search,
+                            limit,
+                            offset,
+                            ::characterWithRole
+                        )
                 }
             }
         )

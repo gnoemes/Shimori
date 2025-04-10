@@ -18,6 +18,7 @@ import com.gnoemes.shimori.common.compose.ui.UiMessageManager
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
 import com.gnoemes.shimori.domain.interactors.LogoutSource
@@ -113,6 +114,7 @@ class HomePresenter(
             }
         }
 
+        appUiEventHandler(uiMessageManager, eventSink)
         trackUiEventHandler(uiMessageManager, eventSink)
 
         return HomeUiState(
@@ -165,6 +167,20 @@ class HomePresenter(
         eventPreparedMessage?.let {
             LaunchedEffect(it) {
                 uiMessageManager.emitMessage(it)
+            }
+        }
+    }
+
+    @Composable
+    private fun appUiEventHandler(
+        uiMessageManager: UiMessageManager,
+        eventSink: CoroutineScope.(HomeUiEvent) -> Unit,
+    ) {
+        LaunchedEffect(Unit) {
+            EventBus.observe<AppUiEvents> { event ->
+                when (event) {
+                    is AppUiEvents.UiError -> uiMessageManager.emitMessage(UiMessage(event.error))
+                }
             }
         }
     }

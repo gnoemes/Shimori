@@ -17,9 +17,13 @@ import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.rememberRetainedCachedPagingFlow
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.characters.CharacterWithRole
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitleCharacters
 import com.gnoemes.shimori.domain.observers.ObserveTitleCharacters
+import com.gnoemes.shimori.domain.observers.ObserveTitleCharactersCount
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
+import com.gnoemes.shimori.domain.onFailurePublishToBus
 import com.gnoemes.shimori.screens.CharacterDetailsScreen
 import com.gnoemes.shimori.screens.TitleCharactersScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -41,6 +45,7 @@ class TitleCharactersPresenter(
     private val updateTitleCharacters: Lazy<UpdateTitleCharacters>,
     private val observeTitleCharacters: Lazy<ObserveTitleCharacters>,
     private val observeTitle: Lazy<ObserveTitleWithTrackEntity>,
+    private val observeCharactersCount: Lazy<ObserveTitleCharactersCount>,
 ) : Presenter<TitleCharactersUiState> {
 
     @Composable
@@ -57,6 +62,8 @@ class TitleCharactersPresenter(
         } ?: ""
 
         val titleName by remember { derivedStateOf { titleNameLocalized } }
+        val charactersCount by observeCharactersCount.value.flow.collectAsState(-1)
+        val charactersUpdating by updateTitleCharacters.value.inProgress.collectAsState(false)
 
         val retainedCharacterPagingInteractor =
             rememberRetained(screen.id, screen.type) { observeTitleCharacters.value }
@@ -80,11 +87,15 @@ class TitleCharactersPresenter(
                             screen.id,
                             screen.type
                         )
-                    )
+                    ).onFailurePublishToBus()
                 }
 
                 observeTitle.value(
                     ObserveTitleWithTrackEntity.Params(screen.id, screen.type)
+                )
+
+                observeCharactersCount.value(
+                    ObserveTitleCharactersCount.Params(screen.id, screen.type)
                 )
             }
         }
@@ -95,13 +106,24 @@ class TitleCharactersPresenter(
             )
         }
 
+        val hideList = !isGrid && !charactersUpdating && charactersCount == 0
+        LaunchedEffect(hideList) {
+            if (hideList) {
+                EventBus.publish(TitleUiEvents.HideCharacters)
+            }
+        }
+
         val eventSink: CoroutineScope.(TitleCharactersUiEvent) -> Unit = { event ->
             when (event) {
                 TitleCharactersUiEvent.NavigateUp -> navigator.pop()
                 TitleCharactersUiEvent.CloseSearch -> isSearchActive = false
                 TitleCharactersUiEvent.OpenSearch -> isSearchActive = true
                 is TitleCharactersUiEvent.Search -> searchInput = event.value
-                is TitleCharactersUiEvent.OpenCharacter -> navigator.goTo(CharacterDetailsScreen(event.id))
+                is TitleCharactersUiEvent.OpenCharacter -> navigator.goTo(
+                    CharacterDetailsScreen(
+                        event.id
+                    )
+                )
             }
         }
 

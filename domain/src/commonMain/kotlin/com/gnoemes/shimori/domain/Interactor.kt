@@ -2,6 +2,8 @@ package com.gnoemes.shimori.domain
 
 import app.cash.paging.PagingConfig
 import app.cash.paging.PagingData
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.AppUiEvents
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -84,4 +86,13 @@ abstract class PagingInteractor<P : PagingInteractor.PagingParams<T>, T : Any> :
 suspend operator fun <R> Interactor<Unit, R>.invoke(
     timeout: Duration = Interactor.DefaultTimeout,
 ) = invoke(Unit, timeout)
+
 operator fun <T> SubjectInteractor<Unit, T>.invoke() = invoke(Unit)
+
+suspend fun <T> Result<T>.onFailurePublishToBus(): Result<T> {
+    exceptionOrNull()?.let {
+        EventBus.publish(AppUiEvents.UiError(it))
+    }
+
+    return this
+}

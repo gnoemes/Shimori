@@ -16,10 +16,15 @@ abstract class CharacterDao : EntityDao<Character> {
 
     abstract fun observeById(id: Long): Flow<Character?>
 
+    abstract fun observeTitleCharactersCount(
+        targetId: Long,
+        targetType: TrackTargetType
+    ): Flow<Int>
+
     abstract fun observeTitleCharacters(
         targetId: Long,
         targetType: TrackTargetType,
-        search : String?
+        search: String?
     ): PagingSource<Int, CharacterWithRole>
 
     abstract fun observeCharacterAnimes(id: Long): Flow<List<AnimeWithTrack>>

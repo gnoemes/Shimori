@@ -17,8 +17,12 @@ import com.gnoemes.shimori.common.compose.isExpanded
 import com.gnoemes.shimori.common.compose.isMedium
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
 import com.gnoemes.shimori.common.ui.wrapEventSink
+import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
+import com.gnoemes.shimori.domain.onFailurePublishToBus
+import com.gnoemes.shimori.screens.TitleCharactersScreen
 import com.gnoemes.shimori.screens.TitleDetailsScreen
 import com.gnoemes.shimori.screens.TrackEditScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -48,6 +52,7 @@ class TitleDetailsPresenter(
         val titleWithEntity by observeTitleWithTrack.value.flow.collectAsState(null)
 
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
+        var isShowCharacters by remember { mutableStateOf(true) }
 
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
@@ -55,6 +60,7 @@ class TitleDetailsPresenter(
         LaunchedEffect(Unit) {
             launchOrThrow {
                 updateTitle.value(UpdateTitle.Params.optionalUpdate(screen.id, screen.type))
+                    .onFailurePublishToBus()
             }
 
             observeTitleWithTrack.value(
@@ -72,7 +78,18 @@ class TitleDetailsPresenter(
 
                 TitleDetailsUiEvent.ToggleFavorite -> TODO()
 
-                TitleDetailsUiEvent.OpenCharactersList -> TODO()
+                TitleDetailsUiEvent.OpenCharactersList -> {
+                    titleWithEntity?.entity?.let { title ->
+                        navigator.goTo(
+                            TitleCharactersScreen(
+                                title.id,
+                                title.type,
+                                grid = true
+                            )
+                        )
+                    }
+                }
+
                 TitleDetailsUiEvent.OpenChronology -> TODO()
                 TitleDetailsUiEvent.OpenFrames -> TODO()
                 TitleDetailsUiEvent.OpenInBrowser -> TODO()
@@ -99,6 +116,17 @@ class TitleDetailsPresenter(
             }
         }
 
+        LaunchedEffect(Unit) {
+            EventBus.observe<TitleUiEvents> {
+                when (it) {
+                    is TitleUiEvents.HideCharacters -> isShowCharacters = false
+
+                    else -> Unit
+                }
+            }
+        }
+
+
         return TitleDetailsUiState(
             isListView = isCompact || isMedium,
             title = titleWithEntity?.entity,
@@ -106,9 +134,10 @@ class TitleDetailsPresenter(
             isFavorite = titleWithEntity?.entity?.favorite ?: false,
             descriptionExpanded = descriptionExpanded,
 
-            showCharactersList = true,
+            isShowCharacters = isShowCharacters,
 
             eventSink = wrapEventSink(eventSink)
         )
     }
+
 }
