@@ -4,6 +4,8 @@ import app.cash.sqldelight.db.SqlDriver
 import com.gnoemes.shimori.data.adapters.AnimeAdapter
 import com.gnoemes.shimori.data.adapters.AnimeVideoAdapter
 import com.gnoemes.shimori.data.adapters.CharacterRoleAdapter
+import com.gnoemes.shimori.data.adapters.GenreAdapter
+import com.gnoemes.shimori.data.adapters.GenreRelationAdapter
 import com.gnoemes.shimori.data.adapters.LastRequestAdapter
 import com.gnoemes.shimori.data.adapters.ListSortAdapter
 import com.gnoemes.shimori.data.adapters.MangaAdapter
@@ -28,12 +30,14 @@ class DatabaseFactory(
         last_requestAdapter = LastRequestAdapter,
         list_sortAdapter = ListSortAdapter,
         mangaAdapter = MangaAdapter,
-        pinnedAdapter = PinnedAdapter,
         ranobeAdapter = RanobeAdapter,
         source_ids_syncAdapter = SourceIdsSyncAdapter,
         trackAdapter = TrackAdapter,
         track_to_syncAdapter = TrackToSyncAdapter,
-        userAdapter = UserAdapter
+        genre_relationAdapter = GenreRelationAdapter,
+        genreAdapter = GenreAdapter,
+        userAdapter = UserAdapter,
+        pinnedAdapter = PinnedAdapter
     )
 
 }

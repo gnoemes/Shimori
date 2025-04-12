@@ -2,16 +2,7 @@ import com.gnoemes.shimori.data.app.SyncAction;
 import kotlin.Int;
 import kotlinx.datetime.Instant;
 
-CREATE TABLE track_to_sync (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    track_id INTEGER NOT NULL,
-    sync_action TEXT AS SyncAction NOT NULL,
-    attempts INTEGER AS Int NOT NULL,
-    last_attempt INTEGER AS Instant,
-    attempt_source_id INTEGER
-);
 
-CREATE UNIQUE INDEX sync_track_id ON track_to_sync(track_id);
 
 insert:
 INSERT OR REPLACE INTO track_to_sync (track_id, sync_action, attempts, last_attempt)

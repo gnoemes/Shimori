@@ -1,13 +1,13 @@
 package com.gnoemes.shimori.data.common
 
 import com.gnoemes.shimori.data.ShimoriEntity
+import com.gnoemes.shimori.data.track.TrackTargetType
 
 @kotlinx.serialization.Serializable
-data class Genre(
+data class GenreRelation(
     override val id: Long = 0,
     val sourceId: Long,
-    val type: GenreType,
-    val name: String = "",
-    val nameRu: String? = null,
-    val description: String? = null,
+    val targetId : Long,
+    val type : TrackTargetType,
+    val ids : List<Long>
 ) : ShimoriEntity

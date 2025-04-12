@@ -1,20 +1,4 @@
-CREATE VIEW titleCharactersView AS
-SELECT
-    c.id,
-    c.name,
-    c.name_ru AS nameRu,
-    c.name_eng AS nameEn,
-    c.image_original,
-    c.image_preview,
-    c.image_x96,
-    c.image_x48,
-    cr.id,
-    cr.role AS role,
-    cr.role_ru AS roleRu,
-    cr.target_id,
-    cr.target_type
-FROM character_role AS cr
-INNER JOIN character AS c ON cr.character_id = c.id;
+
 
 querySortByRoleAndName:
 SELECT * FROM titleCharactersView

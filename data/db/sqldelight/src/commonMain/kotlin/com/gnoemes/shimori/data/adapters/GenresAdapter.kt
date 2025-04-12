@@ -1,12 +1,12 @@
 package com.gnoemes.shimori.data.adapters
 
 import app.cash.sqldelight.ColumnAdapter
-import com.gnoemes.shimori.data.common.Genre
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
-internal object GenresAdapter : ColumnAdapter<List<Genre>, String> {
+internal object GenreIdsAdapter : ColumnAdapter<List<Long>, String> {
+    private const val DELIMITER = ","
+    override fun decode(databaseValue: String): List<Long> =
+        databaseValue.split(DELIMITER).map { it.toLong() }
 
-    override fun decode(databaseValue: String) = Json.decodeFromString<List<Genre>>(databaseValue)
-    override fun encode(value: List<Genre>): String = Json.encodeToString(value)
+    override fun encode(value: List<Long>): String =
+        value.joinToString(separator = DELIMITER) { it.toString() }
 }

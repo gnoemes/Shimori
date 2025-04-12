@@ -6,39 +6,15 @@ import kotlin.Int;
 import kotlin.Boolean;
 import kotlinx.datetime.LocalDate;
 
-CREATE TABLE manga (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    name TEXT NOT NULL,
-    name_ru TEXT,
-    name_eng TEXT,
-    image_original TEXT,
-    image_preview TEXT,
-    image_x96 TEXT,
-    image_x48 TEXT,
-    url TEXT,
-    manga_type TEXT,
-    rating REAL,
-    status TEXT AS TitleStatus,
-    chapters INTEGER AS Int NOT NULL,
-    volumes INTEGER AS Int NOT NULL,
-    date_aired TEXT AS LocalDate,
-    date_released TEXT AS LocalDate,
-    age_rating TEXT AS AgeRating NOT NULL,
-    description TEXT,
-    description_html TEXT,
-    franchise TEXT,
-    favorite INTEGER AS Boolean NOT NULL,
-    topic_id INTEGER,
-    genres TEXT AS List<Genre>
-);
+
 
 insert:
 INSERT OR REPLACE INTO manga(
 name, name_ru, name_eng, image_original, image_preview,
 image_x96, image_x48, url, manga_type, rating, status, chapters, volumes,
 date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
-topic_id, genres)
-VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+topic_id)
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
 UPDATE manga
@@ -64,8 +40,7 @@ SET
  description_html = coalesce(:description_html, description_html),
  franchise = coalesce(:franchise, franchise),
  favorite = :favorite,
- topic_id  = coalesce(:topic_id, topic_id),
- genres = coalesce(:genres, genres)
+ topic_id  = coalesce(:topic_id, topic_id)
  WHERE id = :id;
 
 deleteAll:

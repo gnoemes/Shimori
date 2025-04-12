@@ -1,15 +1,6 @@
 import kotlin.Int;
 
-CREATE TABLE source_ids_sync (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    source_id INTEGER NOT NULL,
-    local_id INTEGER NOT NULL,
-    remote_id INTEGER NOT NULL,
-    type INTEGER AS Int NOT NULL
-);
 
-CREATE INDEX source_ids_sync_local_index ON source_ids_sync(source_id, local_id, type);
-CREATE INDEX source_ids_sync_remote_index ON source_ids_sync(source_id, remote_id, type);
 
 insert:
 INSERT OR REPLACE INTO source_ids_sync(source_id, local_id, remote_id, type)

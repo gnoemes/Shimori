@@ -1,21 +1,6 @@
-import kotlin.Int;
-
-CREATE TABLE anime_video (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    title_id INTEGER NOT NULL,
-    name TEXT,
-    url TEXT NOT NULL,
-    image_url TEXT,
-    type INTEGER AS Int,
-    hosting TEXT
-);
-
-CREATE INDEX title_index ON anime_video(title_id);
-
 insert:
-INSERT OR REPLACE INTO anime_video(
-title_id, name, url, image_url, type, hosting
-) VALUES (?,?,?,?,?,?);
+INSERT OR REPLACE INTO anime_video(title_id, name, url, image_url, type, hosting)
+ VALUES (?,?,?,?,?,?);
 
 update:
 UPDATE anime_video

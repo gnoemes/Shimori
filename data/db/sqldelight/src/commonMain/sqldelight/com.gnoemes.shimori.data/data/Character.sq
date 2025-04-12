@@ -1,16 +1,3 @@
-CREATE TABLE character (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    name TEXT NOT NULL,
-    name_ru TEXT,
-    name_eng TEXT,
-    image_original TEXT,
-    image_preview TEXT,
-    image_x96 TEXT,
-    image_x48 TEXT,
-    url TEXT,
-    description TEXT,
-    description_source_url TEXT
-);
 
 insert:
 INSERT INTO character(name, name_ru, name_eng, image_original,

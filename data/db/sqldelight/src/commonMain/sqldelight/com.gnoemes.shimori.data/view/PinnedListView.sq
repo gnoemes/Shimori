@@ -1,21 +1,4 @@
-CREATE VIEW pinnedListView AS
-SELECT * FROM (
-SELECT anime.*, track.*, pinned.* FROM pinned
-INNER JOIN anime ON pinned.target_type = "ANIME" AND anime.id = pinned.target_id
-INNER JOIN track ON track.target_id = anime.id AND track.target_type = pinned.target_type
 
-UNION ALL
-
-SELECT manga.*, NULL, NULL, NULL, track.*, pinned.* FROM pinned
-INNER JOIN manga ON pinned.target_type = "MANGA" AND manga.id = pinned.target_id
-INNER JOIN track ON track.target_id = manga.id AND track.target_type = pinned.target_type
-
-UNION ALL
-
-SELECT ranobe.*, NULL, NULL, NULL, track.*, pinned.* FROM pinned
-INNER JOIN ranobe ON pinned.target_type = "RANOBE" AND ranobe.id = pinned.target_id
-INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = pinned.target_type
-);
 
 -- https://github.com/cashapp/sqldelight/issues/4492
 dummySelectManga:

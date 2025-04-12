@@ -1,7 +1,6 @@
 package com.gnoemes.shimori.data
 
 import com.gnoemes.shimori.data.common.AgeRating
-import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.titles.anime.Anime
@@ -38,7 +37,6 @@ interface ShimoriTitleEntity : ShimoriContentEntity {
     val franchise: String?
     val favorite: Boolean
     val topicId: Long?
-    val genres: List<Genre>?
 
     val isOngoing get() = status != null && status == TitleStatus.ONGOING
 

@@ -51,7 +51,7 @@ class TrackDaoImpl(
     override fun update(entity: Track) {
         entity.let {
             db.trackQueries.update(
-                comgnoemesshimoridatadb.data.Track(
+                migrations.Track(
                     it.id,
                     it.targetId,
                     it.targetType,

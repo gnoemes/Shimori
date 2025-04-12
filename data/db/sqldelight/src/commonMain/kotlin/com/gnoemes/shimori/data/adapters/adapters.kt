@@ -5,22 +5,25 @@ import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.app.SyncAction
 import com.gnoemes.shimori.data.common.AgeRating
+import com.gnoemes.shimori.data.common.GenreType
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
-import comgnoemesshimoridatadb.data.Anime
-import comgnoemesshimoridatadb.data.Anime_video
-import comgnoemesshimoridatadb.data.Character_role
-import comgnoemesshimoridatadb.data.Last_request
-import comgnoemesshimoridatadb.data.List_sort
-import comgnoemesshimoridatadb.data.Manga
-import comgnoemesshimoridatadb.data.Pinned
-import comgnoemesshimoridatadb.data.Ranobe
-import comgnoemesshimoridatadb.data.Source_ids_sync
-import comgnoemesshimoridatadb.data.Track
-import comgnoemesshimoridatadb.data.Track_to_sync
-import comgnoemesshimoridatadb.data.User
+import migrations.Anime
+import migrations.Anime_video
+import migrations.Character_role
+import migrations.Genre
+import migrations.Genre_relation
+import migrations.Last_request
+import migrations.List_sort
+import migrations.Manga
+import migrations.Pinned
+import migrations.Ranobe
+import migrations.Source_ids_sync
+import migrations.Track
+import migrations.Track_to_sync
+import migrations.User
 
 
 internal val TrackAdapter = Track.Adapter(
@@ -35,12 +38,12 @@ internal val TrackAdapter = Track.Adapter(
 
 internal val UserAdapter = User.Adapter(
     last_onlineAdapter = InstantAdapter,
-    full_yearsAdapter = IntColumnAdapter
+    full_yearsAdapter = IntColumnAdapter,
 )
 
 internal val ListSortAdapter = List_sort.Adapter(
     sortAdapter = EnumColumnAdapter<ListSortOption>(),
-    typeAdapter = EnumColumnAdapter<TrackTargetType>()
+    typeAdapter = EnumColumnAdapter<TrackTargetType>(),
 )
 
 internal val LastRequestAdapter = Last_request.Adapter(
@@ -62,19 +65,17 @@ internal val AnimeAdapter = Anime.Adapter(
     date_releasedAdapter = LocalDateAdapter,
     next_episode_dateAdapter = InstantAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
-    genresAdapter = GenresAdapter,
     episodesAdapter = IntColumnAdapter,
     episodes_airedAdapter = IntColumnAdapter,
     durationAdapter = IntColumnAdapter,
     next_episodeAdapter = IntColumnAdapter,
-)
+    )
 
 internal val MangaAdapter = Manga.Adapter(
     statusAdapter = EnumColumnAdapter<TitleStatus>(),
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
-    genresAdapter = GenresAdapter,
     chaptersAdapter = IntColumnAdapter,
     volumesAdapter = IntColumnAdapter,
 )
@@ -84,13 +85,8 @@ internal val RanobeAdapter = Ranobe.Adapter(
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
-    genresAdapter = GenresAdapter,
     chaptersAdapter = IntColumnAdapter,
     volumesAdapter = IntColumnAdapter,
-)
-
-internal val PinnedAdapter = Pinned.Adapter(
-    target_typeAdapter = EnumColumnAdapter<TrackTargetType>()
 )
 
 internal val TrackToSyncAdapter = Track_to_sync.Adapter(
@@ -100,5 +96,17 @@ internal val TrackToSyncAdapter = Track_to_sync.Adapter(
 )
 
 internal val CharacterRoleAdapter = Character_role.Adapter(
+    target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
+)
+
+internal val GenreAdapter = Genre.Adapter(
+    typeAdapter = EnumColumnAdapter<GenreType>()
+)
+
+internal val GenreRelationAdapter = Genre_relation.Adapter(
+    target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
+)
+
+internal val PinnedAdapter = Pinned.Adapter(
     target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
 )

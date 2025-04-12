@@ -1,0 +1,44 @@
+insert:
+INSERT OR REPLACE INTO genre(source_id, type, name, name_ru, description)
+VALUES (?,?,?,?, ?);
+
+update:
+UPDATE genre
+SET
+ id = :id,
+ source_id = :source_id,
+ type = :type,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ description = coalesce(:description, description)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM genre;
+
+deleteById:
+DELETE FROM genre WHERE id = :id;
+
+countWithSource:
+SELECT COUNT(*) FROM genre
+WHERE source_id = :sourceId;
+
+queryAll:
+SELECT * FROM genre;
+
+queryById:
+SELECT * FROM genre WHERE id = :id;
+
+queryBySource:
+SELECT * FROM genre
+WHERE source_id = :sourceId;
+
+queryByTitle:
+SELECT g.* FROM genre_relation AS r
+INNER JOIN genre AS g ON ',' || r.genre_ids || ',' LIKE '%,' || g.id || ',%'
+WHERE r.target_id = :targetId
+  AND r.target_type = :targetType
+  AND r.source_id = :sourceId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

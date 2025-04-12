@@ -8,7 +8,6 @@ import app.cash.sqldelight.paging3.QueryPagingSource
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
 import com.gnoemes.shimori.data.ShimoriDB
-import com.gnoemes.shimori.data.adapters.GenresAdapter
 import com.gnoemes.shimori.data.adapters.LocalDateAdapter
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.TitleStatus
@@ -64,7 +63,6 @@ class AnimeDaoImpl(
                 it.franchise,
                 it.favorite,
                 it.topicId,
-                it.genres,
                 it.duration,
                 it.nextEpisode,
                 it.nextEpisodeDate,
@@ -99,7 +97,6 @@ class AnimeDaoImpl(
                 it.franchise,
                 it.favorite,
                 it.topicId,
-                it.genres?.let(GenresAdapter::encode),
                 it.duration?.toLong(),
                 it.nextEpisode?.toLong(),
             )

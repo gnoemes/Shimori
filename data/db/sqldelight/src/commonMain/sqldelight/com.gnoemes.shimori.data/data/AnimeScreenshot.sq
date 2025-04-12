@@ -1,16 +1,7 @@
-CREATE TABLE anime_screenshot (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    title_id INTEGER NOT NULL,
-    original TEXT NOT NULL,
-    preview TEXT NOT NULL
-);
-
-CREATE INDEX screenshottitle_index ON anime_screenshot(title_id);
 
 insert:
-INSERT OR REPLACE INTO anime_screenshot(
-title_id, original, preview
-) VALUES (?,?,?);
+INSERT OR REPLACE INTO anime_screenshot(title_id, original, preview)
+VALUES (?,?,?);
 
 update:
 UPDATE anime_screenshot

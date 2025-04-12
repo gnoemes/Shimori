@@ -43,8 +43,10 @@ sqldelight {
             srcDirs("src/commonMain/sqldelight")
             dialect(libs.sqldelight.dialects.sql)
 
-            schemaOutputDirectory = file("src/commonMain/sqldelight/databases")
+            schemaOutputDirectory = file("src/commonMain/sqldelight/schemes")
+            migrationOutputDirectory = file("src/commonMain/sqldelight/migrations")
             verifyMigrations = true
+            deriveSchemaFromMigrations = true
         }
     }
 }

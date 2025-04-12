@@ -9,6 +9,7 @@ import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.characters.CharacterWithRole
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.GenreType
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.titles.anime.Anime
@@ -30,7 +31,7 @@ import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.track.TrackToSync
 import com.gnoemes.shimori.data.user.User
 import com.gnoemes.shimori.data.user.UserShort
-import comgnoemesshimoridatadb.data.QueryMeShort
+import comgnoemesshimoridata.data.QueryMeShort
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
@@ -170,7 +171,6 @@ internal fun animeWithTrack(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
@@ -193,7 +193,7 @@ internal fun animeWithTrack(
         image_original, image_preview, image_x96, image_x48,
         url, anime_type, rating, status, episodes, episodes_aired,
         date_aired, date_released, age_rating, description, description_html,
-        franchise, favorite, topic_id, genres,
+        franchise, favorite, topic_id,
         duration, next_episode, next_episode_date,
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
@@ -227,7 +227,6 @@ internal fun anime(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
@@ -260,7 +259,6 @@ internal fun anime(
     franchise = franchise,
     favorite = favorite,
     topicId = topic_id,
-    genres = genres
 )
 
 val animeListViewMapper: (
@@ -319,7 +317,6 @@ val animeListViewMapper: (
         franchise = null,
         favorite = false,
         topic_id = null,
-        genres = null,
         duration = duration,
         next_episode = nextEpisode,
         next_episode_date = nextEpisodeDate,
@@ -362,7 +359,6 @@ internal fun mangaWithTrack(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
     id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
@@ -382,7 +378,7 @@ internal fun mangaWithTrack(
         image_original, image_preview, image_x96, image_x48,
         url, manga_type, rating, status, chapters, volumes,
         date_aired, date_released, age_rating, description,
-        description_html, franchise, favorite, topic_id, genres
+        description_html, franchise, favorite, topic_id,
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
@@ -415,7 +411,6 @@ internal fun manga(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
 ) = Manga(
     id = id,
     name = name,
@@ -441,7 +436,6 @@ internal fun manga(
     franchise = franchise,
     favorite = favorite,
     topicId = topic_id,
-    genres = genres
 )
 
 val mangaListViewMapper: (
@@ -497,7 +491,6 @@ val mangaListViewMapper: (
         franchise = null,
         favorite = false,
         topic_id = null,
-        genres = null,
         id_ = trackId,
         target_id = id,
         target_type = TrackTargetType.MANGA,
@@ -537,7 +530,6 @@ internal fun ranobeWithTrack(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
     id_: Long?,
     target_id: Long?,
     target_type: TrackTargetType?,
@@ -557,7 +549,7 @@ internal fun ranobeWithTrack(
         image_original, image_preview, image_x96, image_x48,
         url, ranobe_type, rating, status, chapters, volumes,
         date_aired, date_released, age_rating, description,
-        description_html, franchise, favorite, topic_id, genres
+        description_html, franchise, favorite, topic_id
     ),
     track = if (id_ == null || target_id == null || target_type == null || status_ == null || progress == null || re_counter == null) null
     else track(
@@ -590,7 +582,6 @@ internal fun ranobe(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
 ) = Ranobe(
     id = id,
     name = name,
@@ -616,7 +607,6 @@ internal fun ranobe(
     franchise = franchise,
     favorite = favorite,
     topicId = topic_id,
-    genres = genres
 )
 
 val ranobeListViewMapper: (
@@ -672,7 +662,6 @@ val ranobeListViewMapper: (
         franchise = null,
         favorite = false,
         topic_id = null,
-        genres = null,
         id_ = trackId,
         target_id = id,
         target_type = TrackTargetType.MANGA,
@@ -737,7 +726,6 @@ internal fun pinPaginated(
     franchise: String?,
     favorite: Boolean,
     topic_id: Long?,
-    genres: List<Genre>?,
     duration: Int?,
     next_episode: Int?,
     next_episode_date: Instant?,
@@ -779,7 +767,6 @@ internal fun pinPaginated(
             franchise,
             favorite,
             topic_id,
-            genres,
             duration,
             next_episode,
             next_episode_date,
@@ -821,7 +808,6 @@ internal fun pinPaginated(
             franchise,
             favorite,
             topic_id,
-            genres,
             id_,
             target_id,
             target_type,
@@ -860,7 +846,6 @@ internal fun pinPaginated(
             franchise,
             favorite,
             topic_id,
-            genres,
             id_,
             target_id,
             target_type,
@@ -998,5 +983,18 @@ internal fun screenshot(
             original = original,
             preview = preview
         )
+    )
+}
+
+internal fun genre(
+    id: Long,
+    source_id: Long,
+    type: GenreType,
+    name: String,
+    name_ru: String?,
+    description: String?,
+): Genre {
+    return Genre(
+        id, source_id, type, name, name_ru, description
     )
 }

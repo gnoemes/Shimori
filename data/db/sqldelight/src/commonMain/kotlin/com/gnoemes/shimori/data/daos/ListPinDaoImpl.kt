@@ -14,11 +14,11 @@ import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.util.long
 import com.gnoemes.shimori.data.util.pinPaginated
 import com.gnoemes.shimori.logging.api.Logger
-import comgnoemesshimoridatadb.data.Pinned
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
+import migrations.Pinned
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
