@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,6 +50,7 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_open_in_browser
 import com.gnoemes.shimori.common.ui.resources.icons.ic_share
 import com.gnoemes.shimori.common.ui.resources.icons.ic_star
 import com.gnoemes.shimori.common.ui.resources.strings.filter_age_rating
+import com.gnoemes.shimori.common.ui.resources.strings.title_about
 import com.gnoemes.shimori.common.ui.resources.strings.title_chapters
 import com.gnoemes.shimori.common.ui.resources.strings.title_characters
 import com.gnoemes.shimori.common.ui.resources.strings.title_ep
@@ -57,6 +62,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_score
 import com.gnoemes.shimori.common.ui.resources.strings.title_type
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.ShimoriTitleEntity
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
@@ -289,6 +295,78 @@ internal fun TitleCharacters(
         openCharactersList,
     ) {
         CircuitContent(TitleCharactersScreen(id, type, grid = false))
+    }
+}
+
+@Composable
+internal fun TitleAbout(
+    genres: List<Genre>,
+    description: String?,
+    onGenreClicked: (Long) -> Unit,
+) {
+    Column(
+        Modifier.fillMaxWidth()
+    ) {
+        Row(
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
+                Text(
+                    stringResource(Strings.title_about),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+            }
+        }
+
+        CompositionLocalProvider(
+            LocalMinimumInteractiveComponentSize provides 0.dp
+        ) {
+            val textCreator = LocalShimoriTextCreator.current
+
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Spacer(Modifier.width(8.dp))
+
+                genres.forEach { genre ->
+                    FilterChip(
+                        selected = false,
+                        onClick = { onGenreClicked(genre.id) },
+                        label = {
+                            Text(
+                                text = textCreator {
+                                    genre.name()
+                                }
+                            )
+                        },
+                    )
+                }
+
+                Spacer(Modifier.width(8.dp))
+            }
+        }
+
+        description?.let {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SelectionContainer {
+                Text(
+                    it,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        }
+
+
     }
 }
 

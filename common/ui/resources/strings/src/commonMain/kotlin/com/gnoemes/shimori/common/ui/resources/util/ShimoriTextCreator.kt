@@ -64,6 +64,7 @@ import com.gnoemes.shimori.data.ShimoriContentEntity
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.common.AgeRating
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.titles.anime.Anime
@@ -513,12 +514,11 @@ class ShimoriTextCreator(
     }
 
 
-//
-//    fun genre(genre: Genre): String {
-//        return when (titlesLocale) {
-//            AppTitlesLocale.English -> genre.name
-//            AppTitlesLocale.Russian -> genre.nameRu ?: genre.name
-//            else -> genre.name
-//        }
-//    }
+    fun Genre.name(): String {
+        return when (titlesLocale) {
+            AppTitlesLocale.English -> name
+            AppTitlesLocale.Russian -> nameRu ?: name
+            else -> name
+        }
+    }
 }

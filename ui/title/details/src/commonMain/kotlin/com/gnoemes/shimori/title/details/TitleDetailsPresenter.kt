@@ -20,6 +20,7 @@ import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.observers.ObserveTitleGenres
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.domain.onFailurePublishToBus
 import com.gnoemes.shimori.screens.TitleCharactersScreen
@@ -40,6 +41,7 @@ class TitleDetailsPresenter(
     @Assisted private val navigator: Navigator,
     private val updateTitle: Lazy<UpdateTitle>,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
+    private val observeGenres: Lazy<ObserveTitleGenres>,
 ) : Presenter<TitleDetailsUiState> {
 
     @Composable
@@ -50,6 +52,7 @@ class TitleDetailsPresenter(
         val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
 
         val titleWithEntity by observeTitleWithTrack.value.flow.collectAsState(null)
+        val genres by observeGenres.value.flow.collectAsState(emptyList())
 
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
         var isShowCharacters by remember { mutableStateOf(true) }
@@ -65,6 +68,10 @@ class TitleDetailsPresenter(
 
             observeTitleWithTrack.value(
                 ObserveTitleWithTrackEntity.Params(screen.id, screen.type)
+            )
+
+            observeGenres.value(
+                ObserveTitleGenres.Params(screen.id, screen.type)
             )
         }
 
@@ -131,6 +138,7 @@ class TitleDetailsPresenter(
             isListView = isCompact || isMedium,
             title = titleWithEntity?.entity,
             track = titleWithEntity?.track,
+            genres = genres,
             isFavorite = titleWithEntity?.entity?.favorite ?: false,
             descriptionExpanded = descriptionExpanded,
 

@@ -2,6 +2,7 @@ package com.gnoemes.shimori.title.details
 
 import androidx.compose.runtime.Immutable
 import com.gnoemes.shimori.data.ShimoriTitleEntity
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -12,6 +13,7 @@ data class TitleDetailsUiState(
     val isListView: Boolean,
     val title: ShimoriTitleEntity?,
     val track: Track?,
+    val genres: List<Genre>,
     val isFavorite: Boolean,
     val descriptionExpanded: Boolean,
     val isShowCharacters: Boolean,

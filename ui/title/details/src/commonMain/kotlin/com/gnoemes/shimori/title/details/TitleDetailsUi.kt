@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -43,14 +44,17 @@ import coil3.compose.AsyncImage
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
+import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
 import com.gnoemes.shimori.common.compose.NestedScaffold
 import com.gnoemes.shimori.common.compose.calculateBottomWithAdditional
+import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.itemSpacer
 import com.gnoemes.shimori.common.compose.mouseWheelNestedScrollConnectionFix
 import com.gnoemes.shimori.common.compose.ui.imageGradientBackground
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.data.ShimoriTitleEntity
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleDetailsScreen
@@ -68,6 +72,7 @@ internal fun TitleDetailsUi(
     TitleDetailsUi(
         title = state.title,
         track = state.track,
+        genres = state.genres,
         isFavorite = state.isFavorite,
         isShowCharacters = state.isShowCharacters,
 
@@ -98,6 +103,7 @@ internal fun TitleDetailsUi(
 private fun TitleDetailsUi(
     title: ShimoriTitleEntity?,
     track: Track?,
+    genres: List<Genre>,
     isFavorite: Boolean,
     isShowCharacters: Boolean,
 
@@ -215,6 +221,7 @@ private fun TitleDetailsUi(
                 scrollBehavior = scrollBehavior,
                 title = title,
                 track = track,
+                genres = genres,
                 isFavorite = isFavorite,
                 isShowCharacters = isShowCharacters,
                 toggleFavorite = toggleFavorite,
@@ -252,6 +259,7 @@ private fun TitleDetailsUiContent(
     track: Track?,
     isFavorite: Boolean,
     isShowCharacters: Boolean,
+    genres: List<Genre>,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -272,13 +280,14 @@ private fun TitleDetailsUiContent(
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val icons = LocalShimoriIconsUtil.current
+    val isCompact = LocalWindowSizeClass.current.widthSizeClass.isCompact()
 
     val state = rememberLazyGridState()
 
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
         LazyVerticalGrid(
             state = state,
-            columns = GridCells.Adaptive(50.dp),
+            columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .mouseWheelNestedScrollConnectionFix(state, scrollBehavior)
@@ -329,6 +338,42 @@ private fun TitleDetailsUiContent(
                     }
                 }
             }
+
+            itemSpacer(24.dp)
+
+            item(
+                key = "about",
+                span = {
+                    GridItemSpan(
+                        if (isCompact) this.maxLineSpan
+                        else 1
+                    )
+                }
+            ) {
+                TitleAbout(
+                    genres = genres,
+                    description = title.description,
+                    onGenreClicked = openGenreSearch
+                )
+            }
+
+
+            item(
+                key = "frames",
+                span = {
+                    GridItemSpan(
+                        if (isCompact) this.maxLineSpan
+                        else 1
+                    )
+                }
+            ) {
+                Box(
+                    Modifier.fillMaxWidth()
+                        .height(90.dp)
+                        .background(Color.Red)
+                )
+            }
+
 
             itemSpacer(paddingValue.calculateBottomWithAdditional())
         }
