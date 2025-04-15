@@ -72,6 +72,7 @@ include(
     ":data:lists",
     ":data:user",
     ":data:auth",
+    ":data:genre",
     ":data:queryable",
     ":data:eventbus",
     ":domain",

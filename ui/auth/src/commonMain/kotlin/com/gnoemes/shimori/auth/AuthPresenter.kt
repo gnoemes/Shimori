@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.domain.interactors.SignInSource
+import com.gnoemes.shimori.domain.interactors.source.SignInSource
 import com.gnoemes.shimori.domain.observers.ObserveAuthSources
 import com.gnoemes.shimori.screens.AuthScreen
 import com.slack.circuit.codegen.annotations.CircuitInject

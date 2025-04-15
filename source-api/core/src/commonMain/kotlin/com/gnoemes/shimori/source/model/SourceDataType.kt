@@ -12,6 +12,7 @@ value class SourceDataType private constructor(val type: Int) {
         val Character = SourceDataType(5)
         val Person = SourceDataType(6)
         val User = SourceDataType(7)
+        val Genre = SourceDataType(8)
     }
 
     fun find(type : Int) = when(type) {
@@ -22,6 +23,7 @@ value class SourceDataType private constructor(val type: Int) {
         5 -> Character
         6 -> Person
         7 -> User
+        8 -> Genre
         else -> null
     }
 
@@ -34,6 +36,7 @@ value class SourceDataType private constructor(val type: Int) {
             5 -> "Character"
             6 -> "Person"
             7 -> "User"
+            8 -> "Genre"
             else -> "Unknown type"
         }
     }

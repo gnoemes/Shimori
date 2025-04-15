@@ -13,6 +13,7 @@ import com.gnoemes.shimori.source.shikimori.models.user.UserBriefResponse
 import com.gnoemes.shimori.source.shikimori.models.user.UserDetailsResponse
 import com.gnoemes.shimori.source.shikimori.services.AnimeService
 import com.gnoemes.shimori.source.shikimori.services.CharacterService
+import com.gnoemes.shimori.source.shikimori.services.GraphQlService
 import com.gnoemes.shimori.source.shikimori.services.MangaService
 import com.gnoemes.shimori.source.shikimori.services.RanobeService
 import com.gnoemes.shimori.source.shikimori.services.RateService
@@ -49,6 +50,7 @@ class ShikimoriApi(
     // Services
     ///////////////////////////////////////////////////////
 
+    internal val apollo: GraphQlService by lazy { GraphQlServiceImpl() }
     internal val rate: RateService by lazy { RateServiceImpl() }
     internal val user: UserService by lazy { UserServiceImpl() }
     internal val anime: AnimeService by lazy { AnimeServiceImpl() }
@@ -62,8 +64,6 @@ class ShikimoriApi(
 
     private inner class RateServiceImpl : RateService {
         private val serviceUrl = "$apiUrl/v2/user_rates"
-
-        override suspend fun <D : Query.Data> graphql(query: Query<D>) = query(query)
 
         override suspend fun userRates(
             userId: Long,
@@ -197,8 +197,6 @@ class ShikimoriApi(
     private inner class AnimeServiceImpl : AnimeService {
         private val serviceUrl = "$apiUrl/animes"
 
-        override suspend fun <D : Query.Data> graphql(query: Query<D>) = query(query)
-
         override suspend fun getSimilar(id: Long): List<com.gnoemes.shimori.source.shikimori.models.anime.AnimeResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
@@ -217,8 +215,6 @@ class ShikimoriApi(
         MangaService {
         private val serviceUrl = "$apiUrl/mangas"
 
-        override suspend fun <D : Query.Data> graphql(query: Query<D>) = query(query)
-
         override suspend fun getSimilar(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
@@ -230,8 +226,6 @@ class ShikimoriApi(
     private inner class RanobeServiceImpl : RanobeService {
         private val serviceUrl = "$apiUrl/mangas"
 
-        override suspend fun <D : Query.Data> graphql(query: Query<D>) = query(query)
-
         override suspend fun getSimilar(id: Long): List<MangaResponse> {
             return client.get {
                 url("$serviceUrl/$id/similar")
@@ -241,7 +235,11 @@ class ShikimoriApi(
     }
 
     private inner class CharacterServiceImpl : CharacterService {
-        override suspend fun <D : Query.Data> graphql(query: Query<D>) = query(query)
+    }
+
+    private inner class GraphQlServiceImpl : GraphQlService {
+        override suspend fun <D : Query.Data> query(query: Query<D>) =
+            this@ShikimoriApi.query(query)
     }
 
 }

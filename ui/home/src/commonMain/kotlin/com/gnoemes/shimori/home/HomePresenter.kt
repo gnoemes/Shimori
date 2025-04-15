@@ -21,7 +21,7 @@ import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.source.auth.AuthManager
-import com.gnoemes.shimori.domain.interactors.LogoutSource
+import com.gnoemes.shimori.domain.interactors.source.LogoutSource
 import com.gnoemes.shimori.domain.interactors.tracks.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
 import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth

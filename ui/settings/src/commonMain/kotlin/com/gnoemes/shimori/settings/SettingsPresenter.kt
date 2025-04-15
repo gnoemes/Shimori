@@ -9,7 +9,7 @@ import com.gnoemes.shimori.base.inject.GithubLink
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.ui.wrapEventSink
-import com.gnoemes.shimori.domain.interactors.GetSource
+import com.gnoemes.shimori.domain.interactors.source.GetSource
 import com.gnoemes.shimori.screens.SettingsAppearanceScreen
 import com.gnoemes.shimori.screens.SettingsScreen
 import com.gnoemes.shimori.screens.UrlScreen

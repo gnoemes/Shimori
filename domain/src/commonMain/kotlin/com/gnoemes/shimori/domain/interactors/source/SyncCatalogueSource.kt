@@ -1,0 +1,46 @@
+package com.gnoemes.shimori.domain.interactors.source
+
+import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
+import com.gnoemes.shimori.data.eventbus.StateBus
+import com.gnoemes.shimori.domain.Interactor
+import com.gnoemes.shimori.domain.interactors.UpdateGenres
+import kotlinx.coroutines.withContext
+import me.tatarka.inject.annotations.Inject
+
+@Inject
+class SyncCatalogueSource(
+    private val updateGenres: UpdateGenres,
+    private val bus: StateBus,
+    private val dispatchers: AppCoroutineDispatchers,
+) : Interactor<SyncCatalogueSource.Params, Unit>() {
+
+    override suspend fun doWork(params: Params) {
+        withContext(dispatchers.io) {
+            try {
+                bus.catalogueSyncActive(true)
+
+                updateGenres(UpdateGenres.Params(params.force)).getOrThrow()
+
+                bus.catalogueSyncActive(false)
+            } catch (e: Exception) {
+                bus.catalogueSyncActive(false)
+                throw e
+            }
+
+        }
+    }
+
+    data class Params(
+        val force: Boolean,
+    ) {
+        companion object {
+            fun forceUpdate() = Params(
+                force = true,
+            )
+
+            fun optionalUpdate() = Params(
+                force = false,
+            )
+        }
+    }
+}

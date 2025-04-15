@@ -112,3 +112,11 @@ fragment MangaUserRateWithModel on UserRate {
 fragment PosterShort on Poster {
     originalUrl mainUrl previewUrl
 }
+
+fragment Genre on Genre {
+    id
+    name
+    russian
+    entryType
+    kind
+}

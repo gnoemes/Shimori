@@ -3,6 +3,7 @@ package com.gnoemes.shimori.domain.interactors
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.anime.AnimeRepository
 import com.gnoemes.shimori.data.character.CharacterRepository
+import com.gnoemes.shimori.data.manga.GenreRepository
 import com.gnoemes.shimori.data.manga.MangaRepository
 import com.gnoemes.shimori.data.ranobe.RanobeRepository
 import com.gnoemes.shimori.data.track.TrackTargetType
@@ -16,6 +17,7 @@ class UpdateTitle(
     private val mangaRepository: MangaRepository,
     private val ranobeRepository: RanobeRepository,
     private val characterRepository: CharacterRepository,
+    private val genreRepository: GenreRepository,
     private val dispatchers: AppCoroutineDispatchers
 ) : Interactor<UpdateTitle.Params, Unit>() {
 
@@ -29,13 +31,22 @@ class UpdateTitle(
     private suspend fun update(id: Long, type: TrackTargetType) {
         when (type) {
             TrackTargetType.ANIME -> animeRepository.sync(id)
-                .also { characterRepository.trySync(it) }
+                .also {
+                    characterRepository.trySync(it)
+                    genreRepository.trySync(it)
+                }
 
             TrackTargetType.MANGA -> mangaRepository.sync(id)
-                .also { characterRepository.trySync(it) }
+                .also {
+                    characterRepository.trySync(it)
+                    genreRepository.trySync(it)
+                }
 
             TrackTargetType.RANOBE -> ranobeRepository.sync(id)
-                .also { characterRepository.trySync(it) }
+                .also {
+                    characterRepository.trySync(it)
+                    genreRepository.trySync(it)
+                }
         }
     }
 

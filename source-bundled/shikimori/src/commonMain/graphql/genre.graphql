@@ -1,0 +1,11 @@
+query AnimeGenres {
+    genres(entryType: Anime) {
+        ...Genre
+    }
+}
+
+query MangaGenres {
+    genres(entryType: Manga) {
+        ...Genre
+    }
+}

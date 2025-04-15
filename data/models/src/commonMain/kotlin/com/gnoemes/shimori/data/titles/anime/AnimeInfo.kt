@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.titles.anime
 
 import com.gnoemes.shimori.data.characters.CharacterInfo
 import com.gnoemes.shimori.data.characters.CharacterRole
+import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.track.Track
 
 data class AnimeInfo(
@@ -13,8 +14,8 @@ data class AnimeInfo(
     val fanSubbers: List<String>? = null,
     val characters: List<CharacterInfo>? = null,
     val charactersRoles: List<CharacterRole>? = null,
+    val genres: List<Genre>? = null,
     //TODO
-//    val genres
 //    val translators
 //    val studioInfo
 )

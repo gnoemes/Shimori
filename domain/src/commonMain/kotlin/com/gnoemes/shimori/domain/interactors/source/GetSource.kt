@@ -1,4 +1,4 @@
-package com.gnoemes.shimori.domain.interactors
+package com.gnoemes.shimori.domain.interactors.source
 
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
 import com.gnoemes.shimori.data.source.track.TrackManager

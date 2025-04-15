@@ -32,7 +32,7 @@ class ShikimoriAnimeDataSource(
 
     override suspend fun get(id: MalIdArgument) = get(SourceIdArgument(id))
     override suspend fun get(id: SourceIdArgument): SAnime {
-        return api.anime.graphql(
+        return api.apollo.query(
             AnimeDetailsQuery(
                 ids = Optional.present(id.id.toString())
             )
@@ -47,7 +47,7 @@ class ShikimoriAnimeDataSource(
         userId: SourceIdArgument,
         status: STrackStatus?
     ): List<SAnime> {
-        return api.rate.graphql(
+        return api.apollo.query(
             AnimeTracksQuery(
                 limit = Optional.present(Shikimori.MAX_PAGE_SIZE),
                 userId = Optional.present(userId.id.toString()),
@@ -61,7 +61,7 @@ class ShikimoriAnimeDataSource(
 
     override suspend fun getCharacters(id: MalIdArgument) = getCharacters(SourceIdArgument(id))
     override suspend fun getCharacters(id: SourceIdArgument): SAnime {
-        return api.anime.graphql(
+        return api.apollo.query(
             AnimeCharactersQuery(
                 ids = Optional.present(id.id.toString())
             )

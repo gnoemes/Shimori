@@ -19,7 +19,7 @@ class ShikimoriCharacterDataSource(
     override suspend fun get(id: MalIdArgument) = get(SourceIdArgument(id))
 
     override suspend fun get(id: SourceIdArgument): SCharacter {
-        return api.character.graphql(
+        return api.apollo.query(
             CharacterDetailsQuery(
                 ids = Optional.present(listOf(id.id.toString()))
             )

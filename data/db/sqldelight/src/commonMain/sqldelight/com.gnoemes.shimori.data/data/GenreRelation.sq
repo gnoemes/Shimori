@@ -1,7 +1,3 @@
-import com.gnoemes.shimori.data.track.TrackTargetType;
-
-
-
 insert:
 INSERT OR REPLACE INTO genre_relation(target_id, target_type, source_id, genre_ids)
 VALUES (?,?,?,?);

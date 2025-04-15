@@ -13,6 +13,7 @@ import me.tatarka.inject.annotations.Inject
 class SourceMangaMapper(
     private val imageMapper: SourceImageMapper,
     private val trackMapper: SourceTrackMapper,
+    private val genreMapper: SourceGenreMapper,
 ) : Mapper<SManga, MangaInfo> {
 
     override fun map(from: SManga): MangaInfo {
@@ -38,9 +39,14 @@ class SourceMangaMapper(
             topicId = from.topicId,
         )
         val track = from.track?.let { trackMapper.map(it) }
+
+        val genres = from.genres
+            ?.map { genreMapper.map(it) }
+
         return MangaInfo(
             entity = manga,
-            track = track
+            track = track,
+            genres = genres
         )
     }
 }

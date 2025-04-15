@@ -33,6 +33,10 @@ queryBySource:
 SELECT * FROM genre
 WHERE source_id = :sourceId;
 
+countBySource:
+SELECT COUNT(*) FROM genre
+WHERE source_id = :sourceId;
+
 queryByTitle:
 SELECT g.* FROM genre_relation AS r
 INNER JOIN genre AS g ON ',' || r.genre_ids || ',' LIKE '%,' || g.id || ',%'

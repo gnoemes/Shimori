@@ -6,6 +6,7 @@ import com.gnoemes.shimori.source.model.SAnime
 import com.gnoemes.shimori.source.model.SAnimeScreenshot
 import com.gnoemes.shimori.source.model.SAnimeVideo
 import com.gnoemes.shimori.source.model.SCharacterRole
+import com.gnoemes.shimori.source.model.SGenre
 import com.gnoemes.shimori.source.model.SImage
 import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.source.shikimori.AnimeDetailsQuery
@@ -15,6 +16,7 @@ import com.gnoemes.shimori.source.shikimori.mappers.character.CharacterShortToSC
 import com.gnoemes.shimori.source.shikimori.mappers.toInstant
 import com.gnoemes.shimori.source.shikimori.mappers.toLocalDate
 import com.gnoemes.shimori.source.shikimori.mappers.toSourceType
+import com.gnoemes.shimori.source.shikimori.type.GenreKindEnum
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -62,6 +64,18 @@ class AnimeDetailsToAnimeInfoMapper(
             )
         }
 
+        val genres = from.genres?.map {
+            SGenre(
+                id = it.id.toLong(),
+                name = it.name,
+                nameRu = it.russian,
+                type = when (it.kind) {
+                    GenreKindEnum.genre -> 0
+                    else -> 1
+                },
+                description = null
+            )
+        }
 
         val title = SAnime(
             id = from.id.toLong(),
@@ -84,7 +98,7 @@ class AnimeDetailsToAnimeInfoMapper(
             description = from.description,
             descriptionHtml = from.descriptionHtml,
             franchise = from.franchise,
-            genres = from.genres?.map { it.toSourceType() },
+            genres = genres,
             videos = videos,
             screenshots = screenshots,
             fanDubbers = fandubbers,

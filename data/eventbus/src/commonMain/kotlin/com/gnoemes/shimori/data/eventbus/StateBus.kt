@@ -53,6 +53,17 @@ class StateBus(
     }
 
     /**
+     * Sync loading status across screens
+     */
+    val catalogueSyncActive = object : State<Boolean> {
+        private val catalogueSync = MutableStateFlow(false)
+        override suspend fun update(newState: Boolean) =
+            kotlin.run { catalogueSync.value = newState }
+
+        override val observe: StateFlow<Boolean> = catalogueSync
+    }
+
+    /**
      * Interface for common used state features
      */
     interface State<T> {

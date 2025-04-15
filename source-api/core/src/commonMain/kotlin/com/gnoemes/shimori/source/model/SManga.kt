@@ -23,7 +23,7 @@ data class SManga(
     val franchise: String? = null,
     val favorite: Boolean = false,
     val topicId: Long? = null,
-    val genres: List<String>? = null,
+    val genres: List<SGenre>? = null,
     val track: STrack? = null,
     val characters: List<SCharacter>? = null,
     val charactersRoles: List<SCharacterRole>? = null,

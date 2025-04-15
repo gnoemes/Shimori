@@ -1,15 +1,11 @@
 package com.gnoemes.shimori.source.shikimori.services
 
-import com.apollographql.apollo.api.ApolloResponse
-import com.apollographql.apollo.api.Query
 import com.gnoemes.shimori.source.shikimori.models.common.ShikimoriTargetType
 import com.gnoemes.shimori.source.shikimori.models.rates.ShikimoriRateStatus
 import com.gnoemes.shimori.source.shikimori.models.rates.UserRateCreateOrUpdateRequest
 import com.gnoemes.shimori.source.shikimori.models.rates.UserRateResponse
 
 internal interface RateService {
-
-    suspend fun <D : Query.Data> graphql(query: Query<D>): ApolloResponse<D>
     suspend fun userRates(
         userId: Long,
         targetId: Long? = null,

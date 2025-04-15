@@ -29,7 +29,7 @@ class ShikimoriRanobeDataSource(
 
     override suspend fun get(id: MalIdArgument): SManga = get(SourceIdArgument(id))
     override suspend fun get(id: SourceIdArgument): SManga {
-        return api.manga.graphql(
+        return api.apollo.query(
             MangaDetailsQuery(
                 ids = Optional.present(id.id.toString())
             )
@@ -43,7 +43,7 @@ class ShikimoriRanobeDataSource(
         userId: SourceIdArgument,
         status: STrackStatus?
     ): List<SManga> {
-        return api.rate.graphql(
+        return api.apollo.query(
             MangaTracksQuery(
                 limit = Optional.present(Shikimori.MAX_PAGE_SIZE),
                 userId = Optional.present(userId.id.toString()),
@@ -61,7 +61,7 @@ class ShikimoriRanobeDataSource(
 
     override suspend fun getCharacters(id: MalIdArgument) = getCharacters(SourceIdArgument(id))
     override suspend fun getCharacters(id: SourceIdArgument): SManga {
-        return api.manga.graphql(
+        return api.apollo.query(
             MangaCharactersQuery(
                 ids = Optional.present(id.id.toString())
             )

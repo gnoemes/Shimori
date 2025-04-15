@@ -14,4 +14,6 @@ enum class Request(val tag : String) {
     RANOBE_DETAILS("ranobe_details"),
     RANOBE_DETAILS_CHARACTERS("ranobe_details_characters"),
     CHARACTER_DETAILS("character_details"),
+
+    GENRES("genres"),
 }

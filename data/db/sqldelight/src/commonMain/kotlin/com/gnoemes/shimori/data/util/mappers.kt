@@ -3,12 +3,14 @@ package com.gnoemes.shimori.data.util
 import com.gnoemes.shimori.base.utils.Mapper
 import com.gnoemes.shimori.base.utils.TwoWayMapper
 import com.gnoemes.shimori.data.PaginatedEntity
+import com.gnoemes.shimori.data.adapters.GenreIdsAdapter
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.characters.CharacterWithRole
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.GenreRelation
 import com.gnoemes.shimori.data.common.GenreType
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.TitleStatus
@@ -996,5 +998,21 @@ internal fun genre(
 ): Genre {
     return Genre(
         id, source_id, type, name, name_ru, description
+    )
+}
+
+internal fun genreRelation(
+    id: Long,
+    targetId: Long,
+    type: TrackTargetType,
+    source_id: Long,
+    ids : String
+): GenreRelation {
+    return GenreRelation(
+        id = id,
+        sourceId = source_id,
+        targetId = targetId,
+        type,
+        GenreIdsAdapter.decode(ids)
     )
 }
