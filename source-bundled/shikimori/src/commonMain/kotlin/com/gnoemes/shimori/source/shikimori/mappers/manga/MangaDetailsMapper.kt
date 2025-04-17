@@ -8,6 +8,7 @@ import com.gnoemes.shimori.source.model.SManga
 import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.source.shikimori.MangaDetailsQuery
 import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.appendHostIfNeed
+import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.removeBbCodes
 import com.gnoemes.shimori.source.shikimori.ShikimoriValues
 import com.gnoemes.shimori.source.shikimori.mappers.character.CharacterShortToSCharacterMapper
 import com.gnoemes.shimori.source.shikimori.mappers.toLocalDate
@@ -73,6 +74,8 @@ class MangaDetailsMapper(
             volumes = from.volumes,
             dateAired = from.airedOn?.date?.toLocalDate(),
             dateReleased = from.releasedOn?.date?.toLocalDate(),
+            description = from.description?.removeBbCodes(),
+            descriptionHtml = from.descriptionHtml,
             ageRating = null,
             characters = characters,
             charactersRoles = characterRoles,

@@ -14,6 +14,7 @@ import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -75,7 +76,9 @@ class GenreRelationStore(
                 sourceId = params.sourceId,
                 targetId = titleId,
                 type = type,
-                ids = genres.map { it.id }
+                ids = genres.mapNotNull {
+                    syncDao.findLocalId(params.sourceId, it.id, SourceDataType.Genre)
+                }
             )
         )
 

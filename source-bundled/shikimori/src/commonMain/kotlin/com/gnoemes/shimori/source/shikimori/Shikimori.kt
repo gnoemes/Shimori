@@ -54,9 +54,18 @@ class Shikimori(
         const val NAME = "Shikimori"
         internal const val MAX_PAGE_SIZE = 5000
 
+        private val noSpoilersRegex =
+            Regex("""\[spoiler](.*?)\[/spoiler]""", RegexOption.DOT_MATCHES_ALL)
+
+        private val bbCodesRegex = Regex("""\s*\[[^\[\]]{1,40}]\s*""")
+
         internal fun String.appendHostIfNeed(values: ShikimoriValues): String {
             return if (this.contains("http")) this else values.url + this
         }
+
+        internal fun String.removeBbCodes(removeSpoilerCompletely: Boolean = true): String =
+            (if (removeSpoilerCompletely) replace(noSpoilersRegex, "") else this)
+                .replace(bbCodesRegex, " ")
     }
 
     override val name: String = NAME

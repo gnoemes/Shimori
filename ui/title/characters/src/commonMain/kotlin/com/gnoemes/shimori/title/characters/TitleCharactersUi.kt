@@ -24,11 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.itemKey
-import com.eygraber.compose.placeholder.PlaceholderHighlight
-import com.eygraber.compose.placeholder.placeholder
-import com.eygraber.compose.placeholder.shimmer
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.NestedScaffold
+import com.gnoemes.shimori.common.compose.placeholder
 import com.gnoemes.shimori.common.compose.rememberLazyListState
 import com.gnoemes.shimori.common.compose.theme.CharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.compose.ui.CharacterCover
@@ -118,10 +116,6 @@ private fun TitleCharactersUiListContent(
                         .aspectRatio(3 / 4f)
                         .placeholder(
                             visible = true,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            highlight = PlaceholderHighlight.shimmer(
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.52f)
-                            ),
                             shape = CharacterCoverRoundedCornerShape,
                         ),
                     onClick = {}

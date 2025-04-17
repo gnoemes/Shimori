@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.title.details
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,10 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.noRippleClickable
+import com.gnoemes.shimori.common.compose.placeholder
 import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
 import com.gnoemes.shimori.common.compose.ui.StatusButton
@@ -329,44 +332,48 @@ internal fun TitleAbout(
             val textCreator = LocalShimoriTextCreator.current
 
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Spacer(Modifier.width(8.dp))
+                if (genres.isEmpty()) {
+                    repeat(5) {
+                        Box(
+                            modifier = Modifier.width(64.dp)
+                                .height(32.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .placeholder(visible = true),
+                        )
+                    }
+                } else {
+                    genres.forEach { genre ->
+                        FilterChip(
+                            selected = false,
+                            onClick = { onGenreClicked(genre.id) },
+                            label = {
+                                Text(text = textCreator { genre.name() })
+                            },
+                        )
+                    }
+                }
+            }
 
-                genres.forEach { genre ->
-                    FilterChip(
-                        selected = false,
-                        onClick = { onGenreClicked(genre.id) },
-                        label = {
-                            Text(
-                                text = textCreator {
-                                    genre.name()
-                                }
-                            )
-                        },
+            description?.let {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SelectionContainer {
+                    Text(
+                        it,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(horizontal = 16.dp).animateContentSize()
                     )
                 }
-
-                Spacer(Modifier.width(8.dp))
             }
+
+
         }
-
-        description?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            SelectionContainer {
-                Text(
-                    it,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
-        }
-
-
     }
 }
 

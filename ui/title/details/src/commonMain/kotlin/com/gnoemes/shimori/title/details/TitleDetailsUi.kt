@@ -5,7 +5,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -339,8 +338,6 @@ private fun TitleDetailsUiContent(
                 }
             }
 
-            itemSpacer(24.dp)
-
             item(
                 key = "about",
                 span = {
@@ -367,11 +364,7 @@ private fun TitleDetailsUiContent(
                     )
                 }
             ) {
-                Box(
-                    Modifier.fillMaxWidth()
-                        .height(90.dp)
-                        .background(Color.Red)
-                )
+
             }
 
 

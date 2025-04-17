@@ -11,6 +11,7 @@ import com.gnoemes.shimori.source.model.SImage
 import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.source.shikimori.AnimeDetailsQuery
 import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.appendHostIfNeed
+import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.removeBbCodes
 import com.gnoemes.shimori.source.shikimori.ShikimoriValues
 import com.gnoemes.shimori.source.shikimori.mappers.character.CharacterShortToSCharacterMapper
 import com.gnoemes.shimori.source.shikimori.mappers.toInstant
@@ -95,7 +96,7 @@ class AnimeDetailsToAnimeInfoMapper(
             nextEpisodeDate = from.nextEpisodeAt?.toInstant(),
             ageRating = from.rating.toSourceType(),
             duration = from.duration,
-            description = from.description,
+            description = from.description?.removeBbCodes(),
             descriptionHtml = from.descriptionHtml,
             franchise = from.franchise,
             genres = genres,
