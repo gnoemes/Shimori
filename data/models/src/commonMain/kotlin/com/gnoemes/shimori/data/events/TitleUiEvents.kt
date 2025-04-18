@@ -7,4 +7,5 @@ sealed class TitleUiEvents(
     val eventId: Long = uuid4().mostSignificantBits
 ) {
     data object HideCharacters : TitleUiEvents()
+    data object HideTrailers : TitleUiEvents()
 }

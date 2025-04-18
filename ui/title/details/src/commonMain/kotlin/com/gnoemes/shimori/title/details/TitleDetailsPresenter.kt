@@ -21,7 +21,6 @@ import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
 import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshotsCount
-import com.gnoemes.shimori.domain.observers.ObserveAnimeVideos
 import com.gnoemes.shimori.domain.observers.ObserveTitleGenres
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.domain.onFailurePublishToBus
@@ -46,7 +45,6 @@ class TitleDetailsPresenter(
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
     private val observeGenres: Lazy<ObserveTitleGenres>,
     private val observeAnimeScreenshotsCount: Lazy<ObserveAnimeScreenshotsCount>,
-    private val observeAnimeVideos: Lazy<ObserveAnimeVideos>,
 ) : Presenter<TitleDetailsUiState> {
 
     @Composable
@@ -64,14 +62,10 @@ class TitleDetailsPresenter(
                 .collectAsState(false)
             else mutableStateOf(false)
 
-        val trailers =
-            //avoid lazy initialization
-            if (screen.type.anime) observeAnimeVideos.value.flow.collectAsState(null)
-            else mutableStateOf(emptyList())
-
 
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
         var isShowCharacters by remember { mutableStateOf(true) }
+        var isShowTrailers by remember { mutableStateOf(true) }
 
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
@@ -94,10 +88,6 @@ class TitleDetailsPresenter(
                 observeAnimeScreenshotsCount.value(
                     ObserveAnimeScreenshotsCount.Params(screen.id)
                 )
-
-                observeAnimeVideos.value(
-                    ObserveAnimeVideos.Params(screen.id)
-                )
             }
         }
 
@@ -118,7 +108,7 @@ class TitleDetailsPresenter(
                             TitleCharactersScreen(
                                 title.id,
                                 title.type,
-                                grid = true
+                                asContent = false
                             )
                         )
                     }
@@ -154,6 +144,7 @@ class TitleDetailsPresenter(
             EventBus.observe<TitleUiEvents> {
                 when (it) {
                     is TitleUiEvents.HideCharacters -> isShowCharacters = false
+                    is TitleUiEvents.HideTrailers -> isShowTrailers = false
 
                     else -> Unit
                 }
@@ -167,11 +158,11 @@ class TitleDetailsPresenter(
             track = titleWithEntity?.track,
             genres = genres,
             isFavorite = titleWithEntity?.entity?.favorite ?: false,
+            isShowTrailers = isShowTrailers,
             descriptionExpanded = descriptionExpanded,
 
             isShowCharacters = isShowCharacters,
             isFramesExists = isFramesExists.value,
-            trailers = trailers.value,
             eventSink = wrapEventSink(eventSink)
         )
     }

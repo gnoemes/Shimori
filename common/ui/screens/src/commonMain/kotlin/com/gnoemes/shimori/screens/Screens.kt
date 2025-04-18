@@ -64,8 +64,29 @@ data class TitleDetailsScreen(
 data class TitleCharactersScreen(
     val id: Long,
     val type: TrackTargetType,
-    val grid : Boolean,
+    val asContent: Boolean,
 ) : ShimoriScreen("TitleCharacters()")
+
+@Parcelize
+data class TitleTrailersScreen(
+    val id: Long,
+    val type: TrackTargetType,
+    val asContent: Boolean,
+) : ShimoriScreen("TitleTrailers()")
+
+@Parcelize
+data class TitleRelatedScreen(
+    val id: Long,
+    val type: TrackTargetType,
+    val asContent: Boolean,
+) : ShimoriScreen("TitleRelated()")
+
+@Parcelize
+data class TitleSimilarScreen(
+    val id: Long,
+    val type: TrackTargetType,
+    val asContent: Boolean,
+) : ShimoriScreen("TitleSimilar()")
 
 @Parcelize
 data class CharacterDetailsScreen(

@@ -99,6 +99,7 @@ include(
 
     ":ui:title:details",
     ":ui:title:characters",
+    ":ui:title:trailers",
 
     ":app:core",
     ":app:complete",

@@ -64,6 +64,17 @@ class StateBus(
     }
 
     /**
+     * Sync loading status across screens
+     */
+    val titleUpdating = object : State<Boolean> {
+        private val titleUpdating = MutableStateFlow(false)
+        override suspend fun update(newState: Boolean) =
+            kotlin.run { titleUpdating.value = newState }
+
+        override val observe: StateFlow<Boolean> = titleUpdating
+    }
+
+    /**
      * Interface for common used state features
      */
     interface State<T> {

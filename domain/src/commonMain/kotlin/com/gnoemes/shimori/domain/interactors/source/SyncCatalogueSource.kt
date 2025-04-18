@@ -18,13 +18,9 @@ class SyncCatalogueSource(
         withContext(dispatchers.io) {
             try {
                 bus.catalogueSyncActive(true)
-
                 updateGenres(UpdateGenres.Params(params.force)).getOrThrow()
-
+            } finally {
                 bus.catalogueSyncActive(false)
-            } catch (e: Exception) {
-                bus.catalogueSyncActive(false)
-                throw e
             }
 
         }

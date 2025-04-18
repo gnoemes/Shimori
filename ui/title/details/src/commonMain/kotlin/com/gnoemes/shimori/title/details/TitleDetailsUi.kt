@@ -54,7 +54,6 @@ import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
-import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleDetailsScreen
@@ -76,7 +75,7 @@ internal fun TitleDetailsUi(
         isFavorite = state.isFavorite,
         isShowCharacters = state.isShowCharacters,
         isFramesExists = state.isFramesExists,
-        trailers = state.trailers,
+        isShowTrailers = state.isShowTrailers,
 
         toggleFavorite = { eventSink(TitleDetailsUiEvent.ToggleFavorite) },
         expandDescription = { eventSink(TitleDetailsUiEvent.ExpandDescription) },
@@ -109,7 +108,7 @@ private fun TitleDetailsUi(
     isFavorite: Boolean,
     isShowCharacters: Boolean,
     isFramesExists: Boolean,
-    trailers: List<AnimeVideo>?,
+    isShowTrailers: Boolean,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -229,7 +228,7 @@ private fun TitleDetailsUi(
                 isFavorite = isFavorite,
                 isShowCharacters = isShowCharacters,
                 isFramesExists = isFramesExists,
-                trailers = trailers,
+                isShowTrailers = isShowTrailers,
                 toggleFavorite = toggleFavorite,
                 expandDescription = expandDescription,
                 share = share,
@@ -267,7 +266,7 @@ private fun TitleDetailsUiContent(
     isShowCharacters: Boolean,
     genres: List<Genre>,
     isFramesExists: Boolean,
-    trailers: List<AnimeVideo>?,
+    isShowTrailers: Boolean,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -367,7 +366,8 @@ private fun TitleDetailsUiContent(
             }
 
 
-            if (title.type.anime && (isFramesExists || trailers?.isNotEmpty() == true)
+            if (
+                title.type.anime && (isFramesExists || isShowTrailers)
             ) {
                 item(
                     key = "frames_and_trailers",
@@ -379,10 +379,11 @@ private fun TitleDetailsUiContent(
                     }
                 ) {
                     TitleFramesAndTrailers(
+                        titleId = title.id,
+                        titleType = title.type,
                         isFramesExists = isFramesExists,
-                        trailers = trailers,
+                        isShowTrailers = isShowTrailers,
                         onFramesClicked = openFrames,
-                        onTrailerClicked = openTrailer,
                         openTrailerList = openTrailers
                     )
                 }

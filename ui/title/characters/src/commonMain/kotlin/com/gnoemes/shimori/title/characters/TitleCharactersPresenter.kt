@@ -50,7 +50,7 @@ class TitleCharactersPresenter(
 
     @Composable
     override fun present(): TitleCharactersUiState {
-        val isGrid = screen.grid
+        val asContent = screen.asContent
 
         val title by observeTitle.value.flow
             .mapNotNull { it?.entity }
@@ -79,7 +79,7 @@ class TitleCharactersPresenter(
         var searchInput by remember { mutableStateOf("") }
         var isSearchActive by remember { mutableStateOf(false) }
 
-        if (isGrid) {
+        if (!asContent) {
             LaunchedEffect(Unit) {
                 observeTitle.value(
                     ObserveTitleWithTrackEntity.Params(screen.id, screen.type)
@@ -101,7 +101,7 @@ class TitleCharactersPresenter(
                     )
                 }.onFailurePublishToBus()
                     .onFailure {
-                        if (characters.itemCount == 0 && !isGrid) {
+                        if (characters.itemCount == 0 && asContent) {
                             EventBus.publish(TitleUiEvents.HideCharacters)
                         }
                     }
@@ -116,7 +116,7 @@ class TitleCharactersPresenter(
             )
         }
 
-        val hideList = !isGrid && !charactersUpdating && charactersCount == 0
+        val hideList = asContent && !charactersUpdating && charactersCount == 0
         LaunchedEffect(hideList) {
             if (hideList) {
                 EventBus.publish(TitleUiEvents.HideCharacters)
@@ -138,10 +138,10 @@ class TitleCharactersPresenter(
         }
 
         return TitleCharactersUiState(
-            isList = !isGrid,
+            isList = asContent,
             titleName = titleName,
             isLoading = charactersUpdating,
-            isShowSearchButton = isGrid && !isSearchActive,
+            isShowSearchButton = !asContent && !isSearchActive,
             isSearchActive = isSearchActive,
             characters = characters,
             eventSink = wrapEventSink(eventSink)

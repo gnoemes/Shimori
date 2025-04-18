@@ -44,13 +44,6 @@ query AnimeDetails(
             updatedAt
         }
 
-        characterRoles {
-            id
-            rolesRu
-            rolesEn
-            character { ...CharacterShort }
-        }
-
         videos { id url name kind imageUrl }
         screenshots { id originalUrl x166Url x332Url }
 

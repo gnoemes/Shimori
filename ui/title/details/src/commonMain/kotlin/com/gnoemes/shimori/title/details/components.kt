@@ -47,7 +47,6 @@ import com.gnoemes.shimori.common.compose.placeholder
 import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
 import com.gnoemes.shimori.common.compose.ui.StatusButton
-import com.gnoemes.shimori.common.compose.ui.TrailerItem
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_arrow_right
 import com.gnoemes.shimori.common.ui.resources.icons.ic_frames
@@ -73,10 +72,10 @@ import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.titles.anime.Anime
-import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleCharactersScreen
+import com.gnoemes.shimori.screens.TitleTrailersScreen
 import com.slack.circuit.foundation.CircuitContent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -304,7 +303,7 @@ internal fun TitleCharacters(
         stringResource(Strings.title_characters),
         openCharactersList,
     ) {
-        CircuitContent(TitleCharactersScreen(id, type, grid = false))
+        CircuitContent(TitleCharactersScreen(id, type, asContent = true))
     }
 }
 
@@ -387,10 +386,11 @@ internal fun TitleAbout(
 
 @Composable
 internal fun TitleFramesAndTrailers(
+    titleId: Long,
+    titleType: TrackTargetType,
+    isShowTrailers: Boolean,
     isFramesExists: Boolean,
-    trailers: List<AnimeVideo>?,
     onFramesClicked: () -> Unit,
-    onTrailerClicked: (Long) -> Unit,
     openTrailerList: () -> Unit,
 ) {
     Column(
@@ -417,38 +417,16 @@ internal fun TitleFramesAndTrailers(
             }
         }
 
+        if (!isShowTrailers) return@Column
+
         Spacer(Modifier.height(24.dp))
 
-        if (trailers?.isEmpty() == true) return@Column
 
         TitleListCategory(
             stringResource(Strings.title_trailers),
             openTrailerList,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Spacer(Modifier.width(0.dp))
-
-                if (trailers == null) {
-                    repeat(3) {
-                        Box(
-                            modifier = Modifier.width(280.dp)
-                                .height(156.dp)
-                                .clip(MaterialTheme.shapes.medium)
-                                .placeholder(visible = true),
-                        )
-                    }
-                } else {
-                    trailers.forEach {
-                        TrailerItem(it, onClick = { onTrailerClicked(it.id) })
-                    }
-                }
-
-                Spacer(Modifier.width(0.dp))
-            }
+            CircuitContent(TitleTrailersScreen(titleId, titleType, true))
         }
 
     }
