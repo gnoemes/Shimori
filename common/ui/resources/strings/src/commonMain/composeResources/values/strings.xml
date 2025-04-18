@@ -135,6 +135,7 @@
     <string name="title_mark_as_fav">Marked as favourite.</string>
     <string name="title_remove_from_fav">Removed from favourites.</string>
     <string name="title_release_format" translatable="false">%s–%s</string>
+    <string name="title_link_not_found">Link not found</string>
     <string name="calendar">Episodes calendar</string>
     <string name="title_type">Type</string>
     <string name="title_ep">Episodes</string>

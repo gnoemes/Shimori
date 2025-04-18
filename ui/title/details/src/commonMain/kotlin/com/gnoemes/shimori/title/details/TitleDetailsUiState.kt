@@ -35,7 +35,6 @@ sealed interface TitleDetailsUiEvent : CircuitUiEvent {
     data object OpenChronology : TitleDetailsUiEvent
     data object NavigateUp : TitleDetailsUiEvent
 
-    data class OpenTrailer(val id: Long) : TitleDetailsUiEvent
     data class OpenEditTrack(val id: Long, val type: TrackTargetType) : TitleDetailsUiEvent
     data class OpenGenreSearch(val id: Long) : TitleDetailsUiEvent
     data class OpenStudioSearch(val studioName: String) : TitleDetailsUiEvent

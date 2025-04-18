@@ -9,4 +9,8 @@ sealed class AppUiEvents(
     data class UiError(
         val error: Throwable,
     ) : AppUiEvents()
+
+    data class UiMessage(
+        val message: String,
+    ) : AppUiEvents()
 }

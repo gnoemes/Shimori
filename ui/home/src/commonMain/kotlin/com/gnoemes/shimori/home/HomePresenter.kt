@@ -108,9 +108,6 @@ class HomePresenter(
                         }
                     }
                 }
-
-                else -> {}
-//                HomeUiEvent.OpenSearch -> navigator
             }
         }
 
@@ -180,6 +177,7 @@ class HomePresenter(
             EventBus.observe<AppUiEvents> { event ->
                 when (event) {
                     is AppUiEvents.UiError -> uiMessageManager.emitMessage(UiMessage(event.error))
+                    is AppUiEvents.UiMessage -> uiMessageManager.emitMessage(UiMessage(event.message))
                 }
             }
         }

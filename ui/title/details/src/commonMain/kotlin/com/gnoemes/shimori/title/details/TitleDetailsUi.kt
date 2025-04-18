@@ -88,7 +88,6 @@ internal fun TitleDetailsUi(
         openChronology = { eventSink(TitleDetailsUiEvent.OpenChronology) },
         navigateUp = { eventSink(TitleDetailsUiEvent.NavigateUp) },
 
-        openTrailer = { eventSink(TitleDetailsUiEvent.OpenTrailer(it)) },
         openEditTrack = { id, type -> eventSink(TitleDetailsUiEvent.OpenEditTrack(id, type)) },
         openGenreSearch = { eventSink(TitleDetailsUiEvent.OpenGenreSearch(it)) },
         openStudioSearch = { eventSink(TitleDetailsUiEvent.OpenStudioSearch(it)) },
@@ -121,7 +120,6 @@ private fun TitleDetailsUi(
     openChronology: () -> Unit,
     navigateUp: () -> Unit,
 
-    openTrailer: (Long) -> Unit,
     openEditTrack: (Long, TrackTargetType) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,
@@ -238,7 +236,6 @@ private fun TitleDetailsUi(
                 openTrailers = openTrailers,
                 openTranslators = openTranslators,
                 openChronology = openChronology,
-                openTrailer = openTrailer,
                 openEditTrack = openEditTrack,
                 openGenreSearch = openGenreSearch,
                 openStudioSearch = openStudioSearch,
@@ -278,7 +275,6 @@ private fun TitleDetailsUiContent(
     openTranslators: () -> Unit,
     openChronology: () -> Unit,
 
-    openTrailer: (Long) -> Unit,
     openEditTrack: (Long, TrackTargetType) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,

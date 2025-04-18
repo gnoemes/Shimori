@@ -124,6 +124,7 @@
     <string name="title_similar">Похожие тайтлы</string>
     <string name="title_mark_as_fav">Полюбилось.</string>
     <string name="title_remove_from_fav">Разонравилось.</string>
+    <string name="title_link_not_found">Ссылка не найдена</string>
     <string name="calendar">Календарь эпизодов</string>
     <string name="title_type">Тип</string>
     <string name="title_ep">Эпизоды</string>

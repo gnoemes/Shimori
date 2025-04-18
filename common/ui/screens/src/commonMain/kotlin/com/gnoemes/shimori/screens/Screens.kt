@@ -75,6 +75,11 @@ data class TitleTrailersScreen(
 ) : ShimoriScreen("TitleTrailers()")
 
 @Parcelize
+data class TitleFramesScreen(
+    val id: Long,
+) : ShimoriScreen("TitleFrames()")
+
+@Parcelize
 data class TitleRelatedScreen(
     val id: Long,
     val type: TrackTargetType,

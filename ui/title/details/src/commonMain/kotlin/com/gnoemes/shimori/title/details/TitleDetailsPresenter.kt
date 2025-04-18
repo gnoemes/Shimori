@@ -16,8 +16,11 @@ import com.gnoemes.shimori.common.compose.isCompact
 import com.gnoemes.shimori.common.compose.isExpanded
 import com.gnoemes.shimori.common.compose.isMedium
 import com.gnoemes.shimori.common.ui.overlay.showInSideSheet
+import com.gnoemes.shimori.common.ui.resources.strings.title_link_not_found
+import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
+import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
 import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshotsCount
@@ -26,7 +29,10 @@ import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.domain.onFailurePublishToBus
 import com.gnoemes.shimori.screens.TitleCharactersScreen
 import com.gnoemes.shimori.screens.TitleDetailsScreen
+import com.gnoemes.shimori.screens.TitleFramesScreen
+import com.gnoemes.shimori.screens.TitleTrailersScreen
 import com.gnoemes.shimori.screens.TrackEditScreen
+import com.gnoemes.shimori.screens.UrlScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.runtime.Navigator
@@ -35,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.stringResource
 
 @Inject
 @CircuitInject(screen = TitleDetailsScreen::class, UiScope::class)
@@ -91,14 +98,15 @@ class TitleDetailsPresenter(
             }
         }
 
+        val linkError = stringResource(Strings.title_link_not_found)
+
 
         val eventSink: CoroutineScope.(TitleDetailsUiEvent) -> Unit = { event ->
             when (event) {
                 TitleDetailsUiEvent.NavigateUp -> navigator.pop()
                 TitleDetailsUiEvent.Share -> TODO()
-                TitleDetailsUiEvent.ExpandDescription -> {
-                    descriptionExpanded = true
-                }
+                TitleDetailsUiEvent.ExpandDescription -> descriptionExpanded = true
+
 
                 TitleDetailsUiEvent.ToggleFavorite -> TODO()
 
@@ -115,9 +123,32 @@ class TitleDetailsPresenter(
                 }
 
                 TitleDetailsUiEvent.OpenChronology -> TODO()
-                TitleDetailsUiEvent.OpenFrames -> TODO()
-                TitleDetailsUiEvent.OpenInBrowser -> TODO()
-                TitleDetailsUiEvent.OpenTrailers -> TODO()
+                TitleDetailsUiEvent.OpenFrames -> titleWithEntity?.let { title ->
+                    navigator.goTo(
+                        TitleFramesScreen(title.id)
+                    )
+                }
+
+                TitleDetailsUiEvent.OpenInBrowser -> {
+                    titleWithEntity?.entity?.url?.let { url ->
+                        navigator.goTo(UrlScreen(url))
+                    } ?: launchOrThrow {
+                        EventBus.publish(AppUiEvents.UiMessage(linkError))
+                    }
+                }
+
+                TitleDetailsUiEvent.OpenTrailers -> {
+                    titleWithEntity?.entity?.let { title ->
+                        navigator.goTo(
+                            TitleTrailersScreen(
+                                title.id,
+                                title.type,
+                                asContent = false
+                            )
+                        )
+                    }
+                }
+
                 TitleDetailsUiEvent.OpenTranslators -> TODO()
                 is TitleDetailsUiEvent.OpenEditTrack -> {
                     val screen = TrackEditScreen(
@@ -135,8 +166,10 @@ class TitleDetailsPresenter(
                 is TitleDetailsUiEvent.OpenHuman -> TODO()
                 is TitleDetailsUiEvent.OpenGenreSearch -> TODO()
                 is TitleDetailsUiEvent.OpenStudioSearch -> TODO()
-                is TitleDetailsUiEvent.OpenTitle -> TODO()
-                is TitleDetailsUiEvent.OpenTrailer -> TODO()
+                is TitleDetailsUiEvent.OpenTitle -> {
+                    navigator.goTo(TitleDetailsScreen(event.id, event.type))
+                }
+
             }
         }
 
