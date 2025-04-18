@@ -43,12 +43,44 @@ import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_add_one
 import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.common.ui.resources.icons.ic_star
+import com.gnoemes.shimori.common.ui.resources.strings.title_trailer_unknown
+import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.titles.anime.Anime
+import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+fun TrailerItem(
+    video: AnimeVideo,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier
+    ) {
+        TrailerCover(
+            video.imageUrl,
+            modifier = Modifier.height(156.dp)
+                .width(280.dp),
+            onClick = onClick
+        )
+
+        Text(
+            video.name?.takeIf { it.isNotEmpty() } ?: stringResource(Strings.title_trailer_unknown),
+            modifier = Modifier.width(280.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
 
 @Composable
 fun CharacterItem(

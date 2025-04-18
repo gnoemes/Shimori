@@ -54,6 +54,7 @@ import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleDetailsScreen
@@ -74,6 +75,8 @@ internal fun TitleDetailsUi(
         genres = state.genres,
         isFavorite = state.isFavorite,
         isShowCharacters = state.isShowCharacters,
+        isFramesExists = state.isFramesExists,
+        trailers = state.trailers,
 
         toggleFavorite = { eventSink(TitleDetailsUiEvent.ToggleFavorite) },
         expandDescription = { eventSink(TitleDetailsUiEvent.ExpandDescription) },
@@ -105,6 +108,8 @@ private fun TitleDetailsUi(
     genres: List<Genre>,
     isFavorite: Boolean,
     isShowCharacters: Boolean,
+    isFramesExists: Boolean,
+    trailers: List<AnimeVideo>?,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -223,6 +228,8 @@ private fun TitleDetailsUi(
                 genres = genres,
                 isFavorite = isFavorite,
                 isShowCharacters = isShowCharacters,
+                isFramesExists = isFramesExists,
+                trailers = trailers,
                 toggleFavorite = toggleFavorite,
                 expandDescription = expandDescription,
                 share = share,
@@ -259,6 +266,8 @@ private fun TitleDetailsUiContent(
     isFavorite: Boolean,
     isShowCharacters: Boolean,
     genres: List<Genre>,
+    isFramesExists: Boolean,
+    trailers: List<AnimeVideo>?,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -347,24 +356,36 @@ private fun TitleDetailsUiContent(
                     )
                 }
             ) {
-                TitleAbout(
-                    genres = genres,
-                    description = title.description,
-                    onGenreClicked = openGenreSearch
-                )
+                Column {
+                    TitleAbout(
+                        genres = genres,
+                        description = title.description,
+                        onGenreClicked = openGenreSearch
+                    )
+                    Spacer(Modifier.height(24.dp))
+                }
             }
 
 
-            item(
-                key = "frames",
-                span = {
-                    GridItemSpan(
-                        if (isCompact) this.maxLineSpan
-                        else 1
+            if (title.type.anime && (isFramesExists || trailers?.isNotEmpty() == true)
+            ) {
+                item(
+                    key = "frames_and_trailers",
+                    span = {
+                        GridItemSpan(
+                            if (isCompact) this.maxLineSpan
+                            else 1
+                        )
+                    }
+                ) {
+                    TitleFramesAndTrailers(
+                        isFramesExists = isFramesExists,
+                        trailers = trailers,
+                        onFramesClicked = openFrames,
+                        onTrailerClicked = openTrailer,
+                        openTrailerList = openTrailers
                     )
                 }
-            ) {
-
             }
 
 

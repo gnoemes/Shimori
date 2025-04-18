@@ -20,6 +20,8 @@ import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshotsCount
+import com.gnoemes.shimori.domain.observers.ObserveAnimeVideos
 import com.gnoemes.shimori.domain.observers.ObserveTitleGenres
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.domain.onFailurePublishToBus
@@ -31,6 +33,7 @@ import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -42,6 +45,8 @@ class TitleDetailsPresenter(
     private val updateTitle: Lazy<UpdateTitle>,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
     private val observeGenres: Lazy<ObserveTitleGenres>,
+    private val observeAnimeScreenshotsCount: Lazy<ObserveAnimeScreenshotsCount>,
+    private val observeAnimeVideos: Lazy<ObserveAnimeVideos>,
 ) : Presenter<TitleDetailsUiState> {
 
     @Composable
@@ -53,6 +58,17 @@ class TitleDetailsPresenter(
 
         val titleWithEntity by observeTitleWithTrack.value.flow.collectAsState(null)
         val genres by observeGenres.value.flow.collectAsState(emptyList())
+        val isFramesExists =
+            //avoid lazy initialization
+            if (screen.type.anime) observeAnimeScreenshotsCount.value.flow.map { it > 0 }
+                .collectAsState(false)
+            else mutableStateOf(false)
+
+        val trailers =
+            //avoid lazy initialization
+            if (screen.type.anime) observeAnimeVideos.value.flow.collectAsState(null)
+            else mutableStateOf(emptyList())
+
 
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
         var isShowCharacters by remember { mutableStateOf(true) }
@@ -73,7 +89,18 @@ class TitleDetailsPresenter(
             observeGenres.value(
                 ObserveTitleGenres.Params(screen.id, screen.type)
             )
+
+            if (screen.type.anime) {
+                observeAnimeScreenshotsCount.value(
+                    ObserveAnimeScreenshotsCount.Params(screen.id)
+                )
+
+                observeAnimeVideos.value(
+                    ObserveAnimeVideos.Params(screen.id)
+                )
+            }
         }
+
 
         val eventSink: CoroutineScope.(TitleDetailsUiEvent) -> Unit = { event ->
             when (event) {
@@ -143,7 +170,8 @@ class TitleDetailsPresenter(
             descriptionExpanded = descriptionExpanded,
 
             isShowCharacters = isShowCharacters,
-
+            isFramesExists = isFramesExists.value,
+            trailers = trailers.value,
             eventSink = wrapEventSink(eventSink)
         )
     }

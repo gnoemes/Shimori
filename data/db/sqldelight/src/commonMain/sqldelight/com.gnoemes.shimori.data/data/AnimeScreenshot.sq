@@ -24,6 +24,9 @@ DELETE FROM anime_screenshot WHERE title_id = :titleId;
 queryByTitleId:
 SELECT * FROM anime_screenshot WHERE title_id = :titleId;
 
+queryCountByTitleId:
+SELECT COUNT(*) FROM anime_screenshot WHERE title_id = :titleId;
+
 selectLastInsertedRowId:
 SELECT last_insert_rowid();
 

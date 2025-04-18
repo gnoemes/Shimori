@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.daos
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.db.api.daos.AnimeScreenshotDao
@@ -9,6 +10,7 @@ import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.data.util.screenshot
 import com.gnoemes.shimori.logging.api.Logger
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -58,4 +60,13 @@ class AnimeScreenshotDaoImpl(
         .asFlow()
         .mapToList(dispatchers.io)
         .flowOn(dispatchers.io)
+
+
+    override fun observeCountByTitleId(id: Long) = db.animeScreenshotQueries
+        .queryCountByTitleId(id)
+        .asFlow()
+        .mapToOne(dispatchers.io)
+        .flowOn(dispatchers.io)
+        .map { it.toInt() }
+
 }

@@ -138,3 +138,36 @@ fun CharacterCover(
 
     }
 }
+
+
+@Composable
+fun TrailerCover(
+    image: String?,
+    modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.medium,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clip(shape)
+    ) {
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalPlatformContext.current)
+                .data(image)
+                .apply {
+                    crossfade(true)
+                }
+                .build(),
+            error = painterResource(Icons.ic_no_image),
+            fallback = painterResource(Icons.ic_no_image),
+            modifier = Modifier
+                .matchParentSize()
+                .combinedClickable(
+                    onClick = onClick
+                ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+    }
+}

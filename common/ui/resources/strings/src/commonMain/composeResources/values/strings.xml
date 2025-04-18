@@ -123,6 +123,7 @@
     <string name="title_menu_names">Names</string>
     <string name="title_character_seiyu">Seiyu</string>
     <string name="title_trailers" comment="title_trailers">Trailers</string>
+    <string name="title_trailer_unknown">Trailer</string>
     <string name="title_frames" comment="title_frames">Frames</string>
     <string name="title_frames_hint" comment="title_frames_hint">Try to zoom</string>
     <string name="title_translators">Translators</string>

@@ -36,7 +36,7 @@ class AnimeDetailsToAnimeInfoMapper(
                 name = it.name,
                 type = it.kind.toSourceType(),
                 url = it.url,
-                imageUrl = it.imageUrl
+                imageUrl = "https:${it.imageUrl}"
             )
         }
 

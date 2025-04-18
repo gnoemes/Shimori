@@ -113,6 +113,7 @@
     <string name="title_menu_names">Названия</string>
     <string name="title_character_seiyu">Сэйю</string>
     <string name="title_trailers" comment="title_trailers">Трейлеры</string>
+    <string name="title_trailer_unknown">Трейлер</string>
     <string name="title_frames" comment="title_frames">Кадры</string>
     <string name="title_frames_hint" comment="title_frames_hint">Попробуй увеличить</string>
     <string name="title_translators">Переводчики</string>

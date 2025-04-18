@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.title.details
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -45,8 +47,10 @@ import com.gnoemes.shimori.common.compose.placeholder
 import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
 import com.gnoemes.shimori.common.compose.ui.StatusButton
+import com.gnoemes.shimori.common.compose.ui.TrailerItem
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_arrow_right
+import com.gnoemes.shimori.common.ui.resources.icons.ic_frames
 import com.gnoemes.shimori.common.ui.resources.icons.ic_heart
 import com.gnoemes.shimori.common.ui.resources.icons.ic_more
 import com.gnoemes.shimori.common.ui.resources.icons.ic_open_in_browser
@@ -58,15 +62,18 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_chapters
 import com.gnoemes.shimori.common.ui.resources.strings.title_characters
 import com.gnoemes.shimori.common.ui.resources.strings.title_ep
 import com.gnoemes.shimori.common.ui.resources.strings.title_ep_duration
+import com.gnoemes.shimori.common.ui.resources.strings.title_frames
 import com.gnoemes.shimori.common.ui.resources.strings.title_menu_share
 import com.gnoemes.shimori.common.ui.resources.strings.title_menu_web
 import com.gnoemes.shimori.common.ui.resources.strings.title_release
 import com.gnoemes.shimori.common.ui.resources.strings.title_score
+import com.gnoemes.shimori.common.ui.resources.strings.title_trailers
 import com.gnoemes.shimori.common.ui.resources.strings.title_type
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.titles.anime.Anime
+import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleCharactersScreen
@@ -376,6 +383,77 @@ internal fun TitleAbout(
         }
     }
 }
+
+
+@Composable
+internal fun TitleFramesAndTrailers(
+    isFramesExists: Boolean,
+    trailers: List<AnimeVideo>?,
+    onFramesClicked: () -> Unit,
+    onTrailerClicked: (Long) -> Unit,
+    openTrailerList: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxWidth()
+    ) {
+        AnimatedVisibility(isFramesExists) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f, false)
+                    .widthIn(max = 572.dp)
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(horizontal = 16.dp),
+                onClick = onFramesClicked,
+            ) {
+                Icon(
+                    painterResource(Icons.ic_frames),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Text(stringResource(Strings.title_frames))
+            }
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        if (trailers?.isEmpty() == true) return@Column
+
+        TitleListCategory(
+            stringResource(Strings.title_trailers),
+            openTrailerList,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Spacer(Modifier.width(0.dp))
+
+                if (trailers == null) {
+                    repeat(3) {
+                        Box(
+                            modifier = Modifier.width(280.dp)
+                                .height(156.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .placeholder(visible = true),
+                        )
+                    }
+                } else {
+                    trailers.forEach {
+                        TrailerItem(it, onClick = { onTrailerClicked(it.id) })
+                    }
+                }
+
+                Spacer(Modifier.width(0.dp))
+            }
+        }
+
+    }
+}
+
 
 @Composable
 internal fun TitleListCategory(
