@@ -46,7 +46,9 @@ class SourceAnimeMapper(
             descriptionHtml = from.descriptionHtml,
             franchise = from.franchise,
             favorite = from.favorite,
-            topicId = from.topicId
+            topicId = from.topicId,
+            dubbers = from.fanDubbers,
+            subbers = from.fanSubbers
         )
 
         val videos = from.videos?.map {
@@ -84,7 +86,7 @@ class SourceAnimeMapper(
             characters = characters,
             charactersRoles = characterRoles,
             genres = genres,
-            studio = studio
+            studio = studio,
         )
     }
 

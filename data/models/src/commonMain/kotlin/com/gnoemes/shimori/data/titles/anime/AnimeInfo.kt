@@ -11,8 +11,6 @@ data class AnimeInfo(
     val track: Track? = null,
     val videos: List<AnimeVideo>? = null,
     val screenshots: List<AnimeScreenshot>? = null,
-    val fanDubbers: List<String>? = null,
-    val fanSubbers: List<String>? = null,
     val characters: List<CharacterInfo>? = null,
     val charactersRoles: List<CharacterRole>? = null,
     val genres: List<Genre>? = null,

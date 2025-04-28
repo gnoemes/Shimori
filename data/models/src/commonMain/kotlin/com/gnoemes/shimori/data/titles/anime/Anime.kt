@@ -34,8 +34,15 @@ data class Anime(
     override val franchise: String? = null,
     override val favorite: Boolean = false,
     override val topicId: Long? = null,
+    val dubbers: List<String>? = null,
+    val subbers: List<String>? = null,
 ) : ShimoriTitleEntity {
     val episodesOrUnknown: String get() = episodes.let { if (it == 0) "?" else "$it" }
     val isMovie: Boolean get() = animeType == AnimeType.Movie
     override val size: Int? get() = episodesOrUnknown.toIntOrNull()
+    val commonTranslators: List<String>
+        get() = dubbers
+            .orEmpty()
+            .intersect(subbers.orEmpty().toSet())
+            .toList()
 }

@@ -66,6 +66,8 @@ class AnimeDaoImpl(
                 it.duration,
                 it.nextEpisode,
                 it.nextEpisodeDate,
+                it.dubbers?.joinToString(),
+                it.subbers?.joinToString(),
             )
         }
 
@@ -99,6 +101,8 @@ class AnimeDaoImpl(
                 it.topicId,
                 it.duration?.toLong(),
                 it.nextEpisode?.toLong(),
+                it.dubbers?.joinToString(),
+                it.subbers?.joinToString(),
             )
         }
     }

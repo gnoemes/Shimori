@@ -1,0 +1,2 @@
+ALTER TABLE anime ADD COLUMN dubbers TEXT;
+ALTER TABLE anime ADD COLUMN subbers TEXT;
