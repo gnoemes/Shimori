@@ -6,5 +6,5 @@ interface StudioRelationDao : EntityDao<StudioRelation> {
     fun queryByTitle(
         sourceId: Long,
         targetId: Long
-    ): StudioRelation?
+    ): List<StudioRelation>
 }

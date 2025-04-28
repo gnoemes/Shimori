@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.daos
 
 import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToOneOrNull
+import app.cash.sqldelight.coroutines.mapToList
 import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.common.Studio
@@ -63,15 +63,15 @@ class StudioDaoImpl(
             .executeAsOneOrNull()
     }
 
-    override fun queryByTitle(targetId: Long, sourceId: Long): Studio? {
+    override fun queryByTitle(targetId: Long, sourceId: Long): List<Studio> {
         return db.studioQueries.queryByTitle(sourceId, targetId, ::studio)
-            .executeAsOneOrNull()
+            .executeAsList()
     }
 
-    override fun observeByTitle(targetId: Long, sourceId: Long): Flow<Studio?> {
+    override fun observeByTitle(targetId: Long, sourceId: Long): Flow<List<Studio>> {
         return db.studioQueries.queryByTitle(sourceId, targetId, ::studio)
             .asFlow()
-            .mapToOneOrNull(dispatchers.io)
+            .mapToList(dispatchers.io)
             .flowOn(dispatchers.io)
     }
 }

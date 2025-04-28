@@ -7,6 +7,6 @@ interface StudioDao : EntityDao<Studio> {
     fun queryById(id: Long): Studio?
     fun queryBySource(sourceId: Long): List<Studio>
     fun countBySource(sourceId: Long): Long
-    fun queryByTitle(targetId: Long, sourceId: Long): Studio?
-    fun observeByTitle(targetId: Long, sourceId: Long): Flow<Studio?>
+    fun queryByTitle(targetId: Long, sourceId: Long): List<Studio>
+    fun observeByTitle(targetId: Long, sourceId: Long): Flow<List<Studio>>
 }

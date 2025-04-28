@@ -43,8 +43,8 @@ class StudioRelationDaoImpl(
         db.studioRelationQueries.deleteById(entity.id)
     }
 
-    override fun queryByTitle(sourceId: Long, targetId: Long): StudioRelation? {
+    override fun queryByTitle(sourceId: Long, targetId: Long): List<StudioRelation> {
         return db.studioRelationQueries.queryRelationsByTitle(sourceId, targetId, ::StudioRelation)
-            .executeAsOneOrNull()
+            .executeAsList()
     }
 }

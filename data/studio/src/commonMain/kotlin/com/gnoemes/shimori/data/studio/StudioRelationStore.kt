@@ -86,8 +86,7 @@ class StudioRelationStore(
         relations: List<StudioRelation>,
     ) {
         val result = createSyncer().sync(
-            currentValues = dao.queryByTitle(sourceId, titleId)
-                ?.let { listOf(it) } ?: emptyList(),
+            currentValues = dao.queryByTitle(sourceId, titleId),
             networkValues = relations,
             removeNotMatched = true
         )
