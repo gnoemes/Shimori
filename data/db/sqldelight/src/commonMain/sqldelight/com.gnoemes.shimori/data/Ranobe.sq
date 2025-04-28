@@ -1,0 +1,97 @@
+import com.gnoemes.shimori.data.common.AgeRating;
+import com.gnoemes.shimori.data.common.TitleStatus;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE ranobe (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    ranobe_type TEXT,
+    rating REAL,
+    status TEXT AS TitleStatus,
+    chapters INTEGER AS Int NOT NULL,
+    volumes INTEGER AS Int NOT NULL,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER
+);
+
+insert:
+INSERT OR REPLACE INTO ranobe(
+name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, ranobe_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id)
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE ranobe
+SET
+ id = :id,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ ranobe_type = coalesce(:ranobe_type, ranobe_type),
+ rating = coalesce(:rating, rating),
+ status = coalesce(:status , status),
+ chapters = :chapters,
+ volumes = :volumes,
+ date_aired = coalesce(:date_aired, date_aired),
+ date_released = coalesce(:date_released, date_released),
+ age_rating = CASE WHEN :age_rating = "NONE" THEN age_rating ELSE :age_rating END,
+ description = coalesce(:description, description),
+ description_html = coalesce(:description_html, description_html),
+ franchise = coalesce(:franchise, franchise),
+ favorite = :favorite,
+ topic_id  = coalesce(:topic_id, topic_id)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM ranobe;
+
+deleteById:
+DELETE FROM ranobe WHERE id = :id;
+
+countWithStatus:
+SELECT COUNT(*) FROM ranobe
+INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+WHERE track.status = :status;
+
+queryById:
+SELECT * FROM ranobe WHERE id = :id;
+
+queryAll:
+SELECT * FROM ranobe;
+
+queryByIdWithTrack:
+SELECT * FROM ranobe
+LEFT OUTER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+LEFT OUTER JOIN pinned ON pinned.target_id = ranobe.id AND pinned.target_type = track.target_type
+WHERE ranobe.id = :id;
+
+queryByStatus:
+SELECT * FROM ranobe
+INNER JOIN track ON track.target_id = ranobe.id AND track.target_type = "RANOBE"
+LEFT OUTER JOIN pinned ON pinned.target_id = ranobe.id AND pinned.target_type = track.target_type
+WHERE track.status = :status;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

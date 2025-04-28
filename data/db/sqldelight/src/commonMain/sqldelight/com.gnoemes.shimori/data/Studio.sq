@@ -1,0 +1,53 @@
+CREATE TABLE studio(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    source_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    image_url TEXT
+);
+
+CREATE INDEX studio_source_id ON studio(source_id);
+
+insert:
+INSERT OR REPLACE INTO studio(source_id, name, image_url)
+VALUES (?,?,?);
+
+update:
+UPDATE studio
+SET
+ id = :id,
+ source_id = :source_id,
+ name = :name,
+ image_url = coalesce(:image_url, image_url)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM studio;
+
+deleteById:
+DELETE FROM studio WHERE id = :id;
+
+countWithSource:
+SELECT COUNT(*) FROM studio
+WHERE source_id = :sourceId;
+
+queryAll:
+SELECT * FROM studio;
+
+queryById:
+SELECT * FROM studio WHERE id = :id;
+
+queryBySource:
+SELECT * FROM studio
+WHERE source_id = :sourceId;
+
+countBySource:
+SELECT COUNT(*) FROM studio
+WHERE source_id = :sourceId;
+
+queryByTitle:
+SELECT s.* FROM studio_relation AS r
+INNER JOIN studio AS s ON s.id = r.studio_id
+WHERE r.source_id = :sourceId AND r.target_id = :titleId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

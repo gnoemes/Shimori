@@ -1,0 +1,71 @@
+import com.gnoemes.shimori.data.track.TrackStatus;
+import com.gnoemes.shimori.data.track.TrackTargetType;
+import kotlin.Int;
+import kotlinx.datetime.Instant;
+CREATE TABLE track (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS TrackTargetType NOT NULL,
+    status TEXT AS TrackStatus  NOT NULL,
+    score INTEGER AS Int,
+    comment TEXT,
+    progress INTEGER AS Int NOT NULL,
+    re_counter INTEGER AS Int NOT NULL,
+    date_created INTEGER AS Instant,
+    date_updated INTEGER AS Instant
+);
+
+CREATE UNIQUE INDEX track_target ON track(target_id, target_type);
+
+insert:
+INSERT OR REPLACE INTO track ( target_id, target_type,  status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES (?,?,?,?,?,?,?,?,?);
+
+update:
+INSERT OR REPLACE INTO track (id, target_id, target_type,  status, score, comment, progress, re_counter, date_created, date_updated)
+VALUES ?;
+
+deleteById:
+DELETE FROM track WHERE id = ?;
+
+deleteAll:
+DELETE FROM track;
+
+queryAll:
+SELECT * FROM track;
+
+queryAllByTarget:
+SELECT * FROM track WHERE target_type = :type;
+
+queryAllByTargetAndStatus:
+SELECT * FROM track WHERE target_type = :type AND status = :status;
+
+queryById:
+SELECT * FROM track WHERE id = ?;
+
+queryByTarget:
+SELECT * FROM track WHERE target_id = :id AND target_type = :type;
+
+queryCount:
+SELECT COUNT(*) FROM track;
+
+statusForTypeExist:
+SELECT COUNT(*) FROM track WHERE target_type = ? AND status = ?;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

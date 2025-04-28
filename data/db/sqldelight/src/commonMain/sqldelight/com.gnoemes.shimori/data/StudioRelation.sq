@@ -1,0 +1,47 @@
+CREATE TABLE studio_relation(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    studio_id INTEGER NOT NULL,
+    source_id INTEGER NOT NULL,
+    target_id INTEGER NOT NULL
+);
+
+CREATE INDEX studio_relation_source_id ON studio_relation(source_id);
+CREATE UNIQUE INDEX studio_relation_target ON studio_relation(studio_id,  source_id, target_id);
+
+insert:
+INSERT OR REPLACE INTO studio_relation(studio_id, source_id,  target_id)
+VALUES (?,?,?);
+
+update:
+UPDATE studio_relation
+SET
+ id = :id,
+ studio_id = :studio_id,
+ source_id = :source_id,
+ target_id = :target_id
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM studio_relation;
+
+deleteById:
+DELETE FROM studio_relation WHERE id = :id;
+
+deleteBySource:
+DELETE FROM studio_relation WHERE source_id = :sourceId;
+
+deleteByTitle:
+DELETE FROM studio_relation WHERE target_id = :targetId;
+
+queryAll:
+SELECT * FROM studio_relation;
+
+queryById:
+SELECT * FROM studio_relation WHERE id = :id;
+
+queryRelationsByTitle:
+SELECT * FROM studio_relation
+WHERE target_id = :targetId AND source_id = :sourceId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

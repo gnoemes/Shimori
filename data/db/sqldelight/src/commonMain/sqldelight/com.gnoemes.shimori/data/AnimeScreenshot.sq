@@ -1,0 +1,41 @@
+CREATE TABLE anime_screenshot (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    title_id INTEGER NOT NULL,
+    original TEXT NOT NULL,
+    preview TEXT NOT NULL
+);
+
+CREATE INDEX screenshottitle_index ON anime_screenshot(title_id);
+
+
+insert:
+INSERT OR REPLACE INTO anime_screenshot(title_id, original, preview)
+VALUES (?,?,?);
+
+update:
+UPDATE anime_screenshot
+SET
+  id = :id,
+  title_id = :titleId,
+  original = coalesce(:original, original),
+  preview = coalesce(:preview, preview)
+WHERE id = :id;
+
+deleteAll:
+DELETE FROM anime_screenshot;
+
+deleteById:
+DELETE FROM anime_screenshot WHERE id = :id;
+
+deleteByTitleId:
+DELETE FROM anime_screenshot WHERE title_id = :titleId;
+
+queryByTitleId:
+SELECT * FROM anime_screenshot WHERE title_id = :titleId;
+
+queryCountByTitleId:
+SELECT COUNT(*) FROM anime_screenshot WHERE title_id = :titleId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
+

@@ -10,4 +10,5 @@ object ExpiryConstants {
     const val TITLE_CHARACTERS = DAY
     const val CHARACTER_DETAILS = DAY
     const val SYNC_PENDING_TASKS = 5
+    const val SOURCE_SYNC = WEEK
 }

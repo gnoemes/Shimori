@@ -20,7 +20,6 @@ import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TrackUiEvents
-import com.gnoemes.shimori.data.source.auth.AuthManager
 import com.gnoemes.shimori.domain.interactors.source.LogoutSource
 import com.gnoemes.shimori.domain.interactors.tracks.CreateOrUpdateTrack
 import com.gnoemes.shimori.domain.observers.ObserveMyUserShort
@@ -28,6 +27,7 @@ import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 import com.gnoemes.shimori.preferences.ShimoriPreferences
 import com.gnoemes.shimori.screens.HomeScreen
 import com.gnoemes.shimori.screens.TrackEditScreen
+import com.gnoemes.shimori.source.auth.SourceAuthStore
 import com.gnoemes.shimori.sources.SourceIds
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.onNavEvent
@@ -48,18 +48,18 @@ class HomePresenter(
     private val prefs: ShimoriPreferences,
     private val observeShikimoriAuth: Lazy<ObserveShikimoriAuth>,
     private val observeMyUserShort: Lazy<ObserveMyUserShort>,
-    private val authManager: Lazy<AuthManager>,
+    private val authStore: Lazy<SourceAuthStore>,
     private val logoutSource: Lazy<LogoutSource>,
     private val createOrUpdateTrack: Lazy<CreateOrUpdateTrack>,
 ) : Presenter<HomeUiState> {
 
-    private val isAuthorizedBefore by lazy { authManager.value.isAuthorized(SourceIds.SHIKIMORI) }
 
     @Composable
     override fun present(): HomeUiState {
         val isAuthorized by observeShikimoriAuth.value.flow.map { it.isAuthorized }
             .distinctUntilChanged()
-            .collectAsRetainedState(isAuthorizedBefore)
+            //TODO remove shikimori dependence
+            .collectAsRetainedState(authStore.value.get(SourceIds.SHIKIMORI)?.isAuthorized ?: false)
         val profileImage by observeMyUserShort.value.flow.map { it?.image }
             .collectAsRetainedState(null)
 

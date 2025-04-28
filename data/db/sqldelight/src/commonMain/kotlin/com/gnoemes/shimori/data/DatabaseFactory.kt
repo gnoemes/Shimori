@@ -1,6 +1,7 @@
 package com.gnoemes.shimori.data
 
 import app.cash.sqldelight.db.SqlDriver
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.data.adapters.AnimeAdapter
 import com.gnoemes.shimori.data.adapters.AnimeVideoAdapter
 import com.gnoemes.shimori.data.adapters.CharacterRoleAdapter

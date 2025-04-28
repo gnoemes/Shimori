@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.daos
 
-import com.gnoemes.shimori.data.ShimoriDB
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.data.ShimoriEntity
 import com.gnoemes.shimori.data.db.api.daos.EntityDao
 

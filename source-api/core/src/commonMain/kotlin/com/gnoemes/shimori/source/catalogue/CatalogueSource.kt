@@ -12,4 +12,5 @@ interface CatalogueSource : Source {
     val characterDataSource: CharacterDataSource
     val personDataSource: PersonDataSource
     val genreDateSource: GenreDataSource
+    val studioDataSource: StudioDataSource
 }

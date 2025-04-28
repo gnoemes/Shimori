@@ -3,9 +3,9 @@ package com.gnoemes.shimori.data.daos
 import app.cash.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.paging3.QueryPagingSource
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.app.ListPin
 import com.gnoemes.shimori.data.db.api.daos.ListPinDao
 import com.gnoemes.shimori.data.track.ListSort
@@ -14,11 +14,11 @@ import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.util.long
 import com.gnoemes.shimori.data.util.pinPaginated
 import com.gnoemes.shimori.logging.api.Logger
+import comgnoemesshimori.data.Pinned
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
-import migrations.Pinned
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn

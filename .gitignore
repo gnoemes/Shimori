@@ -13,6 +13,7 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+.env
 
 
 # Do not commit firebase config

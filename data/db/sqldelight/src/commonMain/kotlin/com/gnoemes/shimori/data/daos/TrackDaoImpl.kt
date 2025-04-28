@@ -4,8 +4,8 @@ package com.gnoemes.shimori.data.daos
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.db.api.daos.TrackDao
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -51,7 +51,7 @@ class TrackDaoImpl(
     override fun update(entity: Track) {
         entity.let {
             db.trackQueries.update(
-                migrations.Track(
+                comgnoemesshimori.data.Track(
                     it.id,
                     it.targetId,
                     it.targetType,

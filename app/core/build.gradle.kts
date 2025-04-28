@@ -27,9 +27,21 @@ kotlin {
                 api(projects.core.logging.impl)
                 api(projects.core.settings)
                 api(projects.core.preferences)
+
                 api(projects.data.db.sqldelight)
+                api(projects.data.lists)
                 api(projects.data.source.core)
-                api(projects.data.source.auth)
+                api(projects.data.anime)
+                api(projects.data.manga)
+                api(projects.data.ranobe)
+                api(projects.data.character)
+                api(projects.data.tracks)
+                api(projects.data.user)
+                api(projects.data.lastrequest)
+                api(projects.data.auth)
+                api(projects.data.genre)
+                api(projects.data.studio)
+                api(projects.data.queryable)
 
                 api(projects.sourceBundled.shikimori)
 

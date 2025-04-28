@@ -3,8 +3,8 @@ package com.gnoemes.shimori.data.daos
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.db.api.daos.AnimeScreenshotDao
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.data.util.screenshot

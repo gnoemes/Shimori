@@ -6,8 +6,8 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.characters.Character
 import com.gnoemes.shimori.data.characters.CharacterWithRole
 import com.gnoemes.shimori.data.db.api.daos.CharacterDao

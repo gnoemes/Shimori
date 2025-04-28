@@ -5,9 +5,9 @@ import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.adapters.LocalDateAdapter
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.TitleStatus

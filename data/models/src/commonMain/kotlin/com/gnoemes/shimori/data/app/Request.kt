@@ -16,4 +16,5 @@ enum class Request(val tag : String) {
     CHARACTER_DETAILS("character_details"),
 
     GENRES("genres"),
+    STUDIOS("studios"),
 }

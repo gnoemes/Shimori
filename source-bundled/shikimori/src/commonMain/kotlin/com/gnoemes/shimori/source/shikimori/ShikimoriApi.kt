@@ -3,6 +3,7 @@ package com.gnoemes.shimori.source.shikimori
 import com.apollographql.apollo.api.Query
 import com.gnoemes.shimori.logging.api.Logger
 import com.gnoemes.shimori.source.shikimori.models.anime.CalendarResponse
+import com.gnoemes.shimori.source.shikimori.models.anime.StudioResponse
 import com.gnoemes.shimori.source.shikimori.models.common.ShikimoriTargetType
 import com.gnoemes.shimori.source.shikimori.models.manga.MangaResponse
 import com.gnoemes.shimori.source.shikimori.models.rates.ShikimoriRateStatus
@@ -17,6 +18,7 @@ import com.gnoemes.shimori.source.shikimori.services.GraphQlService
 import com.gnoemes.shimori.source.shikimori.services.MangaService
 import com.gnoemes.shimori.source.shikimori.services.RanobeService
 import com.gnoemes.shimori.source.shikimori.services.RateService
+import com.gnoemes.shimori.source.shikimori.services.StudioService
 import com.gnoemes.shimori.source.shikimori.services.UserService
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -57,6 +59,7 @@ class ShikimoriApi(
     internal val manga: MangaService by lazy { MangaServiceImpl() }
     internal val ranobe: RanobeService by lazy { RanobeServiceImpl() }
     internal val character: CharacterService by lazy { CharacterServiceImpl() }
+    internal val studio: StudioService by lazy { StudioServiceImpl() }
 
     ///////////////////////////////////////////////////////
     // Implementations
@@ -235,6 +238,14 @@ class ShikimoriApi(
     }
 
     private inner class CharacterServiceImpl : CharacterService {
+    }
+
+    private inner class StudioServiceImpl : StudioService {
+        override suspend fun getAll(): List<StudioResponse> {
+            return client.get {
+                url("$apiUrl/studios")
+            }.body()
+        }
     }
 
     private inner class GraphQlServiceImpl : GraphQlService {

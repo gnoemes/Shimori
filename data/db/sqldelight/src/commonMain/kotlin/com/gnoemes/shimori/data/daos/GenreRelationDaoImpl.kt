@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.data.daos
 
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.adapters.GenreIdsAdapter
 import com.gnoemes.shimori.data.common.GenreRelation
 import com.gnoemes.shimori.data.db.api.daos.GenreRelationDao

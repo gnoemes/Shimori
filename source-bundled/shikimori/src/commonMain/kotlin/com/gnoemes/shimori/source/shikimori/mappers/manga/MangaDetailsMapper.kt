@@ -46,18 +46,20 @@ class MangaDetailsMapper(
             if (mangaType != null) SourceDataType.Manga to mangaType
             else SourceDataType.Ranobe to ranobeType
 
-        val genres = from.genres?.map {
-            SGenre(
-                id = it.id.toLong(),
-                name = it.name,
-                nameRu = it.russian,
-                type = when (it.kind) {
-                    GenreKindEnum.genre -> 0
-                    else -> 1
-                },
-                description = null
-            )
-        }
+        val genres = from.genres
+            ?.map { it.genre }
+            ?.map {
+                SGenre(
+                    id = it.id.toLong(),
+                    name = it.name,
+                    nameRu = it.russian,
+                    type = when (it.kind) {
+                        GenreKindEnum.genre -> 0
+                        else -> 1
+                    },
+                    description = null
+                )
+            }
 
         val title = SManga(
             id = from.id.toLong(),

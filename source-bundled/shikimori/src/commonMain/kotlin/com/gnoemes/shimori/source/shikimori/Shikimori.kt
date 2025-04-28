@@ -8,6 +8,7 @@ import com.gnoemes.shimori.source.catalogue.GenreDataSource
 import com.gnoemes.shimori.source.catalogue.MangaDataSource
 import com.gnoemes.shimori.source.catalogue.PersonDataSource
 import com.gnoemes.shimori.source.catalogue.RanobeDataSource
+import com.gnoemes.shimori.source.catalogue.StudioDataSource
 import com.gnoemes.shimori.source.model.SourceAuthState
 import com.gnoemes.shimori.source.model.SourceDataType
 import com.gnoemes.shimori.source.shikimori.actions.ShikimoriLogoutAction
@@ -19,6 +20,7 @@ import com.gnoemes.shimori.source.shikimori.sources.ShikimoriCharacterDataSource
 import com.gnoemes.shimori.source.shikimori.sources.ShikimoriGenreDataSource
 import com.gnoemes.shimori.source.shikimori.sources.ShikimoriMangaDataSource
 import com.gnoemes.shimori.source.shikimori.sources.ShikimoriRanobeDataSource
+import com.gnoemes.shimori.source.shikimori.sources.ShikimoriStudioDataSource
 import com.gnoemes.shimori.source.shikimori.sources.ShikimoriTrackDataSource
 import com.gnoemes.shimori.source.shikimori.sources.ShikimoriUserDataSource
 import com.gnoemes.shimori.source.track.TrackDataSource
@@ -42,6 +44,7 @@ class Shikimori(
     ranobe: ShikimoriRanobeDataSource,
     character: ShikimoriCharacterDataSource,
     genre: ShikimoriGenreDataSource,
+    studio: ShikimoriStudioDataSource,
     user: ShikimoriUserDataSource,
     track: ShikimoriTrackDataSource,
     private val authStore: ShikimoriAuthStore,
@@ -77,7 +80,7 @@ class Shikimori(
     override val availableData: List<SourceDataType> = listOf(
         SourceDataType.Anime, SourceDataType.Manga, SourceDataType.Ranobe,
         SourceDataType.Track, SourceDataType.Character, SourceDataType.Person,
-        SourceDataType.Genre
+        SourceDataType.Genre, SourceDataType.Studio,
     )
 
     override val animeDataSource: AnimeDataSource = anime
@@ -85,6 +88,7 @@ class Shikimori(
     override val ranobeDataSource: RanobeDataSource = ranobe
     override val characterDataSource: CharacterDataSource = character
     override val genreDateSource: GenreDataSource = genre
+    override val studioDataSource: StudioDataSource = studio
     override val personDataSource: PersonDataSource get() = TODO("Not yet implemented")
     override val userDataSource: UserDataSource = user
     override val trackDataSource: TrackDataSource = track

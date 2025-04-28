@@ -1,0 +1,97 @@
+import com.gnoemes.shimori.data.common.AgeRating;
+import com.gnoemes.shimori.data.common.TitleStatus;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE manga(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    manga_type TEXT,
+    rating REAL,
+    status TEXT AS TitleStatus,
+    chapters INTEGER AS Int NOT NULL,
+    volumes INTEGER AS Int NOT NULL,
+    date_aired TEXT AS LocalDate,
+    date_released TEXT AS LocalDate,
+    age_rating TEXT AS AgeRating NOT NULL,
+    description TEXT,
+    description_html TEXT,
+    franchise TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    topic_id INTEGER
+);
+
+insert:
+INSERT OR REPLACE INTO manga(
+name, name_ru, name_eng, image_original, image_preview,
+image_x96, image_x48, url, manga_type, rating, status, chapters, volumes,
+date_aired, date_released, age_rating,  description, description_html, franchise, favorite,
+topic_id)
+VALUES (?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE manga
+SET
+ id = :id,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ manga_type = coalesce(:manga_type, manga_type),
+ rating = coalesce(:rating, rating),
+ status = coalesce(:status , status),
+ chapters = :chapters,
+ volumes = :volumes,
+ date_aired = coalesce(:date_aired, date_aired),
+ date_released = coalesce(:date_released, date_released),
+ age_rating = CASE WHEN :age_rating = "NONE" THEN age_rating ELSE :age_rating END,
+ description = coalesce(:description, description),
+ description_html = coalesce(:description_html, description_html),
+ franchise = coalesce(:franchise, franchise),
+ favorite = :favorite,
+ topic_id  = coalesce(:topic_id, topic_id)
+ WHERE id = :id;
+
+deleteAll:
+DELETE FROM manga;
+
+deleteById:
+DELETE FROM manga WHERE id = :id;
+
+countWithStatus:
+SELECT COUNT(*) FROM manga
+INNER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+WHERE track.status = :status;
+
+queryById:
+SELECT * FROM manga WHERE id = :id;
+
+queryAll:
+SELECT * FROM manga;
+
+queryByIdWithTrack:
+SELECT * FROM manga
+LEFT OUTER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+LEFT OUTER JOIN pinned ON pinned.target_id = manga.id AND pinned.target_type = track.target_type
+WHERE manga.id = :id;
+
+queryByStatus:
+SELECT * FROM manga
+INNER JOIN track ON track.target_id = manga.id AND track.target_type = "MANGA"
+LEFT OUTER JOIN pinned ON pinned.target_id = manga.id AND pinned.target_type = track.target_type
+WHERE track.status = :status;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

@@ -10,7 +10,7 @@ import com.gnoemes.shimori.source.shikimori.AnimeDetailsQuery
 import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.appendHostIfNeed
 import com.gnoemes.shimori.source.shikimori.Shikimori.Companion.removeBbCodes
 import com.gnoemes.shimori.source.shikimori.ShikimoriValues
-import com.gnoemes.shimori.source.shikimori.mappers.character.CharacterShortToSCharacterMapper
+import com.gnoemes.shimori.source.shikimori.mappers.StudioFragmentMapper
 import com.gnoemes.shimori.source.shikimori.mappers.toInstant
 import com.gnoemes.shimori.source.shikimori.mappers.toLocalDate
 import com.gnoemes.shimori.source.shikimori.mappers.toSourceType
@@ -20,7 +20,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AnimeDetailsToAnimeInfoMapper(
     private val values: ShikimoriValues,
-    private val characterMapper: CharacterShortToSCharacterMapper,
+    private val studioMapper: StudioFragmentMapper,
 ) : Mapper<AnimeDetailsQuery.Anime, SAnime> {
 
     override fun map(from: AnimeDetailsQuery.Anime): SAnime {
@@ -48,18 +48,22 @@ class AnimeDetailsToAnimeInfoMapper(
             )
         }
 
-        val genres = from.genres?.map {
-            SGenre(
-                id = it.id.toLong(),
-                name = it.name,
-                nameRu = it.russian,
-                type = when (it.kind) {
-                    GenreKindEnum.genre -> 0
-                    else -> 1
-                },
-                description = null
-            )
-        }
+        val genres = from.genres
+            ?.map { it.genre }
+            ?.map {
+                SGenre(
+                    id = it.id.toLong(),
+                    name = it.name,
+                    nameRu = it.russian,
+                    type = when (it.kind) {
+                        GenreKindEnum.genre -> 0
+                        else -> 1
+                    },
+                    description = null
+                )
+            }
+
+        val studio = from.studios.firstOrNull()?.let { studioMapper.map(it.studio) }
 
         val title = SAnime(
             id = from.id.toLong(),
@@ -88,7 +92,8 @@ class AnimeDetailsToAnimeInfoMapper(
             fanDubbers = fandubbers,
             fanSubbers = fansubbers,
             characters = null,
-            charactersRoles = null
+            charactersRoles = null,
+            studio = studio
         )
 
 

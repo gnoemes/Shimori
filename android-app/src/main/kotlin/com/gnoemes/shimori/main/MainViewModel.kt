@@ -8,7 +8,7 @@
 //import com.gnoemes.shimori.base.core.utils.Logger
 //import com.gnoemes.shimori.common.ui.utils.ObservableLoadingCounter
 //import com.gnoemes.shimori.common.ui.utils.collectStatus
-//import com.gnoemes.shimori.data.lists.ListsStateBus
+//import com.gnoemes.shimori.lists.ListsStateBus
 //import com.gnoemes.shimori.domain.interactors.UpdateUserAndTracks
 //import com.gnoemes.shimori.domain.observers.ObserveShikimoriAuth
 //import kotlinx.coroutines.flow.SharingStarted

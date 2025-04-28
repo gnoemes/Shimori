@@ -10,20 +10,20 @@ import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.track.TrackTargetType
-import migrations.Anime
-import migrations.Anime_video
-import migrations.Character_role
-import migrations.Genre
-import migrations.Genre_relation
-import migrations.Last_request
-import migrations.List_sort
-import migrations.Manga
-import migrations.Pinned
-import migrations.Ranobe
-import migrations.Source_ids_sync
-import migrations.Track
-import migrations.Track_to_sync
-import migrations.User
+import comgnoemesshimori.data.Anime
+import comgnoemesshimori.data.Anime_video
+import comgnoemesshimori.data.Character_role
+import comgnoemesshimori.data.Genre
+import comgnoemesshimori.data.Genre_relation
+import comgnoemesshimori.data.Last_request
+import comgnoemesshimori.data.List_sort
+import comgnoemesshimori.data.Manga
+import comgnoemesshimori.data.Pinned
+import comgnoemesshimori.data.Ranobe
+import comgnoemesshimori.data.Source_ids_sync
+import comgnoemesshimori.data.Track
+import comgnoemesshimori.data.Track_to_sync
+import comgnoemesshimori.data.User
 
 
 internal val TrackAdapter = Track.Adapter(
@@ -69,7 +69,7 @@ internal val AnimeAdapter = Anime.Adapter(
     episodes_airedAdapter = IntColumnAdapter,
     durationAdapter = IntColumnAdapter,
     next_episodeAdapter = IntColumnAdapter,
-    )
+)
 
 internal val MangaAdapter = Manga.Adapter(
     statusAdapter = EnumColumnAdapter<TitleStatus>(),

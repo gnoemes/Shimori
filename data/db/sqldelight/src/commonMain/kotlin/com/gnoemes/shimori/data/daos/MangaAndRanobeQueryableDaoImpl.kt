@@ -4,9 +4,9 @@ import app.cash.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
 import com.gnoemes.shimori.data.PaginatedEntity
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.db.api.daos.MangaAndRanobeQueryableDao
 import com.gnoemes.shimori.data.track.ListSort

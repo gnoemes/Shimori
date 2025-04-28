@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.observers
 
 import com.gnoemes.shimori.data.common.Genre
-import com.gnoemes.shimori.data.manga.GenreRepository
+import com.gnoemes.shimori.data.genre.GenreRepository
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.domain.SubjectInteractor
 import kotlinx.coroutines.flow.Flow

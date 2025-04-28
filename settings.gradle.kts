@@ -73,10 +73,13 @@ include(
     ":data:user",
     ":data:auth",
     ":data:genre",
+    ":data:studio",
     ":data:queryable",
     ":data:eventbus",
+
     ":domain",
     ":tasks",
+
     ":common:ui:circuit",
     ":common:ui:compose",
     ":common:ui:resources:strings",

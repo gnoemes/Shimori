@@ -19,6 +19,7 @@ kotlin {
                 implementation(libs.sqldelight.coroutines)
                 implementation(libs.sqldelight.paging)
                 implementation(libs.sqldelight.primitive)
+                implementation(libs.sqldelight.runtime)
             }
         }
 
@@ -37,16 +38,18 @@ kotlin {
 }
 
 sqldelight {
+    linkSqlite.set(true)
+
     databases {
         create("ShimoriDB") {
-            packageName = "${ProjectConfig.APP_PACKAGE}.data"
+            packageName.set(ProjectConfig.APP_PACKAGE)
             srcDirs("src/commonMain/sqldelight")
             dialect(libs.sqldelight.dialects.sql)
 
-            schemaOutputDirectory = file("src/commonMain/sqldelight/schemes")
-            migrationOutputDirectory = file("src/commonMain/sqldelight/migrations")
-            verifyMigrations = true
-            deriveSchemaFromMigrations = true
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/schemes"))
+            migrationOutputDirectory.set(file("src/commonMain/sqldelight/migrations"))
+            verifyMigrations.set(true)
+            deriveSchemaFromMigrations.set(false)
         }
     }
 }

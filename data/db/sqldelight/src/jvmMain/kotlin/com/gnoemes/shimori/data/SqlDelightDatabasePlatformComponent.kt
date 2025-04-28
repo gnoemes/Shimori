@@ -29,7 +29,7 @@ actual interface SqlDelightDatabasePlatformComponent {
         )
 
         if (version.value == 0L) {
-//            ShimoriDB.Schema.create(db)
+            ShimoriDB.Schema.create(db)
             db.execute(null, "PRAGMA foreign_keys=ON;", 0)
             db.execute(null, sql = "PRAGMA user_version = 1;", 0)
         }

@@ -20,6 +20,7 @@ class SourceAnimeMapper(
     private val characterMapper: SourceCharacterMapper,
     private val roleMapper: SourceCharacterRoleMapper,
     private val genreMapper: SourceGenreMapper,
+    private val studioMapper: SourceStudioMapper,
 ) : Mapper<SAnime, AnimeInfo> {
 
     override fun map(from: SAnime): AnimeInfo {
@@ -73,6 +74,8 @@ class SourceAnimeMapper(
         val genres = from.genres
             ?.map { genreMapper.map(it) }
 
+        val studio = from.studio?.let { studioMapper.map(it) }
+
         return AnimeInfo(
             entity = entity,
             track = from.track?.let { trackMapper.map(it) },
@@ -80,7 +83,8 @@ class SourceAnimeMapper(
             screenshots = screenshots,
             characters = characters,
             charactersRoles = characterRoles,
-            genres = genres
+            genres = genres,
+            studio = studio
         )
     }
 

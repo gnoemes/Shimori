@@ -1,7 +1,7 @@
 package com.gnoemes.shimori.domain.interactors
 
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.manga.GenreRepository
+import com.gnoemes.shimori.data.genre.GenreRepository
 import com.gnoemes.shimori.domain.Interactor
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject

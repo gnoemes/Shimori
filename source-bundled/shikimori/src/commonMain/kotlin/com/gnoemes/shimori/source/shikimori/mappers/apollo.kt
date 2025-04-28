@@ -100,7 +100,7 @@ fun PosterShort?.toSourceType() = this?.let {
 }
 
 fun AnimeDetailsQuery.Genre.toSourceType(): String {
-    return this.name
+    return this.genre.name
 }
 
 fun VideoKindEnum?.toSourceType() = when (this) {

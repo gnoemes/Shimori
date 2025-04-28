@@ -1,5 +1,6 @@
 package com.gnoemes.shimori.data
 
+import com.gnoemes.shimori.ShimoriDB
 import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo

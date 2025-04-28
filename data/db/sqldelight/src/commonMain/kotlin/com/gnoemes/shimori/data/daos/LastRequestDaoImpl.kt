@@ -1,6 +1,6 @@
 package com.gnoemes.shimori.data.daos
 
-import com.gnoemes.shimori.data.ShimoriDB
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.data.app.LastRequest
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.db.api.daos.LastRequestDao

@@ -11,6 +11,7 @@ import com.gnoemes.shimori.source.catalogue.CharacterDataSource
 import com.gnoemes.shimori.source.catalogue.GenreDataSource
 import com.gnoemes.shimori.source.catalogue.MangaDataSource
 import com.gnoemes.shimori.source.catalogue.RanobeDataSource
+import com.gnoemes.shimori.source.catalogue.StudioDataSource
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -25,6 +26,7 @@ class CatalogueManager(
     private val ranobeSourceAdapter: RanobeDataSourceAdapter,
     private val characterSourceAdapter: CharacterDataSourceAdapter,
     private val genreSourceAdapter: GenreDataSourceAdapter,
+    private val studioSourceAdapter: StudioDataSourceAdapter,
     dao: SourceIdsSyncDao,
 ) : SourceManager<CatalogueSource>(dao) {
     val current: CatalogueSource
@@ -81,6 +83,13 @@ class CatalogueManager(
     ): SourceResponse<ResponseType> = with(current) {
         val sourceAction = genreSourceAdapter(action)
         return@with request(this, genreDateSource, sourceAction)
+    }
+
+    suspend  fun <ResponseType> studio(
+        action: suspend StudioDataSourceAdapter.() -> suspend StudioDataSource.(Source) -> ResponseType
+    ): SourceResponse<ResponseType> = with(current) {
+        val sourceAction = studioSourceAdapter(action)
+        return@with request(this, studioDataSource, sourceAction)
     }
 
 }

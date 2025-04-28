@@ -2,8 +2,8 @@ package com.gnoemes.shimori.data.daos
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.gnoemes.shimori.ShimoriDB
 import com.gnoemes.shimori.base.utils.AppCoroutineDispatchers
-import com.gnoemes.shimori.data.ShimoriDB
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.db.api.daos.GenreDao
 import com.gnoemes.shimori.data.track.TrackTargetType

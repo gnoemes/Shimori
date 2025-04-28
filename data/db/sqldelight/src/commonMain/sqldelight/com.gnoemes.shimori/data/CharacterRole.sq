@@ -1,0 +1,68 @@
+import com.gnoemes.shimori.data.track.TrackTargetType;
+
+CREATE TABLE character_role(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    character_id INTEGER NOT NULL,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS TrackTargetType NOT NULL,
+    role TEXT,
+    role_ru TEXT
+ );
+
+CREATE INDEX role_index ON character_role(character_id, target_id, target_type);
+
+insert:
+INSERT INTO character_role(character_id, target_id, target_type, role, role_ru)
+VALUES (?,?,?,?, ?);
+
+update:
+UPDATE character_role
+SET
+ id = :id,
+ character_id = :character_id,
+ target_id = :target_id,
+ target_type = :target_type,
+ role = :role,
+ role_ru = : role_ru
+WHERE id = :id;
+
+deleteById:
+DELETE FROM character_role WHERE id = :id;
+
+deleteByCharacterId:
+DELETE FROM character_role WHERE character_id = :id;
+
+queryByTitle:
+SELECT * FROM character_role
+WHERE target_id = :targetId AND target_type = :target_type;
+
+countCharactersByTitle:
+SELECT COUNT(*) FROM character_role AS cr
+INNER JOIN character AS c ON cr.character_id = c.id
+WHERE target_id = :targetId AND target_type = :target_type;
+
+queryByCharacterId:
+SELECT cr.* FROM character_role AS cr
+WHERE character_id = :characterId;
+
+queryAnimesByCharacter:
+SELECT title.*, r.* FROM character_role AS cr
+INNER JOIN anime AS title ON title.id = cr.target_id AND cr.target_type = "ANIME"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = cr.target_type
+LEFT OUTER JOIN pinned AS p ON p.target_id = title.id AND p.target_type = r.target_type
+WHERE cr.character_id = :characterId;
+
+queryMangasByCharacter:
+SELECT title.*, r.* FROM character_role AS cr
+INNER JOIN manga AS title ON title.id = cr.target_id AND cr.target_type = "MANGA"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = cr.target_type
+WHERE cr.character_id = :characterId;
+
+queryRanobesByCharacter:
+SELECT title.*, r.* FROM character_role AS cr
+INNER JOIN ranobe AS title ON title.id = cr.target_id AND cr.target_type = "RANOBE"
+INNER JOIN track AS r ON r.target_id = title.id AND r.target_type = cr.target_type
+WHERE cr.character_id = :characterId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

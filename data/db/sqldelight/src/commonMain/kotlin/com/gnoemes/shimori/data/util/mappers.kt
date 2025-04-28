@@ -13,6 +13,7 @@ import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.GenreRelation
 import com.gnoemes.shimori.data.common.GenreType
 import com.gnoemes.shimori.data.common.ShimoriImage
+import com.gnoemes.shimori.data.common.Studio
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
@@ -33,7 +34,7 @@ import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.data.track.TrackToSync
 import com.gnoemes.shimori.data.user.User
 import com.gnoemes.shimori.data.user.UserShort
-import comgnoemesshimoridata.data.QueryMeShort
+import comgnoemesshimori.data.QueryMeShort
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
@@ -1014,5 +1015,19 @@ internal fun genreRelation(
         targetId = targetId,
         type,
         GenreIdsAdapter.decode(ids)
+    )
+}
+
+internal fun studio(
+    id: Long,
+    source_id: Long,
+    name: String,
+    imageUrl: String?,
+): Studio {
+    return Studio(
+        id = id,
+        sourceId = source_id,
+        name = name,
+        imageUrl = imageUrl
     )
 }

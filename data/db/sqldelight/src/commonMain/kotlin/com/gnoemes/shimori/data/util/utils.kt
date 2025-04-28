@@ -1,12 +1,17 @@
 package com.gnoemes.shimori.data.util
 
-import com.gnoemes.shimori.data.ShimoriDB
+import com.gnoemes.shimori.ShimoriDB
+import comgnoemesshimori.data.Last_request
+import comgnoemesshimori.data.List_sort
+import comgnoemesshimori.data.Track
+import comgnoemesshimori.data.Track_to_sync
+import comgnoemesshimori.data.User
 
-internal typealias TrackDAO = migrations.Track
-internal typealias UserDAO = migrations.User
-internal typealias ListSortDAO = migrations.List_sort
-internal typealias LastRequestDAO = migrations.Last_request
-internal typealias TrackToSyncDAO = migrations.Track_to_sync
+internal typealias TrackDAO = Track
+internal typealias UserDAO = User
+internal typealias ListSortDAO = List_sort
+internal typealias LastRequestDAO = Last_request
+internal typealias TrackToSyncDAO = Track_to_sync
 
 
 internal val Boolean.long: Long
