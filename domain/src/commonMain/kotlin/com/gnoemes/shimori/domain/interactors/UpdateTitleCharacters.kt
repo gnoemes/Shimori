@@ -22,7 +22,7 @@ class UpdateTitleCharacters(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) update(params.id, params.type)
-            else if (needUpdate(params.id, params.type)) update(params.id, params.type)
+            else if (shouldUpdate(params.id, params.type)) update(params.id, params.type)
         }
     }
 
@@ -39,8 +39,8 @@ class UpdateTitleCharacters(
         }
     }
 
-    private fun needUpdate(id: Long, type: TrackTargetType) =
-        characterRepository.needUpdateTitleCharacters(id, type)
+    private fun shouldUpdate(id: Long, type: TrackTargetType) =
+        characterRepository.shouldUpdateTitleCharacters(id, type)
 
     data class Params(
         val id: Long,

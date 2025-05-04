@@ -1,9 +1,8 @@
 package com.gnoemes.shimori.data.person
 
-import com.gnoemes.shimori.base.extensions.inPast
-import com.gnoemes.shimori.data.app.ExpiryConstants
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.core.BaseCatalogueRepository
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
@@ -12,102 +11,96 @@ import com.gnoemes.shimori.data.titles.anime.AnimeInfo
 import com.gnoemes.shimori.data.titles.manga.MangaInfo
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
-import kotlinx.datetime.Instant
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class PersonRepository(
-    private val catalogue: CatalogueManager,
+    logger: Logger,
+    catalogue: CatalogueManager,
+    entityLastRequest: EntityLastRequestStore,
     private val store: SyncedPersonStore,
     private val roleStore: PersonRoleStore,
-    private val entityLastRequest: EntityLastRequestStore,
     private val ids: SourceIdsSyncDao,
-    private val logger: Logger,
     private val transactionRunner: DatabaseTransactionRunner
+) : BaseCatalogueRepository<Person>(
+    SourceDataType.Person,
+    logger,
+    catalogue,
+    entityLastRequest,
+    transactionRunner
 ) {
+    override fun queryById(id: Long) = store.dao.queryById(id)
     fun observeById(id: Long) = store.dao.observeById(id)
     fun observeTitlePersons(titleId: Long, type: TrackTargetType) =
         store.dao.observeTitlePersons(titleId, type)
 
-    suspend fun sync(id: Long): SourceResponse<PersonInfo> {
-        val local = store.dao.queryById(id)
-            ?: throw IllegalStateException("Person with id: $id not found")
-
-        return catalogue.person { get(local) }
-            .also {
-                transactionRunner {
-                    store.trySync(it)
-                    roleStore.trySync(it)
-                    personUpdated(id)
-                }
+    suspend fun sync(id: Long) =
+        request(id) {
+            person { get(it) }
+        }.also {
+            transactionRunner {
+                store.trySync(it)
+                roleStore.trySync(it)
+                personUpdated(id)
             }
-    }
+        }
 
-    suspend fun <T> trySync(data: SourceResponse<T>) {
-        transactionRunner {
-            store.trySync(data)
-            roleStore.trySync(data)
+    override fun <T> trySyncTransaction(data: SourceResponse<T>) {
+        store.trySync(data)
+        roleStore.trySync(data)
 
-            when (val info = data.data) {
-                is AnimeInfo -> if (info.persons != null && info.personsRoles != null) {
-                    val localId = ids.findLocalId(
-                        data.sourceId,
-                        info.entity.id,
-                        info.entity.type.sourceDataType
-                    ) ?: return@transactionRunner
-                    titlePersonsUpdated(localId, info.entity.type)
-                }
+        when (val info = data.data) {
+            is AnimeInfo -> if (info.persons != null && info.personsRoles != null) {
+                val localId = ids.findLocalId(
+                    data.sourceId,
+                    info.entity.id,
+                    info.entity.type.sourceDataType
+                ) ?: return
+                titlePersonsUpdated(localId, info.entity.type)
+            }
 
-                is MangaInfo -> if (info.persons != null && info.personsRoles != null) {
-                    val localId = ids.findLocalId(
-                        data.sourceId,
-                        info.entity.id,
-                        info.entity.type.sourceDataType
-                    ) ?: return@transactionRunner
-                    titlePersonsUpdated(localId, info.entity.type)
-                }
+            is MangaInfo -> if (info.persons != null && info.personsRoles != null) {
+                val localId = ids.findLocalId(
+                    data.sourceId,
+                    info.entity.id,
+                    info.entity.type.sourceDataType
+                ) ?: return
+                titlePersonsUpdated(localId, info.entity.type)
             }
         }
     }
 
-    fun needUpdatePerson(
+    fun shouldUpdatePerson(
         id: Long,
-        expiry: Instant = ExpiryConstants.PERSON_DETAILS.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
-        Request.CHARACTER_DETAILS,
+    ) = shouldUpdate(
+        Request.PERSON_DETAILS,
         id,
-        expiry
     )
 
-    fun needUpdateTitlePersons(
+    fun shouldUpdateTitlePersons(
         id: Long,
         type: TrackTargetType,
-        expiry: Instant = ExpiryConstants.TITLE_PERSONS.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
+    ) = shouldUpdate(
         when (type) {
             TrackTargetType.ANIME -> Request.ANIME_DETAILS_PERSONS
             TrackTargetType.MANGA -> Request.MANGA_DETAILS_PERSONS
             TrackTargetType.RANOBE -> Request.RANOBE_DETAILS_PERSONS
         },
         id,
-        expiry
     )
 
-    fun titlePersonsUpdated(
+    private fun titlePersonsUpdated(
         id: Long,
         type: TrackTargetType,
-    ) =
-        entityLastRequest.updateLastRequest(
-            when (type) {
-                TrackTargetType.ANIME -> Request.ANIME_DETAILS_PERSONS
-                TrackTargetType.MANGA -> Request.MANGA_DETAILS_PERSONS
-                TrackTargetType.RANOBE -> Request.RANOBE_DETAILS_PERSONS
-            },
-            id
-        )
+    ) = updated(
+        when (type) {
+            TrackTargetType.ANIME -> Request.ANIME_DETAILS_PERSONS
+            TrackTargetType.MANGA -> Request.MANGA_DETAILS_PERSONS
+            TrackTargetType.RANOBE -> Request.RANOBE_DETAILS_PERSONS
+        },
+        id
+    )
 
-
-    fun personUpdated(id: Long) =
-        entityLastRequest.updateLastRequest(Request.PERSON_DETAILS, id)
+    private fun personUpdated(id: Long) = updated(Request.PERSON_DETAILS, id)
 }

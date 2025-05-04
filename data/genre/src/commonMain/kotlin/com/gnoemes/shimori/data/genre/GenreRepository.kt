@@ -1,60 +1,59 @@
 package com.gnoemes.shimori.data.genre
 
-import com.gnoemes.shimori.base.extensions.inPast
-import com.gnoemes.shimori.data.app.ExpiryConstants
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.app.SourceResponse
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.core.BaseCatalogueRepository
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.logging.api.Logger
-import kotlinx.datetime.Instant
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class GenreRepository(
-    private val catalogue: CatalogueManager,
+    logger: Logger,
+    catalogue: CatalogueManager,
+    entityLastRequest: EntityLastRequestStore,
     private val store: SyncedGenreStore,
     private val relationsStore: GenreRelationStore,
-    private val entityLastRequest: EntityLastRequestStore,
-    private val logger: Logger,
     private val transactionRunner: DatabaseTransactionRunner
+) : BaseCatalogueRepository<Genre>(
+    SourceDataType.Genre,
+    logger,
+    catalogue,
+    entityLastRequest,
+    transactionRunner
 ) {
+    override fun queryById(id: Long) = store.dao.queryById(id)
 
     fun observeByTitle(
         id: Long,
         type: TrackTargetType
     ) = store.dao.observeByTitle(id, type, catalogue.current.id)
 
-    suspend fun sync(): SourceResponse<List<Genre>> {
-        return catalogue.genre { getAll() }
-            .also {
-                transactionRunner {
-                    store.trySync(it)
-                    genresUpdated(it.sourceId)
-                }
-            }
-    }
-
-    suspend fun <T> trySync(data: SourceResponse<T>) {
+    suspend fun sync() = request {
+        genre { getAll() }
+    }.also {
         transactionRunner {
-            store.trySync(data)
-            relationsStore.trySync(data)
+            store.trySync(it)
+            genresUpdated(it.sourceId)
         }
     }
 
-    fun needUpdateGenresForSource(
+    override fun <T> trySyncTransaction(data: SourceResponse<T>) {
+        store.trySync(data)
+        relationsStore.trySync(data)
+    }
+
+    fun shouldUpdateGenresForSource(
         sourceId: Long = catalogue.current.id,
-        expiry: Instant = ExpiryConstants.SOURCE_SYNC.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
+    ) = shouldUpdate(
         Request.GENRES,
         sourceId,
-        expiry
     )
 
-    fun genresUpdated(sourceId: Long) =
-        entityLastRequest.updateLastRequest(Request.GENRES, sourceId)
+    private fun genresUpdated(sourceId: Long) = updated(Request.GENRES, sourceId)
 }

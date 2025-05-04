@@ -1,104 +1,91 @@
 package com.gnoemes.shimori.data.manga
 
-import com.gnoemes.shimori.base.extensions.inPast
-import com.gnoemes.shimori.data.app.ExpiryConstants
 import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.core.BaseCatalogueRepository
 import com.gnoemes.shimori.data.db.api.db.DatabaseTransactionRunner
 import com.gnoemes.shimori.data.lastrequest.EntityLastRequestStore
 import com.gnoemes.shimori.data.source.catalogue.CatalogueManager
-import com.gnoemes.shimori.data.titles.manga.MangaInfo
+import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.track.ListSort
 import com.gnoemes.shimori.data.track.TrackStatus
 import com.gnoemes.shimori.data.user.UserShort
 import com.gnoemes.shimori.logging.api.Logger
-import kotlinx.datetime.Instant
+import com.gnoemes.shimori.source.model.SourceDataType
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class MangaRepository(
-    private val catalogue: CatalogueManager,
+    logger: Logger,
+    catalogue: CatalogueManager,
+    entityLastRequest: EntityLastRequestStore,
     private val store: SyncedMangaStore,
-    private val entityLastRequest: EntityLastRequestStore,
-    private val logger: Logger,
     private val transactionRunner: DatabaseTransactionRunner
+) : BaseCatalogueRepository<Manga>(
+    SourceDataType.Manga,
+    logger,
+    catalogue,
+    entityLastRequest,
+    transactionRunner
 ) {
-
-    fun queryById(id: Long) = store.dao.queryById(id)
+    override fun queryById(id: Long) = store.dao.queryById(id)
     fun observeById(id: Long) = store.dao.observeById(id)
     fun paging(status: TrackStatus, sort: ListSort) = store.dao.paging(status, sort)
 
     suspend fun syncTracked(
         user: UserShort,
         status: TrackStatus?
-    ): SourceResponse<List<MangaInfo>> {
-        return catalogue.manga { getWithStatus(user, status) }
-            .also {
-                transactionRunner {
-                    store.trySync(it)
-                    statusUpdated(status)
-                }
-            }
+    ) = request {
+        manga { getWithStatus(user, status) }
+    }.also {
+        transactionRunner {
+            store.trySync(it)
+            statusUpdated(status)
+        }
     }
 
-    suspend fun sync(id: Long): SourceResponse<MangaInfo> {
-        val local = store.dao.queryById(id)
-            ?: throw IllegalStateException("Anime with id: $id not found")
-
-        return catalogue.manga { get(local) }
-            .also {
-                transactionRunner {
-                    store.trySync(it)
-                    titleUpdated(id)
-                }
+    suspend fun sync(id: Long) =
+        request(id) {
+            manga { get(it) }
+        }.also {
+            transactionRunner {
+                store.trySync(it)
+                titleUpdated(id)
             }
-    }
+        }
 
     suspend fun syncTitleCharacters(
         id: Long
-    ): SourceResponse<MangaInfo> {
-        val local = store.dao.queryById(id)
-            ?: throw IllegalStateException("Manga with id: $id not found")
-
-        return catalogue.manga { getCharacters(local) }
+    ) = request(id) {
+        manga { getCharacters(it) }
     }
 
     suspend fun syncTitlePersons(
         id: Long
-    ): SourceResponse<MangaInfo> {
-        val local = store.dao.queryById(id)
-            ?: throw IllegalStateException("Manga with id: $id not found")
-
-        return catalogue.manga { getPersons(local) }
+    ) = request(id) {
+        manga { getPersons(it) }
     }
 
-    suspend fun <T> trySync(data: SourceResponse<T>) {
-        transactionRunner {
-            store.trySync(data)
-        }
+    override fun <T> trySyncTransaction(data: SourceResponse<T>) {
+        store.trySync(data)
     }
 
-    fun needUpdateTitlesWithStatus(
+    fun shouldUpdateTitlesWithStatus(
         status: TrackStatus?,
-        expiry: Instant = ExpiryConstants.TITLES_WITH_STATUS.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
+    ) = shouldUpdate(
         Request.MANGAS_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong(),
-        expiry
     )
 
-    fun needUpdateTitle(
+    fun shouldUpdateTitle(
         id: Long,
-        expiry: Instant = ExpiryConstants.TITLE_DETAILS.minutes.inPast
-    ) = entityLastRequest.isRequestBefore(
+    ) = shouldUpdate(
         Request.MANGA_DETAILS,
         id,
-        expiry
     )
 
-    fun titleUpdated(id: Long) = entityLastRequest.updateLastRequest(Request.MANGA_DETAILS, id)
-    fun statusUpdated(status: TrackStatus?) = entityLastRequest.updateLastRequest(
+    private fun titleUpdated(id: Long) = updated(Request.MANGA_DETAILS, id)
+    fun statusUpdated(status: TrackStatus?) = updated(
         Request.MANGAS_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong()
     )

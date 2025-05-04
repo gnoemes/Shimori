@@ -19,6 +19,7 @@ class KotlinMultiplatformDataConventionPlugin : Plugin<Project> {
                 commonMain {
                     dependencies {
                         api(project(":data:models"))
+                        api(project(":data:core"))
                         implementation(project(":data:db:api"))
                         implementation(project(":data:source:core"))
                         implementation(project(":data:lastrequest"))

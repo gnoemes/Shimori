@@ -15,7 +15,7 @@ class UpdateGenres(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) update()
-            else if (repository.needUpdateGenresForSource()) update()
+            else if (repository.shouldUpdateGenresForSource()) update()
         }
     }
 

@@ -26,7 +26,7 @@ class UpdateTitle(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) update(params.id, params.type)
-            else if (needUpdate(params.id, params.type)) update(params.id, params.type)
+            else if (shouldUpdate(params.id, params.type)) update(params.id, params.type)
         }
     }
 
@@ -55,10 +55,10 @@ class UpdateTitle(
         }
     }
 
-    private fun needUpdate(id: Long, type: TrackTargetType) = when (type) {
-        TrackTargetType.ANIME -> animeRepository.needUpdateTitle(id)
-        TrackTargetType.MANGA -> mangaRepository.needUpdateTitle(id)
-        TrackTargetType.RANOBE -> ranobeRepository.needUpdateTitle(id)
+    private fun shouldUpdate(id: Long, type: TrackTargetType) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.shouldUpdateTitle(id)
+        TrackTargetType.MANGA -> mangaRepository.shouldUpdateTitle(id)
+        TrackTargetType.RANOBE -> ranobeRepository.shouldUpdateTitle(id)
     }
 
     data class Params(

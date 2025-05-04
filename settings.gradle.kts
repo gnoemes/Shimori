@@ -58,6 +58,7 @@ include(
     ":core:logging:api",
     ":core:logging:impl",
     ":data:models",
+    ":data:core",
     ":data:db:api",
     ":data:db:sqldelight",
     ":data:source:core",

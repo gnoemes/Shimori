@@ -15,7 +15,7 @@ class UpdateStudios(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) update()
-            else if (repository.needUpdateStudiosForSource()) update()
+            else if (repository.shouldUpdateStudiosForSource()) update()
         }
     }
 

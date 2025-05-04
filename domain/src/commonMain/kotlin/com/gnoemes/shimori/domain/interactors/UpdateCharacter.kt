@@ -15,7 +15,7 @@ class UpdateCharacter(
     override suspend fun doWork(params: Params) {
         withContext(dispatchers.io) {
             if (params.force) update(params.id)
-            else if (characterRepository.needUpdateCharacter(params.id)) update(params.id)
+            else if (characterRepository.shouldUpdateCharacter(params.id)) update(params.id)
         }
     }
 

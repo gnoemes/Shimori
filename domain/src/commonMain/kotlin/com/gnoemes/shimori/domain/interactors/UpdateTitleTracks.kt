@@ -38,7 +38,7 @@ class UpdateTitleTracks(
             if (user == null || user.isLocal) return@withContext
 
             if (params.forceUpdate) update(user, params.type, params.status)
-            else if (params.optionalUpdate && needUpdate(params.type, params.status)) update(
+            else if (params.optionalUpdate && shouldUpdate(params.type, params.status)) update(
                 user,
                 params.type,
                 params.status
@@ -61,10 +61,10 @@ class UpdateTitleTracks(
                 .also { syncMangaOrRanobeResponse(it, status) }
         }
 
-    private suspend fun needUpdate(type: TrackTargetType, status: TrackStatus?) = when (type) {
-        TrackTargetType.ANIME -> animeRepository.needUpdateTitlesWithStatus(status)
-        TrackTargetType.MANGA -> mangaRepository.needUpdateTitlesWithStatus(status)
-        TrackTargetType.RANOBE -> ranobeRepository.needUpdateTitlesWithStatus(status)
+    private suspend fun shouldUpdate(type: TrackTargetType, status: TrackStatus?) = when (type) {
+        TrackTargetType.ANIME -> animeRepository.shouldUpdateTitlesWithStatus(status)
+        TrackTargetType.MANGA -> mangaRepository.shouldUpdateTitlesWithStatus(status)
+        TrackTargetType.RANOBE -> ranobeRepository.shouldUpdateTitlesWithStatus(status)
     }
 
     //mangaSource is always true for shikimori, may be changed later for other sources
