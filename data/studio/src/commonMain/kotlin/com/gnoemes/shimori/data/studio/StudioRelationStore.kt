@@ -61,7 +61,7 @@ class StudioRelationStore(
             return
         }
 
-        val studioId = syncDao.findLocalId(params.sourceId, remoteTitleId, SourceDataType.Studio)
+        val studioId = syncDao.findLocalId(params.sourceId, studio.id, SourceDataType.Studio)
         if (studioId == null) {
             logger.i(tag = type) { "Studio ${studio.name} with remote id ${studio.id} not found" }
             return

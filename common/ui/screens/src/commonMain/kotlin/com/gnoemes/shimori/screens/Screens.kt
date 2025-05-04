@@ -99,6 +99,11 @@ data class CharacterDetailsScreen(
 ) : ShimoriScreen("CharacterDetails()")
 
 @Parcelize
+data class PersonDetailsScreen(
+    val id: Long,
+) : ShimoriScreen("PersonDetails()")
+
+@Parcelize
 object MockScreen : ShimoriScreen("Mock()")
 
 @Parcelize

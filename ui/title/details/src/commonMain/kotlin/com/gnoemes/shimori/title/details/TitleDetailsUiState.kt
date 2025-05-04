@@ -1,8 +1,11 @@
 package com.gnoemes.shimori.title.details
 
 import androidx.compose.runtime.Immutable
+import app.cash.paging.compose.LazyPagingItems
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.Studio
+import com.gnoemes.shimori.data.person.Person
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -19,6 +22,9 @@ data class TitleDetailsUiState(
     val isShowCharacters: Boolean,
     val isShowTrailers: Boolean,
     val isFramesExists: Boolean,
+    val isTranslatorsExists : Boolean,
+    val studios : List<Studio>,
+    val persons : LazyPagingItems<Person>,
     val eventSink: (TitleDetailsUiEvent) -> Unit
 ) : CircuitUiState
 
@@ -38,6 +44,6 @@ sealed interface TitleDetailsUiEvent : CircuitUiEvent {
     data class OpenEditTrack(val id: Long, val type: TrackTargetType) : TitleDetailsUiEvent
     data class OpenGenreSearch(val id: Long) : TitleDetailsUiEvent
     data class OpenStudioSearch(val studioName: String) : TitleDetailsUiEvent
-    data class OpenHuman(val id: Long) : TitleDetailsUiEvent
+    data class OpenPerson(val id: Long) : TitleDetailsUiEvent
     data class OpenTitle(val id: Long, val type: TrackTargetType) : TitleDetailsUiEvent
 }

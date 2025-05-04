@@ -62,6 +62,21 @@ queryByTitle:
 SELECT p.* FROM person_role AS pr
 INNER JOIN person AS p ON pr.person_id = p.id
 WHERE target_id = :targetId AND target_type = :target_type
+ORDER BY
+  CASE pr.role
+    WHEN 'Original Creator' THEN 1
+    WHEN 'Director' THEN 2
+    WHEN 'Episode Director' THEN 3
+    WHEN 'Storyboard' THEN 4
+    WHEN 'Chief Animation Director' THEN 5
+    WHEN 'Character Design' THEN 6
+    WHEN 'Animation Director' THEN 7
+    WHEN 'Animation Check' THEN 8
+    WHEN 'Key Animation' THEN 9
+    WHEN '2nd Key Animation' THEN 10
+    ELSE 11
+  END,
+  pr.role ASC
 LIMIT :limit OFFSET :offset;
 
 countPersonsByTitle:

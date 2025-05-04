@@ -23,7 +23,7 @@ class RanobePersonsMapper(
             SPersonRole(
                 personId = it.person.personShort.id.toLong(),
                 targetId = from.id.toLong(),
-                targetType = SourceDataType.Anime,
+                targetType = SourceDataType.Ranobe,
                 role = it.rolesEn.firstOrNull(),
                 roleRu = it.rolesRu.firstOrNull()
             )

@@ -83,7 +83,7 @@ class SyncedStudioStore(
         entityToKey = { _, studio -> syncDao.findRemoteId(params.sourceId, studio.id, type) },
         networkEntityToKey = { _, studio -> studio.id },
         networkToId = { remote -> remote.id },
-        mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0) },
+        mapper = { _, remote, local -> remote.copy(id = local?.id ?: 0, sourceId = params.sourceId) },
         logger
     )
 

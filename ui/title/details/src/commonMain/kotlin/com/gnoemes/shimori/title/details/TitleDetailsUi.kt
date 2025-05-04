@@ -39,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import app.cash.paging.compose.LazyPagingItems
 import coil3.compose.AsyncImage
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
@@ -54,6 +55,8 @@ import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_back
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.Studio
+import com.gnoemes.shimori.data.person.Person
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleDetailsScreen
@@ -76,6 +79,9 @@ internal fun TitleDetailsUi(
         isShowCharacters = state.isShowCharacters,
         isFramesExists = state.isFramesExists,
         isShowTrailers = state.isShowTrailers,
+        isTranslatorsExists = state.isTranslatorsExists,
+        studios = state.studios,
+        persons = state.persons,
 
         toggleFavorite = { eventSink(TitleDetailsUiEvent.ToggleFavorite) },
         expandDescription = { eventSink(TitleDetailsUiEvent.ExpandDescription) },
@@ -91,7 +97,7 @@ internal fun TitleDetailsUi(
         openEditTrack = { id, type -> eventSink(TitleDetailsUiEvent.OpenEditTrack(id, type)) },
         openGenreSearch = { eventSink(TitleDetailsUiEvent.OpenGenreSearch(it)) },
         openStudioSearch = { eventSink(TitleDetailsUiEvent.OpenStudioSearch(it)) },
-        openHuman = { eventSink(TitleDetailsUiEvent.OpenHuman(it)) },
+        openPerson = { eventSink(TitleDetailsUiEvent.OpenPerson(it)) },
         openTitle = { id, type -> eventSink(TitleDetailsUiEvent.OpenTitle(id, type)) },
     )
 }
@@ -108,6 +114,10 @@ private fun TitleDetailsUi(
     isShowCharacters: Boolean,
     isFramesExists: Boolean,
     isShowTrailers: Boolean,
+    isTranslatorsExists: Boolean,
+
+    studios: List<Studio>,
+    persons: LazyPagingItems<Person>,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -123,7 +133,7 @@ private fun TitleDetailsUi(
     openEditTrack: (Long, TrackTargetType) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,
-    openHuman: (Long) -> Unit,
+    openPerson: (Long) -> Unit,
     openTitle: (Long, TrackTargetType) -> Unit,
 ) {
     val behavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -227,6 +237,9 @@ private fun TitleDetailsUi(
                 isShowCharacters = isShowCharacters,
                 isFramesExists = isFramesExists,
                 isShowTrailers = isShowTrailers,
+                isTranslatorsExists = isTranslatorsExists,
+                studios = studios,
+                persons = persons,
                 toggleFavorite = toggleFavorite,
                 expandDescription = expandDescription,
                 share = share,
@@ -239,7 +252,7 @@ private fun TitleDetailsUi(
                 openEditTrack = openEditTrack,
                 openGenreSearch = openGenreSearch,
                 openStudioSearch = openStudioSearch,
-                openHuman = openHuman,
+                openPerson = openPerson,
                 openTitle = openTitle
             )
         }
@@ -264,6 +277,10 @@ private fun TitleDetailsUiContent(
     genres: List<Genre>,
     isFramesExists: Boolean,
     isShowTrailers: Boolean,
+    isTranslatorsExists: Boolean,
+
+    studios: List<Studio>,
+    persons: LazyPagingItems<Person>,
 
     toggleFavorite: () -> Unit,
     expandDescription: () -> Unit,
@@ -278,7 +295,7 @@ private fun TitleDetailsUiContent(
     openEditTrack: (Long, TrackTargetType) -> Unit,
     openGenreSearch: (Long) -> Unit,
     openStudioSearch: (String) -> Unit,
-    openHuman: (Long) -> Unit,
+    openPerson: (Long) -> Unit,
     openTitle: (Long, TrackTargetType) -> Unit,
 ) {
     val textCreator = LocalShimoriTextCreator.current
@@ -381,6 +398,34 @@ private fun TitleDetailsUiContent(
                         isShowTrailers = isShowTrailers,
                         onFramesClicked = openFrames,
                         openTrailerList = openTrailers
+                    )
+                }
+            }
+
+            if (title.type.anime && (isFramesExists || isShowTrailers)) {
+                itemSpacer(24.dp)
+            }
+
+            if (
+                isTranslatorsExists || studios.isNotEmpty() || persons.itemCount > 0
+            ) {
+                item(
+                    key = "staff",
+                    span = {
+                        GridItemSpan(
+                            if (isCompact) this.maxLineSpan
+                            else if (isFramesExists || isShowTrailers) this.maxLineSpan
+                            else 1
+                        )
+                    }
+                ) {
+                    TitleStaff(
+                        isTranslatorsExists = isTranslatorsExists,
+                        studios = studios,
+                        persons = persons,
+                        openTranslators = openTranslators,
+                        openStudioSearch = openStudioSearch,
+                        openPerson = openPerson,
                     )
                 }
             }

@@ -2,6 +2,7 @@ package com.gnoemes.shimori.title.details
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.DropdownMenu
@@ -39,13 +42,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import app.cash.paging.compose.LazyPagingItems
+import coil3.compose.AsyncImage
 import com.gnoemes.shimori.common.compose.LocalShimoriTextCreator
 import com.gnoemes.shimori.common.compose.noRippleClickable
 import com.gnoemes.shimori.common.compose.placeholder
 import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
+import com.gnoemes.shimori.common.compose.theme.ic_no_image
 import com.gnoemes.shimori.common.compose.ui.StatusButton
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_arrow_right
@@ -55,6 +62,8 @@ import com.gnoemes.shimori.common.ui.resources.icons.ic_more
 import com.gnoemes.shimori.common.ui.resources.icons.ic_open_in_browser
 import com.gnoemes.shimori.common.ui.resources.icons.ic_share
 import com.gnoemes.shimori.common.ui.resources.icons.ic_star
+import com.gnoemes.shimori.common.ui.resources.icons.ic_studios
+import com.gnoemes.shimori.common.ui.resources.icons.ic_translators
 import com.gnoemes.shimori.common.ui.resources.strings.filter_age_rating
 import com.gnoemes.shimori.common.ui.resources.strings.title_about
 import com.gnoemes.shimori.common.ui.resources.strings.title_chapters
@@ -66,11 +75,15 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_menu_share
 import com.gnoemes.shimori.common.ui.resources.strings.title_menu_web
 import com.gnoemes.shimori.common.ui.resources.strings.title_release
 import com.gnoemes.shimori.common.ui.resources.strings.title_score
+import com.gnoemes.shimori.common.ui.resources.strings.title_staff
 import com.gnoemes.shimori.common.ui.resources.strings.title_trailers
+import com.gnoemes.shimori.common.ui.resources.strings.title_translators
 import com.gnoemes.shimori.common.ui.resources.strings.title_type
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.Studio
+import com.gnoemes.shimori.data.person.Person
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
@@ -432,11 +445,116 @@ internal fun TitleFramesAndTrailers(
     }
 }
 
+@Composable
+internal fun TitleStaff(
+    isTranslatorsExists: Boolean,
+    studios: List<Studio>,
+    persons: LazyPagingItems<Person>,
+    openTranslators: () -> Unit,
+    openStudioSearch: (String) -> Unit,
+    openPerson: (Long) -> Unit,
+) {
+    val textCreator = LocalShimoriTextCreator.current
+
+    TitleListCategory(
+        stringResource(Strings.title_staff),
+        null,
+    ) {
+        CompositionLocalProvider(
+            LocalMinimumInteractiveComponentSize provides 0.dp
+        ) {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item { Spacer(Modifier.width(8.dp)) }
+
+                if (isTranslatorsExists) {
+                    item("translators") {
+                        FilterChip(
+                            selected = false,
+                            onClick = openTranslators,
+                            label = {
+                                Text(text = stringResource(Strings.title_translators))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painterResource(Icons.ic_translators),
+                                    modifier = Modifier.size(18.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    contentDescription = stringResource(Strings.title_translators),
+                                )
+                            }
+                        )
+                    }
+                }
+
+                items(studios, key = { "studio_${it.id}" }) {
+                    FilterChip(
+                        selected = false,
+                        onClick = { openStudioSearch(it.name) },
+                        label = {
+                            Text(text = it.name)
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painterResource(Icons.ic_studios),
+                                modifier = Modifier.size(18.dp),
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                contentDescription = it.name,
+                            )
+                        }
+                    )
+                }
+
+                items(
+                    persons.itemCount,
+                    key = { "person_$it" },
+                ) { index ->
+                    val person = persons[index]
+                    if (person != null) {
+                        FilterChip(
+                            selected = false,
+                            onClick = { openPerson(person.id) },
+                            label = {
+                                Text(text = textCreator { person.name() })
+                            },
+                            leadingIcon = {
+                                if (person.image?.original != null) {
+                                    AsyncImage(
+                                        model = person.image,
+                                        modifier = Modifier.size(18.dp)
+                                            .clip(MaterialTheme.shapes.medium),
+                                        placeholder = painterResource(Icons.ic_no_image),
+                                        fallback = painterResource(Icons.ic_no_image),
+                                        contentScale = ContentScale.Crop,
+                                        contentDescription = person.name,
+                                    )
+                                } else {
+                                    Image(
+                                        painterResource(Icons.ic_no_image),
+                                        modifier = Modifier.size(18.dp)
+                                            .clip(MaterialTheme.shapes.medium),
+                                        contentDescription = null,
+                                    )
+                                }
+
+                            }
+                        )
+                    }
+                }
+
+                item { Spacer(Modifier.width(8.dp)) }
+            }
+        }
+    }
+}
+
 
 @Composable
 internal fun TitleListCategory(
     title: String,
-    openList: () -> Unit,
+    openList: (() -> Unit)?,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -446,7 +564,7 @@ internal fun TitleListCategory(
             Modifier.fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
-                .noRippleClickable(openList),
+                .noRippleClickable { openList?.invoke() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
@@ -456,10 +574,12 @@ internal fun TitleListCategory(
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                Icon(
-                    painter = painterResource(Icons.ic_arrow_right),
-                    contentDescription = null
-                )
+                if (openList != null) {
+                    Icon(
+                        painter = painterResource(Icons.ic_arrow_right),
+                        contentDescription = null
+                    )
+                }
             }
         }
 

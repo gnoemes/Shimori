@@ -9,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.paging.PagingConfig
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.gnoemes.shimori.base.inject.UiScope
 import com.gnoemes.shimori.base.utils.launchOrThrow
 import com.gnoemes.shimori.common.compose.LocalWindowSizeClass
@@ -22,12 +24,16 @@ import com.gnoemes.shimori.common.ui.wrapEventSink
 import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TitleUiEvents
+import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
 import com.gnoemes.shimori.domain.interactors.UpdateTitlePersons
 import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshotsCount
+import com.gnoemes.shimori.domain.observers.ObserveAnimeStudios
 import com.gnoemes.shimori.domain.observers.ObserveTitleGenres
+import com.gnoemes.shimori.domain.observers.ObserveTitlePersons
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
 import com.gnoemes.shimori.domain.onFailurePublishToBus
+import com.gnoemes.shimori.screens.PersonDetailsScreen
 import com.gnoemes.shimori.screens.TitleCharactersScreen
 import com.gnoemes.shimori.screens.TitleDetailsScreen
 import com.gnoemes.shimori.screens.TitleFramesScreen
@@ -53,7 +59,9 @@ class TitleDetailsPresenter(
     private val updateTitlePersons: Lazy<UpdateTitlePersons>,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
     private val observeGenres: Lazy<ObserveTitleGenres>,
+    private val observePersons: Lazy<ObserveTitlePersons>,
     private val observeAnimeScreenshotsCount: Lazy<ObserveAnimeScreenshotsCount>,
+    private val observeAnimeStudios: Lazy<ObserveAnimeStudios>,
 ) : Presenter<TitleDetailsUiState> {
 
     @Composable
@@ -71,10 +79,24 @@ class TitleDetailsPresenter(
                 .collectAsState(false)
             else mutableStateOf(false)
 
+        val persons = observePersons.value.flow.collectAsLazyPagingItems()
 
+        val studios =
+            if (screen.type.anime) observeAnimeStudios.value.flow.collectAsState(emptyList())
+            else mutableStateOf(emptyList())
+
+
+        val isTranslatorsExists = remember {
+            derivedStateOf {
+                val title = titleWithEntity?.entity
+                if (title is Anime) {
+                    !title.dubbers.isNullOrEmpty() || !title.subbers.isNullOrEmpty()
+                } else false
+            }
+        }
         var descriptionExpanded by remember(isExpanded) { mutableStateOf(isExpanded) }
         var isShowCharacters by remember { mutableStateOf(true) }
-        var isShowTrailers by remember { mutableStateOf(true) }
+        var isShowTrailers by remember { mutableStateOf(screen.type.anime) }
 
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
@@ -103,15 +125,22 @@ class TitleDetailsPresenter(
                 ObserveTitleGenres.Params(screen.id, screen.type)
             )
 
+            observePersons.value(
+                ObserveTitlePersons.Params(screen.id, screen.type, PAGING_CONFIG)
+            )
+
             if (screen.type.anime) {
                 observeAnimeScreenshotsCount.value(
                     ObserveAnimeScreenshotsCount.Params(screen.id)
+                )
+
+                observeAnimeStudios.value(
+                    ObserveAnimeStudios.Params(screen.id)
                 )
             }
         }
 
         val linkError = stringResource(Strings.title_link_not_found)
-
 
         val eventSink: CoroutineScope.(TitleDetailsUiEvent) -> Unit = { event ->
             when (event) {
@@ -175,9 +204,18 @@ class TitleDetailsPresenter(
                     }
                 }
 
-                is TitleDetailsUiEvent.OpenHuman -> TODO()
-                is TitleDetailsUiEvent.OpenGenreSearch -> TODO()
-                is TitleDetailsUiEvent.OpenStudioSearch -> TODO()
+                is TitleDetailsUiEvent.OpenPerson -> {
+                    navigator.goTo(PersonDetailsScreen(event.id))
+                }
+
+                is TitleDetailsUiEvent.OpenGenreSearch -> {
+                    //TODO open search
+                }
+
+                is TitleDetailsUiEvent.OpenStudioSearch -> {
+                    //TODO open search
+                }
+
                 is TitleDetailsUiEvent.OpenTitle -> {
                     navigator.goTo(TitleDetailsScreen(event.id, event.type))
                 }
@@ -205,10 +243,19 @@ class TitleDetailsPresenter(
             isFavorite = titleWithEntity?.entity?.favorite ?: false,
             isShowTrailers = isShowTrailers,
             descriptionExpanded = descriptionExpanded,
-
             isShowCharacters = isShowCharacters,
             isFramesExists = isFramesExists.value,
+            isTranslatorsExists = isTranslatorsExists.value,
+            studios = studios.value,
+            persons = persons,
             eventSink = wrapEventSink(eventSink)
+        )
+    }
+
+    private companion object {
+        val PAGING_CONFIG = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 20,
         )
     }
 

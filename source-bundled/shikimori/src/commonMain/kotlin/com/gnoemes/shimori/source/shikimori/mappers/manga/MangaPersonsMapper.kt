@@ -23,7 +23,7 @@ class MangaPersonsMapper(
             SPersonRole(
                 personId = it.person.personShort.id.toLong(),
                 targetId = from.id.toLong(),
-                targetType = SourceDataType.Anime,
+                targetType = SourceDataType.Manga,
                 role = it.rolesEn.firstOrNull(),
                 roleRu = it.rolesRu.firstOrNull()
             )
