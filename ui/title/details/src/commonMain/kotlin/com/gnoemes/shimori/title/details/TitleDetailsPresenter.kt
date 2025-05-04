@@ -66,10 +66,10 @@ class TitleDetailsPresenter(
 
     @Composable
     override fun present(): TitleDetailsUiState {
-        val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
-        val isCompact by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
-        val isMedium by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isMedium() } }
-        val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
+        val sizeClass = LocalWindowSizeClass.current
+        val isCompact by remember(sizeClass) { derivedStateOf { sizeClass.isCompact() } }
+        val isMedium by remember(sizeClass) { derivedStateOf { sizeClass.isMedium() } }
+        val isExpanded by remember(sizeClass) { derivedStateOf { sizeClass.isExpanded() } }
 
         val titleWithEntity by observeTitleWithTrack.value.flow.collectAsState(null)
         val genres by observeGenres.value.flow.collectAsState(emptyList())

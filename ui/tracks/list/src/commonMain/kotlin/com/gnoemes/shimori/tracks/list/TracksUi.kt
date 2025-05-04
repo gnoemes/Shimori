@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,7 +52,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -116,7 +117,7 @@ internal fun TracksUi(
     val eventSink = state.eventSink
 
     TracksUi(
-        widthSizeClass = windowSizeClass.widthSizeClass,
+        sizeClass = windowSizeClass,
         state = state,
         addOneToProgress = { eventSink(TracksUiEvent.AddOneToProgress(it)) },
         changeSort = { eventSink(TracksUiEvent.ChangeSort(it)) },
@@ -130,7 +131,7 @@ internal fun TracksUi(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun TracksUi(
-    widthSizeClass: WindowWidthSizeClass,
+    sizeClass: WindowSizeClass,
     state: TracksUiState,
     addOneToProgress: (Track) -> Unit,
     changeSort: (ListSort) -> Unit,
@@ -140,7 +141,7 @@ private fun TracksUi(
     openSettings: () -> Unit,
 ) {
     val density = LocalDensity.current
-    val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
+    val isList by remember(sizeClass) { derivedStateOf { sizeClass.isCompact() } }
     val insets = with(density) { WindowInsets.statusBars.getTop(density).toDp() }
     val appbarHeight by remember(isList) {
         derivedStateOf {
@@ -203,7 +204,7 @@ private fun TracksUi(
             },
             floatingActionButtonPosition = FabPosition.Center,
             bottomBar = {
-                if (isList) {
+                if (sizeClass.widthSizeClass.isCompact() || sizeClass.heightSizeClass.isCompact()) {
                     Box(modifier = Modifier.height(84.dp))
                 }
             }
@@ -214,7 +215,7 @@ private fun TracksUi(
                 TracksUiContent(
                     scrollConnection = scrollConnection,
                     paddingValues = it,
-                    widthSizeClass = widthSizeClass,
+                    sizeClass = sizeClass,
                     type = state.type,
                     status = state.status,
                     sort = state.sort,
@@ -264,7 +265,7 @@ private fun TracksUi(
 private fun TracksUiContent(
     scrollConnection: CollapsingAppBarNestedScrollConnection,
     paddingValues: PaddingValues,
-    widthSizeClass: WindowWidthSizeClass,
+    sizeClass: WindowSizeClass,
     type: TrackTargetType,
     status: TrackStatus,
     sort: ListSort,
@@ -285,7 +286,7 @@ private fun TracksUiContent(
             }
         }
     }
-    val isList by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
+    val isList by remember(sizeClass) { derivedStateOf { sizeClass.isCompact() } }
 
     if (isList) {
         Box(
@@ -377,6 +378,7 @@ private fun TracksUiContent(
                 span = { GridItemSpan(this.maxLineSpan) }
             ) {
                 Column {
+                    Spacer(Modifier.statusBarsPadding())
                     Spacer(modifier = Modifier.height(18.dp))
 
                     Text(

@@ -300,7 +300,7 @@ private fun TitleDetailsUiContent(
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val icons = LocalShimoriIconsUtil.current
-    val isCompact = LocalWindowSizeClass.current.widthSizeClass.isCompact()
+    val isCompact = LocalWindowSizeClass.current.isCompact()
 
     val state = rememberLazyGridState()
 

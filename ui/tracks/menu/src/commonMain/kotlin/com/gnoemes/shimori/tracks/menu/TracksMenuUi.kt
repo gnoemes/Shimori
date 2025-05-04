@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -19,7 +21,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -50,11 +52,11 @@ internal fun TracksMenuUi(
     modifier: Modifier = Modifier,
 ) {
 
-    val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
+    val sizeClass = LocalWindowSizeClass.current
     val eventSink = state.eventSink
 
     TracksMenuUi(
-        widthSizeClass = widthSizeClass,
+        sizeClass = sizeClass,
         selectedType = state.selectedType,
         selectedStatus = state.selectedStatus,
         availableStatuses = state.availableStatuses,
@@ -66,7 +68,7 @@ internal fun TracksMenuUi(
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun TracksMenuUi(
-    widthSizeClass: WindowWidthSizeClass,
+    sizeClass: WindowSizeClass,
     selectedType: TrackTargetType,
     selectedStatus: TrackStatus,
     availableStatuses: Map<TrackTargetType, List<TrackStatus>>,
@@ -79,23 +81,24 @@ private fun TracksMenuUi(
 
     Column(
         modifier = Modifier.composed {
-            if (widthSizeClass.isCompact()) Modifier.fillMaxWidth()
+            if (sizeClass.isCompact()) Modifier.fillMaxWidth()
                 .padding(horizontal = 16.dp)
-            else if (widthSizeClass.isMedium())
+            else if (sizeClass.isMedium())
                 Modifier.fillMaxSize()
                     .padding(
                         start = 24.dp,
                         top = 24.dp,
                         bottom = 16.dp,
                         end = 12.dp
-                    )
+                    ).verticalScroll(rememberScrollState())
             else Modifier.fillMaxSize()
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         }
 
     ) {
 
-        if (widthSizeClass.isCompact()) {
+        if (sizeClass.isCompact()) {
             Text(
                 stringResource(Strings.lists_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -112,7 +115,7 @@ private fun TracksMenuUi(
                         modifier = Modifier.weight(1f)
                     )
 
-                    if (widthSizeClass.isMedium()) {
+                    if (sizeClass.isMedium()) {
                         IconButton(navigateUp) {
                             Icon(painterResource(Icons.ic_clear), contentDescription = null)
                         }

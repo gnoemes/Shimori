@@ -65,8 +65,8 @@ class HomePresenter(
 
         val uiMessageManager = remember { UiMessageManager() }
 
-        val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
-        val isCompact by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
+        val sizeClass = LocalWindowSizeClass.current
+        val isCompact by remember(sizeClass) { derivedStateOf { sizeClass.isCompact() } }
         val overlayHost = LocalOverlayHost.current
 
         val message by uiMessageManager.message.collectAsState(null)

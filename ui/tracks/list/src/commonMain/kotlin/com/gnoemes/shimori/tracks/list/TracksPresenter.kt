@@ -67,10 +67,10 @@ class TracksPresenter(
     @Composable
     @ComposableTarget("presenter")
     override fun present(): TracksUiState {
-        val widthSizeClass = LocalWindowSizeClass.current.widthSizeClass
-        val isCompact by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isCompact() } }
-        val isMedium by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isMedium() } }
-        val isExpanded by remember(widthSizeClass) { derivedStateOf { widthSizeClass.isExpanded() } }
+        val sizeClass = LocalWindowSizeClass.current
+        val isCompact by remember(sizeClass) { derivedStateOf { sizeClass.isCompact() } }
+        val isMedium by remember(sizeClass) { derivedStateOf { sizeClass.isMedium() } }
+        val isExpanded by remember(sizeClass) { derivedStateOf { sizeClass.isExpanded() } }
 
         val type by statusBus.type.observe.collectAsRetainedState(TrackTargetType.valueOf(prefs.preferredListType))
         val status by statusBus.page.observe.collectAsRetainedState(TrackStatus.valueOf(prefs.preferredListStatus))
@@ -99,7 +99,7 @@ class TracksPresenter(
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
 
-        val isMenuButtonVisible = (isCompact || isMedium) && tracksExist
+        val isMenuButtonVisible = !isExpanded && tracksExist
         prefs.nestedScaffoldContainsFab = isMenuButtonVisible
 
         LaunchedEffect(type, status, sort) {

@@ -21,7 +21,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -165,13 +165,13 @@ fun TrackItem(
     openEdit: () -> Unit,
     openDetails: () -> Unit,
     addOneToProgress: (() -> Unit)? = null,
-    widthSizeClass: WindowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass,
+    sizeClass: WindowSizeClass = LocalWindowSizeClass.current,
 ) {
     val textCreator = LocalShimoriTextCreator.current
     val track = titleWithTrack.track
-    val isListItem by remember(widthSizeClass) {
+    val isListItem by remember(sizeClass) {
         derivedStateOf {
-            widthSizeClass.isCompact()
+            sizeClass.isCompact()
         }
     }
 

@@ -124,10 +124,10 @@ internal fun HomeUi(
             logger
         )
     }
-    val windowSizeClass = LocalWindowSizeClass.current.widthSizeClass
-    val isCompact by remember(windowSizeClass) {
+    val sizeClass = LocalWindowSizeClass.current
+    val isCompact by remember(sizeClass) {
         derivedStateOf {
-            windowSizeClass.isCompact()
+            sizeClass.isCompact()
         }
     }
 
