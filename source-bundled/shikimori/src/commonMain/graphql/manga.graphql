@@ -66,6 +66,22 @@ query MangaCharacters(
     }
 }
 
+query MangaPeople(
+    $ids: String
+) {
+    mangas(ids: $ids) {
+        id
+        name
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { ...PersonShort }
+        }
+    }
+}
+
 query mangas(
     $page: PositiveInt = 1
     $limit: PositiveInt = 2

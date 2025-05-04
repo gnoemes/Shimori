@@ -69,6 +69,7 @@ include(
     ":data:manga",
     ":data:ranobe",
     ":data:character",
+    ":data:person",
     ":data:lists",
     ":data:user",
     ":data:auth",

@@ -51,6 +51,11 @@ fragment PersonShort on Person {
     japanese
     poster { ...PosterShort }
     url
+    isMangaka
+    isProducer
+    isSeyu
+    birthOn { year month day date }
+    deceasedOn { year month day date }
 }
 
 fragment AnimeUserRate on UserRate {

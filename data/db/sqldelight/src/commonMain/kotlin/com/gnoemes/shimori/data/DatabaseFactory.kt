@@ -10,6 +10,8 @@ import com.gnoemes.shimori.data.adapters.GenreRelationAdapter
 import com.gnoemes.shimori.data.adapters.LastRequestAdapter
 import com.gnoemes.shimori.data.adapters.ListSortAdapter
 import com.gnoemes.shimori.data.adapters.MangaAdapter
+import com.gnoemes.shimori.data.adapters.PersonAdapter
+import com.gnoemes.shimori.data.adapters.PersonRoleAdapter
 import com.gnoemes.shimori.data.adapters.PinnedAdapter
 import com.gnoemes.shimori.data.adapters.RanobeAdapter
 import com.gnoemes.shimori.data.adapters.SourceIdsSyncAdapter
@@ -38,7 +40,9 @@ class DatabaseFactory(
         genre_relationAdapter = GenreRelationAdapter,
         genreAdapter = GenreAdapter,
         userAdapter = UserAdapter,
-        pinnedAdapter = PinnedAdapter
+        pinnedAdapter = PinnedAdapter,
+        personAdapter = PersonAdapter,
+        person_roleAdapter = PersonRoleAdapter
     )
 
 }

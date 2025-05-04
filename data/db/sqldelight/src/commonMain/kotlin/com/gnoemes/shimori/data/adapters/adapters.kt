@@ -18,6 +18,8 @@ import comgnoemesshimori.data.Genre_relation
 import comgnoemesshimori.data.Last_request
 import comgnoemesshimori.data.List_sort
 import comgnoemesshimori.data.Manga
+import comgnoemesshimori.data.Person
+import comgnoemesshimori.data.Person_role
 import comgnoemesshimori.data.Pinned
 import comgnoemesshimori.data.Ranobe
 import comgnoemesshimori.data.Source_ids_sync
@@ -108,5 +110,14 @@ internal val GenreRelationAdapter = Genre_relation.Adapter(
 )
 
 internal val PinnedAdapter = Pinned.Adapter(
+    target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
+)
+
+internal val PersonAdapter = Person.Adapter(
+    birthday_dateAdapter = LocalDateAdapter,
+    deceased_dateAdapter = LocalDateAdapter
+)
+
+internal val PersonRoleAdapter = Person_role.Adapter(
     target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
 )

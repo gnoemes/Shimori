@@ -35,6 +35,7 @@ kotlin {
                 api(projects.data.manga)
                 api(projects.data.ranobe)
                 api(projects.data.character)
+                api(projects.data.person)
                 api(projects.data.tracks)
                 api(projects.data.user)
                 api(projects.data.lastrequest)

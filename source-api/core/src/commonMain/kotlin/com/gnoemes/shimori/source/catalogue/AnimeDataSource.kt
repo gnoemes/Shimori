@@ -11,4 +11,7 @@ interface AnimeDataSource {
     suspend fun get(id : SourceIdArgument): SAnime
     suspend fun getCharacters(id : MalIdArgument): SAnime
     suspend fun getCharacters(id : SourceIdArgument): SAnime
+
+    suspend fun getPersons(id : MalIdArgument): SAnime
+    suspend fun getPersons(id : SourceIdArgument): SAnime
 }

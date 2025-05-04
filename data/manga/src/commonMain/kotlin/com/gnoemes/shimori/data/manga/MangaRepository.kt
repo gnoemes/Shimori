@@ -64,6 +64,15 @@ class MangaRepository(
         return catalogue.manga { getCharacters(local) }
     }
 
+    suspend fun syncTitlePersons(
+        id: Long
+    ): SourceResponse<MangaInfo> {
+        val local = store.dao.queryById(id)
+            ?: throw IllegalStateException("Manga with id: $id not found")
+
+        return catalogue.manga { getPersons(local) }
+    }
+
     suspend fun <T> trySync(data: SourceResponse<T>) {
         transactionRunner {
             store.trySync(data)

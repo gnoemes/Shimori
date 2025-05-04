@@ -65,6 +65,23 @@ query AnimeCharacters(
             rolesRu
             rolesEn
             character { ...CharacterShort }
+
+        }
+    }
+}
+
+query AnimePersons(
+    $ids: String
+) {
+    animes(ids: $ids) {
+        id
+        name
+
+        personRoles {
+            id
+            rolesRu
+            rolesEn
+            person { ...PersonShort }
         }
     }
 }

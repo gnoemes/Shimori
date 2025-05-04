@@ -15,6 +15,7 @@ import com.gnoemes.shimori.data.common.GenreType
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.Studio
 import com.gnoemes.shimori.data.common.TitleStatus
+import com.gnoemes.shimori.data.person.Person
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeScreenshot
 import com.gnoemes.shimori.data.titles.anime.AnimeType
@@ -1031,5 +1032,41 @@ internal fun studio(
         sourceId = source_id,
         name = name,
         imageUrl = imageUrl
+    )
+}
+
+internal fun person(
+    id: Long,
+    name: String,
+    name_ru: String?,
+    name_eng: String?,
+    image_original: String?,
+    image_preview: String?,
+    image_x96: String?,
+    image_x48: String?,
+    url: String?,
+    is_mangaka: Boolean,
+    is_producer: Boolean,
+    is_seyu: Boolean,
+    birthday_date: LocalDate?,
+    deceased_date: LocalDate?,
+): Person {
+    return Person(
+        id = id,
+        name = name,
+        nameRu = name_ru,
+        nameEn = name_eng,
+        image = ShimoriImage(
+            original = image_original,
+            preview = image_preview,
+            x96 = image_x96,
+            x48 = image_x48
+        ),
+        url = url,
+        isMangaka = is_mangaka,
+        isProducer = is_producer,
+        isSeyu = is_seyu,
+        birthDate = birthday_date,
+        deceasedDate = deceased_date
     )
 }

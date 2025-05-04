@@ -1,0 +1,31 @@
+import com.gnoemes.shimori.data.track.TrackTargetType;
+import kotlin.Boolean;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE person(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    is_mangaka INTEGER AS Boolean NOT NULL,
+    is_producer INTEGER AS Boolean NOT NULL,
+    is_seyu INTEGER AS Boolean NOT NULL,
+    birthday_date TEXT AS LocalDate,
+    deceased_date TEXT AS LocalDate
+);
+
+CREATE TABLE person_role(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    person_id INTEGER NOT NULL,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS TrackTargetType NOT NULL,
+    role TEXT,
+    role_ru TEXT
+ );
+
+ CREATE INDEX person_role_index ON person_role(person_id, target_id, target_type);

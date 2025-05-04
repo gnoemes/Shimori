@@ -11,4 +11,7 @@ interface MangaDataSource {
     suspend fun get(id: SourceIdArgument): SManga
     suspend fun getCharacters(id : MalIdArgument): SManga
     suspend fun getCharacters(id : SourceIdArgument): SManga
+
+    suspend fun getPersons(id : MalIdArgument): SManga
+    suspend fun getPersons(id : SourceIdArgument): SManga
 }

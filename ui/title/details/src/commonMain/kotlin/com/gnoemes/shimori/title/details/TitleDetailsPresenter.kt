@@ -23,6 +23,7 @@ import com.gnoemes.shimori.data.eventbus.EventBus
 import com.gnoemes.shimori.data.events.AppUiEvents
 import com.gnoemes.shimori.data.events.TitleUiEvents
 import com.gnoemes.shimori.domain.interactors.UpdateTitle
+import com.gnoemes.shimori.domain.interactors.UpdateTitlePersons
 import com.gnoemes.shimori.domain.observers.ObserveAnimeScreenshotsCount
 import com.gnoemes.shimori.domain.observers.ObserveTitleGenres
 import com.gnoemes.shimori.domain.observers.ObserveTitleWithTrackEntity
@@ -49,6 +50,7 @@ class TitleDetailsPresenter(
     @Assisted private val screen: TitleDetailsScreen,
     @Assisted private val navigator: Navigator,
     private val updateTitle: Lazy<UpdateTitle>,
+    private val updateTitlePersons: Lazy<UpdateTitlePersons>,
     private val observeTitleWithTrack: Lazy<ObserveTitleWithTrackEntity>,
     private val observeGenres: Lazy<ObserveTitleGenres>,
     private val observeAnimeScreenshotsCount: Lazy<ObserveAnimeScreenshotsCount>,
@@ -80,6 +82,16 @@ class TitleDetailsPresenter(
         LaunchedEffect(Unit) {
             launchOrThrow {
                 updateTitle.value(UpdateTitle.Params.optionalUpdate(screen.id, screen.type))
+                    .onFailurePublishToBus()
+            }
+
+            launchOrThrow {
+                updateTitlePersons.value(
+                    UpdateTitlePersons.Params.optionalUpdate(
+                        screen.id,
+                        screen.type
+                    )
+                )
                     .onFailurePublishToBus()
             }
 

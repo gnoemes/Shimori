@@ -1,0 +1,44 @@
+import com.gnoemes.shimori.data.track.TrackTargetType;
+
+CREATE TABLE person_role(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    person_id INTEGER NOT NULL,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS TrackTargetType NOT NULL,
+    role TEXT,
+    role_ru TEXT
+ );
+
+CREATE INDEX person_role_index ON person_role(person_id, target_id, target_type);
+
+insert:
+INSERT INTO person_role(person_id, target_id, target_type, role, role_ru)
+VALUES (?,?,?,?, ?);
+
+update:
+UPDATE person_role
+SET
+ id = :id,
+ person_id = :person_id,
+ target_id = :target_id,
+ target_type = :target_type,
+ role = :role,
+ role_ru = : role_ru
+WHERE id = :id;
+
+deleteById:
+DELETE FROM person_role WHERE id = :id;
+
+deleteByPersonId:
+DELETE FROM person_role WHERE person_id = :id;
+
+queryByPersonId:
+SELECT pr.* FROM person_role AS pr
+WHERE person_id = :personId;
+
+queryByTitle:
+SELECT * FROM person_role AS pr
+WHERE target_id = :id AND target_type = :type;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

@@ -64,6 +64,15 @@ class RanobeRepository(
         return catalogue.ranobe { getCharacters(local) }
     }
 
+    suspend fun syncTitlePersons(
+        id: Long
+    ): SourceResponse<MangaInfo> {
+        val local = store.dao.queryById(id)
+            ?: throw IllegalStateException("Ranobe with id: $id not found")
+
+        return catalogue.ranobe { getPersons(local) }
+    }
+
     suspend fun <T> trySync(data: SourceResponse<T>) {
         transactionRunner {
             store.trySync(data)

@@ -10,11 +10,13 @@ import com.gnoemes.shimori.source.model.STrackStatus
 import com.gnoemes.shimori.source.model.SourceIdArgument
 import com.gnoemes.shimori.source.shikimori.AnimeCharactersQuery
 import com.gnoemes.shimori.source.shikimori.AnimeDetailsQuery
+import com.gnoemes.shimori.source.shikimori.AnimePersonsQuery
 import com.gnoemes.shimori.source.shikimori.AnimeTracksQuery
 import com.gnoemes.shimori.source.shikimori.Shikimori
 import com.gnoemes.shimori.source.shikimori.ShikimoriApi
 import com.gnoemes.shimori.source.shikimori.mappers.anime.AnimeCharactersMapper
 import com.gnoemes.shimori.source.shikimori.mappers.anime.AnimeDetailsToAnimeInfoMapper
+import com.gnoemes.shimori.source.shikimori.mappers.anime.AnimePersonsMapper
 import com.gnoemes.shimori.source.shikimori.mappers.anime.AnimeTracksQueryToAnimeWithTrack
 import com.gnoemes.shimori.source.shikimori.mappers.anime.CalendarMapper
 import com.gnoemes.shimori.source.shikimori.mappers.from
@@ -28,6 +30,7 @@ class ShikimoriAnimeDataSource(
     private val animeTracksQueryToAnimeWithTrack: AnimeTracksQueryToAnimeWithTrack,
     private val animeDetailsToAnimeInfoMapper: AnimeDetailsToAnimeInfoMapper,
     private val charactersMapper: AnimeCharactersMapper,
+    private val personsMapper: AnimePersonsMapper,
 ) : AnimeDataSource {
 
     override suspend fun get(id: MalIdArgument) = get(SourceIdArgument(id))
@@ -68,6 +71,19 @@ class ShikimoriAnimeDataSource(
         ).dataAssertNoErrors
             .let {
                 charactersMapper.map(it.animes.first())
+            }
+    }
+
+    override suspend fun getPersons(id: MalIdArgument) = getPersons(SourceIdArgument(id))
+
+    override suspend fun getPersons(id: SourceIdArgument): SAnime {
+        return api.apollo.query(
+            AnimePersonsQuery(
+                ids = Optional.present(id.id.toString())
+            )
+        ).dataAssertNoErrors
+            .let {
+                personsMapper.map(it.animes.first())
             }
     }
 }

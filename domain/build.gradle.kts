@@ -15,6 +15,7 @@ kotlin {
                 implementation(projects.data.manga)
                 implementation(projects.data.ranobe)
                 implementation(projects.data.character)
+                implementation(projects.data.person)
                 implementation(projects.data.tracks)
                 implementation(projects.data.user)
                 implementation(projects.data.lastrequest)

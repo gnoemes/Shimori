@@ -48,6 +48,15 @@ class MangaDataSourceAdapter(
         }.let(mapper::invoke)
     }
 
+    fun getPersons(data: Manga): suspend MangaDataSource.(Source) -> MangaInfo = { source ->
+        val arg = requestMapper.toId(source, data)
+        when (arg) {
+            is MalIdArgument -> getPersons(arg)
+            is SourceIdArgument -> getPersons(arg)
+            else -> throw IllegalArgumentException("Unknown argument $arg for request")
+        }.let(mapper::invoke)
+    }
+
     fun getWithStatus(
         user: UserShort?,
         status: TrackStatus?

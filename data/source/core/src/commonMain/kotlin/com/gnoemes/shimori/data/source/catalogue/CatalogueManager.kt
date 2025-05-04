@@ -10,6 +10,7 @@ import com.gnoemes.shimori.source.catalogue.CatalogueSource
 import com.gnoemes.shimori.source.catalogue.CharacterDataSource
 import com.gnoemes.shimori.source.catalogue.GenreDataSource
 import com.gnoemes.shimori.source.catalogue.MangaDataSource
+import com.gnoemes.shimori.source.catalogue.PersonDataSource
 import com.gnoemes.shimori.source.catalogue.RanobeDataSource
 import com.gnoemes.shimori.source.catalogue.StudioDataSource
 import me.tatarka.inject.annotations.Inject
@@ -27,6 +28,7 @@ class CatalogueManager(
     private val characterSourceAdapter: CharacterDataSourceAdapter,
     private val genreSourceAdapter: GenreDataSourceAdapter,
     private val studioSourceAdapter: StudioDataSourceAdapter,
+    private val personSourceAdapter: PersonDataSourceAdapter,
     dao: SourceIdsSyncDao,
 ) : SourceManager<CatalogueSource>(dao) {
     val current: CatalogueSource
@@ -90,6 +92,13 @@ class CatalogueManager(
     ): SourceResponse<ResponseType> = with(current) {
         val sourceAction = studioSourceAdapter(action)
         return@with request(this, studioDataSource, sourceAction)
+    }
+
+    suspend fun <ResponseType> person(
+        action: suspend PersonDataSourceAdapter.() -> suspend PersonDataSource.(Source) -> ResponseType
+    ): SourceResponse<ResponseType> = with(current) {
+        val sourceAction = personSourceAdapter(action)
+        return@with request(this, personDataSource, sourceAction)
     }
 
 }

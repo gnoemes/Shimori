@@ -16,6 +16,7 @@ import com.gnoemes.shimori.source.shikimori.services.AnimeService
 import com.gnoemes.shimori.source.shikimori.services.CharacterService
 import com.gnoemes.shimori.source.shikimori.services.GraphQlService
 import com.gnoemes.shimori.source.shikimori.services.MangaService
+import com.gnoemes.shimori.source.shikimori.services.PeopleService
 import com.gnoemes.shimori.source.shikimori.services.RanobeService
 import com.gnoemes.shimori.source.shikimori.services.RateService
 import com.gnoemes.shimori.source.shikimori.services.StudioService
@@ -59,6 +60,7 @@ class ShikimoriApi(
     internal val manga: MangaService by lazy { MangaServiceImpl() }
     internal val ranobe: RanobeService by lazy { RanobeServiceImpl() }
     internal val character: CharacterService by lazy { CharacterServiceImpl() }
+    internal val people: PeopleService by lazy { PeopleServiceImpl() }
     internal val studio: StudioService by lazy { StudioServiceImpl() }
 
     ///////////////////////////////////////////////////////
@@ -239,6 +241,10 @@ class ShikimoriApi(
 
     private inner class CharacterServiceImpl : CharacterService {
     }
+
+    private inner class PeopleServiceImpl : PeopleService {
+    }
+
 
     private inner class StudioServiceImpl : StudioService {
         override suspend fun getAll(): List<StudioResponse> {

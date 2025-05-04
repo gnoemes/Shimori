@@ -35,6 +35,8 @@ data class SAnime(
     val characters: List<SCharacter>? = null,
     val charactersRoles: List<SCharacterRole>? = null,
     val studio: SStudio? = null,
+    val persons: List<SPerson>? = null,
+    val personsRoles: List<SPersonRole>? = null,
 ) {
 
     constructor(
@@ -71,6 +73,8 @@ data class SAnime(
         fanSubbers = entity.fanSubbers,
         characters = entity.characters,
         charactersRoles = entity.charactersRoles,
-        studio = entity.studio
+        studio = entity.studio,
+        persons = entity.persons,
+        personsRoles = entity.personsRoles
     )
 }

@@ -1,0 +1,73 @@
+import kotlin.Boolean;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE person(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    name_ru TEXT,
+    name_eng TEXT,
+    image_original TEXT,
+    image_preview TEXT,
+    image_x96 TEXT,
+    image_x48 TEXT,
+    url TEXT,
+    is_mangaka INTEGER AS Boolean NOT NULL,
+    is_producer INTEGER AS Boolean NOT NULL,
+    is_seyu INTEGER AS Boolean NOT NULL,
+    birthday_date TEXT AS LocalDate,
+    deceased_date TEXT AS LocalDate
+);
+
+insert:
+INSERT INTO person(name, name_ru, name_eng, image_original,
+image_preview,image_x96, image_x48, url, is_mangaka, is_producer, is_seyu, birthday_date, deceased_date)
+VALUES (?,?,?,?,?,?,?,?,  ?, ?,?,?,?);
+
+
+update:
+UPDATE person
+SET
+ id = :id,
+ name = :name,
+ name_ru = coalesce(:name_ru, name_ru),
+ name_eng = coalesce(:name_eng, name_eng),
+ image_original = :image_original,
+ image_preview = :image_preview,
+ image_x96 = :image_x96,
+ image_x48 = :image_x48,
+ url = coalesce(:url, url),
+ is_mangaka = :isMangaka,
+ is_producer = :isProducer,
+ is_seyu = :isSeyu,
+ birthday_date = :birthdayDate,
+ deceased_date = :deceasedDate
+WHERE id = :id;
+
+deleteAll:
+DELETE FROM person;
+
+deleteById:
+DELETE FROM person WHERE id = :id;
+
+queryAll:
+SELECT * FROM person;
+
+queryById:
+SELECT * FROM person WHERE id = :id;
+
+queryByIds:
+SELECT * FROM person WHERE id IN :ids;
+
+queryByTitle:
+SELECT p.* FROM person_role AS pr
+INNER JOIN person AS p ON pr.person_id = p.id
+WHERE target_id = :targetId AND target_type = :target_type
+LIMIT :limit OFFSET :offset;
+
+countPersonsByTitle:
+SELECT COUNT(*) FROM person_role AS pr
+INNER JOIN person AS p ON pr.person_id = p.id
+WHERE target_id = :targetId AND target_type = :target_type;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

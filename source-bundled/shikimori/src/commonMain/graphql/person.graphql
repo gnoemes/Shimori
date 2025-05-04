@@ -1,0 +1,48 @@
+query PersonDetails(
+    $ids: [ID!]
+) {
+    people(ids: $ids) {
+        id
+        malId
+        name
+        russian
+        japanese
+        synonyms
+        url
+        createdAt
+        updatedAt
+        isMangaka
+        isProducer
+        isSeyu
+        birthOn { year month day date }
+        deceasedOn { year month day date }
+
+        poster { ...PosterShort }
+
+    }
+}
+
+query PersonSearch(
+    $page: PositiveInt = 1
+    $limit: PositiveInt = 2
+    $search: String
+) {
+    people(page: $page, limit: $limit, search: $search) {
+        id
+        malId
+        name
+        russian
+        japanese
+        synonyms
+        url
+        createdAt
+        updatedAt
+        isMangaka
+        isProducer
+        isSeyu
+        birthOn { year month day date }
+        deceasedOn { year month day date }
+
+        poster { ...PosterShort }
+    }
+}
