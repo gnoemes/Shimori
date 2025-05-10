@@ -34,6 +34,18 @@ import com.gnoemes.shimori.common.ui.resources.strings.rate_status_manga_re_read
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_manga_reading
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_on_hold
 import com.gnoemes.shimori.common.ui.resources.strings.rate_status_planned
+import com.gnoemes.shimori.common.ui.resources.strings.related_adaptation
+import com.gnoemes.shimori.common.ui.resources.strings.related_alternative_setting
+import com.gnoemes.shimori.common.ui.resources.strings.related_alternative_version
+import com.gnoemes.shimori.common.ui.resources.strings.related_character
+import com.gnoemes.shimori.common.ui.resources.strings.related_full_story
+import com.gnoemes.shimori.common.ui.resources.strings.related_other
+import com.gnoemes.shimori.common.ui.resources.strings.related_parent_story
+import com.gnoemes.shimori.common.ui.resources.strings.related_prequel
+import com.gnoemes.shimori.common.ui.resources.strings.related_sequel
+import com.gnoemes.shimori.common.ui.resources.strings.related_side_story
+import com.gnoemes.shimori.common.ui.resources.strings.related_spin_off
+import com.gnoemes.shimori.common.ui.resources.strings.related_summary
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_english
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_romaji
 import com.gnoemes.shimori.common.ui.resources.strings.settings_language_russian
@@ -65,6 +77,8 @@ import com.gnoemes.shimori.data.ShimoriTitleEntity
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.Related
+import com.gnoemes.shimori.data.common.RelationType
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.events.TrackUiEvents
 import com.gnoemes.shimori.data.titles.anime.Anime
@@ -519,6 +533,25 @@ class ShimoriTextCreator(
             AppTitlesLocale.English -> name
             AppTitlesLocale.Russian -> nameRu ?: name
             else -> name
+        }
+    }
+
+
+    @Composable
+    fun Related.relation(): String {
+        return when (relationType) {
+            RelationType.Adaptation -> stringResource(Strings.related_adaptation)
+            RelationType.AlternativeSetting -> stringResource(Strings.related_alternative_setting)
+            RelationType.AlternativeVersion -> stringResource(Strings.related_alternative_version)
+            RelationType.Character -> stringResource(Strings.related_character)
+            RelationType.FullStory -> stringResource(Strings.related_full_story)
+            RelationType.ParentStory -> stringResource(Strings.related_parent_story)
+            RelationType.Prequel -> stringResource(Strings.related_prequel)
+            RelationType.Sequel -> stringResource(Strings.related_sequel)
+            RelationType.SideStory -> stringResource(Strings.related_side_story)
+            RelationType.SpinOff -> stringResource(Strings.related_spin_off)
+            RelationType.Summary -> stringResource(Strings.related_summary)
+            else -> stringResource(Strings.related_other)
         }
     }
 }

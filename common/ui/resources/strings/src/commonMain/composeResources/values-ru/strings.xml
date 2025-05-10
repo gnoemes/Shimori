@@ -220,6 +220,19 @@
     <string name="title_score">Оценка</string>
     <string name="List_item_current_state">Сейчас</string>
 
+    <string name="related_adaptation">Адаптация</string>
+    <string name="related_alternative_setting">Альтернативная вселенная</string>
+    <string name="related_alternative_version">Альтернативная версия</string>
+    <string name="related_character">Персонаж</string>
+    <string name="related_full_story">Полная история</string>
+    <string name="related_other">Другое</string>
+    <string name="related_parent_story">Предыстория</string>
+    <string name="related_prequel">Приквел</string>
+    <string name="related_sequel">Сиквел</string>
+    <string name="related_side_story">Побочная история</string>
+    <string name="related_spin_off">Спин-офф</string>
+    <string name="related_summary">Краткое содержание</string>
+
     <string-array name="months_short">
         <item>Янв</item>
         <item>Фев</item>

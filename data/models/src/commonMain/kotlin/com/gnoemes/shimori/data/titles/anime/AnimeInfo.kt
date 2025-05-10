@@ -3,6 +3,7 @@ package com.gnoemes.shimori.data.titles.anime
 import com.gnoemes.shimori.data.characters.CharacterInfo
 import com.gnoemes.shimori.data.characters.CharacterRole
 import com.gnoemes.shimori.data.common.Genre
+import com.gnoemes.shimori.data.common.RelatedInfo
 import com.gnoemes.shimori.data.common.Studio
 import com.gnoemes.shimori.data.person.PersonInfo
 import com.gnoemes.shimori.data.person.PersonRole
@@ -19,4 +20,5 @@ data class AnimeInfo(
     val studio: Studio? = null,
     val persons : List<PersonInfo>? = null,
     val personsRoles : List<PersonRole>? = null,
+    val related : List<RelatedInfo>? = null,
 )

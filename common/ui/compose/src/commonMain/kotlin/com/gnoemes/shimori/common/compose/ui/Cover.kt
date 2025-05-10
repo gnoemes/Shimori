@@ -21,11 +21,14 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.gnoemes.shimori.common.compose.LocalShimoriIconsUtil
 import com.gnoemes.shimori.common.compose.theme.CharacterCoverRoundedCornerShape
 import com.gnoemes.shimori.common.compose.theme.ic_no_image
 import com.gnoemes.shimori.common.ui.resources.Icons
+import com.gnoemes.shimori.common.ui.resources.icons.ic_add
 import com.gnoemes.shimori.common.ui.resources.icons.ic_edit
 import com.gnoemes.shimori.data.common.ShimoriImage
+import com.gnoemes.shimori.data.track.TrackStatus
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -59,12 +62,14 @@ fun ProfileCover(
 @Composable
 fun TrackCover(
     image: ShimoriImage?,
+    status: TrackStatus?,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     showEditButton: Boolean = false,
-    onEditClick: (() -> Unit)? = null,
+    showStatusButton: Boolean = true,
+    onButtonClick: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier
@@ -92,13 +97,31 @@ fun TrackCover(
 
         if (showEditButton) {
             FilledTonalIconButton(
-                onClick = { onEditClick?.invoke() },
+                onClick = { onButtonClick?.invoke() },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
+                    .size(32.dp)
             ) {
                 Icon(
                     painter = painterResource(Icons.ic_edit),
+                    modifier = Modifier.size(18.dp),
+                    contentDescription = null
+                )
+            }
+        } else if (showStatusButton) {
+            FilledTonalIconButton(
+                onClick = { onButtonClick?.invoke() },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .size(32.dp)
+            ) {
+                val icon = status?.let { LocalShimoriIconsUtil.current.trackStatusIcon(it) }
+                    ?: Icons.ic_add
+                Icon(
+                    painter = painterResource(icon),
+                    modifier = Modifier.size(18.dp),
                     contentDescription = null
                 )
             }

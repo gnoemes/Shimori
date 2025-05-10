@@ -14,6 +14,7 @@ object ExpiryConstants {
     const val CHARACTER_DETAILS = HALF_WEEK
     const val SYNC_PENDING_TASKS = 5
     const val SOURCE_SYNC = WEEK
+    const val RELATED = WEEK
 }
 
 
@@ -28,5 +29,6 @@ val Request.expiry
         //source info sync
         Request.GENRES, Request.STUDIOS -> ExpiryConstants.SOURCE_SYNC
         Request.CHARACTER_DETAILS, Request.PERSON_DETAILS -> ExpiryConstants.CHARACTER_DETAILS
+        Request.ANIME_DETAILS_RELATED, Request.MANGA_DETAILS_RELATED, Request.RANOBE_DETAILS_RELATED -> ExpiryConstants.RELATED
         else -> ExpiryConstants.DEFAULT
     }

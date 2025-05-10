@@ -66,6 +66,12 @@ class RanobeRepository(
         ranobe { getPersons(it) }
     }
 
+    suspend fun syncTitleRelated(
+        id: Long
+    ) = request(id) {
+        ranobe { getRelated(it) }
+    }
+
     override fun <T> trySyncTransaction(data: SourceResponse<T>) {
         store.trySync(data)
     }
@@ -84,7 +90,15 @@ class RanobeRepository(
         id,
     )
 
+    fun shouldUpdateTitleRelated(
+        id: Long,
+    ) = shouldUpdate(
+        Request.RANOBE_DETAILS_RELATED,
+        id,
+    )
+
     private fun titleUpdated(id: Long) = updated(Request.RANOBE_DETAILS, id)
+    fun titleRelatedUpdated(id: Long) = updated(Request.RANOBE_DETAILS_RELATED, id)
     fun statusUpdated(status: TrackStatus?) = updated(
         Request.RANOBE_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong()

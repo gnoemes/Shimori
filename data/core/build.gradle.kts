@@ -9,6 +9,7 @@ kotlin {
                 api(projects.data.models)
                 implementation(projects.sourceBundled.ids)
                 implementation(projects.data.source.core)
+                implementation(projects.data.syncer)
                 implementation(projects.data.lastrequest)
                 implementation(projects.data.db.api)
             }

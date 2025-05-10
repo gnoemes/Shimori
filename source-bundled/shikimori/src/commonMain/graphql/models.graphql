@@ -131,3 +131,15 @@ fragment Studio on Studio {
     name
     imageUrl
 }
+
+fragment Related on Related {
+    id
+    relationKind
+    relationText
+    anime {
+        ...AnimeShort
+    }
+    manga {
+        ...MangaShort
+    }
+}

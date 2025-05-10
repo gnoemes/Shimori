@@ -66,6 +66,7 @@ kotlin {
                 api(projects.ui.title.details)
                 api(projects.ui.title.characters)
                 api(projects.ui.title.trailers)
+                api(projects.ui.title.related)
 
                 api(libs.graphql.apollo)
 

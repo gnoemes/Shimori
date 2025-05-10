@@ -91,6 +91,7 @@ operator fun <T> SubjectInteractor<Unit, T>.invoke() = invoke(Unit)
 
 suspend fun <T> Result<T>.onFailurePublishToBus(): Result<T> {
     exceptionOrNull()?.let {
+        it.printStackTrace()
         EventBus.publish(AppUiEvents.UiError(it))
     }
 

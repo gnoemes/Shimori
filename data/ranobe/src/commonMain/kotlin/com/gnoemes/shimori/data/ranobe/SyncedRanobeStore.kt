@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.ranobe
 
 import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.common.RelatedInfo
 import com.gnoemes.shimori.data.db.api.daos.RanobeDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
@@ -58,6 +59,12 @@ class SyncedRanobeStore(
             data.filterIsInstance<MangaInfo>().any { it.entity is Ranobe } -> sync(
                 params,
                 data.filterIsInstance<MangaInfo>().map { it.entity }
+                    .filterIsInstance<Ranobe>()
+            )
+
+            data.filterIsInstance<RelatedInfo>().any { it.title is Ranobe } -> sync(
+                params,
+                data.filterIsInstance<RelatedInfo>().map { it.title }
                     .filterIsInstance<Ranobe>()
             )
 

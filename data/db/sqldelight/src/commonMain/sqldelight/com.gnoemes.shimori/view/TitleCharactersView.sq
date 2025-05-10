@@ -19,11 +19,21 @@ INNER JOIN character AS c ON cr.character_id = c.id;
 querySortByRoleAndName:
 SELECT * FROM titleCharactersView
 WHERE target_id = :targetId AND target_type = :target_type
-ORDER BY role ASC, name ASC
+ORDER BY
+  CASE role
+    WHEN 'Main' THEN 1
+    WHEN 'Supporting' THEN 2
+    ELSE 3
+  END, name ASC
 LIMIT :limit OFFSET :offset;
 
 querySearchSortByRoleAndName:
 SELECT * FROM titleCharactersView
 WHERE target_id = :targetId AND target_type = :target_type AND name LIKE '%' || :name || '%' COLLATE NOCASE
-ORDER BY role ASC, name ASC
+ORDER BY
+  CASE role
+    WHEN 'Main' THEN 1
+    WHEN 'Supporting' THEN 2
+    ELSE 3
+  END, name ASC
 LIMIT :limit OFFSET :offset;

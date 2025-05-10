@@ -232,6 +232,19 @@
     <string name="title_score">Score</string>
     <string name="List_item_current_state">Now</string>
 
+    <string name="related_adaptation">Adaptation</string>
+    <string name="related_alternative_setting">Alternative Setting</string>
+    <string name="related_alternative_version">Alternative Version</string>
+    <string name="related_character">Character</string>
+    <string name="related_full_story">Full Story</string>
+    <string name="related_other">Other</string>
+    <string name="related_parent_story">Parent Story</string>
+    <string name="related_prequel">Prequel</string>
+    <string name="related_sequel">Sequel</string>
+    <string name="related_side_story">Side Story</string>
+    <string name="related_spin_off">Spin-off</string>
+    <string name="related_summary">Summary</string>
+
     <string-array name="months_short">
         <item>Jan</item>
         <item>Feb</item>

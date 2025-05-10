@@ -47,12 +47,58 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_trailer_unknown
 import com.gnoemes.shimori.common.ui.resources.util.Strings
 import com.gnoemes.shimori.data.TitleWithTrackEntity
 import com.gnoemes.shimori.data.characters.Character
+import com.gnoemes.shimori.data.common.Related
+import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.titles.anime.AnimeVideo
 import com.gnoemes.shimori.data.titles.manga.Manga
 import com.gnoemes.shimori.data.titles.ranobe.Ranobe
+import com.gnoemes.shimori.data.track.TrackStatus
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+
+
+@Composable
+fun TitleGridItem(
+    name: String,
+    image: ShimoriImage?,
+    status: TrackStatus?,
+    showEditButton: Boolean,
+    showStatusButton: Boolean,
+    modifier: Modifier = Modifier,
+    subInfo: @Composable () -> Unit,
+    onCoverClick: () -> Unit,
+    onEditClick: (() -> Unit)? = null,
+) {
+    Column(
+        modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .clickable(onClick = onCoverClick),
+    ) {
+        TrackCover(
+            image,
+            status = status,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(3 / 4f)
+                .animateContentSize(),
+            showEditButton = showEditButton,
+            showStatusButton = showStatusButton,
+            onClick = onCoverClick,
+            onButtonClick = onEditClick
+        )
+
+        Text(
+            name,
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.titleSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        subInfo()
+    }
+}
 
 @Composable
 fun TrailerItem(
@@ -191,11 +237,13 @@ fun TrackItem(
                 Spacer(Modifier.width(16.dp))
                 TrackCover(
                     titleWithTrack.entity.image,
+                    status = null,
                     modifier = Modifier
                         .width(width)
                         .height(height)
                         .animateContentSize(),
                     showEditButton = false,
+                    showStatusButton = false,
                     onClick = openDetails
                 )
                 Spacer(Modifier.width(16.dp))
@@ -326,36 +374,47 @@ fun TrackItem(
             }
         } else {
             val title = titleWithTrack.entity
-            Column(
-                modifier = modifier
-                    .clip(MaterialTheme.shapes.medium.copy())
-                    .clickable(onClick = openDetails),
-            ) {
-                TrackCover(
-                    title.image,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(3 / 4f)
-                        .animateContentSize(),
-                    showEditButton = true,
-                    onClick = openDetails,
-                    onEditClick = openEdit
-                )
 
-                Text(
-                    textCreator {
-                        title.name()
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            TitleGridItem(
+                textCreator { title.name() },
+                title.image,
+                titleWithTrack.track?.status,
+                showEditButton = true,
+                showStatusButton = false,
+                modifier = modifier,
+                subInfo = {
+                    TitleSubInfo(title, modifier.fillMaxWidth())
+                },
+                onCoverClick = openDetails,
+                onEditClick = openEdit
+            )
 
-
-                TitleSubInfo(title, modifier.fillMaxWidth())
-            }
         }
     }
+}
 
+@Composable
+fun RelatedItem(
+    related: Related,
+    onClick: () -> Unit,
+    openEdit: () -> Unit
+) {
+    val textCreator = LocalShimoriTextCreator.current
+
+    TitleGridItem(
+        name = textCreator {
+            related.relation()
+        },
+        image = related.title.entity.image,
+        status = related.title.track?.status,
+        showEditButton = false,
+        showStatusButton = true,
+        modifier = Modifier
+            .width(132.dp),
+        subInfo = {
+            TitleSubInfo(related.title.entity, Modifier.fillMaxWidth())
+        },
+        onCoverClick = onClick,
+        onEditClick = openEdit
+    )
 }

@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.anime
 
 import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.common.RelatedInfo
 import com.gnoemes.shimori.data.db.api.daos.AnimeDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
@@ -50,6 +51,12 @@ class SyncedAnimeStore(
             data.filterIsInstance<AnimeWithTrack>().isNotEmpty() -> sync(
                 params,
                 data.filterIsInstance<AnimeWithTrack>().map { it.entity })
+
+            data.filterIsInstance<RelatedInfo>().any { it.title is Anime } -> sync(
+                params,
+                data.filterIsInstance<RelatedInfo>().map { it.title }
+                    .filterIsInstance<Anime>()
+            )
 
             else -> logger.d(tag = tag) {
                 "Unsupported data type for sync: ${

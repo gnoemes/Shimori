@@ -6,6 +6,7 @@ import com.gnoemes.shimori.data.app.Request
 import com.gnoemes.shimori.data.app.SyncAction
 import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.GenreType
+import com.gnoemes.shimori.data.common.RelationType
 import com.gnoemes.shimori.data.common.TitleStatus
 import com.gnoemes.shimori.data.track.ListSortOption
 import com.gnoemes.shimori.data.track.TrackStatus
@@ -22,11 +23,15 @@ import comgnoemesshimori.data.Person
 import comgnoemesshimori.data.Person_role
 import comgnoemesshimori.data.Pinned
 import comgnoemesshimori.data.Ranobe
+import comgnoemesshimori.data.Related
 import comgnoemesshimori.data.Source_ids_sync
 import comgnoemesshimori.data.Track
 import comgnoemesshimori.data.Track_to_sync
 import comgnoemesshimori.data.User
 
+
+internal val TrackTargetTypeAdapter = EnumColumnAdapter<TrackTargetType>()
+internal val TitleStatusAdapter = EnumColumnAdapter<TitleStatus>()
 
 internal val TrackAdapter = Track.Adapter(
     target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
@@ -62,7 +67,7 @@ internal val AnimeVideoAdapter = Anime_video.Adapter(
 )
 
 internal val AnimeAdapter = Anime.Adapter(
-    statusAdapter = EnumColumnAdapter<TitleStatus>(),
+    statusAdapter = TitleStatusAdapter,
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     next_episode_dateAdapter = InstantAdapter,
@@ -74,7 +79,7 @@ internal val AnimeAdapter = Anime.Adapter(
 )
 
 internal val MangaAdapter = Manga.Adapter(
-    statusAdapter = EnumColumnAdapter<TitleStatus>(),
+    statusAdapter = TitleStatusAdapter,
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
@@ -83,7 +88,7 @@ internal val MangaAdapter = Manga.Adapter(
 )
 
 internal val RanobeAdapter = Ranobe.Adapter(
-    statusAdapter = EnumColumnAdapter<TitleStatus>(),
+    statusAdapter = TitleStatusAdapter,
     date_airedAdapter = LocalDateAdapter,
     date_releasedAdapter = LocalDateAdapter,
     age_ratingAdapter = EnumColumnAdapter<AgeRating>(),
@@ -121,3 +126,10 @@ internal val PersonAdapter = Person.Adapter(
 internal val PersonRoleAdapter = Person_role.Adapter(
     target_typeAdapter = EnumColumnAdapter<TrackTargetType>(),
 )
+
+internal val RelatedAdapter = Related.Adapter(
+    target_typeAdapter = TrackTargetTypeAdapter,
+    typeAdapter = EnumColumnAdapter<RelationType>(),
+    related_typeAdapter = TrackTargetTypeAdapter,
+)
+

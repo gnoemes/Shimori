@@ -2,6 +2,7 @@ package com.gnoemes.shimori.data.manga
 
 import com.gnoemes.shimori.data.app.SourceParams
 import com.gnoemes.shimori.data.app.SourceResponse
+import com.gnoemes.shimori.data.common.RelatedInfo
 import com.gnoemes.shimori.data.db.api.daos.MangaDao
 import com.gnoemes.shimori.data.db.api.daos.SourceIdsSyncDao
 import com.gnoemes.shimori.data.db.api.syncer.ItemSyncer.Companion.RESULT_TAG
@@ -58,6 +59,12 @@ class SyncedMangaStore(
             data.filterIsInstance<MangaInfo>().any { it.entity is Manga } -> sync(
                 params,
                 data.filterIsInstance<MangaInfo>().map { it.entity }
+                    .filterIsInstance<Manga>()
+            )
+
+            data.filterIsInstance<RelatedInfo>().any { it.title is Manga } -> sync(
+                params,
+                data.filterIsInstance<RelatedInfo>().map { it.title }
                     .filterIsInstance<Manga>()
             )
 

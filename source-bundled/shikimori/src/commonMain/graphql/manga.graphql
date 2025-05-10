@@ -82,6 +82,19 @@ query MangaPeople(
     }
 }
 
+query MangaRelated(
+    $ids: String
+) {
+    mangas(ids: $ids) {
+        id
+        name
+
+        related {
+            ...Related
+        }
+    }
+}
+
 query mangas(
     $page: PositiveInt = 1
     $limit: PositiveInt = 2

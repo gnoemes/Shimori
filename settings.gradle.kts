@@ -105,6 +105,7 @@ include(
     ":ui:title:details",
     ":ui:title:characters",
     ":ui:title:trailers",
+    ":ui:title:related",
 
     ":app:core",
     ":app:complete",

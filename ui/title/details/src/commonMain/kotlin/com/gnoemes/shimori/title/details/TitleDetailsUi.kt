@@ -430,6 +430,15 @@ private fun TitleDetailsUiContent(
                 }
             }
 
+            itemSpacer(24.dp)
+
+            item(
+                key = "related",
+                span = { GridItemSpan(this.maxLineSpan) }
+            ) {
+                TitleRelated(title.id, title.type, openChronology)
+            }
+
 
             itemSpacer(paddingValue.calculateBottomWithAdditional())
         }

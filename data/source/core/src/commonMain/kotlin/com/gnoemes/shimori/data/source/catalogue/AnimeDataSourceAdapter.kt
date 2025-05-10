@@ -57,6 +57,15 @@ class AnimeDataSourceAdapter(
         }.let(mapper::invoke)
     }
 
+    fun getRelated(data: Anime): suspend AnimeDataSource.(Source) -> AnimeInfo = { source ->
+        val arg = requestMapper.toId(source, data)
+        when (arg) {
+            is MalIdArgument -> getRelated(arg)
+            is SourceIdArgument -> getRelated(arg)
+            else -> throw IllegalArgumentException("Unknown argument $arg for request")
+        }.let(mapper::invoke)
+    }
+
     fun getWithStatus(
         user: UserShort?,
         status: TrackStatus?

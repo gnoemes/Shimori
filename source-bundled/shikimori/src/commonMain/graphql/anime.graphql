@@ -86,6 +86,19 @@ query AnimePersons(
     }
 }
 
+query AnimeRelated(
+    $ids: String
+) {
+    animes(ids: $ids) {
+        id
+        name
+
+        related {
+            ...Related
+        }
+    }
+}
+
 query animes(
     $page: PositiveInt = 1
     $limit: PositiveInt = 2

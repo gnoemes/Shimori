@@ -12,6 +12,8 @@ import com.gnoemes.shimori.data.common.AgeRating
 import com.gnoemes.shimori.data.common.Genre
 import com.gnoemes.shimori.data.common.GenreRelation
 import com.gnoemes.shimori.data.common.GenreType
+import com.gnoemes.shimori.data.common.Related
+import com.gnoemes.shimori.data.common.RelationType
 import com.gnoemes.shimori.data.common.ShimoriImage
 import com.gnoemes.shimori.data.common.Studio
 import com.gnoemes.shimori.data.common.TitleStatus
@@ -1068,5 +1070,176 @@ internal fun person(
         isSeyu = is_seyu,
         birthDate = birthday_date,
         deceasedDate = deceased_date
+    )
+}
+
+internal fun related(
+    id: Long,
+    name: String,
+    nameRu: String?,
+    nameEn: String?,
+    image_original: String?,
+    image_preview: String?,
+    image_x96: String?,
+    image_x48: String?,
+    anime_type: String?,
+    rating: Double?,
+    status: TitleStatus?,
+    episodes: Int?,
+    episodes_aired: Int?,
+    volumes: Int?,
+    chapters: Int?,
+    dateAired: LocalDate?,
+    date_released: LocalDate?,
+    duration: Int?,
+    next_episode: Int?,
+    next_episode_date: Instant?,
+    trackId: Long?,
+    trackStatus: TrackStatus?,
+    target_type: TrackTargetType?,
+    score: Int?,
+    comment: String?,
+    progress: Int?,
+    re_counter: Int?,
+    date_created: Instant?,
+    date_updated: Instant?,
+    relatedId: Long,
+    targetId: Long,
+    targetType: TrackTargetType,
+    relatedType : TrackTargetType,
+    relationType: RelationType,
+    relation: String?
+) : Related {
+    return Related(
+        id = relatedId,
+        targetId = targetId,
+        targetType = targetType,
+        relationType = relationType,
+        title = when(relatedType) {
+            TrackTargetType.ANIME -> {
+                animeWithTrack(
+                    id = id,
+                    name = name,
+                    name_ru = nameRu,
+                    name_eng = nameEn,
+                    image_original = image_original,
+                    image_preview = image_preview,
+                    image_x96 = image_x96,
+                    image_x48 = image_x48,
+                    url = null,
+                    anime_type = anime_type,
+                    rating = rating,
+                    status = status,
+                    episodes = episodes ?: 0,
+                    episodes_aired = episodes_aired ?: 0,
+                    date_aired = dateAired,
+                    date_released = date_released,
+                    age_rating = AgeRating.NONE,
+                    description = null,
+                    description_html = null,
+                    franchise = null,
+                    favorite = false,
+                    topic_id = null,
+                    duration = duration,
+                    next_episode = next_episode,
+                    next_episode_date = next_episode_date,
+                    dubbers = null,
+                    subbers = null,
+                    id_ = trackId,
+                    target_id = id,
+                    target_type = TrackTargetType.ANIME,
+                    status_ = trackStatus,
+                    score = score,
+                    comment = comment,
+                    progress = progress,
+                    re_counter = re_counter,
+                    date_created = date_created,
+                    date_updated = date_updated,
+                    pinId = null,
+                    target_id_ = id,
+                    target_type_ = TrackTargetType.ANIME,
+                )
+            }
+
+            TrackTargetType.MANGA -> {
+                mangaWithTrack(
+                    id = id,
+                    name = name,
+                    name_ru = nameRu,
+                    name_eng = nameEn,
+                    image_original = image_original,
+                    image_preview = image_preview,
+                    image_x96 = image_x96,
+                    image_x48 = image_x48,
+                    url = null,
+                    manga_type = anime_type,
+                    rating = rating,
+                    status = status,
+                    volumes = volumes ?: 0,
+                    chapters = chapters ?: 0,
+                    date_aired = dateAired,
+                    date_released = date_released,
+                    age_rating = AgeRating.NONE,
+                    description = null,
+                    description_html = null,
+                    franchise = null,
+                    favorite = false,
+                    topic_id = null,
+                    id_ = trackId,
+                    target_id = id,
+                    target_type = TrackTargetType.MANGA,
+                    status_ = trackStatus,
+                    score = score,
+                    comment = comment,
+                    progress = progress,
+                    re_counter = re_counter,
+                    date_created = date_created,
+                    date_updated = date_updated,
+                    pinId = null,
+                    target_id_ = id,
+                    target_type_ = TrackTargetType.MANGA
+                )
+            }
+
+            TrackTargetType.RANOBE -> {
+                ranobeWithTrack(
+                    id = id,
+                    name = name,
+                    name_ru = nameRu,
+                    name_eng = nameEn,
+                    image_original = image_original,
+                    image_preview = image_preview,
+                    image_x96 = image_x96,
+                    image_x48 = image_x48,
+                    url = null,
+                    ranobe_type  = anime_type,
+                    rating = rating,
+                    status = status,
+                    volumes = volumes ?: 0,
+                    chapters = chapters ?: 0,
+                    date_aired = dateAired,
+                    date_released = date_released,
+                    age_rating = AgeRating.NONE,
+                    description = null,
+                    description_html = null,
+                    franchise = null,
+                    favorite = false,
+                    topic_id = null,
+                    id_ = trackId,
+                    target_id = id,
+                    target_type = TrackTargetType.RANOBE,
+                    status_ = trackStatus,
+                    score = score,
+                    comment = comment,
+                    progress = progress,
+                    re_counter = re_counter,
+                    date_created = date_created,
+                    date_updated = date_updated,
+                    pinId = null,
+                    target_id_ = id,
+                    target_type_ = TrackTargetType.RANOBE
+                )
+            }
+        }
     )
 }

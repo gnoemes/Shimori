@@ -54,6 +54,7 @@ import com.gnoemes.shimori.common.compose.theme.favorite
 import com.gnoemes.shimori.common.compose.theme.favoriteContainer
 import com.gnoemes.shimori.common.compose.theme.ic_no_image
 import com.gnoemes.shimori.common.compose.ui.StatusButton
+import com.gnoemes.shimori.common.ui.navigator.LocalNavigator
 import com.gnoemes.shimori.common.ui.resources.Icons
 import com.gnoemes.shimori.common.ui.resources.icons.ic_arrow_right
 import com.gnoemes.shimori.common.ui.resources.icons.ic_frames
@@ -73,6 +74,7 @@ import com.gnoemes.shimori.common.ui.resources.strings.title_ep_duration
 import com.gnoemes.shimori.common.ui.resources.strings.title_frames
 import com.gnoemes.shimori.common.ui.resources.strings.title_menu_share
 import com.gnoemes.shimori.common.ui.resources.strings.title_menu_web
+import com.gnoemes.shimori.common.ui.resources.strings.title_related_chronology
 import com.gnoemes.shimori.common.ui.resources.strings.title_release
 import com.gnoemes.shimori.common.ui.resources.strings.title_score
 import com.gnoemes.shimori.common.ui.resources.strings.title_staff
@@ -88,8 +90,10 @@ import com.gnoemes.shimori.data.titles.anime.Anime
 import com.gnoemes.shimori.data.track.Track
 import com.gnoemes.shimori.data.track.TrackTargetType
 import com.gnoemes.shimori.screens.TitleCharactersScreen
+import com.gnoemes.shimori.screens.TitleRelatedScreen
 import com.gnoemes.shimori.screens.TitleTrailersScreen
 import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.onNavEvent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -316,7 +320,11 @@ internal fun TitleCharacters(
         stringResource(Strings.title_characters),
         openCharactersList,
     ) {
-        CircuitContent(TitleCharactersScreen(id, type, asContent = true))
+        val navigator = LocalNavigator.current
+        CircuitContent(
+            TitleCharactersScreen(id, type, asContent = true),
+            onNavEvent = { navigator.onNavEvent(it) }
+        )
     }
 }
 
@@ -547,6 +555,25 @@ internal fun TitleStaff(
                 item { Spacer(Modifier.width(8.dp)) }
             }
         }
+    }
+}
+
+@Composable
+internal fun TitleRelated(
+    id: Long,
+    type: TrackTargetType,
+    openRelated: () -> Unit,
+) {
+    TitleListCategory(
+        stringResource(Strings.title_related_chronology),
+        openRelated,
+    ) {
+        val navigator = LocalNavigator.current
+
+        CircuitContent(
+            TitleRelatedScreen(id, type, asContent = true),
+            onNavEvent = { navigator.onNavEvent(it) }
+        )
     }
 }
 

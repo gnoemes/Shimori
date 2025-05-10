@@ -14,6 +14,7 @@ import com.gnoemes.shimori.data.adapters.PersonAdapter
 import com.gnoemes.shimori.data.adapters.PersonRoleAdapter
 import com.gnoemes.shimori.data.adapters.PinnedAdapter
 import com.gnoemes.shimori.data.adapters.RanobeAdapter
+import com.gnoemes.shimori.data.adapters.RelatedAdapter
 import com.gnoemes.shimori.data.adapters.SourceIdsSyncAdapter
 import com.gnoemes.shimori.data.adapters.TrackAdapter
 import com.gnoemes.shimori.data.adapters.TrackToSyncAdapter
@@ -42,7 +43,8 @@ class DatabaseFactory(
         userAdapter = UserAdapter,
         pinnedAdapter = PinnedAdapter,
         personAdapter = PersonAdapter,
-        person_roleAdapter = PersonRoleAdapter
+        person_roleAdapter = PersonRoleAdapter,
+        relatedAdapter = RelatedAdapter
     )
 
 }

@@ -1,0 +1,14 @@
+import com.gnoemes.shimori.data.common.RelationType;
+import com.gnoemes.shimori.data.track.TrackTargetType;
+
+CREATE TABLE related(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    target_id INTEGER NOT NULL,
+    target_type TEXT AS TrackTargetType NOT NULL,
+    type TEXT AS RelationType NOT NULL,
+    relation TEXT,
+    related_id INTEGER NOT NULL,
+    related_type TEXT AS TrackTargetType NOT NULL
+);
+
+CREATE INDEX related_index ON related(target_id, target_type);

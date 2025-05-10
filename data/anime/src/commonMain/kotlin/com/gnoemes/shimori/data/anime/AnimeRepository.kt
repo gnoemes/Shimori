@@ -74,6 +74,12 @@ class AnimeRepository(
         anime { getPersons(it) }
     }
 
+    suspend fun syncTitleRelated(
+        id: Long
+    ) = request(id) {
+        anime { getRelated(it) }
+    }
+
     override fun <T> trySyncTransaction(data: SourceResponse<T>) {
         store.trySync(data)
         videoStore.trySync(data)
@@ -94,7 +100,15 @@ class AnimeRepository(
         id,
     )
 
+    fun shouldUpdateTitleRelated(
+        id: Long,
+    ) = shouldUpdate(
+        Request.ANIME_DETAILS_RELATED,
+        id,
+    )
+
     private fun titleUpdated(id: Long) = updated(Request.ANIME_DETAILS, id)
+    fun titleRelatedUpdated(id: Long) = updated(Request.ANIME_DETAILS_RELATED, id)
     private fun statusUpdated(status: TrackStatus?) = updated(
         Request.ANIMES_WITH_STATUS,
         status?.priority?.toLong() ?: TrackStatus.entries.size.toLong()

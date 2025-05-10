@@ -14,4 +14,7 @@ interface RanobeDataSource {
 
     suspend fun getPersons(id : MalIdArgument): SManga
     suspend fun getPersons(id : SourceIdArgument): SManga
+
+    suspend fun getRelated(id: MalIdArgument): SManga
+    suspend fun getRelated(id: SourceIdArgument): SManga
 }

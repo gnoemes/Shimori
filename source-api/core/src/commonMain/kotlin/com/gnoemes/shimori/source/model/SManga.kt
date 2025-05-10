@@ -29,6 +29,7 @@ data class SManga(
     val charactersRoles: List<SCharacterRole>? = null,
     val persons: List<SPerson>? = null,
     val personsRoles: List<SPersonRole>? = null,
+    val related: List<SRelated>? = null,
 ) {
 
     constructor(entity: SManga, track: STrack?) : this(
@@ -55,6 +56,7 @@ data class SManga(
         genres = entity.genres,
         track = track,
         persons = entity.persons,
-        personsRoles = entity.personsRoles
+        personsRoles = entity.personsRoles,
+        related = entity.related
     )
 }

@@ -9,6 +9,8 @@ kotlin {
                 api(projects.data.models)
                 api(projects.data.eventbus)
 
+                implementation(projects.data.core)
+                implementation(projects.data.syncer)
                 implementation(projects.data.lists)
                 implementation(projects.data.source.core)
                 implementation(projects.data.anime)
