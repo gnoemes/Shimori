@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -145,9 +146,6 @@ private fun TitleDetailsUi(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             val isCollapsed by remember(scrollBehavior.state) { derivedStateOf { scrollBehavior.state.collapsedFraction == 1f } }
-            val isHalfCollapsed by remember(scrollBehavior.state) {
-                derivedStateOf { scrollBehavior.state.collapsedFraction >= 0.5f }
-            }
 
             val animateColor by animateColorAsState(
                 when {
@@ -164,7 +162,6 @@ private fun TitleDetailsUi(
                     navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
                     actionIconContentColor = MaterialTheme.colorScheme.onSurface,
                 ),
-                expandedHeight = 196.dp,
                 scrollBehavior = scrollBehavior,
                 title = {
                     Box(
@@ -172,23 +169,13 @@ private fun TitleDetailsUi(
                             .animateContentSize(),
                     ) {
                         textCreator.nullable { title?.name() }?.let {
-
-                            if (isCollapsed || isHalfCollapsed) {
+                            if (isCollapsed) {
                                 Text(
                                     it,
                                     modifier = Modifier.align(Alignment.CenterStart),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            } else {
-                                Text(
-                                    it,
-                                    modifier = Modifier.align(Alignment.BottomStart),
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 4,
                                     overflow = TextOverflow.Ellipsis,
                                 )
                             }
@@ -314,6 +301,22 @@ private fun TitleDetailsUiContent(
         ) {
 
             itemSpacer(paddingValue.calculateTopPadding(), "title_spacer")
+
+            item(
+                key = "name",
+                span = { GridItemSpan(this.maxLineSpan) }
+            ) {
+                Text(
+                    textCreator { title.name() },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 4,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+
             itemSpacer(12.dp)
 
             item(
