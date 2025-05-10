@@ -95,7 +95,7 @@ fun TrackCover(
             contentScale = ContentScale.Crop
         )
 
-        if (showEditButton) {
+        if (showEditButton || showStatusButton) {
             FilledTonalIconButton(
                 onClick = { onButtonClick?.invoke() },
                 modifier = Modifier
@@ -104,23 +104,12 @@ fun TrackCover(
                     .size(32.dp)
             ) {
                 Icon(
-                    painter = painterResource(Icons.ic_edit),
-                    modifier = Modifier.size(18.dp),
-                    contentDescription = null
-                )
-            }
-        } else if (showStatusButton) {
-            FilledTonalIconButton(
-                onClick = { onButtonClick?.invoke() },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .size(32.dp)
-            ) {
-                val icon = status?.let { LocalShimoriIconsUtil.current.trackStatusIcon(it) }
-                    ?: Icons.ic_add
-                Icon(
-                    painter = painterResource(icon),
+                    painter = painterResource(
+                        if (showEditButton) Icons.ic_edit
+                        else status?.let {
+                            LocalShimoriIconsUtil.current.trackStatusIcon(it)
+                        } ?: Icons.ic_add
+                    ),
                     modifier = Modifier.size(18.dp),
                     contentDescription = null
                 )
