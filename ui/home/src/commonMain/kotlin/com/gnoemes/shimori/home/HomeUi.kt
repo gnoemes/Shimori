@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
@@ -192,22 +191,13 @@ private fun HomeUi(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val dismissSnackbarState = rememberDismissState { value ->
-        if (value != DismissValue.Default) {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            true
-        } else {
-            false
-        }
-    }
-
     message?.let {
         LaunchedEffect(it) {
             snackbarHostState.showSnackbar(
                 it.message,
                 it.actionLabel,
                 withDismissAction = it.actionLabel != null,
-                duration = SnackbarDuration.Long
+                duration = SnackbarDuration.Short
             )
             onMessageShown(it.id)
         }
@@ -218,7 +208,7 @@ private fun HomeUi(
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 SwipeToDismiss(
-                    state = dismissSnackbarState,
+                    state = rememberDismissState(),
                     background = {},
                     dismissContent = {
                         ShimoriSnackbar(
